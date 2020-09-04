@@ -23,5 +23,17 @@ window.renderOpptjeningApp = () => {
         const data = await response.json();
         console.log(data.opptjeninger);
     });
+
+    setTimeout(async () => {
+        const responseAp = await fetch('/k9/sak/api/behandling/aksjonspunkt', { method: 'POST', credentials: 'same-origin'});
+        let event = null;
+        if (responseAp.ok === false) {
+            event = new CustomEvent('opptjening-aksjonspunkt-failed', { detail: [{ data: '123' }]});
+        } else {
+            event = new CustomEvent('opptjening-aksjonspunkt-solved', { detail: [{ data: '123' }]});
+        }
+        document.dispatchEvent(event);
+    }, 3500);
+
     return appendToApp('opptjeningApp', createHeading('Opptjeningsperioder'))
 };
