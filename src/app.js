@@ -23,16 +23,18 @@ async function getOpptjeningData(behandlingUuid) {
 }
 
 window.renderOpptjeningApp = async (appId) => {
+    let opptjeningData = null;
     const { renderAppInSuccessfulState, renderErrorMessage, renderAppInLoadingState } = renderUtils;
     renderAppInLoadingState(appId);
     try {
         const behandlingUuid = await getBehandlingUuid();
         if (behandlingUuid !== null) {
-            const opptjeningData = await getOpptjeningData(behandlingUuid);
-            renderAppInSuccessfulState(appId, opptjeningData);
+            opptjeningData = await getOpptjeningData(behandlingUuid);
         }
     }
     catch (error) {
+        console.error(error);
         renderErrorMessage(appId);
     }
+    renderAppInSuccessfulState(appId, opptjeningData);
 };

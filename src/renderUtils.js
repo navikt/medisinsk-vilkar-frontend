@@ -1,23 +1,94 @@
+const loadingMessageCls = 'loadingMessage';
+
+function toggleElementByCls(classname) {
+    const element = document.querySelector(`.${classname}`);
+    if (element !== null) {
+        const { display } = element.style;
+        if (display === 'none') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+}
+
+function appendToOpptjeningApp(element, appId) {
+    const appElement = document.getElementById(appId || 'opptjeningApp');
+    if (appElement !== null) {
+        appElement.appendChild(element);
+    }
+}
+
 function renderErrorMessage(appId) {
     const h3 = document.createElement('h3');
-    const text = document.createTextNode('Noe gikk dårlig :(');
+    const text = document.createTextNode('Noe gikk galt :(');
     h3.append(text);
-    document.getElementById(appId).appendChild(h3);
+    appendToOpptjeningApp(h3);
 }
 
 function renderAppInLoadingState(appId) {
     const h3 = document.createElement('h3');
     const text = document.createTextNode('Vennligst vent, siden laster...');
+    h3.classList.add(loadingMessageCls);
     h3.append(text);
-    document.getElementById(appId).appendChild(h3);
+    appendToOpptjeningApp(h3);
+}
+
+function createTableHeader(labels) {
+    const thead = document.createElement('thead');
+    const tr = document.createElement('tr');
+    labels.map((label) => {
+        const thContent = document.createTextNode(label)
+        const th = document.createElement('th');
+        th.appendChild(thContent)
+        tr.append(th);
+    });
+    thead.appendChild(tr);
+    return thead;
+}
+
+function addColumnToTableRow(text, trElement) {
+    const td = document.createElement('td');
+    td.appendChild(document.createTextNode(text));
+    trElement.appendChild(td);
+}
+
+function createAktivitetTableRow(aktivitet) {
+    const tr = document.createElement('tr');
+    addColumnToTableRow(aktivitet.klasse.kode, tr);
+    addColumnToTableRow(`${aktivitet.fom}-${aktivitet.tom}`, tr);
+    addColumnToTableRow(`${aktivitet.arbeidsgiverNavn}`, tr);
+    addColumnToTableRow(`Aktivitet`, tr);
+    addColumnToTableRow(`Stillingsandel`, tr);
+    return tr;
+}
+
+function renderOpptjeningTable(opptjeningData) {
+    const table = document.createElement('table');
+
+    const thead = createTableHeader(['Status', 'Periode', 'Arbeidsgiver', 'Aktivitet', 'Stillingsandel']);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    opptjeningData.fastsattOpptjening.fastsattOpptjeningAktivitetList.forEach((aktivitet) => {
+        tbody.appendChild(createAktivitetTableRow(aktivitet));
+    });
+    table.appendChild(tbody);
+
+    return table;
 }
 
 function renderAppInSuccessfulState(appId, opptjeningData) {
     const h3 = document.createElement('h3');
-    const text = document.createTextNode('Har data :)');
+    const text = document.createTextNode('Opptjeningsperioder');
     h3.append(text);
-    document.getElementById(appId).appendChild(h3);
-    console.log(opptjeningData);
+    toggleElementByCls(loadingMessageCls);
+    appendToOpptjeningApp(h3);
+
+    const { opptjeninger } = opptjeningData;
+    opptjeninger.forEach((opptjening) => {
+        appendToOpptjeningApp(renderOpptjeningTable(opptjening))
+    });
 }
 
 export default {
