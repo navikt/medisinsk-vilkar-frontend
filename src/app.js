@@ -1,39 +1,38 @@
-const createTextElement = (type, text) => {
-    const elem = document.createElement(type);
-    const textChildren = document.createTextNode(text);
-    elem.appendChild(textChildren);
-    return elem;
-};
+import regeneratorRuntime from 'regenerator-runtime'; // (needed for async fns, see https://github.com/babel/babel/issues/9849)
+import renderUtils from './renderUtils';
 
-const appendToApp = (appId, element) => {
-    const appElement = document.getElementById(appId);
-    appElement.appendChild(element)
-};
-
-const createHeading = (text) => {
-    return (createTextElement('h3', text))
-};
-
-window.renderOpptjeningApp = () => {
-    document.addEventListener('got-some-data', async (event) => {
-        const behandlingUuid = event.detail.behandlingUuid;
-        const response = await fetch(`/k9/sak/api/behandling/opptjening-v2?behandlingUuid=${behandlingUuid}`, {
-            credentials: 'same-origin'
+function getBehandlingUuid() {
+    return new Promise((resolve, reject) => {
+        let behandlingUuid = null;
+        document.addEventListener('opptjening:behandlingUuid', (event) => {
+            behandlingUuid = event.detail.behandlingUuid;
+            resolve(behandlingUuid);
         });
-        const data = await response.json();
-        console.log(data.opptjeninger);
+        setTimeout(() => {
+            reject('Getting behandlingUuid has timed out')
+        }, 2500)
     });
+}
 
-    setTimeout(async () => {
-        const responseAp = await fetch('/k9/sak/api/behandling/aksjonspunkt', { method: 'POST', credentials: 'same-origin'});
-        let event = null;
-        if (responseAp.ok === false) {
-            event = new CustomEvent('opptjening-aksjonspunkt-failed', { detail: [{ data: '123' }]});
-        } else {
-            event = new CustomEvent('opptjening-aksjonspunkt-solved', { detail: [{ data: '123' }]});
+async function getOpptjeningData(behandlingUuid) {
+    const response = await fetch(`/k9/sak/api/behandling/opptjening-v2?behandlingUuid=${behandlingUuid}`, {
+        credentials: 'same-origin'
+    });
+    const data = await response.json();
+    return data;
+}
+
+window.renderOpptjeningApp = async (appId) => {
+    const { renderAppInSuccessfulState, renderErrorMessage, renderAppInLoadingState } = renderUtils;
+    renderAppInLoadingState(appId);
+    try {
+        const behandlingUuid = await getBehandlingUuid();
+        if (behandlingUuid !== null) {
+            const opptjeningData = await getOpptjeningData(behandlingUuid);
+            renderAppInSuccessfulState(appId, opptjeningData);
         }
-        document.dispatchEvent(event);
-    }, 3500);
-
-    return appendToApp('opptjeningApp', createHeading('Opptjeningsperioder'))
+    }
+    catch (error) {
+        renderErrorMessage(appId);
+    }
 };
