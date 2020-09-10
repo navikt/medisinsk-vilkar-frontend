@@ -57,9 +57,9 @@ function createAktivitetTableRow(aktivitet) {
     const tr = document.createElement('tr');
     addColumnToTableRow(aktivitet.klasse.kode, tr);
     addColumnToTableRow(`${aktivitet.fom}-${aktivitet.tom}`, tr);
-    addColumnToTableRow(`${aktivitet.arbeidsgiverNavn}`, tr);
-    addColumnToTableRow(`Aktivitet`, tr);
-    addColumnToTableRow(`Stillingsandel`, tr);
+    addColumnToTableRow(aktivitet.arbeidsgiverNavn, tr);
+    addColumnToTableRow(aktivitet.type.kode, tr);
+    addColumnToTableRow(`${aktivitet.stillingsandel}%`, tr);
     return tr;
 }
 
@@ -70,7 +70,7 @@ function renderOpptjeningTable(opptjeningData) {
     table.appendChild(thead);
 
     const tbody = document.createElement('tbody');
-    opptjeningData.fastsattOpptjening.fastsattOpptjeningAktivitetList.forEach((aktivitet) => {
+    opptjeningData.opptjeninger.forEach((aktivitet) => {
         tbody.appendChild(createAktivitetTableRow(aktivitet));
     });
     table.appendChild(tbody);
