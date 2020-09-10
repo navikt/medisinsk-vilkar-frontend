@@ -1,0 +1,25 @@
+.aktivitetTabell {
+  border-collapse: collapse;
+  width: 100%;
+
+  tr {
+    text-align: left;
+
+    td, th {
+      padding: 0.5rem;
+    }
+  }
+
+  .tableHeaderRow {
+    border-bottom: 1px solid #3e3832;
+  }
+
+  .tableRow {
+    border-bottom: 1px solid #c6c2bf;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #E9E7E7;
+    }
+  }
+}

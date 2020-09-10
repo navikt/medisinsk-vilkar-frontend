@@ -1,3 +1,5 @@
+import './aktivitetTabell.scss';
+
 const loadingMessageCls = 'loadingMessage';
 
 function toggleElementByCls(classname) {
@@ -37,6 +39,7 @@ function renderAppInLoadingState(appId) {
 function createTableHeader(labels) {
     const thead = document.createElement('thead');
     const tr = document.createElement('tr');
+    tr.classList.add('tableHeaderRow')
     labels.map((label) => {
         const thContent = document.createTextNode(label)
         const th = document.createElement('th');
@@ -55,8 +58,9 @@ function addColumnToTableRow(text, trElement) {
 
 function createAktivitetTableRow(aktivitet) {
     const tr = document.createElement('tr');
-    addColumnToTableRow(aktivitet.klasse.kode, tr);
-    addColumnToTableRow(`${aktivitet.fom}-${aktivitet.tom}`, tr);
+    tr.classList.add('tableRow');
+    addColumnToTableRow(aktivitet.klasse?.kode, tr);
+    addColumnToTableRow(`${aktivitet.aktivitetsperiode.fom}-${aktivitet.aktivitetsperiode.tom}`, tr);
     addColumnToTableRow(aktivitet.arbeidsgiverNavn, tr);
     addColumnToTableRow(aktivitet.type.kode, tr);
     addColumnToTableRow(`${aktivitet.stillingsandel}%`, tr);
@@ -65,12 +69,13 @@ function createAktivitetTableRow(aktivitet) {
 
 function renderOpptjeningTable(opptjeningData) {
     const table = document.createElement('table');
+    table.classList.add('aktivitetTabell');
 
     const thead = createTableHeader(['Status', 'Periode', 'Arbeidsgiver', 'Aktivitet', 'Stillingsandel']);
     table.appendChild(thead);
 
     const tbody = document.createElement('tbody');
-    opptjeningData.opptjeninger.forEach((aktivitet) => {
+    opptjeningData.aktiviteter.forEach((aktivitet) => {
         tbody.appendChild(createAktivitetTableRow(aktivitet));
     });
     table.appendChild(tbody);
@@ -83,11 +88,11 @@ function renderAppInSuccessfulState(appId, opptjeningData) {
     const text = document.createTextNode('Opptjeningsperioder');
     h3.append(text);
     toggleElementByCls(loadingMessageCls);
-    appendToOpptjeningApp(h3);
+    appendToOpptjeningApp(h3, appId);
 
     const { opptjeninger } = opptjeningData;
     opptjeninger.forEach((opptjening) => {
-        appendToOpptjeningApp(renderOpptjeningTable(opptjening))
+        appendToOpptjeningApp(renderOpptjeningTable(opptjening), appId)
     });
 }
 
