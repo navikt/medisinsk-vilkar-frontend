@@ -2,21 +2,21 @@ import regeneratorRuntime from 'regenerator-runtime'; // (needed for async fns, 
 import renderUtils from './renderUtils';
 import mockedOpptjeningData from "./mock/mockedOpptjeningData";
 
-function getBehandlingUuid() {
+function getOpptjeningPath() {
     return new Promise((resolve, reject) => {
-        let behandlingUuid = null;
-        document.addEventListener('opptjening:behandlingUuid', (event) => {
-            behandlingUuid = event.detail.behandlingUuid;
-            resolve(behandlingUuid);
+        let opptjeningPath = null;
+        document.addEventListener('path:opptjening', (event) => {
+            opptjeningPath = event.detail.opptjeningPath;
+            resolve(opptjeningPath);
         });
         setTimeout(() => {
-            reject('Getting behandlingUuid has timed out')
+            reject('Getting opptjeningPath has timed out')
         }, 2500)
     });
 }
 
-async function getOpptjeningData(behandlingUuid) {
-    const response = await fetch(`/k9/sak/api/behandling/opptjening-v3?behandlingUuid=${behandlingUuid}`, {
+async function getOpptjeningData(opptjeningPath) {
+    const response = await fetch(opptjeningPath, {
         credentials: 'same-origin'
     });
     const data = await response.json();
@@ -33,9 +33,9 @@ window.renderOpptjeningApp = async (appId, useMock) => {
 
     let opptjeningData = null;
     try {
-        const behandlingUuid = await getBehandlingUuid();
-        if (behandlingUuid !== null) {
-            opptjeningData = await getOpptjeningData(behandlingUuid);
+        const opptjeningPath = await getOpptjeningPath();
+        if (opptjeningPath !== null) {
+            opptjeningData = await getOpptjeningData(opptjeningPath);
         }
     }
     catch (error) {

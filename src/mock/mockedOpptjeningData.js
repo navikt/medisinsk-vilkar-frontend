@@ -18,7 +18,22 @@ export default {
                     },
                     stillingsandel: 100,
                     klasse: {
-                        kode: "Something"
+                        kode: "STATUS"
+                    }
+                },
+                {
+                    type: {
+                        kode: "ARBEID",
+                        kodeverk: "OPPTJENING_AKTIVITET_TYPE"
+                    },
+                    arbeidsgiverNavn: "K0NGEB3DR1FT ASA",
+                    aktivitetsperiode: {
+                        fom: "2019-01-01",
+                        tom: "2019-04-01"
+                    },
+                    stillingsandel: 100,
+                    klasse: {
+                        kode: "STATUS"
                     }
                 }
             ]
