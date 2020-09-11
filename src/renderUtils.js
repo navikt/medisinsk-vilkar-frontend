@@ -2,6 +2,9 @@ import './aktivitetTabell.scss';
 
 const loadingMessageCls = 'loadingMessage';
 
+let appElement = null;
+let newOpptjeningData = {};
+
 function toggleElementByCls(classname) {
     const element = document.querySelector(`.${classname}`);
     if (element !== null) {
@@ -15,7 +18,9 @@ function toggleElementByCls(classname) {
 }
 
 function appendToOpptjeningApp(element, appId) {
-    const appElement = document.getElementById(appId || 'opptjeningApp');
+    if (appElement === null) {
+        appElement = document.getElementById(appId || 'opptjeningApp');
+    }
     if (appElement !== null) {
         appElement.appendChild(element);
     }
@@ -56,9 +61,50 @@ function addColumnToTableRow(text, trElement) {
     trElement.appendChild(td);
 }
 
+function getSelectedRadioValue(groupName) {
+    return document.querySelector(`input[name=${groupName}]:checked`)?.value;
+}
+
+function toggleForm(aktivitet) {
+    const form = document.createElement('form');
+    const radioGroupName = 'godkjenningStatus';
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const index = newOpptjeningData.opptjeninger[0].aktiviteter.indexOf(aktivitet);
+        newOpptjeningData.opptjeninger[0].aktiviteter[index] = { ...aktivitet, klasse: { kode: getSelectedRadioValue(radioGroupName) } };
+    });
+
+    const submitButton = document.createElement('input');
+    submitButton.type = 'submit';
+    submitButton.innerHTML = 'Lagre';
+
+    const godkjentRadio = document.createElement('input');
+    godkjentRadio.type = 'radio';
+    godkjentRadio.name = radioGroupName;
+    godkjentRadio.value = 'godkjent';
+
+    const godkjentLabel = document.createElement('label');
+    godkjentLabel.innerHTML = 'Godkjent';
+    godkjentLabel.htmlFor = 'godkjent';
+
+    const ikkeGodkjentRadio = document.createElement('input');
+    ikkeGodkjentRadio.type = 'radio';
+    ikkeGodkjentRadio.name = radioGroupName;
+    ikkeGodkjentRadio.value = 'ikkeGodkjent';
+
+    const ikkeGodkjentLabel = document.createElement('label');
+    ikkeGodkjentLabel.innerHTML = 'Ikke godkjent';
+    ikkeGodkjentLabel.htmlFor = 'ikkeGodkjent';
+
+    form.append(godkjentRadio, godkjentLabel, ikkeGodkjentRadio, ikkeGodkjentLabel, submitButton);
+    appElement.append(form);
+}
+
 function createAktivitetTableRow(aktivitet) {
     const tr = document.createElement('tr');
     tr.classList.add('tableRow');
+    tr.addEventListener('click', () => toggleForm(aktivitet));
     addColumnToTableRow(aktivitet.klasse?.kode, tr);
     addColumnToTableRow(`${aktivitet.aktivitetsperiode.fom}-${aktivitet.aktivitetsperiode.tom}`, tr);
     addColumnToTableRow(aktivitet.arbeidsgiverNavn, tr);
@@ -84,6 +130,8 @@ function renderOpptjeningTable(opptjeningData) {
 }
 
 function renderAppInSuccessfulState(appId, opptjeningData) {
+    newOpptjeningData = opptjeningData;
+
     const h3 = document.createElement('h3');
     const text = document.createTextNode('Opptjeningsperioder');
     h3.append(text);
