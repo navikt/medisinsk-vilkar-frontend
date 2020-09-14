@@ -2,11 +2,14 @@ import regeneratorRuntime from 'regenerator-runtime'; // (needed for async fns, 
 import renderUtils from './renderUtils';
 import mockedOpptjeningData from "./mock/mockedOpptjeningData";
 
+let aksjonspunktService = null;
+
 function getOpptjeningPath() {
     return new Promise((resolve, reject) => {
         let opptjeningPath = null;
-        document.addEventListener('path:opptjening', (event) => {
-            opptjeningPath = event.detail.opptjeningPath;
+        document.addEventListener('init:opptjening', (event) => {
+            opptjeningPath = event.detail.services.opptjening.path;
+            aksjonspunktService = event.detail.services.aksjonspunkt;
             resolve(opptjeningPath);
         });
         setTimeout(() => {
@@ -42,5 +45,5 @@ window.renderOpptjeningApp = async (appId, useMock) => {
         console.error(error);
         renderErrorMessage(appId);
     }
-    renderAppInSuccessfulState(appId, opptjeningData);
+    renderAppInSuccessfulState(appId, opptjeningData, aksjonspunktService);
 };

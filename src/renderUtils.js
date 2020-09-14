@@ -4,6 +4,7 @@ const loadingMessageCls = 'loadingMessage';
 
 let appElement = null;
 let newOpptjeningData = {};
+let aksjonspunktService = null;
 
 function toggleElementByCls(classname) {
     const element = document.querySelector(`.${classname}`);
@@ -67,40 +68,54 @@ function getSelectedRadioValue(groupName) {
     return document.querySelector(`input[name=${groupName}]:checked`)?.value;
 }
 
+const formId = 'aktivitetGodkjentForm';
 function toggleForm(aktivitet) {
-    const form = document.createElement('form');
-    const radioGroupName = 'godkjenningStatus';
+    const formEl = document.getElementById(formId);
+    if (formEl === null) {
+        const form = document.createElement('form');
+        form.id = 'aktivitetGodkjentForm';
+        const radioGroupName = 'godkjenningStatus';
 
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const index = newOpptjeningData.opptjeninger[0].aktiviteter.indexOf(aktivitet);
-        newOpptjeningData.opptjeninger[0].aktiviteter[index] = { ...aktivitet, klasse: { kode: getSelectedRadioValue(radioGroupName) } };
-    });
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const index = newOpptjeningData.opptjeninger[0].aktiviteter.indexOf(aktivitet);
+            newOpptjeningData.opptjeninger[0].aktiviteter[index] = { ...aktivitet, klasse: { kode: getSelectedRadioValue(radioGroupName) } };
+            const event = new CustomEvent('opptjening:aksjonspunkt');
 
-    const submitButton = document.createElement('input');
-    submitButton.type = 'submit';
-    submitButton.innerHTML = 'Lagre';
+            // todo aksjonspunkt-call
+            console.log(aksjonspunktService);
+            document.dispatchEvent(event);
+        });
 
-    const godkjentRadio = document.createElement('input');
-    godkjentRadio.type = 'radio';
-    godkjentRadio.name = radioGroupName;
-    godkjentRadio.value = 'godkjent';
+        const submitButton = document.createElement('input');
+        submitButton.type = 'submit';
+        submitButton.innerHTML = 'Lagre';
 
-    const godkjentLabel = document.createElement('label');
-    godkjentLabel.innerHTML = 'Godkjent';
-    godkjentLabel.htmlFor = 'godkjent';
+        const godkjentRadio = document.createElement('input');
+        godkjentRadio.type = 'radio';
+        godkjentRadio.name = radioGroupName;
+        godkjentRadio.value = 'godkjent';
 
-    const ikkeGodkjentRadio = document.createElement('input');
-    ikkeGodkjentRadio.type = 'radio';
-    ikkeGodkjentRadio.name = radioGroupName;
-    ikkeGodkjentRadio.value = 'ikkeGodkjent';
+        const godkjentLabel = document.createElement('label');
+        godkjentLabel.innerHTML = 'Godkjent';
+        godkjentLabel.htmlFor = 'godkjent';
 
-    const ikkeGodkjentLabel = document.createElement('label');
-    ikkeGodkjentLabel.innerHTML = 'Ikke godkjent';
-    ikkeGodkjentLabel.htmlFor = 'ikkeGodkjent';
+        const ikkeGodkjentRadio = document.createElement('input');
+        ikkeGodkjentRadio.type = 'radio';
+        ikkeGodkjentRadio.name = radioGroupName;
+        ikkeGodkjentRadio.value = 'ikkeGodkjent';
 
-    form.append(godkjentRadio, godkjentLabel, ikkeGodkjentRadio, ikkeGodkjentLabel, submitButton);
-    appElement.append(form);
+        const ikkeGodkjentLabel = document.createElement('label');
+        ikkeGodkjentLabel.innerHTML = 'Ikke godkjent';
+        ikkeGodkjentLabel.htmlFor = 'ikkeGodkjent';
+
+        form.append(godkjentRadio, godkjentLabel, ikkeGodkjentRadio, ikkeGodkjentLabel, submitButton);
+        appElement.append(form);
+    } else if (formEl.offsetParent === null) {
+        formEl.style.display = 'block'
+    } else {
+        formEl.style.display = 'none';
+    }
 }
 
 function addColumnToTableRow(text, rowElement) {
@@ -145,8 +160,9 @@ function renderOpptjeningTable(opptjeningData) {
     return table;
 }
 
-function renderAppInSuccessfulState(appId, opptjeningData) {
+function renderAppInSuccessfulState(appId, opptjeningData, aksjonspunktServiceParam) {
     newOpptjeningData = opptjeningData;
+    aksjonspunktService = aksjonspunktServiceParam;
 
     const h3 = document.createElement('h3');
     const text = document.createTextNode('Opptjeningsperioder');
