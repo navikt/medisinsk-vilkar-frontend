@@ -25,7 +25,20 @@ function createElement(tagName, options) {
     return el;
 }
 
+function getSelectedRadioValue(groupName) {
+    return document.querySelector(`input[name=${groupName}]:checked`)?.value;
+}
+
+function appendToOpptjeningApp(element, appId) {
+    const appElement = document.getElementById(appId || 'opptjeningApp');
+    if (appElement !== null) {
+        appElement.appendChild(element);
+    }
+}
+
 export {
     createElement,
-    toggleElementByCls
+    getSelectedRadioValue,
+    toggleElementByCls,
+    appendToOpptjeningApp
 }

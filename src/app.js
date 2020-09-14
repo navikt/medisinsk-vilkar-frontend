@@ -1,6 +1,7 @@
 import regeneratorRuntime from 'regenerator-runtime'; // (needed for async fns, see https://github.com/babel/babel/issues/9849)
 import mockedOpptjeningData from "./mock/mockedOpptjeningData";
 import renderers from './ui/renderers';
+import './aktivitetTabell.scss';
 
 let aksjonspunktService = null;
 
