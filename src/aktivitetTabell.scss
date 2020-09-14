@@ -1,5 +1,5 @@
 .aktivitetTabell {
-  border-collapse: collapse;
+  display: table;
   width: 100%;
 
   tr {
@@ -10,16 +10,37 @@
     }
   }
 
-  .tableHeaderRow {
-    border-bottom: 1px solid #3e3832;
+  &__thead {
+    display: table-header-group;
   }
 
-  .tableRow {
-    border-bottom: 1px solid #c6c2bf;
-    cursor: pointer;
+  &__tbody {
+    display: table-row-group;
+  }
+
+  &__tr {
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
+    display: table-row;
+    flex-flow: row nowrap;
+    justify-content: center;
 
     &:hover {
       background-color: #E9E7E7;
     }
+  }
+
+  &__td, &__th {
+    display: table-cell;
+    padding: 1rem;
+  }
+
+  &__th {
+    border-bottom: 1px solid #3e3832;
+    font-weight: 600;
+  }
+
+  &__td {
+    border-bottom: 1px solid #c6c2bf;
+    cursor: pointer;
   }
 }

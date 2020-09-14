@@ -42,23 +42,25 @@ function renderAppInLoadingState(appId) {
 }
 
 function createTableHeader(labels) {
-    const thead = document.createElement('thead');
-    const tr = document.createElement('tr');
-    tr.classList.add('tableHeaderRow')
-    labels.map((label) => {
-        const thContent = document.createTextNode(label)
-        const th = document.createElement('th');
-        th.appendChild(thContent)
-        tr.append(th);
-    });
-    thead.appendChild(tr);
-    return thead;
-}
+    const rowGroup = document.createElement('div');
+    rowGroup.classList = 'aktivitetTabell__thead';
+    rowGroup.setAttribute('role', 'row-group');
 
-function addColumnToTableRow(text, trElement) {
-    const td = document.createElement('td');
-    td.appendChild(document.createTextNode(text));
-    trElement.appendChild(td);
+    const row = document.createElement('div');
+    row.classList.add('aktivitetTabell__tr');
+    row.setAttribute('role', 'row')
+
+    labels.map((label) => {
+        const rowContent = document.createTextNode(label)
+        const labelElement = document.createElement('div');
+        labelElement.classList.add('aktivitetTabell__th');
+        labelElement.setAttribute('role', 'columnheader');
+        labelElement.appendChild(rowContent);
+        row.append(labelElement);
+    });
+
+    rowGroup.appendChild(row);
+    return rowGroup;
 }
 
 function getSelectedRadioValue(groupName) {
@@ -101,30 +103,44 @@ function toggleForm(aktivitet) {
     appElement.append(form);
 }
 
+function addColumnToTableRow(text, rowElement) {
+    const column = document.createElement('div');
+    column.classList.add('aktivitetTabell__td');
+    column.setAttribute('role', 'cell');
+    column.appendChild(document.createTextNode(text));
+    rowElement.appendChild(column);
+}
+
 function createAktivitetTableRow(aktivitet) {
-    const tr = document.createElement('tr');
-    tr.classList.add('tableRow');
-    tr.addEventListener('click', () => toggleForm(aktivitet));
-    addColumnToTableRow(aktivitet.klasse?.kode, tr);
-    addColumnToTableRow(`${aktivitet.aktivitetsperiode.fom}-${aktivitet.aktivitetsperiode.tom}`, tr);
-    addColumnToTableRow(aktivitet.arbeidsgiverNavn, tr);
-    addColumnToTableRow(aktivitet.type.kode, tr);
-    addColumnToTableRow(`${aktivitet.stillingsandel}%`, tr);
-    return tr;
+    const row = document.createElement('div');
+    row.classList.add('aktivitetTabell__tr');
+    row.setAttribute('role', 'row');
+
+    row.addEventListener('click', () => toggleForm(aktivitet));
+    addColumnToTableRow(aktivitet.klasse?.kode, row);
+    addColumnToTableRow(`${aktivitet.aktivitetsperiode.fom}-${aktivitet.aktivitetsperiode.tom}`, row);
+    addColumnToTableRow(aktivitet.arbeidsgiverNavn, row);
+    addColumnToTableRow(aktivitet.type.kode, row);
+    addColumnToTableRow(`${aktivitet.stillingsandel}%`, row);
+    return row;
 }
 
 function renderOpptjeningTable(opptjeningData) {
-    const table = document.createElement('table');
+    const table = document.createElement('div');
     table.classList.add('aktivitetTabell');
+    table.setAttribute('role', 'table');
 
-    const thead = createTableHeader(['Status', 'Periode', 'Arbeidsgiver', 'Aktivitet', 'Stillingsandel']);
-    table.appendChild(thead);
+    const tableHead = createTableHeader(['Status', 'Periode', 'Arbeidsgiver', 'Aktivitet', 'Stillingsandel']);
+    table.appendChild(tableHead);
 
-    const tbody = document.createElement('tbody');
+    const tableBody = document.createElement('div');
+    tableBody.classList.add('aktivitetTabell__tbody');
+    tableBody.setAttribute('role', 'row-group');
+
     opptjeningData.aktiviteter.forEach((aktivitet) => {
-        tbody.appendChild(createAktivitetTableRow(aktivitet));
+        tableBody.appendChild(createAktivitetTableRow(aktivitet));
     });
-    table.appendChild(tbody);
+    table.appendChild(tableBody);
 
     return table;
 }
