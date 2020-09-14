@@ -1,22 +1,10 @@
 import './aktivitetTabell.scss';
+import {createElement} from "./ui/utils";
 
-const loadingMessageCls = 'loadingMessage';
 
 let appElement = null;
 let newOpptjeningData = {};
 let aksjonspunktService = null;
-
-function toggleElementByCls(classname) {
-    const element = document.querySelector(`.${classname}`);
-    if (element !== null) {
-        const { display } = element.style;
-        if (display === 'none') {
-            element.style.display = 'block';
-        } else {
-            element.style.display = 'none';
-        }
-    }
-}
 
 function appendToOpptjeningApp(element, appId) {
     if (appElement === null) {
@@ -27,41 +15,19 @@ function appendToOpptjeningApp(element, appId) {
     }
 }
 
-function renderErrorMessage(appId) {
-    const h3 = document.createElement('h3');
-    const text = document.createTextNode('Noe gikk galt :(');
-    h3.append(text);
-    appendToOpptjeningApp(h3);
-}
-
-function renderAppInLoadingState(appId) {
-    const h3 = document.createElement('h3');
-    const text = document.createTextNode('Vennligst vent, siden laster...');
-    h3.classList.add(loadingMessageCls);
-    h3.append(text);
-    appendToOpptjeningApp(h3);
-}
-
 function createTableHeader(labels) {
-    const rowGroup = document.createElement('div');
-    rowGroup.classList = 'aktivitetTabell__thead';
-    rowGroup.setAttribute('role', 'row-group');
+    const thead = createElement('div', { classList: ['aktivitetTabell__thead'], role: 'row-group' });
+    const tr = createElement('div', { classList: ['aktivitetTabell__tr'], role: 'row' });
 
-    const row = document.createElement('div');
-    row.classList.add('aktivitetTabell__tr');
-    row.setAttribute('role', 'row')
-
-    labels.map((label) => {
-        const rowContent = document.createTextNode(label)
-        const labelElement = document.createElement('div');
-        labelElement.classList.add('aktivitetTabell__th');
-        labelElement.setAttribute('role', 'columnheader');
+    labels.map((labelText) => {
+        const rowContent = document.createTextNode(labelText);
+        const labelElement = createElement('div', { classList: ['aktivitetTabell__th'], role: 'columnheader' });
         labelElement.appendChild(rowContent);
-        row.append(labelElement);
+        tr.append(labelElement);
     });
 
-    rowGroup.appendChild(row);
-    return rowGroup;
+    thead.appendChild(tr);
+    return thead;
 }
 
 function getSelectedRadioValue(groupName) {
@@ -72,45 +38,26 @@ const formId = 'aktivitetGodkjentForm';
 function toggleForm(aktivitet) {
     const formEl = document.getElementById(formId);
     if (formEl === null) {
-        const form = document.createElement('form');
-        form.id = 'aktivitetGodkjentForm';
         const radioGroupName = 'godkjenningStatus';
 
-        form.addEventListener('submit', (e) => {
+        const formElement = createElement('form', { id: 'aktivitetGodkjentForm' });
+        formElement.addEventListener('submit', (e) => {
             e.preventDefault();
-            const index = newOpptjeningData.opptjeninger[0].aktiviteter.indexOf(aktivitet);
-            newOpptjeningData.opptjeninger[0].aktiviteter[index] = { ...aktivitet, klasse: { kode: getSelectedRadioValue(radioGroupName) } };
+            console.log(newOpptjeningData);
+            const index = newOpptjeningData.aktiviteter.indexOf(aktivitet);
+            newOpptjeningData.aktiviteter[index] = { ...aktivitet, klasse: { kode: getSelectedRadioValue(radioGroupName) } };
             const event = new CustomEvent('opptjening:aksjonspunkt');
-
-            // todo aksjonspunkt-call
-            console.log(aksjonspunktService);
             document.dispatchEvent(event);
         });
 
-        const submitButton = document.createElement('input');
-        submitButton.type = 'submit';
-        submitButton.innerHTML = 'Lagre';
+        const submitButton = createElement('input', { type: 'submit', innerHTML: 'Lagre' });
+        const godkjentRadio = createElement('input', { type: 'radio', name: radioGroupName, value: 'godkjent' });
+        const godkjentLabel = createElement('label', { innerHTML: 'Godkjent', htmlFor: 'godkjent' });
+        const ikkeGodkjentRadio = createElement('input', { type: 'radio', name: radioGroupName, htmlFor: 'ikkeGodkjent' });
+        const ikkeGodkjentLabel = createElement('label', { innerHTML: 'Ikke godkjent', htmlFor: 'ikkeGodkjent' });
 
-        const godkjentRadio = document.createElement('input');
-        godkjentRadio.type = 'radio';
-        godkjentRadio.name = radioGroupName;
-        godkjentRadio.value = 'godkjent';
-
-        const godkjentLabel = document.createElement('label');
-        godkjentLabel.innerHTML = 'Godkjent';
-        godkjentLabel.htmlFor = 'godkjent';
-
-        const ikkeGodkjentRadio = document.createElement('input');
-        ikkeGodkjentRadio.type = 'radio';
-        ikkeGodkjentRadio.name = radioGroupName;
-        ikkeGodkjentRadio.value = 'ikkeGodkjent';
-
-        const ikkeGodkjentLabel = document.createElement('label');
-        ikkeGodkjentLabel.innerHTML = 'Ikke godkjent';
-        ikkeGodkjentLabel.htmlFor = 'ikkeGodkjent';
-
-        form.append(godkjentRadio, godkjentLabel, ikkeGodkjentRadio, ikkeGodkjentLabel, submitButton);
-        appElement.append(form);
+        formElement.append(godkjentRadio, godkjentLabel, ikkeGodkjentRadio, ikkeGodkjentLabel, submitButton);
+        appElement.append(formElement);
     } else if (formEl.offsetParent === null) {
         formEl.style.display = 'block'
     } else {
@@ -119,19 +66,17 @@ function toggleForm(aktivitet) {
 }
 
 function addColumnToTableRow(text, rowElement) {
-    const column = document.createElement('div');
-    column.classList.add('aktivitetTabell__td');
-    column.setAttribute('role', 'cell');
-    column.appendChild(document.createTextNode(text));
-    rowElement.appendChild(column);
+    const col = createElement('div', { classList: ['aktivitetTabell__td'], role: 'cell' });
+    col.appendChild(document.createTextNode(text));
+    rowElement.appendChild(col);
 }
 
 function createAktivitetTableRow(aktivitet) {
     const row = document.createElement('div');
     row.classList.add('aktivitetTabell__tr');
     row.setAttribute('role', 'row');
-
     row.addEventListener('click', () => toggleForm(aktivitet));
+
     addColumnToTableRow(aktivitet.klasse?.kode, row);
     addColumnToTableRow(`${aktivitet.aktivitetsperiode.fom}-${aktivitet.aktivitetsperiode.tom}`, row);
     addColumnToTableRow(aktivitet.arbeidsgiverNavn, row);
@@ -141,16 +86,14 @@ function createAktivitetTableRow(aktivitet) {
 }
 
 function renderOpptjeningTable(opptjeningData) {
-    const table = document.createElement('div');
-    table.classList.add('aktivitetTabell');
-    table.setAttribute('role', 'table');
+    newOpptjeningData = opptjeningData;
+
+    const table = createElement('div', { classList: ['aktivitetTabell'], role: 'table' });
 
     const tableHead = createTableHeader(['Status', 'Periode', 'Arbeidsgiver', 'Aktivitet', 'Stillingsandel']);
     table.appendChild(tableHead);
 
-    const tableBody = document.createElement('div');
-    tableBody.classList.add('aktivitetTabell__tbody');
-    tableBody.setAttribute('role', 'row-group');
+    const tableBody = createElement('div', { classList: ['aktivitetTabell__body'], role: 'row-group' });
 
     opptjeningData.aktiviteter.forEach((aktivitet) => {
         tableBody.appendChild(createAktivitetTableRow(aktivitet));
@@ -160,24 +103,6 @@ function renderOpptjeningTable(opptjeningData) {
     return table;
 }
 
-function renderAppInSuccessfulState(appId, opptjeningData, aksjonspunktServiceParam) {
-    newOpptjeningData = opptjeningData;
-    aksjonspunktService = aksjonspunktServiceParam;
-
-    const h3 = document.createElement('h3');
-    const text = document.createTextNode('Opptjeningsperioder');
-    h3.append(text);
-    toggleElementByCls(loadingMessageCls);
-    appendToOpptjeningApp(h3, appId);
-
-    const { opptjeninger } = opptjeningData;
-    opptjeninger.forEach((opptjening) => {
-        appendToOpptjeningApp(renderOpptjeningTable(opptjening), appId)
-    });
-}
-
-export default {
-    renderAppInSuccessfulState,
-    renderAppInLoadingState,
-    renderErrorMessage
+export {
+    renderOpptjeningTable, appendToOpptjeningApp
 }
