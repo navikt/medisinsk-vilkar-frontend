@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "parcel index.html",
     "build": "parcel build src/app.js",
-    "start": "node ./src/server/server.js"
+    "start": "node ./server.js"
   },
   "keywords": [],
   "author": "NAV IT",
