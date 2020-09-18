@@ -8,7 +8,7 @@ const AktivitetTabell = ({ columnHeaders, children }) => {
                     <div className="aktivitetTabell__th">{columnHeader}</div>
                 ))}
             </div>
-            {React.Children.map(children, (child, childIndex) => {
+            {React.Children.map(children, (child) => {
                 if (child.type === AktivitetTabell.Row) {
                     return React.cloneElement(child);
                 }

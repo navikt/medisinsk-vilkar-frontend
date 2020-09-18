@@ -44,9 +44,6 @@ export default (opptjeningerFromApi) => {
     return (
         <AktivitetTabell
             columnHeaders={['Status', 'Periode', 'Arbeidsgiver', 'Type', 'Stillingsandel']}
-            onFormSubmission={(formValues) => {
-                console.log(formValues);
-            }}
         >
             {aktiviteter.map((aktivitet, aktivitetIndex) => (
                 <AktivitetTabell.Row
