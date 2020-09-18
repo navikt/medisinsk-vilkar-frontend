@@ -1,12 +1,17 @@
 import React from 'react';
 import AktivitetTabell from './AktivitetTabell';
 import AktivitetForm from './AktivitetForm';
+import CheckCircle from './icons/CheckCircle';
 
 function renderAktivitetColumns(aktivitet) {
     const { klasse, aktivitetsperiode, type, arbeidsgiverNavn, stillingsandel } = aktivitet;
     return (
         <>
-            <AktivitetTabell.Column>{klasse?.kode}</AktivitetTabell.Column>
+            <AktivitetTabell.Column>
+                {' '}
+                <CheckCircle />
+                {klasse?.kode}
+            </AktivitetTabell.Column>
             <AktivitetTabell.Column>
                 {aktivitetsperiode.fom}-{aktivitetsperiode.tom}
             </AktivitetTabell.Column>

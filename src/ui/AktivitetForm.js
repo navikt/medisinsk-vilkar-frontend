@@ -1,7 +1,7 @@
 import React from 'react';
 import { Radio, RadioGruppe, Textarea } from 'nav-frontend-skjema';
 import Knapp from 'nav-frontend-knapper';
-import './../aktivitetForm.scss';
+import './aktivitetForm.scss';
 
 export default ({ onSubmit }) => {
     const [begrunnelse, setBegrunnelse] = React.useState('');
@@ -13,19 +13,21 @@ export default ({ onSubmit }) => {
             onSubmit={(event) => onSubmit(event, { begrunnelse, godkjenning })}
         >
             <div className="aktivitetForm__element">
-                <RadioGruppe legend="Vurder om aktiviteten kan godkjennes">
-                    <Radio
-                        label="Aktiviteten godkjennes"
-                        value="godkjent"
-                        name="status"
-                        onChange={(e) => setGodkjenning(e.target.value)}
-                    />
-                    <Radio
-                        label="Aktiviteten godkjennes ikke"
-                        value="ikkeGodkjent"
-                        name="status"
-                        onChange={(e) => setGodkjenning(e.target.value)}
-                    />
+                <RadioGruppe legend="Vurdering">
+                    <div className="godkjenningGroup">
+                        <Radio
+                            label="Aktiviteten godkjennes"
+                            value="godkjent"
+                            name="status"
+                            onChange={(e) => setGodkjenning(e.target.value)}
+                        />
+                        <Radio
+                            label="Aktiviteten godkjennes ikke"
+                            value="ikkeGodkjent"
+                            name="status"
+                            onChange={(e) => setGodkjenning(e.target.value)}
+                        />
+                    </div>
                 </RadioGruppe>
             </div>
             <div className="aktivitetForm__element">

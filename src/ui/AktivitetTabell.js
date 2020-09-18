@@ -18,8 +18,11 @@ const AktivitetTabell = ({ columnHeaders, children }) => {
 };
 
 AktivitetTabell.Row = ({ isActive, onButtonClick, renderWhenActive, children }) => {
+    const rowCls = isActive
+        ? 'aktivitetTabell__tr aktivitetTabell__tr--active'
+        : 'aktivitetTabell__tr';
     const rowContent = (
-        <div className="aktivitetTabell__tr" role="row">
+        <div className={rowCls} role="row">
             {children}
             <div className="aktivitetTabell__tr__btnContainer">
                 <div className="aktivitetTabell__tr__btnContainer__btn">
