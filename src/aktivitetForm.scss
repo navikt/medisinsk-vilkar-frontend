@@ -1,0 +1,16 @@
+.aktivitetForm {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1rem;
+
+  &__element {
+    flex-basis: 50%;
+    flex-grow: 1;
+  }
+
+  &__buttons {
+    flex-basis: 100%;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+}

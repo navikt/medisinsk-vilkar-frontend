@@ -1,5 +1,5 @@
 import regeneratorRuntime from 'regenerator-runtime'; // (needed for async fns, see https://github.com/babel/babel/issues/9849)
-import mockedOpptjeningData from "./mock/mockedOpptjeningData";
+import mockedOpptjeningData from './mock/mockedOpptjeningData';
 import renderers from './ui/renderers';
 import './aktivitetTabell.scss';
 
@@ -14,25 +14,25 @@ function getOpptjeningPath() {
             resolve(opptjeningPath);
         });
         setTimeout(() => {
-            reject('Getting opptjeningPath has timed out')
-        }, 2500)
+            reject('Getting opptjeningPath has timed out');
+        }, 2500);
     });
 }
 
 async function getOpptjeningData(opptjeningPath) {
     const response = await fetch(opptjeningPath, {
-        credentials: 'same-origin'
+        credentials: 'same-origin',
     });
     const data = await response.json();
     return data;
 }
 
 window.renderOpptjeningApp = async (appId, useMock) => {
-    const { renderAppInSuccessfulState, renderErrorMessage, renderAppInLoadingState }  = renderers;
+    const { renderAppInSuccessfulState, renderErrorMessage, renderAppInLoadingState } = renderers;
 
     renderAppInLoadingState(appId);
     if (useMock) {
-        return renderAppInSuccessfulState(appId, mockedOpptjeningData)
+        return renderAppInSuccessfulState(appId, mockedOpptjeningData);
     }
 
     let opptjeningData = null;
@@ -41,8 +41,7 @@ window.renderOpptjeningApp = async (appId, useMock) => {
         if (opptjeningPath !== null) {
             opptjeningData = await getOpptjeningData(opptjeningPath);
         }
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
         renderErrorMessage(appId);
     }
