@@ -3,7 +3,7 @@ import { Radio, RadioGruppe, Textarea } from 'nav-frontend-skjema';
 import Knapp from 'nav-frontend-knapper';
 import './aktivitetForm.scss';
 
-export default ({ onSubmit }) => {
+export default ({ onSubmit, onCancel }) => {
     const [begrunnelse, setBegrunnelse] = React.useState('');
     const [godkjenning, setGodkjenning] = React.useState(null);
 
@@ -43,7 +43,7 @@ export default ({ onSubmit }) => {
                 <Knapp type="hoved" mini htmlType="submit">
                     Oppdater
                 </Knapp>
-                <Knapp type="standard" mini>
+                <Knapp type="standard" mini htmlType="button" onClick={onCancel}>
                     Avbryt
                 </Knapp>
             </div>

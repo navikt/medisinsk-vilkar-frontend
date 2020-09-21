@@ -1,4 +1,5 @@
 import React from 'react';
+import Chevron from 'nav-frontend-chevron';
 
 const AktivitetTabell = ({ columnHeaders, children }) => {
     return (
@@ -7,6 +8,7 @@ const AktivitetTabell = ({ columnHeaders, children }) => {
                 {columnHeaders.map((columnHeader) => (
                     <div className="aktivitetTabell__th">{columnHeader}</div>
                 ))}
+                <div className="aktivitetTabell__th">{/* Empty column header for Chevron */}</div>
             </div>
             {React.Children.map(children, (child) => {
                 if (child.type === AktivitetTabell.Row) {
@@ -24,13 +26,13 @@ AktivitetTabell.Row = ({ isActive, onButtonClick, renderWhenActive, children }) 
     const rowContent = (
         <div className={rowCls} role="row">
             {children}
-            <div className="aktivitetTabell__tr__btnContainer">
-                <div className="aktivitetTabell__tr__btnContainer__btn">
-                    <button onClick={onButtonClick}>
-                        {isActive ? 'Lukk skjema' : 'Åpne skjema'}
-                    </button>
-                </div>
-            </div>
+            <AktivitetTabell.Column onClick={onButtonClick} role="button">
+                <Chevron
+                    type={isActive ? 'opp' : 'ned'}
+                    stor
+                    style={{ color: '#0067C5', position: 'relative', top: '-4px' }}
+                />
+            </AktivitetTabell.Column>
         </div>
     );
 
@@ -41,9 +43,9 @@ AktivitetTabell.Row = ({ isActive, onButtonClick, renderWhenActive, children }) 
     return rowContent;
 };
 
-AktivitetTabell.Column = ({ children }) => {
+AktivitetTabell.Column = ({ children, ...otherProps }) => {
     return (
-        <div className="aktivitetTabell__td" role="cell">
+        <div className="aktivitetTabell__td" role="cell" {...otherProps}>
             {children}
         </div>
     );

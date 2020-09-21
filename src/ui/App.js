@@ -1,16 +1,18 @@
 import React from 'react';
+import Chevron from 'nav-frontend-chevron';
 import AktivitetTabell from './AktivitetTabell';
 import AktivitetForm from './AktivitetForm';
 import CheckCircle from './icons/CheckCircle';
+import ExclamationCircle from './icons/ExclamationCircle';
 
 function renderAktivitetColumns(aktivitet) {
     const { klasse, aktivitetsperiode, type, arbeidsgiverNavn, stillingsandel } = aktivitet;
     return (
         <>
             <AktivitetTabell.Column>
-                {' '}
-                <CheckCircle />
-                {klasse?.kode}
+                {klasse?.kode === 'Innvilget' && <CheckCircle />}
+                {klasse?.kode === 'Må avklares' && <ExclamationCircle />}
+                <span style={{ marginLeft: '1rem' }}>{klasse?.kode}</span>
             </AktivitetTabell.Column>
             <AktivitetTabell.Column>
                 {aktivitetsperiode.fom}-{aktivitetsperiode.tom}
@@ -59,6 +61,9 @@ export default (opptjeningerFromApi) => {
                             onSubmit={(event, formValues) => {
                                 event.preventDefault();
                                 updateAktivitet(formValues, aktivitetIndex);
+                            }}
+                            onCancel={() => {
+                                updateActiveRowIndex(-1);
                             }}
                         />
                     )}
