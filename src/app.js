@@ -5,13 +5,14 @@ import './ui/aktivitetTabell.scss';
 
 let aksjonspunktService = null;
 
-function getOpptjeningPath() {
+// rename this fn
+function getOpptjeningInitData() {
     return new Promise((resolve, reject) => {
         let opptjeningPath = null;
         document.addEventListener('init:opptjening', (event) => {
             opptjeningPath = event.detail.services.opptjening.path;
             aksjonspunktService = event.detail.services.aksjonspunkt;
-            resolve(opptjeningPath);
+            resolve({ opptjeningPath, submitCallback: event.detail.submitCallback });
         });
         setTimeout(() => {
             reject('Getting opptjeningPath has timed out');
@@ -36,8 +37,11 @@ window.renderOpptjeningApp = async (appId, useMock) => {
     }
 
     let opptjeningData = null;
+    let submitCallback = null;
     try {
-        const opptjeningPath = await getOpptjeningPath();
+        const initData = await getOpptjeningInitData();
+        const opptjeningPath = initData.opptjeningPath;
+        submitCallback = initData.submitCallback;
         if (opptjeningPath !== null) {
             opptjeningData = await getOpptjeningData(opptjeningPath);
         }
@@ -45,5 +49,5 @@ window.renderOpptjeningApp = async (appId, useMock) => {
         console.error(error);
         renderErrorMessage(appId);
     }
-    renderAppInSuccessfulState(appId, opptjeningData, aksjonspunktService);
+    renderAppInSuccessfulState(appId, opptjeningData, submitCallback);
 };

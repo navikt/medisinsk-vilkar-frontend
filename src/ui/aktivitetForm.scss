@@ -1,10 +1,9 @@
-.aktivitetForm {
+.opptjeningAktivitetForm {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   padding: 1rem 0.5rem 0.5rem 0.5rem;
-  position: fixed;
-  width: 97%;
+  position: absolute;
 
   &__element {
     flex: 1 0 50%;

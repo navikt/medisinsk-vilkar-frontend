@@ -1,5 +1,5 @@
 import React from 'react';
-import Chevron from 'nav-frontend-chevron';
+import { Hovedknapp } from 'nav-frontend-knapper';
 import AktivitetTabell from './AktivitetTabell';
 import AktivitetForm from './AktivitetForm';
 import CheckCircle from './icons/CheckCircle';
@@ -24,11 +24,9 @@ function renderAktivitetColumns(aktivitet) {
     );
 }
 
-export default (opptjeningerFromApi) => {
+export default ({ opptjeninger, submitCallback }) => {
     const [activeRowIndex, setActiveRowIndex] = React.useState(-1);
-    const [aktiviteter, updateAktiviteter] = React.useState(
-        opptjeningerFromApi.opptjeninger[0].aktiviteter
-    );
+    const [aktiviteter, updateAktiviteter] = React.useState(opptjeninger[0].aktiviteter);
 
     const updateActiveRowIndex = (clickedIndex) => {
         if (clickedIndex === activeRowIndex) {
@@ -49,28 +47,37 @@ export default (opptjeningerFromApi) => {
     };
 
     return (
-        <AktivitetTabell
-            columnHeaders={['Status', 'Periode', 'Arbeidsgiver', 'Type', 'Stillingsandel']}
-        >
-            {aktiviteter.map((aktivitet, aktivitetIndex) => (
-                <AktivitetTabell.Row
-                    isActive={aktivitetIndex === activeRowIndex}
-                    onButtonClick={() => updateActiveRowIndex(aktivitetIndex)}
-                    renderWhenActive={() => (
-                        <AktivitetForm
-                            onSubmit={(event, formValues) => {
-                                event.preventDefault();
-                                updateAktivitet(formValues, aktivitetIndex);
-                            }}
-                            onCancel={() => {
-                                updateActiveRowIndex(-1);
-                            }}
-                        />
-                    )}
-                >
-                    {renderAktivitetColumns(aktivitet)}
-                </AktivitetTabell.Row>
-            ))}
-        </AktivitetTabell>
+        <div>
+            <h3>Opptjeningsperioder</h3>
+            <AktivitetTabell
+                columnHeaders={['Status', 'Periode', 'Arbeidsgiver', 'Type', 'Stillingsandel']}
+            >
+                {aktiviteter.map((aktivitet, aktivitetIndex) => (
+                    <AktivitetTabell.Row
+                        isActive={aktivitetIndex === activeRowIndex}
+                        onButtonClick={() => updateActiveRowIndex(aktivitetIndex)}
+                        renderWhenActive={() => (
+                            <AktivitetForm
+                                onSubmit={(event, formValues) => {
+                                    event.preventDefault();
+                                    updateAktivitet(formValues, aktivitetIndex);
+                                }}
+                                onCancel={() => {
+                                    updateActiveRowIndex(-1);
+                                }}
+                            />
+                        )}
+                    >
+                        {renderAktivitetColumns(aktivitet)}
+                    </AktivitetTabell.Row>
+                ))}
+            </AktivitetTabell>
+            <Hovedknapp
+                style={{ marginTop: '10rem' }}
+                onClick={() => submitCallback({ aktiviteter: aktiviteter })}
+            >
+                Bekreft og fortsett
+            </Hovedknapp>
+        </div>
     );
 };

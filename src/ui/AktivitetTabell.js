@@ -30,7 +30,7 @@ AktivitetTabell.Row = ({ isActive, onButtonClick, renderWhenActive, children }) 
                 <Chevron
                     type={isActive ? 'opp' : 'ned'}
                     stor
-                    style={{ color: '#0067C5', position: 'relative', top: '-4px' }}
+                    style={{ color: '#0067C5', position: 'relative' }}
                 />
             </AktivitetTabell.Column>
         </div>

@@ -9,10 +9,10 @@ export default ({ onSubmit, onCancel }) => {
 
     return (
         <form
-            className="aktivitetForm"
+            className="opptjeningAktivitetForm"
             onSubmit={(event) => onSubmit(event, { begrunnelse, godkjenning })}
         >
-            <div className="aktivitetForm__element">
+            <div className="opptjeningAktivitetForm__element">
                 <RadioGruppe legend="Vurdering">
                     <div className="godkjenningGroup">
                         <Radio
@@ -30,7 +30,7 @@ export default ({ onSubmit, onCancel }) => {
                     </div>
                 </RadioGruppe>
             </div>
-            <div className="aktivitetForm__element">
+            <div className="opptjeningAktivitetForm__element">
                 <Textarea
                     label="Begrunn vurderingen"
                     onChange={(e) => {
@@ -39,7 +39,7 @@ export default ({ onSubmit, onCancel }) => {
                     value={begrunnelse}
                 />
             </div>
-            <div className="aktivitetForm__buttons">
+            <div className="opptjeningAktivitetForm__buttons">
                 <Knapp type="hoved" mini htmlType="submit">
                     Oppdater
                 </Knapp>
