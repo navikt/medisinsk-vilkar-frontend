@@ -12,7 +12,7 @@ function getOpptjeningInitData() {
         document.addEventListener('init:opptjening', (event) => {
             opptjeningPath = event.detail.services.opptjening.path;
             aksjonspunktService = event.detail.services.aksjonspunkt;
-            resolve({ opptjeningPath, submitCallback: event.detail.submitCallback });
+            resolve({ opptjeningPath, onSubmit: event.detail.onSubmit });
         });
         setTimeout(() => {
             reject('Getting opptjeningPath has timed out');
@@ -33,15 +33,17 @@ window.renderOpptjeningApp = async (appId, useMock) => {
 
     renderAppInLoadingState(appId);
     if (useMock) {
-        return renderAppInSuccessfulState(appId, mockedOpptjeningData);
+        return renderAppInSuccessfulState(appId, mockedOpptjeningData, (data) => {
+            console.log('Submit', data);
+        });
     }
 
     let opptjeningData = null;
-    let submitCallback = null;
+    let onSubmit = null;
     try {
         const initData = await getOpptjeningInitData();
         const opptjeningPath = initData.opptjeningPath;
-        submitCallback = initData.submitCallback;
+        onSubmit = initData.onSubmit;
         if (opptjeningPath !== null) {
             opptjeningData = await getOpptjeningData(opptjeningPath);
         }
@@ -49,5 +51,5 @@ window.renderOpptjeningApp = async (appId, useMock) => {
         console.error(error);
         renderErrorMessage(appId);
     }
-    renderAppInSuccessfulState(appId, opptjeningData, submitCallback);
+    renderAppInSuccessfulState(appId, opptjeningData, onSubmit);
 };

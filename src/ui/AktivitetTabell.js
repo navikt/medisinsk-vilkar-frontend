@@ -8,7 +8,6 @@ const AktivitetTabell = ({ columnHeaders, children }) => {
                 {columnHeaders.map((columnHeader) => (
                     <div className="aktivitetTabell__th">{columnHeader}</div>
                 ))}
-                <div className="aktivitetTabell__th">{/* Empty column header for Chevron */}</div>
             </div>
             {React.Children.map(children, (child) => {
                 if (child.type === AktivitetTabell.Row) {
@@ -19,20 +18,13 @@ const AktivitetTabell = ({ columnHeaders, children }) => {
     );
 };
 
-AktivitetTabell.Row = ({ isActive, onButtonClick, renderWhenActive, children }) => {
+AktivitetTabell.Row = ({ isActive, renderWhenActive, children }) => {
     const rowCls = isActive
         ? 'aktivitetTabell__tr aktivitetTabell__tr--active'
         : 'aktivitetTabell__tr';
     const rowContent = (
         <div className={rowCls} role="row">
             {children}
-            <AktivitetTabell.Column onClick={onButtonClick} role="button">
-                <Chevron
-                    type={isActive ? 'opp' : 'ned'}
-                    stor
-                    style={{ color: '#0067C5', position: 'relative' }}
-                />
-            </AktivitetTabell.Column>
         </div>
     );
 

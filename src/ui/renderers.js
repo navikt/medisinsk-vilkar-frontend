@@ -10,12 +10,9 @@ function renderAppInLoadingState() {
     return <p>Laster</p>;
 }
 
-function renderAppInSuccessfulState(appId, opptjeningData, submitCallback) {
+function renderAppInSuccessfulState(appId, opptjeningData, onSubmit) {
     const opptjeninger = opptjeningData.opptjeninger;
-    render(
-        <App opptjeninger={opptjeninger} submitCallback={submitCallback} />,
-        document.getElementById(appId)
-    );
+    render(<App opptjeninger={opptjeninger} onSubmit={onSubmit} />, document.getElementById(appId));
 }
 
 export default {

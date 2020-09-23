@@ -17,9 +17,9 @@ export default {
                         tom: '2019-04-01',
                     },
                     stillingsandel: 100,
-                    klasse: {
-                        kode: 'Innvilget',
-                    },
+                    erGodkjent: true,
+                    erAvslått: false,
+                    måVurderesAvSaksbehandler: false,
                 },
                 {
                     type: {
@@ -32,9 +32,9 @@ export default {
                         tom: '2019-04-01',
                     },
                     stillingsandel: 100,
-                    klasse: {
-                        kode: 'Må avklares',
-                    },
+                    erGodkjent: false,
+                    erAvslått: false,
+                    måVurderesAvSaksbehandler: true,
                 },
             ],
         },
