@@ -3,23 +3,6 @@ import mockedOpptjeningData from './mock/mockedOpptjeningData';
 import renderers from './ui/renderers';
 import './ui/aktivitetTabell.scss';
 
-let aksjonspunktService = null;
-
-// rename this fn
-function getOpptjeningInitData() {
-    return new Promise((resolve, reject) => {
-        let opptjeningPath = null;
-        document.addEventListener('init:opptjening', (event) => {
-            opptjeningPath = event.detail.services.opptjening.path;
-            aksjonspunktService = event.detail.services.aksjonspunkt;
-            resolve({ opptjeningPath, onSubmit: event.detail.onSubmit });
-        });
-        setTimeout(() => {
-            reject('Getting opptjeningPath has timed out');
-        }, 2500);
-    });
-}
-
 async function getOpptjeningData(opptjeningPath) {
     const response = await fetch(opptjeningPath, {
         credentials: 'same-origin',
@@ -28,7 +11,7 @@ async function getOpptjeningData(opptjeningPath) {
     return data;
 }
 
-window.renderOpptjeningApp = async (appId, useMock) => {
+window.renderOpptjeningApp = async (appId, config, useMock) => {
     const { renderAppInSuccessfulState, renderErrorMessage, renderAppInLoadingState } = renderers;
 
     renderAppInLoadingState(appId);
@@ -39,11 +22,8 @@ window.renderOpptjeningApp = async (appId, useMock) => {
     }
 
     let opptjeningData = null;
-    let onSubmit = null;
     try {
-        const initData = await getOpptjeningInitData();
-        const opptjeningPath = initData.opptjeningPath;
-        onSubmit = initData.onSubmit;
+        const opptjeningPath = config.services.opptjening.path;
         if (opptjeningPath !== null) {
             opptjeningData = await getOpptjeningData(opptjeningPath);
         }
@@ -51,5 +31,6 @@ window.renderOpptjeningApp = async (appId, useMock) => {
         console.error(error);
         renderErrorMessage(appId);
     }
-    renderAppInSuccessfulState(appId, opptjeningData, onSubmit);
+
+    renderAppInSuccessfulState(appId, opptjeningData, config.onSubmit);
 };

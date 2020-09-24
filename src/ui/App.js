@@ -43,7 +43,7 @@ function renderAktivitetColumns(aktivitet) {
                 {aktivitetsperiode.fom}-{aktivitetsperiode.tom}
             </AktivitetTabell.Column>
             <AktivitetTabell.Column>{arbeidsgiverNavn}</AktivitetTabell.Column>
-            <AktivitetTabell.Column>{type.kode}</AktivitetTabell.Column>
+            <AktivitetTabell.Column>{type}</AktivitetTabell.Column>
             <AktivitetTabell.Column>{stillingsandel}%</AktivitetTabell.Column>
         </>
     );
@@ -103,7 +103,7 @@ export default ({ opptjeninger, onSubmit }) => {
                     >
                         {renderAktivitetColumns(aktivitet)}
                         {aktivitet.måVurderesAvSaksbehandler && (
-                            <div>
+                            <div onClick={() => updateActiveRowIndex(aktivitetIndex)}>
                                 <button
                                     onClick={() => updateActiveRowIndex(aktivitetIndex)}
                                     role="button"
@@ -115,6 +115,7 @@ export default ({ opptjeninger, onSubmit }) => {
                                     }}
                                 >
                                     <Chevron
+                                        onClick={() => updateActiveRowIndex(aktivitetIndex)}
                                         type={aktivitetIndex === activeRowIndex ? 'opp' : 'ned'}
                                         stor
                                         style={{

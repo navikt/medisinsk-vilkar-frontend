@@ -7,10 +7,7 @@ export default {
             },
             aktiviteter: [
                 {
-                    type: {
-                        kode: 'ARBEID',
-                        kodeverk: 'OPPTJENING_AKTIVITET_TYPE',
-                    },
+                    type: 'ARBEID',
                     arbeidsgiverNavn: '1ELLERANNENBEDRIFT AS',
                     aktivitetsperiode: {
                         fom: '2019-01-01',
@@ -22,10 +19,7 @@ export default {
                     måVurderesAvSaksbehandler: false,
                 },
                 {
-                    type: {
-                        kode: 'ARBEID',
-                        kodeverk: 'OPPTJENING_AKTIVITET_TYPE',
-                    },
+                    type: 'ARBEID',
                     arbeidsgiverNavn: 'K0NGEB3DR1FT ASA',
                     aktivitetsperiode: {
                         fom: '2019-01-01',
