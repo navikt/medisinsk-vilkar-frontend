@@ -1,5 +1,4 @@
 import React from 'react';
-import Chevron from 'nav-frontend-chevron';
 
 const AktivitetTabell = ({ columnHeaders, children }) => {
     return (
@@ -18,12 +17,12 @@ const AktivitetTabell = ({ columnHeaders, children }) => {
     );
 };
 
-AktivitetTabell.Row = ({ isActive, renderWhenActive, children }) => {
+AktivitetTabell.Row = ({ isActive, renderWhenActive, children, ...otherProps }) => {
     const rowCls = isActive
         ? 'aktivitetTabell__tr aktivitetTabell__tr--active'
         : 'aktivitetTabell__tr';
     const rowContent = (
-        <div className={rowCls} role="row">
+        <div {...otherProps} role="row" className={rowCls}>
             {children}
         </div>
     );
@@ -37,7 +36,7 @@ AktivitetTabell.Row = ({ isActive, renderWhenActive, children }) => {
 
 AktivitetTabell.Column = ({ children, ...otherProps }) => {
     return (
-        <div className="aktivitetTabell__td" role="cell" {...otherProps}>
+        <div {...otherProps} className="aktivitetTabell__td" role="cell">
             {children}
         </div>
     );

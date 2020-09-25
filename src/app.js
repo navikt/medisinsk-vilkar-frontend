@@ -1,7 +1,7 @@
 import regeneratorRuntime from 'regenerator-runtime'; // (needed for async fns, see https://github.com/babel/babel/issues/9849)
 import mockedOpptjeningData from './mock/mockedOpptjeningData';
 import renderers from './ui/renderers';
-import './ui/aktivitetTabell.scss';
+import './ui/components/aktivitetTabell.scss';
 
 async function getOpptjeningData(opptjeningPath) {
     const response = await fetch(opptjeningPath, {

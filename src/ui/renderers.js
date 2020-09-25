@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import App from './App';
+import MainComponent from './components/MainComponent';
 
 function renderErrorMessage() {
     return <p>Noe gikk galt :(</p>;
@@ -12,7 +12,10 @@ function renderAppInLoadingState() {
 
 function renderAppInSuccessfulState(appId, opptjeningData, onSubmit) {
     const opptjeninger = opptjeningData.opptjeninger;
-    render(<App opptjeninger={opptjeninger} onSubmit={onSubmit} />, document.getElementById(appId));
+    render(
+        <MainComponent initialOpptjeninger={opptjeninger} onSubmit={onSubmit} />,
+        document.getElementById(appId)
+    );
 }
 
 export default {
