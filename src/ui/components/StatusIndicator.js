@@ -1,6 +1,7 @@
 import React from 'react';
 import CheckCircle from '../icons/CheckCircle';
 import ExclamationCircle from '../icons/ExclamationCircle';
+import RemoveCircle from '../icons/RemoveCircle';
 
 export default ({ aktivitet: { erAvslått, erGodkjent, måVurderesAvSaksbehandler } }) => {
     if (erGodkjent) {
@@ -13,7 +14,7 @@ export default ({ aktivitet: { erAvslått, erGodkjent, måVurderesAvSaksbehandle
     }
     if (erAvslått) {
         return [
-            <CheckCircle key="icon" />,
+            <RemoveCircle key="icon" />,
             <span key="text" style={{ marginLeft: '1rem' }}>
                 Avslått
             </span>,
