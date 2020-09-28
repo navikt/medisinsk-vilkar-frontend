@@ -1,7 +1,16 @@
 import React from 'react';
+import utils from './../../util/utils';
 import AktivitetTabell from './AktivitetTabell';
 import StatusIndicator from './StatusIndicator';
 import Chevron from 'nav-frontend-chevron';
+
+const formatAktivitetsperiode = ({ fom, tom }) => {
+    const tomYearIs9999 = utils.isYear9999(tom);
+    if (tomYearIs9999) {
+        return `${utils.formatDate(fom)} - pågående`;
+    }
+    return `${utils.formatDateInterval(fom, tom)}`;
+};
 
 const AktivitetDataColumns = ({ aktivitet }) => {
     const { aktivitetsperiode, arbeidsgiverNavn, type, stillingsandel } = aktivitet;
@@ -11,7 +20,7 @@ const AktivitetDataColumns = ({ aktivitet }) => {
                 <StatusIndicator aktivitet={aktivitet} />
             </AktivitetTabell.Column>
             <AktivitetTabell.Column>
-                {aktivitetsperiode.fom}-{aktivitetsperiode.tom}
+                {formatAktivitetsperiode(aktivitetsperiode)}
             </AktivitetTabell.Column>
             <AktivitetTabell.Column>{arbeidsgiverNavn}</AktivitetTabell.Column>
             <AktivitetTabell.Column>{type}</AktivitetTabell.Column>

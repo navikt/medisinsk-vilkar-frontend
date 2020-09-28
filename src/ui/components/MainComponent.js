@@ -1,13 +1,13 @@
 import React from 'react';
 import { Hovedknapp } from 'nav-frontend-knapper';
-import { opptjeningerHarAktiviteterSomMåVurderesAvSaksbehandler } from '../../util/utils';
+import utils from '../../util/utils';
 import OpptjeningsperiodeContent from './OpptjeningsperiodeContent';
 
 export default ({ initialOpptjeninger, onSubmit }) => {
     const [opptjeninger, updateOpptjeninger] = React.useState(initialOpptjeninger);
 
     const formIsEditable = (opptjeninger) => {
-        return opptjeningerHarAktiviteterSomMåVurderesAvSaksbehandler(opptjeninger);
+        return utils.opptjeningerHarAktiviteterSomMåVurderesAvSaksbehandler(opptjeninger);
     };
 
     const updateOpptjening = (updatedOpptjening, opptjeningIndex) => {
