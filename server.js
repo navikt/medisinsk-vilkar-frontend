@@ -5,6 +5,10 @@ const app = express();
 app.use(cors());
 app.use(express.static('build'));
 
+app.use('/isAlive', (req, res) => {
+    res.sendStatus(200);
+});
+
 const port = 8080;
 app.listen(port, (error) => {
     if (error) {
