@@ -82,20 +82,21 @@ jobs:
             ```
             <script
               type="text/javascript"
-              text="https://opptjening-microfrontend-poc.dev.adeo.no/${{ env.VERSION }}/app.js"
-              integrity="${{ env.JS_HASH }}"
+              src="https://opptjening-microfrontend-poc.dev.adeo.no/${{ env.VERSION }}/app.js"
+              integrity="sha384-${{ env.JS_HASH }}"
             />
             ```
 
             For CSS, add this to the `<head>` of your app:
-            ```<link
-                rel="stylesheet"
-                text="https://opptjening-microfrontend-poc.dev.adeo.no/${{ env.VERSION }}/styles.css"
-                integrity="${{ env.CSS_HASH }}"
-              >
+            ```
+            <link
+              rel="stylesheet"
+              href="https://opptjening-microfrontend-poc.dev.adeo.no/${{ env.VERSION }}/styles.css"
+              integrity="sha384-${{ env.CSS_HASH }}"
+            >
             ```
 
-            *Changes in this Release*
+            **Changes in this Release**
             ${{ env.CHANGELOG }}
           draft: false
           prerelease: false
