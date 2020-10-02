@@ -84,7 +84,8 @@ jobs:
               type="text/javascript"
               src="https://opptjening-microfrontend-poc.dev.adeo.no/${{ env.VERSION }}/app.js"
               integrity="sha384-${{ env.JS_HASH }}"
-            />
+              crossorigin="anonymous"
+            ></script>
             ```
 
             For CSS, add this to the `<head>` of your app:
@@ -93,6 +94,7 @@ jobs:
               rel="stylesheet"
               href="https://opptjening-microfrontend-poc.dev.adeo.no/${{ env.VERSION }}/styles.css"
               integrity="sha384-${{ env.CSS_HASH }}"
+              crossorigin="anonymous"
             >
             ```
 
