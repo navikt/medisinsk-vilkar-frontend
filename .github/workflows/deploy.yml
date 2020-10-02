@@ -6,7 +6,7 @@ on:
       - '.gitignore'
       - '.prettierrc'
     branches:
-      - master
+      - main
 env:
   IMAGE_BASE: docker.pkg.github.com/${{ github.repository }}/opptjening-microfrontend-poc
   CLUSTER: dev-gcp
