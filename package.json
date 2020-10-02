@@ -6,7 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./server.js",
     "build": "webpack --config webpack/webpack-config.production.js",
-    "dev": "node webpack/webpack-config.development.js"
+    "dev": "node webpack/webpack-config.development.js",
+    "version": "node ./version.js"
   },
   "keywords": [],
   "author": "NAV IT",
