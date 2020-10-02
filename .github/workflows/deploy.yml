@@ -31,7 +31,7 @@ jobs:
           echo "::set-env name=IMAGE::$IMAGE_BASE:$(npm run version --silent)"
       - name: Bygg og laste opp docker-image
         run: |
-          docker build --tag ${IMAGE}
+          docker build --tag ${IMAGE} .
           echo "$GITHUB_TOKEN" | docker login --username "x-access-token" --password-stdin https://docker.pkg.github.com
           docker push ${IMAGE}
         env:
