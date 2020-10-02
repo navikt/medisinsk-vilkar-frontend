@@ -26,8 +26,6 @@ jobs:
           node-version: 12.x
       - name: Installere dependencies
         run: npm install
-      - name: Bygge dist
-        run: npm run build
       - name: Sette versjon
         run: |
           echo "::set-env name=VERSION::$(npm run version --silent)"
