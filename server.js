@@ -6,6 +6,9 @@ app.use(cors());
 app.use(express.static('build'));
 
 const port = 8080;
-app.listen(port, () => {
+app.listen(port, (error) => {
+    if (error) {
+        console.error(error);
+    }
     console.log('Listening on port', 8080);
 });
