@@ -28,8 +28,7 @@ jobs:
         run: npm run build
       - name: Sette Docker-navn og -tag
         run: |
-          echo "::set-env name=TAG::$(npm run version --silent)"
-          echo "::set-env name=IMAGE::$IMAGE_BASE:$TAG"
+          echo "::set-env name=IMAGE::$IMAGE_BASE:$(npm run version --silent)"
       - name: Bygg og laste opp docker-image
         run: |
           docker build --tag ${IMAGE}
