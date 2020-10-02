@@ -1,0 +1,9 @@
+{
+  "app": "opptjening-microfrontend-poc",
+  "cluster": "dev-gcp",
+  "namespace": "k9saksbehandling",
+  "team": "k9saksbehandling",
+  "minReplicas": "1",
+  "maxReplicas": "2",
+  "ingresses": ["https://opptjening-microfrontend-poc.dev.adeo.no"]
+}

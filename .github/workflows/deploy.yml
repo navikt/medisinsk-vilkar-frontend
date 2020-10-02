@@ -34,5 +34,11 @@ jobs:
           docker build --tag ${IMAGE} .
           echo "$GITHUB_TOKEN" | docker login --username "x-access-token" --password-stdin https://docker.pkg.github.com
           docker push ${IMAGE}
+      - name: Deploy til dev-gcp
+        uses: nais/deploy/actions/deploy@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: nais/naiserator.yaml
+          VARS: nais/dev-gcp.json
