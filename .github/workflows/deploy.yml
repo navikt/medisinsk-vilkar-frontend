@@ -78,15 +78,24 @@ jobs:
           tag_name: ${{ env.VERSION }}
           release_name: ${{ env.VERSION }}
           body: |
-            For JS, look here:
-            https://opptjening-microfrontend-poc.dev.adeo.no/${{ env.VERSION }}/app.js
-            SHA-384 is ${{ env.JS_HASH }}
+            For JS, add this to your app:
+            ```
+            <script
+              type="text/javascript"
+              text="https://opptjening-microfrontend-poc.dev.adeo.no/${{ env.VERSION }}/app.js"
+              integrity="${{ env.JS_HASH }}"
+            />
+            ```
 
-            For CSS, look here:
-            https://opptjening-microfrontend-poc.dev.adeo.no/${{ env.VERSION }}/styles.css
-            SHA-384 is ${{ env.CSS_HASH }}
+            For CSS, add this to the `<head>` of your app:
+            ```<link
+                rel="stylesheet"
+                text="https://opptjening-microfrontend-poc.dev.adeo.no/${{ env.VERSION }}/styles.css"
+                integrity="${{ env.CSS_HASH }}"
+              >
+            ```
 
-            Changes in this Release
+            *Changes in this Release*
             ${{ env.CHANGELOG }}
           draft: false
           prerelease: false
