@@ -29,6 +29,12 @@ jobs:
       - name: Sette versjon
         run: |
           echo "::set-env name=VERSION::$(npm run version --silent)"
+      - name: Sjekke om tag fins fra før
+        run: |
+          if git rev-parse "$VERSION" >/dev/null 2>&1; then
+            echo "Tag $VERSION already exists, aborting"
+            exit 1
+          fi
       - name: Sette miljøvariabler
         run: |
           echo "::set-env name=IMAGE::$IMAGE_BASE:$VERSION"
