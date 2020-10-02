@@ -35,6 +35,12 @@ jobs:
             echo "Tag $VERSION already exists, aborting"
             exit 1
           fi
+      - name: Sjekk om bygg finnes
+        run: |
+          if [ ! -d "build/$VERSION" ]; then
+            echo "Build folder with name $VERSION does not exist, aborting"
+            exit 1
+          fi
       - name: Sette miljøvariabler
         run: |
           echo "::set-env name=IMAGE::$IMAGE_BASE:$VERSION"
