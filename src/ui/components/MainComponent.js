@@ -3,7 +3,7 @@ import { Hovedknapp } from 'nav-frontend-knapper';
 import utils from '../../util/utils';
 import OpptjeningsperiodeContent from './OpptjeningsperiodeContent';
 
-export default ({ initialOpptjeninger, onSubmit }) => {
+const MainComponent = ({ initialOpptjeninger, onSubmit }) => {
     const [opptjeninger, updateOpptjeninger] = React.useState(initialOpptjeninger);
 
     const formIsEditable = (opptjeninger) => {
@@ -43,3 +43,5 @@ export default ({ initialOpptjeninger, onSubmit }) => {
         </div>
     );
 };
+
+export default MainComponent;

@@ -2,7 +2,7 @@ FROM node:alpine
 
 WORKDIR /opptjening-app
 
-COPY dist ./dist
+COPY build ./build
 COPY server.js .
 COPY node_modules ./node_modules
 COPY package.json .
