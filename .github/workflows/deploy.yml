@@ -26,9 +26,14 @@ jobs:
         run: npm install
       - name: Bygge dist
         run: npm run build
-      - name: Sette Docker-navn og -tag
+      - name: Sette versjon
         run: |
-          echo "::set-env name=IMAGE::$IMAGE_BASE:$(npm run version --silent)"
+          echo "::set-env name=VERSION::$(npm run version --silent)"
+      - name: Sette miljøvariabler
+        run: |
+          echo "::set-env name=IMAGE::$IMAGE_BASE:$VERSION"
+          echo "::set-env name=CSS_HASH::$(shasum -b -a 384 build/$VERSION/styles.css | awk '{ print $1 }' | xxd -r -p | base64)"
+          echo "::set-env name=JS_HASH::$(shasum -b -a 384 build/$VERSION/app.js | awk '{ print $1 }' | xxd -r -p | base64)"
       - name: Bygg og laste opp docker-image
         run: |
           docker build --tag ${IMAGE} .
@@ -44,3 +49,32 @@ jobs:
           CLUSTER: dev-gcp
           RESOURCE: nais/naiserator.yml
           VARS: nais/dev-gcp.json
+      - name: Set changelog
+        # (Escape newlines see https://github.com/actions/create-release/issues/25)
+        run: |
+          text="$(git --no-pager log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%h %s")"
+          text="${text//$'%'/%25}"
+          text="${text//$'\n'/%0A}"
+          text="${text//$'\r'/%0D}"
+          echo "::set-env name=CHANGELOG::$text"
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.VERSION }}
+          release_name: ${{ env.VERSION }}
+          body: |
+            For JS, look here:
+            https://opptjening-microfrontend-poc.dev.adeo.no/${{ env.VERSION }}/app.js
+            SHA-384 is ${{ env.JS_HASH }}
+
+            For CSS, look here:
+            https://opptjening-microfrontend-poc.dev.adeo.no/${{ env.VERSION }}/styles.css
+            SHA-384 is ${{ env.CSS_HASH }}
+
+            Changes in this Release
+            ${{ env.CHANGELOG }}
+          draft: false
+          prerelease: false
