@@ -34,6 +34,8 @@ jobs:
           docker build --tag ${IMAGE} .
           echo "$GITHUB_TOKEN" | docker login --username "x-access-token" --password-stdin https://docker.pkg.github.com
           docker push ${IMAGE}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy til dev-gcp
         uses: nais/deploy/actions/deploy@v1
         env:
