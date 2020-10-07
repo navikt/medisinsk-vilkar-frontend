@@ -1,6 +1,6 @@
 FROM node:alpine
 
-WORKDIR /opptjening-app
+WORKDIR /medisinsk-vilkar-app
 
 COPY build ./build
 COPY server.js .
