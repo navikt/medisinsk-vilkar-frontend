@@ -11,15 +11,18 @@ const cssExtractLoaderConfig = {
 };
 
 module.exports = {
-    entry: path.resolve(__dirname, '../', 'src') + '/app.js',
+    entry: path.resolve(__dirname, '../', 'src') + '/app.ts',
     output: {
         filename: 'app.js',
         path: path.resolve(__dirname, `../build/${pkg.version}`),
     },
+    resolve: {
+        extensions: ['.ts', '.tsx', '.js'],
+    },
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.(ts|js)x?$/,
                 exclude: /(node_modules)/,
                 use: {
                     loader: 'babel-loader',

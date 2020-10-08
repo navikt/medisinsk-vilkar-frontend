@@ -1,6 +1,6 @@
 import renderers from './ui/renderers';
 
-window.renderMedisinskVilkarApp = async (appId) => {
+(window as any).renderMedisinskVilkarApp = async (appId) => {
     const { renderAppInSuccessfulState } = renderers;
     renderAppInSuccessfulState(appId);
 };
