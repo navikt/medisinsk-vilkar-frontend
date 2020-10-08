@@ -2,9 +2,12 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
-app.use(express.static('build'));
 
+app.use(cors({
+    origin: 'https://app-q1.adeo.no'
+}));
+
+app.use(express.static('build'));
 app.use(['/isAlive', '/isReady'], (req, res) => {
     res.sendStatus(200);
 });
