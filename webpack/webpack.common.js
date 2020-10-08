@@ -17,7 +17,7 @@ module.exports = {
         path: path.resolve(__dirname, `../build/${pkg.version}`),
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.json'],
+        extensions: ['.ts', '.tsx', '.js'],
     },
     module: {
         rules: [
