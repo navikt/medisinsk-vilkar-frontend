@@ -17,7 +17,7 @@ module.exports = {
         path: path.resolve(__dirname, `../build/${pkg.version}`),
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js'],
+        extensions: ['.ts', '.tsx', '.js', '.less'],
     },
     module: {
         rules: [
@@ -34,7 +34,31 @@ module.exports = {
             },
             {
                 test: /\.less$/,
-                use: [cssExtractLoaderConfig, 'css-loader', 'less-loader'],
+                use: [
+                    cssExtractLoaderConfig,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1,
+                            modules: {
+                                localIdentName: '[name]_[local]_[contenthash:base64:5]',
+                            },
+                        },
+                    },
+                    {
+                        loader: 'less-loader',
+                        options: {
+                            lessOptions: {
+                                modules: true,
+                                localIdentName: '[name]_[local]_[contenthash:base64:5]',
+                                modifyVars: {
+                                    nodeModulesPath: '~',
+                                    coreModulePath: '~',
+                                },
+                            },
+                        },
+                    },
+                ],
             },
         ],
     },

@@ -1,9 +1,21 @@
-import React, { useEffect } from 'react';
+import { Systemtittel } from 'nav-frontend-typografi';
+import React from 'react';
+import Legeerklæring from './Legeerklæring';
+import styles from './medisinskVilkar.less';
 
 const MainComponent = () => {
-    useEffect(() => console.log('medisinsk vilkår frontend'));
-
-    return <h3>Medisinsk vilkår</h3>;
+    return (
+        <>
+            <form onSubmit={() => null}>
+                <div className={styles.headingContainer}>
+                    <Systemtittel>Fakta</Systemtittel>
+                </div>
+                <div className={styles.fieldContainerLarge}>
+                    <Legeerklæring readOnly={false} />
+                </div>
+            </form>
+        </>
+    );
 };
 
 export default MainComponent;

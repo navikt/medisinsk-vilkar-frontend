@@ -63,8 +63,8 @@
         "nav-frontend-paneler-style": "^0.3.21",
         "nav-frontend-skjema": "^3.0.18",
         "nav-frontend-skjema-style": "^2.0.10",
-        "nav-frontend-typografi": "^2.0.26",
-        "nav-frontend-typografi-style": "^1.0.22",
+        "nav-frontend-typografi": "^2.0.29",
+        "nav-frontend-typografi-style": "^1.0.25",
         "react": "^16.13.1",
         "react-dom": "^16.13.1"
     }
