@@ -10,6 +10,9 @@ const cssExtractLoaderConfig = {
     },
 };
 
+const CORE_DIR = path.resolve(__dirname, '../node_modules');
+const SRC_DIR = path.resolve(__dirname, '../src');
+
 module.exports = {
     entry: path.resolve(__dirname, '../', 'src') + '/app.ts',
     output: {
@@ -27,6 +30,7 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                 },
+                include: [SRC_DIR],
             },
             {
                 test: /\.scss$/,
@@ -59,6 +63,28 @@ module.exports = {
                         },
                     },
                 ],
+                exclude: [CORE_DIR],
+            },
+            {
+                test: /\.(less|css)?$/,
+                use: [
+                    cssExtractLoaderConfig,
+                    {
+                        loader: 'css-loader',
+                    },
+                    {
+                        loader: 'less-loader',
+                        options: {
+                            lessOptions: {
+                                modifyVars: {
+                                    nodeModulesPath: '~',
+                                    coreModulePath: '~',
+                                },
+                            },
+                        },
+                    },
+                ],
+                include: [CORE_DIR],
             },
         ],
     },

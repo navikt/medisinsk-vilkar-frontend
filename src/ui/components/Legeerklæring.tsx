@@ -1,76 +1,153 @@
-import React from 'react';
-import { Element } from 'nav-frontend-typografi';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Datovelger } from 'nav-datovelger';
+import { Hovedknapp } from 'nav-frontend-knapper';
+import { Input, Label, Radio, RadioGruppe } from 'nav-frontend-skjema';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import Error from './Error';
 import styles from './legeerklæring.less';
-import RadioButton from './RadioButton';
-import InputField from './InputField';
+import Sykdom from '../../types/medisinsk-vilkår/sykdom';
 
-interface LegeerklæringProps {
-    readOnly: boolean;
+interface FormInput {
+    legeerklæringLege: string;
+    legeerklæringSignert: string;
+    legeerklæringDiagnose: string;
+    legeerklæringDatoFra: string;
+    legeerklæringDatoTil: string;
 }
 
-const legeerklæringRadioGroup = 'legeerklæring';
+interface LegeerklæringProps {
+    changeTab: (index: number) => void;
+    thisTab: number;
+    sykdom: Sykdom;
+}
 
-const Legeerklæring = ({ readOnly }: LegeerklæringProps) => (
-    <>
-        <Element>Legeerklæring</Element>
-        <div className={styles.inputContainer}>
-            <fieldset className={styles.fieldset}>
-                <legend className={styles.legend}>Legeerklæring</legend>
-                <RadioButton
-                    label="Sykehuslege"
-                    id="sykehuslege"
-                    radioGroupName={legeerklæringRadioGroup}
-                    value="SYKEHUSLEGE"
-                    readOnly={readOnly}
+const legeerklæringRadioGroupName = 'legeerklæringLege';
+
+const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JSX.Element => {
+    const schema = yup.object().shape({
+        legeerklæringLege: yup.string().required(),
+        legeerklæringSignert: yup.date().min(sykdom.periodeTilVurdering.fom).required(),
+        legeerklæringDiagnose: yup.string().required(),
+        legeerklæringDatoFra: yup.date().min(sykdom.periodeTilVurdering.fom).required(),
+        legeerklæringDatoTil: yup.date().max(sykdom.periodeTilVurdering.tom).required(),
+    });
+
+    const { register, handleSubmit, errors } = useForm<FormInput>({
+        resolver: yupResolver(schema),
+    });
+    const onSubmit = (data) => {
+        console.log(data);
+        changeTab(thisTab + 1);
+    };
+
+    const [dato, setDato] = useState('');
+    const [legeerklæringDatoFra, setLegeerklæringDatoFra] = useState('');
+    const [legeerklæringDatoTil, setLegeerklæringDatoTil] = useState('');
+
+    return (
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <div className={styles.inputContainer}>
+                <RadioGruppe legend="Hvilken lege har signert legeerklæringen?">
+                    <Radio
+                        label="Sykehuslege"
+                        name={legeerklæringRadioGroupName}
+                        radioRef={register}
+                        value="SYKEHUSLEGE"
+                    />
+                    <Radio
+                        label="Spesialisthelsetjeneste"
+                        name={legeerklæringRadioGroupName}
+                        radioRef={register}
+                        value="SPESIALISTHELSETJENESTE"
+                    />
+                    <Radio
+                        label="Fastlege"
+                        name={legeerklæringRadioGroupName}
+                        radioRef={register}
+                        value="FASTLEGE"
+                    />
+                    <Radio
+                        label="Annet"
+                        name={legeerklæringRadioGroupName}
+                        radioRef={register}
+                        value="ANNET"
+                    />
+                </RadioGruppe>
+                {errors.legeerklæringLege && <Error />}
+            </div>
+            <div className={styles.inputContainer}>
+                <Label htmlFor="legeerklæringSignert">
+                    Hvilken dato ble legeerklæringen signert?
+                </Label>
+                <Datovelger
+                    onChange={setDato}
+                    valgtDato={dato}
+                    input={{
+                        inputRef: register,
+                        id: 'legeerklæringSignert',
+                        name: 'legeerklæringSignert',
+                        placeholder: 'dd.mm.åååå',
+                    }}
+                    avgrensninger={{
+                        minDato: sykdom.periodeTilVurdering.fom,
+                        maksDato: sykdom.periodeTilVurdering.tom,
+                    }}
                 />
-                <RadioButton
-                    label="Spesialisthelsetjeneste"
-                    id="spesialisthelsetjeneste"
-                    radioGroupName={legeerklæringRadioGroup}
-                    value="SPESIALISTHELSETJENESTE"
-                    readOnly={readOnly}
+                {errors.legeerklæringSignert && <Error />}
+            </div>
+            <div className={styles.inputContainer}>
+                <Input
+                    label="Er det fastsatt en diagnose?"
+                    placeholder="Søk etter diagnose"
+                    inputRef={register}
+                    bredde="L"
+                    name="legeerklæringDiagnose"
                 />
-                <RadioButton
-                    label="Fastlege"
-                    id="fastlege"
-                    radioGroupName={legeerklæringRadioGroup}
-                    value="FASTLEGE"
-                    readOnly={readOnly}
-                />
-                <RadioButton
-                    label="Annet"
-                    id="annet"
-                    radioGroupName={legeerklæringRadioGroup}
-                    value="ANNET"
-                    readOnly={readOnly}
-                />
-            </fieldset>
-        </div>
-        <div className={styles.inputContainer}>
-            <InputField
-                id="legeerklæring-signert"
-                label="Hvilken dato ble legeerklæringen signert?"
-                readOnly={readOnly}
-                placeholder="dd.mm.åååå"
-            />
-        </div>
-        <div className={styles.inputContainer}>
-            <InputField
-                id="diagnose"
-                label="Er det fastsatt en diagnose?"
-                readOnly={readOnly}
-                placeholder="Søk etter diagnose"
-            />
-        </div>
-        <div className={styles.inputContainer}>
-            <InputField
-                id="innleggelse-dato"
-                label="Hvilke datoer gjelder innleggelsen?"
-                readOnly={readOnly}
-                placeholder="dd.mm.åååå - dd.mm.åååå"
-            />
-        </div>
-    </>
-);
+                {errors.legeerklæringDiagnose && <Error />}
+            </div>
+            <div className={styles.inputContainer}>
+                <p>Hvilke datoer gjelder innleggelsen?</p>
+                <div style={{ display: 'flex' }}>
+                    <div style={{ marginRight: '1.5rem' }}>
+                        <Label className={styles.visuallyHidden} htmlFor="legeerklæringDatoFra">
+                            Innleggelsen gjelder fra
+                        </Label>
+                        <Datovelger
+                            onChange={setLegeerklæringDatoFra}
+                            valgtDato={legeerklæringDatoFra}
+                            input={{
+                                inputRef: register,
+                                id: 'legeerklæringDatoFra',
+                                name: 'legeerklæringDatoFra',
+                                placeholder: 'dd.mm.åååå',
+                            }}
+                        />
+                    </div>
+                    <div>
+                        <Label className={styles.visuallyHidden} htmlFor="legeerklæringDatoTil">
+                            Innleggelsen gjelder til
+                        </Label>
+                        <Datovelger
+                            onChange={setLegeerklæringDatoTil}
+                            valgtDato={legeerklæringDatoTil}
+                            input={{
+                                inputRef: register,
+                                id: 'legeerklæringDatoTil',
+                                name: 'legeerklæringDatoTil',
+                                placeholder: 'dd.mm.åååå',
+                            }}
+                        />
+                    </div>
+                </div>
+                {(errors.legeerklæringDatoFra || errors.legeerklæringDatoTil) && <Error />}
+            </div>
+            <div className={styles.fieldContainerSmall}>
+                <Hovedknapp>Gå videre</Hovedknapp>
+            </div>
+        </form>
+    );
+};
 
 export default Legeerklæring;
