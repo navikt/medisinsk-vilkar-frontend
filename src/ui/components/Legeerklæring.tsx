@@ -8,6 +8,7 @@ import * as yup from 'yup';
 import Error from './Error';
 import styles from './legeerklæring.less';
 import Sykdom from '../../types/medisinsk-vilkår/sykdom';
+import DiagnosekodeSelektor from './DiagnosekodeSelector';
 
 interface FormInput {
     legeerklæringLege: string;
@@ -34,7 +35,7 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
         legeerklæringDatoTil: yup.date().max(sykdom.periodeTilVurdering.tom).required(),
     });
 
-    const { register, handleSubmit, errors } = useForm<FormInput>({
+    const { register, handleSubmit, errors, control } = useForm<FormInput>({
         resolver: yupResolver(schema),
     });
     const onSubmit = (data) => {
@@ -98,12 +99,9 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                 {errors.legeerklæringSignert && <Error />}
             </div>
             <div className={styles.inputContainer}>
-                <Input
-                    label="Er det fastsatt en diagnose?"
-                    placeholder="Søk etter diagnose"
-                    inputRef={register}
-                    bredde="L"
-                    name="legeerklæringDiagnose"
+                <DiagnosekodeSelektor
+                    control={control}
+                    initialDiagnosekodeValue={sykdom.legeerklæringer[0]?.diagnosekode}
                 />
                 {errors.legeerklæringDiagnose && <Error />}
             </div>
