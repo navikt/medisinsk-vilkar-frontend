@@ -59,6 +59,7 @@ const DiagnosekodeSelektor = ({
                 control={control}
                 name="legeerklæringDiagnose"
                 defaultValue={initialDiagnosekodeValue}
+                // rules={{ required: true }}
                 render={(props) => (
                     <Autocomplete
                         id="legeerklæringDiagnose"
