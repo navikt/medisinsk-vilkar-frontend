@@ -1,6 +1,7 @@
 import { Datepicker } from 'nav-datovelger';
 import { Label } from 'nav-frontend-skjema';
 import * as React from 'react';
+import Error from '../../components/Error';
 import { Limitations } from '../wrappers/DatePicker';
 
 interface DatepickerProps {
@@ -34,7 +35,7 @@ const PureDatepicker = ({
                 maxDate: limitations?.maxDate,
             }}
         />
-        {errorMessage && <p>{errorMessage}</p>}
+        {errorMessage && <Error message={errorMessage} />}
     </>
 );
 

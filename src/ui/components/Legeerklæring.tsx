@@ -1,13 +1,14 @@
 import { DevTool } from '@hookform/devtools';
 import moment from 'moment';
-import { Datovelger } from 'nav-datovelger';
 import { Hovedknapp } from 'nav-frontend-knapper';
-import { Label, Radio, RadioGruppe } from 'nav-frontend-skjema';
+import { Radio, RadioGruppe } from 'nav-frontend-skjema';
 import React from 'react';
-import { Controller, FieldError, useForm } from 'react-hook-form';
+import { FieldError, useForm } from 'react-hook-form';
 import Sykdom from '../../types/medisinsk-vilkår/sykdom';
+import Datepicker from '../form/wrappers/DatePicker';
 import DiagnosekodeSelektor from './DiagnosekodeSelector';
 import Error from './Error';
+import { required } from '../form/validators';
 import styles from './legeerklæring.less';
 
 interface FormInput {
@@ -56,13 +57,11 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
         );
     };
 
-    const legeerklæringSignertTest = '2020-09-11';
-
     const { register, handleSubmit, errors, control } = useForm<FormInput>({
         defaultValues: {
-            legeerklæringSignert: legeerklæringSignertTest,
-            innleggelseDatoFra: '2020-10-01',
-            innleggelseDatoTil: '2020-10-03',
+            legeerklæringSignert: undefined,
+            innleggelseDatoFra: undefined,
+            innleggelseDatoTil: undefined,
         },
     });
 
@@ -120,52 +119,17 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                     {errors.legeerklæringLege && <Error />}
                 </div>
                 <div className={styles.inputContainer}>
-                    <Label htmlFor="legeerklæringSignert">
-                        Hvilken dato ble legeerklæringen signert?
-                    </Label>
-                    <Controller
+                    <Datepicker
+                        label="Når ble legeerklæringen signert?"
                         control={control}
-                        render={({ onChange, onBlur, value }) => (
-                            <Datovelger
-                                onChange={onChange}
-                                valgtDato={value}
-                                input={{
-                                    inputRef: register({
-                                        required: true,
-                                        validate: validateLegeerklæringSignert,
-                                    }),
-                                    id: 'legeerklæringSignert',
-                                    name: 'legeerklæringSignert',
-                                    placeholder: 'dd.mm.åååå',
-                                }}
-                                avgrensninger={{
-                                    minDato: sykdom.periodeTilVurdering.fom,
-                                    maksDato: sykdom.periodeTilVurdering.tom,
-                                }}
-                            />
-                        )}
                         name="legeerklæringSignert"
-                        rules={{ required: true, validate: validateLegeerklæringSignert }}
+                        validators={{ required }}
+                        errors={errors}
+                        limitations={{
+                            minDate: sykdom.periodeTilVurdering.fom,
+                            maxDate: sykdom.periodeTilVurdering.tom,
+                        }}
                     />
-                    {/* <Datovelger
-                        // onChange={setDato}
-                        // valgtDato={dato}
-                        input={{
-                            inputRef: register({
-                                required: true,
-                                validate: validateLegeerklæringSignert,
-                            }),
-                            id: 'legeerklæringSignert',
-                            name: 'legeerklæringSignert',
-                            placeholder: 'dd.mm.åååå',
-                        }}
-                        avgrensninger={{
-                            minDato: sykdom.periodeTilVurdering.fom,
-                            maksDato: sykdom.periodeTilVurdering.tom,
-                        }}
-                    /> */}
-                    {errors.legeerklæringSignert &&
-                        legeerklæringSignertValidationMessage(errors.legeerklæringSignert)}
                 </div>
                 <div className={styles.inputContainer}>
                     <DiagnosekodeSelektor
@@ -178,86 +142,24 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                     <p>Hvilke datoer gjelder innleggelsen?</p>
                     <div style={{ display: 'flex' }}>
                         <div style={{ marginRight: '1.5rem' }}>
-                            <Label className={styles.visuallyHidden} htmlFor="legeerklæringDatoFra">
-                                Innleggelsen gjelder fra
-                            </Label>
-                            <Controller
+                            <Datepicker
+                                label="Innleggelsen gjelder fra"
                                 control={control}
-                                render={({ onChange, onBlur, value }) => (
-                                    <Datovelger
-                                        onChange={onChange}
-                                        valgtDato={value}
-                                        input={{
-                                            inputRef: register({
-                                                required: true,
-                                                validate: validateInnleggelseDatoFra,
-                                            }),
-                                            id: 'innleggelseDatoFra',
-                                            name: 'innleggelseDatoFra',
-                                            placeholder: 'dd.mm.åååå',
-                                        }}
-                                    />
-                                )}
                                 name="innleggelseDatoFra"
-                                rules={{ required: true, validate: validateInnleggelseDatoFra }}
+                                validators={{ required }}
+                                errors={errors}
                             />
-                            {/* <Datovelger
-                                onChange={setInnleggelseDatoFra}
-                                valgtDato={innleggelseDatoFra}
-                                input={{
-                                    inputRef: register({
-                                        required: true,
-                                        validate: validateInnleggelseDatoFra,
-                                    }),
-                                    id: 'innleggelseDatoFra',
-                                    name: 'innleggelseDatoFra',
-                                    placeholder: 'dd.mm.åååå',
-                                }}
-                            /> */}
                         </div>
                         <div>
-                            <Label className={styles.visuallyHidden} htmlFor="legeerklæringDatoTil">
-                                Innleggelsen gjelder til
-                            </Label>
-                            <Controller
+                            <Datepicker
+                                label="Innleggelsen gjelder til"
                                 control={control}
-                                render={({ onChange, onBlur, value }) => (
-                                    <Datovelger
-                                        onChange={onChange}
-                                        valgtDato={value}
-                                        input={{
-                                            inputRef: register({
-                                                required: true,
-                                                validate: validateInnleggelseDatoTil,
-                                            }),
-                                            id: 'innleggelseDatoTil',
-                                            name: 'innleggelseDatoTil',
-                                            placeholder: 'dd.mm.åååå',
-                                        }}
-                                    />
-                                )}
                                 name="innleggelseDatoTil"
-                                rules={{ required: true, validate: validateInnleggelseDatoTil }}
+                                validators={{ required }}
+                                errors={errors}
                             />
-                            {/* <Datovelger
-                                onChange={setInnleggelseDatoTil}
-                                valgtDato={innleggelseDatoTil}
-                                input={{
-                                    inputRef: register({
-                                        required: true,
-                                        validate: validateInnleggelseDatoTil,
-                                    }),
-                                    id: 'innleggelseDatoTil',
-                                    name: 'innleggelseDatoTil',
-                                    placeholder: 'dd.mm.åååå',
-                                }}
-                            /> */}
                         </div>
                     </div>
-                    {(errors.innleggelseDatoFra || errors.innleggelseDatoTil) &&
-                        innleggelseDatoValidationMessage(
-                            errors.innleggelseDatoFra || errors.innleggelseDatoTil
-                        )}
                 </div>
                 <div className={styles.fieldContainerSmall}>
                     <Hovedknapp>Gå videre</Hovedknapp>
