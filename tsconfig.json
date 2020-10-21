@@ -5,8 +5,7 @@
         "module": "commonjs",
         "declaration": true,
         "skipLibCheck": true,
-        "target": "esnext",
-        "esModuleInterop": true
+        "target": "esnext"
     },
     "exclude": ["node_modules", "build"]
 }
