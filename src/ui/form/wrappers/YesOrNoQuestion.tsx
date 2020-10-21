@@ -15,6 +15,7 @@ const YesOrNoQuestion = ({ errors, question, name, control, validators }: YesOrN
         <Controller
             control={control}
             name={name}
+            defaultValue={null}
             rules={{
                 validate: {
                     ...validators,
