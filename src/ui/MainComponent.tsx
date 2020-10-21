@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Sykdom from '../types/medisinsk-vilkår/sykdom';
 import { required } from './form/validators';
+import Datepicker from './form/wrappers/DatePicker';
 import YesOrNoQuestion from './form/wrappers/YesOrNoQuestion';
 
 const tabs = ['Legeerklæring', 'Vilkårsvurdering'];
@@ -14,7 +15,9 @@ interface MainComponentProps {
 const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
     const [activeTab, setActiveTab] = useState(0);
     const { handleSubmit, control, errors } = useForm();
-    const onSubmit = () => {};
+    const onSubmit = (v) => {
+        console.log(v);
+    };
 
     return (
         <div style={{ margin: '2rem' }}>
@@ -42,6 +45,17 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
                     control={control}
                     errors={errors}
                     validators={{ required }}
+                />
+                <Datepicker
+                    label="Når ble legeerklæringen signert?"
+                    control={control}
+                    name="legeerklæringSignert"
+                    validators={{ required }}
+                    errors={errors}
+                    limitations={{
+                        minDate: '2020-10-05',
+                        maxDate: '2020-10-30',
+                    }}
                 />
                 <Knapp>Lagre</Knapp>
             </form>

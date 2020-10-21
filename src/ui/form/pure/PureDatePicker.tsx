@@ -1,41 +1,41 @@
+import { Datepicker } from 'nav-datovelger';
+import { Label } from 'nav-frontend-skjema';
 import * as React from 'react';
-import { RadioPanelGruppe as RadioPanelGroup } from 'nav-frontend-skjema';
+import { Limitations } from '../wrappers/DatePicker';
 
-interface DatePickerProps {
-    question: string;
-    value: boolean;
+interface DatepickerProps {
+    label: string;
+    value: string;
     onChange: (value) => void;
     name: string;
     errorMessage?: string;
+    limitations: Limitations;
 }
 
-enum YesOrNo {
-    YES = 'YES',
-    NO = 'NO',
-}
-
-const resolveYesOrNoLiteral = (value: boolean | undefined) => {
-    if (value === true) {
-        return YesOrNo.YES;
-    }
-    if (value === false) {
-        return YesOrNo.NO;
-    }
-    return undefined;
-};
-
-const PureDatePicker = ({ question, value, onChange, name, errorMessage }: DatePickerProps) => (
-    <RadioPanelGroup
-        legend={question}
-        name={name}
-        checked={resolveYesOrNoLiteral(value)}
-        onChange={(event, value) => onChange(value === YesOrNo.YES)}
-        radios={[
-            { label: 'Ja', value: YesOrNo.YES },
-            { label: 'Nei', value: YesOrNo.NO },
-        ]}
-        feil={errorMessage}
-    />
+const PureDatepicker = ({
+    label,
+    value,
+    onChange,
+    name,
+    errorMessage,
+    limitations,
+}: DatepickerProps): JSX.Element => (
+    <>
+        <Label htmlFor={name}>{label}</Label>
+        <Datepicker
+            onChange={onChange}
+            value={value}
+            inputId={name}
+            inputProps={{
+                placeholder: 'dd.mm.åååå',
+            }}
+            limitations={{
+                minDate: limitations?.minDate,
+                maxDate: limitations?.maxDate,
+            }}
+        />
+        {errorMessage && <p>{errorMessage}</p>}
+    </>
 );
 
-export default PureDatePicker;
+export default PureDatepicker;
