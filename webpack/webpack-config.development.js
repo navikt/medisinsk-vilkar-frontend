@@ -17,7 +17,10 @@ const webpackConfig = merge(commonWebpackConfig, {
 
 const devServerOptions = { hot: true };
 WebpackDevServer.addDevServerEntrypoints(webpackConfig, devServerOptions);
-const devServer = new WebpackDevServer(webpack(webpackConfig), devServerOptions);
+
+const compiler = webpack(webpackConfig);
+const devServer = new WebpackDevServer(compiler, devServerOptions);
+compiler.close(() => console.info('Compiler closed'));
 
 devServer.listen(8080, 'localhost', (error) => {
     if (error) {
