@@ -1,7 +1,6 @@
 const process = require('process');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const pkg = require('./../package');
 
 const cssExtractLoaderConfig = {
     loader: MiniCssExtractPlugin.loader,
@@ -15,10 +14,6 @@ const SRC_DIR = path.resolve(__dirname, '../src');
 
 module.exports = {
     entry: path.resolve(__dirname, '../', 'src') + '/app.ts',
-    output: {
-        filename: 'app.js',
-        path: path.resolve(__dirname, `../build/${pkg.version}`),
-    },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.less'],
     },
