@@ -134,9 +134,12 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                 <div className={styles.inputContainer}>
                     <DiagnosekodeSelektor
                         control={control}
+                        name="legeerklæringDiagnose"
                         initialDiagnosekodeValue={sykdom.legeerklæringer[0]?.diagnosekode}
+                        validators={{ required }}
+                        errors={errors}
+                        label="Er det fastsatt en diagnose?"
                     />
-                    {errors.legeerklæringDiagnose && <Error />}
                 </div>
                 <div className={styles.inputContainer}>
                     <p>Hvilke datoer gjelder innleggelsen?</p>

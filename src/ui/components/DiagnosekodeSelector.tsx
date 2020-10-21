@@ -1,81 +1,44 @@
-import Autocomplete from '@navikt/nap-autocomplete';
-import axios from 'axios';
-import { Label } from 'nav-frontend-skjema';
 import * as React from 'react';
-import { Control, Controller } from 'react-hook-form';
-import styles from './diagnosekodeSelector.less';
-
-const fetchDiagnosekoderByQuery = (queryString: string) => {
-    return axios.get(`/k9/diagnosekoder?query=${queryString}&max=8`);
-};
-
-const getUpdatedSuggestions = async (queryString: string) => {
-    if (queryString.length >= 3) {
-        const diagnosekoder = await fetchDiagnosekoderByQuery(queryString);
-        return diagnosekoder.data.map(({ kode, beskrivelse }) => ({
-            key: kode,
-            value: `${kode} - ${beskrivelse}`,
-        }));
-    }
-    return [];
-};
+import { Control, Controller, FieldErrors } from 'react-hook-form';
+import PureDiagnosekodeSelector from '../form/pure/PureDiagnosekodeSelector';
 
 interface DiagnosekodeSelektorProps {
     control: Control;
     initialDiagnosekodeValue?: string;
+    validators?: { [key: string]: (v: any) => string | undefined };
+    errors?: FieldErrors;
+    name: string;
+    label: string;
 }
 
 const DiagnosekodeSelektor = ({
     control,
     initialDiagnosekodeValue = '',
+    validators,
+    errors,
+    name,
+    label,
 }: DiagnosekodeSelektorProps): JSX.Element => {
-    const [suggestions, setSuggestions] = React.useState([]);
-    const [inputValue, setInputValue] = React.useState('');
-
-    React.useEffect(() => {
-        const getInitialDiagnosekode = async () => {
-            const diagnosekode:
-                | {
-                      value: string;
-                  }[]
-                | [] = await getUpdatedSuggestions(initialDiagnosekodeValue);
-            if (diagnosekode.length > 0 && diagnosekode[0].value) {
-                setInputValue(diagnosekode[0].value);
-            }
-        };
-        getInitialDiagnosekode();
-    }, [initialDiagnosekodeValue]);
-
-    const onInputValueChange = async (v) => {
-        setInputValue(v);
-        const newSuggestionList = await getUpdatedSuggestions(v);
-        setSuggestions(newSuggestionList);
-    };
-
     return (
-        <div className={styles.diagnosekodeContainer}>
-            <Label htmlFor="legeerklæringDiagnose">Er det fastsatt en diagnose?</Label>
-            <Controller
-                control={control}
-                name="legeerklæringDiagnose"
-                defaultValue={initialDiagnosekodeValue}
-                // rules={{ required: true }}
-                render={(props) => (
-                    <Autocomplete
-                        id="legeerklæringDiagnose"
-                        suggestions={suggestions}
-                        value={inputValue}
-                        onChange={onInputValueChange}
-                        onSelect={(e) => {
-                            onInputValueChange(e.value);
-                            props.onChange(e.value);
-                        }}
-                        ariaLabel="Søk etter diagnose"
-                        placeholder="Søk etter diagnose"
-                    />
-                )}
-            />
-        </div>
+        <Controller
+            control={control}
+            name={name}
+            defaultValue={initialDiagnosekodeValue}
+            rules={{
+                validate: {
+                    ...validators,
+                },
+            }}
+            render={({ onChange }) => (
+                <PureDiagnosekodeSelector
+                    label={label}
+                    initialDiagnosekodeValue={initialDiagnosekodeValue}
+                    name={name}
+                    onChange={onChange}
+                    errorMessage={errors[name]?.message}
+                />
+            )}
+        />
     );
 };
 
