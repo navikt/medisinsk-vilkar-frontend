@@ -8,13 +8,13 @@ export interface Limitations {
 }
 
 interface DatepickerProps {
-    label: string;
+    label?: string;
     name: string;
     control: Control;
     errors?: FieldErrors;
     validators?: { [key: string]: (v: any) => string | undefined };
     limitations?: Limitations;
-    hiddenLabel?: boolean;
+    ariaLabel?: string;
 }
 
 const Datepicker = ({
@@ -24,7 +24,7 @@ const Datepicker = ({
     validators,
     limitations,
     label,
-    hiddenLabel,
+    ariaLabel,
 }: DatepickerProps): JSX.Element => {
     return (
         <Controller
@@ -43,7 +43,7 @@ const Datepicker = ({
                     value={value}
                     errorMessage={errors[name]?.message}
                     limitations={limitations}
-                    hiddenLabel={hiddenLabel}
+                    ariaLabel={ariaLabel}
                 />
             )}
         />

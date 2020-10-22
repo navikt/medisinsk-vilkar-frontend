@@ -115,8 +115,7 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                         <div style={{ display: 'flex' }}>
                             <div style={{ marginRight: '1.5rem' }}>
                                 <Datepicker
-                                    label="Innleggelsen gjelder fra"
-                                    hiddenLabel
+                                    ariaLabel="Innleggelsen gjelder fra"
                                     control={control}
                                     name="innleggelseDatoFra"
                                     validators={{
@@ -131,8 +130,7 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                             </div>
                             <div>
                                 <Datepicker
-                                    label="Innleggelsen gjelder til"
-                                    hiddenLabel
+                                    ariaLabel="Innleggelsen gjelder til"
                                     control={control}
                                     name="innleggelseDatoTil"
                                     validators={{
