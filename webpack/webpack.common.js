@@ -9,10 +9,13 @@ const cssExtractLoaderConfig = {
     },
 };
 
+const CORE_DIR = path.resolve(__dirname, '../node_modules');
+const SRC_DIR = path.resolve(__dirname, '../src');
+
 module.exports = {
     entry: path.resolve(__dirname, '../', 'src') + '/app.ts',
     resolve: {
-        extensions: ['.ts', '.tsx', '.js'],
+        extensions: ['.ts', '.tsx', '.js', '.less'],
     },
     module: {
         rules: [
@@ -22,6 +25,7 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                 },
+                include: [SRC_DIR],
             },
             {
                 test: /\.scss$/,
@@ -29,7 +33,53 @@ module.exports = {
             },
             {
                 test: /\.less$/,
-                use: [cssExtractLoaderConfig, 'css-loader', 'less-loader'],
+                use: [
+                    cssExtractLoaderConfig,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1,
+                            modules: {
+                                localIdentName: '[name]_[local]_[contenthash:base64:5]',
+                            },
+                        },
+                    },
+                    {
+                        loader: 'less-loader',
+                        options: {
+                            lessOptions: {
+                                modules: true,
+                                localIdentName: '[name]_[local]_[contenthash:base64:5]',
+                                modifyVars: {
+                                    nodeModulesPath: '~',
+                                    coreModulePath: '~',
+                                },
+                            },
+                        },
+                    },
+                ],
+                exclude: [CORE_DIR],
+            },
+            {
+                test: /\.(less|css)?$/,
+                use: [
+                    cssExtractLoaderConfig,
+                    {
+                        loader: 'css-loader',
+                    },
+                    {
+                        loader: 'less-loader',
+                        options: {
+                            lessOptions: {
+                                modifyVars: {
+                                    nodeModulesPath: '~',
+                                    coreModulePath: '~',
+                                },
+                            },
+                        },
+                    },
+                ],
+                include: [CORE_DIR],
             },
         ],
     },

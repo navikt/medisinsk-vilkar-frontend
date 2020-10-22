@@ -1,43 +1,39 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { Knapp } from 'nav-frontend-knapper';
-import YesOrNoQuestion from './form/wrappers/YesOrNoQuestion';
-import { required } from './form/validators';
-import RadioGroupPanel from './form/wrappers/RadioGroupPanel';
+import { TabsPure } from 'nav-frontend-tabs';
+import { Systemtittel } from 'nav-frontend-typografi';
+import React, { useState } from 'react';
+import Sykdom from '../types/medisinsk-vilkår/sykdom';
+import Legeerklæring from './components/Legeerklæring';
+import styles from './components/medisinskVilkar.less';
 
-const harDokumentasjonFieldName = 'harDokumentasjon';
+const tabs = ['Legeerklæring', 'Vilkårsvurdering'];
 
-const MainComponent = () => {
-    const { handleSubmit, control, errors, watch } = useForm();
-    const onSubmit = () => {};
+interface MainComponentProps {
+    sykdom: Sykdom;
+}
 
-    const harDokumentasjon = watch(harDokumentasjonFieldName);
+const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
+    const [activeTab, setActiveTab] = useState(0);
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <YesOrNoQuestion
-                question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i speisalisthelsetjenesten?"
-                name={harDokumentasjonFieldName}
-                control={control}
-                errors={errors}
-                validators={{ required }}
-            />
-
-            {harDokumentasjon === false && (
-                <RadioGroupPanel
-                    question="Hvem har signert legeerklæringen?"
-                    name="signertAv"
-                    radios={[
-                        { label: 'Fastlege', value: 'fastlege' },
-                        { label: 'Annen yrkesgruppe', value: 'annenYrkesgruppe' },
-                    ]}
-                    control={control}
-                    errors={errors}
-                    validators={{ required }}
+        <div style={{ margin: '2rem' }}>
+            <div className={styles.headingContainer}>
+                <Systemtittel>Fakta</Systemtittel>
+            </div>
+            <div className={styles.fieldContainerLarge}>
+                <TabsPure
+                    tabs={tabs.map((tab, index) => ({
+                        aktiv: activeTab === index,
+                        label: tab,
+                    }))}
+                    onChange={(e, clickedIndex) => setActiveTab(clickedIndex)}
                 />
-            )}
-            <Knapp>Lagre</Knapp>
-        </form>
+                <div className={styles.fieldContainerLarge}>
+                    <div className={activeTab === 0 ? '' : styles.hide}>
+                        <Legeerklæring thisTab={0} changeTab={setActiveTab} sykdom={sykdom} />
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 };
 

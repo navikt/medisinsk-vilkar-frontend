@@ -1,10 +1,10 @@
 import React from 'react';
 import { render } from 'react-dom';
+import Sykdom from '../types/medisinsk-vilkår/sykdom';
 import MainComponent from './MainComponent';
 
-function renderAppInSuccessfulState(appId) {
-    render(<MainComponent />, document.getElementById(appId));
-}
+const renderAppInSuccessfulState = (appId: string, sykdom: Sykdom) =>
+    render(<MainComponent sykdom={sykdom} />, document.getElementById(appId));
 
 export default {
     renderAppInSuccessfulState,
