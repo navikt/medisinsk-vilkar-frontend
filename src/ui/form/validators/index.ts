@@ -6,10 +6,10 @@ export function required(v: any) {
     }
 }
 
-export const isDateInPeriod = (v: any, datePeriod: { fom: string; tom: string }): string => {
+export const isDateInPeriod = (date: any, datePeriod: { fom: string; tom: string }): string => {
     if (
-        moment(datePeriod.fom).isSameOrBefore(moment(v)) &&
-        moment(datePeriod.tom).isSameOrAfter(moment(v))
+        moment(datePeriod.fom).isSameOrBefore(moment(date)) &&
+        moment(datePeriod.tom).isSameOrAfter(moment(date))
     ) {
         return undefined;
     }
@@ -17,7 +17,7 @@ export const isDateInPeriod = (v: any, datePeriod: { fom: string; tom: string })
     return 'Dato må være innenfor søknadsperioden';
 };
 
-export const isDateBeforeOtherDate = (date, otherDate) => {
+export const isDateBeforeOtherDate = (date: string, otherDate: string) => {
     if (!otherDate || moment(date).isBefore(otherDate)) {
         return undefined;
     }
@@ -25,7 +25,7 @@ export const isDateBeforeOtherDate = (date, otherDate) => {
     return 'Dato må være før til-dato';
 };
 
-export const isDateAfterOtherDate = (date, otherDate) => {
+export const isDateAfterOtherDate = (date: string, otherDate: string) => {
     if (!otherDate || moment(date).isAfter(otherDate)) {
         return undefined;
     }

@@ -1,6 +1,5 @@
 import { DevTool } from '@hookform/devtools';
 import { Hovedknapp } from 'nav-frontend-knapper';
-import { Radio, RadioGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import Sykdom from '../../types/medisinsk-vilkår/sykdom';
@@ -12,7 +11,8 @@ import {
 } from '../form/validators';
 import Datepicker from '../form/wrappers/DatePicker';
 import DiagnosekodeSelektor from '../form/wrappers/DiagnosekodeSelector';
-import Error from './Error';
+import RadioGroupPanel from '../form/wrappers/RadioGroupPanel';
+import YesOrNoQuestion from '../form/wrappers/YesOrNoQuestion';
 import styles from './legeerklæring.less';
 
 interface FormInput {
@@ -29,16 +29,22 @@ interface LegeerklæringProps {
     sykdom: Sykdom;
 }
 
-const legeerklæringRadioGroupName = 'legeerklæringLege';
+const harDokumentasjonFieldName = 'harDokumentasjon';
+const innleggelseDatoFraFieldName = 'innleggelseDatoFra';
+const innleggelseDatoTilFieldName = 'innleggelseDatoTil';
 
 const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JSX.Element => {
-    const { register, handleSubmit, errors, control, getValues } = useForm<FormInput>({
+    const { watch, handleSubmit, errors, control } = useForm<FormInput>({
         defaultValues: {
             legeerklæringSignert: undefined,
             innleggelseDatoFra: undefined,
             innleggelseDatoTil: undefined,
         },
     });
+
+    const harDokumentasjon = watch(harDokumentasjonFieldName);
+    const innleggelseDatoFra = watch(innleggelseDatoFraFieldName);
+    const innleggelseDatoTil = watch(innleggelseDatoTilFieldName);
 
     const onSubmit = (data) => {
         console.log(data);
@@ -51,34 +57,29 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles.inputContainer}>
-                    <RadioGruppe legend="Hvilken lege har signert legeerklæringen?">
-                        <Radio
-                            label="Sykehuslege"
-                            name={legeerklæringRadioGroupName}
-                            radioRef={register({ required: true })}
-                            value="SYKEHUSLEGE"
-                        />
-                        <Radio
-                            label="Spesialisthelsetjeneste"
-                            name={legeerklæringRadioGroupName}
-                            radioRef={register({ required: true })}
-                            value="SPESIALISTHELSETJENESTE"
-                        />
-                        <Radio
-                            label="Fastlege"
-                            name={legeerklæringRadioGroupName}
-                            radioRef={register({ required: true })}
-                            value="FASTLEGE"
-                        />
-                        <Radio
-                            label="Annet"
-                            name={legeerklæringRadioGroupName}
-                            radioRef={register({ required: true })}
-                            value="ANNET"
-                        />
-                    </RadioGruppe>
-                    {errors.legeerklæringLege && <Error />}
+                    <YesOrNoQuestion
+                        question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i speisalisthelsetjenesten?"
+                        name={harDokumentasjonFieldName}
+                        control={control}
+                        errors={errors}
+                        validators={{ required }}
+                    />
                 </div>
+                {harDokumentasjon === false && (
+                    <div className={styles.inputContainer}>
+                        <RadioGroupPanel
+                            question="Hvem har signert legeerklæringen?"
+                            name="signertAv"
+                            radios={[
+                                { label: 'Fastlege', value: 'fastlege' },
+                                { label: 'Annen yrkesgruppe', value: 'annenYrkesgruppe' },
+                            ]}
+                            control={control}
+                            errors={errors}
+                            validators={{ required }}
+                        />
+                    </div>
+                )}
                 <div className={styles.inputContainer}>
                     <Datepicker
                         label="Hvilken dato ble legeerklæringen signert?"
@@ -122,13 +123,8 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                                         required,
                                         isDateInPeriodeTilVurdering: (value) =>
                                             isDateInPeriod(value, sykdom?.periodeTilVurdering),
-                                        isDateBeforeInnleggelseDatoTil: (value) => {
-                                            const innleggelseDatoTil = getValues(
-                                                'innleggelseDatoTil'
-                                            );
-
-                                            return isDateBeforeOtherDate(value, innleggelseDatoTil);
-                                        },
+                                        isDateBeforeInnleggelseDatoTil: (value) =>
+                                            isDateBeforeOtherDate(value, innleggelseDatoTil),
                                     }}
                                     errors={errors}
                                 />
@@ -143,13 +139,8 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                                         required,
                                         isDateInPeriodeTilVurdering: (value) =>
                                             isDateInPeriod(value, sykdom?.periodeTilVurdering),
-                                        isDateAfterInnleggelseDatoFra: (value) => {
-                                            const innleggelseDatoFra = getValues(
-                                                'innleggelseDatoFra'
-                                            );
-
-                                            return isDateAfterOtherDate(value, innleggelseDatoFra);
-                                        },
+                                        isDateAfterInnleggelseDatoFra: (value) =>
+                                            isDateAfterOtherDate(value, innleggelseDatoFra),
                                     }}
                                     errors={errors}
                                 />
