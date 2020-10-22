@@ -9,9 +9,7 @@ const harDokumentasjonFieldName = 'harDokumentasjon';
 
 const MainComponent = () => {
     const { handleSubmit, control, errors, watch } = useForm();
-    const onSubmit = (d) => {
-        console.log(d);
-    };
+    const onSubmit = () => {};
 
     const harDokumentasjon = watch(harDokumentasjonFieldName);
 
