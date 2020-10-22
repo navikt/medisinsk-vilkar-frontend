@@ -13,6 +13,7 @@ import Datepicker from '../form/wrappers/DatePicker';
 import DiagnosekodeSelektor from '../form/wrappers/DiagnosekodeSelector';
 import RadioGroupPanel from '../form/wrappers/RadioGroupPanel';
 import YesOrNoQuestion from '../form/wrappers/YesOrNoQuestion';
+import Box, { Margins } from './Box';
 import styles from './legeerklæring.less';
 
 interface FormInput {
@@ -56,7 +57,7 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
             <DevTool control={control} />
 
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className={styles.inputContainer}>
+                <Box marginTop={Margins.medium}>
                     <YesOrNoQuestion
                         question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i speisalisthelsetjenesten?"
                         name={harDokumentasjonFieldName}
@@ -64,9 +65,9 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                         errors={errors}
                         validators={{ required }}
                     />
-                </div>
+                </Box>
                 {harDokumentasjon === false && (
-                    <div className={styles.inputContainer}>
+                    <Box marginTop={Margins.medium}>
                         <RadioGroupPanel
                             question="Hvem har signert legeerklæringen?"
                             name="signertAv"
@@ -78,9 +79,9 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                             errors={errors}
                             validators={{ required }}
                         />
-                    </div>
+                    </Box>
                 )}
-                <div className={styles.inputContainer}>
+                <Box marginTop={Margins.medium}>
                     <Datepicker
                         label="Hvilken dato ble legeerklæringen signert?"
                         control={control}
@@ -96,8 +97,8 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                             maxDate: sykdom.periodeTilVurdering.tom,
                         }}
                     />
-                </div>
-                <div className={styles.inputContainer}>
+                </Box>
+                <Box marginTop={Margins.medium}>
                     <DiagnosekodeSelektor
                         control={control}
                         name="legeerklæringDiagnose"
@@ -106,8 +107,8 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                         errors={errors}
                         label="Oppgi diagnose(r) som er fastsatt"
                     />
-                </div>
-                <div className={styles.inputContainer}>
+                </Box>
+                <Box marginTop={Margins.medium}>
                     <fieldset className={styles.fieldset}>
                         <legend className={styles.legend}>
                             Periode for eventuelle innleggelser
@@ -145,10 +146,10 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                             </div>
                         </div>
                     </fieldset>
-                </div>
-                <div className={styles.fieldContainerSmall}>
+                </Box>
+                <Box marginTop={Margins.large}>
                     <Hovedknapp>Gå videre</Hovedknapp>
-                </div>
+                </Box>
             </form>
         </>
     );
