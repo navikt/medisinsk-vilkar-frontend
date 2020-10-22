@@ -6,7 +6,7 @@
         "declaration": true,
         "skipLibCheck": true,
         "target": "esnext",
-        "typeRoots": ["./node_modules/@types", "./@types"],
+        "typeRoots": ["./node_modules/@types"],
         "esModuleInterop": true
     },
     "exclude": ["node_modules", "build"]
