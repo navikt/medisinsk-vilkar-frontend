@@ -6,12 +6,13 @@ const cx = classNames.bind(styles);
 
 // eslint-disable-next-line no-shadow
 export enum Margins {
+    small = 'small',
     medium = 'medium',
     large = 'large',
 }
 
 interface BoxProps {
-    children: React.ReactChild;
+    children: React.ReactNode;
     marginBottom?: Margins;
     marginTop?: Margins;
 }
