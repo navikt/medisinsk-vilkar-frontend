@@ -3,6 +3,7 @@ import { Label } from 'nav-frontend-skjema';
 import * as React from 'react';
 import Error from '../../components/Error';
 import { Limitations } from '../wrappers/DatePicker';
+import styles from './datepicker.less';
 
 interface DatepickerProps {
     label: string;
@@ -11,6 +12,7 @@ interface DatepickerProps {
     name: string;
     errorMessage?: string;
     limitations: Limitations;
+    hiddenLabel?: boolean;
 }
 
 const PureDatepicker = ({
@@ -20,9 +22,12 @@ const PureDatepicker = ({
     name,
     errorMessage,
     limitations,
+    hiddenLabel,
 }: DatepickerProps): JSX.Element => (
     <>
-        <Label htmlFor={name}>{label}</Label>
+        <Label className={hiddenLabel ? styles.visuallyHidden : ''} htmlFor={name}>
+            {label}
+        </Label>
         <Datepicker
             onChange={onChange}
             value={value}

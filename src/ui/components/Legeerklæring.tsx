@@ -1,14 +1,18 @@
 import { DevTool } from '@hookform/devtools';
-import moment from 'moment';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import { Radio, RadioGruppe } from 'nav-frontend-skjema';
 import React from 'react';
-import { FieldError, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import Sykdom from '../../types/medisinsk-vilkår/sykdom';
+import {
+    isDateAfterOtherDate,
+    isDateBeforeOtherDate,
+    isDateInPeriod,
+    required,
+} from '../form/validators';
 import Datepicker from '../form/wrappers/DatePicker';
-import DiagnosekodeSelektor from './DiagnosekodeSelector';
+import DiagnosekodeSelektor from '../form/wrappers/DiagnosekodeSelector';
 import Error from './Error';
-import { required } from '../form/validators';
 import styles from './legeerklæring.less';
 
 interface FormInput {
@@ -28,36 +32,7 @@ interface LegeerklæringProps {
 const legeerklæringRadioGroupName = 'legeerklæringLege';
 
 const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JSX.Element => {
-    const validateLegeerklæringSignert = (legeerklæringSignert: Date) => {
-        if (!legeerklæringSignert) {
-            return true;
-        }
-
-        return moment(sykdom.periodeTilVurdering.fom).isSameOrBefore(
-            moment(legeerklæringSignert, 'DD.MM.YYYY')
-        );
-    };
-
-    const validateInnleggelseDatoFra = (innleggelseDatoFra: Date) => {
-        if (!innleggelseDatoFra) {
-            return true;
-        }
-        return moment(sykdom.periodeTilVurdering.fom).isSameOrBefore(
-            moment(innleggelseDatoFra, 'DD.MM.YYYY')
-        );
-    };
-
-    const validateInnleggelseDatoTil = (innleggelseDatoTil: Date) => {
-        if (!innleggelseDatoTil) {
-            return true;
-        }
-
-        return moment(sykdom.periodeTilVurdering.tom).isSameOrAfter(
-            moment(innleggelseDatoTil, 'DD.MM.YYYY')
-        );
-    };
-
-    const { register, handleSubmit, errors, control } = useForm<FormInput>({
+    const { register, handleSubmit, errors, control, getValues } = useForm<FormInput>({
         defaultValues: {
             legeerklæringSignert: undefined,
             innleggelseDatoFra: undefined,
@@ -68,20 +43,6 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
     const onSubmit = (data) => {
         console.log(data);
         // changeTab(thisTab + 1);
-    };
-
-    const legeerklæringSignertValidationMessage = (error: FieldError) => {
-        if (error.type === 'validate') {
-            return <Error message="Datoen må være innenfor søknadsperioden" />;
-        }
-        return <Error />;
-    };
-
-    const innleggelseDatoValidationMessage = (error: FieldError) => {
-        if (error.type === 'validate') {
-            return <Error message="Datoen må være innenfor søknadsperioden" />; // TODO: valideringsbeskjed for før-dato etter etter-dato og omvendt
-        }
-        return <Error />;
     };
 
     return (
@@ -120,10 +81,14 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                 </div>
                 <div className={styles.inputContainer}>
                     <Datepicker
-                        label="Når ble legeerklæringen signert?"
+                        label="Hvilken dato ble legeerklæringen signert?"
                         control={control}
                         name="legeerklæringSignert"
-                        validators={{ required }}
+                        validators={{
+                            required,
+                            isDateInPeriodeTilVurdering: (value) =>
+                                isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                        }}
                         errors={errors}
                         limitations={{
                             minDate: sykdom.periodeTilVurdering.fom,
@@ -138,31 +103,59 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                         initialDiagnosekodeValue={sykdom.legeerklæringer[0]?.diagnosekode}
                         validators={{ required }}
                         errors={errors}
-                        label="Er det fastsatt en diagnose?"
+                        label="Oppgi diagnose(r) som er fastsatt"
                     />
                 </div>
                 <div className={styles.inputContainer}>
-                    <p>Hvilke datoer gjelder innleggelsen?</p>
-                    <div style={{ display: 'flex' }}>
-                        <div style={{ marginRight: '1.5rem' }}>
-                            <Datepicker
-                                label="Innleggelsen gjelder fra"
-                                control={control}
-                                name="innleggelseDatoFra"
-                                validators={{ required }}
-                                errors={errors}
-                            />
+                    <fieldset className={styles.fieldset}>
+                        <legend className={styles.legend}>
+                            Periode for eventuelle innleggelser
+                        </legend>
+                        <div style={{ display: 'flex' }}>
+                            <div style={{ marginRight: '1.5rem' }}>
+                                <Datepicker
+                                    label="Innleggelsen gjelder fra"
+                                    hiddenLabel
+                                    control={control}
+                                    name="innleggelseDatoFra"
+                                    validators={{
+                                        required,
+                                        isDateInPeriodeTilVurdering: (value) =>
+                                            isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                        isDateBeforeInnleggelseDatoTil: (value) => {
+                                            const innleggelseDatoTil = getValues(
+                                                'innleggelseDatoTil'
+                                            );
+
+                                            return isDateBeforeOtherDate(value, innleggelseDatoTil);
+                                        },
+                                    }}
+                                    errors={errors}
+                                />
+                            </div>
+                            <div>
+                                <Datepicker
+                                    label="Innleggelsen gjelder til"
+                                    hiddenLabel
+                                    control={control}
+                                    name="innleggelseDatoTil"
+                                    validators={{
+                                        required,
+                                        isDateInPeriodeTilVurdering: (value) =>
+                                            isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                        isDateAfterInnleggelseDatoFra: (value) => {
+                                            const innleggelseDatoFra = getValues(
+                                                'innleggelseDatoFra'
+                                            );
+
+                                            return isDateAfterOtherDate(value, innleggelseDatoFra);
+                                        },
+                                    }}
+                                    errors={errors}
+                                />
+                            </div>
                         </div>
-                        <div>
-                            <Datepicker
-                                label="Innleggelsen gjelder til"
-                                control={control}
-                                name="innleggelseDatoTil"
-                                validators={{ required }}
-                                errors={errors}
-                            />
-                        </div>
-                    </div>
+                    </fieldset>
                 </div>
                 <div className={styles.fieldContainerSmall}>
                     <Hovedknapp>Gå videre</Hovedknapp>

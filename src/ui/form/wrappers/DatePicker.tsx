@@ -14,6 +14,7 @@ interface DatepickerProps {
     errors?: FieldErrors;
     validators?: { [key: string]: (v: any) => string | undefined };
     limitations?: Limitations;
+    hiddenLabel?: boolean;
 }
 
 const Datepicker = ({
@@ -23,6 +24,7 @@ const Datepicker = ({
     validators,
     limitations,
     label,
+    hiddenLabel,
 }: DatepickerProps): JSX.Element => {
     return (
         <Controller
@@ -41,6 +43,7 @@ const Datepicker = ({
                     value={value}
                     errorMessage={errors[name]?.message}
                     limitations={limitations}
+                    hiddenLabel={hiddenLabel}
                 />
             )}
         />

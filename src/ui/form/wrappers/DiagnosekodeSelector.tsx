@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
-import PureDiagnosekodeSelector from '../form/pure/PureDiagnosekodeSelector';
+import PureDiagnosekodeSelector from '../pure/PureDiagnosekodeSelector';
 
 interface DiagnosekodeSelektorProps {
     control: Control;
