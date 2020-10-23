@@ -5,7 +5,7 @@ import styles from './box.less';
 const cx = classNames.bind(styles);
 
 // eslint-disable-next-line no-shadow
-export enum Margins {
+export enum Margin {
     small = 'small',
     medium = 'medium',
     large = 'large',
@@ -13,8 +13,8 @@ export enum Margins {
 
 interface BoxProps {
     children: React.ReactNode;
-    marginBottom?: Margins;
-    marginTop?: Margins;
+    marginBottom?: Margin;
+    marginTop?: Margin;
 }
 
 const Box = ({ children, marginBottom, marginTop }: BoxProps): JSX.Element => {

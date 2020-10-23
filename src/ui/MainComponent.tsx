@@ -2,7 +2,7 @@ import { TabsPure } from 'nav-frontend-tabs';
 import { Systemtittel } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
 import Sykdom from '../types/medisinsk-vilkår/sykdom';
-import Box, { Margins } from './components/Box';
+import Box, { Margin } from './components/Box';
 import Legeerklæring from './components/Legeerklæring';
 import styles from './components/medisinskVilkar.less';
 
@@ -17,10 +17,8 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
 
     return (
         <div style={{ margin: '2rem' }}>
-            <Box marginBottom={Margins.small}>
-                <Systemtittel>Fakta</Systemtittel>
-            </Box>
-            <Box marginTop={Margins.large}>
+            <Systemtittel>Fakta</Systemtittel>
+            <Box marginTop={Margin.large}>
                 <TabsPure
                     tabs={tabs.map((tab, index) => ({
                         aktiv: activeTab === index,
@@ -28,7 +26,7 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
                     }))}
                     onChange={(e, clickedIndex) => setActiveTab(clickedIndex)}
                 />
-                <Box marginTop={Margins.large}>
+                <Box marginTop={Margin.large}>
                     <div className={activeTab === 0 ? '' : styles.hide}>
                         <Legeerklæring thisTab={0} changeTab={setActiveTab} sykdom={sykdom} />
                     </div>
