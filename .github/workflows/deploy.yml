@@ -9,7 +9,7 @@ on:
             - main
 env:
     IMAGE_BASE: docker.pkg.github.com/${{ github.repository }}/medisinsk-vilkar-frontend
-    CLUSTER: dev-gcp
+    CLUSTER: dev-fss
     NAMESPACE: default
 jobs:
     deploy-docker-image:
@@ -53,14 +53,14 @@ jobs:
                   docker push ${IMAGE}
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            - name: Deploy til dev-gcp
+            - name: Deploy til dev-fss
               uses: nais/deploy/actions/deploy@v1
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-                  CLUSTER: dev-gcp
+                  CLUSTER: dev-fss
                   RESOURCE: nais/naiserator.yml
-                  VARS: nais/dev-gcp.json
+                  VARS: nais/dev-fss.json
             - name: Set changelog
               # (Escape newlines see https://github.com/actions/create-release/issues/25)
               run: |

@@ -13,7 +13,7 @@ import Datepicker from '../form/wrappers/DatePicker';
 import DiagnosekodeSelektor from '../form/wrappers/DiagnosekodeSelector';
 import RadioGroupPanel from '../form/wrappers/RadioGroupPanel';
 import YesOrNoQuestion from '../form/wrappers/YesOrNoQuestion';
-import Box, { Margins } from './Box';
+import Box, { Margin } from './Box';
 import styles from './legeerklæring.less';
 
 interface FormInput {
@@ -57,7 +57,7 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
             <DevTool control={control} />
 
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Box marginTop={Margins.medium}>
+                <Box marginTop={Margin.medium}>
                     <YesOrNoQuestion
                         question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i speisalisthelsetjenesten?"
                         name={harDokumentasjonFieldName}
@@ -67,7 +67,7 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                     />
                 </Box>
                 {harDokumentasjon === false && (
-                    <Box marginTop={Margins.medium}>
+                    <Box marginTop={Margin.medium}>
                         <RadioGroupPanel
                             question="Hvem har signert legeerklæringen?"
                             name="signertAv"
@@ -81,7 +81,7 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                         />
                     </Box>
                 )}
-                <Box marginTop={Margins.medium}>
+                <Box marginTop={Margin.medium}>
                     <Datepicker
                         label="Hvilken dato ble legeerklæringen signert?"
                         control={control}
@@ -98,7 +98,7 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                         }}
                     />
                 </Box>
-                <Box marginTop={Margins.medium}>
+                <Box marginTop={Margin.medium}>
                     <DiagnosekodeSelektor
                         control={control}
                         name="legeerklæringDiagnose"
@@ -108,7 +108,7 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                         label="Oppgi diagnose(r) som er fastsatt"
                     />
                 </Box>
-                <Box marginTop={Margins.medium}>
+                <Box marginTop={Margin.medium}>
                     <fieldset className={styles.fieldset}>
                         <legend className={styles.legend}>
                             Periode for eventuelle innleggelser
@@ -147,7 +147,7 @@ const Legeerklæring = ({ changeTab, thisTab, sykdom }: LegeerklæringProps): JS
                         </div>
                     </fieldset>
                 </Box>
-                <Box marginTop={Margins.large}>
+                <Box marginTop={Margin.large}>
                     <Hovedknapp>Gå videre</Hovedknapp>
                 </Box>
             </form>
