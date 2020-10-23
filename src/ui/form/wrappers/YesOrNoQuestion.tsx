@@ -1,16 +1,15 @@
 import React from 'react';
-import { Controller, Control, FieldErrors } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import PureYesOrNoQuestion from '../pure/PureYesOrNoQuestion';
 
 interface YesOrNoQuestionProps {
     question: string;
     name: string;
-    control: Control;
-    errors?: FieldErrors;
     validators?: { [key: string]: (v: any) => string | undefined };
 }
 
-const YesOrNoQuestion = ({ errors, question, name, control, validators }: YesOrNoQuestionProps) => {
+const YesOrNoQuestion = ({ question, name, validators }: YesOrNoQuestionProps) => {
+    const { control, errors } = useFormContext();
     return (
         <Controller
             control={control}

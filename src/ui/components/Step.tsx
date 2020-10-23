@@ -1,0 +1,23 @@
+import { Hovedknapp } from 'nav-frontend-knapper';
+import * as React from 'react';
+import Box, { Margin } from './Box';
+
+interface StepProps {
+    children: React.ReactNode;
+    onSubmit: () => void;
+    buttonLabel: string;
+}
+
+const Step = ({ children, onSubmit, buttonLabel }: StepProps): JSX.Element => {
+    return (
+        <Box marginTop={Margin.large}>
+            <form onSubmit={onSubmit}>
+                {children}
+                <Box marginTop={Margin.large}>
+                    <Hovedknapp>{buttonLabel}</Hovedknapp>
+                </Box>
+            </form>
+        </Box>
+    );
+};
+export default Step;
