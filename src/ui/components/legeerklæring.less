@@ -14,3 +14,41 @@
 .flexContainer {
     display: flex;
 }
+
+.datePeriodContainer {
+    margin-right: 1.5rem;
+}
+
+.buttonDeleteContainer {
+    margin-left: 1.5rem;
+    align-self: center;
+}
+
+.buttonAdd,
+.buttonDelete {
+    padding: 0;
+    color: #0067c5;
+    border: none;
+    border-bottom: 1px solid #0067c5;
+    background: none;
+    height: 23px;
+}
+
+.buttonAdd {
+    padding: 0;
+    margin-left: 29px;
+    border-bottom: 1px solid #0067c5;
+    position: relative;
+
+    &:before {
+        content: '';
+        height: 23px;
+        background: white url('../assets/images/add-circle.svg') no-repeat;
+        background-size: contain;
+        display: block;
+        position: absolute;
+        width: 23px;
+        left: -29px;
+        top: 0;
+    }
+}
