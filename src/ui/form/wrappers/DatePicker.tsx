@@ -13,6 +13,7 @@ interface DatepickerProps {
     validators?: { [key: string]: (v: any) => string | undefined };
     limitations?: Limitations;
     ariaLabel?: string;
+    defaultValue?: string;
 }
 
 const Datepicker = ({
@@ -21,6 +22,7 @@ const Datepicker = ({
     limitations,
     label,
     ariaLabel,
+    defaultValue,
 }: DatepickerProps): JSX.Element => {
     const { control, errors } = useFormContext();
 
@@ -33,6 +35,7 @@ const Datepicker = ({
                     ...validators,
                 },
             }}
+            defaultValue={defaultValue}
             render={({ onChange, value }) => (
                 <PureDatepicker
                     label={label}

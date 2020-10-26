@@ -18,6 +18,9 @@ interface MainComponentProps {
 const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
     const [activeTab, setActiveTab] = useState(0);
     const formMethods = useForm({
+        defaultValues: {
+            innleggelseperioder: [{ fra: '', til: '' }],
+        },
         shouldUnregister: false,
     });
 

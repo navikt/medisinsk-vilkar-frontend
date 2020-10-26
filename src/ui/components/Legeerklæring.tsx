@@ -1,6 +1,6 @@
 import { DevTool } from '@hookform/devtools';
 import React from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import Sykdom from '../../types/medisinsk-vilkår/sykdom';
 import {
     isDateAfterOtherDate,
@@ -30,6 +30,7 @@ interface LegeerklæringProps {
 const harDokumentasjonFieldName = 'harDokumentasjon';
 const innleggelseDatoFraFieldName = 'innleggelseDatoFra';
 const innleggelseDatoTilFieldName = 'innleggelseDatoTil';
+const innleggelsesperioderFieldName = 'innleggelseperioder';
 
 const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
     const formMethods = useFormContext<FormInput>();
@@ -38,6 +39,11 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
     const harDokumentasjon = watch(harDokumentasjonFieldName);
     const innleggelseDatoFra = watch(innleggelseDatoFraFieldName);
     const innleggelseDatoTil = watch(innleggelseDatoTilFieldName);
+
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: innleggelsesperioderFieldName,
+    });
 
     return (
         <>
@@ -88,34 +94,66 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
             <Box marginTop={Margin.medium}>
                 <fieldset className={styles.fieldset}>
                     <legend className={styles.legend}>Periode for eventuelle innleggelser</legend>
-                    <div className={styles.flexContainer}>
-                        <div style={{ marginRight: '1.5rem' }}>
-                            <Datepicker
-                                ariaLabel="Innleggelsen gjelder fra"
-                                name="innleggelseDatoFra"
-                                validators={{
-                                    required,
-                                    isDateInPeriodeTilVurdering: (value) =>
-                                        isDateInPeriod(value, sykdom?.periodeTilVurdering),
-                                    isDateBeforeInnleggelseDatoTil: (value) =>
-                                        isDateBeforeOtherDate(value, innleggelseDatoTil),
-                                }}
-                            />
-                        </div>
-                        <div>
-                            <Datepicker
-                                ariaLabel="Innleggelsen gjelder til"
-                                name="innleggelseDatoTil"
-                                validators={{
-                                    required,
-                                    isDateInPeriodeTilVurdering: (value) =>
-                                        isDateInPeriod(value, sykdom?.periodeTilVurdering),
-                                    isDateAfterInnleggelseDatoFra: (value) =>
-                                        isDateAfterOtherDate(value, innleggelseDatoFra),
-                                }}
-                            />
-                        </div>
-                    </div>
+                    {fields.map((item, index) => (
+                        <Box marginBottom={Margin.medium} key={item.id}>
+                            <div className={styles.flexContainer}>
+                                <div className={styles.datePeriodContainer}>
+                                    <Datepicker
+                                        ariaLabel="Innleggelsen gjelder fra"
+                                        name={`${innleggelsesperioderFieldName}[${index}].fra`}
+                                        defaultValue={item.fra}
+                                        limitations={{
+                                            minDate: sykdom.periodeTilVurdering.fom,
+                                            maxDate: sykdom.periodeTilVurdering.tom,
+                                        }}
+                                        validators={{
+                                            required,
+                                            isDateInPeriodeTilVurdering: (value) =>
+                                                isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                            isDateBeforeInnleggelseDatoTil: (value) =>
+                                                isDateBeforeOtherDate(value, innleggelseDatoTil),
+                                        }}
+                                    />
+                                </div>
+                                <div>
+                                    <Datepicker
+                                        ariaLabel="Innleggelsen gjelder til"
+                                        name={`${innleggelsesperioderFieldName}[${index}].til`}
+                                        defaultValue={item.til}
+                                        limitations={{
+                                            minDate: sykdom.periodeTilVurdering.fom,
+                                            maxDate: sykdom.periodeTilVurdering.tom,
+                                        }}
+                                        validators={{
+                                            required,
+                                            isDateInPeriodeTilVurdering: (value) =>
+                                                isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                            isDateAfterInnleggelseDatoFra: (value) =>
+                                                isDateAfterOtherDate(value, innleggelseDatoFra),
+                                        }}
+                                    />
+                                </div>
+                                {index > 0 && (
+                                    <div className={styles.buttonDeleteContainer}>
+                                        <button
+                                            className={styles.buttonDelete}
+                                            type="button"
+                                            onClick={() => remove(index)}
+                                        >
+                                            Fjern periode
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </Box>
+                    ))}
+                    <button
+                        className={styles.buttonAdd}
+                        type="button"
+                        onClick={() => append({ fra: '', til: '' })}
+                    >
+                        Legg til flere perioder
+                    </button>
                 </fieldset>
             </Box>
         </>

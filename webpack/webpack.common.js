@@ -6,11 +6,13 @@ const cssExtractLoaderConfig = {
     loader: MiniCssExtractPlugin.loader,
     options: {
         hmr: process.env.NODE_ENV === 'development',
+        publicPath: '',
     },
 };
 
 const CORE_DIR = path.resolve(__dirname, '../node_modules');
 const SRC_DIR = path.resolve(__dirname, '../src');
+const IMAGES_DIR = path.resolve(__dirname, '../src/ui/assets/images');
 
 module.exports = {
     entry: path.resolve(__dirname, '../', 'src') + '/app.ts',
@@ -80,6 +82,11 @@ module.exports = {
                     },
                 ],
                 include: [CORE_DIR],
+            },
+            {
+                test: /\.(jpg|png|svg)$/,
+                loader: 'file-loader',
+                include: [IMAGES_DIR],
             },
         ],
     },
