@@ -1,24 +1,22 @@
 import * as React from 'react';
-import { Control, Controller, FieldErrors } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import PureDiagnosekodeSelector from '../pure/PureDiagnosekodeSelector';
 
 interface DiagnosekodeSelektorProps {
-    control: Control;
     initialDiagnosekodeValue?: string;
     validators?: { [key: string]: (v: any) => string | undefined };
-    errors?: FieldErrors;
     name: string;
     label: string;
 }
 
 const DiagnosekodeSelektor = ({
-    control,
     initialDiagnosekodeValue = '',
     validators,
-    errors,
     name,
     label,
 }: DiagnosekodeSelektorProps): JSX.Element => {
+    const { control, errors } = useFormContext();
+
     return (
         <Controller
             control={control}
