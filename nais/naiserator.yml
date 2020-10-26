@@ -14,10 +14,10 @@ spec:
     timeout: 1
     periodSeconds: 5
     failureThreshold: 10
-    readiness:
-      path: /isReady
-      initialDelay: 20
-      timeout: 1
+  readiness:
+    path: /isReady
+    initialDelay: 20
+    timeout: 1
   resources:
     limits:
       cpu: 500m

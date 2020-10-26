@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 const { merge } = require('webpack-merge');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -14,4 +15,7 @@ module.exports = merge(commonWebpackConfig, {
         minimize: true,
         minimizer: [new TerserPlugin({ extractComments: false })],
     },
+    plugins: [
+        new webpack.IgnorePlugin({ resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/ }),
+    ],
 });
