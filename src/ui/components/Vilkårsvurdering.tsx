@@ -14,7 +14,6 @@ import {
     vurderingToOmsorgspersonerFieldName,
 } from '../MainComponent';
 import Box, { Margin } from './Box';
-import { intersectPeriods } from '../../util/dateUtils';
 
 interface VilkårsvurderingProps {
     sykdom: Sykdom;
@@ -25,8 +24,6 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
     const { getValues } = formMethods;
 
     const innleggelsesperioder = getValues(innleggelsesperioderFieldName);
-    console.log(intersectPeriods(sykdom.periodeTilVurdering, innleggelsesperioder));
-
     const getFormatttedDate = (periode: Periode) => {
         const fomMoment = moment(periode.fom);
         const tomMoment = moment(periode.tom);

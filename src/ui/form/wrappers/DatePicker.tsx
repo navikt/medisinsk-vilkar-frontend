@@ -7,7 +7,7 @@ export interface Limitations {
     maxDate?: string;
 }
 
-interface DatepickerProps {
+export interface DatepickerProps {
     label?: string;
     name: string;
     validators?: { [key: string]: (v: any) => string | undefined };

@@ -1,6 +1,6 @@
 import { DevTool } from '@hookform/devtools';
 import React from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import Sykdom from '../../types/medisinsk-vilkår/sykdom';
 import {
     isDateAfterOtherDate,
@@ -14,15 +14,8 @@ import RadioGroupPanel from '../form/wrappers/RadioGroupPanel';
 import YesOrNoQuestion from '../form/wrappers/YesOrNoQuestion';
 import { innleggelsesperioderFieldName } from '../MainComponent';
 import Box, { Margin } from './Box';
-import styles from './legeerklæring.less';
-
-interface FormInput {
-    legeerklæringLege: string;
-    legeerklæringSignert: string;
-    legeerklæringDiagnose: string;
-    innleggelseDatoFra: string;
-    innleggelseDatoTil: string;
-}
+import { LegeerklæringFormInput } from '../../types/medisinsk-vilkår/LegeerklæringFormInput';
+import PeriodpickerList from '../PeriodpickerList';
 
 interface LegeerklæringProps {
     sykdom: Sykdom;
@@ -33,17 +26,12 @@ const innleggelseDatoFraFieldName = 'innleggelseDatoFra';
 const innleggelseDatoTilFieldName = 'innleggelseDatoTil';
 
 const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
-    const formMethods = useFormContext<FormInput>();
+    const formMethods = useFormContext<LegeerklæringFormInput>();
     const { watch, control } = formMethods;
 
     const harDokumentasjon = watch(harDokumentasjonFieldName);
     const innleggelseDatoFra = watch(innleggelseDatoFraFieldName);
     const innleggelseDatoTil = watch(innleggelseDatoTilFieldName);
-
-    const { fields, append, remove } = useFieldArray({
-        control,
-        name: innleggelsesperioderFieldName,
-    });
 
     return (
         <>
@@ -92,69 +80,42 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
                 />
             </Box>
             <Box marginTop={Margin.medium}>
-                <fieldset className={styles.fieldset}>
-                    <legend className={styles.legend}>Periode for eventuelle innleggelser</legend>
-                    {fields.map((item, index) => (
-                        <Box marginBottom={Margin.medium} key={item.id}>
-                            <div className={styles.flexContainer}>
-                                <div className={styles.datePeriodContainer}>
-                                    <Datepicker
-                                        ariaLabel="Innleggelsen gjelder fra"
-                                        name={`${innleggelsesperioderFieldName}[${index}].fom`}
-                                        defaultValue={item.fom}
-                                        limitations={{
-                                            minDate: sykdom.periodeTilVurdering.fom,
-                                            maxDate: sykdom.periodeTilVurdering.tom,
-                                        }}
-                                        validators={{
-                                            required,
-                                            isDateInPeriodeTilVurdering: (value) =>
-                                                isDateInPeriod(value, sykdom?.periodeTilVurdering),
-                                            isDateBeforeInnleggelseDatoTil: (value) =>
-                                                isDateBeforeOtherDate(value, innleggelseDatoTil),
-                                        }}
-                                    />
-                                </div>
-                                <div>
-                                    <Datepicker
-                                        ariaLabel="Innleggelsen gjelder til"
-                                        name={`${innleggelsesperioderFieldName}[${index}].tom`}
-                                        defaultValue={item.tom}
-                                        limitations={{
-                                            minDate: sykdom.periodeTilVurdering.fom,
-                                            maxDate: sykdom.periodeTilVurdering.tom,
-                                        }}
-                                        validators={{
-                                            required,
-                                            isDateInPeriodeTilVurdering: (value) =>
-                                                isDateInPeriod(value, sykdom?.periodeTilVurdering),
-                                            isDateAfterInnleggelseDatoFra: (value) =>
-                                                isDateAfterOtherDate(value, innleggelseDatoFra),
-                                        }}
-                                    />
-                                </div>
-                                {index > 0 && (
-                                    <div className={styles.buttonDeleteContainer}>
-                                        <button
-                                            className={styles.buttonDelete}
-                                            type="button"
-                                            onClick={() => remove(index)}
-                                        >
-                                            Fjern periode
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        </Box>
-                    ))}
-                    <button
-                        className={styles.buttonAdd}
-                        type="button"
-                        onClick={() => append({ fra: '', til: '' })}
-                    >
-                        Legg til flere perioder
-                    </button>
-                </fieldset>
+                <PeriodpickerList
+                    legend="Periode for eventuelle innleggelser"
+                    name={innleggelsesperioderFieldName}
+                    periodpickerProps={{
+                        fromDatepickerProps: {
+                            name: 'fom',
+                            ariaLabel: 'Innleggelsen gjelder fra',
+                            limitations: {
+                                minDate: sykdom.periodeTilVurdering.fom,
+                                maxDate: sykdom.periodeTilVurdering.tom,
+                            },
+                            validators: {
+                                required,
+                                isDateInPeriodeTilVurdering: (value) =>
+                                    isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                isDateBeforeInnleggelseDatoTil: (value) =>
+                                    isDateBeforeOtherDate(value, innleggelseDatoTil),
+                            },
+                        },
+                        toDatepickerProps: {
+                            name: 'tom',
+                            ariaLabel: 'Innleggelsen gjelder til',
+                            limitations: {
+                                minDate: sykdom.periodeTilVurdering.fom,
+                                maxDate: sykdom.periodeTilVurdering.tom,
+                            },
+                            validators: {
+                                required,
+                                isDateInPeriodeTilVurdering: (value) =>
+                                    isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                isDateAfterInnleggelseDatoFra: (value) =>
+                                    isDateAfterOtherDate(value, innleggelseDatoFra),
+                            },
+                        },
+                    }}
+                />
             </Box>
         </>
     );
