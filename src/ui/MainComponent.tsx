@@ -5,9 +5,9 @@ import { FormProvider, useForm } from 'react-hook-form';
 import Sykdom from '../types/medisinsk-vilkår/sykdom';
 import Box, { Margin } from './components/Box';
 import Legeerklæring from './components/Legeerklæring';
-import styles from './components/medisinskVilkar.less';
 import Step from './components/Step';
 import Vilkårsvurdering from './components/Vilkårsvurdering';
+import styles from './components/medisinskVilkar.less';
 
 const tabs = ['Legeerklæring', 'Vilkårsvurdering'];
 
