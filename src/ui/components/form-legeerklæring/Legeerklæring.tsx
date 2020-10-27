@@ -35,7 +35,7 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
 
     return (
         <>
-            <DevTool control={control} />
+            {process.env.NODE_ENV === 'development' && <DevTool control={control} />}
             <Box marginTop={Margin.medium}>
                 <YesOrNoQuestion
                     question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i speisalisthelsetjenesten?"

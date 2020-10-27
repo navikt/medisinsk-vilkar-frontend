@@ -220,22 +220,22 @@
   font-weight: 400;
 }
 
-.box_smallMarginTop_2bneO {
+.box_smallMarginTop_3Tt20 {
   margin-top: 0.5rem;
 }
-.box_mediumMarginTop_10j6E {
+.box_mediumMarginTop_VQEou {
   margin-top: 1rem;
 }
-.box_largeMarginTop_nJrQj {
+.box_largeMarginTop_3d54Q {
   margin-top: 2rem;
 }
-.box_smallMarginBottom_3N5Nr {
+.box_smallMarginBottom_E98Ty {
   margin-bottom: 0.5rem;
 }
-.box_mediumMarginBottom_337E8 {
+.box_mediumMarginBottom_30wpl {
   margin-bottom: 1rem;
 }
-.box_largeMarginBottom_Z6l6R {
+.box_largeMarginBottom_1mTCp {
   margin-bottom: 2rem;
 }
 
@@ -2384,7 +2384,7 @@ body .blokk-xl {
   stroke: white;
 }
 
-.error_error_2myNb {
+.error_error_2Bv11 {
   color: red;
   margin-bottom: 0;
 }
@@ -2471,29 +2471,12 @@ body .blokk-xl {
   width: 40%;
 }
 
-.legeerkl\E6ring_fieldset_3Yh6Z {
-  border: none;
-  padding: 0;
-  margin: 0;
-}
-.legeerkl\E6ring_legend_1D_dD {
-  font-family: 'Source Sans Pro', Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-.legeerkl\E6ring_flexContainer_1zHvA {
-  display: flex;
-}
-.legeerkl\E6ring_datePeriodContainer_2xIDq {
-  margin-right: 1.5rem;
-}
-.legeerkl\E6ring_buttonDeleteContainer_3LygH {
+.legeerkl\E6ring_buttonDeleteContainer_3hDn5 {
   margin-left: 1.5rem;
   align-self: center;
 }
-.legeerkl\E6ring_buttonAdd_11Id1,
-.legeerkl\E6ring_buttonDelete_1-ZIw {
+.legeerkl\E6ring_buttonAdd_31Idl,
+.legeerkl\E6ring_buttonDelete_nz6J7 {
   padding: 0;
   color: #0067c5;
   border: none;
@@ -2501,13 +2484,13 @@ body .blokk-xl {
   background: none;
   height: 23px;
 }
-.legeerkl\E6ring_buttonAdd_11Id1 {
+.legeerkl\E6ring_buttonAdd_31Idl {
   padding: 0;
   margin-left: 29px;
   border-bottom: 1px solid #0067c5;
   position: relative;
 }
-.legeerkl\E6ring_buttonAdd_11Id1:before {
+.legeerkl\E6ring_buttonAdd_31Idl:before {
   content: '';
   height: 23px;
   background: white url(947815422ce54d68bb0c6ded06efb433.svg) no-repeat;
@@ -2517,16 +2500,6 @@ body .blokk-xl {
   width: 23px;
   left: -29px;
   top: 0;
-}
-
-.medisinskVilkar_hide_1Pyjz {
-  display: none;
-}
-.medisinskVilkar_main_SAnZJ {
-  margin: 2rem;
-}
-.medisinskVilkar_main_SAnZJ .inputPanel {
-  max-width: 325px;
 }
 
 .knappmini-mixin {
@@ -2895,5 +2868,33 @@ body .blokk-xl {
   clip: rect(0, 0, 0, 0);
   border: 0;
   white-space: nowrap;
+}
+
+.step_stepContainer_26WwH {
+  border: 1px solid #c6c2bf;
+  border-top: none;
+  border-radius: 5px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  padding: 50px 35px;
+}
+
+.periodList_title_1_UXs {
+  margin-bottom: 0.5rem;
+}
+.periodList_list_12jAT {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.main_hide_1Xy04 {
+  display: none;
+}
+.main_main_3FMVg {
+  margin: 2rem;
+}
+.main_main_3FMVg .inputPanel {
+  max-width: 325px;
 }
 
