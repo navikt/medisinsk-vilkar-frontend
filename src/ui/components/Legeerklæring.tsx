@@ -12,6 +12,7 @@ import Datepicker from '../form/wrappers/DatePicker';
 import DiagnosekodeSelektor from '../form/wrappers/DiagnosekodeSelector';
 import RadioGroupPanel from '../form/wrappers/RadioGroupPanel';
 import YesOrNoQuestion from '../form/wrappers/YesOrNoQuestion';
+import { innleggelsesperioderFieldName } from '../MainComponent';
 import Box, { Margin } from './Box';
 import styles from './legeerklæring.less';
 
@@ -30,7 +31,6 @@ interface LegeerklæringProps {
 const harDokumentasjonFieldName = 'harDokumentasjon';
 const innleggelseDatoFraFieldName = 'innleggelseDatoFra';
 const innleggelseDatoTilFieldName = 'innleggelseDatoTil';
-const innleggelsesperioderFieldName = 'innleggelseperioder';
 
 const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
     const formMethods = useFormContext<FormInput>();
@@ -87,7 +87,7 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
                 <DiagnosekodeSelektor
                     name="legeerklæringDiagnose"
                     initialDiagnosekodeValue={sykdom.legeerklæringer[0]?.diagnosekode}
-                    validators={{ required }}
+                    // validators={{ required }}
                     label="Oppgi diagnose(r) som er fastsatt"
                 />
             </Box>
@@ -100,8 +100,8 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
                                 <div className={styles.datePeriodContainer}>
                                     <Datepicker
                                         ariaLabel="Innleggelsen gjelder fra"
-                                        name={`${innleggelsesperioderFieldName}[${index}].fra`}
-                                        defaultValue={item.fra}
+                                        name={`${innleggelsesperioderFieldName}[${index}].fom`}
+                                        defaultValue={item.fom}
                                         limitations={{
                                             minDate: sykdom.periodeTilVurdering.fom,
                                             maxDate: sykdom.periodeTilVurdering.tom,
@@ -118,8 +118,8 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
                                 <div>
                                     <Datepicker
                                         ariaLabel="Innleggelsen gjelder til"
-                                        name={`${innleggelsesperioderFieldName}[${index}].til`}
-                                        defaultValue={item.til}
+                                        name={`${innleggelsesperioderFieldName}[${index}].tom`}
+                                        defaultValue={item.tom}
                                         limitations={{
                                             minDate: sykdom.periodeTilVurdering.fom,
                                             maxDate: sykdom.periodeTilVurdering.tom,

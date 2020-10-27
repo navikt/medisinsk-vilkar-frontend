@@ -11,15 +11,19 @@ import Vilkårsvurdering from './components/Vilkårsvurdering';
 
 const tabs = ['Legeerklæring', 'Vilkårsvurdering'];
 
+export const innleggelsesperioderFieldName = 'innleggelseperioder';
+export const vurderingKontinuerligTilsynFieldName = 'vurderingKontinuerligTilsyn';
+
 interface MainComponentProps {
     sykdom: Sykdom;
 }
 
 const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState(1);
     const formMethods = useForm({
         defaultValues: {
-            innleggelseperioder: [{ fra: '', til: '' }],
+            [innleggelsesperioderFieldName]: [{ fom: '2020-09-11', tom: '2020-09-18' }],
+            [vurderingKontinuerligTilsynFieldName]: '',
         },
         shouldUnregister: false,
     });
@@ -53,7 +57,7 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
                             onSubmit={formMethods.handleSubmit((data) => console.log(data))}
                             buttonLabel="Send inn"
                         >
-                            <Vilkårsvurdering />
+                            <Vilkårsvurdering sykdom={sykdom} />
                         </Step>
                     )}
                 </FormProvider>

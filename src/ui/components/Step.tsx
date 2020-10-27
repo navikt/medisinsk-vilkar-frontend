@@ -1,6 +1,7 @@
 import { Hovedknapp } from 'nav-frontend-knapper';
 import * as React from 'react';
 import Box, { Margin } from './Box';
+import styles from './step.less';
 
 interface StepProps {
     children: React.ReactNode;
@@ -10,14 +11,14 @@ interface StepProps {
 
 const Step = ({ children, onSubmit, buttonLabel }: StepProps): JSX.Element => {
     return (
-        <Box marginTop={Margin.large}>
+        <div className={styles.stepContainer}>
             <form onSubmit={onSubmit}>
                 {children}
                 <Box marginTop={Margin.large}>
                     <Hovedknapp>{buttonLabel}</Hovedknapp>
                 </Box>
             </form>
-        </Box>
+        </div>
     );
 };
 export default Step;
