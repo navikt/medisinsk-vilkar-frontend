@@ -1,4 +1,4 @@
-import renderers from './ui/renderers';
+import renderers from './util/renderers';
 import mockedSykdom from './mock/mockedSykdom';
 
 (window as any).renderMedisinskVilkarApp = async (appId, data) => {

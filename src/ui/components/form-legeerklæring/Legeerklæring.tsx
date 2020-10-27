@@ -1,21 +1,21 @@
 import { DevTool } from '@hookform/devtools';
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Sykdom from '../../types/medisinsk-vilkår/sykdom';
+import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import {
     isDateAfterOtherDate,
     isDateBeforeOtherDate,
     isDateInPeriod,
     required,
-} from '../form/validators';
-import Datepicker from '../form/wrappers/DatePicker';
-import DiagnosekodeSelektor from '../form/wrappers/DiagnosekodeSelector';
-import RadioGroupPanel from '../form/wrappers/RadioGroupPanel';
-import YesOrNoQuestion from '../form/wrappers/YesOrNoQuestion';
-import { innleggelsesperioderFieldName } from '../MainComponent';
-import Box, { Margin } from './Box';
-import { LegeerklæringFormInput } from '../../types/medisinsk-vilkår/LegeerklæringFormInput';
-import PeriodpickerList from '../PeriodpickerList';
+} from '../../form/validators';
+import Datepicker from '../../form/wrappers/DatePicker';
+import DiagnosekodeSelektor from '../../form/wrappers/DiagnosekodeSelector';
+import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
+import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
+import { innleggelsesperioderFieldName } from '../../MainComponent';
+import Box, { Margin } from '../box/Box';
+import { LegeerklæringFormInput } from '../../../types/medisinsk-vilkår/LegeerklæringFormInput';
+import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 
 interface LegeerklæringProps {
     sykdom: Sykdom;

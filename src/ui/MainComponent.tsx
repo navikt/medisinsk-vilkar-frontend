@@ -3,11 +3,11 @@ import { Systemtittel } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Sykdom from '../types/medisinsk-vilkår/sykdom';
-import Box, { Margin } from './components/Box';
-import Legeerklæring from './components/Legeerklæring';
-import Step from './components/Step';
-import Vilkårsvurdering from './components/Vilkårsvurdering';
-import styles from './components/medisinskVilkar.less';
+import Box, { Margin } from './components/box/Box';
+import Legeerklæring from './components/form-legeerklæring/Legeerklæring';
+import Step from './components/step/Step';
+import Vilkårsvurdering from './components/form-vilkårsvurdering/Vilkårsvurdering';
+import styles from './main.less';
 
 const tabs = ['Legeerklæring', 'Vilkårsvurdering'];
 
@@ -20,7 +20,7 @@ interface MainComponentProps {
 }
 
 const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
-    const [activeTab, setActiveTab] = useState(1);
+    const [activeTab, setActiveTab] = useState(0);
     const formMethods = useForm({
         defaultValues: {
             [innleggelsesperioderFieldName]: [
@@ -44,7 +44,6 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
                     }))}
                     onChange={(e, clickedIndex) => setActiveTab(clickedIndex)}
                 />
-
                 <FormProvider {...formMethods}>
                     {activeTab === 0 && (
                         <Step

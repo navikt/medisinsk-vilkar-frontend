@@ -1,9 +1,23 @@
 import React from 'react';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import Periodpicker, { PeriodpickerProps } from './form/pure/Periodpicker';
+import Periodpicker, { PeriodpickerProps } from '../pure/Periodpicker';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { LegeerklæringFormInput } from '../types/medisinsk-vilkår/LegeerklæringFormInput';
-import styles from './components/legeerklæring.less';
+import { LegeerklæringFormInput } from '../../../types/medisinsk-vilkår/LegeerklæringFormInput';
+import styles from '../../components/form-legeerklæring/legeerklæring.less';
+
+const AddButton = ({ onClick }) => (
+    <button className={styles.buttonAdd} type="button" onClick={onClick}>
+        Legg til flere perioder
+    </button>
+);
+
+const DeleteButton = ({ onClick }) => (
+    <div className={styles.buttonDeleteContainer}>
+        <button className={styles.buttonDelete} type="button" onClick={onClick}>
+            Fjern periode
+        </button>
+    </div>
+);
 
 interface PeriodpickerListProps {
     name: string;
@@ -18,7 +32,6 @@ const PeriodpickerList = ({
 }: PeriodpickerListProps) => {
     const formMethods = useFormContext<LegeerklæringFormInput>();
     const { control } = formMethods;
-
     const { fields, append, remove } = useFieldArray({
         control,
         name,
@@ -40,28 +53,14 @@ const PeriodpickerList = ({
                             name: `${name}[${index}].${toDatepickerProps.name}`,
                         }}
                     />
-                    {index > 0 && (
-                        <div className={styles.buttonDeleteContainer}>
-                            <button
-                                className={styles.buttonDelete}
-                                type="button"
-                                onClick={() => remove(index)}
-                            >
-                                Fjern periode
-                            </button>
-                        </div>
-                    )}
+                    {index > 0 && <DeleteButton onClick={() => remove(index)} />}
                 </>
             ))}
-            <button
-                className={styles.buttonAdd}
-                type="button"
+            <AddButton
                 onClick={() =>
                     append({ [fromDatepickerProps.name]: '', [toDatepickerProps.name]: '' })
                 }
-            >
-                Legg til flere perioder
-            </button>
+            />
         </SkjemaGruppe>
     );
 };

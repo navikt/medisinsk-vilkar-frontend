@@ -1,18 +1,18 @@
-import { Systemtittel } from 'nav-frontend-typografi';
 import * as React from 'react';
+import { Systemtittel } from 'nav-frontend-typografi';
 import { useFormContext } from 'react-hook-form';
-import Sykdom from '../../types/medisinsk-vilkår/sykdom';
-import { intersectPeriods } from '../../util/dateUtils';
-import { required } from '../form/validators';
-import RadioGroupPanel from '../form/wrappers/RadioGroupPanel';
-import TextArea from '../form/wrappers/TextArea';
+import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
+import { intersectPeriods } from '../../../util/dateUtils';
+import { required } from '../../form/validators';
+import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
+import TextArea from '../../form/wrappers/TextArea';
 import {
     innleggelsesperioderFieldName,
     vurderingKontinuerligTilsynFieldName,
     vurderingToOmsorgspersonerFieldName,
-} from '../MainComponent';
-import Box, { Margin } from './Box';
-import Periodevisning from './Periodevisning';
+} from '../../MainComponent';
+import Box, { Margin } from '../box/Box';
+import PeriodList from '../period-list/PeriodList';
 
 interface VilkårsvurderingProps {
     sykdom: Sykdom;
@@ -44,20 +44,17 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
         <>
             <Systemtittel>Vurdering av tilsyn og pleie</Systemtittel>
             <Box marginTop={Margin.large}>
-                <Periodevisning
-                    perioder={[sykdom.periodeTilVurdering] || []}
-                    title="Søknadsperiode:"
-                />
+                <PeriodList periods={[sykdom.periodeTilVurdering] || []} title="Søknadsperiode:" />
             </Box>
             <Box marginTop={Margin.large}>
-                <Periodevisning
-                    perioder={innleggelsesperioder || []}
+                <PeriodList
+                    periods={innleggelsesperioder || []}
                     title="Tilsyn og pleie innvilget automatisk pga. innleggelse:"
                 />
             </Box>
             <Box marginTop={Margin.large}>
-                <Periodevisning
-                    perioder={getPerioderSomMåVurderes()}
+                <PeriodList
+                    periods={getPerioderSomMåVurderes()}
                     title="Vurder behov for tilsyn og pleie i perioden hvor barnet ikke er innlagt:"
                 />
             </Box>
@@ -85,20 +82,17 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
                 <Systemtittel>Vurdering av to omsorgspersoner</Systemtittel>
             </Box>
             <Box marginTop={Margin.large}>
-                <Periodevisning
-                    perioder={[sykdom.periodeTilVurdering] || []}
-                    title="Søknadsperiode:"
-                />
+                <PeriodList periods={[sykdom.periodeTilVurdering] || []} title="Søknadsperiode:" />
             </Box>
             <Box marginTop={Margin.large}>
-                <Periodevisning
-                    perioder={innleggelsesperioder || []}
+                <PeriodList
+                    periods={innleggelsesperioder || []}
                     title="Rett til to omsorgspersoner pga innleggelse:"
                 />
             </Box>
             <Box marginTop={Margin.large}>
-                <Periodevisning
-                    perioder={getPerioderSomMåVurderes()}
+                <PeriodList
+                    periods={getPerioderSomMåVurderes()}
                     title="Vurder behov for tilsyn og pleie i perioden hvor barnet ikke er innlagt:"
                 />
             </Box>

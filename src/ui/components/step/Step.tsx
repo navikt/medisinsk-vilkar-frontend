@@ -1,6 +1,6 @@
 import { Hovedknapp } from 'nav-frontend-knapper';
 import * as React from 'react';
-import Box, { Margin } from './Box';
+import Box, { Margin } from '../box/Box';
 import styles from './step.less';
 
 interface StepProps {

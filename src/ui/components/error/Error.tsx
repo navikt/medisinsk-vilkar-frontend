@@ -5,8 +5,6 @@ interface ErrorProps {
     message?: string;
 }
 
-const Error = ({ message }: ErrorProps): JSX.Element => (
-    <p className={styles.error}>{message || 'Dette er et påkrevd felt'}</p>
-);
+const Error = ({ message }: ErrorProps): JSX.Element => <p className={styles.error}>{message}</p>;
 
 export default Error;
