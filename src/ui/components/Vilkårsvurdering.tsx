@@ -11,6 +11,7 @@ import TextArea from '../form/wrappers/TextArea';
 import {
     innleggelsesperioderFieldName,
     vurderingKontinuerligTilsynFieldName,
+    vurderingToOmsorgspersonerFieldName,
 } from '../MainComponent';
 import Box, { Margin } from './Box';
 import { intersectPeriods } from '../../util/dateUtils';
@@ -44,13 +45,17 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
         );
     };
 
-    const getInnleggelsesperioder = () => {
+    const getInnleggelsesperioder = (toOmsorgspersoner?: boolean) => {
         if (innleggelsesperioder?.length > 0 && innleggelsesperioder[0].fom !== '') {
             const innleggelsesperiode: Periode = innleggelsesperioder[0];
 
+            const tekst = toOmsorgspersoner
+                ? 'Rett til to omsorgspersoner pga innleggelse:'
+                : 'Tilsyn og pleie innvilget automatisk pga. innleggelse:';
+
             return (
                 <p>
-                    Tilsyn og pleie innvilget automatisk pga. innleggelse:
+                    {tekst}
                     <br />
                     {getFormatttedDate(innleggelsesperiode)}
                 </p>
@@ -59,7 +64,7 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
         return undefined;
     };
 
-    const getPerioderSomMåVurderes = () => {
+    const getPerioderSomMåVurderes = (toOmsorgspersoner?: boolean) => {
         const perioder = [];
         if (innleggelsesperioder?.length > 0 && innleggelsesperioder[0].fom !== '') {
             const resterendePerioder = getResterendePerioder(
@@ -73,15 +78,18 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
             }
         }
         if (perioder.length > 0) {
+            const tekst = toOmsorgspersoner
+                ? 'Vurder behov for to omsorgspersoner i perioden barnet skal ha kontinerlig tilsyn og pleie:'
+                : 'Vurder behov for tilsyn og pleie i perioden hvor barnet ikke er innlagt:';
             return (
                 <p>
-                    Vurder behov for tilsyn og pleie i perioden hvor barnet ikke er innlagt:
+                    {tekst}
                     <br />
-                    {perioder.map((periode) => (
-                        <>
+                    {perioder.map((periode, index) => (
+                        <span key={index}>
                             {periode}
                             <br />
-                        </>
+                        </span>
                     ))}
                 </p>
             );
@@ -92,21 +100,19 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
     return (
         <>
             <Systemtittel>Vurdering av tilsyn og pleie</Systemtittel>
-            {getSøknadsperiode()}
-            {getInnleggelsesperioder()}
-            {getPerioderSomMåVurderes()}
-            {/* <Label htmlFor="vurderingKontinuerligTilsyn">
-                Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge av
-                sykdommen. Dersom det er behov for tilsyn og pleie kun i deler av søknadsperioden må
-                det komme tydelig frem av vurderingen hvilke perioder det er behov og hvilke det
-                ikke er behov.
-            </Label> */}
-            <TextArea
-                label="Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge av
-                sykdommen."
-                name={vurderingKontinuerligTilsynFieldName}
-            />
             <Box marginTop={Margin.medium}>
+                {getSøknadsperiode()}
+                {getInnleggelsesperioder()}
+                {getPerioderSomMåVurderes()}
+            </Box>
+            <Box marginTop={Margin.large}>
+                <TextArea
+                    label="Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge av
+                sykdommen."
+                    name={vurderingKontinuerligTilsynFieldName}
+                />
+            </Box>
+            <Box marginTop={Margin.large}>
                 <RadioGroupPanel
                     question="Er det behov for kontinuerlig tilsyn og pleie som følge av sykdommen?"
                     name="behovKontinuerligTilsyn"
@@ -123,7 +129,26 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
             </Box>
             <Box marginTop={Margin.medium}>
                 {getSøknadsperiode()}
-                {getInnleggelsesperioder()}
+                {getInnleggelsesperioder(true)}
+                {getPerioderSomMåVurderes(true)}
+            </Box>
+            <Box marginTop={Margin.large}>
+                <TextArea
+                    label="Gjør en vurdering av om det er behov for to omsorgspersoner i perioden hvor det er behov for kontinerlig tilsyn og pleie."
+                    name={vurderingToOmsorgspersonerFieldName}
+                />
+            </Box>
+            <Box marginTop={Margin.large}>
+                <RadioGroupPanel
+                    question="Er det behov for to omsorgspersoner i perioden hvor vilkår for tilsyn og pleie er oppfylt?"
+                    name="behovToOmsorgspersoner"
+                    radios={[
+                        { label: 'Ja, i hele søknadsperioden', value: 'hele' },
+                        { label: 'Ja, i deler av perioden', value: 'deler' },
+                        { label: 'Nei', value: 'nei' },
+                    ]}
+                    validators={{ required }}
+                />
             </Box>
         </>
     );

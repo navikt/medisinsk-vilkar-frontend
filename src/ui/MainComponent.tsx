@@ -13,6 +13,7 @@ const tabs = ['Legeerklæring', 'Vilkårsvurdering'];
 
 export const innleggelsesperioderFieldName = 'innleggelseperioder';
 export const vurderingKontinuerligTilsynFieldName = 'vurderingKontinuerligTilsyn';
+export const vurderingToOmsorgspersonerFieldName = 'vurderingToOmsorgspersoner';
 
 interface MainComponentProps {
     sykdom: Sykdom;
@@ -24,6 +25,7 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
         defaultValues: {
             [innleggelsesperioderFieldName]: [{ fom: '2020-09-11', tom: '2020-09-18' }],
             [vurderingKontinuerligTilsynFieldName]: '',
+            [vurderingToOmsorgspersonerFieldName]: '',
         },
         shouldUnregister: false,
     });
@@ -55,7 +57,7 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
                     {activeTab === 1 && (
                         <Step
                             onSubmit={formMethods.handleSubmit((data) => console.log(data))}
-                            buttonLabel="Send inn"
+                            buttonLabel="Bekreft vurdering"
                         >
                             <Vilkårsvurdering sykdom={sykdom} />
                         </Step>
