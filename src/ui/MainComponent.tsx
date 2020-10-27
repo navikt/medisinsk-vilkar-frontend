@@ -23,7 +23,10 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
     const [activeTab, setActiveTab] = useState(1);
     const formMethods = useForm({
         defaultValues: {
-            [innleggelsesperioderFieldName]: [{ fom: '2020-09-11', tom: '2020-09-18' }],
+            [innleggelsesperioderFieldName]: [
+                { fom: '2020-09-11', tom: '2020-09-18' },
+                { fom: '2020-10-01', tom: '2020-10-05' },
+            ],
             [vurderingKontinuerligTilsynFieldName]: '',
             [vurderingToOmsorgspersonerFieldName]: '',
         },
