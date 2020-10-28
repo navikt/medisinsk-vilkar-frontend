@@ -1,40 +1,29 @@
-import * as React from 'react';
 import { Systemtittel } from 'nav-frontend-typografi';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import * as React from 'react';
+import { useFormContext } from 'react-hook-form';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
+import SykdomFormValues from '../../../types/SykdomFormState';
 import { intersectPeriods } from '../../../util/dateUtils';
+import { convertToInternationalPeriod } from '../../../util/formats';
 import { isDateInPeriod, required } from '../../form/validators';
+import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import TextArea from '../../form/wrappers/TextArea';
-import {
-    innleggelsesperioderFieldName,
-    perioderMedBehovForKontinuerligTilsynFieldName,
-    vurderingKontinuerligTilsynFieldName,
-    vurderingToOmsorgspersonerFieldName,
-} from '../../MainComponent';
 import Box, { Margin } from '../box/Box';
 import PeriodList from '../period-list/PeriodList';
-import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
-import { convertToInternationalPeriod } from '../../../util/formats';
 
 interface VilkårsvurderingProps {
     sykdom: Sykdom;
 }
 
-const behovKontinuerligTilsynFieldName = 'behovKontinuerligTilsyn';
-
 const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
     const formMethods = useFormContext();
-    const { getValues, watch, control } = formMethods;
+    const { getValues, watch } = formMethods;
 
-    const innleggelsesperioder = getValues(innleggelsesperioderFieldName);
+    const innleggelsesperioder = getValues(SykdomFormValues.INNLEGGELSESPERIODER);
 
-    const delvisBehovForKontinuerligTilsyn = watch(behovKontinuerligTilsynFieldName) === 'deler';
-
-    const { fields, append, remove } = useFieldArray({
-        control,
-        name: perioderMedBehovForKontinuerligTilsynFieldName,
-    });
+    const delvisBehovForKontinuerligTilsyn =
+        watch(SykdomFormValues.BEHOV_FOR_KONTINUERLIG_TILSYN) === 'deler';
 
     const getPerioderSomMåVurderes = () => {
         const perioder = [];
@@ -75,13 +64,13 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
                 <TextArea
                     label="Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge av
                 sykdommen."
-                    name={vurderingKontinuerligTilsynFieldName}
+                    name={SykdomFormValues.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE}
                 />
             </Box>
             <Box marginTop={Margin.large}>
                 <RadioGroupPanel
                     question="Er det behov for kontinuerlig tilsyn og pleie som følge av sykdommen?"
-                    name={behovKontinuerligTilsynFieldName}
+                    name={SykdomFormValues.BEHOV_FOR_KONTINUERLIG_TILSYN}
                     radios={[
                         { label: 'Ja, i hele søknadsperioden', value: 'hele' },
                         { label: 'Ja, i deler av perioden', value: 'deler' },
@@ -94,7 +83,7 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
                 <Box marginTop={Margin.large}>
                     <PeriodpickerList
                         legend="Oppgi hvilke perioder det er behov for kontinerlig tilsyn og pleie utenom innleggelsesperioden"
-                        name={perioderMedBehovForKontinuerligTilsynFieldName}
+                        name={SykdomFormValues.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE}
                         periodpickerProps={{
                             fromDatepickerProps: {
                                 name: 'fom',
@@ -110,8 +99,6 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
                                     required,
                                     isDateInPeriodeTilVurdering: (value) =>
                                         isDateInPeriod(value, sykdom?.periodeTilVurdering),
-                                    // isDateBeforeInnleggelseDatoTil: (value) =>
-                                    //     isDateBeforeOtherDate(value, innleggelseDatoTil),
                                 },
                             },
                             toDatepickerProps: {
@@ -128,8 +115,6 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
                                     required,
                                     isDateInPeriodeTilVurdering: (value) =>
                                         isDateInPeriod(value, sykdom?.periodeTilVurdering),
-                                    // isDateAfterInnleggelseDatoFra: (value) =>
-                                    //     isDateAfterOtherDate(value, innleggelseDatoFra),
                                 },
                             },
                         }}
@@ -157,7 +142,7 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
             <Box marginTop={Margin.large}>
                 <TextArea
                     label="Gjør en vurdering av om det er behov for to omsorgspersoner i perioden hvor det er behov for kontinerlig tilsyn og pleie."
-                    name={vurderingToOmsorgspersonerFieldName}
+                    name={SykdomFormValues.VURDERING_TO_OMSORGSPERSONER}
                 />
             </Box>
             <Box marginTop={Margin.large}>

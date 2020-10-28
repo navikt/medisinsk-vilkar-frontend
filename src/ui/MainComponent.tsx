@@ -8,14 +8,9 @@ import Legeerklæring from './components/form-legeerklæring/Legeerklæring';
 import Step from './components/step/Step';
 import Vilkårsvurdering from './components/form-vilkårsvurdering/Vilkårsvurdering';
 import styles from './main.less';
+import SykdomFormValues from '../types/SykdomFormState';
 
 const tabs = ['Legeerklæring', 'Vilkårsvurdering'];
-
-export const innleggelsesperioderFieldName = 'innleggelseperioder';
-export const vurderingKontinuerligTilsynFieldName = 'vurderingKontinuerligTilsyn';
-export const vurderingToOmsorgspersonerFieldName = 'vurderingToOmsorgspersoner';
-export const perioderMedBehovForKontinuerligTilsynFieldName =
-    'perioderMedBehovForKontinuerligTilsyn';
 
 interface MainComponentProps {
     sykdom: Sykdom;
@@ -25,13 +20,15 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
     const [activeTab, setActiveTab] = useState(0);
     const formMethods = useForm({
         defaultValues: {
-            [innleggelsesperioderFieldName]: [
+            [SykdomFormValues.INNLEGGELSESPERIODER]: [
                 { fom: '2020-09-11', tom: '2020-09-18' },
                 { fom: '2020-10-01', tom: '2020-10-05' },
             ],
-            [vurderingKontinuerligTilsynFieldName]: '',
-            [vurderingToOmsorgspersonerFieldName]: '',
-            [perioderMedBehovForKontinuerligTilsynFieldName]: [{ fom: '', tom: '' }],
+            [SykdomFormValues.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
+            [SykdomFormValues.VURDERING_TO_OMSORGSPERSONER]: '',
+            [SykdomFormValues.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: [
+                { fom: '', tom: '' },
+            ],
         },
         shouldUnregister: false,
     });
