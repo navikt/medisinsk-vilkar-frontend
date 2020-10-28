@@ -17,6 +17,17 @@ function getPeriodAsListOfDays({ fom, tom }: Period) {
     return list;
 }
 
+function getDaySequencesAsListOfPeriods(daySequences: string[][]): Period[] {
+    return daySequences.map((daySequence) => {
+        const firstDay = daySequence[0];
+        const lastDay = daySequence[daySequence.length - 1];
+        return {
+            fom: firstDay,
+            tom: lastDay,
+        };
+    });
+}
+
 export function intersectPeriods(basePeriod: Period, periods: Period[]) {
     const baseListOfDays = getPeriodAsListOfDays({
         fom: basePeriod.fom,
@@ -45,18 +56,7 @@ export function intersectPeriods(basePeriod: Period, periods: Period[]) {
         }
     });
 
-    return daysToInclude;
-}
-
-export function getDaySequencesAsListOfPeriods(daySequences: string[][]): Period[] {
-    return daySequences.map((daySequence) => {
-        const firstDay = daySequence[0];
-        const lastDay = daySequence[daySequence.length - 1];
-        return {
-            fom: firstDay,
-            tom: lastDay,
-        };
-    });
+    return getDaySequencesAsListOfPeriods(daysToInclude);
 }
 
 export function isValidPeriod({ fom, tom }: Period) {

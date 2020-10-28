@@ -15,17 +15,12 @@ function harTilsynsbehov(value: string) {
     return value === 'hele' || value === 'deler';
 }
 
-function finnPerioderUtenInnleggelse(søknadsperiode: Period, innleggelsesperioder: Period[]) {
-    const dagerUtenInnleggelser = intersectPeriods(søknadsperiode, innleggelsesperioder);
-    return getDaySequencesAsListOfPeriods(dagerUtenInnleggelser);
-}
-
 const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
     const { watch } = useFormContext();
 
     const tilsynsbehov = watch(SykdomFormValues.BEHOV_FOR_KONTINUERLIG_TILSYN);
     const innleggelsesperioder = watch(SykdomFormValues.INNLEGGELSESPERIODER);
-    const perioderUtenInnleggelse = finnPerioderUtenInnleggelse(
+    const perioderUtenInnleggelse = intersectPeriods(
         sykdom.periodeTilVurdering,
         innleggelsesperioder
     );

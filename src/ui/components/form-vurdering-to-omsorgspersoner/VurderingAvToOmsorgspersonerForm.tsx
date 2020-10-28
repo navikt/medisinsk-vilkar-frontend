@@ -1,16 +1,17 @@
-import React from 'react';
-import Box, { Margin } from '../box/Box';
 import { Systemtittel } from 'nav-frontend-typografi';
-import PeriodList from '../period-list/PeriodList';
-import TextArea from '../../form/wrappers/TextArea';
-import SykdomFormValues from '../../../types/SykdomFormState';
-import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
-import { isDateInPeriod, required } from '../../form/validators';
-import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
-import { convertToInternationalPeriod } from '../../../util/formats';
+import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { Period } from '../../../types/Period';
+import SykdomFormValues from '../../../types/SykdomFormState';
+import { intersectPeriods } from '../../../util/dateUtils';
+import { convertToInternationalPeriod } from '../../../util/formats';
+import { isDateInPeriod, required } from '../../form/validators';
+import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
+import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
+import TextArea from '../../form/wrappers/TextArea';
+import Box, { Margin } from '../box/Box';
+import PeriodList from '../period-list/PeriodList';
 
 interface VurderingAvToOmsorgspersonerFormProps {
     sykdom: Sykdom;
@@ -22,7 +23,7 @@ export default ({
     sykdom,
     innleggelsesperioder,
     perioderUtenInnleggelser,
-}: VurderingAvToOmsorgspersonerFormProps) => {
+}: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
     const { watch } = useFormContext();
 
     const perioderMedTilsynsbehov = watch(
@@ -36,6 +37,11 @@ export default ({
     } else if (tilsynsbehov === 'deler') {
         perioderMedBehovForTilsynOgPleie = perioderMedTilsynsbehov;
     }
+
+    const perioderUtenBehovForTilsynOgPleie = intersectPeriods(
+        sykdom.periodeTilVurdering,
+        perioderMedBehovForTilsynOgPleie
+    );
 
     const delvisBehovForToOmsorgspersoner =
         watch(SykdomFormValues.BEHOV_FOR_TO_OMSORGSPERSONER) === 'deler';
@@ -90,7 +96,7 @@ export default ({
                                 limitations: {
                                     minDate: sykdom.periodeTilVurdering.fom,
                                     maxDate: sykdom.periodeTilVurdering.tom,
-                                    invalidDateRanges: innleggelsesperioder.map(
+                                    invalidDateRanges: perioderUtenBehovForTilsynOgPleie.map(
                                         convertToInternationalPeriod
                                     ),
                                 },
@@ -106,7 +112,7 @@ export default ({
                                 limitations: {
                                     minDate: sykdom.periodeTilVurdering.fom,
                                     maxDate: sykdom.periodeTilVurdering.tom,
-                                    invalidDateRanges: innleggelsesperioder.map(
+                                    invalidDateRanges: perioderUtenBehovForTilsynOgPleie.map(
                                         convertToInternationalPeriod
                                     ),
                                 },
