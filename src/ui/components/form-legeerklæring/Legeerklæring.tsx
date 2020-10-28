@@ -8,7 +8,7 @@ import {
     isDateInPeriod,
     required,
 } from '../../form/validators';
-import Datepicker from '../../form/wrappers/DatePicker';
+import Datepicker from '../../form/wrappers/Datepicker';
 import DiagnosekodeSelektor from '../../form/wrappers/DiagnosekodeSelector';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';

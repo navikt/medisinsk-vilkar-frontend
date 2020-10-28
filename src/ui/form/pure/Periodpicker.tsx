@@ -1,6 +1,5 @@
 import React from 'react';
-import Datepicker, { DatepickerProps } from '../wrappers/DatePicker';
-import styles from './periodpicker.less';
+import Datepicker, { DatepickerProps } from '../wrappers/Datepicker';
 
 export interface PeriodpickerProps {
     fromDatepickerProps: DatepickerProps;

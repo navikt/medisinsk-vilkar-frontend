@@ -15,7 +15,7 @@ const PeriodList = ({ periods, title }: PeriodListProps): JSX.Element => (
         {periods.length > 0 ? (
             <ul className={styles.list}>
                 {periods.map((period) => (
-                    <li>
+                    <li key={`${period.fom}-${period.tom}`}>
                         <Element>{prettifyPeriod(period)}</Element>
                     </li>
                 ))}

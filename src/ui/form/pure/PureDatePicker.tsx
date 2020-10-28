@@ -1,16 +1,13 @@
 import { Datepicker } from 'nav-datovelger';
+import { DatepickerProps } from 'nav-datovelger/lib/Datepicker';
 import { Label } from 'nav-frontend-skjema';
 import * as React from 'react';
 import Error from '../../components/error/Error';
-import { Limitations } from '../wrappers/DatePicker';
 
-interface DatepickerProps {
+interface CustomDatepickerProps {
     label: string;
-    value: string;
-    onChange: (value) => void;
     name: string;
     errorMessage?: string;
-    limitations: Limitations;
     ariaLabel?: string;
 }
 
@@ -22,7 +19,7 @@ const PureDatepicker = ({
     errorMessage,
     limitations,
     ariaLabel,
-}: DatepickerProps): JSX.Element => (
+}: DatepickerProps & CustomDatepickerProps): JSX.Element => (
     <>
         {label && <Label htmlFor={name}>{label}</Label>}
         <Datepicker
@@ -33,10 +30,7 @@ const PureDatepicker = ({
                 placeholder: 'dd.mm.åååå',
                 'aria-label': ariaLabel,
             }}
-            limitations={{
-                minDate: limitations?.minDate,
-                maxDate: limitations?.maxDate,
-            }}
+            limitations={limitations}
         />
         {errorMessage && <Error message={errorMessage} />}
     </>

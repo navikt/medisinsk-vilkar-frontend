@@ -14,6 +14,8 @@ const tabs = ['Legeerklæring', 'Vilkårsvurdering'];
 export const innleggelsesperioderFieldName = 'innleggelseperioder';
 export const vurderingKontinuerligTilsynFieldName = 'vurderingKontinuerligTilsyn';
 export const vurderingToOmsorgspersonerFieldName = 'vurderingToOmsorgspersoner';
+export const perioderMedBehovForKontinuerligTilsynFieldName =
+    'perioderMedBehovForKontinuerligTilsyn';
 
 interface MainComponentProps {
     sykdom: Sykdom;
@@ -29,6 +31,7 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
             ],
             [vurderingKontinuerligTilsynFieldName]: '',
             [vurderingToOmsorgspersonerFieldName]: '',
+            [perioderMedBehovForKontinuerligTilsynFieldName]: [{ fom: '', tom: '' }],
         },
         shouldUnregister: false,
     });

@@ -1,19 +1,15 @@
+import { DatepickerLimitations } from 'nav-datovelger';
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import PureDatepicker from '../pure/PureDatepicker';
-
-export interface Limitations {
-    minDate?: string;
-    maxDate?: string;
-}
 
 export interface DatepickerProps {
     label?: string;
     name: string;
     validators?: { [key: string]: (v: any) => string | undefined };
-    limitations?: Limitations;
     ariaLabel?: string;
     defaultValue?: string;
+    limitations: DatepickerLimitations;
 }
 
 const Datepicker = ({

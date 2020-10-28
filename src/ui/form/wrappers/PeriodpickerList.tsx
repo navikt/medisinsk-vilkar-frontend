@@ -41,7 +41,7 @@ const PeriodpickerList = ({
     return (
         <SkjemaGruppe legend={legend}>
             {fields.map((item, index) => (
-                <Box marginTop={index > 0 ? Margin.medium : undefined}>
+                <Box key={item.id} marginTop={index > 0 ? Margin.medium : undefined}>
                     <div className={styles.flexContainer}>
                         <Periodpicker
                             fromDatepickerProps={{
@@ -55,7 +55,7 @@ const PeriodpickerList = ({
                                 name: `${name}[${index}].${toDatepickerProps.name}`,
                             }}
                         />
-                        {index > 0 && <DeleteButton onClick={() => remove(index)} />}
+                        {fields.length > 1 && <DeleteButton onClick={() => remove(index)} />}
                     </div>
                 </Box>
             ))}

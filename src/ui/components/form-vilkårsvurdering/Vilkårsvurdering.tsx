@@ -1,28 +1,40 @@
 import * as React from 'react';
 import { Systemtittel } from 'nav-frontend-typografi';
-import { useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { intersectPeriods } from '../../../util/dateUtils';
-import { required } from '../../form/validators';
+import { isDateInPeriod, required } from '../../form/validators';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import TextArea from '../../form/wrappers/TextArea';
 import {
     innleggelsesperioderFieldName,
+    perioderMedBehovForKontinuerligTilsynFieldName,
     vurderingKontinuerligTilsynFieldName,
     vurderingToOmsorgspersonerFieldName,
 } from '../../MainComponent';
 import Box, { Margin } from '../box/Box';
 import PeriodList from '../period-list/PeriodList';
+import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
+import { convertToInternationalPeriod } from '../../../util/formats';
 
 interface VilkårsvurderingProps {
     sykdom: Sykdom;
 }
 
+const behovKontinuerligTilsynFieldName = 'behovKontinuerligTilsyn';
+
 const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
     const formMethods = useFormContext();
-    const { getValues } = formMethods;
+    const { getValues, watch, control } = formMethods;
 
     const innleggelsesperioder = getValues(innleggelsesperioderFieldName);
+
+    const delvisBehovForKontinuerligTilsyn = watch(behovKontinuerligTilsynFieldName) === 'deler';
+
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: perioderMedBehovForKontinuerligTilsynFieldName,
+    });
 
     const getPerioderSomMåVurderes = () => {
         const perioder = [];
@@ -69,7 +81,7 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
             <Box marginTop={Margin.large}>
                 <RadioGroupPanel
                     question="Er det behov for kontinuerlig tilsyn og pleie som følge av sykdommen?"
-                    name="behovKontinuerligTilsyn"
+                    name={behovKontinuerligTilsynFieldName}
                     radios={[
                         { label: 'Ja, i hele søknadsperioden', value: 'hele' },
                         { label: 'Ja, i deler av perioden', value: 'deler' },
@@ -78,6 +90,52 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
                     validators={{ required }}
                 />
             </Box>
+            {delvisBehovForKontinuerligTilsyn && (
+                <Box marginTop={Margin.large}>
+                    <PeriodpickerList
+                        legend="Oppgi hvilke perioder det er behov for kontinerlig tilsyn og pleie utenom innleggelsesperioden"
+                        name={perioderMedBehovForKontinuerligTilsynFieldName}
+                        periodpickerProps={{
+                            fromDatepickerProps: {
+                                name: 'fom',
+                                ariaLabel: 'Fra',
+                                limitations: {
+                                    minDate: sykdom.periodeTilVurdering.fom,
+                                    maxDate: sykdom.periodeTilVurdering.tom,
+                                    invalidDateRanges: innleggelsesperioder.map(
+                                        convertToInternationalPeriod
+                                    ),
+                                },
+                                validators: {
+                                    required,
+                                    isDateInPeriodeTilVurdering: (value) =>
+                                        isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                    // isDateBeforeInnleggelseDatoTil: (value) =>
+                                    //     isDateBeforeOtherDate(value, innleggelseDatoTil),
+                                },
+                            },
+                            toDatepickerProps: {
+                                name: 'tom',
+                                ariaLabel: 'Til',
+                                limitations: {
+                                    minDate: sykdom.periodeTilVurdering.fom,
+                                    maxDate: sykdom.periodeTilVurdering.tom,
+                                    invalidDateRanges: innleggelsesperioder.map(
+                                        convertToInternationalPeriod
+                                    ),
+                                },
+                                validators: {
+                                    required,
+                                    isDateInPeriodeTilVurdering: (value) =>
+                                        isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                    // isDateAfterInnleggelseDatoFra: (value) =>
+                                    //     isDateAfterOtherDate(value, innleggelseDatoFra),
+                                },
+                            },
+                        }}
+                    />
+                </Box>
+            )}
             <Box marginTop={Margin.large}>
                 <Systemtittel>Vurdering av to omsorgspersoner</Systemtittel>
             </Box>
