@@ -2,7 +2,7 @@ import Autocomplete from '@navikt/nap-autocomplete';
 import axios from 'axios';
 import { Label } from 'nav-frontend-skjema';
 import * as React from 'react';
-import Error from '../../components/Error';
+import Error from '../../components/error/Error';
 import styles from './diagnosekodeSelector.less';
 
 interface DiagnosekodeSelectorProps {

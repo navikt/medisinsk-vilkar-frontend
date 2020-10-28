@@ -4,7 +4,6 @@ import styles from './box.less';
 
 const cx = classNames.bind(styles);
 
-// eslint-disable-next-line no-shadow
 export enum Margin {
     small = 'small',
     medium = 'medium',
