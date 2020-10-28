@@ -41,7 +41,7 @@ const PeriodpickerList = ({
     return (
         <SkjemaGruppe legend={legend}>
             {fields.map((item, index) => (
-                <Box marginTop={Margin.medium}>
+                <Box marginTop={index > 0 ? Margin.medium : undefined}>
                     <div className={styles.flexContainer}>
                         <Periodpicker
                             fromDatepickerProps={{
