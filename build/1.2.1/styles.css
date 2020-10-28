@@ -2471,12 +2471,15 @@ body .blokk-xl {
   width: 40%;
 }
 
-.legeerkl\E6ring_buttonDeleteContainer_3hDn5 {
+.periodpickerList_flexContainer_2MHt3 {
+  display: flex;
+}
+.periodpickerList_buttonDeleteContainer_28Qqx {
   margin-left: 1.5rem;
   align-self: center;
 }
-.legeerkl\E6ring_buttonAdd_31Idl,
-.legeerkl\E6ring_buttonDelete_nz6J7 {
+.periodpickerList_buttonAdd_3z2Cu,
+.periodpickerList_buttonDelete_kgQZo {
   padding: 0;
   color: #0067c5;
   border: none;
@@ -2484,13 +2487,13 @@ body .blokk-xl {
   background: none;
   height: 23px;
 }
-.legeerkl\E6ring_buttonAdd_31Idl {
+.periodpickerList_buttonAdd_3z2Cu {
   padding: 0;
   margin-left: 29px;
   border-bottom: 1px solid #0067c5;
   position: relative;
 }
-.legeerkl\E6ring_buttonAdd_31Idl:before {
+.periodpickerList_buttonAdd_3z2Cu:before {
   content: '';
   height: 23px;
   background: white url(947815422ce54d68bb0c6ded06efb433.svg) no-repeat;
