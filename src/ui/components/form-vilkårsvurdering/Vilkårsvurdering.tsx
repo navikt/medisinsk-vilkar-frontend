@@ -4,15 +4,11 @@ import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import SykdomFormValues from '../../../types/SykdomFormState';
 import VurderingAvToOmsorgspersonerForm from '../form-vurdering-to-omsorgspersoner/VurderingAvToOmsorgspersonerForm';
 import VurderingAvTilsynsbehovForm from '../form-vurdering-av-tilsynsbehov/VurderingAvTilsynsbehovForm';
-import { Period } from '../../../types/Period';
-import { getDaySequencesAsListOfPeriods, intersectPeriods } from '../../../util/dateUtils';
+import { intersectPeriods } from '../../../util/dateUtils';
+import { harTilsynsbehov } from '../../../util/domain';
 
 interface VilkårsvurderingProps {
     sykdom: Sykdom;
-}
-
-function harTilsynsbehov(value: string) {
-    return value === 'hele' || value === 'deler';
 }
 
 const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {

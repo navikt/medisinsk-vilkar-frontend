@@ -12,6 +12,7 @@ import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import TextArea from '../../form/wrappers/TextArea';
 import Box, { Margin } from '../box/Box';
 import PeriodList from '../period-list/PeriodList';
+import Tilsynsbehov from '../../../types/Tilsynsbehov';
 
 interface VurderingAvToOmsorgspersonerFormProps {
     sykdom: Sykdom;
@@ -26,25 +27,23 @@ export default ({
 }: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
     const { watch } = useFormContext();
 
-    const perioderMedTilsynsbehov = watch(
-        SykdomFormValues.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE
-    );
     const tilsynsbehov = watch(SykdomFormValues.BEHOV_FOR_KONTINUERLIG_TILSYN);
+    const delvisBehovForToOmsorgspersoner =
+        watch(SykdomFormValues.BEHOV_FOR_TO_OMSORGSPERSONER) === Tilsynsbehov.DELER;
 
-    let perioderMedBehovForTilsynOgPleie = [];
-    if (tilsynsbehov === 'hele') {
-        perioderMedBehovForTilsynOgPleie = perioderUtenInnleggelser;
-    } else if (tilsynsbehov === 'deler') {
-        perioderMedBehovForTilsynOgPleie = perioderMedTilsynsbehov;
+    let perioderMedTilsynsbehov = [];
+    if (tilsynsbehov === Tilsynsbehov.HELE) {
+        perioderMedTilsynsbehov = perioderUtenInnleggelser;
+    } else if (tilsynsbehov === Tilsynsbehov.DELER) {
+        perioderMedTilsynsbehov = watch(
+            SykdomFormValues.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE
+        );
     }
 
-    const perioderUtenBehovForTilsynOgPleie = intersectPeriods(
+    const perioderUtenTilsynsbehov = intersectPeriods(
         sykdom.periodeTilVurdering,
-        perioderMedBehovForTilsynOgPleie
+        perioderMedTilsynsbehov
     );
-
-    const delvisBehovForToOmsorgspersoner =
-        watch(SykdomFormValues.BEHOV_FOR_TO_OMSORGSPERSONER) === 'deler';
 
     return (
         <>
@@ -62,7 +61,7 @@ export default ({
             </Box>
             <Box marginTop={Margin.large}>
                 <PeriodList
-                    periods={perioderMedBehovForTilsynOgPleie}
+                    periods={perioderMedTilsynsbehov}
                     title="Vurder behov for to omsorgspersoner i perioden barnet skal ha kontinerlig tilsyn og pleie:"
                 />
             </Box>
@@ -96,7 +95,7 @@ export default ({
                                 limitations: {
                                     minDate: sykdom.periodeTilVurdering.fom,
                                     maxDate: sykdom.periodeTilVurdering.tom,
-                                    invalidDateRanges: perioderUtenBehovForTilsynOgPleie.map(
+                                    invalidDateRanges: perioderUtenTilsynsbehov.map(
                                         convertToInternationalPeriod
                                     ),
                                 },
@@ -112,7 +111,7 @@ export default ({
                                 limitations: {
                                     minDate: sykdom.periodeTilVurdering.fom,
                                     maxDate: sykdom.periodeTilVurdering.tom,
-                                    invalidDateRanges: perioderUtenBehovForTilsynOgPleie.map(
+                                    invalidDateRanges: perioderUtenTilsynsbehov.map(
                                         convertToInternationalPeriod
                                     ),
                                 },

@@ -11,6 +11,7 @@ import { convertToInternationalPeriod } from '../../../util/formats';
 import { useFormContext } from 'react-hook-form';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { Period } from '../../../types/Period';
+import Tilsynsbehov from '../../../types/Tilsynsbehov';
 
 interface VurderingAvTilsynsbehovFormProps {
     sykdom: Sykdom;
@@ -26,7 +27,7 @@ export default ({
     const { watch } = useFormContext();
 
     const delvisBehovForKontinuerligTilsyn =
-        watch(SykdomFormValues.BEHOV_FOR_KONTINUERLIG_TILSYN) === 'deler';
+        watch(SykdomFormValues.BEHOV_FOR_KONTINUERLIG_TILSYN) === Tilsynsbehov.DELER;
 
     return (
         <>
@@ -59,9 +60,9 @@ export default ({
                     question="Er det behov for kontinuerlig tilsyn og pleie som følge av sykdommen?"
                     name={SykdomFormValues.BEHOV_FOR_KONTINUERLIG_TILSYN}
                     radios={[
-                        { label: 'Ja, i hele søknadsperioden', value: 'hele' },
-                        { label: 'Ja, i deler av perioden', value: 'deler' },
-                        { label: 'Nei', value: 'nei' },
+                        { label: 'Ja, i hele søknadsperioden', value: Tilsynsbehov.HELE },
+                        { label: 'Ja, i deler av perioden', value: Tilsynsbehov.DELER },
+                        { label: 'Nei', value: Tilsynsbehov.INGEN },
                     ]}
                     validators={{ required }}
                 />
