@@ -4,6 +4,7 @@ const { merge } = require('webpack-merge');
 const TerserPlugin = require('terser-webpack-plugin');
 const commonWebpackConfig = require('./webpack.common.js');
 const pkg = require('./../package.json');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = merge(commonWebpackConfig, {
     mode: 'production',
@@ -13,7 +14,7 @@ module.exports = merge(commonWebpackConfig, {
     },
     optimization: {
         minimize: true,
-        minimizer: [new TerserPlugin({ extractComments: false })],
+        minimizer: [new TerserPlugin({ extractComments: false }), new CssMinimizerPlugin()],
     },
     plugins: [
         new webpack.IgnorePlugin({ resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/ }),
