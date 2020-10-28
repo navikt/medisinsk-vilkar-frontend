@@ -1,9 +1,10 @@
-import React from 'react';
 import { SkjemaGruppe } from 'nav-frontend-skjema';
-import Periodpicker, { PeriodpickerProps } from '../pure/Periodpicker';
+import React from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { LegeerklæringFormInput } from '../../../types/medisinsk-vilkår/LegeerklæringFormInput';
-import styles from '../../components/form-legeerklæring/legeerklæring.less';
+import Box, { Margin } from '../../components/box/Box';
+import Periodpicker, { PeriodpickerProps } from '../pure/Periodpicker';
+import styles from './periodpickerList.less';
 
 const AddButton = ({ onClick }) => (
     <button className={styles.buttonAdd} type="button" onClick={onClick}>
@@ -29,7 +30,7 @@ const PeriodpickerList = ({
     name,
     legend,
     periodpickerProps: { fromDatepickerProps, toDatepickerProps },
-}: PeriodpickerListProps) => {
+}: PeriodpickerListProps): JSX.Element => {
     const formMethods = useFormContext<LegeerklæringFormInput>();
     const { control } = formMethods;
     const { fields, append, remove } = useFieldArray({
@@ -38,29 +39,33 @@ const PeriodpickerList = ({
     });
 
     return (
-        <SkjemaGruppe className={styles.fieldset} legend={legend}>
+        <SkjemaGruppe legend={legend}>
             {fields.map((item, index) => (
-                <>
-                    <Periodpicker
-                        fromDatepickerProps={{
-                            ...fromDatepickerProps,
-                            defaultValue: item.fom,
-                            name: `${name}[${index}].${fromDatepickerProps.name}`,
-                        }}
-                        toDatepickerProps={{
-                            ...toDatepickerProps,
-                            defaultValue: item.tom,
-                            name: `${name}[${index}].${toDatepickerProps.name}`,
-                        }}
-                    />
-                    {index > 0 && <DeleteButton onClick={() => remove(index)} />}
-                </>
+                <Box marginTop={Margin.medium}>
+                    <div className={styles.flexContainer}>
+                        <Periodpicker
+                            fromDatepickerProps={{
+                                ...fromDatepickerProps,
+                                defaultValue: item.fom,
+                                name: `${name}[${index}].${fromDatepickerProps.name}`,
+                            }}
+                            toDatepickerProps={{
+                                ...toDatepickerProps,
+                                defaultValue: item.tom,
+                                name: `${name}[${index}].${toDatepickerProps.name}`,
+                            }}
+                        />
+                        {index > 0 && <DeleteButton onClick={() => remove(index)} />}
+                    </div>
+                </Box>
             ))}
-            <AddButton
-                onClick={() =>
-                    append({ [fromDatepickerProps.name]: '', [toDatepickerProps.name]: '' })
-                }
-            />
+            <Box marginTop={Margin.medium}>
+                <AddButton
+                    onClick={() =>
+                        append({ [fromDatepickerProps.name]: '', [toDatepickerProps.name]: '' })
+                    }
+                />
+            </Box>
         </SkjemaGruppe>
     );
 };
