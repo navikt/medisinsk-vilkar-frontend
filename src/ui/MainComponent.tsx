@@ -29,6 +29,7 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
             [SykdomFormValues.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: [
                 { fom: '', tom: '' },
             ],
+            [SykdomFormValues.PERIODER_MED_BEHOV_FOR_TO_OMSORGSPERSONER]: [{ fom: '', tom: '' }],
         },
         shouldUnregister: false,
     });

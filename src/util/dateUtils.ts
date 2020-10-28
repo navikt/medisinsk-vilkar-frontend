@@ -1,7 +1,7 @@
-import { Periode } from '../types/medisinsk-vilkår/MedisinskVilkår';
 import moment from 'moment';
+import { Period } from '../types/Period';
 
-function getPeriodAsListOfDays({ fom, tom }: Periode) {
+function getPeriodAsListOfDays({ fom, tom }: Period) {
     const fomMoment = moment(fom);
     const tomMoment = moment(tom);
 
@@ -17,13 +17,13 @@ function getPeriodAsListOfDays({ fom, tom }: Periode) {
     return list;
 }
 
-export function intersectPeriods(basePeriod: Periode, period2: Periode[]) {
+export function intersectPeriods(basePeriod: Period, periods: Period[]) {
     const baseListOfDays = getPeriodAsListOfDays({
         fom: basePeriod.fom,
         tom: basePeriod.tom,
     });
 
-    const listOfDaysToExclude = period2
+    const listOfDaysToExclude = periods
         .map(({ fom, tom }) => getPeriodAsListOfDays({ fom, tom }))
         .flat();
 
@@ -46,4 +46,19 @@ export function intersectPeriods(basePeriod: Periode, period2: Periode[]) {
     });
 
     return daysToInclude;
+}
+
+export function getDaySequencesAsListOfPeriods(daySequences: string[][]): Period[] {
+    return daySequences.map((daySequence) => {
+        const firstDay = daySequence[0];
+        const lastDay = daySequence[daySequence.length - 1];
+        return {
+            fom: firstDay,
+            tom: lastDay,
+        };
+    });
+}
+
+export function isValidPeriod({ fom, tom }: Period) {
+    return !isNaN(new Date(fom) as any) && !isNaN(new Date(tom) as any);
 }
