@@ -25,15 +25,13 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
     return (
         <>
             {process.env.NODE_ENV === 'development' && <DevTool control={control} />}
-            <Box marginTop={Margin.medium}>
-                <YesOrNoQuestion
-                    question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i speisalisthelsetjenesten?"
-                    name={SykdomFormValues.HAR_DOKUMENTASJON}
-                    validators={{ required }}
-                />
-            </Box>
+            <YesOrNoQuestion
+                question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i speisalisthelsetjenesten?"
+                name={SykdomFormValues.HAR_DOKUMENTASJON}
+                validators={{ required }}
+            />
             {harDokumentasjon === false && (
-                <Box marginTop={Margin.medium}>
+                <Box marginTop={Margin.large}>
                     <RadioGroupPanel
                         question="Hvem har signert legeerklæringen?"
                         name="signertAv"
@@ -45,7 +43,7 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
                     />
                 </Box>
             )}
-            <Box marginTop={Margin.medium}>
+            <Box marginTop={Margin.large}>
                 <Datepicker
                     label="Hvilken dato ble legeerklæringen signert?"
                     name="legeerklæringSignert"
@@ -60,7 +58,7 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
                     }}
                 />
             </Box>
-            <Box marginTop={Margin.medium}>
+            <Box marginTop={Margin.large}>
                 <DiagnosekodeSelektor
                     name="legeerklæringDiagnose"
                     initialDiagnosekodeValue={sykdom.legeerklæringer[0]?.diagnosekode}
@@ -68,7 +66,7 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
                     label="Oppgi diagnose(r) som er fastsatt"
                 />
             </Box>
-            <Box marginTop={Margin.medium}>
+            <Box marginTop={Margin.large}>
                 <PeriodpickerList
                     legend="Periode for eventuelle innleggelser"
                     name={SykdomFormValues.INNLEGGELSESPERIODER}

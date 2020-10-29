@@ -14,7 +14,7 @@ const Step = ({ children, onSubmit, buttonLabel }: StepProps): JSX.Element => {
         <div className={styles.stepContainer}>
             <form onSubmit={onSubmit}>
                 {children}
-                <Box marginTop={Margin.large}>
+                <Box marginTop={Margin.xLarge}>
                     <Hovedknapp>{buttonLabel}</Hovedknapp>
                 </Box>
             </form>

@@ -51,7 +51,7 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
                                 setActiveTab(1);
                                 console.log(data);
                             })}
-                            buttonLabel="Gå videre"
+                            buttonLabel="Fortsett til vilkårsvurdering"
                         >
                             <Legeerklæring sykdom={sykdom} />
                         </Step>
