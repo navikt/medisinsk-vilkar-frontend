@@ -11,9 +11,6 @@ import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import Box, { Margin } from '../box/Box';
-import OnePersonIcon from '../icons/OnePersonIcon';
-import TwoPersonsIcon from '../icons/TwoPersonsIcon';
-import StatusPanel, { StatusPanelTheme } from '../status-panel/StatusPanel';
 import TilsynStatusPanel, { TilsynStatus } from '../tilsyn-status-panel/TilsynStatusPanel';
 
 interface LegeerklæringProps {
@@ -30,8 +27,26 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
         <>
             <TilsynStatusPanel
                 period={sykdom.periodeTilVurdering}
-                status={TilsynStatus.BEHOV_FOR_EN}
+                status={TilsynStatus.BEHOV_FOR_TO}
             />
+            <Box marginTop={Margin.medium}>
+                <TilsynStatusPanel
+                    period={sykdom.periodeTilVurdering}
+                    status={TilsynStatus.BEHOV_FOR_EN}
+                />
+            </Box>
+            <Box marginTop={Margin.medium}>
+                <TilsynStatusPanel
+                    period={sykdom.periodeTilVurdering}
+                    status={TilsynStatus.INNLAGT}
+                />
+            </Box>
+            <Box marginTop={Margin.medium}>
+                <TilsynStatusPanel
+                    period={sykdom.periodeTilVurdering}
+                    status={TilsynStatus.IKKE_BEHOV}
+                />
+            </Box>
             {process.env.NODE_ENV === 'development' && <DevTool control={control} />}
             <Box marginTop={Margin.large}>
                 <YesOrNoQuestion
