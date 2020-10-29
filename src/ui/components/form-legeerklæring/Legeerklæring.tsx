@@ -11,6 +11,7 @@ import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import Box, { Margin } from '../box/Box';
+import StatusPanel, { StatusPanelTheme } from '../status-panel/StatusPanel';
 
 interface LegeerklæringProps {
     sykdom: Sykdom;
@@ -24,6 +25,7 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
 
     return (
         <>
+            <StatusPanel theme={StatusPanelTheme.ALERT} />
             {process.env.NODE_ENV === 'development' && <DevTool control={control} />}
             <YesOrNoQuestion
                 question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i speisalisthelsetjenesten?"
