@@ -1,9 +1,9 @@
-import { Textarea } from 'nav-frontend-skjema';
 import * as React from 'react';
+import { Textarea } from 'nav-frontend-skjema';
 import { Controller, useFormContext } from 'react-hook-form';
 
 interface TextAreaProps {
-    label: string;
+    label?: React.ReactNode;
     name: string;
     validators?: { [key: string]: (v: any) => string | undefined };
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Systemtittel } from 'nav-frontend-typografi';
 import Box, { Margin } from '../box/Box';
 import PeriodList from '../period-list/PeriodList';
 import TextArea from '../../form/wrappers/TextArea';
@@ -31,7 +30,6 @@ export default ({
 
     return (
         <>
-            <Systemtittel>Vurdering av tilsyn og pleie</Systemtittel>
             <Box marginTop={Margin.large}>
                 <PeriodList periods={[sykdom.periodeTilVurdering] || []} title="Søknadsperiode:" />
             </Box>
@@ -50,8 +48,17 @@ export default ({
 
             <Box marginTop={Margin.large}>
                 <TextArea
-                    label="Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge av
-                sykdommen."
+                    label={
+                        <label>
+                            <b>
+                                Gjør en vurdering av om det er behov for kontinuerlig tilsyn og
+                                pleie som følge av sykdommen.
+                            </b>
+                            &nbsp;Dersom det er behov for tilsyn og pleie kun i deler av perioden må
+                            det komme tydelig frem av vurderingen hvilke perioder det er behov og
+                            hvilke det ikke er behov.
+                        </label>
+                    }
                     name={SykdomFormValues.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE}
                 />
             </Box>

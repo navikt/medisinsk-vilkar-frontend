@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
+import { Systemtittel } from 'nav-frontend-typografi';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import SykdomFormValues from '../../../types/SykdomFormState';
 import VurderingAvToOmsorgspersonerForm from '../form-vurdering-to-omsorgspersoner/VurderingAvToOmsorgspersonerForm';
@@ -23,6 +24,8 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
 
     return (
         <>
+            <Systemtittel>Vurdering av tilsyn og pleie</Systemtittel>
+            <hr />
             <VurderingAvTilsynsbehovForm
                 sykdom={sykdom}
                 innleggelsesperioder={innleggelsesperioder}

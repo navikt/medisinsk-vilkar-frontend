@@ -10,7 +10,7 @@ import Vilkårsvurdering from './components/form-vilkårsvurdering/Vilkårsvurde
 import styles from './main.less';
 import SykdomFormValues from '../types/SykdomFormState';
 
-const tabs = ['Legeerklæring', 'Vilkårsvurdering'];
+const tabs = ['Legeerklæring', 'Medisinske vilkår'];
 
 interface MainComponentProps {
     sykdom: Sykdom;
@@ -36,7 +36,6 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
 
     return (
         <div className={styles.main}>
-            <Systemtittel>Fakta</Systemtittel>
             <Box marginTop={Margin.large}>
                 <TabsPure
                     tabs={tabs.map((tab, index) => ({
