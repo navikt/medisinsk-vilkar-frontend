@@ -11,7 +11,10 @@ import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import Box, { Margin } from '../box/Box';
+import OnePersonIcon from '../icons/OnePersonIcon';
+import TwoPersonsIcon from '../icons/TwoPersonsIcon';
 import StatusPanel, { StatusPanelTheme } from '../status-panel/StatusPanel';
+import TilsynStatusPanel, { TilsynStatus } from '../tilsyn-status-panel/TilsynStatusPanel';
 
 interface LegeerklæringProps {
     sykdom: Sykdom;
@@ -25,13 +28,18 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
 
     return (
         <>
-            <StatusPanel theme={StatusPanelTheme.ALERT} />
-            {process.env.NODE_ENV === 'development' && <DevTool control={control} />}
-            <YesOrNoQuestion
-                question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i speisalisthelsetjenesten?"
-                name={SykdomFormValues.HAR_DOKUMENTASJON}
-                validators={{ required }}
+            <TilsynStatusPanel
+                period={sykdom.periodeTilVurdering}
+                status={TilsynStatus.BEHOV_FOR_EN}
             />
+            {process.env.NODE_ENV === 'development' && <DevTool control={control} />}
+            <Box marginTop={Margin.large}>
+                <YesOrNoQuestion
+                    question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i speisalisthelsetjenesten?"
+                    name={SykdomFormValues.HAR_DOKUMENTASJON}
+                    validators={{ required }}
+                />
+            </Box>
             {harDokumentasjon === false && (
                 <Box marginTop={Margin.large}>
                     <RadioGroupPanel
