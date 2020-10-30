@@ -21,10 +21,10 @@ const StatusPanel = ({ theme, heading, children }: StatusPanelProps): JSX.Elemen
     return (
         <div className={styles.statusPanel}>
             <div className={`${statusPanelBorder} ${styles[statusPanelTheme]}`} />
-            <div className={styles['statusPanel__infoContainer']}>
+            <div className={styles.statusPanel__infoContainer}>
                 {theme === StatusPanelTheme.SUCCESS && <GreenCheckIcon />}
                 {theme === StatusPanelTheme.ALERT && <RedCrossIcon />}
-                <div className={styles['statusPanel__infoContainer__info']}>
+                <div className={styles.statusPanel__infoContainer__info}>
                     <Element>{heading}</Element>
                     {children}
                 </div>

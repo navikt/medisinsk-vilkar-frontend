@@ -29,19 +29,19 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
                 period={sykdom.periodeTilVurdering}
                 status={TilsynStatus.BEHOV_FOR_TO}
             />
-            <Box marginTop={Margin.medium}>
+            <Box marginTop={Margin.large}>
                 <TilsynStatusPanel
                     period={sykdom.periodeTilVurdering}
                     status={TilsynStatus.BEHOV_FOR_EN}
                 />
             </Box>
-            <Box marginTop={Margin.medium}>
+            <Box marginTop={Margin.large}>
                 <TilsynStatusPanel
                     period={sykdom.periodeTilVurdering}
                     status={TilsynStatus.INNLAGT}
                 />
             </Box>
-            <Box marginTop={Margin.medium}>
+            <Box marginTop={Margin.large}>
                 <TilsynStatusPanel
                     period={sykdom.periodeTilVurdering}
                     status={TilsynStatus.IKKE_BEHOV}

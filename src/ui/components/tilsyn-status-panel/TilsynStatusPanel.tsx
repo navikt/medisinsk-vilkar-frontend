@@ -5,6 +5,7 @@ import Box, { Margin } from '../box/Box';
 import StatusPanel, { StatusPanelTheme } from '../status-panel/StatusPanel';
 import OnePersonIcon from '../icons/OnePersonIcon';
 import TwoPersonsIcon from '../icons/TwoPersonsIcon';
+import styles from './tilsynStatusPanel.less';
 
 export enum TilsynStatus {
     BEHOV_FOR_EN = 'behovForEn',
@@ -44,9 +45,12 @@ interface TilsynStatusPanelProps {
 }
 
 const Tilsynsbeskrivelse = ({ status }) => (
-    <div style={{ display: 'flex' }}>
+    <div className={styles.tilsynBeskrivelseContainer}>
         {statusPanelConfig[status].iconRenderer()}
-        {statusPanelConfig[status].description}
+
+        <p className={styles.tilsynBeskrivelseContainer__beskrivelse}>
+            {statusPanelConfig[status].description}
+        </p>
     </div>
 );
 
