@@ -4,12 +4,11 @@ import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Sykdom from '../types/medisinsk-vilkår/sykdom';
 import Box, { Margin } from './components/box/Box';
-import Legeerklæring from './components/form-legeerklæring/Legeerklæring';
-import Step from './components/step/Step';
-import Vilkårsvurdering from './components/form-vilkårsvurdering/Vilkårsvurdering';
-import styles from './main.less';
-import SykdomFormValues from '../types/SykdomFormState';
+import { SykdomFormValue } from '../types/SykdomFormState';
 import PeriodList from './components/period-list/PeriodList';
+import Vilkårsvurdering from './components/vilkårsvurdering/Vilkårsvurdering';
+import LegeerklæringForm from './components/form-legeerklæring/LegeerklæringForm';
+import styles from './main.less';
 
 const tabs = ['Legeerklæring', 'Medisinske vilkår'];
 
@@ -21,16 +20,13 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
     const [activeTab, setActiveTab] = useState(0);
     const formMethods = useForm({
         defaultValues: {
-            [SykdomFormValues.INNLEGGELSESPERIODER]: [
-                { fom: '2020-09-11', tom: '2020-09-18' },
-                { fom: '2020-10-01', tom: '2020-10-05' },
-            ],
-            [SykdomFormValues.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
-            [SykdomFormValues.VURDERING_TO_OMSORGSPERSONER]: '',
-            [SykdomFormValues.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: [
+            [SykdomFormValue.INNLEGGELSESPERIODER]: [{ fom: '', tom: '' }],
+            [SykdomFormValue.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
+            [SykdomFormValue.VURDERING_TO_OMSORGSPERSONER]: '',
+            [SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: [
                 { fom: '', tom: '' },
             ],
-            [SykdomFormValues.PERIODER_MED_BEHOV_FOR_TO_OMSORGSPERSONER]: [{ fom: '', tom: '' }],
+            [SykdomFormValue.PERIODER_MED_BEHOV_FOR_TO_OMSORGSPERSONER]: [{ fom: '', tom: '' }],
         },
         shouldUnregister: false,
     });
@@ -51,24 +47,9 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
                 />
                 <FormProvider {...formMethods}>
                     {activeTab === 0 && (
-                        <Step
-                            onSubmit={formMethods.handleSubmit((data) => {
-                                setActiveTab(1);
-                                console.log(data);
-                            })}
-                            buttonLabel="Fortsett til vilkårsvurdering"
-                        >
-                            <Legeerklæring sykdom={sykdom} />
-                        </Step>
+                        <LegeerklæringForm sykdom={sykdom} onSubmit={() => setActiveTab(1)} />
                     )}
-                    {activeTab === 1 && (
-                        <Step
-                            onSubmit={formMethods.handleSubmit((data) => console.log(data))}
-                            buttonLabel="Bekreft vurdering"
-                        >
-                            <Vilkårsvurdering sykdom={sykdom} />
-                        </Step>
-                    )}
+                    {activeTab === 1 && <Vilkårsvurdering sykdom={sykdom} />}
                 </FormProvider>
             </Box>
         </div>

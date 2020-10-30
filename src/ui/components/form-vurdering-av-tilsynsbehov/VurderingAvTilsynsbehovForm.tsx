@@ -2,7 +2,7 @@ import React from 'react';
 import Box, { Margin } from '../box/Box';
 import PeriodList from '../period-list/PeriodList';
 import TextArea from '../../form/wrappers/TextArea';
-import SykdomFormValues from '../../../types/SykdomFormState';
+import { SykdomFormValue } from '../../../types/SykdomFormState';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import { isDateInPeriod, required } from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
@@ -26,7 +26,7 @@ export default ({
     const { watch } = useFormContext();
 
     const delvisBehovForKontinuerligTilsyn =
-        watch(SykdomFormValues.BEHOV_FOR_KONTINUERLIG_TILSYN) === Tilsynsbehov.DELER;
+        watch(SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN) === Tilsynsbehov.DELER;
 
     return (
         <>
@@ -59,13 +59,13 @@ export default ({
                             hvilke det ikke er behov.
                         </label>
                     }
-                    name={SykdomFormValues.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE}
+                    name={SykdomFormValue.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE}
                 />
             </Box>
             <Box marginTop={Margin.large}>
                 <RadioGroupPanel
                     question="Er det behov for kontinuerlig tilsyn og pleie som følge av sykdommen?"
-                    name={SykdomFormValues.BEHOV_FOR_KONTINUERLIG_TILSYN}
+                    name={SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN}
                     radios={[
                         { label: 'Ja, i hele søknadsperioden', value: Tilsynsbehov.HELE },
                         { label: 'Ja, i deler av perioden', value: Tilsynsbehov.DELER },
@@ -78,7 +78,7 @@ export default ({
                 <Box marginTop={Margin.large}>
                     <PeriodpickerList
                         legend="Oppgi hvilke perioder det er behov for kontinerlig tilsyn og pleie utenom innleggelsesperioden(e)"
-                        name={SykdomFormValues.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE}
+                        name={SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE}
                         periodpickerProps={{
                             fromDatepickerProps: {
                                 name: 'fom',
