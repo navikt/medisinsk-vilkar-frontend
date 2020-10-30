@@ -59,7 +59,7 @@ const PeriodpickerList = ({
                     </div>
                 </Box>
             ))}
-            <Box marginTop={Margin.medium}>
+            <Box marginTop={Margin.large}>
                 <AddButton
                     onClick={() =>
                         append({ [fromDatepickerProps.name]: '', [toDatepickerProps.name]: '' })

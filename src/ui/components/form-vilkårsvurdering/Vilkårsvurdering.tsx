@@ -7,6 +7,7 @@ import VurderingAvToOmsorgspersonerForm from '../form-vurdering-to-omsorgsperson
 import VurderingAvTilsynsbehovForm from '../form-vurdering-av-tilsynsbehov/VurderingAvTilsynsbehovForm';
 import { intersectPeriods } from '../../../util/dateUtils';
 import { harTilsynsbehov } from '../../../util/domain';
+import Box, { Margin } from '../box/Box';
 
 interface VilkårsvurderingProps {
     sykdom: Sykdom;
@@ -32,11 +33,13 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps): JSX.Element => {
                 perioderUtenInnleggelser={perioderUtenInnleggelse}
             />
             {harTilsynsbehov(tilsynsbehov) && (
-                <VurderingAvToOmsorgspersonerForm
-                    sykdom={sykdom}
-                    innleggelsesperioder={innleggelsesperioder}
-                    perioderUtenInnleggelser={perioderUtenInnleggelse}
-                />
+                <Box marginTop={Margin.xLarge}>
+                    <VurderingAvToOmsorgspersonerForm
+                        sykdom={sykdom}
+                        innleggelsesperioder={innleggelsesperioder}
+                        perioderUtenInnleggelser={perioderUtenInnleggelse}
+                    />
+                </Box>
             )}
         </>
     );

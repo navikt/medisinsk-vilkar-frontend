@@ -49,6 +49,7 @@ export default ({
         <>
             <Box marginTop={Margin.large}>
                 <Systemtittel>Vurdering av to omsorgspersoner</Systemtittel>
+                <hr />
             </Box>
             <Box marginTop={Margin.large}>
                 <PeriodList
@@ -97,7 +98,7 @@ export default ({
                         periodpickerProps={{
                             fromDatepickerProps: {
                                 name: 'fom',
-                                ariaLabel: 'Fra',
+                                label: 'Fra',
                                 limitations: {
                                     minDate: sykdom.periodeTilVurdering.fom,
                                     maxDate: sykdom.periodeTilVurdering.tom,
@@ -113,7 +114,7 @@ export default ({
                             },
                             toDatepickerProps: {
                                 name: 'tom',
-                                ariaLabel: 'Til',
+                                label: 'Til',
                                 limitations: {
                                     minDate: sykdom.periodeTilVurdering.fom,
                                     maxDate: sykdom.periodeTilVurdering.tom,
