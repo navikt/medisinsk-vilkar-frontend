@@ -1,6 +1,6 @@
 import React from 'react';
 import Box, { Margin } from '../box/Box';
-import PeriodList from '../period-list/PeriodList';
+import PeriodList, { PeriodListTheme } from '../period-list/PeriodList';
 import TextArea from '../../form/wrappers/TextArea';
 import SykdomFormValues from '../../../types/SykdomFormState';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
@@ -31,18 +31,24 @@ export default ({
     return (
         <>
             <Box marginTop={Margin.large}>
-                <PeriodList periods={[sykdom.periodeTilVurdering] || []} title="Søknadsperiode:" />
+                <PeriodList
+                    periods={[sykdom.periodeTilVurdering] || []}
+                    title="Søknadsperiode:"
+                    theme={PeriodListTheme.CALENDAR}
+                />
             </Box>
             <Box marginTop={Margin.large}>
                 <PeriodList
                     periods={innleggelsesperioder || []}
                     title="Tilsyn og pleie innvilget automatisk pga. innleggelse:"
+                    theme={PeriodListTheme.SUCCESS}
                 />
             </Box>
             <Box marginTop={Margin.large}>
                 <PeriodList
                     periods={perioderUtenInnleggelser}
                     title="Vurder behov for tilsyn og pleie i perioden hvor barnet ikke er innlagt:"
+                    theme={PeriodListTheme.WARNING}
                 />
             </Box>
 
