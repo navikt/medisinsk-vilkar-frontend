@@ -1,16 +1,16 @@
 import React from 'react';
-import Box, { Margin } from '../box/Box';
-import PeriodList, { PeriodListTheme } from '../period-list/PeriodList';
-import TextArea from '../../form/wrappers/TextArea';
-import SykdomFormValues from '../../../types/SykdomFormState';
-import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
-import { isDateInPeriod, required } from '../../form/validators';
-import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
-import { convertToInternationalPeriod } from '../../../util/formats';
 import { useFormContext } from 'react-hook-form';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { Period } from '../../../types/Period';
+import SykdomFormValues from '../../../types/SykdomFormState';
 import Tilsynsbehov from '../../../types/Tilsynsbehov';
+import { convertToInternationalPeriod } from '../../../util/formats';
+import { isDateInPeriod, required } from '../../form/validators';
+import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
+import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
+import Box, { Margin } from '../box/Box';
+import PeriodList, { PeriodListTheme } from '../period-list/PeriodList';
+import TextareaWithExpandableLabel from '../textarea-with-expandable-label/TextareaWithExpandableLabel';
 
 interface VurderingAvTilsynsbehovFormProps {
     sykdom: Sykdom;
@@ -53,19 +53,18 @@ export default ({
             </Box>
 
             <Box marginTop={Margin.large}>
-                <TextArea
-                    label={
-                        <label>
-                            <b>
-                                Gjør en vurdering av om det er behov for kontinuerlig tilsyn og
-                                pleie som følge av sykdommen.
-                            </b>
-                            &nbsp;Dersom det er behov for tilsyn og pleie kun i deler av perioden må
-                            det komme tydelig frem av vurderingen hvilke perioder det er behov og
-                            hvilke det ikke er behov.
-                        </label>
+                <TextareaWithExpandableLabel
+                    helptext="Dersom det er behov for tilsyn og pleie kun i deler av perioden må
+                    det komme tydelig frem av vurderingen hvilke perioder det er behov og
+                    hvilke det ikke er behov."
+                    id="vurderingKontinuerligTilsynOgPleie"
+                    labelText={
+                        <b>
+                            Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie
+                            som følge av sykdommen.
+                        </b>
                     }
-                    name={SykdomFormValues.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE}
+                    textareaName={SykdomFormValues.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE}
                 />
             </Box>
             <Box marginTop={Margin.large}>

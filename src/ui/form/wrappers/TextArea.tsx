@@ -6,9 +6,10 @@ interface TextAreaProps {
     label?: React.ReactNode;
     name: string;
     validators?: { [key: string]: (v: any) => string | undefined };
+    id?: string;
 }
 
-const TextArea = ({ label, name, validators }: TextAreaProps): JSX.Element => {
+const TextArea = ({ label, name, validators, id }: TextAreaProps): JSX.Element => {
     const { control, errors } = useFormContext();
 
     return (
@@ -29,6 +30,7 @@ const TextArea = ({ label, name, validators }: TextAreaProps): JSX.Element => {
                     feil={errors[name]?.message}
                     name={name}
                     onChange={onChange}
+                    id={id}
                 />
             )}
         />

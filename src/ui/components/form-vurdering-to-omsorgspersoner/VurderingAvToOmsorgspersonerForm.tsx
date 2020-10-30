@@ -4,15 +4,15 @@ import { useFormContext } from 'react-hook-form';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { Period } from '../../../types/Period';
 import SykdomFormValues from '../../../types/SykdomFormState';
+import Tilsynsbehov from '../../../types/Tilsynsbehov';
 import { intersectPeriods } from '../../../util/dateUtils';
 import { convertToInternationalPeriod } from '../../../util/formats';
 import { isDateInPeriod, required } from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
-import TextArea from '../../form/wrappers/TextArea';
 import Box, { Margin } from '../box/Box';
 import PeriodList, { PeriodListTheme } from '../period-list/PeriodList';
-import Tilsynsbehov from '../../../types/Tilsynsbehov';
+import TextareaWithExpandableLabel from '../textarea-with-expandable-label/TextareaWithExpandableLabel';
 
 interface VurderingAvToOmsorgspersonerFormProps {
     sykdom: Sykdom;
@@ -73,9 +73,16 @@ export default ({
                 />
             </Box>
             <Box marginTop={Margin.large}>
-                <TextArea
-                    label="Gjør en vurdering av om det er behov for to omsorgspersoner i perioden hvor det er behov for kontinerlig tilsyn og pleie."
-                    name={SykdomFormValues.VURDERING_TO_OMSORGSPERSONER}
+                <TextareaWithExpandableLabel
+                    helptext="Dersom det er behov for to omsorgsperoner deler av perioden,  må det komme tydelig frem av vurderingen hvilke perioder det er behov og hvilke det ikke er behov."
+                    id="vurderingBehovForToOmsorgspersoner"
+                    labelText={
+                        <b>
+                            Gjør en vurdering av om det er behov for to omsorgspersoner i perioden
+                            hvor det er behov for kontinerlig tilsyn og pleie.
+                        </b>
+                    }
+                    textareaName={SykdomFormValues.VURDERING_TO_OMSORGSPERSONER}
                 />
             </Box>
             <Box marginTop={Margin.large}>
