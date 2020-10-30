@@ -1,11 +1,11 @@
 import { TabsPure } from 'nav-frontend-tabs';
-import { Systemtittel } from 'nav-frontend-typografi';
+import { Element, Systemtittel } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Sykdom from '../types/medisinsk-vilkår/sykdom';
+import { prettifyPeriod } from '../util/formats';
 import Box, { Margin } from './components/box/Box';
 import { SykdomFormValue } from '../types/SykdomFormState';
-import PeriodList from './components/period-list/PeriodList';
 import Vilkårsvurdering from './components/vilkårsvurdering/Vilkårsvurdering';
 import LegeerklæringForm from './components/form-legeerklæring/LegeerklæringForm';
 import styles from './main.less';
@@ -34,9 +34,14 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
     return (
         <div className={styles.main}>
             <Systemtittel>Sykdom</Systemtittel>
-            <Box marginTop={Margin.large}>
-                <PeriodList periods={[sykdom.periodeTilVurdering] || []} title="Søknadsperiode:" />
-            </Box>
+            {sykdom.periodeTilVurdering && (
+                <Box marginTop={Margin.large}>
+                    <p>
+                        {`Søknadsperiode: `}
+                        <Element tag="span">{prettifyPeriod(sykdom.periodeTilVurdering)}</Element>
+                    </p>
+                </Box>
+            )}
             <Box marginTop={Margin.large}>
                 <TabsPure
                     tabs={tabs.map((tab, index) => ({
