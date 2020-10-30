@@ -11,7 +11,7 @@ import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import TextArea from '../../form/wrappers/TextArea';
 import Box, { Margin } from '../box/Box';
-import PeriodList from '../period-list/PeriodList';
+import PeriodList, { PeriodListTheme } from '../period-list/PeriodList';
 import Tilsynsbehov from '../../../types/Tilsynsbehov';
 
 interface VurderingAvToOmsorgspersonerFormProps {
@@ -49,20 +49,27 @@ export default ({
         <>
             <Box marginTop={Margin.large}>
                 <Systemtittel>Vurdering av to omsorgspersoner</Systemtittel>
+                <hr />
             </Box>
             <Box marginTop={Margin.large}>
-                <PeriodList periods={[sykdom.periodeTilVurdering] || []} title="Søknadsperiode:" />
+                <PeriodList
+                    periods={[sykdom.periodeTilVurdering] || []}
+                    title="Søknadsperiode:"
+                    theme={PeriodListTheme.CALENDAR}
+                />
             </Box>
             <Box marginTop={Margin.large}>
                 <PeriodList
                     periods={innleggelsesperioder || []}
                     title="Rett til to omsorgspersoner pga innleggelse:"
+                    theme={PeriodListTheme.SUCCESS}
                 />
             </Box>
             <Box marginTop={Margin.large}>
                 <PeriodList
                     periods={perioderMedTilsynsbehov}
                     title="Vurder behov for to omsorgspersoner i perioden barnet skal ha kontinerlig tilsyn og pleie:"
+                    theme={PeriodListTheme.WARNING}
                 />
             </Box>
             <Box marginTop={Margin.large}>
@@ -97,7 +104,7 @@ export default ({
                         periodpickerProps={{
                             fromDatepickerProps: {
                                 name: 'fom',
-                                ariaLabel: 'Fra',
+                                label: 'Fra',
                                 limitations: {
                                     minDate: sykdom.periodeTilVurdering.fom,
                                     maxDate: sykdom.periodeTilVurdering.tom,
@@ -113,7 +120,7 @@ export default ({
                             },
                             toDatepickerProps: {
                                 name: 'tom',
-                                ariaLabel: 'Til',
+                                label: 'Til',
                                 limitations: {
                                     minDate: sykdom.periodeTilVurdering.fom,
                                     maxDate: sykdom.periodeTilVurdering.tom,
