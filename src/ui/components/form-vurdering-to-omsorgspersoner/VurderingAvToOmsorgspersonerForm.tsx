@@ -3,8 +3,7 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { Period } from '../../../types/Period';
-import SykdomFormValues from '../../../types/SykdomFormState';
-import Tilsynsbehov from '../../../types/Tilsynsbehov';
+import { SykdomFormValue } from '../../../types/SykdomFormState';
 import { intersectPeriods } from '../../../util/dateUtils';
 import { convertToInternationalPeriod } from '../../../util/formats';
 import { isDateInPeriod, required } from '../../form/validators';
@@ -27,16 +26,16 @@ export default ({
 }: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
     const { watch } = useFormContext();
 
-    const tilsynsbehov = watch(SykdomFormValues.BEHOV_FOR_KONTINUERLIG_TILSYN);
+    const tilsynsbehov = watch(SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN);
     const delvisBehovForToOmsorgspersoner =
-        watch(SykdomFormValues.BEHOV_FOR_TO_OMSORGSPERSONER) === Tilsynsbehov.DELER;
+        watch(SykdomFormValue.BEHOV_FOR_TO_OMSORGSPERSONER) === Tilsynsbehov.DELER;
 
     let perioderMedTilsynsbehov = [];
     if (tilsynsbehov === Tilsynsbehov.HELE) {
         perioderMedTilsynsbehov = perioderUtenInnleggelser;
     } else if (tilsynsbehov === Tilsynsbehov.DELER) {
         perioderMedTilsynsbehov = watch(
-            SykdomFormValues.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE
+            SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE
         );
     }
 
@@ -82,16 +81,22 @@ export default ({
                             hvor det er behov for kontinerlig tilsyn og pleie.
                         </b>
                     }
-                    textareaName={SykdomFormValues.VURDERING_TO_OMSORGSPERSONER}
+                    textareaName={SykdomFormValue.VURDERING_TO_OMSORGSPERSONER}
                 />
             </Box>
             <Box marginTop={Margin.large}>
                 <RadioGroupPanel
                     question="Er det behov for to omsorgspersoner i perioden hvor vilkår for tilsyn og pleie er oppfylt?"
-                    name={SykdomFormValues.BEHOV_FOR_TO_OMSORGSPERSONER}
+                    name={SykdomFormValue.BEHOV_FOR_TO_OMSORGSPERSONER}
                     radios={[
-                        { label: 'Ja, i hele søknadsperioden', value: 'hele' },
-                        { label: 'Ja, i deler av perioden', value: 'deler' },
+                        {
+                            label: 'Ja, i hele perioden med tilsynsbehov',
+                            value: 'hele',
+                        },
+                        {
+                            label: 'Ja, i deler av perioden med tilsynsbehov',
+                            value: 'deler',
+                        },
                         { label: 'Nei', value: 'nei' },
                     ]}
                     validators={{ required }}
@@ -101,7 +106,7 @@ export default ({
                 <Box marginTop={Margin.large}>
                     <PeriodpickerList
                         legend="Oppgi hvilke perioder det er behov for to omsorgspersoner"
-                        name={SykdomFormValues.PERIODER_MED_BEHOV_FOR_TO_OMSORGSPERSONER}
+                        name={SykdomFormValue.PERIODER_MED_BEHOV_FOR_TO_OMSORGSPERSONER}
                         periodpickerProps={{
                             fromDatepickerProps: {
                                 name: 'fom',

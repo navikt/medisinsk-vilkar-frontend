@@ -3,7 +3,7 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { LegeerklæringFormInput } from '../../../types/medisinsk-vilkår/LegeerklæringFormInput';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
-import SykdomFormValues from '../../../types/SykdomFormState';
+import { SykdomFormValue } from '../../../types/SykdomFormState';
 import { isDateInPeriod, required } from '../../form/validators';
 import Datepicker from '../../form/wrappers/Datepicker';
 import DiagnosekodeSelektor from '../../form/wrappers/DiagnosekodeSelector';
@@ -11,47 +11,26 @@ import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import Box, { Margin } from '../box/Box';
-import TilsynStatusPanel, { TilsynStatus } from '../tilsyn-status-panel/TilsynStatusPanel';
+import TilsynStatusPanel, { TilsynStatus } from '../status-panel-tilsyn/TilsynStatusPanel';
+import Step from '../step/Step';
 
-interface LegeerklæringProps {
+interface LegeerklæringFormProps {
     sykdom: Sykdom;
+    onSubmit: () => void;
 }
 
-const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
-    const formMethods = useFormContext<LegeerklæringFormInput>();
-    const { watch, control } = formMethods;
+const LegeerklæringForm = ({ sykdom, onSubmit }: LegeerklæringFormProps): JSX.Element => {
+    const { watch, control, handleSubmit } = useFormContext<LegeerklæringFormInput>();
 
-    const harDokumentasjon = watch(SykdomFormValues.HAR_DOKUMENTASJON);
+    const harDokumentasjon = watch(SykdomFormValue.HAR_DOKUMENTASJON);
 
     return (
-        <>
-            <TilsynStatusPanel
-                period={sykdom.periodeTilVurdering}
-                status={TilsynStatus.BEHOV_FOR_TO}
-            />
-            <Box marginTop={Margin.large}>
-                <TilsynStatusPanel
-                    period={sykdom.periodeTilVurdering}
-                    status={TilsynStatus.BEHOV_FOR_EN}
-                />
-            </Box>
-            <Box marginTop={Margin.large}>
-                <TilsynStatusPanel
-                    period={sykdom.periodeTilVurdering}
-                    status={TilsynStatus.INNLAGT}
-                />
-            </Box>
-            <Box marginTop={Margin.large}>
-                <TilsynStatusPanel
-                    period={sykdom.periodeTilVurdering}
-                    status={TilsynStatus.IKKE_BEHOV}
-                />
-            </Box>
+        <Step onSubmit={handleSubmit(onSubmit)} buttonLabel="Fortsett til vilkårsvurdering">
             {process.env.NODE_ENV === 'development' && <DevTool control={control} />}
             <Box marginTop={Margin.large}>
                 <YesOrNoQuestion
                     question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i speisalisthelsetjenesten?"
-                    name={SykdomFormValues.HAR_DOKUMENTASJON}
+                    name={SykdomFormValue.HAR_DOKUMENTASJON}
                     validators={{ required }}
                 />
             </Box>
@@ -94,7 +73,7 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
             <Box marginTop={Margin.large}>
                 <PeriodpickerList
                     legend="Periode for eventuelle innleggelser"
-                    name={SykdomFormValues.INNLEGGELSESPERIODER}
+                    name={SykdomFormValue.INNLEGGELSESPERIODER}
                     periodpickerProps={{
                         fromDatepickerProps: {
                             name: 'fom',
@@ -125,8 +104,8 @@ const Legeerklæring = ({ sykdom }: LegeerklæringProps): JSX.Element => {
                     }}
                 />
             </Box>
-        </>
+        </Step>
     );
 };
 
-export default Legeerklæring;
+export default LegeerklæringForm;

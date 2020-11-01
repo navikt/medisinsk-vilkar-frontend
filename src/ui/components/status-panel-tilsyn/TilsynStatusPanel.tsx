@@ -18,7 +18,7 @@ const statusPanelConfig = {
     [TilsynStatus.BEHOV_FOR_EN]: {
         heading: 'Behov for kontinuerlig tilsyn og pleie',
         theme: StatusPanelTheme.SUCCESS,
-        description: 'Det er kun behov for én omsorgspersoner denne perioden',
+        description: 'Det er kun behov for én omsorgsperson denne perioden',
         iconRenderer: () => <OnePersonIcon />,
     },
     [TilsynStatus.BEHOV_FOR_TO]: {
@@ -39,7 +39,7 @@ const statusPanelConfig = {
     },
 };
 
-interface TilsynStatusPanelProps {
+export interface TilsynStatusPanelProps {
     period: Period;
     status: TilsynStatus;
 }
