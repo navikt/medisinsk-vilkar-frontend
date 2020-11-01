@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Collapse } from 'react-collapse';
 import ChevronIcon from '../icons/ChevronIcon';
 import styles from './expandableLabel.less';
 
@@ -12,10 +13,10 @@ const ExpandableLabel = ({ helptext, labelText, labelFor }: HelptextProps): JSX.
     const [open, setOpen] = React.useState(false);
     return (
         <div className={styles.expandableLabel}>
-            <label htmlFor={labelFor}>
-                {labelText}
-                <p className={open ? '' : styles.visuallyHidden}>{helptext}</p>
-            </label>
+            <label htmlFor={labelFor}>{labelText}</label>
+            <Collapse isOpened={open}>
+                <p className={styles.expandableLabel__helptext}>{helptext}</p>
+            </Collapse>
 
             <button
                 className={styles.expandableLabel__button}
