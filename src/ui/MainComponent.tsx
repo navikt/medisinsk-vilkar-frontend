@@ -9,6 +9,7 @@ import { SykdomFormValue } from '../types/SykdomFormState';
 import Vilkårsvurdering from './components/vilkårsvurdering/Vilkårsvurdering';
 import LegeerklæringForm from './components/form-legeerklæring/LegeerklæringForm';
 import styles from './main.less';
+import CalendarIcon from './components/icons/CalendarIcon';
 
 const tabs = ['Legeerklæring', 'Medisinske vilkår'];
 
@@ -36,10 +37,15 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
             <Systemtittel>Sykdom</Systemtittel>
             {sykdom.periodeTilVurdering && (
                 <Box marginTop={Margin.large}>
-                    <p>
-                        {`Søknadsperiode: `}
-                        <Element tag="span">{prettifyPeriod(sykdom.periodeTilVurdering)}</Element>
-                    </p>
+                    <div className={styles.main__søknadperiodeContainer}>
+                        <CalendarIcon />
+                        <p className={styles.main__søknadperiodeInfo}>
+                            {`Søknadsperiode: `}
+                            <Element tag="span">
+                                {prettifyPeriod(sykdom.periodeTilVurdering)}
+                            </Element>
+                        </p>
+                    </div>
                 </Box>
             )}
             <Box marginTop={Margin.large}>
