@@ -11,7 +11,6 @@ import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import Box, { Margin } from '../box/Box';
-import TilsynStatusPanel, { TilsynStatus } from '../status-panel-tilsyn/TilsynStatusPanel';
 import Step from '../step/Step';
 
 interface LegeerklæringFormProps {
@@ -27,13 +26,11 @@ const LegeerklæringForm = ({ sykdom, onSubmit }: LegeerklæringFormProps): JSX.
     return (
         <Step onSubmit={handleSubmit(onSubmit)} buttonLabel="Fortsett til vilkårsvurdering">
             {process.env.NODE_ENV === 'development' && <DevTool control={control} />}
-            <Box marginTop={Margin.large}>
-                <YesOrNoQuestion
-                    question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i speisalisthelsetjenesten?"
-                    name={SykdomFormValue.HAR_DOKUMENTASJON}
-                    validators={{ required }}
-                />
-            </Box>
+            <YesOrNoQuestion
+                question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i speisalisthelsetjenesten?"
+                name={SykdomFormValue.HAR_DOKUMENTASJON}
+                validators={{ required }}
+            />
             {harDokumentasjon === false && (
                 <Box marginTop={Margin.large}>
                     <RadioGroupPanel
