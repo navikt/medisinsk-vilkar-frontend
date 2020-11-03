@@ -6,7 +6,7 @@ import PureDatepicker from '../pure/PureDatepicker';
 export interface DatepickerProps {
     label?: string;
     name: string;
-    validators?: { [key: string]: (v: any) => string | undefined };
+    validators?: { [key: string]: (v: any) => string | boolean | undefined };
     ariaLabel?: string;
     defaultValue?: string;
     limitations: DatepickerLimitations;
