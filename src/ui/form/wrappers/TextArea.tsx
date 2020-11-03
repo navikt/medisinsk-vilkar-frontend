@@ -1,14 +1,17 @@
 import * as React from 'react';
 import { Textarea } from 'nav-frontend-skjema';
 import { Controller, useFormContext } from 'react-hook-form';
+import ExpandableLabel from '../../components/expandableLabel/ExpandableLabel';
+import Box, { Margin } from '../../components/box/Box';
 
 interface TextAreaProps {
     label?: React.ReactNode;
     name: string;
     validators?: { [key: string]: (v: any) => string | undefined };
+    helptext?: string;
 }
 
-const TextArea = ({ label, name, validators }: TextAreaProps): JSX.Element => {
+const TextArea = ({ label, name, validators, helptext }: TextAreaProps): JSX.Element => {
     const { control, errors } = useFormContext();
 
     return (
@@ -21,16 +24,39 @@ const TextArea = ({ label, name, validators }: TextAreaProps): JSX.Element => {
                     ...validators,
                 },
             }}
-            render={({ onChange, value }) => (
-                <Textarea
-                    value={value}
-                    label={label}
-                    maxLength={0}
-                    feil={errors[name]?.message}
-                    name={name}
-                    onChange={onChange}
-                />
-            )}
+            render={({ onChange, value }) => {
+                if (helptext) {
+                    return (
+                        <>
+                            <ExpandableLabel
+                                labelText={label}
+                                helptext={helptext}
+                                labelFor={name}
+                            />
+                            <Box marginTop={Margin.medium}>
+                                <Textarea
+                                    value={value}
+                                    maxLength={0}
+                                    feil={errors[name]?.message}
+                                    name={name}
+                                    onChange={onChange}
+                                    id={name}
+                                />
+                            </Box>
+                        </>
+                    );
+                }
+                return (
+                    <Textarea
+                        value={value}
+                        label={label}
+                        maxLength={0}
+                        feil={errors[name]?.message}
+                        name={name}
+                        onChange={onChange}
+                    />
+                );
+            }}
         />
     );
 };
