@@ -1,4 +1,3 @@
-import { DevTool } from '@hookform/devtools';
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { LegeerklæringFormInput } from '../../../types/medisinsk-vilkår/LegeerklæringFormInput';
@@ -19,13 +18,12 @@ interface LegeerklæringFormProps {
 }
 
 const LegeerklæringForm = ({ sykdom, onSubmit }: LegeerklæringFormProps): JSX.Element => {
-    const { watch, control, handleSubmit } = useFormContext<LegeerklæringFormInput>();
+    const { watch, handleSubmit } = useFormContext<LegeerklæringFormInput>();
 
     const harDokumentasjon = watch(SykdomFormValue.HAR_DOKUMENTASJON);
 
     return (
         <Step onSubmit={handleSubmit(onSubmit)} buttonLabel="Fortsett til vilkårsvurdering">
-            {process.env.NODE_ENV === 'development' && <DevTool control={control} />}
             <YesOrNoQuestion
                 question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i speisalisthelsetjenesten?"
                 name={SykdomFormValue.HAR_DOKUMENTASJON}
