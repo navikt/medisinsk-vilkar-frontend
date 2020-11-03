@@ -10,6 +10,7 @@ export interface DatepickerProps {
     ariaLabel?: string;
     defaultValue?: string;
     limitations: DatepickerLimitations;
+    error?: string;
 }
 
 const Datepicker = ({
@@ -19,6 +20,7 @@ const Datepicker = ({
     label,
     ariaLabel,
     defaultValue,
+    error,
 }: DatepickerProps): JSX.Element => {
     const { control, errors } = useFormContext();
 
@@ -38,7 +40,7 @@ const Datepicker = ({
                     name={name}
                     onChange={onChange}
                     value={value}
-                    errorMessage={errors[name]?.message}
+                    errorMessage={error || errors[name]?.message}
                     limitations={limitations}
                     ariaLabel={ariaLabel}
                 />

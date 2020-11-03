@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { LegeerklæringFormInput } from '../../../types/medisinsk-vilkår/LegeerklæringFormInput';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { SykdomFormValue } from '../../../types/SykdomFormState';
-import { isDateInPeriod, required } from '../../form/validators';
+import { isDatoInnenforSøknadsperiode, required } from '../../form/validators';
 import Datepicker from '../../form/wrappers/Datepicker';
 import DiagnosekodeSelektor from '../../form/wrappers/DiagnosekodeSelector';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
@@ -48,8 +48,8 @@ const LegeerklæringForm = ({ sykdom, onSubmit }: LegeerklæringFormProps): JSX.
                     name="legeerklæringSignert"
                     validators={{
                         required,
-                        isDateInPeriodeTilVurdering: (value) =>
-                            isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                        datoInnenforSøknadsperiode: (value) =>
+                            isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
                     }}
                     limitations={{
                         minDate: sykdom.periodeTilVurdering.fom,
@@ -79,8 +79,11 @@ const LegeerklæringForm = ({ sykdom, onSubmit }: LegeerklæringFormProps): JSX.
                             },
                             validators: {
                                 required,
-                                isDateInPeriodeTilVurdering: (value) =>
-                                    isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                datoInnenforSøknadsperiode: (value) =>
+                                    isDatoInnenforSøknadsperiode(
+                                        value,
+                                        sykdom?.periodeTilVurdering
+                                    ),
                             },
                         },
                         toDatepickerProps: {
@@ -92,8 +95,11 @@ const LegeerklæringForm = ({ sykdom, onSubmit }: LegeerklæringFormProps): JSX.
                             },
                             validators: {
                                 required,
-                                isDateInPeriodeTilVurdering: (value) =>
-                                    isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                datoInnenforSøknadsperiode: (value) =>
+                                    isDatoInnenforSøknadsperiode(
+                                        value,
+                                        sykdom?.periodeTilVurdering
+                                    ),
                             },
                         },
                     }}

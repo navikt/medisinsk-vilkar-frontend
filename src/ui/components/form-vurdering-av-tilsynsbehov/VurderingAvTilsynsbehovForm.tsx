@@ -4,7 +4,11 @@ import PeriodList, { PeriodListTheme } from '../period-list/PeriodList';
 import TextArea from '../../form/wrappers/TextArea';
 import { SykdomFormValue } from '../../../types/SykdomFormState';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
-import { isDateInPeriod, required } from '../../form/validators';
+import {
+    isDatoUtenforInnleggelsesperiodene,
+    isDatoInnenforSøknadsperiode,
+    required,
+} from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import { convertToInternationalPeriod } from '../../../util/formats';
 import { useFormContext } from 'react-hook-form';
@@ -98,8 +102,16 @@ export default ({
                                 },
                                 validators: {
                                     required,
-                                    isDateInPeriodeTilVurdering: (value) =>
-                                        isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                    datoInnenforSøknadsperiode: (value) =>
+                                        isDatoInnenforSøknadsperiode(
+                                            value,
+                                            sykdom?.periodeTilVurdering
+                                        ),
+                                    datoUtenforInnleggelsesperiodene: (value) =>
+                                        isDatoUtenforInnleggelsesperiodene(
+                                            value,
+                                            innleggelsesperioder
+                                        ),
                                 },
                             },
                             toDatepickerProps: {
@@ -114,8 +126,16 @@ export default ({
                                 },
                                 validators: {
                                     required,
-                                    isDateInPeriodeTilVurdering: (value) =>
-                                        isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                    datoInnenforSøknadsperiode: (value) =>
+                                        isDatoInnenforSøknadsperiode(
+                                            value,
+                                            sykdom?.periodeTilVurdering
+                                        ),
+                                    datoUtenforInnleggelsesperiodene: (value) =>
+                                        isDatoUtenforInnleggelsesperiodene(
+                                            value,
+                                            innleggelsesperioder
+                                        ),
                                 },
                             },
                         }}
