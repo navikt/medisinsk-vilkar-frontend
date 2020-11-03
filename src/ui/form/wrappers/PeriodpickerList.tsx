@@ -32,7 +32,7 @@ const PeriodpickerList = ({
     periodpickerProps: { fromDatepickerProps, toDatepickerProps },
 }: PeriodpickerListProps): JSX.Element => {
     const formMethods = useFormContext<LegeerklæringFormInput>();
-    const { control } = formMethods;
+    const { control, errors } = formMethods;
     const { fields, append, remove } = useFieldArray({
         control,
         name,
@@ -48,11 +48,13 @@ const PeriodpickerList = ({
                                 ...fromDatepickerProps,
                                 defaultValue: item.fom,
                                 name: `${name}[${index}].${fromDatepickerProps.name}`,
+                                error: errors[name]?.[index]?.[fromDatepickerProps.name]?.message,
                             }}
                             toDatepickerProps={{
                                 ...toDatepickerProps,
                                 defaultValue: item.tom,
                                 name: `${name}[${index}].${toDatepickerProps.name}`,
+                                error: errors[name]?.[index]?.[toDatepickerProps.name]?.message,
                             }}
                         />
                         {fields.length > 1 && <DeleteButton onClick={() => remove(index)} />}

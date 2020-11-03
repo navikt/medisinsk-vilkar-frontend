@@ -6,10 +6,11 @@ import PureDatepicker from '../pure/PureDatepicker';
 export interface DatepickerProps {
     label?: string;
     name: string;
-    validators?: { [key: string]: (v: any) => string | undefined };
+    validators?: { [key: string]: (v: any) => string | boolean | undefined };
     ariaLabel?: string;
     defaultValue?: string;
     limitations: DatepickerLimitations;
+    error?: string;
 }
 
 const Datepicker = ({
@@ -19,6 +20,7 @@ const Datepicker = ({
     label,
     ariaLabel,
     defaultValue,
+    error,
 }: DatepickerProps): JSX.Element => {
     const { control, errors } = useFormContext();
 
@@ -38,7 +40,7 @@ const Datepicker = ({
                     name={name}
                     onChange={onChange}
                     value={value}
-                    errorMessage={errors[name]?.message}
+                    errorMessage={error || errors[name]?.message}
                     limitations={limitations}
                     ariaLabel={ariaLabel}
                 />

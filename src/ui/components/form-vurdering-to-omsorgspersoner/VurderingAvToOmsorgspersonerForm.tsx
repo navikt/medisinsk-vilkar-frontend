@@ -7,7 +7,11 @@ import { SykdomFormValue } from '../../../types/SykdomFormState';
 import Tilsynsbehov from '../../../types/Tilsynsbehov';
 import { intersectPeriods } from '../../../util/dateUtils';
 import { convertToInternationalPeriod } from '../../../util/formats';
-import { isDateInPeriod, required } from '../../form/validators';
+import {
+    isDatoUtenforPeriodeUtenTilsynsbehov,
+    isDatoInnenforSøknadsperiode,
+    required,
+} from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import TextArea from '../../form/wrappers/TextArea';
@@ -121,8 +125,16 @@ export default ({
                                 },
                                 validators: {
                                     required,
-                                    isDateInPeriodeTilVurdering: (value) =>
-                                        isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                    datoInnenforSøknadsperiode: (value) =>
+                                        isDatoInnenforSøknadsperiode(
+                                            value,
+                                            sykdom?.periodeTilVurdering
+                                        ),
+                                    datoUtenforUgyldigeDatoer: (value) =>
+                                        isDatoUtenforPeriodeUtenTilsynsbehov(
+                                            value,
+                                            perioderUtenTilsynsbehov
+                                        ),
                                 },
                             },
                             toDatepickerProps: {
@@ -137,8 +149,16 @@ export default ({
                                 },
                                 validators: {
                                     required,
-                                    isDateInPeriodeTilVurdering: (value) =>
-                                        isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                    datoInnenforSøknadsperiode: (value) =>
+                                        isDatoInnenforSøknadsperiode(
+                                            value,
+                                            sykdom?.periodeTilVurdering
+                                        ),
+                                    datoUtenforUgyldigeDatoer: (value) =>
+                                        isDatoUtenforPeriodeUtenTilsynsbehov(
+                                            value,
+                                            perioderUtenTilsynsbehov
+                                        ),
                                 },
                             },
                         }}

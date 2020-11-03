@@ -5,7 +5,7 @@ import PureYesOrNoQuestion from '../pure/PureYesOrNoQuestion';
 interface YesOrNoQuestionProps {
     question: string;
     name: string;
-    validators?: { [key: string]: (v: any) => string | undefined };
+    validators?: { [key: string]: (v: any) => string | boolean | undefined };
 }
 
 const YesOrNoQuestion = ({ question, name, validators }: YesOrNoQuestionProps) => {

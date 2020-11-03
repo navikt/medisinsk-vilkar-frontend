@@ -7,7 +7,7 @@ import Box, { Margin } from '../../components/box/Box';
 interface TextAreaProps {
     label?: React.ReactNode;
     name: string;
-    validators?: { [key: string]: (v: any) => string | undefined };
+    validators?: { [key: string]: (v: any) => string | boolean | undefined };
     helptext?: string;
 }
 
