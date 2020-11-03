@@ -78,8 +78,15 @@ export default ({
             </Box>
             <Box marginTop={Margin.large}>
                 <TextArea
-                    label="Gjør en vurdering av om det er behov for to omsorgspersoner i perioden hvor det er behov for kontinerlig tilsyn og pleie."
                     name={SykdomFormValue.VURDERING_TO_OMSORGSPERSONER}
+                    helptext="Dersom det er behov for to omsorgsperoner deler av perioden,  må det komme tydelig frem av vurderingen hvilke perioder det er behov og hvilke det ikke er behov."
+                    label={
+                        <b>
+                            Gjør en vurdering av om det er behov for to omsorgspersoner i perioden
+                            hvor det er behov for kontinerlig tilsyn og pleie.
+                        </b>
+                    }
+                    validators={{ required }}
                 />
             </Box>
             <Box marginTop={Margin.large}>
