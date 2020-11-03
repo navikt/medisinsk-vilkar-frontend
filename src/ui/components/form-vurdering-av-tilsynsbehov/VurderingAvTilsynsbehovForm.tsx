@@ -8,9 +8,9 @@ import { convertToInternationalPeriod } from '../../../util/formats';
 import { isDateInPeriod, required } from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
+import TextArea from '../../form/wrappers/TextArea';
 import Box, { Margin } from '../box/Box';
 import PeriodList, { PeriodListTheme } from '../period-list/PeriodList';
-import TextareaWithExpandableLabel from '../textarea-with-expandable-label/TextareaWithExpandableLabel';
 
 interface VurderingAvTilsynsbehovFormProps {
     sykdom: Sykdom;
@@ -53,18 +53,18 @@ export default ({
             </Box>
 
             <Box marginTop={Margin.large}>
-                <TextareaWithExpandableLabel
+                <TextArea
+                    name={SykdomFormValue.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE}
                     helptext="Dersom det er behov for tilsyn og pleie kun i deler av perioden må
                     det komme tydelig frem av vurderingen hvilke perioder det er behov og
                     hvilke det ikke er behov."
-                    id="vurderingKontinuerligTilsynOgPleie"
-                    labelText={
+                    label={
                         <b>
                             Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie
                             som følge av sykdommen.
                         </b>
                     }
-                    textareaName={SykdomFormValue.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE}
+                    validators={{ required }}
                 />
             </Box>
             <Box marginTop={Margin.large}>
