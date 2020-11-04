@@ -1,16 +1,20 @@
 import React from 'react';
-import Box, { Margin } from '../box/Box';
-import PeriodList, { PeriodListTheme } from '../period-list/PeriodList';
-import TextArea from '../../form/wrappers/TextArea';
-import { SykdomFormValue } from '../../../types/SykdomFormState';
-import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
-import { isDateInPeriod, required } from '../../form/validators';
-import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
-import { convertToInternationalPeriod } from '../../../util/formats';
 import { useFormContext } from 'react-hook-form';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { Period } from '../../../types/Period';
+import { SykdomFormValue } from '../../../types/SykdomFormState';
 import Tilsynsbehov from '../../../types/Tilsynsbehov';
+import { convertToInternationalPeriod } from '../../../util/formats';
+import {
+    isDatoInnenforSøknadsperiode,
+    isDatoUtenforInnleggelsesperiodene,
+    required,
+} from '../../form/validators';
+import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
+import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
+import TextArea from '../../form/wrappers/TextArea';
+import Box, { Margin } from '../box/Box';
+import PeriodList, { PeriodListTheme } from '../period-list/PeriodList';
 
 interface VurderingAvTilsynsbehovFormProps {
     sykdom: Sykdom;
@@ -54,18 +58,17 @@ export default ({
 
             <Box marginTop={Margin.large}>
                 <TextArea
-                    label={
-                        <label>
-                            <b>
-                                Gjør en vurdering av om det er behov for kontinuerlig tilsyn og
-                                pleie som følge av sykdommen.
-                            </b>
-                            &nbsp;Dersom det er behov for tilsyn og pleie kun i deler av perioden må
-                            det komme tydelig frem av vurderingen hvilke perioder det er behov og
-                            hvilke det ikke er behov.
-                        </label>
-                    }
                     name={SykdomFormValue.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE}
+                    helptext="Dersom det er behov for tilsyn og pleie kun i deler av perioden må
+                    det komme tydelig frem av vurderingen hvilke perioder det er behov og
+                    hvilke det ikke er behov."
+                    label={
+                        <b>
+                            Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie
+                            som følge av sykdommen.
+                        </b>
+                    }
+                    validators={{ required }}
                 />
             </Box>
             <Box marginTop={Margin.large}>
@@ -98,8 +101,16 @@ export default ({
                                 },
                                 validators: {
                                     required,
-                                    isDateInPeriodeTilVurdering: (value) =>
-                                        isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                    datoInnenforSøknadsperiode: (value) =>
+                                        isDatoInnenforSøknadsperiode(
+                                            value,
+                                            sykdom?.periodeTilVurdering
+                                        ),
+                                    datoUtenforInnleggelsesperiodene: (value) =>
+                                        isDatoUtenforInnleggelsesperiodene(
+                                            value,
+                                            innleggelsesperioder
+                                        ),
                                 },
                             },
                             toDatepickerProps: {
@@ -114,8 +125,16 @@ export default ({
                                 },
                                 validators: {
                                     required,
-                                    isDateInPeriodeTilVurdering: (value) =>
-                                        isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                    datoInnenforSøknadsperiode: (value) =>
+                                        isDatoInnenforSøknadsperiode(
+                                            value,
+                                            sykdom?.periodeTilVurdering
+                                        ),
+                                    datoUtenforInnleggelsesperiodene: (value) =>
+                                        isDatoUtenforInnleggelsesperiodene(
+                                            value,
+                                            innleggelsesperioder
+                                        ),
                                 },
                             },
                         }}

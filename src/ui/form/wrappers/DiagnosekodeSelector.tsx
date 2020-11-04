@@ -4,7 +4,7 @@ import PureDiagnosekodeSelector from '../pure/PureDiagnosekodeSelector';
 
 interface DiagnosekodeSelektorProps {
     initialDiagnosekodeValue?: string;
-    validators?: { [key: string]: (v: any) => string | undefined };
+    validators?: { [key: string]: (v: any) => string | boolean | undefined };
     name: string;
     label: string;
 }

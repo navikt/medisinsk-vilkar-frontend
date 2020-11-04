@@ -11,7 +11,7 @@ interface RadioGroupPanelProps {
     question: string;
     name: string;
     radios: RadioProps[];
-    validators?: { [key: string]: (v: any) => string | undefined };
+    validators?: { [key: string]: (v: any) => string | boolean | undefined };
 }
 
 const RadioGroupPanel = ({ question, name, validators, radios }: RadioGroupPanelProps) => {
