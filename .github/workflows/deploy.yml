@@ -28,7 +28,7 @@ jobs:
               run: npm install
             - name: Sette versjon
               run: |
-                  echo "::set-env name=VERSION::$(npm run version --silent)"
+                  echo "VERSION=$(npm run version --silent)" >> $GITHUB_ENV
             - name: Sjekke om tag fins fra før
               run: |
                   if git rev-parse "$VERSION" >/dev/null 2>&1; then
@@ -43,9 +43,9 @@ jobs:
                   fi
             - name: Sette miljøvariabler
               run: |
-                  echo "::set-env name=IMAGE::$IMAGE_BASE:$VERSION"
-                  echo "::set-env name=CSS_HASH::$(shasum -b -a 384 build/$VERSION/styles.css | awk '{ print $1 }' | xxd -r -p | base64)"
-                  echo "::set-env name=JS_HASH::$(shasum -b -a 384 build/$VERSION/app.js | awk '{ print $1 }' | xxd -r -p | base64)"
+                  echo "IMAGE=${IMAGE_BASE}:${VERSION}" >> $GITHUB_ENV
+                  echo "CSS_HASH=$(shasum -b -a 384 build/$VERSION/styles.css | awk '{ print $1 }' | xxd -r -p | base64)" >> $GITHUB_ENV
+                  echo "JS_HASH=$(shasum -b -a 384 build/$VERSION/app.js | awk '{ print $1 }' | xxd -r -p | base64)" >> $GITHUB_ENV
             - name: Bygg og laste opp docker-image
               run: |
                   docker build --tag ${IMAGE} .
@@ -68,7 +68,7 @@ jobs:
                   text="${text//$'%'/%25}"
                   text="${text//$'\n'/%0A}"
                   text="${text//$'\r'/%0D}"
-                  echo "::set-env name=CHANGELOG::$text"
+                  echo "CHANGELOG=$text" >> $GITHUB_ENV
             - name: Create Release
               id: create_release
               uses: actions/create-release@latest
