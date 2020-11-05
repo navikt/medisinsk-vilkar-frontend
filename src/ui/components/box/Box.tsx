@@ -26,7 +26,7 @@ const Box = ({ children, marginBottom, marginTop, maxWidth }: BoxProps): JSX.Ele
         [marginBottomClass]: marginBottom,
     });
     return (
-        <div className={boxClassnames} style={maxWidth ? { maxWidth } : undefined}>
+        <div className={boxClassnames} style={{ maxWidth }}>
             {children}
         </div>
     );
