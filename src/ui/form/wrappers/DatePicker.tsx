@@ -1,5 +1,6 @@
 import { DatepickerLimitations } from 'nav-datovelger';
 import React from 'react';
+import { DayPickerProps } from 'react-day-picker';
 import { Controller, useFormContext } from 'react-hook-form';
 import PureDatepicker from '../pure/PureDatepicker';
 
@@ -11,6 +12,7 @@ export interface DatepickerProps {
     defaultValue?: string;
     limitations: DatepickerLimitations;
     error?: string;
+    dayPickerProps?: DayPickerProps;
 }
 
 const Datepicker = ({
@@ -21,6 +23,7 @@ const Datepicker = ({
     ariaLabel,
     defaultValue,
     error,
+    dayPickerProps,
 }: DatepickerProps): JSX.Element => {
     const { control, errors } = useFormContext();
 
@@ -43,6 +46,7 @@ const Datepicker = ({
                     errorMessage={error || errors[name]?.message}
                     limitations={limitations}
                     ariaLabel={ariaLabel}
+                    dayPickerProps={dayPickerProps}
                 />
             )}
         />
