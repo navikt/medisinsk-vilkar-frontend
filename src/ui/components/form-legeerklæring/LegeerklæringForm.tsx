@@ -43,21 +43,6 @@ const LegeerklæringForm = ({ sykdom, onSubmit }: LegeerklæringFormProps): JSX.
                 </Box>
             )}
             <Box marginTop={Margin.large}>
-                <Datepicker
-                    label="Hvilken dato ble legeerklæringen signert?"
-                    name="legeerklæringSignert"
-                    validators={{
-                        required,
-                        datoInnenforSøknadsperiode: (value) =>
-                            isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
-                    }}
-                    limitations={{
-                        minDate: sykdom.periodeTilVurdering.fom,
-                        maxDate: sykdom.periodeTilVurdering.tom,
-                    }}
-                />
-            </Box>
-            <Box marginTop={Margin.large}>
                 <DiagnosekodeSelektor
                     name="legeerklæringDiagnose"
                     initialDiagnosekodeValue={sykdom.legeerklæringer[0]?.diagnosekode}
