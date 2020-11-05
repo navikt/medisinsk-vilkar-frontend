@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { Period } from '../../../types/Period';
 import { SykdomFormValue } from '../../../types/SykdomFormState';
-import { intersectPeriods } from '../../../util/dateUtils';
+import { getPeriodDifference } from '../../../util/dateUtils';
 import { convertToInternationalPeriod } from '../../../util/formats';
 import { isDateInPeriod, required } from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
@@ -28,22 +28,16 @@ export default ({
     const { watch } = useFormContext();
 
     const tilsynsbehov = watch(SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN);
-    const delvisBehovForToOmsorgspersoner =
-        watch(SykdomFormValue.BEHOV_FOR_TO_OMSORGSPERSONER) === Tilsynsbehov.DELER;
+    const delvisBehovForToOmsorgspersoner = watch(SykdomFormValue.BEHOV_FOR_TO_OMSORGSPERSONER) === Tilsynsbehov.DELER;
 
     let perioderMedTilsynsbehov = [];
     if (tilsynsbehov === Tilsynsbehov.HELE) {
         perioderMedTilsynsbehov = perioderUtenInnleggelser;
     } else if (tilsynsbehov === Tilsynsbehov.DELER) {
-        perioderMedTilsynsbehov = watch(
-            SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE
-        );
+        perioderMedTilsynsbehov = watch(SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE);
     }
 
-    const perioderUtenTilsynsbehov = intersectPeriods(
-        sykdom.periodeTilVurdering,
-        perioderMedTilsynsbehov
-    );
+    const perioderUtenTilsynsbehov = getPeriodDifference(sykdom.periodeTilVurdering, perioderMedTilsynsbehov);
 
     return (
         <>
@@ -108,9 +102,7 @@ export default ({
                                 limitations: {
                                     minDate: sykdom.periodeTilVurdering.fom,
                                     maxDate: sykdom.periodeTilVurdering.tom,
-                                    invalidDateRanges: perioderUtenTilsynsbehov.map(
-                                        convertToInternationalPeriod
-                                    ),
+                                    invalidDateRanges: perioderUtenTilsynsbehov.map(convertToInternationalPeriod),
                                 },
                                 validators: {
                                     required,
@@ -124,9 +116,7 @@ export default ({
                                 limitations: {
                                     minDate: sykdom.periodeTilVurdering.fom,
                                     maxDate: sykdom.periodeTilVurdering.tom,
-                                    invalidDateRanges: perioderUtenTilsynsbehov.map(
-                                        convertToInternationalPeriod
-                                    ),
+                                    invalidDateRanges: perioderUtenTilsynsbehov.map(convertToInternationalPeriod),
                                 },
                                 validators: {
                                     required,

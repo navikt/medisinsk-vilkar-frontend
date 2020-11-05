@@ -9,16 +9,16 @@ interface VilkårsvurderingProps {
 
 const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps) => {
     const [shouldShowSummary, setShouldShowSummary] = React.useState(false);
-    const [formState, setFormState] = React.useState(null);
+    const [perioderMedTilsynsbehov, setPerioderMedTilsynsbehov] = React.useState(null);
 
     if (shouldShowSummary) {
-        return <Summary values={formState} sykdom={sykdom} />;
+        return <Summary perioderMedTilsynsbehov={perioderMedTilsynsbehov} sykdom={sykdom} />;
     } else {
         return (
             <VilkårsvurderingForm
                 sykdom={sykdom}
                 onSubmit={(data) => {
-                    setFormState(data);
+                    setPerioderMedTilsynsbehov(data.perioderMedTilsynsbehov);
                     setShouldShowSummary(true);
                 }}
             />

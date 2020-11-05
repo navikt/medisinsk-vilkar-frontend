@@ -24,7 +24,7 @@ function getDaySequencesAsListOfPeriods(daySequences: string[][]): Period[] {
     });
 }
 
-export function intersectPeriods(basePeriod: Period, periods: Period[]) {
+export function getPeriodDifference(basePeriod: Period, periods: Period[]) {
     const baseListOfDays = getPeriodAsListOfDays({
         fom: basePeriod.fom,
         tom: basePeriod.tom,

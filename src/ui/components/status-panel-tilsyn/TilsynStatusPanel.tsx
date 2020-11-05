@@ -42,7 +42,7 @@ const Tilsynsbeskrivelse = ({ status }) => (
 );
 
 const TilsynStatusPanel = ({ periode, grad }: PeriodeMedTilsynsbehov): JSX.Element => {
-    const { heading, theme } = statusPanelConfig[status];
+    const { heading, theme } = statusPanelConfig[grad];
 
     const harTilsynsbehov = [
         GradAvTilsynsbehov.BEHOV_FOR_EN,
@@ -55,7 +55,7 @@ const TilsynStatusPanel = ({ periode, grad }: PeriodeMedTilsynsbehov): JSX.Eleme
             <Box marginTop={Margin.small}>{prettifyPeriod(periode)}</Box>
             {harTilsynsbehov && (
                 <Box marginTop={Margin.small}>
-                    <Tilsynsbeskrivelse status={status} />
+                    <Tilsynsbeskrivelse status={grad} />
                 </Box>
             )}
         </StatusPanel>

@@ -4,7 +4,7 @@ import { Systemtittel } from 'nav-frontend-typografi';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import VurderingAvToOmsorgspersonerForm from '../form-vurdering-to-omsorgspersoner/VurderingAvToOmsorgspersonerForm';
 import VurderingAvTilsynsbehovForm from '../form-vurdering-av-tilsynsbehov/VurderingAvTilsynsbehovForm';
-import { getPeriodAsListOfDays, intersectPeriods } from '../../../util/dateUtils';
+import { getPeriodDifference } from '../../../util/dateUtils';
 import Step from '../step/Step';
 import SykdomFormState, { SykdomFormValue } from '../../../types/SykdomFormState';
 import Tilsynsbehov from '../../../types/Tilsynsbehov';
@@ -12,7 +12,6 @@ import { harTilsynsbehov } from '../../../util/domain';
 import { Period } from '../../../types/Period';
 import PeriodeMedTilsynsbehov from '../../../types/PeriodeMedTilsynsbehov';
 import GradAvTilsynsbehov from '../../../types/GradAvTilsynsbehov';
-import moment from 'moment';
 
 interface VilkårsvurderingFormProps {
     sykdom: Sykdom;
@@ -23,10 +22,14 @@ const sammenstillPerioderMedTilsynsbehov = (
     perioderMedTilsynsbehov: Period[],
     perioderMedBehovForTo: Period[]
 ): PeriodeMedTilsynsbehov[] => {
-    const dagerMedTilsynsbehov = perioderMedTilsynsbehov.map((p) => getPeriodAsListOfDays(p));
-    const dagerMedBehovForTo = perioderMedBehovForTo.map((p) => getPeriodAsListOfDays(p));
-    const overlappendeDager = dagerMedTilsynsbehov.filter((dag) => dagerMedBehovForTo.includes(dag));
-    return null;
+    const perioderMedBehovForEn = [];
+    perioderMedTilsynsbehov.forEach((periodeMedTilsynsbehov) => {
+        perioderMedBehovForEn.push(...getPeriodDifference(periodeMedTilsynsbehov, perioderMedBehovForTo));
+    });
+    return [
+        ...perioderMedBehovForEn.map((periode) => ({ periode, grad: GradAvTilsynsbehov.BEHOV_FOR_EN })),
+        ...perioderMedBehovForTo.map((periode) => ({ periode, grad: GradAvTilsynsbehov.BEHOV_FOR_TO })),
+    ];
 };
 
 const lagPeriodeMedTilsynsbehov = (periode: Period, grad: GradAvTilsynsbehov): PeriodeMedTilsynsbehov => {
@@ -57,7 +60,7 @@ const VilkårsvurderingForm = ({ sykdom, onSubmit }: VilkårsvurderingFormProps)
 
     const tilsynsbehov = watch(SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN);
     const innleggelsesperioder = watch(SykdomFormValue.INNLEGGELSESPERIODER);
-    const perioderUtenInnleggelse = intersectPeriods(sykdom.periodeTilVurdering, innleggelsesperioder);
+    const perioderUtenInnleggelse = getPeriodDifference(sykdom.periodeTilVurdering, innleggelsesperioder);
 
     const submitHandler = (data: SykdomFormState) => {
         const tilsynsbehov = data[SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN];
@@ -81,7 +84,13 @@ const VilkårsvurderingForm = ({ sykdom, onSubmit }: VilkårsvurderingFormProps)
             }
         }
 
-        onSubmit({ ...data, perioderMedTilsynsbehov });
+        onSubmit({
+            ...data,
+            perioderMedTilsynsbehov: [
+                ...perioderMedTilsynsbehov,
+                ...innleggelsesperioder.map(lagPeriodeMedInnleggelse),
+            ],
+        });
     };
 
     return (
