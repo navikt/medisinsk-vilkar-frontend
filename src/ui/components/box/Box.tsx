@@ -15,16 +15,21 @@ interface BoxProps {
     children: React.ReactNode;
     marginBottom?: Margin;
     marginTop?: Margin;
+    maxWidth?: string;
 }
 
-const Box = ({ children, marginBottom, marginTop }: BoxProps): JSX.Element => {
+const Box = ({ children, marginBottom, marginTop, maxWidth }: BoxProps): JSX.Element => {
     const marginTopClass = `${marginTop}MarginTop`;
     const marginBottomClass = `${marginBottom}MarginBottom`;
     const boxClassnames = cx({
         [marginTopClass]: marginTop,
         [marginBottomClass]: marginBottom,
     });
-    return <div className={boxClassnames}>{children}</div>;
+    return (
+        <div className={boxClassnames} style={{ maxWidth }}>
+            {children}
+        </div>
+    );
 };
 
 export default Box;

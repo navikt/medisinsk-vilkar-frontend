@@ -1,5 +1,5 @@
 import { Systemtittel } from 'nav-frontend-typografi';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { Period } from '../../../types/Period';
@@ -29,6 +29,12 @@ export default ({
     innleggelsesperioder,
     perioderUtenInnleggelser,
 }: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
+    useEffect(() => {
+        document
+            .getElementById('vurderingAvToOmsorgspersoner')
+            .scrollIntoView({ behavior: 'smooth' });
+    }, []);
+
     const { watch } = useFormContext();
 
     const tilsynsbehov = watch(SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN);
@@ -50,7 +56,7 @@ export default ({
     );
 
     return (
-        <>
+        <div id="vurderingAvToOmsorgspersoner">
             <Box marginTop={Margin.large}>
                 <Systemtittel>Vurdering av to omsorgspersoner</Systemtittel>
                 <hr />
@@ -76,7 +82,7 @@ export default ({
                     theme={PeriodListTheme.WARNING}
                 />
             </Box>
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.large} maxWidth="700px">
                 <TextArea
                     name={SykdomFormValue.VURDERING_TO_OMSORGSPERSONER}
                     helptext="Dersom det er behov for to omsorgsperoner deler av perioden,  må det komme tydelig frem av vurderingen hvilke perioder det er behov og hvilke det ikke er behov."
@@ -165,6 +171,6 @@ export default ({
                     />
                 </Box>
             )}
-        </>
+        </div>
     );
 };

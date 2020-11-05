@@ -56,7 +56,7 @@ export default ({
                 />
             </Box>
 
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.large} maxWidth="700px">
                 <TextArea
                     name={SykdomFormValue.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE}
                     helptext="Dersom det er behov for tilsyn og pleie kun i deler av perioden må

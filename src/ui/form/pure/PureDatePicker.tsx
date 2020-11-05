@@ -19,21 +19,28 @@ const PureDatepicker = ({
     errorMessage,
     limitations,
     ariaLabel,
-}: DatepickerProps & CustomDatepickerProps): JSX.Element => (
-    <>
-        {label && <Label htmlFor={name}>{label}</Label>}
-        <Datepicker
-            onChange={onChange}
-            value={value}
-            inputId={name}
-            inputProps={{
-                placeholder: 'dd.mm.åååå',
-                'aria-label': ariaLabel,
-            }}
-            limitations={limitations}
-        />
-        {errorMessage && <Error message={errorMessage} />}
-    </>
-);
+}: DatepickerProps & CustomDatepickerProps): JSX.Element => {
+    const dayPickerProps = limitations.minDate
+        ? { initialMonth: new Date(limitations.minDate) }
+        : undefined;
+
+    return (
+        <>
+            {label && <Label htmlFor={name}>{label}</Label>}
+            <Datepicker
+                onChange={onChange}
+                value={value}
+                inputId={name}
+                inputProps={{
+                    placeholder: 'dd.mm.åååå',
+                    'aria-label': ariaLabel,
+                }}
+                limitations={limitations}
+                dayPickerProps={dayPickerProps}
+            />
+            {errorMessage && <Error message={errorMessage} />}
+        </>
+    );
+};
 
 export default PureDatepicker;
