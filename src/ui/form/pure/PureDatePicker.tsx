@@ -2,7 +2,6 @@ import { Datepicker } from 'nav-datovelger';
 import { DatepickerProps } from 'nav-datovelger/lib/Datepicker';
 import { Label } from 'nav-frontend-skjema';
 import * as React from 'react';
-import { DayPickerProps } from 'react-day-picker';
 import Error from '../../components/error/Error';
 
 interface CustomDatepickerProps {
@@ -10,7 +9,6 @@ interface CustomDatepickerProps {
     name: string;
     errorMessage?: string;
     ariaLabel?: string;
-    dayPickerProps?: DayPickerProps;
 }
 
 const PureDatepicker = ({
@@ -21,14 +19,11 @@ const PureDatepicker = ({
     errorMessage,
     limitations,
     ariaLabel,
-    dayPickerProps,
 }: DatepickerProps & CustomDatepickerProps): JSX.Element => {
-    let customDayPickerProps;
-    if (dayPickerProps) {
-        customDayPickerProps = dayPickerProps;
-    } else if (limitations.minDate) {
-        customDayPickerProps = { initialMonth: new Date(limitations.minDate) };
-    }
+    const dayPickerProps = limitations.minDate
+        ? { initialMonth: new Date(limitations.minDate) }
+        : undefined;
+
     return (
         <>
             {label && <Label htmlFor={name}>{label}</Label>}
@@ -41,7 +36,7 @@ const PureDatepicker = ({
                     'aria-label': ariaLabel,
                 }}
                 limitations={limitations}
-                dayPickerProps={customDayPickerProps}
+                dayPickerProps={dayPickerProps}
             />
             {errorMessage && <Error message={errorMessage} />}
         </>
