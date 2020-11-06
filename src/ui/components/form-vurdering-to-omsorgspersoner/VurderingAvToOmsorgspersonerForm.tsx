@@ -1,12 +1,12 @@
 import { Systemtittel } from 'nav-frontend-typografi';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { Period } from '../../../types/Period';
 import { SykdomFormValue } from '../../../types/SykdomFormState';
 import { getPeriodDifference } from '../../../util/dateUtils';
 import { convertToInternationalPeriod } from '../../../util/formats';
-import { isDateInPeriod, required } from '../../form/validators';
+import { isDatoUtenforPeriodeUtenTilsynsbehov, isDatoInnenforSøknadsperiode, required } from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import TextArea from '../../form/wrappers/TextArea';
@@ -25,6 +25,10 @@ export default ({
     innleggelsesperioder,
     perioderUtenInnleggelser,
 }: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
+    useEffect(() => {
+        document.getElementById('vurderingAvToOmsorgspersoner').scrollIntoView({ behavior: 'smooth' });
+    }, []);
+
     const { watch } = useFormContext();
 
     const tilsynsbehov = watch(SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN);
@@ -40,7 +44,7 @@ export default ({
     const perioderUtenTilsynsbehov = getPeriodDifference(sykdom.periodeTilVurdering, perioderMedTilsynsbehov);
 
     return (
-        <>
+        <div id="vurderingAvToOmsorgspersoner">
             <Box marginTop={Margin.large}>
                 <Systemtittel>Vurdering av to omsorgspersoner</Systemtittel>
                 <hr />
@@ -66,10 +70,17 @@ export default ({
                     theme={PeriodListTheme.WARNING}
                 />
             </Box>
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.large} maxWidth="700px">
                 <TextArea
-                    label="Gjør en vurdering av om det er behov for to omsorgspersoner i perioden hvor det er behov for kontinerlig tilsyn og pleie."
                     name={SykdomFormValue.VURDERING_TO_OMSORGSPERSONER}
+                    helptext="Dersom det er behov for to omsorgsperoner deler av perioden,  må det komme tydelig frem av vurderingen hvilke perioder det er behov og hvilke det ikke er behov."
+                    label={
+                        <b>
+                            Gjør en vurdering av om det er behov for to omsorgspersoner i perioden hvor det er behov for
+                            kontinerlig tilsyn og pleie.
+                        </b>
+                    }
+                    validators={{ required }}
                 />
             </Box>
             <Box marginTop={Margin.large}>
@@ -106,8 +117,10 @@ export default ({
                                 },
                                 validators: {
                                     required,
-                                    isDateInPeriodeTilVurdering: (value) =>
-                                        isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                    datoInnenforSøknadsperiode: (value) =>
+                                        isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
+                                    datoUtenforUgyldigeDatoer: (value) =>
+                                        isDatoUtenforPeriodeUtenTilsynsbehov(value, perioderUtenTilsynsbehov),
                                 },
                             },
                             toDatepickerProps: {
@@ -120,14 +133,16 @@ export default ({
                                 },
                                 validators: {
                                     required,
-                                    isDateInPeriodeTilVurdering: (value) =>
-                                        isDateInPeriod(value, sykdom?.periodeTilVurdering),
+                                    datoInnenforSøknadsperiode: (value) =>
+                                        isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
+                                    datoUtenforUgyldigeDatoer: (value) =>
+                                        isDatoUtenforPeriodeUtenTilsynsbehov(value, perioderUtenTilsynsbehov),
                                 },
                             },
                         }}
                     />
                 </Box>
             )}
-        </>
+        </div>
     );
 };

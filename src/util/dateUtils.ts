@@ -56,3 +56,9 @@ export function getPeriodDifference(basePeriod: Period, periods: Period[]) {
 export function isValidPeriod({ fom, tom }: Period) {
     return !isNaN(new Date(fom) as any) && !isNaN(new Date(tom) as any);
 }
+
+export const isDateInPeriod = (date: any, datePeriod: Period): boolean =>
+    moment(date).isBetween(datePeriod.fom, datePeriod.tom, undefined, '[]');
+
+export const isDateBefore = (date: any, otherDate: any) => moment(date).isBefore(otherDate);
+export const isDateAfter = (date: any, otherDate: any) => moment(date).isAfter(otherDate);
