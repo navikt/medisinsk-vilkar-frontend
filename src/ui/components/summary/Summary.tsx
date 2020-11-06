@@ -4,10 +4,10 @@ import { Systemtittel } from 'nav-frontend-typografi';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { getPeriodDifference } from '../../../util/dateUtils';
 import GradAvTilsynsbehov from '../../../types/GradAvTilsynsbehov';
-import PeriodeMedTilsynsbehov from '../../../types/PeriodeMedTilsynsbehov';
+import PeriodeMedGradAvTilsynsbehov from '../../../types/PeriodeMedGradAvTilsynsbehov';
 
 interface SummaryProps {
-    perioderMedTilsynsbehov: PeriodeMedTilsynsbehov[];
+    perioderMedTilsynsbehov: PeriodeMedGradAvTilsynsbehov[];
     sykdom: Sykdom;
 }
 
@@ -25,7 +25,7 @@ const Summary = ({ perioderMedTilsynsbehov, sykdom }: SummaryProps) => {
             <Systemtittel>Vurdering av tilsyn og pleie</Systemtittel>
             <hr />
             <ListOfTilsynStatusPanel
-                perioderMedTilsynsbehov={[...perioderMedTilsynsbehov, ...perioderUtenTilsynsbehov]}
+                perioderMedGradAvTilsynsbehov={[...perioderMedTilsynsbehov, ...perioderUtenTilsynsbehov]}
             />
         </div>
     );

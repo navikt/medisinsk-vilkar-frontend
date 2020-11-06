@@ -6,7 +6,7 @@ import OnePersonIcon from '../icons/OnePersonIcon';
 import TwoPersonsIcon from '../icons/TwoPersonsIcon';
 import styles from './tilsynStatusPanel.less';
 import GradAvTilsynsbehov from '../../../types/GradAvTilsynsbehov';
-import PeriodeMedTilsynsbehov from '../../../types/PeriodeMedTilsynsbehov';
+import PeriodeMedGradAvTilsynsbehov from '../../../types/PeriodeMedGradAvTilsynsbehov';
 
 const statusPanelConfig = {
     [GradAvTilsynsbehov.BEHOV_FOR_EN]: {
@@ -41,7 +41,7 @@ const Tilsynsbeskrivelse = ({ status }) => (
     </div>
 );
 
-const TilsynStatusPanel = ({ periode, grad }: PeriodeMedTilsynsbehov): JSX.Element => {
+const TilsynStatusPanel = ({ periode, grad }: PeriodeMedGradAvTilsynsbehov): JSX.Element => {
     const { heading, theme } = statusPanelConfig[grad];
 
     const harTilsynsbehov = [

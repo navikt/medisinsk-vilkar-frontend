@@ -10,8 +10,13 @@ import SykdomFormState, { SykdomFormValue } from '../../../types/SykdomFormState
 import Tilsynsbehov from '../../../types/Tilsynsbehov';
 import { harTilsynsbehov } from '../../../util/domain';
 import { Period } from '../../../types/Period';
-import PeriodeMedTilsynsbehov from '../../../types/PeriodeMedTilsynsbehov';
+import PeriodeMedGradAvTilsynsbehov from '../../../types/PeriodeMedGradAvTilsynsbehov';
 import GradAvTilsynsbehov from '../../../types/GradAvTilsynsbehov';
+import {
+    lagPeriodeMedBehovForEnTilsynsperson,
+    lagPeriodeMedBehovForToTilsynspersoner,
+    lagPeriodeMedInnleggelse,
+} from '../../../util/periodeMedTilsynsbehov';
 
 interface VilkårsvurderingFormProps {
     sykdom: Sykdom;
@@ -21,7 +26,7 @@ interface VilkårsvurderingFormProps {
 const sammenstillPerioderMedTilsynsbehov = (
     perioderMedTilsynsbehov: Period[],
     perioderMedBehovForTo: Period[]
-): PeriodeMedTilsynsbehov[] => {
+): PeriodeMedGradAvTilsynsbehov[] => {
     const perioderMedBehovForEn = [];
     perioderMedTilsynsbehov.forEach((periodeMedTilsynsbehov) => {
         perioderMedBehovForEn.push(...getPeriodDifference(periodeMedTilsynsbehov, perioderMedBehovForTo));
@@ -30,29 +35,6 @@ const sammenstillPerioderMedTilsynsbehov = (
         ...perioderMedBehovForEn.map((periode) => ({ periode, grad: GradAvTilsynsbehov.BEHOV_FOR_EN })),
         ...perioderMedBehovForTo.map((periode) => ({ periode, grad: GradAvTilsynsbehov.BEHOV_FOR_TO })),
     ];
-};
-
-const lagPeriodeMedTilsynsbehov = (periode: Period, grad: GradAvTilsynsbehov): PeriodeMedTilsynsbehov => {
-    return {
-        periode,
-        grad,
-    };
-};
-
-const lagPeriodeMedBehovForEnTilsynsperson = (periode: Period): PeriodeMedTilsynsbehov => {
-    return lagPeriodeMedTilsynsbehov(periode, GradAvTilsynsbehov.BEHOV_FOR_EN);
-};
-
-const lagPeriodeMedBehovForToTilsynspersoner = (periode: Period): PeriodeMedTilsynsbehov => {
-    return lagPeriodeMedTilsynsbehov(periode, GradAvTilsynsbehov.BEHOV_FOR_TO);
-};
-
-const lagPeriodeMedIngenTilsynsbehov = (periode: Period): PeriodeMedTilsynsbehov => {
-    return lagPeriodeMedTilsynsbehov(periode, GradAvTilsynsbehov.IKKE_BEHOV);
-};
-
-const lagPeriodeMedInnleggelse = (periode: Period): PeriodeMedTilsynsbehov => {
-    return lagPeriodeMedTilsynsbehov(periode, GradAvTilsynsbehov.INNLAGT);
 };
 
 const VilkårsvurderingForm = ({ sykdom, onSubmit }: VilkårsvurderingFormProps): JSX.Element => {
@@ -65,7 +47,7 @@ const VilkårsvurderingForm = ({ sykdom, onSubmit }: VilkårsvurderingFormProps)
     const submitHandler = (data: SykdomFormState) => {
         const tilsynsbehov = data[SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN];
 
-        let perioderMedTilsynsbehov: PeriodeMedTilsynsbehov[] = [];
+        let perioderMedTilsynsbehov: PeriodeMedGradAvTilsynsbehov[] = [];
         if (tilsynsbehov === Tilsynsbehov.HELE) {
             perioderMedTilsynsbehov = perioderUtenInnleggelse.map(lagPeriodeMedBehovForEnTilsynsperson);
         } else if (tilsynsbehov === Tilsynsbehov.DELER) {

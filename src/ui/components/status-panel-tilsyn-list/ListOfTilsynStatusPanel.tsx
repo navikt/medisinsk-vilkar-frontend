@@ -2,14 +2,14 @@ import React from 'react';
 import moment from 'moment';
 import TilsynStatusPanel from '../status-panel-tilsyn/TilsynStatusPanel';
 import Box, { Margin } from '../box/Box';
-import PeriodeMedTilsynsbehov from '../../../types/PeriodeMedTilsynsbehov';
+import PeriodeMedGradAvTilsynsbehov from '../../../types/PeriodeMedGradAvTilsynsbehov';
 
 interface ListOfTilsynStatusPanelProps {
-    perioderMedTilsynsbehov: PeriodeMedTilsynsbehov[];
+    perioderMedGradAvTilsynsbehov: PeriodeMedGradAvTilsynsbehov[];
 }
 
-function sortByPeriodFom(perioderMedTilsynsbehov: PeriodeMedTilsynsbehov[]) {
-    return perioderMedTilsynsbehov.sort((firstEl, secondEl) => {
+function sortByPeriodFom(perioder: PeriodeMedGradAvTilsynsbehov[]) {
+    return perioder.sort((firstEl, secondEl) => {
         const firstFom = moment(firstEl.periode.fom);
         const secondFom = moment(secondEl.periode.fom);
         if (firstFom.isBefore(secondFom)) {
@@ -21,18 +21,19 @@ function sortByPeriodFom(perioderMedTilsynsbehov: PeriodeMedTilsynsbehov[]) {
     });
 }
 
-const ListOfTilsynStatusPanel = ({ perioderMedTilsynsbehov }: ListOfTilsynStatusPanelProps) => {
-    return (
-        <Box marginTop={Margin.medium}>
-            {sortByPeriodFom(perioderMedTilsynsbehov).map(({ periode, grad }, index) => {
-                const statusEl = <TilsynStatusPanel periode={periode} grad={grad} />;
-                if (index > 0) {
-                    return <Box marginTop={Margin.medium}>{statusEl}</Box>;
-                }
-                return statusEl;
-            })}
-        </Box>
-    );
+function renderPaneler(perioderMedGradAvTilsynsbehov: PeriodeMedGradAvTilsynsbehov[]) {
+    return perioderMedGradAvTilsynsbehov.map(({ periode, grad }, index) => {
+        const statusEl = <TilsynStatusPanel periode={periode} grad={grad} />;
+        if (index > 0) {
+            return <Box marginTop={Margin.medium}>{statusEl}</Box>;
+        }
+        return statusEl;
+    });
+}
+
+const ListOfTilsynStatusPanel = ({ perioderMedGradAvTilsynsbehov }: ListOfTilsynStatusPanelProps) => {
+    const sortertePerioder = sortByPeriodFom(perioderMedGradAvTilsynsbehov);
+    return <Box marginTop={Margin.medium}>{renderPaneler(sortertePerioder)}</Box>;
 };
 
 export default ListOfTilsynStatusPanel;
