@@ -29,7 +29,7 @@ export default ({
         document.getElementById('vurderingAvToOmsorgspersoner').scrollIntoView({ behavior: 'smooth' });
     }, []);
 
-    const { watch } = useFormContext();
+    const { watch, setValue } = useFormContext();
 
     const tilsynsbehov = watch(SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN);
     const delvisBehovForToOmsorgspersoner = watch(SykdomFormValue.BEHOV_FOR_TO_OMSORGSPERSONER) === Tilsynsbehov.DELER;
@@ -99,6 +99,16 @@ export default ({
                         { label: 'Nei', value: 'nei' },
                     ]}
                     validators={{ required }}
+                    onChange={(tilsynsbehov: Tilsynsbehov) => {
+                        let perioderValue = [{ fom: '', tom: '' }];
+                        if (tilsynsbehov === Tilsynsbehov.HELE) {
+                            perioderValue = getPeriodDifference(sykdom.periodeTilVurdering, innleggelsesperioder);
+                        }
+                        if (tilsynsbehov === Tilsynsbehov.INGEN) {
+                            perioderValue = [];
+                        }
+                        setValue(SykdomFormValue.PERIODER_MED_BEHOV_FOR_TO_OMSORGSPERSONER, perioderValue);
+                    }}
                 />
             </Box>
             {delvisBehovForToOmsorgspersoner && (
