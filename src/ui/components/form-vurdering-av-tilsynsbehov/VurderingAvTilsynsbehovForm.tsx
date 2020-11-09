@@ -5,16 +5,13 @@ import { Period } from '../../../types/Period';
 import { SykdomFormValue } from '../../../types/SykdomFormState';
 import Tilsynsbehov from '../../../types/Tilsynsbehov';
 import { convertToInternationalPeriod } from '../../../util/formats';
-import {
-    isDatoInnenforSøknadsperiode,
-    isDatoUtenforInnleggelsesperiodene,
-    required,
-} from '../../form/validators';
+import { isDatoInnenforSøknadsperiode, isDatoUtenforInnleggelsesperiodene, required } from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import TextArea from '../../form/wrappers/TextArea';
 import Box, { Margin } from '../box/Box';
 import PeriodList, { PeriodListTheme } from '../period-list/PeriodList';
+import { getPeriodDifference } from '../../../util/dateUtils';
 
 interface VurderingAvTilsynsbehovFormProps {
     sykdom: Sykdom;
@@ -22,12 +19,8 @@ interface VurderingAvTilsynsbehovFormProps {
     perioderUtenInnleggelser: Period[];
 }
 
-export default ({
-    sykdom,
-    innleggelsesperioder,
-    perioderUtenInnleggelser,
-}: VurderingAvTilsynsbehovFormProps) => {
-    const { watch } = useFormContext();
+export default ({ sykdom, innleggelsesperioder, perioderUtenInnleggelser }: VurderingAvTilsynsbehovFormProps) => {
+    const { watch, setValue } = useFormContext();
 
     const delvisBehovForKontinuerligTilsyn =
         watch(SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN) === Tilsynsbehov.DELER;
@@ -64,8 +57,8 @@ export default ({
                     hvilke det ikke er behov."
                     label={
                         <b>
-                            Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie
-                            som følge av sykdommen.
+                            Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge av
+                            sykdommen.
                         </b>
                     }
                     validators={{ required }}
@@ -81,6 +74,16 @@ export default ({
                         { label: 'Nei', value: Tilsynsbehov.INGEN },
                     ]}
                     validators={{ required }}
+                    onChange={(tilsynsbehov: Tilsynsbehov) => {
+                        let perioderValue = [{ fom: '', tom: '' }];
+                        if (tilsynsbehov === Tilsynsbehov.HELE) {
+                            perioderValue = getPeriodDifference(sykdom.periodeTilVurdering, innleggelsesperioder);
+                        }
+                        if (tilsynsbehov === Tilsynsbehov.INGEN) {
+                            perioderValue = [];
+                        }
+                        setValue(SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE, perioderValue);
+                    }}
                 />
             </Box>
             {delvisBehovForKontinuerligTilsyn && (
@@ -95,22 +98,14 @@ export default ({
                                 limitations: {
                                     minDate: sykdom.periodeTilVurdering.fom,
                                     maxDate: sykdom.periodeTilVurdering.tom,
-                                    invalidDateRanges: innleggelsesperioder.map(
-                                        convertToInternationalPeriod
-                                    ),
+                                    invalidDateRanges: innleggelsesperioder.map(convertToInternationalPeriod),
                                 },
                                 validators: {
                                     required,
                                     datoInnenforSøknadsperiode: (value) =>
-                                        isDatoInnenforSøknadsperiode(
-                                            value,
-                                            sykdom?.periodeTilVurdering
-                                        ),
+                                        isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
                                     datoUtenforInnleggelsesperiodene: (value) =>
-                                        isDatoUtenforInnleggelsesperiodene(
-                                            value,
-                                            innleggelsesperioder
-                                        ),
+                                        isDatoUtenforInnleggelsesperiodene(value, innleggelsesperioder),
                                 },
                             },
                             toDatepickerProps: {
@@ -119,22 +114,14 @@ export default ({
                                 limitations: {
                                     minDate: sykdom.periodeTilVurdering.fom,
                                     maxDate: sykdom.periodeTilVurdering.tom,
-                                    invalidDateRanges: innleggelsesperioder.map(
-                                        convertToInternationalPeriod
-                                    ),
+                                    invalidDateRanges: innleggelsesperioder.map(convertToInternationalPeriod),
                                 },
                                 validators: {
                                     required,
                                     datoInnenforSøknadsperiode: (value) =>
-                                        isDatoInnenforSøknadsperiode(
-                                            value,
-                                            sykdom?.periodeTilVurdering
-                                        ),
+                                        isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
                                     datoUtenforInnleggelsesperiodene: (value) =>
-                                        isDatoUtenforInnleggelsesperiodene(
-                                            value,
-                                            innleggelsesperioder
-                                        ),
+                                        isDatoUtenforInnleggelsesperiodene(value, innleggelsesperioder),
                                 },
                             },
                         }}

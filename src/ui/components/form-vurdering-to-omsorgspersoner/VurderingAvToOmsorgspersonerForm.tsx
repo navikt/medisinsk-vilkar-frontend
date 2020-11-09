@@ -4,19 +4,15 @@ import { useFormContext } from 'react-hook-form';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { Period } from '../../../types/Period';
 import { SykdomFormValue } from '../../../types/SykdomFormState';
-import Tilsynsbehov from '../../../types/Tilsynsbehov';
-import { intersectPeriods } from '../../../util/dateUtils';
+import { getPeriodDifference } from '../../../util/dateUtils';
 import { convertToInternationalPeriod } from '../../../util/formats';
-import {
-    isDatoUtenforPeriodeUtenTilsynsbehov,
-    isDatoInnenforSøknadsperiode,
-    required,
-} from '../../form/validators';
+import { isDatoUtenforPeriodeUtenTilsynsbehov, isDatoInnenforSøknadsperiode, required } from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import TextArea from '../../form/wrappers/TextArea';
 import Box, { Margin } from '../box/Box';
 import PeriodList, { PeriodListTheme } from '../period-list/PeriodList';
+import Tilsynsbehov from '../../../types/Tilsynsbehov';
 
 interface VurderingAvToOmsorgspersonerFormProps {
     sykdom: Sykdom;
@@ -30,30 +26,22 @@ export default ({
     perioderUtenInnleggelser,
 }: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
     useEffect(() => {
-        document
-            .getElementById('vurderingAvToOmsorgspersoner')
-            .scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('vurderingAvToOmsorgspersoner').scrollIntoView({ behavior: 'smooth' });
     }, []);
 
-    const { watch } = useFormContext();
+    const { watch, setValue } = useFormContext();
 
     const tilsynsbehov = watch(SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN);
-    const delvisBehovForToOmsorgspersoner =
-        watch(SykdomFormValue.BEHOV_FOR_TO_OMSORGSPERSONER) === Tilsynsbehov.DELER;
+    const delvisBehovForToOmsorgspersoner = watch(SykdomFormValue.BEHOV_FOR_TO_OMSORGSPERSONER) === Tilsynsbehov.DELER;
 
     let perioderMedTilsynsbehov = [];
     if (tilsynsbehov === Tilsynsbehov.HELE) {
         perioderMedTilsynsbehov = perioderUtenInnleggelser;
     } else if (tilsynsbehov === Tilsynsbehov.DELER) {
-        perioderMedTilsynsbehov = watch(
-            SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE
-        );
+        perioderMedTilsynsbehov = watch(SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE);
     }
 
-    const perioderUtenTilsynsbehov = intersectPeriods(
-        sykdom.periodeTilVurdering,
-        perioderMedTilsynsbehov
-    );
+    const perioderUtenTilsynsbehov = getPeriodDifference(sykdom.periodeTilVurdering, perioderMedTilsynsbehov);
 
     return (
         <div id="vurderingAvToOmsorgspersoner">
@@ -88,8 +76,8 @@ export default ({
                     helptext="Dersom det er behov for to omsorgsperoner deler av perioden,  må det komme tydelig frem av vurderingen hvilke perioder det er behov og hvilke det ikke er behov."
                     label={
                         <b>
-                            Gjør en vurdering av om det er behov for to omsorgspersoner i perioden
-                            hvor det er behov for kontinerlig tilsyn og pleie.
+                            Gjør en vurdering av om det er behov for to omsorgspersoner i perioden hvor det er behov for
+                            kontinerlig tilsyn og pleie.
                         </b>
                     }
                     validators={{ required }}
@@ -111,6 +99,16 @@ export default ({
                         { label: 'Nei', value: 'nei' },
                     ]}
                     validators={{ required }}
+                    onChange={(tilsynsbehov: Tilsynsbehov) => {
+                        let perioderValue = [{ fom: '', tom: '' }];
+                        if (tilsynsbehov === Tilsynsbehov.HELE) {
+                            perioderValue = getPeriodDifference(sykdom.periodeTilVurdering, innleggelsesperioder);
+                        }
+                        if (tilsynsbehov === Tilsynsbehov.INGEN) {
+                            perioderValue = [];
+                        }
+                        setValue(SykdomFormValue.PERIODER_MED_BEHOV_FOR_TO_OMSORGSPERSONER, perioderValue);
+                    }}
                 />
             </Box>
             {delvisBehovForToOmsorgspersoner && (
@@ -125,22 +123,14 @@ export default ({
                                 limitations: {
                                     minDate: sykdom.periodeTilVurdering.fom,
                                     maxDate: sykdom.periodeTilVurdering.tom,
-                                    invalidDateRanges: perioderUtenTilsynsbehov.map(
-                                        convertToInternationalPeriod
-                                    ),
+                                    invalidDateRanges: perioderUtenTilsynsbehov.map(convertToInternationalPeriod),
                                 },
                                 validators: {
                                     required,
                                     datoInnenforSøknadsperiode: (value) =>
-                                        isDatoInnenforSøknadsperiode(
-                                            value,
-                                            sykdom?.periodeTilVurdering
-                                        ),
+                                        isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
                                     datoUtenforUgyldigeDatoer: (value) =>
-                                        isDatoUtenforPeriodeUtenTilsynsbehov(
-                                            value,
-                                            perioderUtenTilsynsbehov
-                                        ),
+                                        isDatoUtenforPeriodeUtenTilsynsbehov(value, perioderUtenTilsynsbehov),
                                 },
                             },
                             toDatepickerProps: {
@@ -149,22 +139,14 @@ export default ({
                                 limitations: {
                                     minDate: sykdom.periodeTilVurdering.fom,
                                     maxDate: sykdom.periodeTilVurdering.tom,
-                                    invalidDateRanges: perioderUtenTilsynsbehov.map(
-                                        convertToInternationalPeriod
-                                    ),
+                                    invalidDateRanges: perioderUtenTilsynsbehov.map(convertToInternationalPeriod),
                                 },
                                 validators: {
                                     required,
                                     datoInnenforSøknadsperiode: (value) =>
-                                        isDatoInnenforSøknadsperiode(
-                                            value,
-                                            sykdom?.periodeTilVurdering
-                                        ),
+                                        isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
                                     datoUtenforUgyldigeDatoer: (value) =>
-                                        isDatoUtenforPeriodeUtenTilsynsbehov(
-                                            value,
-                                            perioderUtenTilsynsbehov
-                                        ),
+                                        isDatoUtenforPeriodeUtenTilsynsbehov(value, perioderUtenTilsynsbehov),
                                 },
                             },
                         }}

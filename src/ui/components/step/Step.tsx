@@ -5,18 +5,21 @@ import styles from './step.less';
 
 interface StepProps {
     children: React.ReactNode;
-    onSubmit: () => void;
     buttonLabel: string;
+    onSubmit: () => void;
+    shouldShowSubmitButton?: boolean;
 }
 
-const Step = ({ children, onSubmit, buttonLabel }: StepProps): JSX.Element => {
+const Step = ({ children, onSubmit, buttonLabel, shouldShowSubmitButton }: StepProps): JSX.Element => {
     return (
         <div className={styles.stepContainer}>
             <form onSubmit={onSubmit}>
                 {children}
-                <Box marginTop={Margin.xLarge}>
-                    <Hovedknapp>{buttonLabel}</Hovedknapp>
-                </Box>
+                {shouldShowSubmitButton !== false && (
+                    <Box marginTop={Margin.xLarge}>
+                        <Hovedknapp>{buttonLabel}</Hovedknapp>
+                    </Box>
+                )}
             </form>
         </div>
     );

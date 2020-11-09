@@ -12,10 +12,12 @@ interface RadioGroupPanelProps {
     name: string;
     radios: RadioProps[];
     validators?: { [key: string]: (v: any) => string | boolean | undefined };
+    onChange?: (value) => void;
 }
 
-const RadioGroupPanel = ({ question, name, validators, radios }: RadioGroupPanelProps) => {
+const RadioGroupPanel = ({ question, name, validators, radios, onChange }: RadioGroupPanelProps) => {
     const { control, errors } = useFormContext();
+    const customOnChange = onChange;
     return (
         <Controller
             control={control}
@@ -26,18 +28,24 @@ const RadioGroupPanel = ({ question, name, validators, radios }: RadioGroupPanel
                     ...validators,
                 },
             }}
-            render={({ onChange, value }) => (
-                <RadioPanelGroup
-                    legend={question}
-                    name={name}
-                    onChange={(event, newValue) => {
-                        onChange(newValue);
-                    }}
-                    radios={radios}
-                    checked={value}
-                    feil={errors[name]?.message}
-                />
-            )}
+            render={(props) => {
+                const reactHookFormOnChange = props.onChange;
+                return (
+                    <RadioPanelGroup
+                        legend={question}
+                        name={name}
+                        onChange={(event, newValue) => {
+                            if (customOnChange) {
+                                customOnChange(newValue);
+                            }
+                            reactHookFormOnChange(newValue);
+                        }}
+                        radios={radios}
+                        checked={props.value}
+                        feil={errors[name]?.message}
+                    />
+                );
+            }}
         />
     );
 };

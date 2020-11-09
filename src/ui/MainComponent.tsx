@@ -25,9 +25,7 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
             [SykdomFormValue.INNLEGGELSESPERIODER]: [{ fom: '', tom: '' }],
             [SykdomFormValue.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
             [SykdomFormValue.VURDERING_TO_OMSORGSPERSONER]: '',
-            [SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: [
-                { fom: '', tom: '' },
-            ],
+            [SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: [{ fom: '', tom: '' }],
             [SykdomFormValue.PERIODER_MED_BEHOV_FOR_TO_OMSORGSPERSONER]: [{ fom: '', tom: '' }],
         },
         shouldUnregister: false,
@@ -44,9 +42,7 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
                         <CalendarIcon />
                         <p className={styles.main__søknadperiodeInfo}>
                             {`Søknadsperiode: `}
-                            <Element tag="span">
-                                {prettifyPeriod(sykdom.periodeTilVurdering)}
-                            </Element>
+                            <Element tag="span">{prettifyPeriod(sykdom.periodeTilVurdering)}</Element>
                         </p>
                     </div>
                 </Box>
@@ -60,9 +56,7 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
                     onChange={(e, clickedIndex) => setActiveTab(clickedIndex)}
                 />
                 <FormProvider {...formMethods}>
-                    {activeTab === 0 && (
-                        <LegeerklæringForm sykdom={sykdom} onSubmit={() => setActiveTab(1)} />
-                    )}
+                    {activeTab === 0 && <LegeerklæringForm sykdom={sykdom} onSubmit={() => setActiveTab(1)} />}
                     {activeTab === 1 && <Vilkårsvurdering sykdom={sykdom} />}
                 </FormProvider>
             </Box>

@@ -10,6 +10,7 @@ export enum SykdomFormValue {
     BEHOV_FOR_KONTINUERLIG_TILSYN = 'behovForKontinuerligTilsyn',
     BEHOV_FOR_TO_OMSORGSPERSONER = 'behovForToOmsorgspersoner',
     PERIODER_MED_BEHOV_FOR_TO_OMSORGSPERSONER = 'perioderMedBehovForToOmsorgspersoner',
+    SIGNERT_AV = 'signertAv',
 }
 
 interface SykdomFormState {
@@ -21,6 +22,7 @@ interface SykdomFormState {
     [SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN]: Tilsynsbehov;
     [SykdomFormValue.BEHOV_FOR_TO_OMSORGSPERSONER]: Tilsynsbehov;
     [SykdomFormValue.PERIODER_MED_BEHOV_FOR_TO_OMSORGSPERSONER]: Period[];
+    [SykdomFormValue.SIGNERT_AV]: 'fastlege' | 'annenYrkesgruppe';
 }
 
 export default SykdomFormState;

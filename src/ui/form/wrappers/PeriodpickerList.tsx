@@ -62,11 +62,7 @@ const PeriodpickerList = ({
                 </Box>
             ))}
             <Box marginTop={Margin.large}>
-                <AddButton
-                    onClick={() =>
-                        append({ [fromDatepickerProps.name]: '', [toDatepickerProps.name]: '' })
-                    }
-                />
+                <AddButton onClick={() => append({ [fromDatepickerProps.name]: '', [toDatepickerProps.name]: '' })} />
             </Box>
         </SkjemaGruppe>
     );
