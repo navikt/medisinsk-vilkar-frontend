@@ -8,13 +8,14 @@ import { getPeriodDifference } from '../../../util/dateUtils';
 import Step from '../step/Step';
 import SykdomFormState, { SykdomFormValue } from '../../../types/SykdomFormState';
 import Tilsynsbehov from '../../../types/Tilsynsbehov';
-import { harTilsynsbehov } from '../../../util/domain';
+import { erHeltEllerDelvisOppfylt } from '../../../util/domain';
 import { Period } from '../../../types/Period';
 import PeriodeMedGradAvTilsynsbehov from '../../../types/PeriodeMedGradAvTilsynsbehov';
 import GradAvTilsynsbehov from '../../../types/GradAvTilsynsbehov';
 import {
     lagPeriodeMedBehovForEnTilsynsperson,
     lagPeriodeMedBehovForToTilsynspersoner,
+    lagPeriodeMedIngenTilsynsbehov,
     lagPeriodeMedInnleggelse,
 } from '../../../util/periodeMedTilsynsbehov';
 
@@ -23,18 +24,81 @@ interface VilkårsvurderingFormProps {
     onSubmit: (d) => void;
 }
 
-const sammenstillPerioderMedTilsynsbehov = (
+const settGradAvTilsynsbehov = (perioder: Period[], gradAvTilsynsbehov: GradAvTilsynsbehov) => {
+    if (gradAvTilsynsbehov === GradAvTilsynsbehov.BEHOV_FOR_EN) {
+        return perioder.map(lagPeriodeMedBehovForEnTilsynsperson);
+    }
+    if (gradAvTilsynsbehov === GradAvTilsynsbehov.BEHOV_FOR_TO) {
+        return perioder.map(lagPeriodeMedBehovForToTilsynspersoner);
+    }
+    if (gradAvTilsynsbehov === GradAvTilsynsbehov.INNLAGT) {
+        return perioder.map(lagPeriodeMedInnleggelse);
+    }
+    if (gradAvTilsynsbehov === GradAvTilsynsbehov.IKKE_BEHOV) {
+        return perioder.map(lagPeriodeMedIngenTilsynsbehov);
+    }
+};
+
+const finnPerioderMedBehovForEnPerson = (
+    tilsynsbehov: Tilsynsbehov,
+    perioderUtenInnleggelse: Period[],
+    oppgittePerioder: Period[]
+) => {
+    if (tilsynsbehov === Tilsynsbehov.HELE) {
+        return settGradAvTilsynsbehov(perioderUtenInnleggelse, GradAvTilsynsbehov.BEHOV_FOR_EN);
+    } else if (tilsynsbehov === Tilsynsbehov.DELER) {
+        return settGradAvTilsynsbehov(oppgittePerioder, GradAvTilsynsbehov.BEHOV_FOR_EN);
+    }
+};
+
+const sammenstillPerioderMedBehovForEnEllerTo = (
+    behovForTo: Tilsynsbehov,
     perioderMedTilsynsbehov: Period[],
     perioderMedBehovForTo: Period[]
 ): PeriodeMedGradAvTilsynsbehov[] => {
-    const perioderMedBehovForEn = [];
-    perioderMedTilsynsbehov.forEach((periodeMedTilsynsbehov) => {
-        perioderMedBehovForEn.push(...getPeriodDifference(periodeMedTilsynsbehov, perioderMedBehovForTo));
-    });
-    return [
-        ...perioderMedBehovForEn.map((periode) => ({ periode, grad: GradAvTilsynsbehov.BEHOV_FOR_EN })),
-        ...perioderMedBehovForTo.map((periode) => ({ periode, grad: GradAvTilsynsbehov.BEHOV_FOR_TO })),
-    ];
+    if (behovForTo === Tilsynsbehov.HELE) {
+        settGradAvTilsynsbehov(perioderMedTilsynsbehov, GradAvTilsynsbehov.BEHOV_FOR_TO);
+    } else if (behovForTo === Tilsynsbehov.DELER) {
+        const perioderMedBehovForEn = [];
+        perioderMedTilsynsbehov.forEach((periodeMedTilsynsbehov) => {
+            perioderMedBehovForEn.push(...getPeriodDifference(periodeMedTilsynsbehov, perioderMedBehovForTo));
+        });
+        return [
+            ...settGradAvTilsynsbehov(perioderMedBehovForEn, GradAvTilsynsbehov.BEHOV_FOR_EN),
+            ...settGradAvTilsynsbehov(perioderMedBehovForTo, GradAvTilsynsbehov.BEHOV_FOR_TO),
+        ];
+    }
+};
+
+const sammenstillOppgittePerioderMedTilsynsbehov = (periodeTilVurdering: Period, formValues: SykdomFormState) => {
+    const innleggelsesperioder = formValues[SykdomFormValue.INNLEGGELSESPERIODER];
+    const perioderUtenomInnleggelsesperioder = getPeriodDifference(periodeTilVurdering, innleggelsesperioder);
+
+    const genereltTilsynsbehov = formValues[SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN];
+    const perioderMedGenereltTilsynsbehov =
+        formValues[SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE];
+
+    const behovForTo = formValues[SykdomFormValue.BEHOV_FOR_TO_OMSORGSPERSONER];
+    const perioderMedBehovForTo = formValues[SykdomFormValue.PERIODER_MED_BEHOV_FOR_TO_OMSORGSPERSONER];
+
+    let allePerioderMedTilsynsbehov = [];
+    if (erHeltEllerDelvisOppfylt(genereltTilsynsbehov)) {
+        allePerioderMedTilsynsbehov = finnPerioderMedBehovForEnPerson(
+            genereltTilsynsbehov,
+            perioderUtenomInnleggelsesperioder,
+            perioderMedGenereltTilsynsbehov
+        );
+    }
+
+    if (erHeltEllerDelvisOppfylt(behovForTo)) {
+        allePerioderMedTilsynsbehov = sammenstillPerioderMedBehovForEnEllerTo(
+            behovForTo,
+            perioderMedGenereltTilsynsbehov,
+            perioderMedBehovForTo
+        );
+    }
+
+    return allePerioderMedTilsynsbehov;
 };
 
 const VilkårsvurderingForm = ({ sykdom, onSubmit }: VilkårsvurderingFormProps): JSX.Element => {
@@ -44,34 +108,16 @@ const VilkårsvurderingForm = ({ sykdom, onSubmit }: VilkårsvurderingFormProps)
     const innleggelsesperioder = watch(SykdomFormValue.INNLEGGELSESPERIODER);
     const perioderUtenInnleggelse = getPeriodDifference(sykdom.periodeTilVurdering, innleggelsesperioder);
 
-    const submitHandler = (data: SykdomFormState) => {
-        const tilsynsbehov = data[SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN];
-
-        let perioderMedTilsynsbehov: PeriodeMedGradAvTilsynsbehov[] = [];
-        if (tilsynsbehov === Tilsynsbehov.HELE) {
-            perioderMedTilsynsbehov = perioderUtenInnleggelse.map(lagPeriodeMedBehovForEnTilsynsperson);
-        } else if (tilsynsbehov === Tilsynsbehov.DELER) {
-            const oppgittePerioder = data[SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE];
-            perioderMedTilsynsbehov = oppgittePerioder.map(lagPeriodeMedBehovForEnTilsynsperson);
-        }
-
-        if (harTilsynsbehov(tilsynsbehov)) {
-            const tilsynsbehovToPersoner = data[SykdomFormValue.BEHOV_FOR_TO_OMSORGSPERSONER];
-            const perioder = perioderMedTilsynsbehov.map(({ periode }) => periode);
-            if (tilsynsbehovToPersoner === Tilsynsbehov.HELE) {
-                perioderMedTilsynsbehov = perioder.map(lagPeriodeMedBehovForToTilsynspersoner);
-            } else if (tilsynsbehovToPersoner === Tilsynsbehov.DELER) {
-                const perioderMedBehovForTo = data[SykdomFormValue.PERIODER_MED_BEHOV_FOR_TO_OMSORGSPERSONER];
-                perioderMedTilsynsbehov = sammenstillPerioderMedTilsynsbehov(perioder, perioderMedBehovForTo);
-            }
-        }
-
+    const submitHandler = (formValues: SykdomFormState) => {
+        const oppgittePerioderMedTilsynsbehov = [
+            ...sammenstillOppgittePerioderMedTilsynsbehov(sykdom.periodeTilVurdering, formValues),
+        ];
+        const oppgitteInnleggelsesperioder = [
+            ...settGradAvTilsynsbehov(innleggelsesperioder, GradAvTilsynsbehov.INNLAGT),
+        ];
         onSubmit({
-            ...data,
-            perioderMedTilsynsbehov: [
-                ...perioderMedTilsynsbehov,
-                ...innleggelsesperioder.map(lagPeriodeMedInnleggelse),
-            ],
+            ...formValues,
+            perioderMedTilsynsbehov: [...oppgittePerioderMedTilsynsbehov, ...oppgitteInnleggelsesperioder],
         });
     };
 
@@ -84,7 +130,7 @@ const VilkårsvurderingForm = ({ sykdom, onSubmit }: VilkårsvurderingFormProps)
                 innleggelsesperioder={innleggelsesperioder}
                 perioderUtenInnleggelser={perioderUtenInnleggelse}
             />
-            {harTilsynsbehov(tilsynsbehov) && (
+            {erHeltEllerDelvisOppfylt(tilsynsbehov) && (
                 <VurderingAvToOmsorgspersonerForm
                     sykdom={sykdom}
                     innleggelsesperioder={innleggelsesperioder}
