@@ -36,7 +36,7 @@ const LegeerklæringForm = ({ sykdom, onSubmit }: LegeerklæringFormProps): JSX.
                 shouldShowSubmitButton={harDokumentasjon === true}
             >
                 <YesOrNoQuestion
-                    question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i speisalisthelsetjenesten?"
+                    question="Finnes det dokumentasjon som er signert av en sykehuslege eller en lege i spesialisthelsetjenesten?"
                     name={SykdomFormValue.HAR_DOKUMENTASJON}
                     validators={{ required }}
                 />

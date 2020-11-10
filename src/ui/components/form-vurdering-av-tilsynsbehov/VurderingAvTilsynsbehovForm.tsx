@@ -34,17 +34,19 @@ export default ({ sykdom, innleggelsesperioder, perioderUtenInnleggelser }: Vurd
                     theme={PeriodListTheme.CALENDAR}
                 />
             </Box>
-            <Box marginTop={Margin.large}>
-                <PeriodList
-                    periods={innleggelsesperioder || []}
-                    title="Tilsyn og pleie innvilget automatisk pga. innleggelse:"
-                    theme={PeriodListTheme.SUCCESS}
-                />
-            </Box>
+            {innleggelsesperioder?.length > 0 && (
+                <Box marginTop={Margin.large}>
+                    <PeriodList
+                        periods={innleggelsesperioder}
+                        title="Tilsyn og pleie innvilget automatisk pga. innleggelse:"
+                        theme={PeriodListTheme.SUCCESS}
+                    />
+                </Box>
+            )}
             <Box marginTop={Margin.large}>
                 <PeriodList
                     periods={perioderUtenInnleggelser}
-                    title="Vurder behov for tilsyn og pleie i perioden hvor barnet ikke er innlagt:"
+                    title="Vurder behov for tilsyn og pleie i følgende perioder:"
                     theme={PeriodListTheme.WARNING}
                 />
             </Box>

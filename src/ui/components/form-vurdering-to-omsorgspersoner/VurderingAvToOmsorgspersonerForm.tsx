@@ -25,10 +25,6 @@ export default ({
     innleggelsesperioder,
     perioderUtenInnleggelser,
 }: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
-    useEffect(() => {
-        document.getElementById('vurderingAvToOmsorgspersoner').scrollIntoView({ behavior: 'smooth' });
-    }, []);
-
     const { watch, setValue } = useFormContext();
 
     const tilsynsbehov = watch(SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN);
@@ -44,7 +40,7 @@ export default ({
     const perioderUtenTilsynsbehov = getPeriodDifference(sykdom.periodeTilVurdering, perioderMedTilsynsbehov);
 
     return (
-        <div id="vurderingAvToOmsorgspersoner">
+        <div>
             <Box marginTop={Margin.large}>
                 <Systemtittel>Vurdering av to omsorgspersoner</Systemtittel>
                 <hr />
@@ -56,13 +52,15 @@ export default ({
                     theme={PeriodListTheme.CALENDAR}
                 />
             </Box>
-            <Box marginTop={Margin.large}>
-                <PeriodList
-                    periods={innleggelsesperioder || []}
-                    title="Rett til to omsorgspersoner pga innleggelse:"
-                    theme={PeriodListTheme.SUCCESS}
-                />
-            </Box>
+            {innleggelsesperioder?.length > 0 && (
+                <Box marginTop={Margin.large}>
+                    <PeriodList
+                        periods={innleggelsesperioder}
+                        title="Rett til to omsorgspersoner pga innleggelse:"
+                        theme={PeriodListTheme.SUCCESS}
+                    />
+                </Box>
+            )}
             <Box marginTop={Margin.large}>
                 <PeriodList
                     periods={perioderMedTilsynsbehov}
