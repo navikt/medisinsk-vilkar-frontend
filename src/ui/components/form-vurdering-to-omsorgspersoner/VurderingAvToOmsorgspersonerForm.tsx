@@ -70,7 +70,7 @@ export default ({
                     theme={PeriodListTheme.WARNING}
                 />
             </Box>
-            <Box marginTop={Margin.large} maxWidth="700px">
+            <Box marginTop={Margin.large}>
                 <TextArea
                     name={SykdomFormValue.VURDERING_TO_OMSORGSPERSONER}
                     helptext="Dersom det er behov for to omsorgsperoner deler av perioden,  må det komme tydelig frem av vurderingen hvilke perioder det er behov og hvilke det ikke er behov."

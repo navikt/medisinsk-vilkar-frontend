@@ -43,32 +43,36 @@ const PeriodpickerList = ({
     });
 
     return (
-        <SkjemaGruppe legend={legend}>
-            {fields.map((item, index) => (
-                <Box key={item.id} marginTop={index > 0 ? Margin.medium : undefined}>
-                    <div className={styles.flexContainer}>
-                        <Periodpicker
-                            fromDatepickerProps={{
-                                ...fromDatepickerProps,
-                                defaultValue: item.fom,
-                                name: `${name}[${index}].${fromDatepickerProps.name}`,
-                                error: errors[name]?.[index]?.[fromDatepickerProps.name]?.message,
-                            }}
-                            toDatepickerProps={{
-                                ...toDatepickerProps,
-                                defaultValue: item.tom,
-                                name: `${name}[${index}].${toDatepickerProps.name}`,
-                                error: errors[name]?.[index]?.[toDatepickerProps.name]?.message,
-                            }}
-                        />
-                        {fields.length > 1 && <DeleteButton onClick={() => remove(index)} />}
-                    </div>
+        <div className={styles.periodPickerList}>
+            <SkjemaGruppe legend={legend}>
+                {fields.map((item, index) => (
+                    <Box key={item.id} marginTop={index > 0 ? Margin.medium : undefined}>
+                        <div className={styles.flexContainer}>
+                            <Periodpicker
+                                fromDatepickerProps={{
+                                    ...fromDatepickerProps,
+                                    defaultValue: item.fom,
+                                    name: `${name}[${index}].${fromDatepickerProps.name}`,
+                                    error: errors[name]?.[index]?.[fromDatepickerProps.name]?.message,
+                                }}
+                                toDatepickerProps={{
+                                    ...toDatepickerProps,
+                                    defaultValue: item.tom,
+                                    name: `${name}[${index}].${toDatepickerProps.name}`,
+                                    error: errors[name]?.[index]?.[toDatepickerProps.name]?.message,
+                                }}
+                            />
+                            {fields.length > 1 && <DeleteButton onClick={() => remove(index)} />}
+                        </div>
+                    </Box>
+                ))}
+                <Box marginTop={Margin.large}>
+                    <AddButton
+                        onClick={() => append({ [fromDatepickerProps.name]: '', [toDatepickerProps.name]: '' })}
+                    />
                 </Box>
-            ))}
-            <Box marginTop={Margin.large}>
-                <AddButton onClick={() => append({ [fromDatepickerProps.name]: '', [toDatepickerProps.name]: '' })} />
-            </Box>
-        </SkjemaGruppe>
+            </SkjemaGruppe>
+        </div>
     );
 };
 

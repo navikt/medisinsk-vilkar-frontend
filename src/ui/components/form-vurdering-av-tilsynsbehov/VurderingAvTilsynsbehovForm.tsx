@@ -49,7 +49,7 @@ export default ({ sykdom, innleggelsesperioder, perioderUtenInnleggelser }: Vurd
                 />
             </Box>
 
-            <Box marginTop={Margin.large} maxWidth="700px">
+            <Box marginTop={Margin.large}>
                 <TextArea
                     name={SykdomFormValue.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE}
                     helptext="Dersom det er behov for tilsyn og pleie kun i deler av perioden må

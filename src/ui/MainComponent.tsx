@@ -47,7 +47,7 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
                     </div>
                 </Box>
             )}
-            <Box marginTop={Margin.large} maxWidth="60%">
+            <Box marginTop={Margin.large}>
                 <TabsPure
                     tabs={tabs.map((tab, index) => ({
                         aktiv: activeTab === index,
