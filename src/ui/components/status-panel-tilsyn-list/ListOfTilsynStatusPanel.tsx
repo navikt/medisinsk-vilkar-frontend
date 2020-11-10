@@ -25,7 +25,7 @@ function renderPaneler(perioderMedGradAvTilsynsbehov: PeriodeMedGradAvTilsynsbeh
     return perioderMedGradAvTilsynsbehov.map(({ periode, grad }, index) => {
         const statusEl = <TilsynStatusPanel periode={periode} grad={grad} />;
         if (index > 0) {
-            return <Box marginTop={Margin.large}>{statusEl}</Box>;
+            return <Box marginTop={Margin.medium}>{statusEl}</Box>;
         }
         return statusEl;
     });
