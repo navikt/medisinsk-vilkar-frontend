@@ -130,13 +130,13 @@ const VilkårsvurderingForm = ({ sykdom, onSubmit }: VilkårsvurderingFormProps)
                 innleggelsesperioder={innleggelsesperioder}
                 perioderUtenInnleggelser={perioderUtenInnleggelse}
             />
-            {erHeltEllerDelvisOppfylt(tilsynsbehov) && (
+            {/* {erHeltEllerDelvisOppfylt(tilsynsbehov) && (
                 <VurderingAvToOmsorgspersonerForm
                     sykdom={sykdom}
                     innleggelsesperioder={innleggelsesperioder}
                     perioderUtenInnleggelser={perioderUtenInnleggelse}
                 />
-            )}
+            )} */}
         </Step>
     );
 };
