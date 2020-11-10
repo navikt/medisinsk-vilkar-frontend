@@ -1,26 +1,34 @@
-import { Hovedknapp } from 'nav-frontend-knapper';
 import * as React from 'react';
-import Box, { Margin } from '../box/Box';
+import { Systemtittel } from 'nav-frontend-typografi';
 import styles from './step.less';
 
-interface StepProps {
-    children: React.ReactNode;
-    buttonLabel: string;
-    onSubmit: () => void;
-    shouldShowSubmitButton?: boolean;
+interface StepHeaderProps {
+    title: string;
+    contentRenderer?: () => React.ReactNode;
 }
 
-const Step = ({ children, onSubmit, buttonLabel, shouldShowSubmitButton }: StepProps): JSX.Element => {
+interface StepProps {
+    headerProps?: StepHeaderProps;
+    children: React.ReactNode;
+}
+
+const StepHeader = ({ title, contentRenderer }: StepHeaderProps) => {
+    return (
+        <>
+            <div style={{ display: 'flex' }}>
+                <Systemtittel>{title}</Systemtittel>
+                {contentRenderer && <div className={styles.stepHeaderContent}>{contentRenderer()}</div>}
+            </div>
+            <hr className={styles.hr} />
+        </>
+    );
+};
+
+const Step = ({ headerProps, children }: StepProps) => {
     return (
         <div className={styles.stepContainer}>
-            <form onSubmit={onSubmit}>
-                {children}
-                {shouldShowSubmitButton !== false && (
-                    <Box marginTop={Margin.xLarge}>
-                        <Hovedknapp>{buttonLabel}</Hovedknapp>
-                    </Box>
-                )}
-            </form>
+            {headerProps && <StepHeader {...headerProps} />}
+            {children}
         </div>
     );
 };

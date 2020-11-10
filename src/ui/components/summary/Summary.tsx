@@ -1,5 +1,4 @@
 import React from 'react';
-import { Systemtittel } from 'nav-frontend-typografi';
 import ListOfTilsynStatusPanel from '../status-panel-tilsyn-list/ListOfTilsynStatusPanel';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { getPeriodDifference } from '../../../util/dateUtils';
@@ -18,9 +17,7 @@ const Summary = ({ perioderMedTilsynsbehov, sykdom }: SummaryProps) => {
     );
 
     return (
-        <div style={{ padding: '50px 35px' }}>
-            <Systemtittel>Vurdering av tilsyn og pleie</Systemtittel>
-            <hr />
+        <div style={{ marginTop: '2rem' }}>
             <ListOfTilsynStatusPanel
                 perioderMedGradAvTilsynsbehov={[...perioderMedTilsynsbehov, ...perioderUtenTilsynsbehov]}
             />

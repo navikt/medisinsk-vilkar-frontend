@@ -18,6 +18,7 @@ import {
     lagPeriodeMedIngenTilsynsbehov,
     lagPeriodeMedInnleggelse,
 } from '../../../util/periodeMedTilsynsbehov';
+import Form from '../form/Form';
 
 interface VilkårsvurderingFormProps {
     sykdom: Sykdom;
@@ -124,9 +125,7 @@ const VilkårsvurderingForm = ({ sykdom, onSubmit }: VilkårsvurderingFormProps)
     };
 
     return (
-        <Step onSubmit={handleSubmit(submitHandler)} buttonLabel="Bekreft vurdering">
-            <Systemtittel>Vurdering av tilsyn og pleie</Systemtittel>
-            <hr />
+        <Form onSubmit={handleSubmit(submitHandler)} buttonLabel="Bekreft vurdering">
             <VurderingAvTilsynsbehovForm
                 sykdom={sykdom}
                 innleggelsesperioder={innleggelsesperioder}
@@ -139,7 +138,7 @@ const VilkårsvurderingForm = ({ sykdom, onSubmit }: VilkårsvurderingFormProps)
                     perioderUtenInnleggelser={perioderUtenInnleggelse}
                 />
             )}
-        </Step>
+        </Form>
     );
 };
 
