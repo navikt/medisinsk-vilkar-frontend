@@ -53,11 +53,11 @@ const TilsynStatusPanel = ({ periode, grad }: PeriodeMedGradAvTilsynsbehov): JSX
     return (
         <StatusPanel heading={heading} theme={theme}>
             <Box marginTop={Margin.small}>{prettifyPeriod(periode)}</Box>
-            {/* {harTilsynsbehov && (
+            {harTilsynsbehov && (
                 <Box marginTop={Margin.small}>
                     <Tilsynsbeskrivelse status={grad} />
                 </Box>
-            )} */}
+            )}
         </StatusPanel>
     );
 };
