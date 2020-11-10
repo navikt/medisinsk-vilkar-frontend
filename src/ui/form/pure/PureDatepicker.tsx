@@ -20,9 +20,7 @@ const PureDatepicker = ({
     limitations,
     ariaLabel,
 }: DatepickerProps & CustomDatepickerProps): JSX.Element => {
-    const dayPickerProps = limitations.minDate
-        ? { initialMonth: new Date(limitations.minDate) }
-        : undefined;
+    const dayPickerProps = limitations?.minDate ? { initialMonth: new Date(limitations.minDate) } : undefined;
 
     return (
         <>
