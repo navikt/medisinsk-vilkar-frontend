@@ -4,7 +4,7 @@ import { Systemtittel } from 'nav-frontend-typografi';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import VurderingAvToOmsorgspersonerForm from '../form-vurdering-to-omsorgspersoner/VurderingAvToOmsorgspersonerForm';
 import VurderingAvTilsynsbehovForm from '../form-vurdering-av-tilsynsbehov/VurderingAvTilsynsbehovForm';
-import { getPeriodDifference } from '../../../util/dateUtils';
+import { getPeriodDifference, isValidPeriod } from '../../../util/dateUtils';
 import Step from '../step/Step';
 import SykdomFormState, { SykdomFormValue } from '../../../types/SykdomFormState';
 import Tilsynsbehov from '../../../types/Tilsynsbehov';
@@ -105,7 +105,9 @@ const VilkårsvurderingForm = ({ sykdom, onSubmit }: VilkårsvurderingFormProps)
     const { watch, handleSubmit } = useFormContext();
 
     const tilsynsbehov = watch(SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN);
-    const innleggelsesperioder = watch(SykdomFormValue.INNLEGGELSESPERIODER);
+
+    // remove this filter when we have a proper way of putting innleggelsesperioder in form state
+    const innleggelsesperioder = watch(SykdomFormValue.INNLEGGELSESPERIODER).filter(isValidPeriod);
     const perioderUtenInnleggelse = getPeriodDifference(sykdom.periodeTilVurdering, innleggelsesperioder);
 
     const submitHandler = (formValues: SykdomFormState) => {
