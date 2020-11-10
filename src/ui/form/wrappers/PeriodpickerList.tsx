@@ -43,7 +43,7 @@ const PeriodpickerList = ({
     });
 
     return (
-        <div className={styles.periodPickerList}>
+        <div className={styles.periodpickerList}>
             <SkjemaGruppe legend={legend}>
                 {fields.map((item, index) => (
                     <Box key={item.id} marginTop={index > 0 ? Margin.medium : undefined}>
