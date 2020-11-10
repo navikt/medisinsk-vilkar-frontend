@@ -53,8 +53,12 @@ export function getPeriodDifference(basePeriod: Period, periods: Period[]) {
     return getDaySequencesAsListOfPeriods(daysToInclude);
 }
 
+export function isValidDate(date: any) {
+    return !isNaN(new Date(date) as any);
+}
+
 export function isValidPeriod({ fom, tom }: Period) {
-    return !isNaN(new Date(fom) as any) && !isNaN(new Date(tom) as any);
+    return isValidDate(fom) && isValidDate(tom);
 }
 
 export const isDateInPeriod = (date: any, datePeriod: Period): boolean =>

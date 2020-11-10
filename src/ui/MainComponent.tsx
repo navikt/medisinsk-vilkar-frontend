@@ -56,7 +56,14 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
                     onChange={(e, clickedIndex) => setActiveTab(clickedIndex)}
                 />
                 <FormProvider {...formMethods}>
-                    {activeTab === 0 && <LegeerklæringForm sykdom={sykdom} onSubmit={() => setActiveTab(1)} />}
+                    {activeTab === 0 && (
+                        <LegeerklæringForm
+                            sykdom={sykdom}
+                            onSubmit={() => {
+                                setActiveTab(1);
+                            }}
+                        />
+                    )}
                     {activeTab === 1 && <Vilkårsvurdering sykdom={sykdom} />}
                 </FormProvider>
             </Box>

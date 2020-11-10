@@ -14,6 +14,7 @@ import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import Lenke from 'nav-frontend-lenker';
 import styles from './legeerklæringFormStyles.less';
+import { isValidDate } from '../../../util/dateUtils';
 
 interface LegeerklæringFormProps {
     sykdom: Sykdom;
@@ -94,9 +95,11 @@ const LegeerklæringForm = ({ sykdom, onSubmit }: LegeerklæringFormProps): JSX.
                                         maxDate: sykdom.periodeTilVurdering.tom,
                                     },
                                     validators: {
-                                        required,
-                                        datoInnenforSøknadsperiode: (value) =>
-                                            isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
+                                        datoInnenforSøknadsperiode: (value) => {
+                                            if (isValidDate(value)) {
+                                                return isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering);
+                                            }
+                                        },
                                     },
                                 },
                                 toDatepickerProps: {
@@ -107,9 +110,11 @@ const LegeerklæringForm = ({ sykdom, onSubmit }: LegeerklæringFormProps): JSX.
                                         maxDate: sykdom.periodeTilVurdering.tom,
                                     },
                                     validators: {
-                                        required,
-                                        datoInnenforSøknadsperiode: (value) =>
-                                            isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
+                                        datoInnenforSøknadsperiode: (value) => {
+                                            if (isValidDate(value)) {
+                                                return isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering);
+                                            }
+                                        },
                                     },
                                 },
                             }}
