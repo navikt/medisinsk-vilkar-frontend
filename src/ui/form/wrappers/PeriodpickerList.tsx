@@ -3,13 +3,17 @@ import React from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { LegeerklæringFormInput } from '../../../types/medisinsk-vilkår/LegeerklæringFormInput';
 import Box, { Margin } from '../../components/box/Box';
+import PlusIcon from '../../components/icons/PlusIcon';
 import Periodpicker, { PeriodpickerProps } from '../pure/Periodpicker';
 import styles from './periodpickerList.less';
 
 const AddButton = ({ onClick }) => (
-    <button className={styles.buttonAdd} type="button" onClick={onClick}>
-        Legg til flere perioder
-    </button>
+    <div className={styles.buttonAddContainer}>
+        <PlusIcon />
+        <button className={styles.buttonAdd} type="button" onClick={onClick}>
+            Legg til flere perioder
+        </button>
+    </div>
 );
 
 const DeleteButton = ({ onClick }) => (
