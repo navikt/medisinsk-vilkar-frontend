@@ -15,9 +15,11 @@ interface StepProps {
 const StepHeader = ({ title, contentRenderer }: StepHeaderProps) => {
     return (
         <>
-            <div style={{ display: 'flex' }}>
+            <div className={styles.stepContainer__stepHeader}>
                 <Systemtittel>{title}</Systemtittel>
-                {contentRenderer && <div className={styles.stepHeaderContent}>{contentRenderer()}</div>}
+                {contentRenderer && (
+                    <div className={styles.stepContainer__stepHeader__content}>{contentRenderer()}</div>
+                )}
             </div>
             <hr className={styles.hr} />
         </>
