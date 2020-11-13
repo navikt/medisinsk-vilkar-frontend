@@ -1,5 +1,5 @@
-import { DatepickerLimitations } from 'nav-datovelger';
 import React from 'react';
+import { DatepickerLimitations } from 'nav-datovelger';
 import { Controller, useFormContext } from 'react-hook-form';
 import PureDatepicker from '../pure/PureDatepicker';
 

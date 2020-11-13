@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { LegeerklæringFormInput } from '../../../types/medisinsk-vilkår/LegeerklæringFormInput';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { SykdomFormValue } from '../../../types/SykdomFormState';
-import { isDatoInnenforSøknadsperiode, required } from '../../form/validators';
+import { datoenInngårISøknadsperioden, required } from '../../form/validators';
 import DiagnosekodeSelektor from '../../form/wrappers/DiagnosekodeSelector';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
@@ -14,8 +14,8 @@ import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import Lenke from 'nav-frontend-lenker';
 import styles from './legeerklæringFormStyles.less';
-import { isValidDate } from '../../../util/dateUtils';
 import Form from '../form/Form';
+import { Period } from '../../../types/Period';
 
 interface LegeerklæringFormProps {
     sykdom: Sykdom;
@@ -97,14 +97,14 @@ const LegeerklæringForm = ({ sykdom, onSubmit }: LegeerklæringFormProps): JSX.
                                             maxDate: sykdom.periodeTilVurdering.tom,
                                         },
                                         validators: {
-                                            datoInnenforSøknadsperiode: (value) => {
-                                                if (isValidDate(value)) {
-                                                    return isDatoInnenforSøknadsperiode(
-                                                        value,
-                                                        sykdom?.periodeTilVurdering
-                                                    );
-                                                }
-                                            },
+                                            datoenInngårISøknadsperioden: (dato) =>
+                                                datoenInngårISøknadsperioden(
+                                                    dato,
+                                                    new Period(
+                                                        sykdom?.periodeTilVurdering.fom,
+                                                        sykdom?.periodeTilVurdering.tom
+                                                    )
+                                                ),
                                         },
                                     },
                                     toDatepickerProps: {
@@ -115,14 +115,14 @@ const LegeerklæringForm = ({ sykdom, onSubmit }: LegeerklæringFormProps): JSX.
                                             maxDate: sykdom.periodeTilVurdering.tom,
                                         },
                                         validators: {
-                                            datoInnenforSøknadsperiode: (value) => {
-                                                if (isValidDate(value)) {
-                                                    return isDatoInnenforSøknadsperiode(
-                                                        value,
-                                                        sykdom?.periodeTilVurdering
-                                                    );
-                                                }
-                                            },
+                                            datoenInngårISøknadsperioden: (dato) =>
+                                                datoenInngårISøknadsperioden(
+                                                    dato,
+                                                    new Period(
+                                                        sykdom?.periodeTilVurdering.fom,
+                                                        sykdom?.periodeTilVurdering.tom
+                                                    )
+                                                ),
                                         },
                                     },
                                 }}

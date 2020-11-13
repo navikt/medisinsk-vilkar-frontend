@@ -1,12 +1,12 @@
 import {
-    Periode,
     Legeerklæring,
     PeriodeMedTilsynOgPleieResponse,
     PeriodeMedUtvidetTilsynOgPleieResponse,
 } from './MedisinskVilkår';
+import { Period } from '../Period';
 
 type Sykdom = Readonly<{
-    periodeTilVurdering: Periode;
+    periodeTilVurdering: Period;
     legeerklæringer: Legeerklæring[];
     perioderMedKontinuerligTilsynOgPleie: PeriodeMedTilsynOgPleieResponse[];
     perioderMedUtvidetKontinuerligTilsynOgPleie: PeriodeMedUtvidetTilsynOgPleieResponse[];

@@ -6,13 +6,11 @@ const cssExtractLoaderConfig = {
     loader: MiniCssExtractPlugin.loader,
     options: {
         hmr: process.env.NODE_ENV === 'development',
-        publicPath: '',
     },
 };
 
-const CORE_DIR = path.resolve(__dirname, '../node_modules');
-const SRC_DIR = path.resolve(__dirname, '../src');
-const IMAGES_DIR = path.resolve(__dirname, '../src/ui/assets/images');
+const NODE_MODULES_LOCATION = path.resolve(__dirname, '../node_modules');
+const DUMMY__LOCATION = path.resolve(__dirname, '../nav-datovelger-dummy');
 
 module.exports = {
     entry: path.resolve(__dirname, '../', 'src') + '/app.ts',
@@ -27,11 +25,6 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                 },
-                include: [SRC_DIR],
-            },
-            {
-                test: /\.scss$/,
-                use: [cssExtractLoaderConfig, 'css-loader', 'sass-loader'],
             },
             {
                 test: /\.less$/,
@@ -60,7 +53,7 @@ module.exports = {
                         },
                     },
                 ],
-                exclude: [CORE_DIR],
+                exclude: [NODE_MODULES_LOCATION, DUMMY__LOCATION],
             },
             {
                 test: /\.(less|css)?$/,
@@ -81,12 +74,11 @@ module.exports = {
                         },
                     },
                 ],
-                include: [CORE_DIR],
+                include: [NODE_MODULES_LOCATION, DUMMY__LOCATION],
             },
             {
                 test: /\.(jpg|png|svg)$/,
                 loader: 'file-loader',
-                include: [IMAGES_DIR],
             },
         ],
     },

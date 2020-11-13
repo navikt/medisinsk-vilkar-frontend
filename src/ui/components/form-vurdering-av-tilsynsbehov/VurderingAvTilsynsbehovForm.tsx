@@ -5,7 +5,7 @@ import { Period } from '../../../types/Period';
 import { SykdomFormValue } from '../../../types/SykdomFormState';
 import Tilsynsbehov from '../../../types/Tilsynsbehov';
 import { convertToInternationalPeriod } from '../../../util/formats';
-import { isDatoInnenforSøknadsperiode, isDatoUtenforInnleggelsesperiodene, required } from '../../form/validators';
+import { datoenInngårISøknadsperioden, detErIngenInnleggelsePåDato, required } from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import TextArea from '../../form/wrappers/TextArea';
@@ -104,10 +104,10 @@ export default ({ sykdom, innleggelsesperioder, perioderUtenInnleggelser }: Vurd
                                 },
                                 validators: {
                                     required,
-                                    datoInnenforSøknadsperiode: (value) =>
-                                        isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
-                                    datoUtenforInnleggelsesperiodene: (value) =>
-                                        isDatoUtenforInnleggelsesperiodene(value, innleggelsesperioder),
+                                    datoenInngårISøknadsperioden: (value) =>
+                                        datoenInngårISøknadsperioden(value, sykdom?.periodeTilVurdering),
+                                    detErIngenInnleggelsePåDato: (value) =>
+                                        detErIngenInnleggelsePåDato(value, innleggelsesperioder),
                                 },
                             },
                             toDatepickerProps: {
@@ -120,10 +120,10 @@ export default ({ sykdom, innleggelsesperioder, perioderUtenInnleggelser }: Vurd
                                 },
                                 validators: {
                                     required,
-                                    datoInnenforSøknadsperiode: (value) =>
-                                        isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
-                                    datoUtenforInnleggelsesperiodene: (value) =>
-                                        isDatoUtenforInnleggelsesperiodene(value, innleggelsesperioder),
+                                    datoenInngårISøknadsperioden: (value) =>
+                                        datoenInngårISøknadsperioden(value, sykdom?.periodeTilVurdering),
+                                    detErIngenInnleggelsePåDato: (value) =>
+                                        detErIngenInnleggelsePåDato(value, innleggelsesperioder),
                                 },
                             },
                         }}

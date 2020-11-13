@@ -16,7 +16,4 @@ module.exports = merge(commonWebpackConfig, {
         minimize: true,
         minimizer: [new TerserPlugin({ extractComments: false }), new CssMinimizerPlugin()],
     },
-    plugins: [
-        new webpack.IgnorePlugin({ resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/ }),
-    ],
 });

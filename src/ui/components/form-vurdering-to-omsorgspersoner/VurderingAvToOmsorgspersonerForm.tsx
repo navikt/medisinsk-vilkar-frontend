@@ -1,12 +1,12 @@
 import { Systemtittel } from 'nav-frontend-typografi';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { Period } from '../../../types/Period';
 import { SykdomFormValue } from '../../../types/SykdomFormState';
 import { getPeriodDifference } from '../../../util/dateUtils';
 import { convertToInternationalPeriod } from '../../../util/formats';
-import { isDatoUtenforPeriodeUtenTilsynsbehov, isDatoInnenforSøknadsperiode, required } from '../../form/validators';
+import { required, detErTilsynsbehovPåDatoen, datoenInngårISøknadsperioden } from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import TextArea from '../../form/wrappers/TextArea';
@@ -125,10 +125,10 @@ export default ({
                                 },
                                 validators: {
                                     required,
-                                    datoInnenforSøknadsperiode: (value) =>
-                                        isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
-                                    datoUtenforUgyldigeDatoer: (value) =>
-                                        isDatoUtenforPeriodeUtenTilsynsbehov(value, perioderUtenTilsynsbehov),
+                                    datoenInngårISøknadsperioden: (dato) =>
+                                        datoenInngårISøknadsperioden(dato, sykdom?.periodeTilVurdering),
+                                    detErTilsynsbehovPåDatoen: (dato) =>
+                                        detErTilsynsbehovPåDatoen(dato, perioderMedTilsynsbehov),
                                 },
                             },
                             toDatepickerProps: {
@@ -141,10 +141,10 @@ export default ({
                                 },
                                 validators: {
                                     required,
-                                    datoInnenforSøknadsperiode: (value) =>
-                                        isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
-                                    datoUtenforUgyldigeDatoer: (value) =>
-                                        isDatoUtenforPeriodeUtenTilsynsbehov(value, perioderUtenTilsynsbehov),
+                                    datoenInngårISøknadsperioden: (dato) =>
+                                        datoenInngårISøknadsperioden(dato, sykdom?.periodeTilVurdering),
+                                    detErTilsynsbehovPåDatoen: (dato) =>
+                                        detErTilsynsbehovPåDatoen(dato, perioderMedTilsynsbehov),
                                 },
                             },
                         }}

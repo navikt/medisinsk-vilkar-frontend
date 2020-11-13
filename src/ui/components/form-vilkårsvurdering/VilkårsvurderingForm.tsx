@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Systemtittel } from 'nav-frontend-typografi';
 import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import VurderingAvToOmsorgspersonerForm from '../form-vurdering-to-omsorgspersoner/VurderingAvToOmsorgspersonerForm';
 import VurderingAvTilsynsbehovForm from '../form-vurdering-av-tilsynsbehov/VurderingAvTilsynsbehovForm';
 import { getPeriodDifference, isValidPeriod } from '../../../util/dateUtils';
-import Step from '../step/Step';
 import SykdomFormState, { SykdomFormValue } from '../../../types/SykdomFormState';
 import Tilsynsbehov from '../../../types/Tilsynsbehov';
 import { erHeltEllerDelvisOppfylt } from '../../../util/domain';
