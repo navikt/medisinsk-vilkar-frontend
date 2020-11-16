@@ -11,6 +11,8 @@ import LegeerklæringForm from './components/form-legeerklæring/LegeerklæringF
 import CalendarIcon from './components/icons/CalendarIcon';
 import Vilkårsvurdering from './components/vilkårsvurdering/Vilkårsvurdering';
 import styles from './main.less';
+import { Period } from '../types/Period';
+import SøknadsperiodeContext from './context/SøknadsperiodeContext';
 
 const tabs = ['Legeerklæring', 'Medisinske vilkår'];
 
@@ -32,42 +34,44 @@ const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
     });
     const { control } = formMethods;
 
+    const søknadsperiode = new Period(sykdom.periodeTilVurdering.fom, sykdom.periodeTilVurdering.tom);
     return (
-        <div className={styles.main}>
-            {process.env.NODE_ENV === 'development' && <DevTool control={control} />}
-            <Systemtittel>Sykdom</Systemtittel>
-            {sykdom.periodeTilVurdering && (
+        <SøknadsperiodeContext.Provider value={søknadsperiode}>
+            <div className={styles.main}>
+                {process.env.NODE_ENV === 'development' && <DevTool control={control} />}
+                <Systemtittel>Sykdom</Systemtittel>
+                {sykdom.periodeTilVurdering && (
+                    <Box marginTop={Margin.large}>
+                        <div className={styles.main__søknadperiodeContainer}>
+                            <CalendarIcon />
+                            <p className={styles.main__søknadperiodeInfo}>
+                                {`Søknadsperiode: `}
+                                <Element tag="span">{prettifyPeriod(sykdom.periodeTilVurdering)}</Element>
+                            </p>
+                        </div>
+                    </Box>
+                )}
                 <Box marginTop={Margin.large}>
-                    <div className={styles.main__søknadperiodeContainer}>
-                        <CalendarIcon />
-                        <p className={styles.main__søknadperiodeInfo}>
-                            {`Søknadsperiode: `}
-                            <Element tag="span">{prettifyPeriod(sykdom.periodeTilVurdering)}</Element>
-                        </p>
-                    </div>
+                    <TabsPure
+                        tabs={tabs.map((tab, index) => ({
+                            aktiv: activeTab === index,
+                            label: tab,
+                        }))}
+                        onChange={(e, clickedIndex) => setActiveTab(clickedIndex)}
+                    />
+                    <FormProvider {...formMethods}>
+                        {activeTab === 0 && (
+                            <LegeerklæringForm
+                                onSubmit={() => {
+                                    setActiveTab(1);
+                                }}
+                            />
+                        )}
+                        {activeTab === 1 && <Vilkårsvurdering />}
+                    </FormProvider>
                 </Box>
-            )}
-            <Box marginTop={Margin.large}>
-                <TabsPure
-                    tabs={tabs.map((tab, index) => ({
-                        aktiv: activeTab === index,
-                        label: tab,
-                    }))}
-                    onChange={(e, clickedIndex) => setActiveTab(clickedIndex)}
-                />
-                <FormProvider {...formMethods}>
-                    {activeTab === 0 && (
-                        <LegeerklæringForm
-                            sykdom={sykdom}
-                            onSubmit={() => {
-                                setActiveTab(1);
-                            }}
-                        />
-                    )}
-                    {activeTab === 1 && <Vilkårsvurdering sykdom={sykdom} />}
-                </FormProvider>
-            </Box>
-        </div>
+            </div>
+        </SøknadsperiodeContext.Provider>
     );
 };
 

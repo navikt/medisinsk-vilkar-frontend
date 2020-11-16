@@ -23,9 +23,13 @@ function sortByPeriodFom(perioder: PeriodeMedGradAvTilsynsbehov[]) {
 
 function renderPaneler(perioderMedGradAvTilsynsbehov: PeriodeMedGradAvTilsynsbehov[]) {
     return perioderMedGradAvTilsynsbehov.map(({ periode, grad }, index) => {
-        const statusEl = <TilsynStatusPanel periode={periode} grad={grad} />;
+        const statusEl = <TilsynStatusPanel periode={periode} grad={grad} key={`panel-${index}`} />;
         if (index > 0) {
-            return <Box marginTop={Margin.large}>{statusEl}</Box>;
+            return (
+                <Box marginTop={Margin.large} key={`panel-${index}`}>
+                    {statusEl}
+                </Box>
+            );
         }
         return statusEl;
     });

@@ -1,5 +1,4 @@
 import { Period } from '../../../types/Period';
-import { isDateAfter, isDateBefore } from '../../../util/dateUtils';
 
 export function required(v: any) {
     if (v === null || v === undefined || v === '') {
@@ -8,7 +7,9 @@ export function required(v: any) {
 }
 
 export const detErTilsynsbehovPåDatoen = (dato: any, perioderMedTilsynsbehov: Period[]): string | boolean => {
-    const detErTilsynsbehovPåDato = perioderMedTilsynsbehov.some((periode) => periode.includesDate(dato));
+    const detErTilsynsbehovPåDato = perioderMedTilsynsbehov.some((periode) =>
+        new Period(periode.fom, periode.tom).includesDate(dato)
+    );
     if (detErTilsynsbehovPåDato) {
         return true;
     }
@@ -24,25 +25,11 @@ export const datoenInngårISøknadsperioden = (dato: any, søknadsperiode: Perio
 };
 
 export const detErIngenInnleggelsePåDato = (dato: any, innleggelsesperioder: Period[]): string | boolean => {
-    const detErInnleggelsePåDato = innleggelsesperioder.some((periode) => periode.includesDate(dato));
+    const detErInnleggelsePåDato = innleggelsesperioder.some((periode) =>
+        new Period(periode.fom, periode.tom).includesDate(dato)
+    );
     if (detErInnleggelsePåDato) {
         return 'Dato må være utenfor innleggelsesperioden(e)';
     }
     return true;
-};
-
-export const isDateBeforeOtherDate = (date: string, otherDate: string): string | boolean => {
-    if (!otherDate || isDateBefore(date, otherDate)) {
-        return true;
-    }
-
-    return 'Dato må være før til-dato';
-};
-
-export const isDateAfterOtherDate = (date: string, otherDate: string): string | boolean => {
-    if (!otherDate || isDateAfter(date, otherDate)) {
-        return true;
-    }
-
-    return 'Dato må være etter fra-dato';
 };

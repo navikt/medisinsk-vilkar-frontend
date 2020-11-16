@@ -64,7 +64,7 @@
         "dayjs": "^1.9.6",
         "express": "^4.17.1",
         "lodash.throttle": "^4.1.1",
-        "nav-datovelger": "file:nav-datovelger-dummy",
+        "nav-datovelger": "^8.0.0",
         "nav-frontend-alertstriper": "^3.0.33",
         "nav-frontend-alertstriper-style": "^2.0.26",
         "nav-frontend-chevron": "^1.0.13",

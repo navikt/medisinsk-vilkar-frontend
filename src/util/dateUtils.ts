@@ -59,6 +59,3 @@ export function isValidDate(date: any) {
 export function isValidPeriod({ fom, tom }: Period) {
     return isValidDate(fom) && isValidDate(tom);
 }
-
-export const isDateBefore = (date: any, otherDate: any) => dayjs(date).isBefore(otherDate);
-export const isDateAfter = (date: any, otherDate: any) => dayjs(date).isAfter(otherDate);
