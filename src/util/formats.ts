@@ -1,7 +1,11 @@
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { Period } from '../types/Period';
 
+dayjs.extend(utc);
+
 export const prettifyDate = (date: string) => {
-    return new Date(date).toLocaleDateString('nb-NO');
+    return dayjs(date).utc(true).format('D.M.YYYY');
 };
 
 export const prettifyPeriod = ({ fom, tom }: Period) => `${prettifyDate(fom)} - ${prettifyDate(tom)}`;

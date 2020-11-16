@@ -10,8 +10,8 @@ test('prettifyDate', () => {
 });
 
 test('prettifyPeriod', () => {
-    const period = new Period('2020-09-10', '2020-09-15');
-    const expectedEqual = '10.9.2020 - 15.9.2020';
+    const period = new Period('2020-09-09', '2020-09-15');
+    const expectedEqual = '9.9.2020 - 15.9.2020';
     expect(prettifyPeriod(period)).toBe(expectedEqual);
 });
 
