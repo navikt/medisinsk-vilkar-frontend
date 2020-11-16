@@ -5,7 +5,7 @@ import { Period } from '../types/Period';
 dayjs.extend(utc);
 
 function isSameOrBefore(date, otherDate) {
-    const dateInQuestion = dayjs(date);
+    const dateInQuestion = dayjs(date).utc(true);
     return dateInQuestion.isBefore(otherDate) || dateInQuestion.isSame(otherDate);
 }
 
