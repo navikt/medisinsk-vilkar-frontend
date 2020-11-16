@@ -66,7 +66,7 @@ jobs:
             - name: Set changelog
               run: |
                   text="$(git --no-pager log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%h %s")"
-                  text="${text//$'\n'/  \n}"
+                  text="${text//$'\n'/\\n}"
                   echo "CHANGELOG=$text" >> $GITHUB_ENV
             - name: Create Release
               id: create_release
