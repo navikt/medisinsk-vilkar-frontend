@@ -1,14 +1,17 @@
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { Period } from '../types/Period';
 
+dayjs.extend(utc);
+
 function isSameOrBefore(date, otherDate) {
-    const dateInQuestion = dayjs(date);
+    const dateInQuestion = dayjs(date).utc(true);
     return dateInQuestion.isBefore(otherDate) || dateInQuestion.isSame(otherDate);
 }
 
 export function getPeriodAsListOfDays(period: Period) {
-    const fom = dayjs(period.fom);
-    const tom = dayjs(period.tom);
+    const fom = dayjs(period.fom).utc(true);
+    const tom = dayjs(period.tom).utc(true);
 
     const list = [];
     for (let currentDate = fom; isSameOrBefore(currentDate, tom); currentDate = currentDate.add(1, 'day')) {
