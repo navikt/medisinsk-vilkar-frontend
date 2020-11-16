@@ -9,8 +9,7 @@ const cssExtractLoaderConfig = {
     },
 };
 
-const NODE_MODULES_LOCATION = path.resolve(__dirname, '../node_modules');
-const DUMMY__LOCATION = path.resolve(__dirname, '../nav-datovelger-dummy');
+const nodeModules = path.resolve(__dirname, '../node_modules');
 
 module.exports = {
     entry: path.resolve(__dirname, '../', 'src') + '/app.ts',
@@ -53,7 +52,7 @@ module.exports = {
                         },
                     },
                 ],
-                exclude: [NODE_MODULES_LOCATION, DUMMY__LOCATION],
+                exclude: [nodeModules],
             },
             {
                 test: /\.(less|css)?$/,
@@ -74,7 +73,7 @@ module.exports = {
                         },
                     },
                 ],
-                include: [NODE_MODULES_LOCATION, DUMMY__LOCATION],
+                include: [nodeModules],
             },
             {
                 test: /\.(jpg|png|svg)$/,
