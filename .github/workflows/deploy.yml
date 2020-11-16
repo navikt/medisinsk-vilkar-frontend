@@ -26,6 +26,8 @@ jobs:
                   node-version: 12.x
             - name: Installere dependencies
               run: npm install
+            - name: Kjøre enhetstester
+              run: npm test
             - name: Sette versjon
               run: |
                   echo "VERSION=$(npm run version --silent)" >> $GITHUB_ENV
