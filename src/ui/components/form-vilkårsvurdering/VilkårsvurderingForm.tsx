@@ -1,11 +1,8 @@
 import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Systemtittel } from 'nav-frontend-typografi';
-import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import VurderingAvToOmsorgspersonerForm from '../form-vurdering-to-omsorgspersoner/VurderingAvToOmsorgspersonerForm';
 import VurderingAvTilsynsbehovForm from '../form-vurdering-av-tilsynsbehov/VurderingAvTilsynsbehovForm';
 import { getPeriodDifference, isValidPeriod } from '../../../util/dateUtils';
-import Step from '../step/Step';
 import SykdomFormState, { SykdomFormValue } from '../../../types/SykdomFormState';
 import Tilsynsbehov from '../../../types/Tilsynsbehov';
 import { erHeltEllerDelvisOppfylt } from '../../../util/domain';
@@ -19,9 +16,9 @@ import {
     lagPeriodeMedInnleggelse,
 } from '../../../util/periodeMedTilsynsbehov';
 import Form from '../form/Form';
+import SøknadsperiodeContext from '../../context/SøknadsperiodeContext';
 
 interface VilkårsvurderingFormProps {
-    sykdom: Sykdom;
     onSubmit: (d) => void;
 }
 
@@ -102,18 +99,19 @@ const sammenstillOppgittePerioderMedTilsynsbehov = (periodeTilVurdering: Period,
     return allePerioderMedTilsynsbehov;
 };
 
-const VilkårsvurderingForm = ({ sykdom, onSubmit }: VilkårsvurderingFormProps): JSX.Element => {
+const VilkårsvurderingForm = ({ onSubmit }: VilkårsvurderingFormProps): JSX.Element => {
+    const søknadsperiode = React.useContext(SøknadsperiodeContext);
     const { watch, handleSubmit } = useFormContext();
 
     const tilsynsbehov = watch(SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN);
 
     // remove this filter when we have a proper way of putting innleggelsesperioder in form state
     const innleggelsesperioder = watch(SykdomFormValue.INNLEGGELSESPERIODER).filter(isValidPeriod);
-    const perioderUtenInnleggelse = getPeriodDifference(sykdom.periodeTilVurdering, innleggelsesperioder);
+    const perioderUtenInnleggelse = getPeriodDifference(søknadsperiode, innleggelsesperioder);
 
     const submitHandler = (formValues: SykdomFormState) => {
         const oppgittePerioderMedTilsynsbehov = [
-            ...sammenstillOppgittePerioderMedTilsynsbehov(sykdom.periodeTilVurdering, formValues),
+            ...sammenstillOppgittePerioderMedTilsynsbehov(søknadsperiode, formValues),
         ];
         const oppgitteInnleggelsesperioder = [
             ...settGradAvTilsynsbehov(innleggelsesperioder, GradAvTilsynsbehov.INNLAGT),
@@ -127,13 +125,11 @@ const VilkårsvurderingForm = ({ sykdom, onSubmit }: VilkårsvurderingFormProps)
     return (
         <Form onSubmit={handleSubmit(submitHandler)} buttonLabel="Bekreft vurdering">
             <VurderingAvTilsynsbehovForm
-                sykdom={sykdom}
                 innleggelsesperioder={innleggelsesperioder}
                 perioderUtenInnleggelser={perioderUtenInnleggelse}
             />
             {erHeltEllerDelvisOppfylt(tilsynsbehov) && (
                 <VurderingAvToOmsorgspersonerForm
-                    sykdom={sykdom}
                     innleggelsesperioder={innleggelsesperioder}
                     perioderUtenInnleggelser={perioderUtenInnleggelse}
                 />

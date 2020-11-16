@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import TilsynStatusPanel from '../status-panel-tilsyn/TilsynStatusPanel';
 import Box, { Margin } from '../box/Box';
 import PeriodeMedGradAvTilsynsbehov from '../../../types/PeriodeMedGradAvTilsynsbehov';
@@ -10,8 +10,8 @@ interface ListOfTilsynStatusPanelProps {
 
 function sortByPeriodFom(perioder: PeriodeMedGradAvTilsynsbehov[]) {
     return perioder.sort((firstEl, secondEl) => {
-        const firstFom = moment(firstEl.periode.fom);
-        const secondFom = moment(secondEl.periode.fom);
+        const firstFom = dayjs(firstEl.periode.fom);
+        const secondFom = dayjs(secondEl.periode.fom);
         if (firstFom.isBefore(secondFom)) {
             return -1;
         } else if (secondFom.isBefore(firstFom)) {
@@ -23,9 +23,13 @@ function sortByPeriodFom(perioder: PeriodeMedGradAvTilsynsbehov[]) {
 
 function renderPaneler(perioderMedGradAvTilsynsbehov: PeriodeMedGradAvTilsynsbehov[]) {
     return perioderMedGradAvTilsynsbehov.map(({ periode, grad }, index) => {
-        const statusEl = <TilsynStatusPanel periode={periode} grad={grad} />;
+        const statusEl = <TilsynStatusPanel periode={periode} grad={grad} key={`panel-${index}`} />;
         if (index > 0) {
-            return <Box marginTop={Margin.large}>{statusEl}</Box>;
+            return (
+                <Box marginTop={Margin.large} key={`panel-${index}`}>
+                    {statusEl}
+                </Box>
+            );
         }
         return statusEl;
     });

@@ -1,15 +1,10 @@
 import React from 'react';
-import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import VilkårsvurderingForm from '../form-vilkårsvurdering/VilkårsvurderingForm';
 import Summary from '../summary/Summary';
 import Step from '../step/Step';
 import EndreVurderingLink from '../endre-vurdering-link/EndreVurderingLink';
 
-interface VilkårsvurderingProps {
-    sykdom: Sykdom;
-}
-
-const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps) => {
+const Vilkårsvurdering = () => {
     const [shouldShowSummary, setShouldShowSummary] = React.useState(false);
     const [perioderMedTilsynsbehov, setPerioderMedTilsynsbehov] = React.useState(null);
 
@@ -22,14 +17,13 @@ const Vilkårsvurdering = ({ sykdom }: VilkårsvurderingProps) => {
                     contentRenderer: () => <EndreVurderingLink onClick={() => setShouldShowSummary(false)} />,
                 }}
             >
-                <Summary perioderMedTilsynsbehov={perioderMedTilsynsbehov} sykdom={sykdom} />
+                <Summary perioderMedTilsynsbehov={perioderMedTilsynsbehov} />
             </Step>
         );
     } else {
         return (
             <Step headerProps={{ title: stepTitle }}>
                 <VilkårsvurderingForm
-                    sykdom={sykdom}
                     onSubmit={(data) => {
                         setPerioderMedTilsynsbehov(data.perioderMedTilsynsbehov);
                         setShouldShowSummary(true);

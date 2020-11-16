@@ -1,30 +1,29 @@
 import { Systemtittel } from 'nav-frontend-typografi';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Sykdom from '../../../types/medisinsk-vilkår/sykdom';
 import { Period } from '../../../types/Period';
 import { SykdomFormValue } from '../../../types/SykdomFormState';
 import { getPeriodDifference } from '../../../util/dateUtils';
 import { convertToInternationalPeriod } from '../../../util/formats';
-import { isDatoUtenforPeriodeUtenTilsynsbehov, isDatoInnenforSøknadsperiode, required } from '../../form/validators';
+import { required, detErTilsynsbehovPåDatoen, datoenInngårISøknadsperioden } from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import TextArea from '../../form/wrappers/TextArea';
 import Box, { Margin } from '../box/Box';
 import PeriodList, { PeriodListTheme } from '../period-list/PeriodList';
 import Tilsynsbehov from '../../../types/Tilsynsbehov';
+import SøknadsperiodeContext from '../../context/SøknadsperiodeContext';
 
 interface VurderingAvToOmsorgspersonerFormProps {
-    sykdom: Sykdom;
     innleggelsesperioder: Period[];
     perioderUtenInnleggelser: Period[];
 }
 
 export default ({
-    sykdom,
     innleggelsesperioder,
     perioderUtenInnleggelser,
 }: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
+    const søknadsperiode = React.useContext(SøknadsperiodeContext);
     const { watch, setValue } = useFormContext();
 
     const tilsynsbehov = watch(SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN);
@@ -37,7 +36,7 @@ export default ({
         perioderMedTilsynsbehov = watch(SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE);
     }
 
-    const perioderUtenTilsynsbehov = getPeriodDifference(sykdom.periodeTilVurdering, perioderMedTilsynsbehov);
+    const perioderUtenTilsynsbehov = getPeriodDifference(søknadsperiode, perioderMedTilsynsbehov);
 
     return (
         <div>
@@ -46,11 +45,7 @@ export default ({
                 <hr />
             </Box>
             <Box marginTop={Margin.large}>
-                <PeriodList
-                    periods={[sykdom.periodeTilVurdering] || []}
-                    title="Søknadsperiode:"
-                    theme={PeriodListTheme.CALENDAR}
-                />
+                <PeriodList periods={[søknadsperiode] || []} title="Søknadsperiode:" theme={PeriodListTheme.CALENDAR} />
             </Box>
             {innleggelsesperioder?.length > 0 && (
                 <Box marginTop={Margin.large}>
@@ -100,7 +95,7 @@ export default ({
                     onChange={(tilsynsbehov: Tilsynsbehov) => {
                         let perioderValue = [{ fom: '', tom: '' }];
                         if (tilsynsbehov === Tilsynsbehov.HELE) {
-                            perioderValue = getPeriodDifference(sykdom.periodeTilVurdering, innleggelsesperioder);
+                            perioderValue = getPeriodDifference(søknadsperiode, innleggelsesperioder);
                         }
                         if (tilsynsbehov === Tilsynsbehov.INGEN) {
                             perioderValue = [];
@@ -119,32 +114,32 @@ export default ({
                                 name: 'fom',
                                 label: 'Fra',
                                 limitations: {
-                                    minDate: sykdom.periodeTilVurdering.fom,
-                                    maxDate: sykdom.periodeTilVurdering.tom,
+                                    minDate: søknadsperiode.fom,
+                                    maxDate: søknadsperiode.tom,
                                     invalidDateRanges: perioderUtenTilsynsbehov.map(convertToInternationalPeriod),
                                 },
                                 validators: {
                                     required,
-                                    datoInnenforSøknadsperiode: (value) =>
-                                        isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
-                                    datoUtenforUgyldigeDatoer: (value) =>
-                                        isDatoUtenforPeriodeUtenTilsynsbehov(value, perioderUtenTilsynsbehov),
+                                    datoenInngårISøknadsperioden: (dato) =>
+                                        datoenInngårISøknadsperioden(dato, søknadsperiode),
+                                    detErTilsynsbehovPåDatoen: (dato) =>
+                                        detErTilsynsbehovPåDatoen(dato, perioderMedTilsynsbehov),
                                 },
                             },
                             toDatepickerProps: {
                                 name: 'tom',
                                 label: 'Til',
                                 limitations: {
-                                    minDate: sykdom.periodeTilVurdering.fom,
-                                    maxDate: sykdom.periodeTilVurdering.tom,
+                                    minDate: søknadsperiode.fom,
+                                    maxDate: søknadsperiode.tom,
                                     invalidDateRanges: perioderUtenTilsynsbehov.map(convertToInternationalPeriod),
                                 },
                                 validators: {
                                     required,
-                                    datoInnenforSøknadsperiode: (value) =>
-                                        isDatoInnenforSøknadsperiode(value, sykdom?.periodeTilVurdering),
-                                    datoUtenforUgyldigeDatoer: (value) =>
-                                        isDatoUtenforPeriodeUtenTilsynsbehov(value, perioderUtenTilsynsbehov),
+                                    datoenInngårISøknadsperioden: (dato) =>
+                                        datoenInngårISøknadsperioden(dato, søknadsperiode),
+                                    detErTilsynsbehovPåDatoen: (dato) =>
+                                        detErTilsynsbehovPåDatoen(dato, perioderMedTilsynsbehov),
                                 },
                             },
                         }}

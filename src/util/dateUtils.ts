@@ -1,12 +1,17 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Period } from '../types/Period';
 
-export function getPeriodAsListOfDays({ fom, tom }: Period) {
-    const fomMoment = moment(fom);
-    const tomMoment = moment(tom);
+function isSameOrBefore(date, otherDate) {
+    const dateInQuestion = dayjs(date);
+    return dateInQuestion.isBefore(otherDate) || dateInQuestion.isSame(otherDate);
+}
+
+export function getPeriodAsListOfDays(period: Period) {
+    const fom = dayjs(period.fom);
+    const tom = dayjs(period.tom);
 
     const list = [];
-    for (let currentDate = fomMoment; currentDate.isSameOrBefore(tomMoment); currentDate.add(1, 'days')) {
+    for (let currentDate = fom; isSameOrBefore(currentDate, tom); currentDate = currentDate.add(1, 'day')) {
         list.push(currentDate.format('YYYY-MM-DD'));
     }
 
@@ -17,20 +22,14 @@ function getDaySequencesAsListOfPeriods(daySequences: string[][]): Period[] {
     return daySequences.map((daySequence) => {
         const firstDay = daySequence[0];
         const lastDay = daySequence[daySequence.length - 1];
-        return {
-            fom: firstDay,
-            tom: lastDay,
-        };
+        return new Period(firstDay, lastDay);
     });
 }
 
 export function getPeriodDifference(basePeriod: Period, periods: Period[]) {
-    const baseListOfDays = getPeriodAsListOfDays({
-        fom: basePeriod.fom,
-        tom: basePeriod.tom,
-    });
+    const baseListOfDays = getPeriodAsListOfDays(basePeriod);
 
-    const listOfDaysToExclude = periods.map(({ fom, tom }) => getPeriodAsListOfDays({ fom, tom })).flat();
+    const listOfDaysToExclude = periods.map((period) => getPeriodAsListOfDays(period)).flat();
 
     const daysToInclude = [];
     let index = 0;
@@ -60,9 +59,3 @@ export function isValidDate(date: any) {
 export function isValidPeriod({ fom, tom }: Period) {
     return isValidDate(fom) && isValidDate(tom);
 }
-
-export const isDateInPeriod = (date: any, datePeriod: Period): boolean =>
-    moment(date).isBetween(datePeriod.fom, datePeriod.tom, undefined, '[]');
-
-export const isDateBefore = (date: any, otherDate: any) => moment(date).isBefore(otherDate);
-export const isDateAfter = (date: any, otherDate: any) => moment(date).isAfter(otherDate);
