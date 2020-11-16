@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import { dateFromString } from '../util/dateUtils';
 
 export class Period {
     fom: string;
@@ -10,9 +10,9 @@ export class Period {
     }
 
     includesDate(dateString: string) {
-        const dateInQuestion = dayjs(dateString);
-        const fomDayjs = dayjs(this.fom);
-        const tomDayjs = dayjs(this.tom);
+        const dateInQuestion = dateFromString(dateString);
+        const fomDayjs = dateFromString(this.fom);
+        const tomDayjs = dateFromString(this.tom);
         return (
             (dateInQuestion.isSame(fomDayjs) || dateInQuestion.isAfter(fomDayjs)) &&
             (dateInQuestion.isSame(tomDayjs) || dateInQuestion.isBefore(tomDayjs))
