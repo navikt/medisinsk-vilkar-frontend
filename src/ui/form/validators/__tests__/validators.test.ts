@@ -1,5 +1,5 @@
-import { datoenInngårISøknadsperioden, detErIngenInnleggelsePåDato, detErTilsynsbehovPåDatoen, required } from '.';
-import { Period } from '../../../types/Period';
+import { datoenInngårISøknadsperioden, detErIngenInnleggelsePåDato, detErTilsynsbehovPåDatoen, required } from '..';
+import { Period } from '../../../../types/Period';
 
 test('required', () => {
     const feilmelding = 'Du må oppgi en verdi';

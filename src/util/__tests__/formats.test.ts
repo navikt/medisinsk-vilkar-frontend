@@ -1,5 +1,5 @@
-import { Period } from '../types/Period';
-import { convertToInternationalPeriod, prettifyDate, prettifyPeriod } from './formats';
+import { Period } from '../../types/Period';
+import { convertToInternationalPeriod, prettifyDate, prettifyPeriod } from '../formats';
 
 test('prettifyDate', () => {
     const expectedEqual = '10.9.2020';
