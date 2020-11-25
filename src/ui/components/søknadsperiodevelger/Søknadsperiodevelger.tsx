@@ -12,10 +12,14 @@ interface SøknadsperiodevelgerProps {
 const Søknadsperiodevelger = ({ søknadsperioder, onSøknadsperiodeClick }: SøknadsperiodevelgerProps) => {
     return (
         <div className={styles.søknadsperiodevelger}>
-            {søknadsperioder.map((periode) => {
+            {søknadsperioder.map((periode, i) => {
                 const { fom, tom } = periode;
                 return (
-                    <div className={styles.søknadsperiodevelger__item} onClick={() => onSøknadsperiodeClick(periode)}>
+                    <div
+                        className={styles.søknadsperiodevelger__item}
+                        onClick={() => onSøknadsperiodeClick(periode)}
+                        key={i + ''}
+                    >
                         {prettifyPeriod(new Period(fom, tom))}
                     </div>
                 );

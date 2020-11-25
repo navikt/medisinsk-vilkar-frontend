@@ -1,23 +1,27 @@
 import React from 'react';
+import { TabsPure } from 'nav-frontend-tabs';
 import Sykdom from '../types/medisinsk-vilkår/sykdom';
-import { Period } from '../types/Period';
-import SøknadsperiodeContext from './context/SøknadsperiodeContext';
-import SykdomContent from './components/sykdom-content/SykdomContent';
-import Søknadsperiodevelger from './components/søknadsperiodevelger/Søknadsperiodevelger';
+import OldVersion from './OldVersion';
+import NewVersion from './NewVersion';
 
 interface MainComponentProps {
     sykdom: Sykdom;
 }
 
-const MainComponent = ({ sykdom: { søknadsperioder } }: MainComponentProps): JSX.Element => {
-    const [valgtSøknadsperiode, setValgtSøknadsperiode] = React.useState(søknadsperioder[0]);
+const MainComponent = ({ sykdom }: MainComponentProps): JSX.Element => {
+    const [activeTab, setActiveTab] = React.useState(1);
 
     return (
-        <div style={{ display: 'flex', padding: '2rem' }}>
-            <Søknadsperiodevelger søknadsperioder={søknadsperioder} onSøknadsperiodeClick={setValgtSøknadsperiode} />
-            <SøknadsperiodeContext.Provider value={new Period(valgtSøknadsperiode.fom, valgtSøknadsperiode.tom)}>
-                <SykdomContent />
-            </SøknadsperiodeContext.Provider>
+        <div style={{ padding: '1rem' }}>
+            <TabsPure
+                tabs={[
+                    { label: 'Gammel versjon', aktiv: activeTab === 0 },
+                    { label: 'Ny versjon', aktiv: activeTab === 1 },
+                ]}
+                onChange={(e, clickedIndex) => setActiveTab(clickedIndex)}
+            />
+            {activeTab === 0 && <OldVersion sykdom={sykdom} />}
+            {activeTab === 1 && <NewVersion />}
         </div>
     );
 };
