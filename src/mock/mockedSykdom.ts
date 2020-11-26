@@ -1,11 +1,10 @@
+import { Period } from '../types/Period';
+
 export default {
     legeerklæringer: [],
     perioderMedKontinuerligTilsynOgPleie: [],
     perioderMedUtvidetKontinuerligTilsynOgPleie: [],
-    periodeTilVurdering: {
-        fom: '2020-08-18',
-        tom: '2020-10-13',
-    },
+    periodeTilVurdering: new Period('2020-08-18', '2020-10-13'),
     søknadsperioder: [
         {
             fom: '2020-01-01,',

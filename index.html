@@ -8,14 +8,18 @@
                 font-size: 1rem;
             }
 
-            
+
         </style>
     </head>
     <body>
         <div id="app"></div>
         <script type="text/javascript">
             setTimeout(() => {
-                window.renderMedisinskVilkarApp('app');
+                window.renderMedisinskVilkarApp('app', {
+                    onSelectVurdering: (vurdering) => {
+                        history.pushState('', '', `&vurdering=${vurdering}`);
+                    }
+                });
             }, 300);
         </script>
     </body>
