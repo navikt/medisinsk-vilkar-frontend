@@ -1,26 +1,34 @@
 import React from 'react';
-import PeriodMenu from './components/period-menu/PeriodMenu';
-import genereltTilsynsbehovVurderingerMock from '../mock/mockedVurderinger';
-import VurderingDetails from './components/vurdering-details/VurderingDetails';
-import ContainerContext from './context/ContainerContext';
-
-const finnValgtVurdering = (vurderingId) => {
-    return genereltTilsynsbehovVurderingerMock.find(({ id }) => vurderingId === id);
-};
+import { getVurderinger } from '../util/httpMock';
+import Vurderingsoversikt from './components/vurderingsoversikt/Vurderingsoversikt';
 
 const NewVersion = () => {
-    const { vurdering, onSelectVurdering } = React.useContext(ContainerContext);
-    const [valgtVurdering, setValgtVurdering] = React.useState(finnValgtVurdering(vurdering) || null);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [vurderinger, setVurderinger] = React.useState([]);
+
+    const hentVurderinger = () =>
+        getVurderinger().then((value) => {
+            setVurderinger(value);
+            setIsLoading(false);
+        });
+
+    React.useEffect(() => {
+        hentVurderinger();
+    }, []);
+
     return (
-        <div style={{ padding: '4rem', display: 'flex' }}>
-            <PeriodMenu
-                vurderinger={genereltTilsynsbehovVurderingerMock}
-                onActiveVurderingChange={(vurdering) => {
-                    setValgtVurdering(vurdering);
-                    onSelectVurdering(vurdering.id);
-                }}
-            />
-            {valgtVurdering !== null && <VurderingDetails vurdering={valgtVurdering} />}
+        <div style={{ padding: '4rem' }}>
+            {isLoading ? (
+                <p>Laster vurderinger</p>
+            ) : (
+                <Vurderingsoversikt
+                    vurderinger={vurderinger}
+                    onVurderingChange={() => {
+                        setIsLoading(true);
+                        hentVurderinger();
+                    }}
+                />
+            )}
         </div>
     );
 };
