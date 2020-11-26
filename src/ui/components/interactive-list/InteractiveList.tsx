@@ -1,32 +1,47 @@
 import React from 'react';
-import Lenke from 'nav-frontend-lenker';
+import classnames from 'classnames';
+import styles from './interactiveList.less';
 
 interface InteractiveListElement {
-    elementRenderer: (el: InteractiveListElement) => React.ReactNode;
-    [key: string]: any;
+    contentRenderer: (el: InteractiveListElement) => React.ReactNode;
+    onClick: (el: InteractiveListElement) => void;
+    key: string;
+    active?: boolean;
 }
 
 interface InteractiveListProps {
     elements: InteractiveListElement[];
-    onElementClick: (element: InteractiveListElement) => void;
 }
 
-const InteractiveList = ({ elements, onElementClick }: InteractiveListProps) => (
-    <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
-        {elements.map((element, i) => (
-            <li style={{ marginTop: '0.5rem' }} key={`${i}`}>
-                <Lenke
-                    href="#"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        onElementClick(element);
+const InteractiveListElement = (props: InteractiveListElement) => {
+    const { contentRenderer, onClick, key, active } = props;
+    const cls = classnames(styles.interactiveListElement, {
+        [styles['interactiveListElement--active']]: active === true,
+    });
+    return (
+        <li className={cls} key={key}>
+            <div onClick={() => onClick(props)}>{contentRenderer(props)}</div>
+        </li>
+    );
+};
+
+const InteractiveList = ({ elements }: InteractiveListProps) => {
+    const [activeElement, setActiveElement] = React.useState(null);
+    return (
+        <ul className={styles.interactiveList}>
+            {elements.map((elementProps, index) => (
+                <InteractiveListElement
+                    {...elementProps}
+                    key={`${index}`}
+                    active={activeElement === index}
+                    onClick={() => {
+                        elementProps.onClick(elementProps);
+                        setActiveElement(index);
                     }}
-                >
-                    {element.elementRenderer(element)}
-                </Lenke>
-            </li>
-        ))}
-    </ul>
-);
+                />
+            ))}
+        </ul>
+    );
+};
 
 export default InteractiveList;

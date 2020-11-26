@@ -1,10 +1,10 @@
 import React from 'react';
 import { TabsPure } from 'nav-frontend-tabs';
 import OldVersion from './OldVersion';
-import NewVersion from './NewVersion';
 import ContainerContext from './context/ContainerContext';
 import ContainerContract from '../types/ContainerContract';
 import mockedSykdom from '../mock/mockedSykdom';
+import MedisinskVilkår from './components/medisinsk-vilkår/MedisinskVilkår';
 
 interface MainComponentProps {
     containerData: ContainerContract;
@@ -26,7 +26,7 @@ const MainComponent = ({ containerData }: MainComponentProps): JSX.Element => {
             {activeTab === 0 && <OldVersion sykdom={mockedSykdom} />}
             {activeTab === 1 && (
                 <ContainerContext.Provider value={containerData}>
-                    <NewVersion />
+                    <MedisinskVilkår />
                 </ContainerContext.Provider>
             )}
         </div>

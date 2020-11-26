@@ -3,6 +3,8 @@ import { TabsPure } from 'nav-frontend-tabs';
 import Vurdering from '../../../types/Vurdering';
 import InteractiveList from '../interactive-list/InteractiveList';
 import { prettifyPeriod } from '../../../util/formats';
+import GreenCheckIcon from '../icons/GreenCheckIcon';
+import GreenCheckIconFilled from '../icons/GreenCheckIconFilled';
 
 const navigationTypes = ['Perioder', 'Vurderinger', 'Resultat'];
 
@@ -16,10 +18,17 @@ const PeriodMenu = ({ vurderinger, onActiveVurderingChange }: PeriodMenuProps) =
 
     const allePerioder = vurderinger
         .map((vurdering) =>
-            vurdering.perioder.map((periode) => {
+            vurdering.perioder.map((periode, index) => {
                 return {
-                    elementRenderer: () => prettifyPeriod(periode),
+                    contentRenderer: () => (
+                        <>
+                            <GreenCheckIconFilled />
+                            {prettifyPeriod(periode)} Innvilget
+                        </>
+                    ),
                     vurdering,
+                    onClick: (element) => onActiveVurderingChange(element.vurdering),
+                    key: `${index}`,
                 };
             })
         )
@@ -32,12 +41,7 @@ const PeriodMenu = ({ vurderinger, onActiveVurderingChange }: PeriodMenuProps) =
                 tabs={navigationTypes.map((label, index) => ({ label, aktiv: activeTab === index }))}
                 onChange={(e, clickedIndex) => setActiveTab(clickedIndex)}
             />
-            {activeTab === 0 && (
-                <InteractiveList
-                    elements={allePerioder}
-                    onElementClick={(element) => onActiveVurderingChange(element.vurdering)}
-                />
-            )}
+            {activeTab === 0 && <InteractiveList elements={allePerioder} />}
         </div>
     );
 };
