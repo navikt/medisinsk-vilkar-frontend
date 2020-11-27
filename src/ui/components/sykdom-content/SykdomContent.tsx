@@ -6,7 +6,7 @@ import { Systemtittel } from 'nav-frontend-typografi';
 import Box, { Margin } from '../box/Box';
 import Søknadsperiode from '../søknadsperiode/Søknadsperiode';
 import LegeerklæringForm from '../form-legeerklæring/LegeerklæringForm';
-import Vilkårsvurdering from '../vilkårsvurdering/Vilkårsvurdering';
+import Vilkårsvurdering from '../old-vilkårsvurdering/Vilkårsvurdering';
 import { SykdomFormValue } from '../../../types/SykdomFormState';
 import styles from './main.less';
 

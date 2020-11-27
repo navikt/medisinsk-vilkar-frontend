@@ -1,36 +1,28 @@
 import React from 'react';
-import VilkårsvurderingForm from '../form-vilkårsvurdering/VilkårsvurderingForm';
-import Summary from '../summary/Summary';
-import Step from '../step/Step';
-import EndreVurderingLink from '../endre-vurdering-link/EndreVurderingLink';
+import Vurderingsoversikt from '../vurderingsoversikt/Vurderingsoversikt';
+import Vurdering from '../../../types/Vurdering';
 
-const Vilkårsvurdering = () => {
-    const [shouldShowSummary, setShouldShowSummary] = React.useState(false);
-    const [perioderMedTilsynsbehov, setPerioderMedTilsynsbehov] = React.useState(null);
+interface VilkårsvurderingProps {
+    hentVurderinger: () => Promise<Vurdering[]>;
+    vurderingsdetaljerRenderer: (valgtVurdering) => React.ReactNode;
+}
 
-    const stepTitle = 'Vurdering av tilsyn og pleie';
-    if (shouldShowSummary) {
-        return (
-            <Step
-                headerProps={{
-                    title: stepTitle,
-                    contentRenderer: () => <EndreVurderingLink onClick={() => setShouldShowSummary(false)} />,
-                }}
-            >
-                <Summary perioderMedTilsynsbehov={perioderMedTilsynsbehov} />
-            </Step>
-        );
+const Vilkårsvurdering = ({ hentVurderinger, vurderingsdetaljerRenderer }: VilkårsvurderingProps) => {
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [vurderinger, setVurderinger] = React.useState([]);
+
+    React.useEffect(() => {
+        setIsLoading(true);
+        hentVurderinger().then((vurderinger) => {
+            setVurderinger(vurderinger);
+            setIsLoading(false);
+        });
+    }, []);
+
+    if (isLoading) {
+        return <p>Henter vurderinger</p>;
     } else {
-        return (
-            <Step headerProps={{ title: stepTitle }}>
-                <VilkårsvurderingForm
-                    onSubmit={(data) => {
-                        setPerioderMedTilsynsbehov(data.perioderMedTilsynsbehov);
-                        setShouldShowSummary(true);
-                    }}
-                />
-            </Step>
-        );
+        return <Vurderingsoversikt vurderinger={vurderinger} vurderingsdetaljerRenderer={vurderingsdetaljerRenderer} />;
     }
 };
 

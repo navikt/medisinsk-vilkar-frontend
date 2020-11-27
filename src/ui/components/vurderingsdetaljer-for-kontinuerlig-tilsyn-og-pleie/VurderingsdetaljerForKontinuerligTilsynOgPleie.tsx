@@ -1,18 +1,18 @@
 import React from 'react';
 import Vurdering from '../../../types/Vurdering';
 import { prettifyPeriod } from '../../../util/formats';
-import styles from './vurderingsdetaljer.less';
+import styles from './vurderingsdetaljerForKontinuerligTilsynOgPleie.less';
 import DetailView from '../detail-view/DetailView';
 
-interface VurderingsdetaljerForToOmsorgspersonerProps {
+interface VurderingsdetaljerForKontinuerligTilsynOgPleieProps {
     vurdering: Vurdering;
 }
 
-const VurderingsdetaljerForToOmsorgspersoner = ({
+const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
     vurdering: { perioder, begrunnelse, resultat },
-}: VurderingsdetaljerForToOmsorgspersonerProps) => {
+}: VurderingsdetaljerForKontinuerligTilsynOgPleieProps) => {
     return (
-        <DetailView title="Vurdering av to omsorgspersoner">
+        <DetailView title="Vurdering av behov for kontinuerlig tilsyn og pleie">
             <p className={styles.begrunnelse}>{begrunnelse}</p>
             <p>{resultat}</p>
             <ul>
@@ -24,4 +24,4 @@ const VurderingsdetaljerForToOmsorgspersoner = ({
     );
 };
 
-export default VurderingsdetaljerForToOmsorgspersoner;
+export default VurderingsdetaljerForKontinuerligTilsynOgPleie;

@@ -1,16 +1,21 @@
 import * as React from 'react';
 import ContainerContext from '../../context/ContainerContext';
 import Vurderingsvelger from '../vurderingsvelger/Vurderingsvelger';
-import Vurderingsdetaljer from '../vurderingsdetaljer-for-to-omsorgspersoner/Vurderingsdetaljer';
 import { Undertittel } from 'nav-frontend-typografi';
 import { Knapp } from 'nav-frontend-knapper';
+import Vurdering from '../../../types/Vurdering';
 import styles from './vurderingsoversikt.less';
 
 const finnValgtVurdering = (vurderinger, vurderingId) => {
     return vurderinger.find(({ id }) => vurderingId === id);
 };
 
-const Vurderingsoversikt = ({ vurderinger }) => {
+interface VurderingsoversiktProps {
+    vurderinger: Vurdering[];
+    vurderingsdetaljerRenderer: (valgtVurdering: Vurdering) => React.ReactNode;
+}
+
+const Vurderingsoversikt = ({ vurderinger, vurderingsdetaljerRenderer }: VurderingsoversiktProps) => {
     const { vurdering, onSelectVurdering } = React.useContext(ContainerContext);
     const [valgtVurdering, setValgtVurdering] = React.useState(finnValgtVurdering(vurderinger, vurdering) || null);
 
@@ -38,7 +43,7 @@ const Vurderingsoversikt = ({ vurderinger }) => {
             </div>
             {valgtVurdering !== null && (
                 <div className={styles.vurderingsoversikt__detailSection}>
-                    <Vurderingsdetaljer vurdering={valgtVurdering} />
+                    {vurderingsdetaljerRenderer(valgtVurdering)}
                 </div>
             )}
         </div>
