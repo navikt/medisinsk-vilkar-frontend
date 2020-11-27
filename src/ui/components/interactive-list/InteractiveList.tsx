@@ -5,7 +5,6 @@ import styles from './interactiveList.less';
 interface InteractiveListElement {
     contentRenderer: (el: InteractiveListElement) => React.ReactNode;
     onClick: (el: InteractiveListElement) => void;
-    key: string;
     active?: boolean;
 }
 
@@ -14,12 +13,12 @@ interface InteractiveListProps {
 }
 
 const InteractiveListElement = (props: InteractiveListElement) => {
-    const { contentRenderer, onClick, key, active } = props;
+    const { contentRenderer, onClick, active } = props;
     const cls = classnames(styles.interactiveListElement, {
         [styles['interactiveListElement--active']]: active === true,
     });
     return (
-        <li className={cls} key={key}>
+        <li className={cls}>
             <div onClick={() => onClick(props)}>{contentRenderer(props)}</div>
         </li>
     );
@@ -32,7 +31,6 @@ const InteractiveList = ({ elements }: InteractiveListProps) => {
             {elements.map((elementProps, index) => (
                 <InteractiveListElement
                     {...elementProps}
-                    key={`${index}`}
                     active={activeElement === index}
                     onClick={() => {
                         elementProps.onClick(elementProps);

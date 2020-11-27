@@ -6,7 +6,7 @@ import { Period } from '../../../types/Period';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import RedCrossIconFilled from '../icons/RedCrossIconFilled';
 
-interface PeriodeMedVurderingProps {
+interface VurderingsperiodeProps {
     periode: Period;
     resultat: Vurderingsresultat;
 }
@@ -27,7 +27,7 @@ const renderResultatText = (resultat: Vurderingsresultat) => {
     }
 };
 
-const PeriodeMedVurdering = ({ periode, resultat }: PeriodeMedVurderingProps) => {
+const Vurderingsperiode = ({ periode, resultat }: VurderingsperiodeProps) => {
     return (
         <div className={styles.periodeMedVurdering}>
             {renderIcon(resultat)}
@@ -39,4 +39,4 @@ const PeriodeMedVurdering = ({ periode, resultat }: PeriodeMedVurderingProps) =>
     );
 };
 
-export default PeriodeMedVurdering;
+export default Vurderingsperiode;

@@ -1,8 +1,7 @@
 import React from 'react';
-import { Systemtittel } from 'nav-frontend-typografi';
 import { TabsPure } from 'nav-frontend-tabs';
-import styles from './medisinskVilkår.less';
 import VurderingAvTilsynOgPleie from '../vurdering-av-tilsyn-og-pleie/VurderingAvTilsynOgPleie';
+import styles from './medisinskVilkår.less';
 
 const tabs = ['Tilsyn og pleie', 'To omsorgspersoner', 'Beredskap og nattevåk'];
 const MedisinskVilkår = () => {
@@ -10,14 +9,14 @@ const MedisinskVilkår = () => {
 
     return (
         <div className={styles.medisinskVilkår}>
-            <Systemtittel>Sykdom</Systemtittel>
+            <h1 style={{ fontSize: 22 }}>Sykdom</h1>
             <div style={{ marginTop: '1rem' }}>
                 <TabsPure
                     kompakt={true}
                     tabs={tabs.map((tabName, index) => ({ label: tabName, aktiv: activeTab === index }))}
                     onChange={(event, clickedIndex) => setActiveTab(clickedIndex)}
                 />
-                <div style={{ marginTop: '1rem' }}>
+                <div className={styles.medisinskVilkår__vilkårContentContainer}>
                     {activeTab === 0 && <VurderingAvTilsynOgPleie />}
                     {activeTab === 1 && <p>To omsorgspersoner</p>}
                     {activeTab === 2 && <p>Beredskap og nattevåk</p>}

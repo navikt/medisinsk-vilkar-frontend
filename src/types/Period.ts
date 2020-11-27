@@ -18,4 +18,10 @@ export class Period {
             (dateInQuestion.isSame(tomDayjs) || dateInQuestion.isBefore(tomDayjs))
         );
     }
+
+    startsBefore(otherPeriod: Period) {
+        const dateInQuestion = dateFromString(otherPeriod.fom);
+        const periodFom = dateFromString(this.fom);
+        return periodFom.isBefore(dateInQuestion);
+    }
 }

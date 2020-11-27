@@ -1,7 +1,9 @@
 import * as React from 'react';
 import ContainerContext from '../../context/ContainerContext';
-import PeriodMenu from '../period-menu/PeriodMenu';
-import VurderingDetails from '../vurdering-details/VurderingDetails';
+import Vurderingsvelger from '../vurderingsvelger/Vurderingsvelger';
+import Vurderingsdetaljer from '../vurderingsdetaljer/Vurderingsdetaljer';
+import { Undertittel } from 'nav-frontend-typografi';
+import { Knapp } from 'nav-frontend-knapper';
 
 const finnValgtVurdering = (vurderinger, vurderingId) => {
     return vurderinger.find(({ id }) => vurderingId === id);
@@ -13,14 +15,22 @@ const Vurderingsoversikt = ({ vurderinger }) => {
 
     return (
         <div style={{ display: 'flex' }}>
-            <PeriodMenu
-                vurderinger={vurderinger}
-                onActiveVurderingChange={(nyvalgtVurdering) => {
-                    setValgtVurdering(nyvalgtVurdering);
-                    onSelectVurdering(nyvalgtVurdering.id);
-                }}
-            />
-            {valgtVurdering !== null && <VurderingDetails vurdering={valgtVurdering} />}
+            <div style={{ display: 'flex', flexWrap: 'wrap', maxWidth: '500px' }}>
+                <Undertittel>Alle perioder</Undertittel>
+                <Knapp type="standard" htmlType="button" mini={true} style={{ marginLeft: 'auto' }}>
+                    Opprett ny vurdering
+                </Knapp>
+                <div style={{ flexGrow: 1, marginTop: '1rem' }}>
+                    <Vurderingsvelger
+                        vurderinger={vurderinger}
+                        onActiveVurderingChange={(nyvalgtVurdering) => {
+                            setValgtVurdering(nyvalgtVurdering);
+                            onSelectVurdering(nyvalgtVurdering.id);
+                        }}
+                    />
+                </div>
+            </div>
+            {valgtVurdering !== null && <Vurderingsdetaljer vurdering={valgtVurdering} />}
         </div>
     );
 };
