@@ -1,7 +1,7 @@
 import * as React from 'react';
 import ContainerContext from '../../context/ContainerContext';
 import Vurderingsvelger from '../vurderingsvelger/Vurderingsvelger';
-import Vurderingsdetaljer from '../vurderingsdetaljer/Vurderingsdetaljer';
+import Vurderingsdetaljer from '../vurderingsdetaljer-for-to-omsorgspersoner/Vurderingsdetaljer';
 import { Undertittel } from 'nav-frontend-typografi';
 import { Knapp } from 'nav-frontend-knapper';
 import styles from './vurderingsoversikt.less';
@@ -26,10 +26,7 @@ const Vurderingsoversikt = ({ vurderinger }) => {
                 >
                     Opprett ny vurdering
                 </Knapp>
-                <div
-                    className={styles.vurderingsoversikt__vurderingsvelgerContainer}
-                    style={{ flexGrow: 1, marginTop: '1rem' }}
-                >
+                <div className={styles.vurderingsoversikt__vurderingsvelgerContainer}>
                     <Vurderingsvelger
                         vurderinger={vurderinger}
                         onActiveVurderingChange={(nyvalgtVurdering) => {
@@ -39,7 +36,11 @@ const Vurderingsoversikt = ({ vurderinger }) => {
                     />
                 </div>
             </div>
-            {valgtVurdering !== null && <Vurderingsdetaljer vurdering={valgtVurdering} />}
+            {valgtVurdering !== null && (
+                <div className={styles.vurderingsoversikt__detailSection}>
+                    <Vurderingsdetaljer vurdering={valgtVurdering} />
+                </div>
+            )}
         </div>
     );
 };

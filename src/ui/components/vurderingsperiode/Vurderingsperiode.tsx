@@ -5,10 +5,11 @@ import { prettifyPeriod } from '../../../util/formats';
 import { Period } from '../../../types/Period';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import RedCrossIconFilled from '../icons/RedCrossIconFilled';
+import WarningIcon from '../icons/WarningIcon';
 
 interface VurderingsperiodeProps {
     periode: Period;
-    resultat: Vurderingsresultat;
+    resultat: Vurderingsresultat | null;
 }
 
 const renderIcon = (resultat: Vurderingsresultat) => {
@@ -16,6 +17,8 @@ const renderIcon = (resultat: Vurderingsresultat) => {
         return <GreenCheckIconFilled />;
     } else if (resultat === Vurderingsresultat.AVSLÅTT) {
         return <RedCrossIconFilled />;
+    } else if (resultat === null) {
+        return <WarningIcon />;
     }
 };
 
@@ -24,6 +27,8 @@ const renderResultatText = (resultat: Vurderingsresultat) => {
         return <span>Innvilget</span>;
     } else if (resultat === Vurderingsresultat.AVSLÅTT) {
         return <span>Avslått</span>;
+    } else if (resultat === null) {
+        return <span>Ikke vurdert</span>;
     }
 };
 
