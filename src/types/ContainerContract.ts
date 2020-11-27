@@ -1,6 +1,6 @@
 interface ContainerContract {
     vurdering: string;
-    onSelectVurdering: (vurdering: string) => void;
+    onVurderingValgt: (vurdering: string) => void;
 }
 
 export default ContainerContract;

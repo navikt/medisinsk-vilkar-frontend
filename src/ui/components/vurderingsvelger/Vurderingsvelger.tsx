@@ -8,7 +8,7 @@ import { prettifyPeriod } from '../../../util/formats';
 
 interface VurderingsvelgerProps {
     vurderinger: Vurdering[];
-    onActiveVurderingChange: (vurdering: Vurdering) => void;
+    onVurderingValgt: (vurdering: Vurdering) => void;
 }
 
 interface PeriodeMedTilhÃ¸rendeVurdering {
@@ -32,12 +32,12 @@ function configureInteractiveListElement({ periode, vurdering }: PeriodeMedTilhÃ
     };
 }
 
-const Vurderingsvelger = ({ vurderinger, onActiveVurderingChange }: VurderingsvelgerProps) => {
+const Vurderingsvelger = ({ vurderinger, onVurderingValgt }: VurderingsvelgerProps) => {
     const vurderingsperioder = sammenstillVurderingsperioder(vurderinger);
     return (
         <InteractiveList
             elements={vurderingsperioder.map((vurderingsperiode) =>
-                configureInteractiveListElement(vurderingsperiode, onActiveVurderingChange)
+                configureInteractiveListElement(vurderingsperiode, onVurderingValgt)
             )}
         />
     );
