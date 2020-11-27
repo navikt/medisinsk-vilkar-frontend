@@ -2,9 +2,8 @@ import React from 'react';
 import { TabsPure } from 'nav-frontend-tabs';
 import Vurdering from '../../../types/Vurdering';
 import InteractiveList from '../interactive-list/InteractiveList';
-import { prettifyPeriod } from '../../../util/formats';
-import GreenCheckIcon from '../icons/GreenCheckIcon';
-import GreenCheckIconFilled from '../icons/GreenCheckIconFilled';
+import PeriodeMedVurdering from '../periode-med-vurdering/PeriodeMedVurdering';
+import styles from './periodMenu.less';
 
 const navigationTypes = ['Perioder', 'Vurderinger', 'Resultat'];
 
@@ -20,12 +19,7 @@ const PeriodMenu = ({ vurderinger, onActiveVurderingChange }: PeriodMenuProps) =
         .map((vurdering) =>
             vurdering.perioder.map((periode, index) => {
                 return {
-                    contentRenderer: () => (
-                        <>
-                            <GreenCheckIconFilled />
-                            {prettifyPeriod(periode)} Innvilget
-                        </>
-                    ),
+                    contentRenderer: () => <PeriodeMedVurdering periode={periode} resultat={vurdering.resultat} />,
                     vurdering,
                     onClick: (element) => onActiveVurderingChange(element.vurdering),
                     key: `${index}`,
@@ -35,14 +29,16 @@ const PeriodMenu = ({ vurderinger, onActiveVurderingChange }: PeriodMenuProps) =
         .flat();
 
     return (
-        <div className="periodMenu">
-            <TabsPure
-                kompakt={true}
-                tabs={navigationTypes.map((label, index) => ({ label, aktiv: activeTab === index }))}
-                onChange={(e, clickedIndex) => setActiveTab(clickedIndex)}
-            />
+        <>
             {activeTab === 0 && <InteractiveList elements={allePerioder} />}
-        </div>
+            <div className={styles.periodMenu__invisibleTabs}>
+                <TabsPure
+                    kompakt={true}
+                    tabs={navigationTypes.map((label, index) => ({ label, aktiv: activeTab === index }))}
+                    onChange={(e, clickedIndex) => setActiveTab(clickedIndex)}
+                />
+            </div>
+        </>
     );
 };
 

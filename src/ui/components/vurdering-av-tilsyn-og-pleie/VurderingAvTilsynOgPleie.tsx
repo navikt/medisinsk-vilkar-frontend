@@ -16,12 +16,11 @@ const VurderingAvTilsynOgPleie = () => {
         hentVurderinger();
     }, []);
 
-    return (
-        <div style={{ padding: '1rem' }}>
-            {isLoading === true && <p>Laster vurderinger</p>}
-            {isLoading === false && <Vurderingsoversikt vurderinger={vurderinger} />}
-        </div>
-    );
+    if (isLoading) {
+        return <p>Laster vurderinger</p>;
+    } else {
+        return <Vurderingsoversikt vurderinger={vurderinger} />;
+    }
 };
 
 export default VurderingAvTilsynOgPleie;
