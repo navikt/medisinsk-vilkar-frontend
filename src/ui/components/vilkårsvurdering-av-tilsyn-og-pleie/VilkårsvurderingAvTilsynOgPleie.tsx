@@ -8,7 +8,7 @@ const finnValgtVurdering = (vurderinger, vurderingId) => {
     return vurderinger.find(({ id }) => vurderingId === id);
 };
 
-const VilkårsvurderingAvToOmsorgspersoner = () => {
+const VilkårsvurderingAvTilsynOgPleie = () => {
     const { vurdering, onVurderingValgt } = React.useContext(ContainerContext);
 
     const [isLoading, setIsLoading] = React.useState(true);
@@ -42,4 +42,4 @@ const VilkårsvurderingAvToOmsorgspersoner = () => {
     }
 };
 
-export default VilkårsvurderingAvToOmsorgspersoner;
+export default VilkårsvurderingAvTilsynOgPleie;

@@ -16,7 +16,7 @@
         <script type="text/javascript">
             setTimeout(() => {
                 window.renderMedisinskVilkarApp('app', {
-                    onSelectVurdering: (vurdering) => {
+                    onVurderingValgt: (vurdering) => {
                         history.pushState('', '', `#vurdering=${vurdering}`);
                     },
                     vurdering: new URLSearchParams(`?${window.location.hash.substr(1)}`).get('vurdering')

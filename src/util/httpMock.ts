@@ -3,9 +3,9 @@ import toOmsorgspersonerVurderinger from '../mock/mockedToOmsorgspersonerVurderi
 import Vurdering from '../types/Vurdering';
 
 export const hentTilsynsbehovVurderinger = (): Promise<Vurdering[]> => {
-    return new Promise((resolve) => setTimeout(() => resolve(genereltTilsynsbehovVurderingerMock), 2 * 1000));
+    return new Promise((resolve) => setTimeout(() => resolve(genereltTilsynsbehovVurderingerMock), 500));
 };
 
 export const hentToOmsorgspersonerVurderinger = (): Promise<Vurdering[]> => {
-    return new Promise((resolve) => setTimeout(() => resolve(toOmsorgspersonerVurderinger), 2 * 1000));
+    return new Promise((resolve) => setTimeout(() => resolve(toOmsorgspersonerVurderinger), 500));
 };
