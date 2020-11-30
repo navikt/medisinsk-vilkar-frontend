@@ -56,7 +56,8 @@ const sammenstillPerioderMedBehovForEnEllerTo = (
 ): PeriodeMedGradAvTilsynsbehov[] => {
     if (behovForTo === Tilsynsbehov.HELE) {
         return settGradAvTilsynsbehov(perioderMedTilsynsbehov, GradAvTilsynsbehov.BEHOV_FOR_TO);
-    } else if (behovForTo === Tilsynsbehov.DELER) {
+    }
+    if (behovForTo === Tilsynsbehov.DELER) {
         const perioderMedBehovForEn = [];
         perioderMedTilsynsbehov.forEach((periodeMedTilsynsbehov) => {
             perioderMedBehovForEn.push(...getPeriodDifference(periodeMedTilsynsbehov, perioderMedBehovForTo));

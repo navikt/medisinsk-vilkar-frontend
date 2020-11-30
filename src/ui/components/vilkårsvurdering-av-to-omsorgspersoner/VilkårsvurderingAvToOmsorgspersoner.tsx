@@ -35,27 +35,27 @@ const VilkårsvurderingAvToOmsorgspersoner = () => {
 
     if (isLoading) {
         return <p>Henter vurderinger</p>;
-    } else {
-        return (
-            <NavigationWithDetailView
-                navigationSection={() => (
-                    <VurderingNavigation
-                        vurderinger={vurderinger}
-                        onVurderingValgt={velgVurdering}
-                        onNyVurderingClick={() => setNyVurderingOpen(true)}
-                    />
-                )}
-                detailSection={() => {
-                    if (nyVurderingOpen) {
-                        return <NyVurderingAvToOmsorgspersoner />;
-                    } else if (valgtVurdering !== null) {
-                        return <VurderingsdetaljerForToOmsorgspersoner vurdering={valgtVurdering} />;
-                    }
-                    return null;
-                }}
-            />
-        );
     }
+    return (
+        <NavigationWithDetailView
+            navigationSection={() => (
+                <VurderingNavigation
+                    vurderinger={vurderinger}
+                    onVurderingValgt={velgVurdering}
+                    onNyVurderingClick={() => setNyVurderingOpen(true)}
+                />
+            )}
+            detailSection={() => {
+                if (nyVurderingOpen) {
+                    return <NyVurderingAvToOmsorgspersoner />;
+                }
+                if (valgtVurdering !== null) {
+                    return <VurderingsdetaljerForToOmsorgspersoner vurdering={valgtVurdering} />;
+                }
+                return null;
+            }}
+        />
+    );
 };
 
 export default VilkårsvurderingAvToOmsorgspersoner;

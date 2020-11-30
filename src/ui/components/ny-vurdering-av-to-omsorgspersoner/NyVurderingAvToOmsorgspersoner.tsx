@@ -41,7 +41,7 @@ const NyVurderingAvToOmsorgspersoner = () => {
                     <Box marginTop={Margin.large}>
                         <YesOrNoQuestion
                             question="Er det behov for to omsorgspersoner i perioden hvor vilkår for tilsyn og pleie er oppfylt?"
-                            name={SykdomFormValue.BEHOV_FOR_TO_OMSORGSPERSONER}
+                            name={SykdomFormValue.HAR_BEHOV_FOR_TO_OMSORGSPERSONER}
                             validators={{ required }}
                         />
                     </Box>
