@@ -11,6 +11,7 @@ export enum SykdomFormValue {
     HAR_BEHOV_FOR_TO_OMSORGSPERSONER = 'harBehovForToOmsorgspersoner',
     BEHOV_FOR_KONTINUERLIG_TILSYN = 'behovForKontinuerligTilsyn',
     BEHOV_FOR_TO_OMSORGSPERSONER = 'behovForToOmsorgspersoner',
+    HAR_BEHOV_FOR_TO_OMSORGSPERSONER = 'harBehovForToOmsorgspersoner',
     PERIODER_MED_BEHOV_FOR_TO_OMSORGSPERSONER = 'perioderMedBehovForToOmsorgspersoner',
     SIGNERT_AV = 'signertAv',
 }
@@ -25,6 +26,7 @@ interface SykdomFormState {
     [SykdomFormValue.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: boolean;
     [SykdomFormValue.BEHOV_FOR_KONTINUERLIG_TILSYN]: Tilsynsbehov;
     [SykdomFormValue.BEHOV_FOR_TO_OMSORGSPERSONER]: Tilsynsbehov;
+    [SykdomFormValue.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: boolean;
     [SykdomFormValue.PERIODER_MED_BEHOV_FOR_TO_OMSORGSPERSONER]: Period[];
     [SykdomFormValue.SIGNERT_AV]: 'fastlege' | 'annenYrkesgruppe';
 }

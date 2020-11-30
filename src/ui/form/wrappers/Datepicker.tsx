@@ -9,7 +9,7 @@ export interface DatepickerProps {
     validators?: { [key: string]: (v: any) => string | boolean | undefined };
     ariaLabel?: string;
     defaultValue?: string;
-    limitations: DatepickerLimitations;
+    limitations?: DatepickerLimitations;
     error?: string;
 }
 
