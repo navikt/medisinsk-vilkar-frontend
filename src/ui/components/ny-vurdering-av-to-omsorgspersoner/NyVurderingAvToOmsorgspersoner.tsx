@@ -32,7 +32,7 @@ const NyVurderingAvToOmsorgspersoner = () => {
                             label={
                                 <b>
                                     Gjør en vurdering av om det er behov for to omsorgspersoner i perioden hvor det er
-                                    behov for kontinerlig tilsyn og pleie
+                                    behov for kontinerlig tilsyn og pleie.
                                 </b>
                             }
                             validators={{ required }}
