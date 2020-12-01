@@ -23,6 +23,7 @@ const VilkårsvurderingAvToOmsorgspersoner = () => {
         setIsLoading(true);
         hentToOmsorgspersonerVurderingsoversikt().then(({ vurderinger }) => {
             setVurderinger(vurderinger);
+            setValgtVurdering(finnValgtVurdering(vurderinger, vurdering) || null);
             setIsLoading(false);
         });
     }, []);

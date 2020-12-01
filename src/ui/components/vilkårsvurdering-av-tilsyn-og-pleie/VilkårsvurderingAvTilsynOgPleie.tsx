@@ -17,13 +17,14 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
 
     const [isLoading, setIsLoading] = React.useState(true);
     const [vurderinger, setVurderinger] = React.useState([]);
-    const [valgtVurdering, setValgtVurdering] = React.useState(finnValgtVurdering(vurderinger, vurdering) || null);
+    const [valgtVurdering, setValgtVurdering] = React.useState(null);
     const [nyVurderingOpen, setNyVurderingOpen] = React.useState(false);
 
     React.useEffect(() => {
         setIsLoading(true);
         hentTilsynsbehovVurderingsoversikt().then(({ vurderinger }: Vurderingsoversikt) => {
             setVurderinger(vurderinger);
+            setValgtVurdering(finnValgtVurdering(vurderinger, vurdering) || null);
             setIsLoading(false);
         });
     }, []);
