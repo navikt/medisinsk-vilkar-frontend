@@ -19,7 +19,9 @@ const InteractiveListElement = (props: InteractiveListElement) => {
     });
     return (
         <li className={cls}>
-            <div onClick={() => onClick(props)}>{contentRenderer(props)}</div>
+            <button className={styles.interactiveListElement__button} type="button" onClick={() => onClick(props)}>
+                {contentRenderer(props)}
+            </button>
         </li>
     );
 };
