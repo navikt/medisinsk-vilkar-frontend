@@ -1,11 +1,12 @@
 import React from 'react';
 import Vurdering from '../../../types/Vurdering';
-import { hentTilsynsbehovVurderinger } from '../../../util/httpMock';
+import { hentTilsynsbehovVurderingsoversikt } from '../../../util/httpMock';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import VurderingAvTilsynsbehovForm from '../ny-vurdering-av-tilsynsbehov/VurderingAvTilsynsbehovForm';
 import VurderingNavigation from '../vurdering-navigation/VurderingNavigation';
 import VurderingsdetaljerForKontinuerligTilsynOgPleie from '../vurderingsdetaljer-for-kontinuerlig-tilsyn-og-pleie/VurderingsdetaljerForKontinuerligTilsynOgPleie';
+import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 
 const finnValgtVurdering = (vurderinger, vurderingId) => {
     return vurderinger.find(({ id }) => vurderingId === id);
@@ -21,8 +22,8 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
 
     React.useEffect(() => {
         setIsLoading(true);
-        hentTilsynsbehovVurderinger().then((v: Vurdering[]) => {
-            setVurderinger(v);
+        hentTilsynsbehovVurderingsoversikt().then(({ vurderinger }: Vurderingsoversikt) => {
+            setVurderinger(vurderinger);
             setIsLoading(false);
         });
     }, []);
@@ -48,7 +49,7 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
                 )}
                 detailSection={() => {
                     if (nyVurderingOpen) {
-                        return <VurderingAvTilsynsbehovForm innleggelsesperioder={[]} />;
+                        return <VurderingAvTilsynsbehovForm />;
                     }
                     if (valgtVurdering !== null) {
                         return <VurderingsdetaljerForKontinuerligTilsynOgPleie vurdering={valgtVurdering} />;

@@ -1,12 +1,10 @@
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import React from 'react';
-import { FormProvider, useForm, useFormContext } from 'react-hook-form';
-import { Period } from '../../../types/Period';
+import { FormProvider, useForm } from 'react-hook-form';
 import { SykdomFormValue } from '../../../types/SykdomFormState';
 import { getPeriodDifference } from '../../../util/dateUtils';
-import { convertToInternationalPeriod } from '../../../util/formats';
 import SøknadsperiodeContext from '../../context/SøknadsperiodeContext';
-import { datoenInngårISøknadsperioden, detErIngenInnleggelsePåDato, required } from '../../form/validators';
+import { required } from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
@@ -14,11 +12,7 @@ import Box, { Margin } from '../box/Box';
 import DetailView from '../detail-view/DetailView';
 import Form from '../form/Form';
 
-interface VurderingAvTilsynsbehovFormProps {
-    innleggelsesperioder: Period[];
-}
-
-export default ({ innleggelsesperioder }: VurderingAvTilsynsbehovFormProps) => {
+export default () => {
     const formMethods = useForm({
         defaultValues: {
             [SykdomFormValue.VURDERING_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
@@ -29,9 +23,7 @@ export default ({ innleggelsesperioder }: VurderingAvTilsynsbehovFormProps) => {
     });
     const { handleSubmit, watch } = formMethods;
 
-    // const { watch } = useFormContext();
     const søknadsperiode = React.useContext(SøknadsperiodeContext);
-
     const behovForKontinuerligTilsyn = watch(SykdomFormValue.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN) === true;
     const perioderMedBehovForTilsynOgPleie = watch(SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE);
 
@@ -79,38 +71,10 @@ export default ({ innleggelsesperioder }: VurderingAvTilsynsbehovFormProps) => {
                                         fromDatepickerProps: {
                                             name: 'fom',
                                             label: 'Fra',
-                                            limitations: {
-                                                minDate: søknadsperiode?.fom,
-                                                maxDate: søknadsperiode?.tom,
-                                                invalidDateRanges: innleggelsesperioder.map(
-                                                    convertToInternationalPeriod
-                                                ),
-                                            },
-                                            validators: {
-                                                required,
-                                                datoenInngårISøknadsperioden: (value) =>
-                                                    datoenInngårISøknadsperioden(value, søknadsperiode),
-                                                detErIngenInnleggelsePåDato: (value) =>
-                                                    detErIngenInnleggelsePåDato(value, innleggelsesperioder),
-                                            },
                                         },
                                         toDatepickerProps: {
                                             name: 'tom',
                                             label: 'Til',
-                                            limitations: {
-                                                minDate: søknadsperiode?.fom,
-                                                maxDate: søknadsperiode?.tom,
-                                                invalidDateRanges: innleggelsesperioder.map(
-                                                    convertToInternationalPeriod
-                                                ),
-                                            },
-                                            validators: {
-                                                required,
-                                                datoenInngårISøknadsperioden: (value) =>
-                                                    datoenInngårISøknadsperioden(value, søknadsperiode),
-                                                detErIngenInnleggelsePåDato: (value) =>
-                                                    detErIngenInnleggelsePåDato(value, innleggelsesperioder),
-                                            },
                                         },
                                     }}
                                 />

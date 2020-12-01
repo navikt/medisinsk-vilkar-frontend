@@ -1,5 +1,5 @@
 import React from 'react';
-import { hentToOmsorgspersonerVurderinger } from '../../../util/httpMock';
+import { hentToOmsorgspersonerVurderingsoversikt } from '../../../util/httpMock';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import VurderingNavigation from '../vurdering-navigation/VurderingNavigation';
@@ -21,7 +21,7 @@ const VilkårsvurderingAvToOmsorgspersoner = () => {
 
     React.useEffect(() => {
         setIsLoading(true);
-        hentToOmsorgspersonerVurderinger().then((vurderinger) => {
+        hentToOmsorgspersonerVurderingsoversikt().then(({ vurderinger }) => {
             setVurderinger(vurderinger);
             setIsLoading(false);
         });
