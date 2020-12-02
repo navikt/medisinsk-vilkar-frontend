@@ -9,3 +9,11 @@ export const hentTilsynsbehovVurderingsoversikt = (): Promise<Vurderingsoversikt
 export const hentToOmsorgspersonerVurderingsoversikt = (): Promise<Vurderingsoversikt> => {
     return new Promise((resolve) => setTimeout(() => resolve(mockedToOmsorgspersonerVurderingsoversikt), 500));
 };
+
+export const doDryRun = (): Promise<string> => {
+    return new Promise((resolve) =>
+        setTimeout(() => {
+            resolve('Alt i orden');
+        }, 500)
+    );
+};

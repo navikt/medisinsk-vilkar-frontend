@@ -6,9 +6,10 @@ interface YesOrNoQuestionProps {
     question: string;
     name: string;
     validators?: { [key: string]: (v: any) => string | boolean | undefined };
+    onChange?: () => void;
 }
 
-const YesOrNoQuestion = ({ question, name, validators }: YesOrNoQuestionProps) => {
+const YesOrNoQuestion = ({ question, name, validators, onChange }: YesOrNoQuestionProps) => {
     const { control, errors } = useFormContext();
     return (
         <Controller
@@ -20,15 +21,22 @@ const YesOrNoQuestion = ({ question, name, validators }: YesOrNoQuestionProps) =
                     ...validators,
                 },
             }}
-            render={({ onChange, value }) => (
-                <PureYesOrNoQuestion
-                    question={question}
-                    name={name}
-                    onChange={onChange}
-                    value={value}
-                    errorMessage={errors[name]?.message}
-                />
-            )}
+            render={(props) => {
+                const reactHookFormOnChange = props.onChange;
+
+                return (
+                    <PureYesOrNoQuestion
+                        question={question}
+                        name={name}
+                        onChange={(value) => {
+                            reactHookFormOnChange(value);
+                            onChange?.();
+                        }}
+                        value={props.value}
+                        errorMessage={errors[name]?.message}
+                    />
+                );
+            }}
         />
     );
 };
