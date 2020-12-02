@@ -17,7 +17,11 @@
             setTimeout(() => {
                 window.renderMedisinskVilkarApp('app', {
                     onVurderingValgt: (vurdering) => {
-                        history.pushState('', '', `#vurdering=${vurdering}`);
+                        if (vurdering !== null) {
+                            history.pushState('', '', `#vurdering=${vurdering}`);
+                        } else {
+                            window.location.hash = '';
+                        }
                     },
                     vurdering: new URLSearchParams(`?${window.location.hash.substr(1)}`).get('vurdering')
                 });

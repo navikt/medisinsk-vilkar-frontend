@@ -16,49 +16,54 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
     const { vurdering, onVurderingValgt } = React.useContext(ContainerContext);
 
     const [isLoading, setIsLoading] = React.useState(true);
-    const [vurderinger, setVurderinger] = React.useState([]);
+    const [vurderingsoversikt, setVurderingsoversikt] = React.useState<Vurderingsoversikt>(null);
     const [valgtVurdering, setValgtVurdering] = React.useState(null);
     const [nyVurderingOpen, setNyVurderingOpen] = React.useState(false);
 
     React.useEffect(() => {
         setIsLoading(true);
-        hentTilsynsbehovVurderingsoversikt().then(({ vurderinger }: Vurderingsoversikt) => {
-            setVurderinger(vurderinger);
-            setValgtVurdering(finnValgtVurdering(vurderinger, vurdering) || null);
+        hentTilsynsbehovVurderingsoversikt().then((vurderingsoversikt: Vurderingsoversikt) => {
+            setVurderingsoversikt(vurderingsoversikt);
+            setValgtVurdering(finnValgtVurdering(vurderingsoversikt.vurderinger, vurdering) || null);
             setIsLoading(false);
         });
     }, []);
 
     const velgVurdering = (v: Vurdering) => {
-        onVurderingValgt(v.id);
-        setValgtVurdering(v);
-        setNyVurderingOpen(false);
+        if (v === null) {
+            onVurderingValgt(null);
+            setValgtVurdering(null);
+            setNyVurderingOpen(true);
+        } else {
+            onVurderingValgt(v.id);
+            setValgtVurdering(v);
+            setNyVurderingOpen(false);
+        }
     };
 
     if (isLoading) {
         return <p>Henter vurderinger</p>;
     }
     return (
-        <>
-            <NavigationWithDetailView
-                navigationSection={() => (
-                    <VurderingNavigation
-                        vurderinger={vurderinger}
-                        onVurderingValgt={velgVurdering}
-                        onNyVurderingClick={() => setNyVurderingOpen(true)}
-                    />
-                )}
-                detailSection={() => {
-                    if (nyVurderingOpen) {
-                        return <VurderingAvTilsynsbehovForm />;
-                    }
-                    if (valgtVurdering !== null) {
-                        return <VurderingsdetaljerForKontinuerligTilsynOgPleie vurdering={valgtVurdering} />;
-                    }
-                    return null;
-                }}
-            />
-        </>
+        <NavigationWithDetailView
+            navigationSection={() => (
+                <VurderingNavigation
+                    vurderinger={vurderingsoversikt?.vurderinger}
+                    perioderSomSkalVurderes={vurderingsoversikt?.perioderSomSkalVurderes}
+                    onVurderingValgt={velgVurdering}
+                    onNyVurderingClick={() => setNyVurderingOpen(true)}
+                />
+            )}
+            detailSection={() => {
+                if (nyVurderingOpen) {
+                    return <VurderingAvTilsynsbehovForm />;
+                }
+                if (valgtVurdering !== null) {
+                    return <VurderingsdetaljerForKontinuerligTilsynOgPleie vurdering={valgtVurdering} />;
+                }
+                return null;
+            }}
+        />
     );
 };
 

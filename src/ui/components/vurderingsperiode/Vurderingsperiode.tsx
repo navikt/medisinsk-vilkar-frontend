@@ -1,15 +1,14 @@
 import React from 'react';
-import styles from './periodeMedVurdering.less';
 import GreenCheckIconFilled from '../icons/GreenCheckIconFilled';
 import { prettifyPeriod } from '../../../util/formats';
 import { Period } from '../../../types/Period';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import RedCrossIconFilled from '../icons/RedCrossIconFilled';
-import WarningIcon from '../icons/WarningIcon';
+import styles from './vurderingsperiode.less';
 
 interface VurderingsperiodeProps {
     periode: Period;
-    resultat: Vurderingsresultat | null;
+    resultat: Vurderingsresultat;
 }
 
 const renderIcon = (resultat: Vurderingsresultat) => {
@@ -17,8 +16,6 @@ const renderIcon = (resultat: Vurderingsresultat) => {
         return <GreenCheckIconFilled />;
     } else if (resultat === Vurderingsresultat.AVSLÅTT) {
         return <RedCrossIconFilled />;
-    } else if (resultat === null) {
-        return <WarningIcon />;
     }
 };
 
@@ -27,17 +24,15 @@ const renderResultatText = (resultat: Vurderingsresultat) => {
         return <span>Innvilget</span>;
     } else if (resultat === Vurderingsresultat.AVSLÅTT) {
         return <span>Avslått</span>;
-    } else if (resultat === null) {
-        return <span>Ikke vurdert</span>;
     }
 };
 
 const Vurderingsperiode = ({ periode, resultat }: VurderingsperiodeProps) => {
     return (
-        <div className={styles.periodeMedVurdering}>
+        <div className={styles.vurderingsperiode}>
             {renderIcon(resultat)}
-            <div className={styles.periodeMedVurdering__texts}>
-                <p className={styles.periodeMedVurdering__texts__period}>{prettifyPeriod(periode)}</p>
+            <div className={styles.vurderingsperiode__texts}>
+                <p className={styles.vurderingsperiode__texts__period}>{prettifyPeriod(periode)}</p>
                 {renderResultatText(resultat)}
             </div>
         </div>
