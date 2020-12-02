@@ -1,16 +1,14 @@
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { SykdomFormValue } from '../../../types/SykdomFormState';
-import { getPeriodDifference } from '../../../util/dateUtils';
-import SøknadsperiodeContext from '../../context/SøknadsperiodeContext';
+import { doDryRun } from '../../../util/httpMock';
 import { required } from '../../form/validators';
-import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import Box, { Margin } from '../box/Box';
 import DetailView from '../detail-view/DetailView';
 import Form from '../form/Form';
+import Tilsynsperiodevelger from './Tilsynsperiodevelger';
 
 export default () => {
     const formMethods = useForm({
@@ -20,21 +18,17 @@ export default () => {
             [SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: [],
         },
         shouldUnregister: false,
+        mode: 'onChange',
     });
     const { handleSubmit, watch } = formMethods;
 
-    const søknadsperiode = React.useContext(SøknadsperiodeContext);
     const behovForKontinuerligTilsyn = watch(SykdomFormValue.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN) === true;
-    const perioderMedBehovForTilsynOgPleie = watch(SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE);
 
-    const erHeleSøknadsperiodenDekket = () => {
-        return false;
-        const resterendePeriode = getPeriodDifference(søknadsperiode, perioderMedBehovForTilsynOgPleie);
-        return resterendePeriode.length === 0;
-    };
+    const dryRun = useCallback(() => {
+        doDryRun().then((result) => console.log(result));
+    }, []);
 
-    const onSubmit = () => null;
-
+    const onSubmit = (values) => console.log(values);
     return (
         <DetailView title="Vurdering av tilsyn og pleie">
             <FormProvider {...formMethods}>
@@ -59,34 +53,14 @@ export default () => {
                             question="Er det behov for tilsyn og pleie"
                             name={SykdomFormValue.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN}
                             validators={{ required }}
+                            onChange={dryRun}
                         />
                     </Box>
                     {behovForKontinuerligTilsyn && (
                         <>
                             <Box marginTop={Margin.large}>
-                                <PeriodpickerList
-                                    legend="Oppgi perioder"
-                                    name={SykdomFormValue.PERIODER_MED_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE}
-                                    periodpickerProps={{
-                                        fromDatepickerProps: {
-                                            name: 'fom',
-                                            label: 'Fra',
-                                        },
-                                        toDatepickerProps: {
-                                            name: 'tom',
-                                            label: 'Til',
-                                        },
-                                    }}
-                                />
+                                <Tilsynsperiodevelger dryRun={dryRun} />
                             </Box>
-                            {!erHeleSøknadsperiodenDekket() && (
-                                <Box marginTop={Margin.large}>
-                                    <AlertStripeAdvarsel>
-                                        Du har ikke vurdert hele søknadsperioden. Resterende periode vurderer du etter
-                                        at du har lagret denne.
-                                    </AlertStripeAdvarsel>
-                                </Box>
-                            )}
                         </>
                     )}
                 </Form>
