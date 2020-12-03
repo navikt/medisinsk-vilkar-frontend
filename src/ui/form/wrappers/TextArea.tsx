@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Textarea } from 'nav-frontend-skjema';
 import { Controller, useFormContext } from 'react-hook-form';
-import ExpandableLabel from '../../components/expandableLabel/ExpandableLabel';
+import ExpandableLabel from '../../components/expandable-label/ExpandableLabel';
 import Box, { Margin } from '../../components/box/Box';
 
 interface TextAreaProps {
@@ -28,11 +28,7 @@ const TextArea = ({ label, name, validators, helptext }: TextAreaProps): JSX.Ele
                 if (helptext) {
                     return (
                         <>
-                            <ExpandableLabel
-                                labelText={label}
-                                helptext={helptext}
-                                labelFor={name}
-                            />
+                            <ExpandableLabel labelText={label} helptext={helptext} labelFor={name} />
                             <Box marginTop={Margin.medium}>
                                 <Textarea
                                     value={value}

@@ -3,10 +3,14 @@ import Vurdering from '../../../types/Vurdering';
 import { hentTilsynsbehovVurderingsoversikt } from '../../../util/httpMock';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
-import VurderingAvTilsynsbehovForm from '../ny-vurdering-av-tilsynsbehov/VurderingAvTilsynsbehovForm';
+import VurderingAvTilsynsbehovForm, {
+    FieldName,
+    VurderingAvTilsynsbehovFormState,
+} from '../ny-vurdering-av-tilsynsbehov/NyVurderingAvTilsynsbehovForm';
 import VurderingNavigation from '../vurdering-navigation/VurderingNavigation';
 import VurderingsdetaljerForKontinuerligTilsynOgPleie from '../vurderingsdetaljer-for-kontinuerlig-tilsyn-og-pleie/VurderingsdetaljerForKontinuerligTilsynOgPleie';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
+import { makeTilsynsbehovFormStateAsVurderingObject } from '../../../util/vurderingUtils';
 
 const finnValgtVurdering = (vurderinger, vurderingId) => {
     return vurderinger.find(({ id }) => vurderingId === id);
@@ -20,9 +24,13 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
     const [valgtVurdering, setValgtVurdering] = React.useState(null);
     const [nyVurderingOpen, setNyVurderingOpen] = React.useState(false);
 
-    React.useEffect(() => {
+    const hentVurderingsoversikt = () => {
         setIsLoading(true);
-        hentTilsynsbehovVurderingsoversikt().then((vurderingsoversikt: Vurderingsoversikt) => {
+        return hentTilsynsbehovVurderingsoversikt();
+    };
+
+    React.useEffect(() => {
+        hentVurderingsoversikt().then((vurderingsoversikt: Vurderingsoversikt) => {
             setVurderingsoversikt(vurderingsoversikt);
             setValgtVurdering(finnValgtVurdering(vurderingsoversikt.vurderinger, vurdering) || null);
             setIsLoading(false);
@@ -41,6 +49,14 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
         }
     };
 
+    const lagreVurderingAvTilsynsbehov = (data: VurderingAvTilsynsbehovFormState) => {
+        hentVurderingsoversikt().then((vurderingsoversikt) => {
+            vurderingsoversikt.vurderinger.push(makeTilsynsbehovFormStateAsVurderingObject(data));
+            setVurderingsoversikt(vurderingsoversikt);
+            setIsLoading(false);
+        });
+    };
+
     if (isLoading) {
         return <p>Henter vurderinger</p>;
     }
@@ -56,7 +72,17 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
             )}
             detailSection={() => {
                 if (nyVurderingOpen) {
-                    return <VurderingAvTilsynsbehovForm />;
+                    return (
+                        <VurderingAvTilsynsbehovForm
+                            defaultValues={{
+                                [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
+                                [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
+                                [FieldName.PERIODER]: vurderingsoversikt.perioderSomSkalVurderes,
+                            }}
+                            onSubmit={lagreVurderingAvTilsynsbehov}
+                            perioderSomSkalVurderes={vurderingsoversikt.perioderSomSkalVurderes}
+                        />
+                    );
                 }
                 if (valgtVurdering !== null) {
                     return <VurderingsdetaljerForKontinuerligTilsynOgPleie vurdering={valgtVurdering} />;

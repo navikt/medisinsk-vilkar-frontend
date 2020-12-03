@@ -1,39 +1,35 @@
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import React from 'react';
-import { getPeriodAsListOfDays } from '../../../util/dateUtils';
+import { FormProvider, useForm } from 'react-hook-form';
 import { required } from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
+import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import Box, { Margin } from '../box/Box';
-import { Period } from '../../../types/Period';
-import { FormProvider, useForm } from 'react-hook-form';
 import DetailView from '../detail-view/DetailView';
 import Form from '../form/Form';
-import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import { Period } from '../../../types/Period';
+import { getPeriodAsListOfDays } from '../../../util/dateUtils';
 
 export enum FieldName {
-    VURDERING_AV_TO_OMSORGSPERSONER = 'vurderingAvToOmsorgspersoner',
-    HAR_BEHOV_FOR_TO_OMSORGSPERSONER = 'harBehovForToOmsorgspersoner',
+    VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
+    HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE = 'harBehovForKontinuerligTilsynOgPleie',
     PERIODER = 'perioder',
 }
 
-export interface VurderingAvToOmsorgspersonerFormState {
-    [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]?: string;
-    [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]?: boolean;
+export interface VurderingAvTilsynsbehovFormState {
+    [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]?: string;
+    [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]?: boolean;
     [FieldName.PERIODER]?: Period[];
 }
 
-interface VurderingAvToOmsorgspersonerFormProps {
-    defaultValues: VurderingAvToOmsorgspersonerFormState;
-    onSubmit: (data: VurderingAvToOmsorgspersonerFormState) => void;
+interface VurderingAvTilsynsbehovFormProps {
+    defaultValues: VurderingAvTilsynsbehovFormState;
+    onSubmit: (data: VurderingAvTilsynsbehovFormState) => void;
     perioderSomSkalVurderes?: Period[];
 }
 
-export default ({
-    defaultValues,
-    onSubmit,
-    perioderSomSkalVurderes,
-}: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
+export default ({ defaultValues, onSubmit, perioderSomSkalVurderes }: VurderingAvTilsynsbehovFormProps) => {
     const formMethods = useForm({
         defaultValues,
         shouldUnregister: false,
@@ -48,20 +44,22 @@ export default ({
     }, [perioderSomSkalVurderes, perioderSomBlirVurdert]);
 
     return (
-        <DetailView title="Vurdering av to omsorgspersoner">
-            <FormProvider {...formMethods}>
-                <Form buttonLabel="Lagre og vurder resterende periode" onSubmit={formMethods.handleSubmit(onSubmit)}>
+        <DetailView title="Vurdering av tilsyn og pleie">
+            <FormProvider {...formMethods} handleSubmit={formMethods.handleSubmit}>
+                <Form buttonLabel="Lagre" onSubmit={formMethods.handleSubmit(onSubmit)}>
                     <Box marginTop={Margin.large}>
                         <TextArea
-                            name={FieldName.VURDERING_AV_TO_OMSORGSPERSONER}
-                            helptext="Dersom det er behov for to omsorgsperoner deler av perioden,  må det komme tydelig frem av vurderingen hvilke perioder det er behov og hvilke det ikke er behov."
+                            name={FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE}
                             label={
                                 <>
-                                    <b>Gjør en vurdering av om det er behov for to omsorgspersoner.</b>
+                                    <b>
+                                        Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge
+                                        av sykdommen.
+                                    </b>
                                     <span style={{ fontWeight: 400 }}>
-                                        &nbsp;Dersom det er behov for to omsorgsperoner deler av perioden, må det komme
-                                        tydelig frem av vurderingen hvilke perioder det er behov og hvilke det ikke er
-                                        behov.
+                                        &nbsp;Dersom det er behov for tilsyn og pleie kun i deler av perioden må det
+                                        komme tydelig frem av vurderingen hvilke perioder det er behov og hvilke det
+                                        ikke er behov.
                                     </span>
                                 </>
                             }
@@ -70,8 +68,8 @@ export default ({
                     </Box>
                     <Box marginTop={Margin.large}>
                         <YesOrNoQuestion
-                            question="Er det behov for to omsorgspersoner?"
-                            name={FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER}
+                            question="Er det behov for tilsyn og pleie?"
+                            name={FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE}
                             validators={{ required }}
                         />
                     </Box>
@@ -82,11 +80,11 @@ export default ({
                             periodpickerProps={{
                                 fromDatepickerProps: {
                                     name: 'fom',
-                                    ariaLabel: 'Fra',
+                                    label: 'Fra',
                                 },
                                 toDatepickerProps: {
                                     name: 'tom',
-                                    ariaLabel: 'Til',
+                                    label: 'Til',
                                 },
                             }}
                         />
