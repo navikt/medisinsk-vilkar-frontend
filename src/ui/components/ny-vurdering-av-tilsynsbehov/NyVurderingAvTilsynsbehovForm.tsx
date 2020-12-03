@@ -1,8 +1,7 @@
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { required } from '../../form/validators';
-import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import Box, { Margin } from '../box/Box';
@@ -10,6 +9,8 @@ import DetailView from '../detail-view/DetailView';
 import Form from '../form/Form';
 import { Period } from '../../../types/Period';
 import { getPeriodAsListOfDays } from '../../../util/dateUtils';
+import { doDryRun } from '../../../util/httpMock';
+import Periodevelger from '../periodevelger/Periodevelger';
 
 export enum FieldName {
     VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
@@ -36,12 +37,15 @@ export default ({ defaultValues, onSubmit, perioderSomSkalVurderes }: VurderingA
     });
 
     const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
-
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
         const dagerSomSkalVurderes = (perioderSomSkalVurderes || []).flatMap(getPeriodAsListOfDays);
         const dagerSomBlirVurdert = (perioderSomBlirVurdert || []).flatMap(getPeriodAsListOfDays);
         return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
     }, [perioderSomSkalVurderes, perioderSomBlirVurdert]);
+
+    const dryRun = useCallback(() => {
+        doDryRun().then((result) => console.log(result));
+    }, []);
 
     return (
         <DetailView title="Vurdering av tilsyn og pleie">
@@ -74,20 +78,7 @@ export default ({ defaultValues, onSubmit, perioderSomSkalVurderes }: VurderingA
                         />
                     </Box>
                     <Box marginTop={Margin.large}>
-                        <PeriodpickerList
-                            legend="Oppgi perioder"
-                            name={FieldName.PERIODER}
-                            periodpickerProps={{
-                                fromDatepickerProps: {
-                                    name: 'fom',
-                                    label: 'Fra',
-                                },
-                                toDatepickerProps: {
-                                    name: 'tom',
-                                    label: 'Til',
-                                },
-                            }}
-                        />
+                        <Periodevelger name={FieldName.PERIODER} dryRun={dryRun} />
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (
                         <Box marginTop={Margin.large}>

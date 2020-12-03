@@ -1,7 +1,6 @@
 import { SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { LegeerklæringFormInput } from '../../../types/medisinsk-vilkår/LegeerklæringFormInput';
 import Box, { Margin } from '../../components/box/Box';
 import PlusIcon from '../../components/icons/PlusIcon';
 import Periodpicker, { PeriodpickerProps } from '../pure/Periodpicker';
@@ -35,7 +34,7 @@ const PeriodpickerList = ({
     legend,
     periodpickerProps: { fromDatepickerProps, toDatepickerProps },
 }: PeriodpickerListProps): JSX.Element => {
-    const formMethods = useFormContext<LegeerklæringFormInput>();
+    const formMethods = useFormContext();
     const { control, errors } = formMethods;
     const { fields, append, remove } = useFieldArray({
         control,
