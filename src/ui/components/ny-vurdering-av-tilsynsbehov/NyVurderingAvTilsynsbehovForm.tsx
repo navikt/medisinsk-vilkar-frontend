@@ -33,6 +33,7 @@ interface VurderingAvTilsynsbehovFormProps {
 export default ({ defaultValues, onSubmit, perioderSomSkalVurderes }: VurderingAvTilsynsbehovFormProps) => {
     const formMethods = useForm({
         defaultValues,
+        mode: 'onChange',
     });
 
     React.useEffect(() => {
@@ -81,7 +82,11 @@ export default ({ defaultValues, onSubmit, perioderSomSkalVurderes }: VurderingA
                         />
                     </Box>
                     <Box marginTop={Margin.large}>
-                        <Periodevelger name={FieldName.PERIODER} dryRun={dryRun} />
+                        <Periodevelger
+                            name={FieldName.PERIODER}
+                            dryRun={dryRun}
+                            perioderSomSkalVurderes={perioderSomSkalVurderes}
+                        />
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (
                         <Box marginTop={Margin.large}>

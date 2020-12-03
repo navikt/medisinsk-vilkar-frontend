@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Vurdering from '../../../types/Vurdering';
 import { hentTilsynsbehovVurderingsoversikt } from '../../../util/httpMock';
 import ContainerContext from '../../context/ContainerContext';
@@ -11,6 +11,7 @@ import VurderingNavigation from '../vurdering-navigation/VurderingNavigation';
 import VurderingsdetaljerForKontinuerligTilsynOgPleie from '../vurderingsdetaljer-for-kontinuerlig-tilsyn-og-pleie/VurderingsdetaljerForKontinuerligTilsynOgPleie';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { makeTilsynsbehovFormStateAsVurderingObject } from '../../../util/vurderingUtils';
+import { slåSammenSammenhengendePerioder } from '../../../util/periodUtils';
 
 const finnValgtVurdering = (vurderinger, vurderingId) => {
     return vurderinger.find(({ id }) => vurderingId === id);
@@ -66,6 +67,13 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
         });
     };
 
+    const sammenslåttePerioderSomSkalVurderes = useMemo(() => {
+        if (vurderingsoversikt) {
+            return slåSammenSammenhengendePerioder(vurderingsoversikt.perioderSomSkalVurderes);
+        }
+        return [];
+    }, [vurderingsoversikt]);
+
     if (isLoading) {
         return <p>Henter vurderinger</p>;
     }
@@ -87,10 +95,10 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
                             defaultValues={{
                                 [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
                                 [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
-                                [FieldName.PERIODER]: perioderTilVurderingDefaultValue,
+                                [FieldName.PERIODER]: sammenslåttePerioderSomSkalVurderes,
                             }}
                             onSubmit={lagreVurderingAvTilsynsbehov}
-                            perioderSomSkalVurderes={vurderingsoversikt.perioderSomSkalVurderes}
+                            perioderSomSkalVurderes={sammenslåttePerioderSomSkalVurderes}
                         />
                     );
                 }
