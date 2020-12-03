@@ -11,23 +11,21 @@ import { Period } from '../../../types/Period';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
 
 interface VurderingNavigationProps {
-    perioderSomSkalVurderes?: Period[];
     vurderinger: Vurdering[];
     onNyVurderingClick: () => void;
     onVurderingValgt: (vurdering: Vurdering) => void;
+    perioderSomSkalVurderes?: Period[];
+    onPerioderSomSkalVurderesClick?: () => void;
 }
 
 const VurderingNavigation = ({
-    perioderSomSkalVurderes,
     vurderinger,
     onNyVurderingClick,
     onVurderingValgt,
+    perioderSomSkalVurderes,
+    onPerioderSomSkalVurderesClick,
 }: VurderingNavigationProps) => {
-    const vurderingselementer = sammenstillVurderingsperioder(vurderinger).map((vurderingsperiode) =>
-        configureInteractiveListElement(vurderingsperiode, onVurderingValgt)
-    );
-
-    function configureInteractiveListElement({ periode, vurdering }, selectCallback) {
+    function configureVurdertPeriodeElement({ periode, vurdering }, selectCallback) {
         return {
             contentRenderer: () => <Vurderingsperiode periode={periode} resultat={vurdering.resultat} />,
             vurdering,
@@ -36,11 +34,26 @@ const VurderingNavigation = ({
         };
     }
 
-    let perioderSomSkalVurderesElement = {
-        contentRenderer: () => <PerioderSomSkalVurderes perioder={perioderSomSkalVurderes || []} />,
-        onClick: () => onVurderingValgt(null),
-        key: 'foobar',
-    };
+    function configurePerioderSomSkalVurderesElement() {
+        return {
+            contentRenderer: () => <PerioderSomSkalVurderes perioder={perioderSomSkalVurderes || []} />,
+            onClick: onPerioderSomSkalVurderesClick,
+            key: 'foobar',
+        };
+    }
+
+    const interactiveListElements = React.useMemo(() => {
+        const vurdertePerioderElements = sammenstillVurderingsperioder(vurderinger).map((vurderingsperiode) =>
+            configureVurdertPeriodeElement(vurderingsperiode, onVurderingValgt)
+        );
+
+        if (perioderSomSkalVurderes && perioderSomSkalVurderes.length > 0) {
+            const perioderSomSkalVurderesElement = configurePerioderSomSkalVurderesElement();
+            return [perioderSomSkalVurderesElement, ...vurdertePerioderElements];
+        }
+
+        return vurdertePerioderElements;
+    }, [vurderinger, perioderSomSkalVurderes]);
 
     return (
         <>
@@ -55,7 +68,7 @@ const VurderingNavigation = ({
                 Opprett ny vurdering
             </Knapp>
             <div className={styles.vurderingsvelgerContainer}>
-                <InteractiveList elements={[perioderSomSkalVurderesElement, ...vurderingselementer]} />
+                <InteractiveList elements={interactiveListElements} />
             </div>
         </>
     );

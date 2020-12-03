@@ -33,8 +33,11 @@ interface VurderingAvTilsynsbehovFormProps {
 export default ({ defaultValues, onSubmit, perioderSomSkalVurderes }: VurderingAvTilsynsbehovFormProps) => {
     const formMethods = useForm({
         defaultValues,
-        shouldUnregister: false,
     });
+
+    React.useEffect(() => {
+        formMethods.reset(defaultValues);
+    }, [defaultValues]);
 
     const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {

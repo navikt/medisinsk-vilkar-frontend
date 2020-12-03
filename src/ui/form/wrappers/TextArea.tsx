@@ -18,7 +18,7 @@ const TextArea = ({ label, name, validators, helptext }: TextAreaProps): JSX.Ele
         <Controller
             control={control}
             name={name}
-            defaultValue={null}
+            defaultValue=""
             rules={{
                 validate: {
                     ...validators,

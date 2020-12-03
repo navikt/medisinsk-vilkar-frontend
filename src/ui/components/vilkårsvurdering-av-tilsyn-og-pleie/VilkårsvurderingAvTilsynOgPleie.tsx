@@ -23,6 +23,7 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
     const [vurderingsoversikt, setVurderingsoversikt] = React.useState<Vurderingsoversikt>(null);
     const [valgtVurdering, setValgtVurdering] = React.useState(null);
     const [nyVurderingOpen, setNyVurderingOpen] = React.useState(false);
+    const [perioderTilVurderingDefaultValue, setPerioderTilVurderingDefaultValue] = React.useState([]);
 
     const hentVurderingsoversikt = () => {
         setIsLoading(true);
@@ -37,16 +38,24 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
         });
     }, []);
 
+    const visNyVurderingUtenPreutfylling = () => {
+        onVurderingValgt(null);
+        setValgtVurdering(null);
+        setPerioderTilVurderingDefaultValue([]);
+        setNyVurderingOpen(true);
+    };
+
+    const visPreutfyltVurdering = () => {
+        onVurderingValgt(null);
+        setValgtVurdering(null);
+        setPerioderTilVurderingDefaultValue(vurderingsoversikt?.perioderSomSkalVurderes || []);
+        setNyVurderingOpen(true);
+    };
+
     const velgVurdering = (v: Vurdering) => {
-        if (v === null) {
-            onVurderingValgt(null);
-            setValgtVurdering(null);
-            setNyVurderingOpen(true);
-        } else {
-            onVurderingValgt(v.id);
-            setValgtVurdering(v);
-            setNyVurderingOpen(false);
-        }
+        onVurderingValgt(v.id);
+        setValgtVurdering(v);
+        setNyVurderingOpen(false);
     };
 
     const lagreVurderingAvTilsynsbehov = (data: VurderingAvTilsynsbehovFormState) => {
@@ -65,9 +74,10 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
             navigationSection={() => (
                 <VurderingNavigation
                     vurderinger={vurderingsoversikt?.vurderinger}
-                    perioderSomSkalVurderes={vurderingsoversikt?.perioderSomSkalVurderes}
                     onVurderingValgt={velgVurdering}
-                    onNyVurderingClick={() => setNyVurderingOpen(true)}
+                    onNyVurderingClick={visNyVurderingUtenPreutfylling}
+                    perioderSomSkalVurderes={vurderingsoversikt?.perioderSomSkalVurderes}
+                    onPerioderSomSkalVurderesClick={visPreutfyltVurdering}
                 />
             )}
             detailSection={() => {
@@ -77,7 +87,7 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
                             defaultValues={{
                                 [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
                                 [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
-                                [FieldName.PERIODER]: vurderingsoversikt.perioderSomSkalVurderes,
+                                [FieldName.PERIODER]: perioderTilVurderingDefaultValue,
                             }}
                             onSubmit={lagreVurderingAvTilsynsbehov}
                             perioderSomSkalVurderes={vurderingsoversikt.perioderSomSkalVurderes}

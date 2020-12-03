@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import styles from './interactiveList.less';
 
-interface InteractiveListElement {
+export interface InteractiveListElement {
     contentRenderer: (el: InteractiveListElement) => React.ReactNode;
     onClick: (el: InteractiveListElement) => void;
     active?: boolean;
