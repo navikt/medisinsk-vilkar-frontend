@@ -11,6 +11,7 @@ import VurderingNavigation from '../vurdering-navigation/VurderingNavigation';
 import VurderingsdetaljerForKontinuerligTilsynOgPleie from '../vurderingsdetaljer-for-kontinuerlig-tilsyn-og-pleie/VurderingsdetaljerForKontinuerligTilsynOgPleie';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { makeTilsynsbehovFormStateAsVurderingObject } from '../../../util/vurderingUtils';
+import { lagreVurderingIVurderingsoversikt } from '../../../util/vurderingsoversikt';
 
 const finnValgtVurdering = (vurderinger, vurderingId) => {
     return vurderinger.find(({ id }) => vurderingId === id);
@@ -59,11 +60,14 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
     };
 
     const lagreVurderingAvTilsynsbehov = (data: VurderingAvTilsynsbehovFormState) => {
-        hentVurderingsoversikt().then((vurderingsoversikt) => {
-            vurderingsoversikt.vurderinger.push(makeTilsynsbehovFormStateAsVurderingObject(data));
-            setVurderingsoversikt(vurderingsoversikt);
-            setIsLoading(false);
-        });
+        setIsLoading(true);
+        lagreVurderingIVurderingsoversikt(makeTilsynsbehovFormStateAsVurderingObject(data), vurderingsoversikt).then(
+            (nyVurderingsoversikt) => {
+                setVurderingsoversikt(nyVurderingsoversikt);
+                setIsLoading(false);
+                setNyVurderingOpen(false);
+            }
+        );
     };
 
     if (isLoading) {

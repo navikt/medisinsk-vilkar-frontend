@@ -19,6 +19,18 @@ export class Period {
         );
     }
 
+    covers(otherPeriod: Period) {
+        return this.includesDate(otherPeriod.fom) && this.includesDate(otherPeriod.tom);
+    }
+
+    overlapsLeft(otherPeriod: Period) {
+        return this.includesDate(otherPeriod.fom) && !this.includesDate(otherPeriod.tom);
+    }
+
+    overlapsRight(otherPeriod) {
+        return this.includesDate(otherPeriod.tom) && !this.includesDate(otherPeriod.fom);
+    }
+
     startsBefore(otherPeriod: Period) {
         const dateInQuestion = dateFromString(otherPeriod.fom);
         const periodFom = dateFromString(this.fom);
