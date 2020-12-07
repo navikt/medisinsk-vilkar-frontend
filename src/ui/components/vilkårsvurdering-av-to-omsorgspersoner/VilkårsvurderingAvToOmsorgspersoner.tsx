@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Vurdering from '../../../types/Vurdering';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
@@ -11,6 +11,7 @@ import VurderingsdetaljerForToOmsorgspersoner from '../vurderingsdetaljer-for-to
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { makeToOmsorgspersonerFormStateAsVurderingObject } from '../../../util/vurderingUtils';
 import { lagreVurderingIVurderingsoversikt } from '../../../util/vurderingsoversikt';
+import { slåSammenSammenhengendePerioder } from '../../../util/periodUtils';
 
 interface VilkårsvurderingAvToOmsorgspersonerProps {
     defaultVurderingsoversikt: Vurderingsoversikt;
@@ -59,6 +60,13 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
         });
     };
 
+    const sammenslåttePerioderMedTilsynsbehov = useMemo(() => {
+        if (vurderingsoversikt) {
+            return slåSammenSammenhengendePerioder(vurderingsoversikt.perioderSomSkalVurderes);
+        }
+        return [];
+    }, [vurderingsoversikt]);
+
     if (isLoading) {
         return <p>Henter vurderinger</p>;
     }
@@ -84,6 +92,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                             }}
                             onSubmit={lagreVurderingAvToOmsorgspersoner}
                             perioderSomSkalVurderes={vurderingsoversikt.perioderSomSkalVurderes}
+                            sammenhengendePerioderMedTilsynsbehov={sammenslåttePerioderMedTilsynsbehov}
                         />
                     );
                 }

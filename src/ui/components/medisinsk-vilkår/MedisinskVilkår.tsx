@@ -37,6 +37,7 @@ const MedisinskVilkår = () => {
                                     vurderingsoversikt?.vurderinger
                                         ?.filter(({ resultat }) => resultat === Vurderingsresultat.INNVILGET)
                                         .flatMap(({ perioder }) => perioder) || [],
+                                søknadsperioder: [],
                             }}
                         />
                     )}

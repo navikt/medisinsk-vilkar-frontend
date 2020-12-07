@@ -53,8 +53,8 @@ export const lagreVurderingIVurderingsoversikt = (
     return new Promise((resolve) =>
         resolve({
             perioderSomSkalVurderes: nyePerioderSomSkalVurderes,
-            // todo: håndtere overlapp mellom vurderinger
             vurderinger: [nyVurdering, ...oppdaterteVurderinger],
+            søknadsperioder: [],
         })
     );
 };

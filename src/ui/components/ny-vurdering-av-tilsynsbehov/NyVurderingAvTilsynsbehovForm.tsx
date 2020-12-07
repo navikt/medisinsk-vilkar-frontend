@@ -9,10 +9,11 @@ import DetailView from '../detail-view/DetailView';
 import Form from '../form/Form';
 import { Period } from '../../../types/Period';
 import { getPeriodAsListOfDays } from '../../../util/dateUtils';
-import { doDryRun } from '../../../util/httpMock';
-import Periodevelger from '../periodevelger/Periodevelger';
 import Documentation from '../../../types/Documentation';
 import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
+import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
+import { convertToInternationalPeriod } from '../../../util/formats';
+import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
 
 export enum FieldName {
     VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
@@ -53,13 +54,26 @@ export default ({
     const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
         const dagerSomSkalVurderes = (perioderSomSkalVurderes || []).flatMap(getPeriodAsListOfDays);
-        const dagerSomBlirVurdert = (perioderSomBlirVurdert || []).flatMap(getPeriodAsListOfDays);
+        const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])
+            .map((period) => {
+                if ((period as any).period) {
+                    return (period as any).period;
+                }
+                return period;
+            })
+            .flatMap(getPeriodAsListOfDays);
         return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
     }, [perioderSomSkalVurderes, perioderSomBlirVurdert]);
 
-    const dryRun = useCallback(() => {
-        doDryRun().then((result) => console.log(result));
-    }, []);
+    const hullISøknadsperiodene = React.useMemo(
+        () => finnHullIPerioder(sammenhengendeSøknadsperioder).map((periode) => convertToInternationalPeriod(periode)),
+        [sammenhengendeSøknadsperioder]
+    );
+
+    const avgrensningerForSøknadsperiode = React.useMemo(
+        () => finnMaksavgrensningerForPerioder(sammenhengendeSøknadsperioder),
+        [sammenhengendeSøknadsperioder]
+    );
 
     return (
         <DetailView title="Vurdering av tilsyn og pleie">
@@ -102,11 +116,40 @@ export default ({
                         />
                     </Box>
                     <Box marginTop={Margin.large}>
-                        <Periodevelger
+                        <PeriodpickerList
+                            legend="Oppgi perioder"
                             name={FieldName.PERIODER}
-                            dryRun={dryRun}
-                            perioderSomSkalVurderes={perioderSomSkalVurderes}
-                            sammenhengendeSøknadsperioder={sammenhengendeSøknadsperioder}
+                            defaultValues={defaultValues[FieldName.PERIODER] || []}
+                            validators={{
+                                required,
+                                inngårISammenhengendeSøknadsperiode: (value: Period) => {
+                                    const isOk = sammenhengendeSøknadsperioder.some((sammenhengendeSøknadsperiode) =>
+                                        sammenhengendeSøknadsperiode.covers(value)
+                                    );
+
+                                    if (!isOk) {
+                                        return 'Perioden som vurderes må være innenfor en eller flere sammenhengede søknadsperioder';
+                                    }
+                                },
+                            }}
+                            fromDatepickerProps={{
+                                label: 'Fra',
+                                ariaLabel: 'fra',
+                                limitations: {
+                                    minDate: avgrensningerForSøknadsperiode?.fom,
+                                    maxDate: avgrensningerForSøknadsperiode?.tom,
+                                    invalidDateRanges: hullISøknadsperiodene,
+                                },
+                            }}
+                            toDatepickerProps={{
+                                label: 'Til',
+                                ariaLabel: 'til',
+                                limitations: {
+                                    minDate: avgrensningerForSøknadsperiode?.fom,
+                                    maxDate: avgrensningerForSøknadsperiode?.tom,
+                                    invalidDateRanges: hullISøknadsperiodene,
+                                },
+                            }}
                         />
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (

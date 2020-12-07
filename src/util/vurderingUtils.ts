@@ -14,7 +14,9 @@ export const makeTilsynsbehovFormStateAsVurderingObject = (formState: VurderingA
     const resultat = formState[TilsynFieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]
         ? Vurderingsresultat.INNVILGET
         : Vurderingsresultat.AVSLÅTT;
-    const perioder = formState[TilsynFieldName.PERIODER].map(({ fom, tom }) => new Period(fom, tom));
+    const perioder = formState[TilsynFieldName.PERIODER].map((periodeWrapper) => {
+        return new Period((periodeWrapper as any).period.fom, (periodeWrapper as any).period.tom);
+    });
     const begrunnelse = formState[TilsynFieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE];
 
     return {
@@ -31,7 +33,9 @@ export const makeToOmsorgspersonerFormStateAsVurderingObject = (
     const resultat = formState[ToOmsorgspersonerFieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]
         ? Vurderingsresultat.INNVILGET
         : Vurderingsresultat.AVSLÅTT;
-    const perioder = formState[ToOmsorgspersonerFieldName.PERIODER].map(({ fom, tom }) => new Period(fom, tom));
+    const perioder = formState[TilsynFieldName.PERIODER].map(
+        (periodeWrapper) => new Period((periodeWrapper as any).period.fom, (periodeWrapper as any).period.tom)
+    );
     const begrunnelse = formState[ToOmsorgspersonerFieldName.VURDERING_AV_TO_OMSORGSPERSONER];
 
     return {

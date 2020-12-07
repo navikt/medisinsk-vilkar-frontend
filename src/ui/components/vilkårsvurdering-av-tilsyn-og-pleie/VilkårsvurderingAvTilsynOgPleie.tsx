@@ -111,6 +111,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                                     [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
                                     [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
                                     [FieldName.PERIODER]: perioderTilVurderingDefaultValue,
+                                    [FieldName.DOKUMENTER]: [],
                                 }}
                                 onSubmit={lagreVurderingAvTilsynsbehov}
                                 perioderSomSkalVurderes={vurderingsoversikt.perioderSomSkalVurderes}

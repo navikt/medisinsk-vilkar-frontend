@@ -10,6 +10,8 @@ import DetailView from '../detail-view/DetailView';
 import Form from '../form/Form';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
+import { convertToInternationalPeriod } from '../../../util/formats';
 
 export enum FieldName {
     VURDERING_AV_TO_OMSORGSPERSONER = 'vurderingAvToOmsorgspersoner',
@@ -27,12 +29,14 @@ interface VurderingAvToOmsorgspersonerFormProps {
     defaultValues: VurderingAvToOmsorgspersonerFormState;
     onSubmit: (data: VurderingAvToOmsorgspersonerFormState) => void;
     perioderSomSkalVurderes?: Period[];
+    sammenhengendePerioderMedTilsynsbehov: Period[];
 }
 
 export default ({
     defaultValues,
     onSubmit,
     perioderSomSkalVurderes,
+    sammenhengendePerioderMedTilsynsbehov,
 }: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
@@ -43,10 +47,29 @@ export default ({
 
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
         const dagerSomSkalVurderes = (perioderSomSkalVurderes || []).flatMap(getPeriodAsListOfDays);
-        const dagerSomBlirVurdert = (perioderSomBlirVurdert || []).flatMap(getPeriodAsListOfDays);
+        const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])
+            .map((period) => {
+                if ((period as any).period) {
+                    return (period as any).period;
+                }
+                return period;
+            })
+            .flatMap(getPeriodAsListOfDays);
         return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
     }, [perioderSomSkalVurderes, perioderSomBlirVurdert]);
 
+    const hullISøknadsperiodene = React.useMemo(
+        () =>
+            finnHullIPerioder(sammenhengendePerioderMedTilsynsbehov).map((periode) =>
+                convertToInternationalPeriod(periode)
+            ),
+        [sammenhengendePerioderMedTilsynsbehov]
+    );
+
+    const avgrensningerForSøknadsperiode = React.useMemo(
+        () => finnMaksavgrensningerForPerioder(sammenhengendePerioderMedTilsynsbehov),
+        [sammenhengendePerioderMedTilsynsbehov]
+    );
     return (
         <DetailView title="Vurdering av to omsorgspersoner">
             <FormProvider {...formMethods}>
@@ -79,14 +102,35 @@ export default ({
                         <PeriodpickerList
                             legend="Oppgi perioder"
                             name={FieldName.PERIODER}
-                            periodpickerProps={{
-                                fromDatepickerProps: {
-                                    name: 'fom',
-                                    ariaLabel: 'Fra',
+                            defaultValues={defaultValues[FieldName.PERIODER] || []}
+                            validators={{
+                                required,
+                                inngårISammenhengendePeriodeMedTilsynsbehov: (value: Period) => {
+                                    const isOk = sammenhengendePerioderMedTilsynsbehov.some(
+                                        (sammenhengendeSøknadsperiode) => sammenhengendeSøknadsperiode.covers(value)
+                                    );
+
+                                    if (!isOk) {
+                                        return 'Perioden som vurderes må være innenfor en eller flere sammenhengede perioder med behov for kontinuerlig tilsyn og pleie';
+                                    }
                                 },
-                                toDatepickerProps: {
-                                    name: 'tom',
-                                    ariaLabel: 'Til',
+                            }}
+                            fromDatepickerProps={{
+                                label: 'Fra',
+                                ariaLabel: 'fra',
+                                limitations: {
+                                    minDate: avgrensningerForSøknadsperiode?.fom || '',
+                                    maxDate: avgrensningerForSøknadsperiode?.tom || '',
+                                    invalidDateRanges: hullISøknadsperiodene,
+                                },
+                            }}
+                            toDatepickerProps={{
+                                label: 'Til',
+                                ariaLabel: 'til',
+                                limitations: {
+                                    minDate: avgrensningerForSøknadsperiode?.fom || '',
+                                    maxDate: avgrensningerForSøknadsperiode?.tom || '',
+                                    invalidDateRanges: hullISøknadsperiodene,
                                 },
                             }}
                         />

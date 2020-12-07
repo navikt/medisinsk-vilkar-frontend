@@ -25,7 +25,11 @@ const CheckboxGroup = ({ question, checkboxes, name, validators }: CheckboxGroup
                 return (
                     <CheckboxGruppe legend={question} feil={errors[name]?.message}>
                         {checkboxes.map((checkboxProps) => (
-                            <Checkbox {...checkboxProps} onChange={() => onChange(checkboxProps.value)} />
+                            <Checkbox
+                                {...checkboxProps}
+                                onChange={() => onChange(checkboxProps.value)}
+                                key={'' + checkboxProps.value}
+                            />
                         ))}
                     </CheckboxGruppe>
                 );

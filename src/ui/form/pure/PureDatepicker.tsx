@@ -6,7 +6,6 @@ import Error from '../../components/error/Error';
 
 interface CustomDatepickerProps {
     label: string;
-    name: string;
     errorMessage?: string;
     ariaLabel?: string;
 }
@@ -15,7 +14,6 @@ const PureDatepicker = ({
     label,
     value,
     onChange,
-    name,
     errorMessage,
     limitations,
     ariaLabel,
@@ -28,7 +26,6 @@ const PureDatepicker = ({
             <Datepicker
                 onChange={onChange}
                 value={value}
-                inputId={name}
                 inputProps={{
                     placeholder: 'dd.mm.åååå',
                     'aria-label': ariaLabel,
