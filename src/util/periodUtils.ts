@@ -1,24 +1,24 @@
 import { Period } from '../types/Period';
 import { dateFromString, isSameOrBefore } from './dateUtils';
 
-export const sortPeriodsByFomDate = (period1: Period, period2: Period, sortChronological?: boolean): number => {
+export const sortPeriodsByFomDate = (period1: Period, period2: Period): number => {
     if (period1.startsBefore(period2)) {
-        return sortChronological ? -1 : 1;
+        return -1;
     }
     if (period2.startsBefore(period1)) {
-        return sortChronological ? 1 : -1;
+        return 1;
     }
     return 0;
 };
 
-const checkIfPeriodsAreEdgeToEdge = (period, nextPeriod) => {
+const checkIfPeriodsAreEdgeToEdge = (period, otherPeriod) => {
     const dayAfterPeriod = dateFromString(period.tom).add(1, 'day');
-    const startOfNextPeriod = dateFromString(nextPeriod.fom);
+    const startOfNextPeriod = dateFromString(otherPeriod.fom);
     return dayAfterPeriod.isSame(startOfNextPeriod);
 };
 
 export const slåSammenSammenhengendePerioder = (periods: Period[]): Period[] => {
-    const sortedPeriods = periods.sort((p1, p2) => sortPeriodsByFomDate(p1, p2, true));
+    const sortedPeriods = periods.sort((p1, p2) => sortPeriodsByFomDate(p1, p2));
     const combinedPeriods: Period[] = [];
 
     const getFirstDate = (date1: string, date2: string) => {
@@ -37,40 +37,63 @@ export const slåSammenSammenhengendePerioder = (periods: Period[]): Period[] =>
         return date1;
     };
 
+    const checkIfPeriodCanBeCombinedWithPreviousPeriod = (period: Period, previousPeriod?: Period) => {
+        if (!previousPeriod) {
+            return false;
+        }
+        const hasOverlapWithPreviousPeriod = previousPeriod.includesDate(period.fom);
+        const periodsAreEdgeToEdge = checkIfPeriodsAreEdgeToEdge(previousPeriod, period);
+        return hasOverlapWithPreviousPeriod || periodsAreEdgeToEdge;
+    };
+
+    const combinePeriods = (period, otherPeriod) => {
+        const firstFom = getFirstDate(period.fom, otherPeriod.fom);
+        const lastTom = getLastDate(period.tom, otherPeriod.tom);
+        const combinedPeriod = new Period(firstFom, lastTom);
+        return combinedPeriod;
+    };
+
     const addToListIfNotAdded = (period: Period) => {
         const previousPeriod = combinedPeriods[combinedPeriods.length - 1];
-        if (!previousPeriod || !previousPeriod.includesDate(period.fom)) {
+        const canBeCombinedWithPreviousPeriod = checkIfPeriodCanBeCombinedWithPreviousPeriod(period, previousPeriod);
+
+        if (canBeCombinedWithPreviousPeriod) {
+            const combinedPeriod = combinePeriods(period, previousPeriod);
+            combinedPeriods[combinedPeriods.length - 1] = combinedPeriod;
+        } else {
             combinedPeriods.push(period);
         }
     };
 
-    sortedPeriods.forEach((period, index, array) => {
-        const nextPeriod = array[index + 1];
-        if (nextPeriod) {
-            const hasOverlapWithNextPeriod = nextPeriod.includesDate(period.tom);
-            const periodsAreEdgeToEdge = checkIfPeriodsAreEdgeToEdge(period, nextPeriod);
+    let skipNextPeriod = false;
 
-            if (hasOverlapWithNextPeriod) {
-                const firstFom = getFirstDate(period.fom, nextPeriod.fom);
-                const lastTom = getLastDate(period.tom, nextPeriod.tom);
-                const combinedPeriod = new Period(firstFom, lastTom);
-                combinedPeriods.push(combinedPeriod);
-            } else if (periodsAreEdgeToEdge) {
-                const combinedPeriod = new Period(period.fom, nextPeriod.tom);
-                combinedPeriods.push(combinedPeriod);
+    sortedPeriods.forEach((period, index, array) => {
+        if (!skipNextPeriod) {
+            const nextPeriod = array[index + 1];
+            if (nextPeriod) {
+                const hasOverlapWithNextPeriod = nextPeriod.includesDate(period.tom);
+                const periodsAreEdgeToEdge = checkIfPeriodsAreEdgeToEdge(period, nextPeriod);
+
+                if (hasOverlapWithNextPeriod || periodsAreEdgeToEdge) {
+                    const combinedPeriod = combinePeriods(period, nextPeriod);
+                    combinedPeriods.push(combinedPeriod);
+                    skipNextPeriod = true;
+                } else {
+                    addToListIfNotAdded(period);
+                }
             } else {
                 addToListIfNotAdded(period);
             }
         } else {
-            addToListIfNotAdded(period);
+            skipNextPeriod = false;
         }
     });
     return combinedPeriods;
 };
 
-export const finnHullIPeriodeTilVurdering = (perioderTilVurdering: Period[]) => {
+export const finnHullIPerioder = (periode: Period[]) => {
     const hull: Period[] = [];
-    const sortedPeriods = perioderTilVurdering.sort((p1, p2) => sortPeriodsByFomDate(p1, p2, true));
+    const sortedPeriods = periode.sort((p1, p2) => sortPeriodsByFomDate(p1, p2));
 
     sortedPeriods.forEach((period, index, array) => {
         const nextPeriod = array[index + 1];

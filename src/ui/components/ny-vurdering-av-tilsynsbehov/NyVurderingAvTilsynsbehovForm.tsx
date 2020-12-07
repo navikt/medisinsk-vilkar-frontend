@@ -28,9 +28,15 @@ interface VurderingAvTilsynsbehovFormProps {
     defaultValues: VurderingAvTilsynsbehovFormState;
     onSubmit: (data: VurderingAvTilsynsbehovFormState) => void;
     perioderSomSkalVurderes?: Period[];
+    sammenhengendeSøknadsperioder?: Period[];
 }
 
-export default ({ defaultValues, onSubmit, perioderSomSkalVurderes }: VurderingAvTilsynsbehovFormProps) => {
+export default ({
+    defaultValues,
+    onSubmit,
+    perioderSomSkalVurderes,
+    sammenhengendeSøknadsperioder,
+}: VurderingAvTilsynsbehovFormProps): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
         mode: 'onChange',
@@ -86,6 +92,7 @@ export default ({ defaultValues, onSubmit, perioderSomSkalVurderes }: VurderingA
                             name={FieldName.PERIODER}
                             dryRun={dryRun}
                             perioderSomSkalVurderes={perioderSomSkalVurderes}
+                            sammenhengendeSøknadsperioder={sammenhengendeSøknadsperioder}
                         />
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (

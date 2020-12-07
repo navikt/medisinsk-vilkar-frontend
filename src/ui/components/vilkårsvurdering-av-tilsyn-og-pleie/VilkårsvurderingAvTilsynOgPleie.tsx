@@ -67,9 +67,9 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
         });
     };
 
-    const sammenslåttePerioderSomSkalVurderes = useMemo(() => {
+    const sammenslåtteSøknadsperioder = useMemo(() => {
         if (vurderingsoversikt) {
-            return slåSammenSammenhengendePerioder(vurderingsoversikt.perioderSomSkalVurderes);
+            return slåSammenSammenhengendePerioder(vurderingsoversikt.søknadsperioder);
         }
         return [];
     }, [vurderingsoversikt]);
@@ -95,10 +95,11 @@ const VilkårsvurderingAvTilsynOgPleie = () => {
                             defaultValues={{
                                 [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
                                 [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
-                                [FieldName.PERIODER]: sammenslåttePerioderSomSkalVurderes,
+                                [FieldName.PERIODER]: perioderTilVurderingDefaultValue,
                             }}
                             onSubmit={lagreVurderingAvTilsynsbehov}
-                            perioderSomSkalVurderes={sammenslåttePerioderSomSkalVurderes}
+                            perioderSomSkalVurderes={vurderingsoversikt.perioderSomSkalVurderes}
+                            sammenhengendeSøknadsperioder={sammenslåtteSøknadsperioder} // bytt til samemnhengende søknadsperioder
                         />
                     );
                 }

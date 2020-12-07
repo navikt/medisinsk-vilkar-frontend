@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Period } from '../../../types/Period';
 import { convertToInternationalPeriod } from '../../../util/formats';
-import { finnHullIPeriodeTilVurdering } from '../../../util/periodUtils';
+import { finnHullIPerioder } from '../../../util/periodUtils';
 import { datoErIkkeIEtHull, datoErInnenforPerioderTilVurdering, required } from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 
@@ -9,6 +9,7 @@ interface PeriodeVelgerProps {
     dryRun: () => void;
     perioderSomSkalVurderes: Period[];
     name: string;
+    sammenhengendeSøknadsperioder: Period[];
 }
 
 const fom = 'fom';
@@ -19,7 +20,12 @@ const finnFeilmelding = (validatorresultater: (string | true)[]) => {
     return feilmelding || '';
 };
 
-const Periodevelger = ({ dryRun, name, perioderSomSkalVurderes }: PeriodeVelgerProps): JSX.Element => {
+const Periodevelger = ({
+    dryRun,
+    name,
+    perioderSomSkalVurderes,
+    sammenhengendeSøknadsperioder,
+}: PeriodeVelgerProps): JSX.Element => {
     const [fomUtfylt, setFomUtfylt] = React.useState(false);
     const [tomUtfylt, setTomUtfylt] = React.useState(false);
 
@@ -32,7 +38,7 @@ const Periodevelger = ({ dryRun, name, perioderSomSkalVurderes }: PeriodeVelgerP
     const validerFelt = (value, feltnavn: string) => {
         const requiredResult = required(value);
         const datoErIPerioderTilVurdering = datoErInnenforPerioderTilVurdering(value, perioderSomSkalVurderes);
-        const datoSkalIkkeVæreIEtHull = datoErIkkeIEtHull(value, perioderSomSkalVurderes);
+        const datoSkalIkkeVæreIEtHull = datoErIkkeIEtHull(value, sammenhengendeSøknadsperioder);
         const isValid =
             requiredResult === true && datoErIPerioderTilVurdering === true && datoSkalIkkeVæreIEtHull === true;
         const feilmelding = finnFeilmelding([requiredResult, datoErIPerioderTilVurdering, datoSkalIkkeVæreIEtHull]);
@@ -46,7 +52,7 @@ const Periodevelger = ({ dryRun, name, perioderSomSkalVurderes }: PeriodeVelgerP
         return isValid || feilmelding;
     };
 
-    const hullIPeriodeTilVurdering = finnHullIPeriodeTilVurdering(perioderSomSkalVurderes).map((periode) =>
+    const hullISøknadsperiodene = finnHullIPerioder(sammenhengendeSøknadsperioder).map((periode) =>
         convertToInternationalPeriod(periode)
     );
 
@@ -65,7 +71,7 @@ const Periodevelger = ({ dryRun, name, perioderSomSkalVurderes }: PeriodeVelgerP
                         limitations: {
                             minDate: perioderSomSkalVurderes[0].fom,
                             maxDate: perioderSomSkalVurderes[perioderSomSkalVurderes.length - 1].tom,
-                            invalidDateRanges: hullIPeriodeTilVurdering,
+                            invalidDateRanges: hullISøknadsperiodene,
                         },
                     },
                     toDatepickerProps: {
@@ -77,7 +83,7 @@ const Periodevelger = ({ dryRun, name, perioderSomSkalVurderes }: PeriodeVelgerP
                         limitations: {
                             minDate: perioderSomSkalVurderes[0].fom,
                             maxDate: perioderSomSkalVurderes[perioderSomSkalVurderes.length - 1].tom,
-                            invalidDateRanges: hullIPeriodeTilVurdering,
+                            invalidDateRanges: hullISøknadsperiodene,
                         },
                     },
                 }}

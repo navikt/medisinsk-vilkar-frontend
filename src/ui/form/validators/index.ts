@@ -1,5 +1,5 @@
 import { Period } from '../../../types/Period';
-import { finnHullIPeriodeTilVurdering } from '../../../util/periodUtils';
+import { finnHullIPerioder } from '../../../util/periodUtils';
 
 export function required(v: any) {
     if (v === null || v === undefined || v === '') {
@@ -46,15 +46,15 @@ export const datoErInnenforPerioderTilVurdering = (dato: any, perioderTilVurderi
     return 'Dato må være innenfor periodene som vurderes';
 };
 
-export const datoErIkkeIEtHull = (dato: any, perioderTilVurdering: Period[]) => {
-    if (perioderTilVurdering.length === 1) {
+export const datoErIkkeIEtHull = (dato: any, perioder: Period[]) => {
+    if (perioder.length === 1) {
         return true;
     }
-    const hull: Period[] = finnHullIPeriodeTilVurdering(perioderTilVurdering);
+    const hull: Period[] = finnHullIPerioder(perioder);
     const datoErIetHull = hull.some((period) => period.includesDate(dato));
 
     if (datoErIetHull) {
-        return 'Dato må være innenfor periodene som vurderes';
+        return 'Dato må være innenfor søknadsperiodene';
     }
     return true;
 };
