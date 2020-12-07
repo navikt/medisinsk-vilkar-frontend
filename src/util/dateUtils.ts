@@ -1,16 +1,21 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { Period } from '../types/Period';
 
-dayjs.extend(utc);
+const dateFormats = ['YYYY-MM-DD', 'DD.MM.YYYY'];
 
-function isSameOrBefore(date, otherDate) {
-    const dateInQuestion = dayjs(date).utc(true);
-    return dateInQuestion.isBefore(otherDate) || dateInQuestion.isSame(otherDate);
+dayjs.extend(utc);
+dayjs.extend(customParseFormat);
+
+export function isSameOrBefore(date, otherDate) {
+    const dateInQuestion = dayjs(date, dateFormats).utc(true);
+    const formattedOtherDate = dayjs(otherDate, dateFormats).utc(true);
+    return dateInQuestion.isBefore(formattedOtherDate) || dateInQuestion.isSame(formattedOtherDate);
 }
 
 export function dateFromString(dateString: string) {
-    return dayjs(dateString).utc(true);
+    return dayjs(dateString, dateFormats).utc(true);
 }
 
 export function getPeriodAsListOfDays(period: Period) {

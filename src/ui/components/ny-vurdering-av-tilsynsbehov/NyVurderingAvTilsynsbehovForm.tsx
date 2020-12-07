@@ -28,11 +28,18 @@ interface VurderingAvTilsynsbehovFormProps {
     defaultValues: VurderingAvTilsynsbehovFormState;
     onSubmit: (data: VurderingAvTilsynsbehovFormState) => void;
     perioderSomSkalVurderes?: Period[];
+    sammenhengendeSøknadsperioder?: Period[];
 }
 
-export default ({ defaultValues, onSubmit, perioderSomSkalVurderes }: VurderingAvTilsynsbehovFormProps) => {
+export default ({
+    defaultValues,
+    onSubmit,
+    perioderSomSkalVurderes,
+    sammenhengendeSøknadsperioder,
+}: VurderingAvTilsynsbehovFormProps): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
+        mode: 'onChange',
     });
 
     React.useEffect(() => {
@@ -81,7 +88,12 @@ export default ({ defaultValues, onSubmit, perioderSomSkalVurderes }: VurderingA
                         />
                     </Box>
                     <Box marginTop={Margin.large}>
-                        <Periodevelger name={FieldName.PERIODER} dryRun={dryRun} />
+                        <Periodevelger
+                            name={FieldName.PERIODER}
+                            dryRun={dryRun}
+                            perioderSomSkalVurderes={perioderSomSkalVurderes}
+                            sammenhengendeSøknadsperioder={sammenhengendeSøknadsperioder}
+                        />
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (
                         <Box marginTop={Margin.large}>

@@ -1,4 +1,5 @@
 import { Period } from '../../../types/Period';
+import { finnHullIPerioder } from '../../../util/periodUtils';
 
 export function required(v: any) {
     if (v === null || v === undefined || v === '') {
@@ -31,6 +32,29 @@ export const detErIngenInnleggelsePåDato = (dato: any, innleggelsesperioder: Pe
     );
     if (detErInnleggelsePåDato) {
         return 'Dato må være utenfor innleggelsesperioden(e)';
+    }
+    return true;
+};
+
+export const datoErInnenforPerioderTilVurdering = (dato: any, perioderTilVurdering: Period[]): string | true => {
+    const datoErInnenfor = perioderTilVurdering.some((period) => new Period(period.fom, period.tom).includesDate(dato));
+
+    if (datoErInnenfor) {
+        return true;
+    }
+
+    return 'Dato må være innenfor periodene som vurderes';
+};
+
+export const datoErIkkeIEtHull = (dato: any, perioder: Period[]) => {
+    if (perioder.length === 1) {
+        return true;
+    }
+    const hull: Period[] = finnHullIPerioder(perioder);
+    const datoErIetHull = hull.some((period) => period.includesDate(dato));
+
+    if (datoErIetHull) {
+        return 'Dato må være innenfor søknadsperiodene';
     }
     return true;
 };

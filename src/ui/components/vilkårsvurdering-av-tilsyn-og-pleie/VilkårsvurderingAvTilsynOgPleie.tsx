@@ -1,6 +1,11 @@
-import React from 'react';
+import { Knapp } from 'nav-frontend-knapper';
+import React, { useMemo } from 'react';
 import Vurdering from '../../../types/Vurdering';
+import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { hentTilsynsbehovVurderingsoversikt } from '../../../util/httpMock';
+import { slåSammenSammenhengendePerioder } from '../../../util/periodUtils';
+import { lagreVurderingIVurderingsoversikt } from '../../../util/vurderingsoversikt';
+import { makeTilsynsbehovFormStateAsVurderingObject } from '../../../util/vurderingUtils';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import VurderingAvTilsynsbehovForm, {
@@ -9,10 +14,6 @@ import VurderingAvTilsynsbehovForm, {
 } from '../ny-vurdering-av-tilsynsbehov/NyVurderingAvTilsynsbehovForm';
 import VurderingNavigation from '../vurdering-navigation/VurderingNavigation';
 import VurderingsdetaljerForKontinuerligTilsynOgPleie from '../vurderingsdetaljer-for-kontinuerlig-tilsyn-og-pleie/VurderingsdetaljerForKontinuerligTilsynOgPleie';
-import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import { makeTilsynsbehovFormStateAsVurderingObject } from '../../../util/vurderingUtils';
-import { lagreVurderingIVurderingsoversikt } from '../../../util/vurderingsoversikt';
-import { Knapp } from 'nav-frontend-knapper';
 
 const finnValgtVurdering = (vurderinger, vurderingId) => {
     return vurderinger.find(({ id }) => vurderingId === id);
@@ -80,6 +81,13 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         );
     };
 
+    const sammenslåtteSøknadsperioder = useMemo(() => {
+        if (vurderingsoversikt) {
+            return slåSammenSammenhengendePerioder(vurderingsoversikt.søknadsperioder);
+        }
+        return [];
+    }, [vurderingsoversikt]);
+
     if (isLoading) {
         return <p>Henter vurderinger</p>;
     }
@@ -106,6 +114,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                                 }}
                                 onSubmit={lagreVurderingAvTilsynsbehov}
                                 perioderSomSkalVurderes={vurderingsoversikt.perioderSomSkalVurderes}
+                                sammenhengendeSøknadsperioder={sammenslåtteSøknadsperioder}
                             />
                         );
                     }
