@@ -11,17 +11,21 @@ import { Period } from '../../../types/Period';
 import { getPeriodAsListOfDays } from '../../../util/dateUtils';
 import { doDryRun } from '../../../util/httpMock';
 import Periodevelger from '../periodevelger/Periodevelger';
+import Documentation from '../../../types/Documentation';
+import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
 
 export enum FieldName {
     VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
     HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE = 'harBehovForKontinuerligTilsynOgPleie',
     PERIODER = 'perioder',
+    DOKUMENTER = 'dokumenter',
 }
 
 export interface VurderingAvTilsynsbehovFormState {
     [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]?: string;
     [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]?: boolean;
     [FieldName.PERIODER]?: Period[];
+    [FieldName.DOKUMENTER]: Documentation[];
 }
 
 interface VurderingAvTilsynsbehovFormProps {
@@ -61,6 +65,16 @@ export default ({
         <DetailView title="Vurdering av tilsyn og pleie">
             <FormProvider {...formMethods} handleSubmit={formMethods.handleSubmit}>
                 <Form buttonLabel="Lagre" onSubmit={formMethods.handleSubmit(onSubmit)}>
+                    <Box marginTop={Margin.large}>
+                        <CheckboxGroup
+                            question="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
+                            name="stuff"
+                            checkboxes={[
+                                { value: 'foo', label: 'Foo' },
+                                { value: 'bar', label: 'Bar' },
+                            ]}
+                        />
+                    </Box>
                     <Box marginTop={Margin.large}>
                         <TextArea
                             name={FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE}
