@@ -36,4 +36,10 @@ export class Period {
         const periodFom = dateFromString(this.fom);
         return periodFom.isBefore(dateInQuestion);
     }
+
+    endsAfter(otherPeriod: Period) {
+        const dateInQuestion = dateFromString(otherPeriod.tom);
+        const periodTom = dateFromString(this.tom);
+        return periodTom.isAfter(dateInQuestion);
+    }
 }

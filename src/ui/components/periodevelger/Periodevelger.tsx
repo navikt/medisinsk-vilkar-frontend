@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Period } from '../../../types/Period';
 import { convertToInternationalPeriod } from '../../../util/formats';
-import { finnHullIPerioder } from '../../../util/periodUtils';
+import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
 import { datoErIkkeIEtHull, datoErInnenforPerioderTilVurdering, required } from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 
@@ -52,8 +52,14 @@ const Periodevelger = ({
         return isValid || feilmelding;
     };
 
-    const hullISøknadsperiodene = finnHullIPerioder(sammenhengendeSøknadsperioder).map((periode) =>
-        convertToInternationalPeriod(periode)
+    const hullISøknadsperiodene = React.useMemo(
+        () => finnHullIPerioder(sammenhengendeSøknadsperioder).map((periode) => convertToInternationalPeriod(periode)),
+        [sammenhengendeSøknadsperioder]
+    );
+
+    const avgrensningerForSøknadsperiode = React.useMemo(
+        () => finnMaksavgrensningerForPerioder(sammenhengendeSøknadsperioder),
+        [sammenhengendeSøknadsperioder]
     );
 
     return (
@@ -69,8 +75,8 @@ const Periodevelger = ({
                             validerFelt: (value) => validerFelt(value, fom),
                         },
                         limitations: {
-                            minDate: perioderSomSkalVurderes[0].fom,
-                            maxDate: perioderSomSkalVurderes[perioderSomSkalVurderes.length - 1].tom,
+                            minDate: avgrensningerForSøknadsperiode.fom,
+                            maxDate: avgrensningerForSøknadsperiode.tom,
                             invalidDateRanges: hullISøknadsperiodene,
                         },
                     },
@@ -81,8 +87,8 @@ const Periodevelger = ({
                             validerFelt: (value) => validerFelt(value, tom),
                         },
                         limitations: {
-                            minDate: perioderSomSkalVurderes[0].fom,
-                            maxDate: perioderSomSkalVurderes[perioderSomSkalVurderes.length - 1].tom,
+                            minDate: avgrensningerForSøknadsperiode.fom,
+                            maxDate: avgrensningerForSøknadsperiode.tom,
                             invalidDateRanges: hullISøknadsperiodene,
                         },
                     },

@@ -1,5 +1,5 @@
 import { Period } from '../../types/Period';
-import { finnHullIPerioder, slåSammenSammenhengendePerioder } from '../periodUtils';
+import { finnMaksavgrensningerForPerioder, finnHullIPerioder, slåSammenSammenhengendePerioder } from '../periodUtils';
 
 describe('slåSammenSammenhengendePerioder', () => {
     it('should handle two consecutive periods with one separate', () => {
@@ -115,4 +115,12 @@ test('finnHullIPeriode', () => {
     const result = finnHullIPerioder(perioder);
 
     expect(result).toEqual(expectedHull);
+});
+
+test('finnAvgrensningerForSøknapdsperioder', () => {
+    const perioder = [new Period('2020-04-01', '2020-04-30'), new Period('2020-04-10', '2020-04-28')];
+    const expectedResult = new Period('2020-04-01', '2020-04-30');
+    const result = finnMaksavgrensningerForPerioder(perioder);
+
+    expect(result).toEqual(expectedResult);
 });

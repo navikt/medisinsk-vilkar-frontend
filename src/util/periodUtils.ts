@@ -113,3 +113,32 @@ export const finnHullIPerioder = (periode: Period[]) => {
     });
     return hull;
 };
+
+export const finnMaksavgrensningerForPerioder = (perioder: Period[]): Period => {
+    let maksimalSøknadsperiode: Period;
+
+    perioder.forEach((periode) => {
+        let nyFom;
+        let nyTom;
+        if (!maksimalSøknadsperiode) {
+            maksimalSøknadsperiode = new Period(periode.fom, periode.tom);
+        } else {
+            if (periode.startsBefore(maksimalSøknadsperiode)) {
+                nyFom = periode.fom;
+            }
+
+            if (periode.endsAfter(maksimalSøknadsperiode)) {
+                nyTom = periode.tom;
+            }
+
+            if (nyFom || nyTom) {
+                maksimalSøknadsperiode = new Period(
+                    nyFom || maksimalSøknadsperiode.fom,
+                    nyTom || maksimalSøknadsperiode.tom
+                );
+            }
+        }
+    });
+
+    return maksimalSøknadsperiode;
+};
