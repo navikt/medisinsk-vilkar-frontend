@@ -15,7 +15,9 @@ const PerioderSomSkalVurderes = ({ perioder }: PerioderSomSkalVurderesProps) => 
             <WarningIcon />
             <div className={styles.perioderSomSkalVurderes__texts}>
                 {perioder.map((periode) => (
-                    <p className={styles.perioderSomSkalVurderes__texts__period}>{prettifyPeriod(periode)}</p>
+                    <p key={`${periode.fom}_${periode.tom}`} className={styles.perioderSomSkalVurderes__texts__period}>
+                        {prettifyPeriod(periode)}
+                    </p>
                 ))}
             </div>
             <EtikettFokus mini={true}>Må vurderes</EtikettFokus>
