@@ -71,6 +71,7 @@ const PeriodpickerList = ({
                                         return (
                                             <>
                                                 <PureDatepicker
+                                                    {...fromDatepickerProps}
                                                     label={fromDatepickerProps.label}
                                                     ariaLabel={fromDatepickerProps.ariaLabel}
                                                     value={value?.fom || ''}
@@ -80,6 +81,7 @@ const PeriodpickerList = ({
                                                 />
                                                 <div style={{ display: 'flex', marginLeft: '1rem' }}>
                                                     <PureDatepicker
+                                                        {...toDatepickerProps}
                                                         label={toDatepickerProps.label}
                                                         ariaLabel={toDatepickerProps.ariaLabel}
                                                         value={value?.tom || ''}
