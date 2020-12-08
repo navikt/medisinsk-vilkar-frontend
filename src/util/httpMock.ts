@@ -2,8 +2,8 @@ import mockedTilsynsbehovVurderingsoversikt from '../mock/mockedTilsynsbehovVurd
 import mockedToOmsorgspersonerVurderingsoversikt from '../mock/mockedToOmsorgspersonerVurderingsoversikt';
 import Vurderingsoversikt from '../types/Vurderingsoversikt';
 
-export const hentTilsynsbehovVurderingsoversikt = (): Promise<Vurderingsoversikt> => {
-    return new Promise((resolve) => setTimeout(() => resolve(mockedTilsynsbehovVurderingsoversikt), 500));
+export const hentTilsynsbehovVurderingsoversikt = (scenario): Promise<Vurderingsoversikt> => {
+    return new Promise((resolve) => setTimeout(() => resolve(mockedTilsynsbehovVurderingsoversikt[scenario]), 500));
 };
 
 export const hentToOmsorgspersonerVurderingsoversikt = (): Promise<Vurderingsoversikt> => {

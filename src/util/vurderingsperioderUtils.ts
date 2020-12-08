@@ -11,5 +11,6 @@ export function sammenstillVurderingsperioder(vurderinger: Vurdering[]): Periode
     return vurderinger
         .map((vurdering) => vurdering.perioder.map((periode) => ({ periode, vurdering })))
         .flat()
-        .sort((p1, p2) => sortPeriodsByFomDate(p1.periode, p2.periode));
+        .sort((p1, p2) => sortPeriodsByFomDate(p1.periode, p2.periode))
+        .reverse();
 }
