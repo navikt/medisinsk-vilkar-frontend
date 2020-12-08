@@ -1,4 +1,4 @@
-import { SkjemaGruppe } from 'nav-frontend-skjema';
+import { SkjemaGruppe, SkjemaelementFeilmelding } from 'nav-frontend-skjema';
 import React from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import Box, { Margin } from '../../components/box/Box';
@@ -58,43 +58,46 @@ const PeriodpickerList = ({
     return (
         <div className={styles.periodpickerList}>
             <SkjemaGruppe legend={legend}>
-                {fields.map((item, index) => (
-                    <Box key={item.id} marginTop={index > 0 ? Margin.medium : undefined}>
-                        <div className={styles.flexContainer}>
-                            <Controller
-                                name={`${name}[${index}].period`}
-                                rules={{ validate: { ...validators } }}
-                                defaultValue={defaultValues[index] || { fom: '', tom: '' }}
-                                render={({ value, onChange }) => {
-                                    const errorMessage = errors[name] && errors[name][index]?.period.message;
-                                    return (
-                                        <>
-                                            <PureDatepicker
-                                                label={fromDatepickerProps.label}
-                                                ariaLabel={fromDatepickerProps.ariaLabel}
-                                                value={value?.fom || ''}
-                                                onChange={(fomValue) =>
-                                                    onChange(new Period(fomValue, value?.tom || ''))
-                                                }
-                                                errorMessage={errorMessage || ''}
-                                            />
-                                            <PureDatepicker
-                                                label={toDatepickerProps.label}
-                                                ariaLabel={toDatepickerProps.ariaLabel}
-                                                value={value?.tom || ''}
-                                                onChange={(tomValue) =>
-                                                    onChange(new Period(value?.fom || '', tomValue))
-                                                }
-                                                errorMessage={errorMessage || ''}
-                                            />
-                                        </>
-                                    );
-                                }}
-                            />
-                            {fields.length > 1 && <DeleteButton onClick={() => remove(index)} />}
-                        </div>
-                    </Box>
-                ))}
+                {fields.map((item, index) => {
+                    const errorMessage = errors[name] && errors[name][index]?.period.message;
+                    return (
+                        <Box key={item.id} marginTop={Margin.medium}>
+                            <div className={styles.flexContainer}>
+                                <Controller
+                                    name={`${name}[${index}].period`}
+                                    rules={{ validate: { ...validators } }}
+                                    defaultValue={defaultValues[index] || { fom: '', tom: '' }}
+                                    render={({ value, onChange }) => {
+                                        return (
+                                            <>
+                                                <PureDatepicker
+                                                    label={fromDatepickerProps.label}
+                                                    ariaLabel={fromDatepickerProps.ariaLabel}
+                                                    value={value?.fom || ''}
+                                                    onChange={(fomValue) =>
+                                                        onChange(new Period(fomValue, value?.tom || ''))
+                                                    }
+                                                />
+                                                <div style={{ display: 'flex', marginLeft: '1rem' }}>
+                                                    <PureDatepicker
+                                                        label={toDatepickerProps.label}
+                                                        ariaLabel={toDatepickerProps.ariaLabel}
+                                                        value={value?.tom || ''}
+                                                        onChange={(tomValue) =>
+                                                            onChange(new Period(value?.fom || '', tomValue))
+                                                        }
+                                                    />
+                                                </div>
+                                            </>
+                                        );
+                                    }}
+                                />
+                                {fields.length > 1 && <DeleteButton onClick={() => remove(index)} />}
+                            </div>
+                            {errorMessage && <SkjemaelementFeilmelding>{errorMessage}</SkjemaelementFeilmelding>}
+                        </Box>
+                    );
+                })}
             </SkjemaGruppe>
             <Box marginTop={Margin.large}>
                 <AddButton onClick={() => append({ fom: '', tom: '' })} />
