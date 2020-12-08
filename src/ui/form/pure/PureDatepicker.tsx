@@ -8,6 +8,7 @@ interface CustomDatepickerProps {
     label: string;
     errorMessage?: string;
     ariaLabel?: string;
+    inputId?: string;
 }
 
 const PureDatepicker = ({
@@ -17,12 +18,13 @@ const PureDatepicker = ({
     errorMessage,
     limitations,
     ariaLabel,
+    inputId,
 }: DatepickerProps & CustomDatepickerProps): JSX.Element => {
     const dayPickerProps = limitations?.minDate ? { initialMonth: new Date(limitations.minDate) } : undefined;
 
     return (
         <>
-            {label && <Label htmlFor={name}>{label}</Label>}
+            {label && <Label htmlFor={inputId}>{label}</Label>}
             <Datepicker
                 onChange={onChange}
                 value={value}
@@ -32,6 +34,7 @@ const PureDatepicker = ({
                 }}
                 limitations={limitations}
                 dayPickerProps={dayPickerProps}
+                inputId={inputId}
             />
             {errorMessage && <Error message={errorMessage} />}
         </>
