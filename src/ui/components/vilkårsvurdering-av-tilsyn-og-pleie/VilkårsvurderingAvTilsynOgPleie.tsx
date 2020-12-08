@@ -43,11 +43,19 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
     };
 
     React.useEffect(() => {
+        let isMounted = true;
+
         hentVurderingsoversikt().then((vurderingsoversikt: Vurderingsoversikt) => {
-            setVurderingsoversikt(vurderingsoversikt);
-            setValgtVurdering(finnValgtVurdering(vurderingsoversikt.vurderinger, vurdering) || null);
-            setIsLoading(false);
+            if (isMounted) {
+                setVurderingsoversikt(vurderingsoversikt);
+                setValgtVurdering(finnValgtVurdering(vurderingsoversikt.vurderinger, vurdering) || null);
+                setIsLoading(false);
+            }
         });
+
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     const visNyVurderingUtenPreutfylling = () => {
