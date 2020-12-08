@@ -9,6 +9,7 @@ import Vurderingsperiode from '../vurderingsperiode/Vurderingsperiode';
 import { prettifyPeriod } from '../../../util/formats';
 import { Period } from '../../../types/Period';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 
 interface VurderingNavigationProps {
     vurderinger: Vurdering[];
@@ -16,6 +17,7 @@ interface VurderingNavigationProps {
     onVurderingValgt: (vurdering: Vurdering) => void;
     perioderSomSkalVurderes?: Period[];
     onPerioderSomSkalVurderesClick?: () => void;
+    kanOppretteNyeVurderinger?: boolean;
 }
 
 const VurderingNavigation = ({
@@ -24,6 +26,7 @@ const VurderingNavigation = ({
     onVurderingValgt,
     perioderSomSkalVurderes,
     onPerioderSomSkalVurderesClick,
+    kanOppretteNyeVurderinger,
 }: VurderingNavigationProps) => {
     function configureVurdertPeriodeElement({ periode, vurdering }, selectCallback) {
         return {
@@ -58,18 +61,28 @@ const VurderingNavigation = ({
     return (
         <>
             <Undertittel>Alle perioder</Undertittel>
-            <Knapp
-                className={styles.nyVurderingKnapp}
-                type="standard"
-                htmlType="button"
-                mini={true}
-                onClick={() => onNyVurderingClick()}
-            >
-                Opprett ny vurdering
-            </Knapp>
+            {kanOppretteNyeVurderinger && (
+                <Knapp
+                    className={styles.nyVurderingKnapp}
+                    type="standard"
+                    htmlType="button"
+                    mini={true}
+                    onClick={() => onNyVurderingClick()}
+                >
+                    Opprett ny vurdering
+                </Knapp>
+            )}
             <div className={styles.vurderingsvelgerContainer}>
                 <InteractiveList elements={interactiveListElements} />
             </div>
+            {!kanOppretteNyeVurderinger && (
+                <div style={{ marginTop: '1rem' }}>
+                    <AlertStripeInfo>
+                        Ingen perioder å vurdere. Tilsyn og pleie må være innvilget før man kan vurdere to
+                        omsorgspersoner.
+                    </AlertStripeInfo>
+                </div>
+            )}
         </>
     );
 };

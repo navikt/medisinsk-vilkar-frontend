@@ -6,7 +6,7 @@ import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import styles from './medisinskVilkår.less';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 
-const tabs = ['Tilsyn og pleie', 'To omsorgspersoner', 'Beredskap og nattevåk'];
+const tabs = ['Tilsyn og pleie', 'To omsorgspersoner'];
 const MedisinskVilkår = () => {
     const [activeTab, setActiveTab] = React.useState(0);
     const [vurderingsoversikt, setVurderingsoversikt] = React.useState<Vurderingsoversikt>(null);
@@ -41,7 +41,6 @@ const MedisinskVilkår = () => {
                             }}
                         />
                     )}
-                    {activeTab === 2 && <p>Beredskap og nattevåk</p>}
                 </div>
             </div>
         </div>

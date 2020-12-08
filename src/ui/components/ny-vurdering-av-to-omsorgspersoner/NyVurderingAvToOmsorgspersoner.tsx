@@ -12,6 +12,7 @@ import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
 import { convertToInternationalPeriod } from '../../../util/formats';
+import styles from './nyVurderingAvToOmsorgspersonerForm.less';
 
 export enum FieldName {
     VURDERING_AV_TO_OMSORGSPERSONER = 'vurderingAvToOmsorgspersoner',
@@ -76,6 +77,7 @@ export default ({
                 <Form buttonLabel="Lagre og vurder resterende periode" onSubmit={formMethods.handleSubmit(onSubmit)}>
                     <Box marginTop={Margin.large}>
                         <TextArea
+                            textareaClass={styles.begrunnelsesfelt}
                             name={FieldName.VURDERING_AV_TO_OMSORGSPERSONER}
                             helptext="Dersom det er behov for to omsorgsperoner deler av perioden,  må det komme tydelig frem av vurderingen hvilke perioder det er behov og hvilke det ikke er behov."
                             label={

@@ -16,23 +16,27 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
     return (
         <DetailView title="Vurdering av behov for kontinuerlig tilsyn og pleie">
             <Box marginTop={Margin.medium}>
-                <LabelledContent label="Vurdering" content={<span>{begrunnelse}</span>} />
-            </Box>
-            <Box marginTop={Margin.large}>
                 <LabelledContent
-                    label="Utfall"
-                    content={
-                        <span>
-                            {resultat === Vurderingsresultat.INNVILGET
-                                ? 'Ja, det er behov for kontinuerlig tilsyn og pleie'
-                                : 'Nei, det er ikke behov for kontinuerlig tilsyn og pleie'}
-                        </span>
-                    }
+                    label="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
+                    content={<span>Test</span>}
                 />
             </Box>
             <Box marginTop={Margin.large}>
                 <LabelledContent
-                    label="Perioder vurdert"
+                    label="Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge
+                                        av sykdommen etter § 9-10, første ledd."
+                    content={<span>{begrunnelse}</span>}
+                />
+            </Box>
+            <Box marginTop={Margin.large}>
+                <LabelledContent
+                    label="Er det behov for tilsyn og pleie?"
+                    content={<span>{resultat === Vurderingsresultat.INNVILGET ? 'Ja' : 'Nei'}</span>}
+                />
+            </Box>
+            <Box marginTop={Margin.large}>
+                <LabelledContent
+                    label={resultat === Vurderingsresultat.INNVILGET ? 'Perioder innvilget' : 'Perioder avslått'}
                     content={
                         <ul style={{ margin: 0, listStyleType: 'none', padding: 0 }}>
                             {perioder.map((periode, i) => (

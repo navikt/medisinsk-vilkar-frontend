@@ -9,9 +9,10 @@ interface TextAreaProps {
     name: string;
     validators?: { [key: string]: (v: any) => string | boolean | undefined };
     helptext?: string;
+    textareaClass?: string;
 }
 
-const TextArea = ({ label, name, validators, helptext }: TextAreaProps): JSX.Element => {
+const TextArea = ({ label, name, validators, helptext, textareaClass }: TextAreaProps): JSX.Element => {
     const { control, errors } = useFormContext();
 
     return (
@@ -37,6 +38,7 @@ const TextArea = ({ label, name, validators, helptext }: TextAreaProps): JSX.Ele
                                     name={name}
                                     onChange={onChange}
                                     id={name}
+                                    textareaClass={textareaClass}
                                 />
                             </Box>
                         </>
@@ -50,6 +52,7 @@ const TextArea = ({ label, name, validators, helptext }: TextAreaProps): JSX.Ele
                         feil={errors[name]?.message}
                         name={name}
                         onChange={onChange}
+                        textareaClass={textareaClass}
                     />
                 );
             }}

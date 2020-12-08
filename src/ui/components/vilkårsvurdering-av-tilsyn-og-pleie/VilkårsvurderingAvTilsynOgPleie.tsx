@@ -109,6 +109,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                         onNyVurderingClick={visNyVurderingUtenPreutfylling}
                         perioderSomSkalVurderes={vurderingsoversikt?.perioderSomSkalVurderes}
                         onPerioderSomSkalVurderesClick={visPreutfyltVurdering}
+                        kanOppretteNyeVurderinger={true}
                     />
                 )}
                 detailSection={() => {
@@ -135,7 +136,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
             />
             {!harPerioderSomSkalVurderes && (
                 <Knapp style={{ marginTop: '2rem' }} onClick={() => onVilkårVurdert(vurderingsoversikt)}>
-                    Lagre og gå videre til vurdering av to omsorgspersoner
+                    Gå videre til vurdering av to omsorgspersoner
                 </Knapp>
             )}
         </>

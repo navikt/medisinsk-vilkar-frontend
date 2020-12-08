@@ -1,5 +1,5 @@
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { required } from '../../form/validators';
 import TextArea from '../../form/wrappers/TextArea';
@@ -14,6 +14,7 @@ import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import { convertToInternationalPeriod } from '../../../util/formats';
 import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
+import styles from './nyVurderingAvTilsynsbehovForm.less';
 
 export enum FieldName {
     VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
@@ -91,19 +92,33 @@ export default ({
                     </Box>
                     <Box marginTop={Margin.large}>
                         <TextArea
+                            textareaClass={styles.begrunnelsesfelt}
                             name={FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE}
                             label={
-                                <>
-                                    <b>
+                                <div style={{ fontWeight: 400 }}>
+                                    <label style={{ fontWeight: 600 }}>
                                         Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge
-                                        av sykdommen.
-                                    </b>
-                                    <span style={{ fontWeight: 400 }}>
-                                        &nbsp;Dersom det er behov for tilsyn og pleie kun i deler av perioden må det
-                                        komme tydelig frem av vurderingen hvilke perioder det er behov og hvilke det
-                                        ikke er behov.
-                                    </span>
-                                </>
+                                        av sykdommen etter § 9-10, første ledd.
+                                    </label>
+                                    <p>
+                                        Du skal ta utgangspunkt i § 9-10, første ledd og rundskrivet når du skriver
+                                        vurderingen. Gjør en vurdering av om det er behov for kontinuerlig tilsyn og
+                                        pleie som følge av sykdommen etter § 9-10, første ledd.
+                                    </p>
+
+                                    <p>Vurderingen skal beskrive:</p>
+                                    <ul>
+                                        <li>Om det er årsakssammenheng mellom sykdom og pleiebehov</li>
+                                        <li>Om behovet er kontinuerlig og ikke situasjonsbestemt</li>
+                                    </ul>
+                                    <p>Husk:</p>
+                                    <ul>
+                                        <li>
+                                            Pleiepenger kan innvilges selv om barnet ikke har behov for tilsyn om natten
+                                        </li>
+                                        <li>Pleiepenger kan innvilges selv om barnet kan være noe alene på dagtid</li>
+                                    </ul>
+                                </div>
                             }
                             validators={{ required }}
                         />

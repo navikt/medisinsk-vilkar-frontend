@@ -79,6 +79,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                     onNyVurderingClick={visNyVurderingUtenPreutfylling}
                     perioderSomSkalVurderes={vurderingsoversikt?.perioderSomSkalVurderes}
                     onPerioderSomSkalVurderesClick={visPreutfyltVurdering}
+                    kanOppretteNyeVurderinger={vurderingsoversikt?.perioderSomSkalVurderes.length > 0}
                 />
             )}
             detailSection={() => {
