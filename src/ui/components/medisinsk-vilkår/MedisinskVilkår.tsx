@@ -1,10 +1,12 @@
-import React from 'react';
 import { TabsPure } from 'nav-frontend-tabs';
+import React from 'react';
+import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
+import Vurderingsresultat from '../../../types/Vurderingsresultat';
+import Box, { Margin } from '../box/Box';
 import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-pleie/VilkårsvurderingAvTilsynOgPleie';
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
-import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import styles from './medisinskVilkår.less';
-import Vurderingsresultat from '../../../types/Vurderingsresultat';
+import Parter from './Parter';
 import Scenariovelger from './Scenariovelger';
 
 const tabs = ['Tilsyn og pleie', 'To omsorgspersoner'];
@@ -16,7 +18,9 @@ const MedisinskVilkår = () => {
     return (
         <>
             <Scenariovelger setScenario={setScenario} />
-
+            <Box marginTop={Margin.large}>
+                <Parter scenario={scenario} />
+            </Box>
             <div className={styles.medisinskVilkår}>
                 <h1 style={{ fontSize: 22 }}>Sykdom</h1>
                 <div style={{ marginTop: '1rem' }}>
