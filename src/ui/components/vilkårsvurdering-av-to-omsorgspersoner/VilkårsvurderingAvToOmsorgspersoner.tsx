@@ -12,6 +12,7 @@ import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { makeToOmsorgspersonerFormStateAsVurderingObject } from '../../../util/vurderingUtils';
 import { lagreVurderingIVurderingsoversikt } from '../../../util/vurderingsoversikt';
 import { slåSammenSammenhengendePerioder } from '../../../util/periodUtils';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 
 interface VilkårsvurderingAvToOmsorgspersonerProps {
     defaultVurderingsoversikt: Vurderingsoversikt;
@@ -72,16 +73,28 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
     }
     return (
         <NavigationWithDetailView
-            navigationSection={() => (
-                <VurderingNavigation
-                    vurderinger={vurderingsoversikt?.vurderinger}
-                    onVurderingValgt={velgVurdering}
-                    onNyVurderingClick={visNyVurderingUtenPreutfylling}
-                    perioderSomSkalVurderes={vurderingsoversikt?.perioderSomSkalVurderes}
-                    onPerioderSomSkalVurderesClick={visPreutfyltVurdering}
-                    kanOppretteNyeVurderinger={vurderingsoversikt?.perioderSomSkalVurderes.length > 0}
-                />
-            )}
+            navigationSection={() => {
+                if (defaultVurderingsoversikt?.perioderSomSkalVurderes.length === 0) {
+                    return (
+                        <div style={{ marginTop: '1rem' }}>
+                            <AlertStripeInfo>
+                                Ingen perioder å vurdere. Tilsyn og pleie må være innvilget før man kan vurdere to
+                                omsorgspersoner.
+                            </AlertStripeInfo>
+                        </div>
+                    );
+                }
+                return (
+                    <VurderingNavigation
+                        vurderinger={vurderingsoversikt?.vurderinger}
+                        onVurderingValgt={velgVurdering}
+                        onNyVurderingClick={visNyVurderingUtenPreutfylling}
+                        perioderSomSkalVurderes={vurderingsoversikt?.perioderSomSkalVurderes}
+                        onPerioderSomSkalVurderesClick={visPreutfyltVurdering}
+                        kanOppretteNyeVurderinger={defaultVurderingsoversikt?.perioderSomSkalVurderes.length > 0}
+                    />
+                );
+            }}
             detailSection={() => {
                 if (nyVurderingOpen) {
                     return (
@@ -90,15 +103,22 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                                 [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]: '',
                                 [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: undefined,
                                 [FieldName.PERIODER]: perioderTilVurderingDefaultValue,
+                                [FieldName.DOKUMENTER]: [],
                             }}
                             onSubmit={lagreVurderingAvToOmsorgspersoner}
                             perioderSomSkalVurderes={vurderingsoversikt.perioderSomSkalVurderes}
                             sammenhengendePerioderMedTilsynsbehov={sammenslåttePerioderMedTilsynsbehov}
+                            dokumenter={vurderingsoversikt.dokumenter}
                         />
                     );
                 }
                 if (valgtVurdering !== null) {
-                    return <VurderingsdetaljerForToOmsorgspersoner vurdering={valgtVurdering} />;
+                    return (
+                        <VurderingsdetaljerForToOmsorgspersoner
+                            vurdering={valgtVurdering}
+                            dokumenter={vurderingsoversikt.dokumenter}
+                        />
+                    );
                 }
                 return null;
             }}

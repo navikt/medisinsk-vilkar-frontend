@@ -1,7 +1,7 @@
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { required } from '../../form/validators';
+import { harBruktDokumentasjon, required } from '../../form/validators';
 import TextArea from '../../form/wrappers/TextArea';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import Box, { Margin } from '../box/Box';
@@ -9,12 +9,14 @@ import DetailView from '../detail-view/DetailView';
 import Form from '../form/Form';
 import { Period } from '../../../types/Period';
 import { getPeriodAsListOfDays } from '../../../util/dateUtils';
-import Documentation from '../../../types/Documentation';
+import Dokument from '../../../types/Dokument';
 import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
-import { convertToInternationalPeriod } from '../../../util/formats';
+import { convertToInternationalPeriod, prettifyDate } from '../../../util/formats';
 import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
 import styles from './nyVurderingAvTilsynsbehovForm.less';
+import Lenke from 'nav-frontend-lenker';
+import DokumentLink from '../dokument-link/DokumentLink';
 
 export enum FieldName {
     VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
@@ -27,7 +29,7 @@ export interface VurderingAvTilsynsbehovFormState {
     [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]?: string;
     [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]?: boolean;
     [FieldName.PERIODER]?: Period[];
-    [FieldName.DOKUMENTER]: Documentation[];
+    [FieldName.DOKUMENTER]: string[];
 }
 
 interface VurderingAvTilsynsbehovFormProps {
@@ -35,6 +37,7 @@ interface VurderingAvTilsynsbehovFormProps {
     onSubmit: (data: VurderingAvTilsynsbehovFormState) => void;
     perioderSomSkalVurderes?: Period[];
     sammenhengendeSøknadsperioder?: Period[];
+    dokumenter: Dokument[];
 }
 
 export default ({
@@ -42,6 +45,7 @@ export default ({
     onSubmit,
     perioderSomSkalVurderes,
     sammenhengendeSøknadsperioder,
+    dokumenter,
 }: VurderingAvTilsynsbehovFormProps): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
@@ -83,11 +87,14 @@ export default ({
                     <Box marginTop={Margin.large}>
                         <CheckboxGroup
                             question="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
-                            name="stuff"
-                            checkboxes={[
-                                { value: 'foo', label: 'Foo' },
-                                { value: 'bar', label: 'Bar' },
-                            ]}
+                            name={FieldName.DOKUMENTER}
+                            checkboxes={dokumenter.map((dokument) => ({
+                                value: dokument.id,
+                                label: <DokumentLink dokument={dokument} />,
+                            }))}
+                            validators={{
+                                harBruktDokumentasjon,
+                            }}
                         />
                     </Box>
                     <Box marginTop={Margin.large}>

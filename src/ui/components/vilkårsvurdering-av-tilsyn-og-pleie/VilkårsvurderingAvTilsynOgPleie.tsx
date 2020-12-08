@@ -125,11 +125,17 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                                 onSubmit={lagreVurderingAvTilsynsbehov}
                                 perioderSomSkalVurderes={vurderingsoversikt.perioderSomSkalVurderes}
                                 sammenhengendeSøknadsperioder={sammenslåtteSøknadsperioder}
+                                dokumenter={vurderingsoversikt.dokumenter}
                             />
                         );
                     }
                     if (valgtVurdering !== null) {
-                        return <VurderingsdetaljerForKontinuerligTilsynOgPleie vurdering={valgtVurdering} />;
+                        return (
+                            <VurderingsdetaljerForKontinuerligTilsynOgPleie
+                                vurdering={valgtVurdering}
+                                dokumenter={vurderingsoversikt.dokumenter}
+                            />
+                        );
                     }
                     return null;
                 }}

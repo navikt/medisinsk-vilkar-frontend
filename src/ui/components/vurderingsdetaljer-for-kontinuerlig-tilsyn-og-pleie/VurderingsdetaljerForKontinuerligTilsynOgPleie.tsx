@@ -5,20 +5,34 @@ import DetailView from '../detail-view/DetailView';
 import LabelledContent from '../labelled-content/LabelledContent';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import Box, { Margin } from '../box/Box';
+import Dokument from '../../../types/Dokument';
+import BasicList from '../basic-list/BasicList';
+import DokumentLink from '../dokument-link/DokumentLink';
 
 interface VurderingsdetaljerForKontinuerligTilsynOgPleieProps {
     vurdering: Vurdering;
+    dokumenter: Dokument[];
 }
 
 const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
-    vurdering: { perioder, begrunnelse, resultat },
+    vurdering,
+    dokumenter,
 }: VurderingsdetaljerForKontinuerligTilsynOgPleieProps) => {
+    const { perioder, begrunnelse, resultat } = vurdering;
     return (
         <DetailView title="Vurdering av behov for kontinuerlig tilsyn og pleie">
             <Box marginTop={Margin.medium}>
                 <LabelledContent
                     label="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
-                    content={<span>Test</span>}
+                    content={
+                        <BasicList
+                            elements={dokumenter
+                                .filter((dokument) => vurdering.dokumenter.includes(dokument.id))
+                                .map((dokument) => (
+                                    <DokumentLink dokument={dokument} />
+                                ))}
+                        />
+                    }
                 />
             </Box>
             <Box marginTop={Margin.large}>

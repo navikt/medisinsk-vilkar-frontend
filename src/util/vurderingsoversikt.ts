@@ -55,6 +55,7 @@ export const lagreVurderingIVurderingsoversikt = (
             perioderSomSkalVurderes: nyePerioderSomSkalVurderes,
             vurderinger: [nyVurdering, ...oppdaterteVurderinger],
             søknadsperioder: [],
+            dokumenter: gammelVurderingsoversikt.dokumenter,
         })
     );
 };

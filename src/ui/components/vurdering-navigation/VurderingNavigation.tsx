@@ -75,14 +75,6 @@ const VurderingNavigation = ({
             <div className={styles.vurderingsvelgerContainer}>
                 <InteractiveList elements={interactiveListElements} />
             </div>
-            {!kanOppretteNyeVurderinger && (
-                <div style={{ marginTop: '1rem' }}>
-                    <AlertStripeInfo>
-                        Ingen perioder å vurdere. Tilsyn og pleie må være innvilget før man kan vurdere to
-                        omsorgspersoner.
-                    </AlertStripeInfo>
-                </div>
-            )}
         </>
     );
 };

@@ -14,20 +14,30 @@ const CheckboxGroup = ({ question, checkboxes, name, validators }: CheckboxGroup
     return (
         <Controller
             control={control}
-            defaultValue={null}
+            defaultValue={[]}
             name={name}
             rules={{
                 validate: {
                     ...validators,
                 },
             }}
-            render={({ name, onChange }) => {
+            render={({ name, value, onChange }) => {
                 return (
                     <CheckboxGruppe legend={question} feil={errors[name]?.message}>
                         {checkboxes.map((checkboxProps) => (
                             <Checkbox
                                 {...checkboxProps}
-                                onChange={() => onChange(checkboxProps.value)}
+                                onChange={() => {
+                                    const index = value.indexOf(checkboxProps.value);
+                                    const newValue = [...value];
+                                    if (index > -1) {
+                                        newValue.splice(index, 1);
+                                    } else {
+                                        newValue.push(checkboxProps.value);
+                                    }
+                                    onChange(newValue);
+                                }}
+                                checked={value.indexOf(checkboxProps.value) >= 0}
                                 key={'' + checkboxProps.value}
                             />
                         ))}

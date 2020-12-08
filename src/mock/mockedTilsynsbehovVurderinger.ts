@@ -8,6 +8,7 @@ const genereltTilsynsbehovVurderingerMock: Vurdering[] = [
         perioder: [new Period('2020-01-01', '2020-01-15')],
         resultat: Vurderingsresultat.INNVILGET,
         begrunnelse: 'Fordi her er det behov',
+        dokumenter: ['2', '3'],
     },
 ];
 

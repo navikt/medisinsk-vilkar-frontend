@@ -6,6 +6,7 @@ interface Vurdering {
     resultat: Vurderingsresultat;
     perioder: Period[];
     begrunnelse: string;
+    dokumenter: string[];
 }
 
 export default Vurdering;

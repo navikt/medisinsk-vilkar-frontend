@@ -24,6 +24,7 @@ export const makeTilsynsbehovFormStateAsVurderingObject = (formState: VurderingA
         resultat,
         perioder,
         begrunnelse,
+        dokumenter: formState[TilsynFieldName.DOKUMENTER],
     };
 };
 
@@ -43,5 +44,6 @@ export const makeToOmsorgspersonerFormStateAsVurderingObject = (
         resultat,
         perioder,
         begrunnelse,
+        dokumenter: formState[ToOmsorgspersonerFieldName.DOKUMENTER],
     };
 };

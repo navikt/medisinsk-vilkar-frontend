@@ -58,3 +58,9 @@ export const datoErIkkeIEtHull = (dato: any, perioder: Period[]) => {
     }
     return true;
 };
+
+export const harBruktDokumentasjon = (dokumenter: []) => {
+    if (dokumenter.length === 0) {
+        return 'Du må ha brukt ett eller flere dokumenter i vurderingen';
+    }
+};
