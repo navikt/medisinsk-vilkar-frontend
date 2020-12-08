@@ -21,9 +21,10 @@ const finnValgtVurdering = (vurderinger, vurderingId) => {
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     onVilkårVurdert: (vurderingsoversikt: Vurderingsoversikt) => void;
+    scenario: number;
 }
 
-const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: VilkårsvurderingAvTilsynOgPleieProps) => {
+const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert, scenario }: VilkårsvurderingAvTilsynOgPleieProps) => {
     const { vurdering, onVurderingValgt } = React.useContext(ContainerContext);
 
     const [isLoading, setIsLoading] = React.useState(true);
@@ -37,26 +38,27 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         vurderingsoversikt.perioderSomSkalVurderes &&
         vurderingsoversikt.perioderSomSkalVurderes.length > 0;
 
-    const hentVurderingsoversikt = () => {
+    const hentVurderingsoversikt = (selectedScenario) => {
         setIsLoading(true);
-        return hentTilsynsbehovVurderingsoversikt();
+        return hentTilsynsbehovVurderingsoversikt(selectedScenario);
     };
 
     React.useEffect(() => {
         let isMounted = true;
 
-        hentVurderingsoversikt().then((vurderingsoversikt: Vurderingsoversikt) => {
+        hentVurderingsoversikt(scenario).then((vurderingsoversikt: Vurderingsoversikt) => {
             if (isMounted) {
                 setVurderingsoversikt(vurderingsoversikt);
                 setValgtVurdering(finnValgtVurdering(vurderingsoversikt.vurderinger, vurdering) || null);
                 setIsLoading(false);
+                setPerioderTilVurderingDefaultValue(vurderingsoversikt?.perioderSomSkalVurderes || []);
             }
         });
 
         return () => {
             isMounted = false;
         };
-    }, []);
+    }, [scenario]);
 
     const visNyVurderingUtenPreutfylling = () => {
         onVurderingValgt(null);
