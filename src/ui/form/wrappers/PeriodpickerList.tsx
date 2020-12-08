@@ -78,6 +78,7 @@ const PeriodpickerList = ({
                                                     onChange={(fomValue) =>
                                                         onChange(new Period(fomValue, value?.tom || ''))
                                                     }
+                                                    inputId={`${name}[${index}].fom`}
                                                 />
                                                 <div style={{ display: 'flex', marginLeft: '1rem' }}>
                                                     <PureDatepicker
@@ -88,6 +89,7 @@ const PeriodpickerList = ({
                                                         onChange={(tomValue) =>
                                                             onChange(new Period(value?.fom || '', tomValue))
                                                         }
+                                                        inputId={`${name}[${index}].tom`}
                                                     />
                                                 </div>
                                             </>
