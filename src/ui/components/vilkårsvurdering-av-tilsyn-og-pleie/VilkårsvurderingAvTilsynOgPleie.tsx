@@ -51,6 +51,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert, scenario }: Vilkå
                 setVurderingsoversikt(vurderingsoversikt);
                 setValgtVurdering(finnValgtVurdering(vurderingsoversikt.vurderinger, vurdering) || null);
                 setIsLoading(false);
+                setPerioderTilVurderingDefaultValue(vurderingsoversikt?.perioderSomSkalVurderes || []);
             }
         });
 
