@@ -1,17 +1,11 @@
 import * as React from 'react';
+import { Select } from 'nav-frontend-skjema';
 
-const id = 'scenario-picker';
-
-const Scenariovelger = ({ setScenario }) => (
-    <div>
-        <label htmlFor={id} style={{ marginRight: '0.5rem' }}>
-            Velg scenario
-        </label>
-        <select id={id} onChange={(event) => setScenario(event.target.value)}>
-            <option value={0}>Mor som søker</option>
-            <option value={1}>Far som søker</option>
-        </select>
-    </div>
+const Scenariovelger = ({ setScenario }): JSX.Element => (
+    <Select label="Velg scenario" onChange={(event) => setScenario(event.target.value)} bredde="m">
+        <option value={0}>Mor som søker</option>
+        <option value={1}>Far som søker</option>
+    </Select>
 );
 
 export default Scenariovelger;
