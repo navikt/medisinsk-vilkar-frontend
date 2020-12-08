@@ -18,11 +18,13 @@ export const toSøkereMedTilsynsbehovVurderingerMock: Vurdering[] = [
         perioder: [new Period('2020-01-01', '2020-01-15')],
         resultat: Vurderingsresultat.INNVILGET,
         begrunnelse: 'Fordi her er det behov',
+        dokumenter: ['2', '3'],
     },
     {
         id: '2',
         perioder: [new Period('2020-01-16', '2020-01-20')],
         resultat: Vurderingsresultat.INNVILGET,
         begrunnelse: 'Fordi her er det behov',
+        dokumenter: ['2', '3'],
     },
 ];

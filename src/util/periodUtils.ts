@@ -21,6 +21,7 @@ export const slåSammenSammenhengendePerioder = (periods: Period[]): Period[] =>
     if (!periods?.length) {
         return [];
     }
+
     const sortedPeriods = periods.sort((p1, p2) => sortPeriodsByFomDate(p1, p2));
     const combinedPeriods: Period[] = [];
 

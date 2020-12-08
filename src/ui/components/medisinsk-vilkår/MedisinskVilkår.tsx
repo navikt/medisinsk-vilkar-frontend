@@ -29,7 +29,9 @@ const MedisinskVilkår = () => {
                         {activeTab === 0 && (
                             <VilkårsvurderingAvTilsynOgPleie
                                 onVilkårVurdert={(nyVurderingsoversikt: Vurderingsoversikt) => {
-                                    setVurderingsoversikt(nyVurderingsoversikt);
+                                    if (scenario === 1) {
+                                        setVurderingsoversikt(nyVurderingsoversikt);
+                                    }
                                     setActiveTab(1);
                                 }}
                                 scenario={scenario}

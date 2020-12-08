@@ -54,7 +54,7 @@ export const lagreVurderingIVurderingsoversikt = (
         resolve({
             perioderSomSkalVurderes: nyePerioderSomSkalVurderes,
             vurderinger: [nyVurdering, ...oppdaterteVurderinger],
-            søknadsperioder: [],
+            søknadsperioder: gammelVurderingsoversikt.søknadsperioder,
             dokumenter: gammelVurderingsoversikt.dokumenter,
         })
     );

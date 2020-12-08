@@ -93,7 +93,8 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert, scenario }: Vilkå
 
     const sammenslåtteSøknadsperioder = useMemo(() => {
         if (vurderingsoversikt) {
-            return slåSammenSammenhengendePerioder(vurderingsoversikt.søknadsperioder);
+            const sammenhengendePerioder = slåSammenSammenhengendePerioder(vurderingsoversikt.søknadsperioder);
+            return sammenhengendePerioder;
         }
         return [];
     }, [vurderingsoversikt]);

@@ -9,7 +9,7 @@ export default [
     {
         vurderinger: genereltTilsynsbehovVurderingerMock,
         perioderSomSkalVurderes: [new Period('2020-01-16', '2020-01-20')],
-        søknadsperioder: [new Period('2020-01-16', '2020-01-20')],
+        søknadsperioder: [new Period('2020-01-01', '2020-01-15'), new Period('2020-01-16', '2020-01-20')],
         dokumenter: mockedDokumentliste,
     },
     {
