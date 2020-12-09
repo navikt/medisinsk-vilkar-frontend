@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import { Period } from '../types/Period';
-import { getPeriodAsListOfDays, isValidDate, isValidPeriod } from './dateUtils';
+import { Period } from '../../types/Period';
+import { getPeriodAsListOfDays, isValidDate, isValidPeriod } from '../dateUtils';
 
 test('getPeriodAsListOfDays', () => {
     const period = new Period('2020-09-10', '2020-09-15');
