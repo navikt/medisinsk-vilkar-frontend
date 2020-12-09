@@ -27,4 +27,3 @@ export const toSøkereMedTilsynsbehovVurderingerMock: Vurdering[] = [
         begrunnelse: 'Fordi her er det behov',
         dokumenter: ['2', '3'],
     },
-];

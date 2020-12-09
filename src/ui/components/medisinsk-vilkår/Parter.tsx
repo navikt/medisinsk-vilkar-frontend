@@ -14,7 +14,7 @@ const Parter = ({ scenario }: ParterProps): JSX.Element => {
     return (
         <AlertStripe type="info">
             <div className={styles.parter__content}>
-                <p className={styles.parter__text}>Sykdomsvurderingen ligger på barnet og vil ....</p>
+                <p className={styles.parter__text}>Sykdomsvurderingen ligger på barnet og er felles</p>
                 <div className={styles.parter__textContainer}>
                     <div className={styles.parter__icon}>
                         <TwoPersonsWithOneHighlightedIcon />

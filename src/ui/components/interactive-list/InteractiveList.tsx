@@ -27,7 +27,7 @@ const InteractiveListElement = (props: InteractiveListElement) => {
 };
 
 const InteractiveList = ({ elements }: InteractiveListProps) => {
-    const [activeElement, setActiveElement] = React.useState(null);
+    const [activeElement, setActiveElement] = React.useState(0);
     return (
         <ul className={styles.interactiveList}>
             {elements.map((elementProps, index) => (

@@ -14,8 +14,8 @@ export default [
     },
     {
         vurderinger: toSøkereMedTilsynsbehovVurderingerMock,
-        perioderSomSkalVurderes: [new Period('2020-01-21', '2020-02-04')],
-        søknadsperioder: [new Period('2020-01-21', '2020-02-04')],
+        perioderSomSkalVurderes: [new Period('2020-01-16', '2020-01-20')],
+        søknadsperioder: [new Period('2020-01-01', '2020-01-15'), new Period('2020-01-16', '2020-01-20')],
         dokumenter: mockedDokumentliste,
     },
 ];

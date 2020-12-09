@@ -14,6 +14,7 @@ import VurderingAvTilsynsbehovForm, {
 } from '../ny-vurdering-av-tilsynsbehov/NyVurderingAvTilsynsbehovForm';
 import VurderingNavigation from '../vurdering-navigation/VurderingNavigation';
 import VurderingsdetaljerForKontinuerligTilsynOgPleie from '../vurderingsdetaljer-for-kontinuerlig-tilsyn-og-pleie/VurderingsdetaljerForKontinuerligTilsynOgPleie';
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 
 const finnValgtVurdering = (vurderinger, vurderingId) => {
     return vurderinger.find(({ id }) => vurderingId === id);
@@ -30,7 +31,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert, scenario }: Vilkå
     const [isLoading, setIsLoading] = React.useState(true);
     const [vurderingsoversikt, setVurderingsoversikt] = React.useState<Vurderingsoversikt>(null);
     const [valgtVurdering, setValgtVurdering] = React.useState(null);
-    const [nyVurderingOpen, setNyVurderingOpen] = React.useState(false);
+    const [nyVurderingOpen, setNyVurderingOpen] = React.useState(true);
     const [perioderTilVurderingDefaultValue, setPerioderTilVurderingDefaultValue] = React.useState([]);
 
     const harPerioderSomSkalVurderes =
@@ -104,6 +105,14 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert, scenario }: Vilkå
     }
     return (
         <>
+            {harPerioderSomSkalVurderes && (
+                <div style={{ maxWidth: '1194px' }}>
+                    <AlertStripeAdvarsel>
+                        Vurder behov for tilsyn og pleie i perioden som gjenstår å vurdere
+                    </AlertStripeAdvarsel>
+                    <div style={{ marginTop: '1rem' }}></div>
+                </div>
+            )}
             <NavigationWithDetailView
                 navigationSection={() => (
                     <VurderingNavigation
@@ -143,7 +152,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert, scenario }: Vilkå
                     return null;
                 }}
             />
-            {!harPerioderSomSkalVurderes && (
+            {!harPerioderSomSkalVurderes && scenario === 1 && (
                 <Knapp style={{ marginTop: '2rem' }} onClick={() => onVilkårVurdert(vurderingsoversikt)}>
                     Gå videre til vurdering av to omsorgspersoner
                 </Knapp>
