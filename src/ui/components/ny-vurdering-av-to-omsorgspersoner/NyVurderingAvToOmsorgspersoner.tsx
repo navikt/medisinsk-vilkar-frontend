@@ -1,6 +1,6 @@
 import React from 'react';
 import { getPeriodAsListOfDays } from '../../../util/dateUtils';
-import { harBruktDokumentasjon, required } from '../../form/validators';
+import { harBruktDokumentasjon, required, fomDatoErFørTomDato } from '../../form/validators';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
 import Box, { Margin } from '../box/Box';
@@ -136,6 +136,7 @@ export default ({
                                         return 'Perioden som vurderes må være innenfor en eller flere sammenhengede perioder med behov for kontinuerlig tilsyn og pleie';
                                     }
                                 },
+                                fomDatoErFørTomDato,
                             }}
                             fromDatepickerProps={{
                                 label: 'Fra',

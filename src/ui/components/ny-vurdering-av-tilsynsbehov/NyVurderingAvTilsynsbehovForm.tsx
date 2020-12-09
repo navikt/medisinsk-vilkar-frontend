@@ -1,7 +1,7 @@
 import React from 'react';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { FormProvider, useForm } from 'react-hook-form';
-import { harBruktDokumentasjon, required } from '../../form/validators';
+import { harBruktDokumentasjon, required, fomDatoErFørTomDato } from '../../form/validators';
 import TextArea from '../../form/wrappers/TextArea';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import Box, { Margin } from '../box/Box';
@@ -152,6 +152,7 @@ export default ({
                                         return 'Perioden som vurderes må være innenfor en eller flere sammenhengede søknadsperioder';
                                     }
                                 },
+                                fomDatoErFørTomDato,
                             }}
                             fromDatepickerProps={{
                                 label: 'Fra',

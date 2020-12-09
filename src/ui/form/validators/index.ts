@@ -1,4 +1,5 @@
 import { Period } from '../../../types/Period';
+import { dateFromString } from '../../../util/dateUtils';
 import { finnHullIPerioder } from '../../../util/periodUtils';
 
 export function required(v: any) {
@@ -63,4 +64,15 @@ export const harBruktDokumentasjon = (dokumenter: []) => {
     if (dokumenter.length === 0) {
         return 'Du må ha brukt ett eller flere dokumenter i vurderingen';
     }
+};
+
+export const fomDatoErFørTomDato = (periode: Period): string | true => {
+    const fom = dateFromString(periode.fom);
+    const tom = dateFromString(periode.tom);
+
+    if (fom.isAfter(tom)) {
+        return 'Fra-dato må være før til-dato';
+    }
+
+    return true;
 };

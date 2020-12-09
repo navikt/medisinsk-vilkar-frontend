@@ -1,6 +1,6 @@
-import GradAvTilsynsbehov from '../types/GradAvTilsynsbehov';
-import { Period } from '../types/Period';
-import { lagPeriodeMedTilsynsbehov } from './periodeMedTilsynsbehov';
+import GradAvTilsynsbehov from '../../types/GradAvTilsynsbehov';
+import { Period } from '../../types/Period';
+import { lagPeriodeMedTilsynsbehov } from '../periodeMedTilsynsbehov';
 
 test('lagPeriodeMedTilsynsbehov', () => {
     const period = new Period('2020-09-10', '2020-09-15');
