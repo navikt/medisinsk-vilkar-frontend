@@ -19,8 +19,8 @@ export function dateFromString(dateString: string) {
 }
 
 export function getPeriodAsListOfDays(period: Period) {
-    const fom = dateFromString(period.fom);
-    const tom = dateFromString(period.tom);
+    const fom = dayjs(period.fom).utc(true);
+    const tom = dayjs(period.tom).utc(true);
 
     const list = [];
     for (let currentDate = fom; isSameOrBefore(currentDate, tom); currentDate = currentDate.add(1, 'day')) {

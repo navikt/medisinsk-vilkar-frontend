@@ -56,7 +56,7 @@ test('datoErIkkeIEtHull', () => {
 
     const datoIHull = '23.02.2020';
     const datoSkalVæreIHull = datoErIkkeIEtHull(datoIHull, perioderTilVurdering);
-    expect(datoSkalVæreIHull).toBe('Dato må være innenfor periodene som vurderes');
+    expect(datoSkalVæreIHull).toBe('Dato må være innenfor periodene som skal vurderes');
 
     const datoUtenforHull = '27.02.2020';
     const datoSkalVæreUtenforHull = datoErIkkeIEtHull(datoUtenforHull, perioderTilVurdering);

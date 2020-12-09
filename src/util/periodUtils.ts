@@ -18,7 +18,7 @@ const checkIfPeriodsAreEdgeToEdge = (period, otherPeriod) => {
 };
 
 export const slåSammenSammenhengendePerioder = (periods: Period[]): Period[] => {
-    if (!periods?.length) {
+    if (!periods || periods.length === 0) {
         return [];
     }
 

@@ -54,7 +54,7 @@ export const datoErIkkeIEtHull = (dato: any, perioder: Period[]) => {
     const datoErIetHull = hull.some((period) => period.includesDate(dato));
 
     if (datoErIetHull) {
-        return 'Dato må være innenfor søknadsperiodene';
+        return 'Dato må være innenfor periodene som skal vurderes';
     }
     return true;
 };
