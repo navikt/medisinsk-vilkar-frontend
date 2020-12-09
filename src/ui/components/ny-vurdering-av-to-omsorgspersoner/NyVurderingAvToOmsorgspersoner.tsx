@@ -11,10 +11,9 @@ import Form from '../form/Form';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
-import { convertToInternationalPeriod, prettifyDate } from '../../../util/formats';
+import { convertToInternationalPeriod } from '../../../util/formats';
 import styles from './nyVurderingAvToOmsorgspersonerForm.less';
 import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
-import Lenke from 'nav-frontend-lenker';
 import Dokument from '../../../types/Dokument';
 import DokumentLink from '../dokument-link/DokumentLink';
 

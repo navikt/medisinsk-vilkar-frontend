@@ -1,5 +1,5 @@
-import { Knapp } from 'nav-frontend-knapper';
 import React, { useMemo } from 'react';
+import { Knapp } from 'nav-frontend-knapper';
 import Vurdering from '../../../types/Vurdering';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { hentTilsynsbehovVurderingsoversikt } from '../../../util/httpMock';

@@ -1,12 +1,12 @@
-import { SkjemaGruppe, SkjemaelementFeilmelding } from 'nav-frontend-skjema';
 import React from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
+import { SkjemaGruppe, SkjemaelementFeilmelding } from 'nav-frontend-skjema';
+import { DatepickerLimitations } from 'nav-datovelger';
 import Box, { Margin } from '../../components/box/Box';
 import PlusIcon from '../../components/icons/PlusIcon';
 import styles from './periodpickerList.less';
 import { Period } from '../../../types/Period';
 import PureDatepicker from '../pure/PureDatepicker';
-import { DatepickerLimitations } from 'nav-datovelger';
 
 const AddButton = ({ onClick }) => (
     <div className={styles.buttonAddContainer}>

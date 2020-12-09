@@ -9,7 +9,6 @@ export function justerPerioder(perioderSomJusteres: Period[], nyePerioder: Perio
     perioderSomJusteres.forEach((periodeSomJusteres) => {
         const helePeriodenErDekket = nyePerioder.some((p) => p.covers(periodeSomJusteres));
         if (helePeriodenErDekket) {
-            // hele perioden kan droppes, fordi den er overskrevet av nyePerioder
             return;
         }
 
@@ -29,7 +28,6 @@ export function justerPerioder(perioderSomJusteres: Period[], nyePerioder: Perio
             return justertePerioder.push(new Period(periodeSomJusteres.fom, nyTildato.format('YYYY-MM-DD')));
         }
 
-        // ingen overlapp = perioden er ikke berørt av nyePeriode, og tas med videre
         justertePerioder.push(periodeSomJusteres);
     });
 

@@ -1,5 +1,5 @@
-import Dokument, { Dokumenttype } from '../types/Dokument';
 import dayjs from 'dayjs';
+import Dokument, { Dokumenttype } from '../types/Dokument';
 
 const mockedDokumentliste: Dokument[] = [
     { id: '1', type: Dokumenttype.LEGEERKLÆRING, mottatt: dayjs().utc(true).toDate(), location: '#' },

@@ -9,7 +9,6 @@ import Vurderingsperiode from '../vurderingsperiode/Vurderingsperiode';
 import { prettifyPeriod } from '../../../util/formats';
 import { Period } from '../../../types/Period';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 
 interface VurderingNavigationProps {
     vurderinger: Vurdering[];

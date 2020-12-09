@@ -1,5 +1,5 @@
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import React from 'react';
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { FormProvider, useForm } from 'react-hook-form';
 import { harBruktDokumentasjon, required } from '../../form/validators';
 import TextArea from '../../form/wrappers/TextArea';
@@ -12,10 +12,9 @@ import { getPeriodAsListOfDays } from '../../../util/dateUtils';
 import Dokument from '../../../types/Dokument';
 import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
-import { convertToInternationalPeriod, prettifyDate } from '../../../util/formats';
+import { convertToInternationalPeriod } from '../../../util/formats';
 import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
 import styles from './nyVurderingAvTilsynsbehovForm.less';
-import Lenke from 'nav-frontend-lenker';
 import DokumentLink from '../dokument-link/DokumentLink';
 
 export enum FieldName {

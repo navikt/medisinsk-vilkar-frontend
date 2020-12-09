@@ -1,5 +1,5 @@
+import React from 'react';
 import AlertStripe from 'nav-frontend-alertstriper';
-import * as React from 'react';
 import mockedParter from '../../../mock/mockedParter';
 import TwoPersonsWithOneHighlightedIcon from '../icons/TwoPersonsWithOneHighlightedIcon';
 import styles from './parter.less';

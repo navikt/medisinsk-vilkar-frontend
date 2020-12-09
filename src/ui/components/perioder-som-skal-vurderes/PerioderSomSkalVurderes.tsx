@@ -1,9 +1,9 @@
 import React from 'react';
+import { EtikettFokus } from 'nav-frontend-etiketter';
 import { prettifyPeriod } from '../../../util/formats';
 import WarningIcon from '../icons/WarningIcon';
 import { Period } from '../../../types/Period';
 import styles from './perioderSomSkalVurderes.less';
-import { EtikettFokus } from 'nav-frontend-etiketter';
 
 interface PerioderSomSkalVurderesProps {
     perioder: Period[];
