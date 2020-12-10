@@ -90,8 +90,8 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                         return (
                             <div style={{ marginTop: '1rem' }}>
                                 <AlertStripeInfo>
-                                    Ingen perioder å vurdere. Tilsyn og pleie må være innvilget før man kan vurdere to
-                                    omsorgspersoner.
+                                    To omsorgspersoner skal ikke vurderes før tilsyn og pleie er blitt innvilget og det
+                                    er to parter i saken.
                                 </AlertStripeInfo>
                             </div>
                         );
