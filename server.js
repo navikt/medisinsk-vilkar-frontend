@@ -24,5 +24,5 @@ app.listen(port, (error) => {
     if (error) {
         console.error(error);
     }
-    console.log('Listening on port', 8080);
+    console.log('Listening on port', port);
 });

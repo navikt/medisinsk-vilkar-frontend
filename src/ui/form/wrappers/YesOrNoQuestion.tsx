@@ -20,15 +20,17 @@ const YesOrNoQuestion = ({ question, name, validators }: YesOrNoQuestionProps) =
                     ...validators,
                 },
             }}
-            render={({ onChange, value }) => (
-                <PureYesOrNoQuestion
-                    question={question}
-                    name={name}
-                    onChange={onChange}
-                    value={value}
-                    errorMessage={errors[name]?.message}
-                />
-            )}
+            render={({ value, onChange }) => {
+                return (
+                    <PureYesOrNoQuestion
+                        question={question}
+                        name={name}
+                        onChange={onChange}
+                        value={value}
+                        errorMessage={errors[name]?.message}
+                    />
+                );
+            }}
         />
     );
 };

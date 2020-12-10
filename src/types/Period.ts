@@ -18,4 +18,28 @@ export class Period {
             (dateInQuestion.isSame(tomDayjs) || dateInQuestion.isBefore(tomDayjs))
         );
     }
+
+    covers(otherPeriod: Period) {
+        return this.includesDate(otherPeriod.fom) && this.includesDate(otherPeriod.tom);
+    }
+
+    overlapsLeft(otherPeriod: Period) {
+        return this.includesDate(otherPeriod.fom) && !this.includesDate(otherPeriod.tom);
+    }
+
+    overlapsRight(otherPeriod) {
+        return this.includesDate(otherPeriod.tom) && !this.includesDate(otherPeriod.fom);
+    }
+
+    startsBefore(otherPeriod: Period) {
+        const dateInQuestion = dateFromString(otherPeriod.fom);
+        const periodFom = dateFromString(this.fom);
+        return periodFom.isBefore(dateInQuestion);
+    }
+
+    endsAfter(otherPeriod: Period) {
+        const dateInQuestion = dateFromString(otherPeriod.tom);
+        const periodTom = dateFromString(this.tom);
+        return periodTom.isAfter(dateInQuestion);
+    }
 }

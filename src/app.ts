@@ -1,8 +1,7 @@
 import renderers from './util/renderers';
-import mockedSykdom from './mock/mockedSykdom';
+import ContainerContract from './types/ContainerContract';
 
-(window as any).renderMedisinskVilkarApp = async (appId, data) => {
-    const sykdom = data || mockedSykdom;
+(window as any).renderMedisinskVilkarApp = async (appId, data: ContainerContract) => {
     const { renderAppInSuccessfulState } = renderers;
-    renderAppInSuccessfulState(appId, sykdom);
+    renderAppInSuccessfulState(appId, data);
 };

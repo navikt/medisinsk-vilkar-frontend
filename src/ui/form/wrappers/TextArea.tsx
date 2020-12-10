@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Textarea } from 'nav-frontend-skjema';
 import { Controller, useFormContext } from 'react-hook-form';
-import ExpandableLabel from '../../components/expandableLabel/ExpandableLabel';
+import ExpandableLabel from '../../components/expandable-label/ExpandableLabel';
 import Box, { Margin } from '../../components/box/Box';
 
 interface TextAreaProps {
@@ -9,16 +9,17 @@ interface TextAreaProps {
     name: string;
     validators?: { [key: string]: (v: any) => string | boolean | undefined };
     helptext?: string;
+    textareaClass?: string;
 }
 
-const TextArea = ({ label, name, validators, helptext }: TextAreaProps): JSX.Element => {
+const TextArea = ({ label, name, validators, helptext, textareaClass }: TextAreaProps): JSX.Element => {
     const { control, errors } = useFormContext();
 
     return (
         <Controller
             control={control}
             name={name}
-            defaultValue={null}
+            defaultValue=""
             rules={{
                 validate: {
                     ...validators,
@@ -28,11 +29,7 @@ const TextArea = ({ label, name, validators, helptext }: TextAreaProps): JSX.Ele
                 if (helptext) {
                     return (
                         <>
-                            <ExpandableLabel
-                                labelText={label}
-                                helptext={helptext}
-                                labelFor={name}
-                            />
+                            <ExpandableLabel labelText={label} helptext={helptext} labelFor={name} />
                             <Box marginTop={Margin.medium}>
                                 <Textarea
                                     value={value}
@@ -41,6 +38,7 @@ const TextArea = ({ label, name, validators, helptext }: TextAreaProps): JSX.Ele
                                     name={name}
                                     onChange={onChange}
                                     id={name}
+                                    textareaClass={textareaClass}
                                 />
                             </Box>
                         </>
@@ -54,6 +52,7 @@ const TextArea = ({ label, name, validators, helptext }: TextAreaProps): JSX.Ele
                         feil={errors[name]?.message}
                         name={name}
                         onChange={onChange}
+                        textareaClass={textareaClass}
                     />
                 );
             }}

@@ -6,35 +6,35 @@ import Error from '../../components/error/Error';
 
 interface CustomDatepickerProps {
     label: string;
-    name: string;
     errorMessage?: string;
     ariaLabel?: string;
+    inputId?: string;
 }
 
 const PureDatepicker = ({
     label,
     value,
     onChange,
-    name,
     errorMessage,
     limitations,
     ariaLabel,
+    inputId,
 }: DatepickerProps & CustomDatepickerProps): JSX.Element => {
     const dayPickerProps = limitations?.minDate ? { initialMonth: new Date(limitations.minDate) } : undefined;
 
     return (
         <>
-            {label && <Label htmlFor={name}>{label}</Label>}
+            {label && <Label htmlFor={inputId}>{label}</Label>}
             <Datepicker
                 onChange={onChange}
                 value={value}
-                inputId={name}
                 inputProps={{
                     placeholder: 'dd.mm.åååå',
                     'aria-label': ariaLabel,
                 }}
                 limitations={limitations}
                 dayPickerProps={dayPickerProps}
+                inputId={inputId}
             />
             {errorMessage && <Error message={errorMessage} />}
         </>

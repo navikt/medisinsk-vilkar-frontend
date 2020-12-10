@@ -1,4 +1,10 @@
-import { datoenInngårISøknadsperioden, detErIngenInnleggelsePåDato, detErTilsynsbehovPåDatoen, required } from '..';
+import {
+    datoenInngårISøknadsperioden,
+    datoErIkkeIEtHull,
+    detErIngenInnleggelsePåDato,
+    detErTilsynsbehovPåDatoen,
+    required,
+} from '..';
 import { Period } from '../../../../types/Period';
 
 test('required', () => {
@@ -39,4 +45,20 @@ test('detErIngenInnleggelsePåDato', () => {
 
     const datoMedInnleggelse = '2020-09-05';
     expect(detErIngenInnleggelsePåDato(datoMedInnleggelse, innleggelsesperioder)).toBe(feilmelding);
+});
+
+test('datoErIkkeIEtHull', () => {
+    const perioderTilVurdering = [
+        new Period('10.02.2020', '20.02.2020'),
+        new Period('25.02.2020', '28.02.2020'),
+        new Period('03.03.2020', '10.03.2020'),
+    ];
+
+    const datoIHull = '23.02.2020';
+    const datoSkalVæreIHull = datoErIkkeIEtHull(datoIHull, perioderTilVurdering);
+    expect(datoSkalVæreIHull).toBe('Dato må være innenfor periodene som skal vurderes');
+
+    const datoUtenforHull = '27.02.2020';
+    const datoSkalVæreUtenforHull = datoErIkkeIEtHull(datoUtenforHull, perioderTilVurdering);
+    expect(datoSkalVæreUtenforHull).toBe(true);
 });

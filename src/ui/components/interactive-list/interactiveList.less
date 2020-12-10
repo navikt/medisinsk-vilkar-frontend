@@ -1,0 +1,37 @@
+.interactiveList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.interactiveListElement {
+    padding: 0.5rem;
+    border-bottom: 1px solid #c6c2bf;
+
+    &:hover {
+        background: #f2f7fc;
+    }
+}
+
+.interactiveListElement--active {
+    background: #f2f7fc;
+    border: 1px solid #0067c5 !important;
+}
+
+.interactiveListElement:first-child {
+    border-top: 1px solid #c6c2bf;
+}
+
+.interactiveListElement__button {
+    border: none;
+    background: transparent;
+    padding: 0;
+    display: block;
+    text-align: left;
+    width: 100%;
+    outline: none;
+
+    &:focus-visible {
+        outline: #0067c5 auto 1px;
+    }
+}

@@ -1,10 +1,10 @@
 import React from 'react';
 import { render } from 'react-dom';
-import Sykdom from '../types/medisinsk-vilkår/sykdom';
 import MainComponent from '../ui/MainComponent';
+import ContainerContract from '../types/ContainerContract';
 
-const renderAppInSuccessfulState = (appId: string, sykdom: Sykdom) =>
-    render(<MainComponent sykdom={sykdom} />, document.getElementById(appId));
+const renderAppInSuccessfulState = (appId: string, data: ContainerContract) =>
+    render(<MainComponent containerData={data} />, document.getElementById(appId));
 
 export default {
     renderAppInSuccessfulState,
