@@ -43,8 +43,10 @@ export const lagreVurderingIVurderingsoversikt = (
     const nyePerioderSomSkalVurderes = justerPerioder(perioderSomSkalVurderes, nyVurdering.perioder);
     const oppdaterteVurderinger = gammelVurderingsoversikt.vurderinger
         .map((vurdering) => {
-            vurdering.perioder = justerPerioder(vurdering.perioder, nyVurdering.perioder);
-            return vurdering;
+            const oppdatertVurdering = { ...vurdering };
+            oppdatertVurdering.perioder = justerPerioder(vurdering.perioder, nyVurdering.perioder);
+
+            return oppdatertVurdering;
         })
         .filter(({ perioder }) => perioder.length > 0);
 

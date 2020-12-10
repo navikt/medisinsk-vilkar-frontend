@@ -39,6 +39,7 @@ const MedisinskVilkår = () => {
                                     setActiveTab(1);
                                 }}
                                 scenario={scenario}
+                                lagretVurderingsoversikt={vurderingsoversikt}
                             />
                         )}
                         {activeTab === 1 && (

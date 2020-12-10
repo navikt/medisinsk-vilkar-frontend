@@ -24,9 +24,14 @@ const finnValgtVurdering = (vurderinger, vurderingId) => {
 interface VilkårsvurderingAvTilsynOgPleieProps {
     onVilkårVurdert: (vurderingsoversikt: Vurderingsoversikt) => void;
     scenario: number;
+    lagretVurderingsoversikt: Vurderingsoversikt;
 }
 
-const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert, scenario }: VilkårsvurderingAvTilsynOgPleieProps) => {
+const VilkårsvurderingAvTilsynOgPleie = ({
+    onVilkårVurdert,
+    scenario,
+    lagretVurderingsoversikt,
+}: VilkårsvurderingAvTilsynOgPleieProps) => {
     const { vurdering, onVurderingValgt } = React.useContext(ContainerContext);
 
     const [isLoading, setIsLoading] = React.useState(true);
@@ -47,20 +52,25 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert, scenario }: Vilkå
 
     React.useEffect(() => {
         let isMounted = true;
-
-        hentVurderingsoversikt(scenario).then((vurderingsoversikt: Vurderingsoversikt) => {
-            if (isMounted) {
-                setVurderingsoversikt(vurderingsoversikt);
-                setValgtVurdering(finnValgtVurdering(vurderingsoversikt.vurderinger, vurdering) || null);
-                setIsLoading(false);
-                setPerioderTilVurderingDefaultValue(vurderingsoversikt?.perioderSomSkalVurderes || []);
-            }
-        });
+        if (lagretVurderingsoversikt) {
+            setVurderingsoversikt(lagretVurderingsoversikt);
+            setIsLoading(false);
+            setNyVurderingOpen(false);
+        } else {
+            hentVurderingsoversikt(scenario).then((vurderingsoversikt: Vurderingsoversikt) => {
+                if (isMounted) {
+                    setVurderingsoversikt(vurderingsoversikt);
+                    setValgtVurdering(finnValgtVurdering(vurderingsoversikt.vurderinger, vurdering) || null);
+                    setIsLoading(false);
+                    setPerioderTilVurderingDefaultValue(vurderingsoversikt?.perioderSomSkalVurderes || []);
+                }
+            });
+        }
 
         return () => {
             isMounted = false;
         };
-    }, [scenario]);
+    }, [scenario, lagretVurderingsoversikt]);
 
     const visNyVurderingUtenPreutfylling = () => {
         onVurderingValgt(null);
