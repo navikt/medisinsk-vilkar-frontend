@@ -1,5 +1,5 @@
-import { Period } from '../types/Period';
-import { justerPerioder } from './vurderingsoversikt';
+import { Period } from '../../types/Period';
+import { justerPerioder } from '../vurderingsoversikt';
 
 describe('oppdaterPerioderSomSkalVurderes', () => {
     it('should remove periods in the first list that are covered completely by one of the periods in the other list', () => {
