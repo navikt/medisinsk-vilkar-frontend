@@ -99,16 +99,11 @@ export default ({
                         <TextArea
                             textareaClass={styles.begrunnelsesfelt}
                             name={FieldName.VURDERING_AV_TO_OMSORGSPERSONER}
-                            helptext="Dersom det er behov for to omsorgsperoner deler av perioden,  må det komme tydelig frem av vurderingen hvilke perioder det er behov og hvilke det ikke er behov."
                             label={
-                                <>
-                                    <b>Gjør en vurdering av om det er behov for to omsorgspersoner.</b>
-                                    <span style={{ fontWeight: 400 }}>
-                                        &nbsp;Dersom det er behov for to omsorgsperoner deler av perioden, må det komme
-                                        tydelig frem av vurderingen hvilke perioder det er behov og hvilke det ikke er
-                                        behov.
-                                    </span>
-                                </>
+                                <b>
+                                    Gjør en vurdering av om det er behov for to omsorgspersoner etter § 9-10, andre
+                                    ledd.
+                                </b>
                             }
                             validators={{ required }}
                         />

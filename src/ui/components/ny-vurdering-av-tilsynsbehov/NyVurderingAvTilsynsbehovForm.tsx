@@ -108,8 +108,7 @@ export default ({
                                     </label>
                                     <p>
                                         Du skal ta utgangspunkt i § 9-10, første ledd og rundskrivet når du skriver
-                                        vurderingen. Gjør en vurdering av om det er behov for kontinuerlig tilsyn og
-                                        pleie som følge av sykdommen etter § 9-10, første ledd.
+                                        vurderingen.
                                     </p>
 
                                     <p>Vurderingen skal beskrive:</p>

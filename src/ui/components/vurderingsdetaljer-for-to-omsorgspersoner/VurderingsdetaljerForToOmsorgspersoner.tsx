@@ -23,7 +23,7 @@ const VurderingsdetaljerForToOmsorgspersoner = ({
         <DetailView title="Vurdering av to omsorgspersoner">
             <Box marginTop={Margin.medium}>
                 <LabelledContent
-                    label="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
+                    label="Hvilke dokumenter er brukt i vurderingen av behov for to omsorgspersoner?"
                     content={
                         <BasicList
                             elements={dokumenter
@@ -35,19 +35,16 @@ const VurderingsdetaljerForToOmsorgspersoner = ({
                     }
                 />
             </Box>
-            <Box marginTop={Margin.medium}>
-                <LabelledContent label="Vurdering" content={<span>{begrunnelse}</span>} />
+            <Box marginTop={Margin.large}>
+                <LabelledContent
+                    label="Gjør en vurdering av om det er behov for to omsorgspersoner etter § 9-10, andre ledd."
+                    content={<span>{begrunnelse}</span>}
+                />
             </Box>
             <Box marginTop={Margin.large}>
                 <LabelledContent
-                    label="Utfall"
-                    content={
-                        <span>
-                            {resultat === Vurderingsresultat.INNVILGET
-                                ? 'Ja, det er behov for to omsorgspersoner'
-                                : 'Nei, det er ikke behov for to omsorgspersoner'}
-                        </span>
-                    }
+                    label="Er det behov for to omsorgspersoner?"
+                    content={<span>{resultat === Vurderingsresultat.INNVILGET ? 'Ja' : 'Nei'}</span>}
                 />
             </Box>
             <Box marginTop={Margin.large}>

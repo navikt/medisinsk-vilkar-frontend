@@ -13,6 +13,7 @@ import { makeToOmsorgspersonerFormStateAsVurderingObject } from '../../../util/v
 import { lagreVurderingIVurderingsoversikt } from '../../../util/vurderingsoversikt';
 import { slåSammenSammenhengendePerioder } from '../../../util/periodUtils';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { prettifyPeriod } from '../../../util/formats';
 
 interface VilkårsvurderingAvToOmsorgspersonerProps {
     defaultVurderingsoversikt: Vurderingsoversikt;
@@ -76,7 +77,9 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
             {vurderingsoversikt.perioderSomSkalVurderes && vurderingsoversikt.perioderSomSkalVurderes.length > 0 && (
                 <div style={{ maxWidth: '1194px' }}>
                     <AlertStripeAdvarsel>
-                        Vurder behov for to omsorgspersoner i perioden som gjenstår å vurdere
+                        {`Vurder behov for to omsorgspersoner for perioden ${prettifyPeriod(
+                            vurderingsoversikt?.perioderSomSkalVurderes[0]
+                        )}.`}
                     </AlertStripeAdvarsel>
                     <div style={{ marginTop: '1rem' }}></div>
                 </div>

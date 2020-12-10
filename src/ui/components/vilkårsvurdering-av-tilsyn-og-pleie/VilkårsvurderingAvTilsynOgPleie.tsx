@@ -15,6 +15,7 @@ import VurderingAvTilsynsbehovForm, {
 import VurderingNavigation from '../vurdering-navigation/VurderingNavigation';
 import VurderingsdetaljerForKontinuerligTilsynOgPleie from '../vurderingsdetaljer-for-kontinuerlig-tilsyn-og-pleie/VurderingsdetaljerForKontinuerligTilsynOgPleie';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import { prettifyPeriod } from '../../../util/formats';
 
 const finnValgtVurdering = (vurderinger, vurderingId) => {
     return vurderinger.find(({ id }) => vurderingId === id);
@@ -108,7 +109,11 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert, scenario }: Vilkå
             {harPerioderSomSkalVurderes && (
                 <div style={{ maxWidth: '1194px' }}>
                     <AlertStripeAdvarsel>
-                        Vurder behov for tilsyn og pleie i perioden som gjenstår å vurdere
+                        {`Vurder behov for tilsyn og pleie for perioden ${prettifyPeriod(
+                            vurderingsoversikt?.perioderSomSkalVurderes[0]
+                        )}.`}
+                        {scenario === 1 &&
+                            ` Søknadsperioden overlapper med tidligere vurderinger. Vurder om det er grunnlag for å gjøre en ny vurdering.`}
                     </AlertStripeAdvarsel>
                     <div style={{ marginTop: '1rem' }}></div>
                 </div>
