@@ -39,7 +39,7 @@ interface VurderingAvToOmsorgspersonerFormProps {
     dokumenter: Dokument[];
 }
 
-export default ({
+const VurderingAvToOmsorgspersonerForm = ({
     defaultValues,
     onSubmit,
     perioderSomSkalVurderes,
@@ -166,3 +166,5 @@ export default ({
         </DetailView>
     );
 };
+
+export default VurderingAvToOmsorgspersonerForm;

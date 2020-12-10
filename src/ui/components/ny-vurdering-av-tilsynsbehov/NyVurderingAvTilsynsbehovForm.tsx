@@ -39,7 +39,7 @@ interface VurderingAvTilsynsbehovFormProps {
     dokumenter: Dokument[];
 }
 
-export default ({
+const VurderingAvTilsynsbehovForm = ({
     defaultValues,
     onSubmit,
     perioderSomSkalVurderes,
@@ -186,3 +186,5 @@ export default ({
         </DetailView>
     );
 };
+
+export default VurderingAvTilsynsbehovForm;
