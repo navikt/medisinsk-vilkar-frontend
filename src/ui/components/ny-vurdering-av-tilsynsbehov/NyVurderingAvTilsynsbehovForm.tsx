@@ -16,6 +16,8 @@ import { convertToInternationalPeriod } from '../../../util/formats';
 import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
 import styles from './nyVurderingAvTilsynsbehovForm.less';
 import DokumentLink from '../dokument-link/DokumentLink';
+import { TilsynsbehovVurdering } from '../../../types/Vurdering';
+import { lagTilsynsbehovVurdering } from '../../../util/vurderingUtils';
 
 export enum FieldName {
     VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
@@ -33,9 +35,9 @@ export interface VurderingAvTilsynsbehovFormState {
 
 interface VurderingAvTilsynsbehovFormProps {
     defaultValues: VurderingAvTilsynsbehovFormState;
-    onSubmit: (data: VurderingAvTilsynsbehovFormState) => void;
+    onSubmit: (nyVurdering: TilsynsbehovVurdering) => void;
     perioderSomSkalVurderes?: Period[];
-    sammenhengendeSøknadsperioder?: Period[];
+    perioderSomKanVurderes?: Period[];
     dokumenter: Dokument[];
 }
 
@@ -43,7 +45,7 @@ const VurderingAvTilsynsbehovForm = ({
     defaultValues,
     onSubmit,
     perioderSomSkalVurderes,
-    sammenhengendeSøknadsperioder,
+    perioderSomKanVurderes,
     dokumenter,
 }: VurderingAvTilsynsbehovFormProps): JSX.Element => {
     const formMethods = useForm({
@@ -70,19 +72,23 @@ const VurderingAvTilsynsbehovForm = ({
     }, [perioderSomSkalVurderes, perioderSomBlirVurdert]);
 
     const hullISøknadsperiodene = React.useMemo(
-        () => finnHullIPerioder(sammenhengendeSøknadsperioder).map((periode) => convertToInternationalPeriod(periode)),
-        [sammenhengendeSøknadsperioder]
+        () => finnHullIPerioder(perioderSomKanVurderes).map((periode) => convertToInternationalPeriod(periode)),
+        [perioderSomKanVurderes]
     );
 
     const avgrensningerForSøknadsperiode = React.useMemo(
-        () => finnMaksavgrensningerForPerioder(sammenhengendeSøknadsperioder),
-        [sammenhengendeSøknadsperioder]
+        () => finnMaksavgrensningerForPerioder(perioderSomKanVurderes),
+        [perioderSomKanVurderes]
     );
+
+    const lagNyTilsynsvurdering = (formState: VurderingAvTilsynsbehovFormState) => {
+        onSubmit(lagTilsynsbehovVurdering(formState, dokumenter));
+    };
 
     return (
         <DetailView title="Vurdering av tilsyn og pleie">
-            <FormProvider {...formMethods} handleSubmit={formMethods.handleSubmit}>
-                <Form buttonLabel="Lagre" onSubmit={formMethods.handleSubmit(onSubmit)}>
+            <FormProvider {...formMethods}>
+                <Form buttonLabel="Lagre" onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}>
                     <Box marginTop={Margin.large}>
                         <CheckboxGroup
                             question="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
@@ -143,7 +149,7 @@ const VurderingAvTilsynsbehovForm = ({
                             validators={{
                                 required,
                                 inngårISammenhengendeSøknadsperiode: (value: Period) => {
-                                    const isOk = sammenhengendeSøknadsperioder.some((sammenhengendeSøknadsperiode) =>
+                                    const isOk = perioderSomKanVurderes.some((sammenhengendeSøknadsperiode) =>
                                         sammenhengendeSøknadsperiode.covers(value)
                                     );
 

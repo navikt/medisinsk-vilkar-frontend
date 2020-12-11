@@ -5,7 +5,7 @@ import Dokument from './Dokument';
 interface Vurderingsoversikt {
     vurderinger: Vurdering[];
     perioderSomSkalVurderes: Period[];
-    søknadsperioder: Period[];
+    perioderSomKanVurderes: Period[];
     dokumenter: Dokument[];
 }
 

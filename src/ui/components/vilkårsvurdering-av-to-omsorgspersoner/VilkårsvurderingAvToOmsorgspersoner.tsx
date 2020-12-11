@@ -9,23 +9,20 @@ import VurderingAvToOmsorgspersonerForm, {
 import VurderingNavigation from '../vurdering-navigation/VurderingNavigation';
 import VurderingsdetaljerForToOmsorgspersoner from '../vurderingsdetaljer-for-to-omsorgspersoner/VurderingsdetaljerForToOmsorgspersoner';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import { makeToOmsorgspersonerFormStateAsVurderingObject } from '../../../util/vurderingUtils';
+import {
+    lagToOmsorgspersonerVurdering,
+    makeToOmsorgspersonerFormStateAsVurderingObject,
+} from '../../../util/vurderingUtils';
 import { lagreVurderingIVurderingsoversikt } from '../../../util/vurderingsoversikt';
 import { slåSammenSammenhengendePerioder } from '../../../util/periodUtils';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import { prettifyPeriod } from '../../../util/formats';
 
-interface VilkårsvurderingAvToOmsorgspersonerProps {
-    defaultVurderingsoversikt: Vurderingsoversikt;
-}
-
-const VilkårsvurderingAvToOmsorgspersoner = ({
-    defaultVurderingsoversikt,
-}: VilkårsvurderingAvToOmsorgspersonerProps) => {
+const VilkårsvurderingAvToOmsorgspersoner = () => {
     const { onVurderingValgt } = React.useContext(ContainerContext);
 
     const [isLoading, setIsLoading] = React.useState(false);
-    const [vurderingsoversikt, setVurderingsoversikt] = React.useState<Vurderingsoversikt>(defaultVurderingsoversikt);
+    const [vurderingsoversikt, setVurderingsoversikt] = React.useState<Vurderingsoversikt>();
     const [valgtVurdering, setValgtVurdering] = React.useState(null);
     const [nyVurderingOpen, setNyVurderingOpen] = React.useState(false);
     const [perioderTilVurderingDefaultValue, setPerioderTilVurderingDefaultValue] = React.useState([]);
@@ -52,14 +49,13 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
 
     const lagreVurderingAvToOmsorgspersoner = (data: VurderingAvToOmsorgspersonerFormState) => {
         setIsLoading(true);
-        lagreVurderingIVurderingsoversikt(
-            makeToOmsorgspersonerFormStateAsVurderingObject(data),
-            vurderingsoversikt
-        ).then((nyVurderingsoversikt) => {
-            setVurderingsoversikt(nyVurderingsoversikt);
-            setIsLoading(false);
-            setNyVurderingOpen(false);
-        });
+        lagreVurderingIVurderingsoversikt(lagToOmsorgspersonerVurdering(data), vurderingsoversikt).then(
+            (nyVurderingsoversikt) => {
+                setVurderingsoversikt(nyVurderingsoversikt);
+                setIsLoading(false);
+                setNyVurderingOpen(false);
+            }
+        );
     };
 
     const sammenslåttePerioderMedTilsynsbehov = useMemo(() => {

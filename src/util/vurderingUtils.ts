@@ -1,4 +1,4 @@
-import Vurdering from '../types/Vurdering';
+import { TilsynsbehovVurdering, ToOmsorgspersonerVurdering } from '../types/Vurdering';
 import {
     FieldName as TilsynFieldName,
     VurderingAvTilsynsbehovFormState,
@@ -9,8 +9,13 @@ import {
 } from '../ui/components/ny-vurdering-av-to-omsorgspersoner/NyVurderingAvToOmsorgspersoner';
 import Vurderingsresultat from '../types/Vurderingsresultat';
 import { Period } from '../types/Period';
+import Dokument from '../types/Dokument';
+import { finnBenyttedeDokumenter } from './dokumentUtils';
 
-export const makeTilsynsbehovFormStateAsVurderingObject = (formState: VurderingAvTilsynsbehovFormState): Vurdering => {
+export const lagTilsynsbehovVurdering = (
+    formState: VurderingAvTilsynsbehovFormState,
+    alleDokumenter: Dokument[]
+): TilsynsbehovVurdering => {
     const resultat = formState[TilsynFieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]
         ? Vurderingsresultat.INNVILGET
         : Vurderingsresultat.AVSLÅTT;
@@ -24,13 +29,14 @@ export const makeTilsynsbehovFormStateAsVurderingObject = (formState: VurderingA
         resultat,
         perioder,
         begrunnelse,
-        dokumenter: formState[TilsynFieldName.DOKUMENTER],
+        dokumenter: finnBenyttedeDokumenter(formState[TilsynFieldName.DOKUMENTER], alleDokumenter),
     };
 };
 
-export const makeToOmsorgspersonerFormStateAsVurderingObject = (
-    formState: VurderingAvToOmsorgspersonerFormState
-): Vurdering => {
+export const lagToOmsorgspersonerVurdering = (
+    formState: VurderingAvToOmsorgspersonerFormState,
+    alleDokumenter: Dokument[]
+): ToOmsorgspersonerVurdering => {
     const resultat = formState[ToOmsorgspersonerFieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]
         ? Vurderingsresultat.INNVILGET
         : Vurderingsresultat.AVSLÅTT;
@@ -44,6 +50,6 @@ export const makeToOmsorgspersonerFormStateAsVurderingObject = (
         resultat,
         perioder,
         begrunnelse,
-        dokumenter: formState[ToOmsorgspersonerFieldName.DOKUMENTER],
+        dokumenter: finnBenyttedeDokumenter(formState[TilsynFieldName.DOKUMENTER], alleDokumenter),
     };
 };

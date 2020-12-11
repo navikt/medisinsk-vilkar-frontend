@@ -33,27 +33,3 @@ export function justerPerioder(perioderSomJusteres: Period[], nyePerioder: Perio
 
     return justertePerioder;
 }
-
-export const lagreVurderingIVurderingsoversikt = (
-    nyVurdering: Vurdering,
-    gammelVurderingsoversikt: Vurderingsoversikt
-): Promise<Vurderingsoversikt> => {
-    const { perioderSomSkalVurderes } = gammelVurderingsoversikt;
-
-    const nyePerioderSomSkalVurderes = justerPerioder(perioderSomSkalVurderes, nyVurdering.perioder);
-    const oppdaterteVurderinger = gammelVurderingsoversikt.vurderinger
-        .map((vurdering) => {
-            vurdering.perioder = justerPerioder(vurdering.perioder, nyVurdering.perioder);
-            return vurdering;
-        })
-        .filter(({ perioder }) => perioder.length > 0);
-
-    return new Promise((resolve) =>
-        resolve({
-            perioderSomSkalVurderes: nyePerioderSomSkalVurderes,
-            vurderinger: [nyVurdering, ...oppdaterteVurderinger],
-            søknadsperioder: gammelVurderingsoversikt.søknadsperioder,
-            dokumenter: gammelVurderingsoversikt.dokumenter,
-        })
-    );
-};

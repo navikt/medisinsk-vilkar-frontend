@@ -1,24 +1,21 @@
 import React from 'react';
-import Vurdering from '../../../types/Vurdering';
+import { TilsynsbehovVurdering } from '../../../types/Vurdering';
 import { prettifyPeriod } from '../../../util/formats';
 import DetailView from '../detail-view/DetailView';
 import LabelledContent from '../labelled-content/LabelledContent';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import Box, { Margin } from '../box/Box';
-import Dokument from '../../../types/Dokument';
 import BasicList from '../basic-list/BasicList';
 import DokumentLink from '../dokument-link/DokumentLink';
 
 interface VurderingsdetaljerForKontinuerligTilsynOgPleieProps {
-    vurdering: Vurdering;
-    dokumenter: Dokument[];
+    vurdering: TilsynsbehovVurdering;
 }
 
 const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
     vurdering,
-    dokumenter,
 }: VurderingsdetaljerForKontinuerligTilsynOgPleieProps) => {
-    const { perioder, begrunnelse, resultat } = vurdering;
+    const { perioder, begrunnelse, resultat, dokumenter } = vurdering;
     return (
         <DetailView title="Vurdering av behov for kontinuerlig tilsyn og pleie">
             <Box marginTop={Margin.medium}>
@@ -27,7 +24,7 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
                     content={
                         <BasicList
                             elements={dokumenter
-                                .filter((dokument) => vurdering.dokumenter.includes(dokument.id))
+                                .filter((dokument) => vurdering.dokumenter.includes(dokument))
                                 .map((dokument) => (
                                     <DokumentLink dokument={dokument} />
                                 ))}
