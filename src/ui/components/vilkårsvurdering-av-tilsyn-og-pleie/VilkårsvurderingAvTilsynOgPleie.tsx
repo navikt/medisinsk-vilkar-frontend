@@ -8,7 +8,7 @@ import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import VurderingNavigation from '../vurdering-navigation/VurderingNavigation';
 import { prettifyPeriod } from '../../../util/formats';
-import VurderingDetails from '../VurderingDetails';
+import VurderingDetailsTilsyn from '../vurderings-details-tilsyn/VurderingDetailsTilsyn';
 
 const finnValgtVurdering = (vurderinger, vurderingId) => {
     return vurderinger.find(({ id }) => vurderingId === id);
@@ -101,7 +101,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                 detailSection={() => {
                     if (visVurderingDetails) {
                         return (
-                            <VurderingDetails
+                            <VurderingDetailsTilsyn
                                 vurderingId={valgtVurdering?.id}
                                 onVurderingLagret={() => {}}
                                 perioderTilVurdering={perioderTilVurderingDefaultValue}

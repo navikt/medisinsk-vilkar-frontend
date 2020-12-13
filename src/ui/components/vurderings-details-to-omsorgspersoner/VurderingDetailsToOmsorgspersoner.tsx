@@ -1,11 +1,13 @@
 import React from 'react';
-import VurderingAvTilsynsbehovForm, { FieldName } from './ny-vurdering-av-tilsynsbehov/NyVurderingAvTilsynsbehovForm';
-import VurderingsdetaljerForKontinuerligTilsynOgPleie from './vurderingsdetaljer-for-kontinuerlig-tilsyn-og-pleie/VurderingsdetaljerForKontinuerligTilsynOgPleie';
-import { TilsynsbehovVurdering } from '../../types/Vurdering';
-import { Period } from '../../types/Period';
-import Dokument from '../../types/Dokument';
-import Vurderingsresultat from '../../types/Vurderingsresultat';
-import mockedDokumentliste from '../../mock/mockedDokumentliste';
+import mockedDokumentliste from '../../../mock/mockedDokumentliste';
+import Dokument from '../../../types/Dokument';
+import { Period } from '../../../types/Period';
+import { ToOmsorgspersonerVurdering } from '../../../types/Vurdering';
+import Vurderingsresultat from '../../../types/Vurderingsresultat';
+import VurderingAvToOmsorgspersonerForm, {
+    FieldName,
+} from '../ny-vurdering-av-to-omsorgspersoner/NyVurderingAvToOmsorgspersoner';
+import VurderingsdetaljerForToOmsorgspersoner from '../vurderingsdetaljer-for-to-omsorgspersoner/VurderingsdetaljerForToOmsorgspersoner';
 
 interface VurderingDetailsProps {
     vurderingId: string | null;
@@ -13,7 +15,7 @@ interface VurderingDetailsProps {
     onVurderingLagret: () => void;
 }
 
-function lagreVurdering(vurdering: TilsynsbehovVurdering) {
+function lagreVurdering(vurdering: ToOmsorgspersonerVurdering) {
     return new Promise((resolve) => {
         setTimeout(() => resolve({}), 1000);
     });
@@ -47,15 +49,19 @@ function hentNødvendigeDataForÅGjøreVurdering() {
     });
 }
 
-const VurderingDetails = ({ vurderingId, perioderTilVurdering, onVurderingLagret }: VurderingDetailsProps) => {
+const VurderingDetailsToOmsorgspersoner = ({
+    vurderingId,
+    perioderTilVurdering,
+    onVurderingLagret,
+}: VurderingDetailsProps): JSX.Element => {
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
-    const [vurdering, setVurdering] = React.useState<TilsynsbehovVurdering>(null);
+    const [vurdering, setVurdering] = React.useState<ToOmsorgspersonerVurdering>(null);
     const [alleDokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
     React.useEffect(() => {
         let isMounted = true;
         if (vurderingId !== null) {
-            hentVurdering(vurderingId).then((vurderingResponse: TilsynsbehovVurdering) => {
+            hentVurdering(vurderingId).then((vurderingResponse: ToOmsorgspersonerVurdering) => {
                 if (isMounted) {
                     setVurdering(vurderingResponse);
                     setIsLoading(false);
@@ -75,7 +81,7 @@ const VurderingDetails = ({ vurderingId, perioderTilVurdering, onVurderingLagret
         };
     }, [vurderingId]);
 
-    const lagreVurderingAvTilsynsbehov = (nyVurdering: TilsynsbehovVurdering) => {
+    const lagreVurderingAvToOmsorgspersoner = (nyVurdering: ToOmsorgspersonerVurdering) => {
         setIsLoading(true);
         lagreVurdering(nyVurdering).then(
             () => {
@@ -91,22 +97,22 @@ const VurderingDetails = ({ vurderingId, perioderTilVurdering, onVurderingLagret
 
     if (isLoading) {
         return <p>Laster</p>;
-    } else if (vurdering !== null) {
-        return <VurderingsdetaljerForKontinuerligTilsynOgPleie vurdering={vurdering} />;
-    } else {
-        return (
-            <VurderingAvTilsynsbehovForm
-                defaultValues={{
-                    [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
-                    [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
-                    [FieldName.PERIODER]: perioderTilVurdering,
-                    [FieldName.DOKUMENTER]: [],
-                }}
-                dokumenter={alleDokumenter}
-                onSubmit={lagreVurderingAvTilsynsbehov}
-            />
-        );
     }
+    if (vurdering !== null) {
+        return <VurderingsdetaljerForToOmsorgspersoner vurdering={vurdering} />;
+    }
+    return (
+        <VurderingAvToOmsorgspersonerForm
+            defaultValues={{
+                [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]: '',
+                [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: undefined,
+                [FieldName.PERIODER]: perioderTilVurdering,
+                [FieldName.DOKUMENTER]: [],
+            }}
+            dokumenter={alleDokumenter}
+            onSubmit={lagreVurderingAvToOmsorgspersoner}
+        />
+    );
 };
 
-export default VurderingDetails;
+export default VurderingDetailsToOmsorgspersoner;

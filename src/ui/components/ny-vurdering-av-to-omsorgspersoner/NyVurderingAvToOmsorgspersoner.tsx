@@ -1,21 +1,22 @@
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import React from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import Dokument from '../../../types/Dokument';
+import { Period } from '../../../types/Period';
+import { ToOmsorgspersonerVurdering } from '../../../types/Vurdering';
 import { getPeriodAsListOfDays } from '../../../util/dateUtils';
-import { harBruktDokumentasjon, required, fomDatoErFørTomDato } from '../../form/validators';
+import { convertToInternationalPeriod } from '../../../util/formats';
+import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
+import { fomDatoErFørTomDato, harBruktDokumentasjon, required } from '../../form/validators';
+import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
-import Box, { Margin } from '../box/Box';
-import { Period } from '../../../types/Period';
-import { FormProvider, useForm } from 'react-hook-form';
-import DetailView from '../detail-view/DetailView';
-import Form from '../form/Form';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
-import { convertToInternationalPeriod } from '../../../util/formats';
-import styles from './nyVurderingAvToOmsorgspersonerForm.less';
-import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
-import Dokument from '../../../types/Dokument';
+import Box, { Margin } from '../box/Box';
+import DetailView from '../detail-view/DetailView';
 import DokumentLink from '../dokument-link/DokumentLink';
+import Form from '../form/Form';
+import styles from './nyVurderingAvToOmsorgspersonerForm.less';
 
 export enum FieldName {
     VURDERING_AV_TO_OMSORGSPERSONER = 'vurderingAvToOmsorgspersoner',
@@ -33,9 +34,8 @@ export interface VurderingAvToOmsorgspersonerFormState {
 
 interface VurderingAvToOmsorgspersonerFormProps {
     defaultValues: VurderingAvToOmsorgspersonerFormState;
-    onSubmit: (data: VurderingAvToOmsorgspersonerFormState) => void;
+    onSubmit: (data: ToOmsorgspersonerVurdering) => void;
     perioderSomSkalVurderes?: Period[];
-    sammenhengendePerioderMedTilsynsbehov: Period[];
     dokumenter: Dokument[];
 }
 
@@ -43,7 +43,6 @@ const VurderingAvToOmsorgspersonerForm = ({
     defaultValues,
     onSubmit,
     perioderSomSkalVurderes,
-    sammenhengendePerioderMedTilsynsbehov,
     dokumenter,
 }: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
     const formMethods = useForm({
@@ -67,16 +66,13 @@ const VurderingAvToOmsorgspersonerForm = ({
     }, [perioderSomSkalVurderes, perioderSomBlirVurdert]);
 
     const hullISøknadsperiodene = React.useMemo(
-        () =>
-            finnHullIPerioder(sammenhengendePerioderMedTilsynsbehov).map((periode) =>
-                convertToInternationalPeriod(periode)
-            ),
-        [sammenhengendePerioderMedTilsynsbehov]
+        () => finnHullIPerioder(perioderSomSkalVurderes).map((periode) => convertToInternationalPeriod(periode)),
+        [perioderSomSkalVurderes]
     );
 
     const avgrensningerForSøknadsperiode = React.useMemo(
-        () => finnMaksavgrensningerForPerioder(sammenhengendePerioderMedTilsynsbehov),
-        [sammenhengendePerioderMedTilsynsbehov]
+        () => finnMaksavgrensningerForPerioder(perioderSomSkalVurderes),
+        [perioderSomSkalVurderes]
     );
     return (
         <DetailView title="Vurdering av to omsorgspersoner">
@@ -123,8 +119,8 @@ const VurderingAvToOmsorgspersonerForm = ({
                             validators={{
                                 required,
                                 inngårISammenhengendePeriodeMedTilsynsbehov: (value: Period) => {
-                                    const isOk = sammenhengendePerioderMedTilsynsbehov.some(
-                                        (sammenhengendeSøknadsperiode) => sammenhengendeSøknadsperiode.covers(value)
+                                    const isOk = perioderSomSkalVurderes.some((sammenhengendeSøknadsperiode) =>
+                                        sammenhengendeSøknadsperiode.covers(value)
                                     );
 
                                     if (!isOk) {
