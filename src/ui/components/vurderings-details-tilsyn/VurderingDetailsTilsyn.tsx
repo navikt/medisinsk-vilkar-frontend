@@ -10,6 +10,7 @@ import mockedDokumentliste from '../../../mock/mockedDokumentliste';
 interface VurderingDetailsProps {
     vurderingId: string | null;
     perioderTilVurdering: Period[];
+    perioderSomKanVurderes: Period[];
     onVurderingLagret: () => void;
 }
 
@@ -47,14 +48,22 @@ function hentNødvendigeDataForÅGjøreVurdering() {
     });
 }
 
-const VurderingDetailsTilsyn = ({ vurderingId, perioderTilVurdering, onVurderingLagret }: VurderingDetailsProps) => {
+const VurderingDetails = ({
+    vurderingId,
+    perioderTilVurdering,
+    perioderSomKanVurderes,
+    onVurderingLagret,
+}: VurderingDetailsProps) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [vurdering, setVurdering] = React.useState<TilsynsbehovVurdering>(null);
     const [alleDokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
     React.useEffect(() => {
         let isMounted = true;
-        if (vurderingId !== null) {
+
+        setIsLoading(true);
+
+        if (vurderingId) {
             hentVurdering(vurderingId).then((vurderingResponse: TilsynsbehovVurdering) => {
                 if (isMounted) {
                     setVurdering(vurderingResponse);
@@ -62,6 +71,7 @@ const VurderingDetailsTilsyn = ({ vurderingId, perioderTilVurdering, onVurdering
                 }
             });
         } else {
+            setVurdering(null);
             hentNødvendigeDataForÅGjøreVurdering().then((nødvendigeDataForÅGjøreVurdering) => {
                 if (isMounted) {
                     setDokumenter(nødvendigeDataForÅGjøreVurdering.dokumenter);
@@ -94,6 +104,21 @@ const VurderingDetailsTilsyn = ({ vurderingId, perioderTilVurdering, onVurdering
     }
     if (vurdering !== null) {
         return <VurderingsdetaljerForKontinuerligTilsynOgPleie vurdering={vurdering} />;
+    } else {
+        return (
+            <VurderingAvTilsynsbehovForm
+                defaultValues={{
+                    [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
+                    [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
+                    [FieldName.PERIODER]: perioderTilVurdering,
+                    [FieldName.DOKUMENTER]: [],
+                }}
+                perioderSomSkalVurderes={perioderTilVurdering}
+                perioderSomKanVurderes={perioderSomKanVurderes}
+                dokumenter={alleDokumenter}
+                onSubmit={lagreVurderingAvTilsynsbehov}
+            />
+        );
     }
     return (
         <VurderingAvTilsynsbehovForm
