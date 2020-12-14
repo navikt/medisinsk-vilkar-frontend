@@ -12,6 +12,7 @@ import VurderingsdetaljerForToOmsorgspersoner from '../vurderingsdetaljer-for-to
 interface VurderingDetailsProps {
     vurderingId: string | null;
     perioderTilVurdering: Period[];
+    perioderSomKanVurderes: Period[];
     onVurderingLagret: () => void;
 }
 
@@ -52,6 +53,7 @@ function hentNødvendigeDataForÅGjøreVurdering() {
 const VurderingDetailsToOmsorgspersoner = ({
     vurderingId,
     perioderTilVurdering,
+    perioderSomKanVurderes,
     onVurderingLagret,
 }: VurderingDetailsProps): JSX.Element => {
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
@@ -109,6 +111,8 @@ const VurderingDetailsToOmsorgspersoner = ({
                 [FieldName.PERIODER]: perioderTilVurdering,
                 [FieldName.DOKUMENTER]: [],
             }}
+            perioderSomSkalVurderes={perioderTilVurdering}
+            perioderSomKanVurderes={perioderSomKanVurderes}
             dokumenter={alleDokumenter}
             onSubmit={lagreVurderingAvToOmsorgspersoner}
         />

@@ -48,7 +48,7 @@ function hentNødvendigeDataForÅGjøreVurdering() {
     });
 }
 
-const VurderingDetails = ({
+const VurderingDetailsTilsyn = ({
     vurderingId,
     perioderTilVurdering,
     perioderSomKanVurderes,
@@ -104,22 +104,8 @@ const VurderingDetails = ({
     }
     if (vurdering !== null) {
         return <VurderingsdetaljerForKontinuerligTilsynOgPleie vurdering={vurdering} />;
-    } else {
-        return (
-            <VurderingAvTilsynsbehovForm
-                defaultValues={{
-                    [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
-                    [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
-                    [FieldName.PERIODER]: perioderTilVurdering,
-                    [FieldName.DOKUMENTER]: [],
-                }}
-                perioderSomSkalVurderes={perioderTilVurdering}
-                perioderSomKanVurderes={perioderSomKanVurderes}
-                dokumenter={alleDokumenter}
-                onSubmit={lagreVurderingAvTilsynsbehov}
-            />
-        );
     }
+
     return (
         <VurderingAvTilsynsbehovForm
             defaultValues={{
@@ -128,6 +114,8 @@ const VurderingDetails = ({
                 [FieldName.PERIODER]: perioderTilVurdering,
                 [FieldName.DOKUMENTER]: [],
             }}
+            perioderSomSkalVurderes={perioderTilVurdering}
+            perioderSomKanVurderes={perioderSomKanVurderes}
             dokumenter={alleDokumenter}
             onSubmit={lagreVurderingAvTilsynsbehov}
         />

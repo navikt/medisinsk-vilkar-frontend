@@ -36,6 +36,7 @@ interface VurderingAvToOmsorgspersonerFormProps {
     defaultValues: VurderingAvToOmsorgspersonerFormState;
     onSubmit: (data: ToOmsorgspersonerVurdering) => void;
     perioderSomSkalVurderes?: Period[];
+    perioderSomKanVurderes?: Period[];
     dokumenter: Dokument[];
 }
 
@@ -43,6 +44,7 @@ const VurderingAvToOmsorgspersonerForm = ({
     defaultValues,
     onSubmit,
     perioderSomSkalVurderes,
+    perioderSomKanVurderes,
     dokumenter,
 }: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
     const formMethods = useForm({
@@ -66,13 +68,13 @@ const VurderingAvToOmsorgspersonerForm = ({
     }, [perioderSomSkalVurderes, perioderSomBlirVurdert]);
 
     const hullISøknadsperiodene = React.useMemo(
-        () => finnHullIPerioder(perioderSomSkalVurderes).map((periode) => convertToInternationalPeriod(periode)),
-        [perioderSomSkalVurderes]
+        () => finnHullIPerioder(perioderSomKanVurderes).map((periode) => convertToInternationalPeriod(periode)),
+        [perioderSomKanVurderes]
     );
 
     const avgrensningerForSøknadsperiode = React.useMemo(
-        () => finnMaksavgrensningerForPerioder(perioderSomSkalVurderes),
-        [perioderSomSkalVurderes]
+        () => finnMaksavgrensningerForPerioder(perioderSomKanVurderes),
+        [perioderSomKanVurderes]
     );
     return (
         <DetailView title="Vurdering av to omsorgspersoner">
@@ -119,7 +121,7 @@ const VurderingAvToOmsorgspersonerForm = ({
                             validators={{
                                 required,
                                 inngårISammenhengendePeriodeMedTilsynsbehov: (value: Period) => {
-                                    const isOk = perioderSomSkalVurderes.some((sammenhengendeSøknadsperiode) =>
+                                    const isOk = perioderSomKanVurderes.some((sammenhengendeSøknadsperiode) =>
                                         sammenhengendeSøknadsperiode.covers(value)
                                     );
 

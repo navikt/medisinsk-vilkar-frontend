@@ -6,21 +6,30 @@ import { prettifyPeriod } from '../../../util/formats';
 import { hentToOmsorgspersonerVurderingsoversikt } from '../../../util/httpMock';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
+import ActionType from '../vilkårsvurdering-av-tilsyn-og-pleie/actionTypes';
+import vilkårsvurderingReducer from '../vilkårsvurdering-av-tilsyn-og-pleie/reducer';
 import VurderingNavigation from '../vurdering-navigation/VurderingNavigation';
 import VurderingDetailsToOmsorgspersoner from '../vurderings-details-to-omsorgspersoner/VurderingDetailsToOmsorgspersoner';
-
-const finnValgtVurdering = (vurderinger, vurderingId) => {
-    return vurderinger.find(({ id }) => vurderingId === id);
-};
 
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const { vurdering, onVurderingValgt } = React.useContext(ContainerContext);
 
-    const [isLoading, setIsLoading] = React.useState(true);
-    const [vurderingsoversikt, setVurderingsoversikt] = React.useState<Vurderingsoversikt>();
-    const [valgtVurdering, setValgtVurdering] = React.useState<Vurdering>(null);
-    const [visVurderingDetails, setVisVurderingDetails] = React.useState(false);
-    const [perioderTilVurderingDefaultValue, setPerioderTilVurderingDefaultValue] = React.useState([]);
+    const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
+        visVurderingDetails: !!vurdering,
+        isLoading: true,
+        vurderingsoversikt: null,
+        valgtVurdering: null,
+        perioderTilVurderingDefaultValue: [],
+        vurdering,
+    });
+
+    const {
+        vurderingsoversikt,
+        isLoading,
+        visVurderingDetails,
+        valgtVurdering,
+        perioderTilVurderingDefaultValue,
+    } = state;
 
     const harPerioderSomSkalVurderes =
         vurderingsoversikt &&
@@ -32,10 +41,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
 
         hentToOmsorgspersonerVurderingsoversikt().then((nyVurderingsoversikt: Vurderingsoversikt) => {
             if (isMounted) {
-                setVurderingsoversikt(nyVurderingsoversikt);
-                setValgtVurdering(finnValgtVurdering(nyVurderingsoversikt.vurderinger, vurdering) || null);
-                setIsLoading(false);
-                setPerioderTilVurderingDefaultValue(nyVurderingsoversikt?.perioderSomSkalVurderes || []);
+                dispatch({ type: ActionType.VIS_EKSISTERENDE_VURDERING, vurderingsoversikt: nyVurderingsoversikt });
             }
         });
 
@@ -46,22 +52,17 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
 
     const visNyVurderingUtenPreutfylling = () => {
         onVurderingValgt(null);
-        setValgtVurdering(null);
-        setPerioderTilVurderingDefaultValue([]);
-        setVisVurderingDetails(true);
+        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM });
     };
 
     const visPreutfyltVurdering = () => {
         onVurderingValgt(null);
-        setValgtVurdering(null);
-        setPerioderTilVurderingDefaultValue(vurderingsoversikt?.perioderSomSkalVurderes || []);
-        setVisVurderingDetails(true);
+        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM_PREUTFYLT });
     };
 
-    const velgVurdering = (v: Vurdering) => {
-        onVurderingValgt(v.id);
-        setValgtVurdering(v);
-        setVisVurderingDetails(false);
+    const velgVurdering = (nyValgtVurdering: Vurdering) => {
+        onVurderingValgt(nyValgtVurdering.id);
+        dispatch({ type: ActionType.VELG_VURDERING, vurdering: nyValgtVurdering });
     };
 
     if (isLoading) {
@@ -109,6 +110,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                                 vurderingId={valgtVurdering?.id}
                                 onVurderingLagret={() => null}
                                 perioderTilVurdering={perioderTilVurderingDefaultValue}
+                                perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}
                             />
                         );
                     }
