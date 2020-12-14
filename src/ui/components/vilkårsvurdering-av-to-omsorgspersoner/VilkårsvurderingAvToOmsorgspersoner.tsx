@@ -6,8 +6,8 @@ import VurderingAvToOmsorgspersonerForm, {
     FieldName,
     VurderingAvToOmsorgspersonerFormState,
 } from '../ny-vurdering-av-to-omsorgspersoner/NyVurderingAvToOmsorgspersoner';
-import VurderingNavigation from '../vurdering-navigation/VurderingNavigation';
-import VurderingsdetaljerForToOmsorgspersoner from '../vurderingsdetaljer-for-to-omsorgspersoner/VurderingsdetaljerForToOmsorgspersoner';
+import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
+import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsdetaljerForToOmsorgspersoner';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import {
     lagToOmsorgspersonerVurdering,
@@ -93,7 +93,7 @@ const VilkårsvurderingAvToOmsorgspersoner = () => {
                         );
                     }
                     return (
-                        <VurderingNavigation
+                        <Vurderingsnavigasjon
                             vurderinger={vurderingsoversikt?.vurderinger}
                             onVurderingValgt={velgVurdering}
                             onNyVurderingClick={visNyVurderingUtenPreutfylling}
@@ -122,7 +122,7 @@ const VilkårsvurderingAvToOmsorgspersoner = () => {
                     }
                     if (valgtVurdering !== null) {
                         return (
-                            <VurderingsdetaljerForToOmsorgspersoner
+                            <VurderingsoppsummeringForToOmsorgspersoner
                                 vurdering={valgtVurdering}
                                 dokumenter={vurderingsoversikt.dokumenter}
                             />

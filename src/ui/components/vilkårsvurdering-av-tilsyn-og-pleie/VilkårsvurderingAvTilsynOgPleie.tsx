@@ -6,9 +6,9 @@ import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { hentTilsynsbehovVurderingsoversikt } from '../../../util/httpMock';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
-import VurderingNavigation from '../vurdering-navigation/VurderingNavigation';
+import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import { prettifyPeriod } from '../../../util/formats';
-import VurderingDetails from '../VurderingDetails';
+import VurderingsdetaljerForKontinuerligTilsynOgPleie from '../vurderingsdetaljer-for-kontinuerlig-tilsyn-og-pleie/VurderingsdetaljerForKontinuerligTilsynOgPleie';
 import vilkårsvurderingReducer from './reducer';
 import ActionType from './actionTypes';
 
@@ -87,7 +87,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
             )}
             <NavigationWithDetailView
                 navigationSection={() => (
-                    <VurderingNavigation
+                    <Vurderingsnavigasjon
                         vurderinger={vurderingsoversikt?.vurderinger}
                         perioderSomSkalVurderes={vurderingsoversikt?.perioderSomSkalVurderes}
                         onVurderingValgt={velgVurdering}
@@ -99,10 +99,10 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                 detailSection={() => {
                     if (visVurderingDetails) {
                         return (
-                            <VurderingDetails
+                            <VurderingsdetaljerForKontinuerligTilsynOgPleie
                                 vurderingId={valgtVurdering?.id}
                                 onVurderingLagret={() => {}}
-                                perioderTilVurdering={perioderTilVurderingDefaultValue}
+                                perioderSomSkalVurderes={perioderTilVurderingDefaultValue}
                                 perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}
                             />
                         );

@@ -2,15 +2,15 @@ import React from 'react';
 import { Knapp } from 'nav-frontend-knapper';
 import { Undertittel } from 'nav-frontend-typografi';
 import Vurdering from '../../../types/Vurdering';
-import styles from './vurderingNavigation.less';
 import InteractiveList from '../interactive-list/InteractiveList';
 import { sammenstillVurderingsperioder } from '../../../util/vurderingsperioderUtils';
 import Vurderingsperiode from '../vurderingsperiode/Vurderingsperiode';
 import { prettifyPeriod } from '../../../util/formats';
 import { Period } from '../../../types/Period';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
+import styles from './vurderingsnavigasjon.less';
 
-interface VurderingNavigationProps {
+interface VurderingsnavigasjonProps {
     vurderinger: Vurdering[];
     onNyVurderingClick: () => void;
     onVurderingValgt: (vurdering: Vurdering) => void;
@@ -19,14 +19,14 @@ interface VurderingNavigationProps {
     kanOppretteNyeVurderinger?: boolean;
 }
 
-const VurderingNavigation = ({
+const Vurderingsnavigasjon = ({
     vurderinger,
     onNyVurderingClick,
     onVurderingValgt,
     perioderSomSkalVurderes,
     onPerioderSomSkalVurderesClick,
     kanOppretteNyeVurderinger,
-}: VurderingNavigationProps) => {
+}: VurderingsnavigasjonProps) => {
     function configureVurdertPeriodeElement({ periode, vurdering }, selectCallback) {
         return {
             contentRenderer: () => <Vurderingsperiode periode={periode} resultat={vurdering.resultat} />,
@@ -78,4 +78,4 @@ const VurderingNavigation = ({
     );
 };
 
-export default VurderingNavigation;
+export default Vurderingsnavigasjon;
