@@ -9,7 +9,7 @@ import VurderingAvToOmsorgspersonerForm, {
 } from '../ny-vurdering-av-to-omsorgspersoner/NyVurderingAvToOmsorgspersoner';
 import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
 
-interface VurderingDetailsProps {
+interface VurderingsdetaljerForToOmsorgspersonerProps {
     vurderingId: string | null;
     perioderSomSkalVurderes: Period[];
     perioderSomKanVurderes: Period[];
@@ -55,7 +55,7 @@ const VurderingsdetaljerToOmsorgspersoner = ({
     perioderSomSkalVurderes,
     perioderSomKanVurderes,
     onVurderingLagret,
-}: VurderingDetailsProps): JSX.Element => {
+}: VurderingsdetaljerForToOmsorgspersonerProps): JSX.Element => {
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [vurdering, setVurdering] = React.useState<ToOmsorgspersonerVurdering>(null);
     const [alleDokumenter, setDokumenter] = React.useState<Dokument[]>([]);
