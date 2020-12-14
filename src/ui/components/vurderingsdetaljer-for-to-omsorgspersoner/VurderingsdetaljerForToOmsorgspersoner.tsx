@@ -1,5 +1,6 @@
 import React from 'react';
 import mockedDokumentliste from '../../../mock/mockedDokumentliste';
+import { toSøkereMedTilsynsbehovVurderingerMock } from '../../../mock/mockedTilsynsbehovVurderinger';
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
 import { ToOmsorgspersonerVurdering } from '../../../types/Vurdering';
@@ -24,17 +25,16 @@ function lagreVurdering(vurdering: ToOmsorgspersonerVurdering) {
 
 function hentVurdering(vurderingsid: string) {
     return new Promise((resolve) => {
-        setTimeout(
-            () =>
-                resolve({
-                    id: vurderingsid,
-                    perioder: [new Period('2020-01-01', '2020-01-15')],
-                    resultat: Vurderingsresultat.INNVILGET,
-                    begrunnelse: 'Fordi her er det behov',
-                    dokumenter: mockedDokumentliste,
-                }),
-            1000
-        );
+        setTimeout(() => {
+            const vurdering = toSøkereMedTilsynsbehovVurderingerMock.find(
+                (vurderingMock) => vurderingMock.id === vurderingsid
+            );
+            resolve({
+                ...vurdering,
+                begrunnelse: 'Fordi her er det behov',
+                dokumenter: mockedDokumentliste,
+            });
+        }, 1000);
     });
 }
 
@@ -103,7 +103,6 @@ const VurderingsdetaljerToOmsorgspersoner = ({
         return <p>Laster</p>;
     }
     if (vurdering !== null) {
-        console.log(vurdering);
         return <VurderingsoppsummeringForToOmsorgspersoner dokumenter={alleDokumenter} vurdering={vurdering} />;
     }
     return (
