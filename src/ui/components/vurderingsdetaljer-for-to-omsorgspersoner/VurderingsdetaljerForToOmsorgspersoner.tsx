@@ -1,13 +1,14 @@
 import React from 'react';
-import VurderingAvTilsynsbehovForm, {
-    FieldName,
-} from './../ny-vurdering-av-tilsynsbehov/NyVurderingAvTilsynsbehovForm';
-import VurderingsoppsummeringForKontinuerligTilsynOgPleie from './../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
-import { TilsynsbehovVurdering } from '../../../types/Vurdering';
-import { Period } from '../../../types/Period';
-import Dokument from '../../../types/Dokument';
-import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import mockedDokumentliste from '../../../mock/mockedDokumentliste';
+import { toSøkereMedTilsynsbehovVurderingerMock } from '../../../mock/mockedTilsynsbehovVurderinger';
+import Dokument from '../../../types/Dokument';
+import { Period } from '../../../types/Period';
+import { ToOmsorgspersonerVurdering } from '../../../types/Vurdering';
+import Vurderingsresultat from '../../../types/Vurderingsresultat';
+import VurderingAvToOmsorgspersonerForm, {
+    FieldName,
+} from '../ny-vurdering-av-to-omsorgspersoner/NyVurderingAvToOmsorgspersoner';
+import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
 
 interface VurderingsdetaljerForToOmsorgspersonerProps {
     vurderingId: string | null;
@@ -16,7 +17,7 @@ interface VurderingsdetaljerForToOmsorgspersonerProps {
     onVurderingLagret: () => void;
 }
 
-function lagreVurdering(vurdering: TilsynsbehovVurdering) {
+function lagreVurdering(vurdering: ToOmsorgspersonerVurdering) {
     return new Promise((resolve) => {
         setTimeout(() => resolve({}), 1000);
     });
@@ -24,17 +25,16 @@ function lagreVurdering(vurdering: TilsynsbehovVurdering) {
 
 function hentVurdering(vurderingsid: string) {
     return new Promise((resolve) => {
-        setTimeout(
-            () =>
-                resolve({
-                    id: vurderingsid,
-                    perioder: [new Period('2020-01-01', '2020-01-15')],
-                    resultat: Vurderingsresultat.INNVILGET,
-                    begrunnelse: 'Fordi her er det behov',
-                    dokumenter: mockedDokumentliste,
-                }),
-            1000
-        );
+        setTimeout(() => {
+            const vurdering = toSøkereMedTilsynsbehovVurderingerMock.find(
+                (vurderingMock) => vurderingMock.id === vurderingsid
+            );
+            resolve({
+                ...vurdering,
+                begrunnelse: 'Fordi her er det behov',
+                dokumenter: mockedDokumentliste,
+            });
+        }, 1000);
     });
 }
 
@@ -50,23 +50,21 @@ function hentNødvendigeDataForÅGjøreVurdering() {
     });
 }
 
-const VurderingsdetaljerForToOmsorgspersoner = ({
+const VurderingsdetaljerToOmsorgspersoner = ({
     vurderingId,
     perioderSomSkalVurderes,
     perioderSomKanVurderes,
     onVurderingLagret,
-}: VurderingsdetaljerForToOmsorgspersonerProps) => {
+}: VurderingsdetaljerForToOmsorgspersonerProps): JSX.Element => {
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
-    const [vurdering, setVurdering] = React.useState<TilsynsbehovVurdering>(null);
+    const [vurdering, setVurdering] = React.useState<ToOmsorgspersonerVurdering>(null);
     const [alleDokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
     React.useEffect(() => {
-        let isMounted = true;
-
         setIsLoading(true);
-
+        let isMounted = true;
         if (vurderingId) {
-            hentVurdering(vurderingId).then((vurderingResponse: TilsynsbehovVurdering) => {
+            hentVurdering(vurderingId).then((vurderingResponse: ToOmsorgspersonerVurdering) => {
                 if (isMounted) {
                     setVurdering(vurderingResponse);
                     setIsLoading(false);
@@ -87,7 +85,7 @@ const VurderingsdetaljerForToOmsorgspersoner = ({
         };
     }, [vurderingId]);
 
-    const lagreVurderingAvTilsynsbehov = (nyVurdering: TilsynsbehovVurdering) => {
+    const lagreVurderingAvToOmsorgspersoner = (nyVurdering: ToOmsorgspersonerVurdering) => {
         setIsLoading(true);
         lagreVurdering(nyVurdering).then(
             () => {
@@ -103,24 +101,24 @@ const VurderingsdetaljerForToOmsorgspersoner = ({
 
     if (isLoading) {
         return <p>Laster</p>;
-    } else if (vurdering !== null) {
-        return <VurderingsoppsummeringForKontinuerligTilsynOgPleie vurdering={vurdering} />;
-    } else {
-        return (
-            <VurderingAvTilsynsbehovForm
-                defaultValues={{
-                    [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
-                    [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
-                    [FieldName.PERIODER]: perioderSomSkalVurderes,
-                    [FieldName.DOKUMENTER]: [],
-                }}
-                perioderSomSkalVurderes={perioderSomSkalVurderes}
-                perioderSomKanVurderes={perioderSomKanVurderes}
-                dokumenter={alleDokumenter}
-                onSubmit={lagreVurderingAvTilsynsbehov}
-            />
-        );
     }
+    if (vurdering !== null) {
+        return <VurderingsoppsummeringForToOmsorgspersoner dokumenter={alleDokumenter} vurdering={vurdering} />;
+    }
+    return (
+        <VurderingAvToOmsorgspersonerForm
+            defaultValues={{
+                [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]: '',
+                [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: undefined,
+                [FieldName.PERIODER]: perioderSomSkalVurderes,
+                [FieldName.DOKUMENTER]: [],
+            }}
+            perioderSomSkalVurderes={perioderSomSkalVurderes}
+            perioderSomKanVurderes={perioderSomKanVurderes}
+            dokumenter={alleDokumenter}
+            onSubmit={lagreVurderingAvToOmsorgspersoner}
+        />
+    );
 };
 
-export default VurderingsdetaljerForToOmsorgspersoner;
+export default VurderingsdetaljerToOmsorgspersoner;
