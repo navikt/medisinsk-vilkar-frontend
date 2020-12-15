@@ -4,9 +4,9 @@ import { prettifyPeriod } from '../../../util/formats';
 import { Period } from '../../../types/Period';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import RedCrossIconFilled from '../icons/RedCrossIconFilled';
-import styles from './vurderingsperiode.less';
+import styles from './vurderingsperiodeElement.less';
 
-interface VurderingsperiodeProps {
+interface VurderingsperiodeElementProps {
     periode: Period;
     resultat: Vurderingsresultat;
 }
@@ -27,16 +27,16 @@ const renderResultatText = (resultat: Vurderingsresultat) => {
     }
 };
 
-const Vurderingsperiode = ({ periode, resultat }: VurderingsperiodeProps) => {
+const VurderingsperiodeElement = ({ periode, resultat }: VurderingsperiodeElementProps) => {
     return (
-        <div className={styles.vurderingsperiode}>
+        <div className={styles.vurderingsperiodeElement}>
             {renderIcon(resultat)}
-            <div className={styles.vurderingsperiode__texts}>
-                <p className={styles.vurderingsperiode__texts__period}>{prettifyPeriod(periode)}</p>
+            <div className={styles.vurderingsperiodeElement__texts}>
+                <p className={styles.vurderingsperiodeElement__texts__period}>{prettifyPeriod(periode)}</p>
                 {renderResultatText(resultat)}
             </div>
         </div>
     );
 };
 
-export default Vurderingsperiode;
+export default VurderingsperiodeElement;

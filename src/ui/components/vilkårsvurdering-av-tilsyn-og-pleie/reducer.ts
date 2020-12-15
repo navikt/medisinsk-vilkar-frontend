@@ -16,6 +16,7 @@ interface Action {
     type: ActionType;
     vurderingsoversikt?: Vurderingsoversikt;
     vurdering?: Vurdering;
+    perioderSomSkalVurderes?: Period[];
 }
 
 const finnValgtVurdering = (vurderinger, vurderingId) => {
@@ -24,26 +25,22 @@ const finnValgtVurdering = (vurderinger, vurderingId) => {
 
 const vilkårsvurderingReducer = (state: State, action: Action) => {
     switch (action.type) {
-        case ActionType.VIS_EKSISTERENDE_VURDERING:
+        case ActionType.VIS_VURDERINGSOVERSIKT:
+            const valgtVurdering = finnValgtVurdering(action.vurderingsoversikt.vurderinger, state.vurdering) || null;
+            const perioderSomSkalVurderes = action.vurderingsoversikt?.perioderSomSkalVurderes || [];
             return {
                 ...state,
                 vurderingsoversikt: action.vurderingsoversikt,
-                valgtVurdering: finnValgtVurdering(action.vurderingsoversikt.vurderinger, state.vurdering) || null,
+                valgtVurdering,
                 isLoading: false,
-                perioderTilVurderingDefaultValue: action.vurderingsoversikt?.perioderSomSkalVurderes || [],
+                perioderTilVurderingDefaultValue: perioderSomSkalVurderes,
+                visVurderingDetails: true,
             };
         case ActionType.VIS_NY_VURDERING_FORM:
             return {
                 ...state,
                 valgtVurdering: null,
-                perioderTilVurderingDefaultValue: [],
-                visVurderingDetails: true,
-            };
-        case ActionType.VIS_NY_VURDERING_FORM_PREUTFYLT:
-            return {
-                ...state,
-                valgtVurdering: null,
-                perioderTilVurderingDefaultValue: state.vurderingsoversikt?.perioderSomSkalVurderes || [],
+                perioderTilVurderingDefaultValue: action.perioderSomSkalVurderes || [],
                 visVurderingDetails: true,
             };
         case ActionType.VELG_VURDERING:

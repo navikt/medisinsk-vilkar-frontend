@@ -4,18 +4,12 @@ import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import VurderingAvToOmsorgspersonerForm, {
     FieldName,
-    VurderingAvToOmsorgspersonerFormState,
 } from '../ny-vurdering-av-to-omsorgspersoner/NyVurderingAvToOmsorgspersoner';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
-import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsdetaljerForToOmsorgspersoner';
+import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import {
-    lagToOmsorgspersonerVurdering,
-    makeToOmsorgspersonerFormStateAsVurderingObject,
-} from '../../../util/vurderingUtils';
-import { lagreVurderingIVurderingsoversikt } from '../../../util/vurderingsoversikt';
 import { slåSammenSammenhengendePerioder } from '../../../util/periodUtils';
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { prettifyPeriod } from '../../../util/formats';
 
 const VilkårsvurderingAvToOmsorgspersoner = () => {
@@ -47,15 +41,8 @@ const VilkårsvurderingAvToOmsorgspersoner = () => {
         setNyVurderingOpen(false);
     };
 
-    const lagreVurderingAvToOmsorgspersoner = (data: VurderingAvToOmsorgspersonerFormState) => {
+    const lagreVurderingAvToOmsorgspersoner = () => {
         setIsLoading(true);
-        lagreVurderingIVurderingsoversikt(lagToOmsorgspersonerVurdering(data), vurderingsoversikt).then(
-            (nyVurderingsoversikt) => {
-                setVurderingsoversikt(nyVurderingsoversikt);
-                setIsLoading(false);
-                setNyVurderingOpen(false);
-            }
-        );
     };
 
     const sammenslåttePerioderMedTilsynsbehov = useMemo(() => {
@@ -82,24 +69,12 @@ const VilkårsvurderingAvToOmsorgspersoner = () => {
             )}
             <NavigationWithDetailView
                 navigationSection={() => {
-                    if (defaultVurderingsoversikt?.perioderSomSkalVurderes.length === 0) {
-                        return (
-                            <div style={{ marginTop: '1rem' }}>
-                                <AlertStripeInfo>
-                                    To omsorgspersoner skal ikke vurderes før tilsyn og pleie er blitt innvilget og det
-                                    er to parter i saken.
-                                </AlertStripeInfo>
-                            </div>
-                        );
-                    }
                     return (
                         <Vurderingsnavigasjon
                             vurderinger={vurderingsoversikt?.vurderinger}
                             onVurderingValgt={velgVurdering}
                             onNyVurderingClick={visNyVurderingUtenPreutfylling}
                             perioderSomSkalVurderes={vurderingsoversikt?.perioderSomSkalVurderes}
-                            onPerioderSomSkalVurderesClick={visPreutfyltVurdering}
-                            kanOppretteNyeVurderinger={defaultVurderingsoversikt?.perioderSomSkalVurderes.length > 0}
                         />
                     );
                 }}

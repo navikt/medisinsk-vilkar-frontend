@@ -11,6 +11,7 @@ import { prettifyPeriod } from '../../../util/formats';
 import VurderingsdetaljerForKontinuerligTilsynOgPleie from '../vurderingsdetaljer-for-kontinuerlig-tilsyn-og-pleie/VurderingsdetaljerForKontinuerligTilsynOgPleie';
 import vilkårsvurderingReducer from './reducer';
 import ActionType from './actionTypes';
+import { Period } from '../../../types/Period';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     onVilkårVurdert: () => void;
@@ -45,7 +46,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         let isMounted = true;
         hentTilsynsbehovVurderingsoversikt().then((nyVurderingsoversikt: Vurderingsoversikt) => {
             if (isMounted) {
-                dispatch({ type: ActionType.VIS_EKSISTERENDE_VURDERING, vurderingsoversikt: nyVurderingsoversikt });
+                dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
             }
         });
         return () => {
@@ -53,14 +54,9 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         };
     }, []);
 
-    const visNyVurderingUtenPreutfylling = () => {
+    const visNyVurderingForm = (perioderSomSkalVurderes?: Period[]) => {
         onVurderingValgt(null);
-        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM });
-    };
-
-    const visPreutfyltVurdering = () => {
-        onVurderingValgt(null);
-        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM_PREUTFYLT });
+        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, perioderSomSkalVurderes: perioderSomSkalVurderes });
     };
 
     const velgVurdering = (nyValgtVurdering: Vurdering) => {
@@ -91,9 +87,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                         vurderinger={vurderingsoversikt?.vurderinger}
                         perioderSomSkalVurderes={vurderingsoversikt?.perioderSomSkalVurderes}
                         onVurderingValgt={velgVurdering}
-                        onNyVurderingClick={visNyVurderingUtenPreutfylling}
-                        onPerioderSomSkalVurderesClick={visPreutfyltVurdering}
-                        kanOppretteNyeVurderinger={true}
+                        onNyVurderingClick={visNyVurderingForm}
                     />
                 )}
                 detailSection={() => {

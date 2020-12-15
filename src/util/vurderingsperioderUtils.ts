@@ -2,12 +2,12 @@ import Vurdering from '../types/Vurdering';
 import { sortPeriodsByFomDate } from './periodUtils';
 import { Period } from '../types/Period';
 
-interface PeriodeMedTilhørendeVurdering {
+export interface Vurderingsperiode {
     periode: Period;
     vurdering: Vurdering;
 }
 
-export function sammenstillVurderingsperioder(vurderinger: Vurdering[]): PeriodeMedTilhørendeVurdering[] {
+export function sammenstillVurderingsperioder(vurderinger: Vurdering[]): Vurderingsperiode[] {
     return vurderinger
         .map((vurdering) => vurdering.perioder.map((periode) => ({ periode, vurdering })))
         .flat()
