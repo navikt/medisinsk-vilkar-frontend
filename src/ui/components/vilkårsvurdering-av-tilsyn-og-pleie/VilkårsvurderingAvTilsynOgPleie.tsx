@@ -21,7 +21,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
     const { vurdering, onVurderingValgt } = React.useContext(ContainerContext);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
-        visVurderingDetails: vurdering != undefined,
+        visVurderingDetails: vurdering !== undefined,
         isLoading: true,
         vurderingsoversikt: null,
         valgtVurdering: null,
@@ -56,7 +56,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
 
     const visNyVurderingForm = (perioderSomSkalVurderes?: Period[]) => {
         onVurderingValgt(null);
-        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, perioderSomSkalVurderes: perioderSomSkalVurderes });
+        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, perioderSomSkalVurderes });
     };
 
     const velgVurdering = (nyValgtVurdering: Vurdering) => {
