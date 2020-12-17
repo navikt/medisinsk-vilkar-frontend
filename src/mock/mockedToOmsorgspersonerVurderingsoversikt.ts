@@ -4,8 +4,9 @@ import { toSøkereMedTilsynsbehovVurderingselementerMock } from './mockedTilsyns
 
 const mockedToOmsorgspersonerVurderingsoversikt: Vurderingsoversikt = {
     vurderingselementer: toSøkereMedTilsynsbehovVurderingselementerMock,
-    perioderSomSkalVurderes: [new Period('2020-01-16', '2020-01-20')],
+    resterendeVurderingsperioder: [new Period('2020-01-16', '2020-01-20')],
     perioderSomKanVurderes: [new Period('2020-01-01', '2020-01-15'), new Period('2020-01-16', '2020-01-20')],
+    søknadsperioderTilBehandling: [],
 };
 
 export default mockedToOmsorgspersonerVurderingsoversikt;

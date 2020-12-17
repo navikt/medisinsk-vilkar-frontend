@@ -8,7 +8,7 @@ interface State {
     isLoading: boolean;
     vurderingsoversikt: Vurderingsoversikt;
     valgtVurderingselement: Vurderingselement;
-    perioderTilVurderingDefaultValue: Period[];
+    resterendeVurderingsperioderDefaultValue: Period[];
     vurdering: string;
 }
 
@@ -16,7 +16,7 @@ interface Action {
     type: ActionType;
     vurderingsoversikt?: Vurderingsoversikt;
     vurderingselement?: Vurderingselement;
-    perioderSomSkalVurderes?: Period[];
+    resterendeVurderingsperioder?: Period[];
 }
 
 const finnvalgtVurderingselement = (vurderingselementer, vurderingId) => {
@@ -28,13 +28,13 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
         case ActionType.VIS_VURDERINGSOVERSIKT: {
             const valgtVurderingselement =
                 finnvalgtVurderingselement(action.vurderingsoversikt.vurderingselementer, state.vurdering) || null;
-            const perioderSomSkalVurderes = action.vurderingsoversikt?.perioderSomSkalVurderes || [];
+            const resterendeVurderingsperioder = action.vurderingsoversikt?.resterendeVurderingsperioder || [];
             return {
                 ...state,
                 vurderingsoversikt: action.vurderingsoversikt,
                 valgtVurderingselement,
                 isLoading: false,
-                perioderTilVurderingDefaultValue: perioderSomSkalVurderes,
+                resterendeVurderingsperioderDefaultValue: resterendeVurderingsperioder,
                 visVurderingDetails: true,
             };
         }
@@ -42,10 +42,10 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 valgtVurderingselement: null,
-                perioderTilVurderingDefaultValue: action.perioderSomSkalVurderes || [],
+                resterendeVurderingsperioderDefaultValue: action.resterendeVurderingsperioder || [],
                 visVurderingDetails: true,
             };
-        case ActionType.VELG_VURDERING:
+        case ActionType.VELG_VURDERINGSELEMENT:
             return {
                 ...state,
                 valgtVurderingselement: action.vurderingselement,

@@ -11,7 +11,7 @@ import mockedDokumentliste from '../../../mock/mockedDokumentliste';
 
 interface VurderingDetailsProps {
     vurderingId: string | null;
-    perioderSomSkalVurderes: Period[];
+    resterendeVurderingsperioder: Period[];
     perioderSomKanVurderes: Period[];
     onVurderingLagret: () => void;
 }
@@ -52,7 +52,7 @@ function hentNødvendigeDataForÅGjøreVurdering() {
 
 const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
     vurderingId,
-    perioderSomSkalVurderes,
+    resterendeVurderingsperioder,
     perioderSomKanVurderes,
     onVurderingLagret,
 }: VurderingDetailsProps) => {
@@ -113,10 +113,10 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
             defaultValues={{
                 [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
                 [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
-                [FieldName.PERIODER]: perioderSomSkalVurderes,
+                [FieldName.PERIODER]: resterendeVurderingsperioder,
                 [FieldName.DOKUMENTER]: [],
             }}
-            perioderSomSkalVurderes={perioderSomSkalVurderes}
+            resterendeVurderingsperioder={resterendeVurderingsperioder}
             perioderSomKanVurderes={perioderSomKanVurderes}
             dokumenter={alleDokumenter}
             onSubmit={lagreVurderingAvTilsynsbehov}

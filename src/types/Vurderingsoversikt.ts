@@ -3,7 +3,8 @@ import Vurderingselement from './Vurderingselement';
 
 interface Vurderingsoversikt {
     vurderingselementer: Vurderingselement[];
-    perioderSomSkalVurderes: Period[];
+    resterendeVurderingsperioder: Period[];
+    søknadsperioderTilBehandling: Period[];
     perioderSomKanVurderes: Period[];
 }
 

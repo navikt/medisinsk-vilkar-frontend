@@ -20,7 +20,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         isLoading: true,
         vurderingsoversikt: null,
         valgtVurderingselement: null,
-        perioderTilVurderingDefaultValue: [],
+        resterendeVurderingsperioderDefaultValue: [],
         vurdering,
     });
 
@@ -29,10 +29,10 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         isLoading,
         visVurderingDetails,
         valgtVurderingselement,
-        perioderTilVurderingDefaultValue,
+        resterendeVurderingsperioderDefaultValue,
     } = state;
 
-    const harPerioderSomSkalVurderes = vurderingsoversikt?.perioderSomSkalVurderes?.length > 0;
+    const harPerioderSomSkalVurderes = vurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
 
     React.useEffect(() => {
         let isMounted = true;
@@ -48,14 +48,14 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         };
     }, []);
 
-    const visNyVurderingForm = (perioderSomSkalVurderes?: Period[]) => {
+    const visNyVurderingForm = (resterendeVurderingsperioder?: Period[]) => {
         onVurderingValgt(null);
-        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, perioderSomSkalVurderes });
+        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, resterendeVurderingsperioder });
     };
 
-    const velgVurdering = (nyvalgtVurderingselement: Vurderingselement) => {
+    const velgVurderingselement = (nyvalgtVurderingselement: Vurderingselement) => {
         onVurderingValgt(nyvalgtVurderingselement.id);
-        dispatch({ type: ActionType.VELG_VURDERINGSPERIODE, vurderingselement: nyvalgtVurderingselement });
+        dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, vurderingselement: nyvalgtVurderingselement });
     };
 
     if (isLoading) {
@@ -67,7 +67,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                 <div style={{ maxWidth: '1194px' }}>
                     <AlertStripeAdvarsel>
                         {`Vurder behov for to omsorgspersoner for perioden ${prettifyPeriod(
-                            vurderingsoversikt?.perioderSomSkalVurderes[0]
+                            vurderingsoversikt?.resterendeVurderingsperioder[0]
                         )}.`}
                     </AlertStripeAdvarsel>
                     <div style={{ marginTop: '1rem' }} />
@@ -75,7 +75,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
             )}
             <NavigationWithDetailView
                 navigationSection={() => {
-                    if (vurderingsoversikt?.perioderSomSkalVurderes.length === 0) {
+                    if (vurderingsoversikt?.resterendeVurderingsperioder.length === 0) {
                         return (
                             <div style={{ marginTop: '1rem' }}>
                                 <AlertStripeInfo>
@@ -88,8 +88,8 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                     return (
                         <Vurderingsnavigasjon
                             vurderingselementer={vurderingsoversikt?.vurderingselementer}
-                            perioderSomSkalVurderes={vurderingsoversikt?.perioderSomSkalVurderes}
-                            onVurderingValgt={velgVurdering}
+                            resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
+                            onVurderingValgt={velgVurderingselement}
                             onNyVurderingClick={visNyVurderingForm}
                         />
                     );
@@ -100,7 +100,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                             <VurderingsdetaljerForToOmsorgspersoner
                                 vurderingId={valgtVurderingselement?.id}
                                 onVurderingLagret={() => null}
-                                perioderSomSkalVurderes={perioderTilVurderingDefaultValue}
+                                resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
                                 perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}
                             />
                         );

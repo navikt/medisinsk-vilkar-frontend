@@ -11,7 +11,7 @@ import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummerin
 
 interface VurderingsdetaljerForToOmsorgspersonerProps {
     vurderingId: string | null;
-    perioderSomSkalVurderes: Period[];
+    resterendeVurderingsperioder: Period[];
     perioderSomKanVurderes: Period[];
     onVurderingLagret: () => void;
 }
@@ -47,7 +47,7 @@ function hentNødvendigeDataForÅGjøreVurdering() {
 
 const VurderingsdetaljerToOmsorgspersoner = ({
     vurderingId,
-    perioderSomSkalVurderes,
+    resterendeVurderingsperioder,
     perioderSomKanVurderes,
     onVurderingLagret,
 }: VurderingsdetaljerForToOmsorgspersonerProps): JSX.Element => {
@@ -105,10 +105,10 @@ const VurderingsdetaljerToOmsorgspersoner = ({
             defaultValues={{
                 [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]: '',
                 [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: undefined,
-                [FieldName.PERIODER]: perioderSomSkalVurderes,
+                [FieldName.PERIODER]: resterendeVurderingsperioder,
                 [FieldName.DOKUMENTER]: [],
             }}
-            perioderSomSkalVurderes={perioderSomSkalVurderes}
+            resterendeVurderingsperioder={resterendeVurderingsperioder}
             perioderSomKanVurderes={perioderSomKanVurderes}
             dokumenter={alleDokumenter}
             onSubmit={lagreVurderingAvToOmsorgspersoner}

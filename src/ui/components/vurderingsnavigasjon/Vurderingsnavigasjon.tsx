@@ -13,18 +13,18 @@ interface VurderingsnavigasjonProps {
     vurderingselementer: Vurderingselement[];
     onNyVurderingClick: (perioder?: Period[]) => void;
     onVurderingValgt: (vurdering: Vurderingselement) => void;
-    perioderSomSkalVurderes?: Period[];
+    resterendeVurderingsperioder?: Period[];
 }
 
 const Vurderingsnavigasjon = ({
     vurderingselementer,
     onNyVurderingClick,
     onVurderingValgt,
-    perioderSomSkalVurderes,
+    resterendeVurderingsperioder,
 }: VurderingsnavigasjonProps): JSX.Element => {
     const [activeIndex, setActiveIndex] = React.useState(0);
 
-    const harPerioderSomSkalVurderes = perioderSomSkalVurderes && perioderSomSkalVurderes.length > 0;
+    const harPerioderSomSkalVurderes = resterendeVurderingsperioder && resterendeVurderingsperioder.length > 0;
 
     const sorterteVurderingselementer: Vurderingselement[] = React.useMemo(() => {
         return vurderingselementer.sort((p1, p2) => sortPeriodsByFomDate(p1.periode, p2.periode)).reverse();
@@ -36,7 +36,7 @@ const Vurderingsnavigasjon = ({
 
     const allElements = [...vurderingsperiodeElements];
     if (harPerioderSomSkalVurderes) {
-        allElements.unshift(<PerioderSomSkalVurderes perioder={perioderSomSkalVurderes || []} />);
+        allElements.unshift(<PerioderSomSkalVurderes perioder={resterendeVurderingsperioder || []} />);
     }
 
     return (
@@ -64,7 +64,7 @@ const Vurderingsnavigasjon = ({
                             if (erEnEksisterendeVurdering) {
                                 onVurderingValgt(sorterteVurderingselementer[vurderingsperiodeIndex]);
                             } else {
-                                onNyVurderingClick(perioderSomSkalVurderes);
+                                onNyVurderingClick(resterendeVurderingsperioder);
                             }
                         },
                     }))}

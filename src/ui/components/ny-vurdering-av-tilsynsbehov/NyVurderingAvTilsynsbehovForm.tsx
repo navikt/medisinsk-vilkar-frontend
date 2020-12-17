@@ -36,7 +36,7 @@ export interface VurderingAvTilsynsbehovFormState {
 interface VurderingAvTilsynsbehovFormProps {
     defaultValues: VurderingAvTilsynsbehovFormState;
     onSubmit: (nyVurdering: TilsynsbehovVurdering) => void;
-    perioderSomSkalVurderes?: Period[];
+    resterendeVurderingsperioder?: Period[];
     perioderSomKanVurderes?: Period[];
     dokumenter: Dokument[];
 }
@@ -44,7 +44,7 @@ interface VurderingAvTilsynsbehovFormProps {
 const VurderingAvTilsynsbehovForm = ({
     defaultValues,
     onSubmit,
-    perioderSomSkalVurderes,
+    resterendeVurderingsperioder,
     perioderSomKanVurderes,
     dokumenter,
 }: VurderingAvTilsynsbehovFormProps): JSX.Element => {
@@ -59,7 +59,7 @@ const VurderingAvTilsynsbehovForm = ({
 
     const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
-        const dagerSomSkalVurderes = (perioderSomSkalVurderes || []).flatMap(getPeriodAsListOfDays);
+        const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap(getPeriodAsListOfDays);
         const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])
             .map((period) => {
                 if ((period as any).period) {
@@ -69,7 +69,7 @@ const VurderingAvTilsynsbehovForm = ({
             })
             .flatMap(getPeriodAsListOfDays);
         return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
-    }, [perioderSomSkalVurderes, perioderSomBlirVurdert]);
+    }, [resterendeVurderingsperioder, perioderSomBlirVurdert]);
 
     const hullISøknadsperiodene = React.useMemo(
         () => finnHullIPerioder(perioderSomKanVurderes).map((periode) => convertToInternationalPeriod(periode)),
