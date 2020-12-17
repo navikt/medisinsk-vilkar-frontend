@@ -53,7 +53,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
 
     const visNyVurderingForm = (perioderSomSkalVurderes?: Period[]) => {
         onVurderingValgt(null);
-        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, perioderSomSkalVurderes: perioderSomSkalVurderes });
+        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, perioderSomSkalVurderes });
     };
 
     const velgVurdering = (nyValgtVurdering: Vurdering) => {
