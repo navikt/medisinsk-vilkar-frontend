@@ -2,7 +2,7 @@ import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import React from 'react';
 import { Period } from '../../../types/Period';
-import Vurderingsperiode from '../../../types/Vurderingsperiode';
+import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { prettifyPeriod } from '../../../util/formats';
 import { hentTilsynsbehovVurderingsoversikt } from '../../../util/httpMock';
@@ -24,7 +24,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         visVurderingDetails: vurdering !== undefined,
         isLoading: true,
         vurderingsoversikt: null,
-        valgtVurderingsperiode: null,
+        valgtVurderingselement: null,
         perioderTilVurderingDefaultValue: [],
         vurdering,
     });
@@ -33,7 +33,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         vurderingsoversikt,
         isLoading,
         visVurderingDetails,
-        valgtVurderingsperiode,
+        valgtVurderingselement,
         perioderTilVurderingDefaultValue,
     } = state;
 
@@ -59,9 +59,9 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, perioderSomSkalVurderes });
     };
 
-    const velgVurdering = (nyValgtVurderingsperiode: Vurderingsperiode) => {
-        onVurderingValgt(nyValgtVurderingsperiode.id);
-        dispatch({ type: ActionType.VELG_VURDERING, vurderingsperiode: nyValgtVurderingsperiode });
+    const velgVurdering = (nyValgtVurderingselement: Vurderingselement) => {
+        onVurderingValgt(nyValgtVurderingselement.id);
+        dispatch({ type: ActionType.VELG_VURDERING, vurderingselement: nyValgtVurderingselement });
     };
 
     if (isLoading) {
@@ -84,7 +84,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
             <NavigationWithDetailView
                 navigationSection={() => (
                     <Vurderingsnavigasjon
-                        vurderingsperioder={vurderingsoversikt?.vurderingsperioder}
+                        vurderingselementer={vurderingsoversikt?.vurderingselementer}
                         perioderSomSkalVurderes={vurderingsoversikt?.perioderSomSkalVurderes}
                         onVurderingValgt={velgVurdering}
                         onNyVurderingClick={visNyVurderingForm}
@@ -94,7 +94,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                     if (visVurderingDetails) {
                         return (
                             <VurderingsdetaljerForKontinuerligTilsynOgPleie
-                                vurderingId={valgtVurderingsperiode?.id}
+                                vurderingId={valgtVurderingselement?.id}
                                 onVurderingLagret={() => null}
                                 perioderSomSkalVurderes={perioderTilVurderingDefaultValue}
                                 perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}

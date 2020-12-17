@@ -1,8 +1,8 @@
 import { Period } from './Period';
-import Vurderingsperiode from './Vurderingsperiode';
+import Vurderingselement from './Vurderingselement';
 
 interface Vurderingsoversikt {
-    vurderingsperioder: Vurderingsperiode[];
+    vurderingselementer: Vurderingselement[];
     perioderSomSkalVurderes: Period[];
     perioderSomKanVurderes: Period[];
 }

@@ -10,7 +10,7 @@ import vilkårsvurderingReducer from './reducer';
 import VurderingsdetaljerForToOmsorgspersoner from '../vurderingsdetaljer-for-to-omsorgspersoner/VurderingsdetaljerForToOmsorgspersoner';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import { Period } from '../../../types/Period';
-import Vurderingsperiode from '../../../types/Vurderingsperiode';
+import Vurderingselement from '../../../types/Vurderingselement';
 
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const { vurdering, onVurderingValgt } = React.useContext(ContainerContext);
@@ -19,7 +19,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         visVurderingDetails: !!vurdering,
         isLoading: true,
         vurderingsoversikt: null,
-        valgtVurderingsperiode: null,
+        valgtVurderingselement: null,
         perioderTilVurderingDefaultValue: [],
         vurdering,
     });
@@ -28,7 +28,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         vurderingsoversikt,
         isLoading,
         visVurderingDetails,
-        valgtVurderingsperiode,
+        valgtVurderingselement,
         perioderTilVurderingDefaultValue,
     } = state;
 
@@ -53,9 +53,9 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, perioderSomSkalVurderes });
     };
 
-    const velgVurdering = (nyValgtVurderingsperiode: Vurderingsperiode) => {
-        onVurderingValgt(nyValgtVurderingsperiode.id);
-        dispatch({ type: ActionType.VELG_VURDERINGSPERIODE, vurderingsperiode: nyValgtVurderingsperiode });
+    const velgVurdering = (nyvalgtVurderingselement: Vurderingselement) => {
+        onVurderingValgt(nyvalgtVurderingselement.id);
+        dispatch({ type: ActionType.VELG_VURDERINGSPERIODE, vurderingselement: nyvalgtVurderingselement });
     };
 
     if (isLoading) {
@@ -87,7 +87,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                     }
                     return (
                         <Vurderingsnavigasjon
-                            vurderingsperioder={vurderingsoversikt?.vurderingsperioder}
+                            vurderingselementer={vurderingsoversikt?.vurderingselementer}
                             perioderSomSkalVurderes={vurderingsoversikt?.perioderSomSkalVurderes}
                             onVurderingValgt={velgVurdering}
                             onNyVurderingClick={visNyVurderingForm}
@@ -98,7 +98,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                     if (visVurderingDetails) {
                         return (
                             <VurderingsdetaljerForToOmsorgspersoner
-                                vurderingId={valgtVurderingsperiode?.id}
+                                vurderingId={valgtVurderingselement?.id}
                                 onVurderingLagret={() => null}
                                 perioderSomSkalVurderes={perioderTilVurderingDefaultValue}
                                 perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}

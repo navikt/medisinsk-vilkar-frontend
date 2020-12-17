@@ -1,7 +1,7 @@
 import { Period } from './Period';
 import Vurderingsresultat from './Vurderingsresultat';
 
-interface Vurderingsperiode {
+interface Vurderingselement {
     id: string;
     resultat: Vurderingsresultat;
     periode: Period;
@@ -9,4 +9,4 @@ interface Vurderingsperiode {
     gjelderForAnnenPart: boolean;
 }
 
-export default Vurderingsperiode;
+export default Vurderingselement;

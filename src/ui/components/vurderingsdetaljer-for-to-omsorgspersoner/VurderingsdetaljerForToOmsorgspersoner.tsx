@@ -4,7 +4,6 @@ import { toSøkereMedTilsynsbehovVurderingerMock } from '../../../mock/mockedTil
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
 import { ToOmsorgspersonerVurdering } from '../../../types/Vurdering';
-import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import VurderingAvToOmsorgspersonerForm, {
     FieldName,
 } from '../ny-vurdering-av-to-omsorgspersoner/NyVurderingAvToOmsorgspersoner';
@@ -23,19 +22,13 @@ function lagreVurdering(vurdering: ToOmsorgspersonerVurdering) {
     });
 }
 
-function hentVurdering(vurderingsid: string) {
+function hentVurdering(vurderingsid: string): Promise<ToOmsorgspersonerVurdering> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const vurdering = toSøkereMedTilsynsbehovVurderingerMock.find(
                 (vurderingMock) => vurderingMock.id === vurderingsid
             );
-            resolve({
-                id: vurderingsid,
-                resultat: vurdering.resultat,
-                perioder: [vurdering.periode],
-                begrunnelse: 'Fordi her er det behov',
-                dokumenter: mockedDokumentliste,
-            });
+            resolve(vurdering);
         }, 1000);
     });
 }
