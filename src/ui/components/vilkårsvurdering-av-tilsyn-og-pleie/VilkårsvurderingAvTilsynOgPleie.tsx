@@ -21,7 +21,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
     const { vurdering, onVurderingValgt } = React.useContext(ContainerContext);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
-        visVurderingDetails: vurdering != undefined,
+        visVurderingDetails: vurdering !== undefined,
         isLoading: true,
         vurderingsoversikt: null,
         valgtVurderingsperiode: null,
