@@ -16,7 +16,7 @@ const StruktureringAvDokumentasjon = () => {
                 />
             )}
             detailSection={() => {
-                if (valgtDokument === null || valgtDokument === undefined) {
+                if (!valgtDokument) {
                     return <StrukturerDokumentForm dokumentNavn="Legeerklæring 4" />;
                 }
                 return <StrukturertDokumentDetaljer dokumentNavn={valgtDokument} />;
