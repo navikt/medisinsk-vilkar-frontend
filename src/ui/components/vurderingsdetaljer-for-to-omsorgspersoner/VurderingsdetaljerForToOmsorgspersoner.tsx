@@ -30,7 +30,9 @@ function hentVurdering(vurderingsid: string) {
                 (vurderingMock) => vurderingMock.id === vurderingsid
             );
             resolve({
-                ...vurdering,
+                id: vurderingsid,
+                resultat: vurdering.resultat,
+                perioder: [vurdering.periode],
                 begrunnelse: 'Fordi her er det behov',
                 dokumenter: mockedDokumentliste,
             });
