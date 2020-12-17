@@ -4,7 +4,6 @@ import { toSøkereMedTilsynsbehovVurderingerMock } from '../../../mock/mockedTil
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
 import { ToOmsorgspersonerVurdering } from '../../../types/Vurdering';
-import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import VurderingAvToOmsorgspersonerForm, {
     FieldName,
 } from '../ny-vurdering-av-to-omsorgspersoner/NyVurderingAvToOmsorgspersoner';
@@ -12,7 +11,7 @@ import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummerin
 
 interface VurderingsdetaljerForToOmsorgspersonerProps {
     vurderingId: string | null;
-    perioderSomSkalVurderes: Period[];
+    resterendeVurderingsperioder: Period[];
     perioderSomKanVurderes: Period[];
     onVurderingLagret: () => void;
 }
@@ -23,17 +22,13 @@ function lagreVurdering(vurdering: ToOmsorgspersonerVurdering) {
     });
 }
 
-function hentVurdering(vurderingsid: string) {
+function hentVurdering(vurderingsid: string): Promise<ToOmsorgspersonerVurdering> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const vurdering = toSøkereMedTilsynsbehovVurderingerMock.find(
                 (vurderingMock) => vurderingMock.id === vurderingsid
             );
-            resolve({
-                ...vurdering,
-                begrunnelse: 'Fordi her er det behov',
-                dokumenter: mockedDokumentliste,
-            });
+            resolve(vurdering);
         }, 1000);
     });
 }
@@ -52,7 +47,7 @@ function hentNødvendigeDataForÅGjøreVurdering() {
 
 const VurderingsdetaljerToOmsorgspersoner = ({
     vurderingId,
-    perioderSomSkalVurderes,
+    resterendeVurderingsperioder,
     perioderSomKanVurderes,
     onVurderingLagret,
 }: VurderingsdetaljerForToOmsorgspersonerProps): JSX.Element => {
@@ -110,10 +105,10 @@ const VurderingsdetaljerToOmsorgspersoner = ({
             defaultValues={{
                 [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]: '',
                 [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: undefined,
-                [FieldName.PERIODER]: perioderSomSkalVurderes,
+                [FieldName.PERIODER]: resterendeVurderingsperioder,
                 [FieldName.DOKUMENTER]: [],
             }}
-            perioderSomSkalVurderes={perioderSomSkalVurderes}
+            resterendeVurderingsperioder={resterendeVurderingsperioder}
             perioderSomKanVurderes={perioderSomKanVurderes}
             dokumenter={alleDokumenter}
             onSubmit={lagreVurderingAvToOmsorgspersoner}

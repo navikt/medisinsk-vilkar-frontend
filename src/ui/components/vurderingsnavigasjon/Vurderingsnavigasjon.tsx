@@ -1,42 +1,42 @@
-import React from 'react';
 import { Undertittel } from 'nav-frontend-typografi';
-import Vurdering from '../../../types/Vurdering';
-import InteractiveList from '../interactive-list/InteractiveList';
-import { Vurderingsperiode, sammenstillVurderingsperioder } from '../../../util/vurderingsperioderUtils';
-import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
+import React from 'react';
 import { Period } from '../../../types/Period';
-import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
-import styles from './vurderingsnavigasjon.less';
+import Vurderingselement from '../../../types/Vurderingselement';
+import { sortPeriodsByFomDate } from '../../../util/periodUtils';
+import InteractiveList from '../interactive-list/InteractiveList';
 import NyVurderingKnapp from '../ny-vurdering-knapp/NyVurderingKnapp';
+import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
+import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
+import styles from './vurderingsnavigasjon.less';
 
 interface VurderingsnavigasjonProps {
-    vurderinger: Vurdering[];
+    vurderingselementer: Vurderingselement[];
     onNyVurderingClick: (perioder?: Period[]) => void;
-    onVurderingValgt: (vurdering: Vurdering) => void;
-    perioderSomSkalVurderes?: Period[];
+    onVurderingValgt: (vurdering: Vurderingselement) => void;
+    resterendeVurderingsperioder?: Period[];
 }
 
 const Vurderingsnavigasjon = ({
-    vurderinger,
+    vurderingselementer,
     onNyVurderingClick,
     onVurderingValgt,
-    perioderSomSkalVurderes,
-}: VurderingsnavigasjonProps) => {
+    resterendeVurderingsperioder,
+}: VurderingsnavigasjonProps): JSX.Element => {
     const [activeIndex, setActiveIndex] = React.useState(0);
 
-    const harPerioderSomSkalVurderes = perioderSomSkalVurderes && perioderSomSkalVurderes.length > 0;
+    const harPerioderSomSkalVurderes = resterendeVurderingsperioder && resterendeVurderingsperioder.length > 0;
 
-    const vurderingsperioder: Vurderingsperiode[] = React.useMemo(() => {
-        return sammenstillVurderingsperioder(vurderinger);
-    }, [vurderinger]);
+    const sorterteVurderingselementer: Vurderingselement[] = React.useMemo(() => {
+        return vurderingselementer.sort((p1, p2) => sortPeriodsByFomDate(p1.periode, p2.periode)).reverse();
+    }, [vurderingselementer]);
 
-    const vurderingsperiodeElements = vurderingsperioder.map(({ periode, vurdering }) => (
-        <VurderingsperiodeElement periode={periode} resultat={vurdering.resultat} />
+    const vurderingsperiodeElements = sorterteVurderingselementer.map(({ periode, resultat }) => (
+        <VurderingsperiodeElement periode={periode} resultat={resultat} />
     ));
 
     const allElements = [...vurderingsperiodeElements];
     if (harPerioderSomSkalVurderes) {
-        allElements.unshift(<PerioderSomSkalVurderes perioder={perioderSomSkalVurderes || []} />);
+        allElements.unshift(<PerioderSomSkalVurderes perioder={resterendeVurderingsperioder || []} />);
     }
 
     return (
@@ -62,9 +62,9 @@ const Vurderingsnavigasjon = ({
                             const vurderingsperiodeIndex = vurderingsperiodeElements.indexOf(element);
                             const erEnEksisterendeVurdering = vurderingsperiodeIndex > -1;
                             if (erEnEksisterendeVurdering) {
-                                onVurderingValgt(vurderingsperioder[vurderingsperiodeIndex].vurdering);
+                                onVurderingValgt(sorterteVurderingselementer[vurderingsperiodeIndex]);
                             } else {
-                                onNyVurderingClick(perioderSomSkalVurderes);
+                                onNyVurderingClick(resterendeVurderingsperioder);
                             }
                         },
                     }))}

@@ -1,52 +1,54 @@
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import Vurdering from '../../../types/Vurdering';
 import { Period } from '../../../types/Period';
 import ActionType from './actionTypes';
+import Vurderingselement from '../../../types/Vurderingselement';
 
 interface State {
     visVurderingDetails: boolean;
     isLoading: boolean;
     vurderingsoversikt: Vurderingsoversikt;
-    valgtVurdering: Vurdering;
-    perioderTilVurderingDefaultValue: Period[];
+    valgtVurderingselement: Vurderingselement;
+    resterendeVurderingsperioderDefaultValue: Period[];
     vurdering: string;
 }
 
 interface Action {
     type: ActionType;
     vurderingsoversikt?: Vurderingsoversikt;
-    vurdering?: Vurdering;
-    perioderSomSkalVurderes?: Period[];
+    vurderingselement?: Vurderingselement;
+    resterendeVurderingsperioder?: Period[];
 }
 
-const finnValgtVurdering = (vurderinger, vurderingId) => {
-    return vurderinger.find(({ id }) => vurderingId === id);
+const finnvalgtVurderingselement = (vurderingselementer, vurderingId) => {
+    return vurderingselementer.find(({ id }) => vurderingId === id);
 };
 
-const vilkårsvurderingReducer = (state: State, action: Action) => {
+const vilkårsvurderingReducer = (state: State, action: Action): State => {
     switch (action.type) {
-        case ActionType.VIS_VURDERINGSOVERSIKT:
-            const valgtVurdering = finnValgtVurdering(action.vurderingsoversikt.vurderinger, state.vurdering) || null;
-            const perioderSomSkalVurderes = action.vurderingsoversikt?.perioderSomSkalVurderes || [];
+        case ActionType.VIS_VURDERINGSOVERSIKT: {
+            const valgtVurderingselement =
+                finnvalgtVurderingselement(action.vurderingsoversikt.vurderingselementer, state.vurdering) || null;
+            const resterendeVurderingsperioder = action.vurderingsoversikt?.resterendeVurderingsperioder || [];
             return {
                 ...state,
                 vurderingsoversikt: action.vurderingsoversikt,
-                valgtVurdering,
+                valgtVurderingselement,
                 isLoading: false,
-                perioderTilVurderingDefaultValue: perioderSomSkalVurderes,
+                resterendeVurderingsperioderDefaultValue: resterendeVurderingsperioder,
                 visVurderingDetails: true,
             };
+        }
         case ActionType.VIS_NY_VURDERING_FORM:
             return {
                 ...state,
-                valgtVurdering: null,
-                perioderTilVurderingDefaultValue: action.perioderSomSkalVurderes || [],
+                valgtVurderingselement: null,
+                resterendeVurderingsperioderDefaultValue: action.resterendeVurderingsperioder || [],
                 visVurderingDetails: true,
             };
-        case ActionType.VELG_VURDERING:
+        case ActionType.VELG_VURDERINGSELEMENT:
             return {
                 ...state,
-                valgtVurdering: action.vurdering,
+                valgtVurderingselement: action.vurderingselement,
                 visVurderingDetails: true,
             };
         default:

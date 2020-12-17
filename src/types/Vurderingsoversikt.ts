@@ -1,12 +1,11 @@
-import Vurdering from './Vurdering';
 import { Period } from './Period';
-import Dokument from './Dokument';
+import Vurderingselement from './Vurderingselement';
 
 interface Vurderingsoversikt {
-    vurderinger: Vurdering[];
-    perioderSomSkalVurderes: Period[];
+    vurderingselementer: Vurderingselement[];
+    resterendeVurderingsperioder: Period[];
+    søknadsperioderTilBehandling: Period[];
     perioderSomKanVurderes: Period[];
-    dokumenter: Dokument[];
 }
 
 export default Vurderingsoversikt;

@@ -1,31 +1,31 @@
-import React from 'react';
-import { Knapp } from 'nav-frontend-knapper';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import Vurdering from '../../../types/Vurdering';
+import { Knapp } from 'nav-frontend-knapper';
+import React from 'react';
+import { Period } from '../../../types/Period';
+import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
+import { prettifyPeriod } from '../../../util/formats';
 import { hentTilsynsbehovVurderingsoversikt } from '../../../util/httpMock';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
-import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
-import { prettifyPeriod } from '../../../util/formats';
 import VurderingsdetaljerForKontinuerligTilsynOgPleie from '../vurderingsdetaljer-for-kontinuerlig-tilsyn-og-pleie/VurderingsdetaljerForKontinuerligTilsynOgPleie';
-import vilkårsvurderingReducer from './reducer';
+import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import ActionType from './actionTypes';
-import { Period } from '../../../types/Period';
+import vilkårsvurderingReducer from './reducer';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     onVilkårVurdert: () => void;
 }
 
-const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: VilkårsvurderingAvTilsynOgPleieProps) => {
+const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
     const { vurdering, onVurderingValgt } = React.useContext(ContainerContext);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
         visVurderingDetails: vurdering !== undefined,
         isLoading: true,
         vurderingsoversikt: null,
-        valgtVurdering: null,
-        perioderTilVurderingDefaultValue: [],
+        valgtVurderingselement: null,
+        resterendeVurderingsperioderDefaultValue: [],
         vurdering,
     });
 
@@ -33,14 +33,14 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         vurderingsoversikt,
         isLoading,
         visVurderingDetails,
-        valgtVurdering,
-        perioderTilVurderingDefaultValue,
+        valgtVurderingselement,
+        resterendeVurderingsperioderDefaultValue,
     } = state;
 
     const harPerioderSomSkalVurderes =
         vurderingsoversikt &&
-        vurderingsoversikt.perioderSomSkalVurderes &&
-        vurderingsoversikt.perioderSomSkalVurderes.length > 0;
+        vurderingsoversikt.resterendeVurderingsperioder &&
+        vurderingsoversikt.resterendeVurderingsperioder.length > 0;
 
     React.useEffect(() => {
         let isMounted = true;
@@ -54,14 +54,14 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         };
     }, []);
 
-    const visNyVurderingForm = (perioderSomSkalVurderes?: Period[]) => {
+    const visNyVurderingForm = (resterendeVurderingsperioder?: Period[]) => {
         onVurderingValgt(null);
-        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, perioderSomSkalVurderes });
+        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, resterendeVurderingsperioder });
     };
 
-    const velgVurdering = (nyValgtVurdering: Vurdering) => {
-        onVurderingValgt(nyValgtVurdering.id);
-        dispatch({ type: ActionType.VELG_VURDERING, vurdering: nyValgtVurdering });
+    const velgVurderingselement = (nyValgtVurderingselement: Vurderingselement) => {
+        onVurderingValgt(nyValgtVurderingselement.id);
+        dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, vurderingselement: nyValgtVurderingselement });
     };
 
     if (isLoading) {
@@ -73,20 +73,20 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                 <div style={{ maxWidth: '1194px' }}>
                     <AlertStripeAdvarsel>
                         {`Vurder behov for tilsyn og pleie for perioden ${prettifyPeriod(
-                            vurderingsoversikt?.perioderSomSkalVurderes[0]
+                            vurderingsoversikt?.resterendeVurderingsperioder[0]
                         )}.`}
                         Perioden som skal vurderes overlapper med tidligere vurderinger. Vurder om det er grunnlag for å
                         gjøre en ny vurdering.
                     </AlertStripeAdvarsel>
-                    <div style={{ marginTop: '1rem' }}></div>
+                    <div style={{ marginTop: '1rem' }} />
                 </div>
             )}
             <NavigationWithDetailView
                 navigationSection={() => (
                     <Vurderingsnavigasjon
-                        vurderinger={vurderingsoversikt?.vurderinger}
-                        perioderSomSkalVurderes={vurderingsoversikt?.perioderSomSkalVurderes}
-                        onVurderingValgt={velgVurdering}
+                        vurderingselementer={vurderingsoversikt?.vurderingselementer}
+                        resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
+                        onVurderingValgt={velgVurderingselement}
                         onNyVurderingClick={visNyVurderingForm}
                     />
                 )}
@@ -94,9 +94,9 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                     if (visVurderingDetails) {
                         return (
                             <VurderingsdetaljerForKontinuerligTilsynOgPleie
-                                vurderingId={valgtVurdering?.id}
-                                onVurderingLagret={() => {}}
-                                perioderSomSkalVurderes={perioderTilVurderingDefaultValue}
+                                vurderingId={valgtVurderingselement?.id}
+                                onVurderingLagret={() => null}
+                                resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
                                 perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}
                             />
                         );
