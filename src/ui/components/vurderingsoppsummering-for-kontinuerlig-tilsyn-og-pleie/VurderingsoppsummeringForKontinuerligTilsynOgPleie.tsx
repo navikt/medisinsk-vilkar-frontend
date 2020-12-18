@@ -1,5 +1,4 @@
 import React from 'react';
-import { TilsynsbehovVurdering } from '../../../types/Vurdering';
 import { prettifyPeriod } from '../../../util/formats';
 import DetailView from '../detail-view/DetailView';
 import LabelledContent from '../labelled-content/LabelledContent';
@@ -7,15 +6,20 @@ import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import Box, { Margin } from '../box/Box';
 import BasicList from '../basic-list/BasicList';
 import DokumentLink from '../dokument-link/DokumentLink';
+import Vurdering from '../../../types/Vurdering';
+import Dokument from '../../../types/Dokument';
 
 interface VurderingsoppsummeringForKontinuerligTilsynOgPleieProps {
-    vurdering: TilsynsbehovVurdering;
+    vurdering: Vurdering;
+    alleDokumenter: Dokument[];
 }
 
 const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
     vurdering,
+    alleDokumenter,
 }: VurderingsoppsummeringForKontinuerligTilsynOgPleieProps) => {
-    const { perioder, begrunnelse, resultat, dokumenter } = vurdering;
+    const gjeldendeVurdering = vurdering.versjoner[0];
+    const { perioder, tekst, resultat, dokumenter } = gjeldendeVurdering;
     return (
         <DetailView title="Vurdering av behov for kontinuerlig tilsyn og pleie">
             <Box marginTop={Margin.medium}>
@@ -23,8 +27,8 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
                     label="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
                     content={
                         <BasicList
-                            elements={dokumenter
-                                .filter((dokument) => vurdering.dokumenter.includes(dokument))
+                            elements={alleDokumenter
+                                .filter((dokument) => dokumenter.includes(dokument))
                                 .map((dokument) => (
                                     <DokumentLink dokument={dokument} />
                                 ))}
@@ -36,7 +40,7 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
                 <LabelledContent
                     label="Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge
                                         av sykdommen etter § 9-10, første ledd."
-                    content={<span>{begrunnelse}</span>}
+                    content={<span>{tekst}</span>}
                 />
             </Box>
             <Box marginTop={Margin.large}>

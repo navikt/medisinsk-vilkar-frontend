@@ -1,24 +1,25 @@
 import React from 'react';
-import { ToOmsorgspersonerVurdering } from '../../../types/Vurdering';
-import { prettifyPeriod } from '../../../util/formats';
-import DetailView from '../detail-view/DetailView';
-import LabelledContent from '../labelled-content/LabelledContent';
-import Box, { Margin } from '../box/Box';
-import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import Dokument from '../../../types/Dokument';
-import DokumentLink from '../dokument-link/DokumentLink';
+import Vurdering from '../../../types/Vurdering';
+import Vurderingsresultat from '../../../types/Vurderingsresultat';
+import { prettifyPeriod } from '../../../util/formats';
 import BasicList from '../basic-list/BasicList';
+import Box, { Margin } from '../box/Box';
+import DetailView from '../detail-view/DetailView';
+import DokumentLink from '../dokument-link/DokumentLink';
+import LabelledContent from '../labelled-content/LabelledContent';
 
 interface VurderingsoppsummeringForToOmsorgspersonerProps {
-    vurdering: ToOmsorgspersonerVurdering;
-    dokumenter: Dokument[];
+    vurdering: Vurdering;
+    alleDokumenter: Dokument[];
 }
 
 const VurderingsoppsummeringForToOmsorgspersoner = ({
     vurdering,
-    dokumenter,
+    alleDokumenter,
 }: VurderingsoppsummeringForToOmsorgspersonerProps) => {
-    const { perioder, begrunnelse, resultat } = vurdering;
+    const gjeldendeVurdering = vurdering.versjoner[0];
+    const { perioder, tekst, resultat, dokumenter } = gjeldendeVurdering;
     return (
         <DetailView title="Vurdering av to omsorgspersoner">
             <Box marginTop={Margin.medium}>
@@ -26,8 +27,8 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
                     label="Hvilke dokumenter er brukt i vurderingen av behov for to omsorgspersoner?"
                     content={
                         <BasicList
-                            elements={dokumenter
-                                .filter((dokument) => vurdering.dokumenter.includes(dokument))
+                            elements={alleDokumenter
+                                .filter((dokument) => dokumenter.includes(dokument))
                                 .map((dokument) => (
                                     <DokumentLink dokument={dokument} />
                                 ))}
@@ -38,7 +39,7 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
             <Box marginTop={Margin.large}>
                 <LabelledContent
                     label="Gjør en vurdering av om det er behov for to omsorgspersoner etter § 9-10, andre ledd."
-                    content={<span>{begrunnelse}</span>}
+                    content={<span>{tekst}</span>}
                 />
             </Box>
             <Box marginTop={Margin.large}>

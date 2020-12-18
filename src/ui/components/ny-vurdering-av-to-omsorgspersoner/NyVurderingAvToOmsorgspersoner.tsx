@@ -3,7 +3,7 @@ import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
-import { ToOmsorgspersonerVurdering } from '../../../types/Vurdering';
+import { Vurderingsversjon } from '../../../types/Vurdering';
 import { getPeriodAsListOfDays } from '../../../util/dateUtils';
 import { convertToInternationalPeriod } from '../../../util/formats';
 import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
@@ -34,7 +34,7 @@ export interface VurderingAvToOmsorgspersonerFormState {
 
 interface VurderingAvToOmsorgspersonerFormProps {
     defaultValues: VurderingAvToOmsorgspersonerFormState;
-    onSubmit: (data: ToOmsorgspersonerVurdering) => void;
+    onSubmit: (nyVurdering: Partial<Vurderingsversjon>) => void;
     resterendeVurderingsperioder?: Period[];
     perioderSomKanVurderes?: Period[];
     dokumenter: Dokument[];
@@ -128,6 +128,8 @@ const VurderingAvToOmsorgspersonerForm = ({
                                     if (!isOk) {
                                         return 'Perioden som vurderes må være innenfor en eller flere sammenhengede perioder med behov for kontinuerlig tilsyn og pleie';
                                     }
+
+                                    return true;
                                 },
                                 fomDatoErFørTomDato,
                             }}

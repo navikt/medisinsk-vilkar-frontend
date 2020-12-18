@@ -3,7 +3,7 @@ import mockedDokumentliste from '../../../mock/mockedDokumentliste';
 import { toSøkereMedTilsynsbehovVurderingerMock } from '../../../mock/mockedTilsynsbehovVurderinger';
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
-import { ToOmsorgspersonerVurdering } from '../../../types/Vurdering';
+import Vurdering, { Vurderingsversjon } from '../../../types/Vurdering';
 import VurderingAvToOmsorgspersonerForm, {
     FieldName,
 } from '../ny-vurdering-av-to-omsorgspersoner/NyVurderingAvToOmsorgspersoner';
@@ -16,13 +16,13 @@ interface VurderingsdetaljerForToOmsorgspersonerProps {
     onVurderingLagret: () => void;
 }
 
-function lagreVurdering(vurdering: ToOmsorgspersonerVurdering) {
+function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>, vurdering: Vurdering) {
     return new Promise((resolve) => {
         setTimeout(() => resolve({}), 1000);
     });
 }
 
-function hentVurdering(vurderingsid: string): Promise<ToOmsorgspersonerVurdering> {
+function hentVurdering(vurderingsid: string): Promise<Vurdering> {
     return new Promise((resolve) => {
         setTimeout(() => {
             const vurdering = toSøkereMedTilsynsbehovVurderingerMock.find(
@@ -52,14 +52,14 @@ const VurderingsdetaljerToOmsorgspersoner = ({
     onVurderingLagret,
 }: VurderingsdetaljerForToOmsorgspersonerProps): JSX.Element => {
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
-    const [vurdering, setVurdering] = React.useState<ToOmsorgspersonerVurdering>(null);
+    const [vurdering, setVurdering] = React.useState<Vurdering>(null);
     const [alleDokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
     React.useEffect(() => {
         setIsLoading(true);
         let isMounted = true;
         if (vurderingId) {
-            hentVurdering(vurderingId).then((vurderingResponse: ToOmsorgspersonerVurdering) => {
+            hentVurdering(vurderingId).then((vurderingResponse: Vurdering) => {
                 if (isMounted) {
                     setVurdering(vurderingResponse);
                     setIsLoading(false);
@@ -80,9 +80,9 @@ const VurderingsdetaljerToOmsorgspersoner = ({
         };
     }, [vurderingId]);
 
-    const lagreVurderingAvToOmsorgspersoner = (nyVurdering: ToOmsorgspersonerVurdering) => {
+    const lagreVurderingAvToOmsorgspersoner = (nyVurderingsversjon: Partial<Vurderingsversjon>) => {
         setIsLoading(true);
-        lagreVurdering(nyVurdering).then(
+        lagreVurdering(nyVurderingsversjon, vurdering).then(
             () => {
                 onVurderingLagret();
                 setIsLoading(false);
@@ -98,7 +98,7 @@ const VurderingsdetaljerToOmsorgspersoner = ({
         return <p>Laster</p>;
     }
     if (vurdering !== null) {
-        return <VurderingsoppsummeringForToOmsorgspersoner dokumenter={alleDokumenter} vurdering={vurdering} />;
+        return <VurderingsoppsummeringForToOmsorgspersoner alleDokumenter={alleDokumenter} vurdering={vurdering} />;
     }
     return (
         <VurderingAvToOmsorgspersonerForm

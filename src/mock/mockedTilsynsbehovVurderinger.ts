@@ -1,5 +1,5 @@
 import { Period } from '../types/Period';
-import Vurdering, { ToOmsorgspersonerVurdering } from '../types/Vurdering';
+import Vurdering from '../types/Vurdering';
 import Vurderingselement from '../types/Vurderingselement';
 import Vurderingsresultat from '../types/Vurderingsresultat';
 import mockedDokumentliste from './mockedDokumentliste';
@@ -31,19 +31,43 @@ export const toSøkereMedTilsynsbehovVurderingselementerMock: Vurderingselement[
     },
 ];
 
-export const toSøkereMedTilsynsbehovVurderingerMock: ToOmsorgspersonerVurdering[] = [
+export const toSøkereMedTilsynsbehovVurderingerMock: Vurdering[] = [
     {
         id: '1',
-        perioder: [new Period('2020-01-01', '2020-01-15')],
-        resultat: Vurderingsresultat.INNVILGET,
-        dokumenter: mockedDokumentliste,
-        begrunnelse: 'Fordi her er det behov',
+        type: 'KONTINUERLIG_TILSYN_OG_PLEIE',
+        versjoner: [
+            {
+                perioder: [new Period('2020-01-01', '2020-01-15')],
+                resultat: Vurderingsresultat.INNVILGET,
+                dokumenter: mockedDokumentliste,
+                tekst: 'Fordi her er det behov',
+                versjon: '1',
+                endretAv: 'SaraSydokke',
+                endretTidspunkt: '2020-12-18T09:56:50.020321',
+            },
+        ],
+        annenInformasjon: {
+            resterendeVurderingsperioder: [],
+            perioderSomKanVurderes: [],
+        },
     },
     {
         id: '2',
-        perioder: [new Period('2020-01-16', '2020-01-20')],
-        resultat: Vurderingsresultat.INNVILGET,
-        dokumenter: mockedDokumentliste,
-        begrunnelse: 'Fordi her er det behov',
+        type: 'KONTINUERLIG_TILSYN_OG_PLEIE',
+        versjoner: [
+            {
+                perioder: [new Period('2020-01-16', '2020-01-20')],
+                resultat: Vurderingsresultat.INNVILGET,
+                dokumenter: mockedDokumentliste,
+                tekst: 'Fordi her er det behov',
+                versjon: '1',
+                endretAv: 'SaraSydokke',
+                endretTidspunkt: '2020-12-18T09:56:50.020321',
+            },
+        ],
+        annenInformasjon: {
+            resterendeVurderingsperioder: [],
+            perioderSomKanVurderes: [],
+        },
     },
 ];
