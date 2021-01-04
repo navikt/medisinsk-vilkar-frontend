@@ -14,24 +14,36 @@ interface VurderingsnavigasjonProps {
     onNyVurderingClick: (perioder?: Period[]) => void;
     onVurderingValgt: (vurdering: Vurderingselement) => void;
     resterendeVurderingsperioder?: Period[];
+    søknadsperioderTilBehandling?: Period[];
 }
+
+const harOverlapp = (periode: Period, søknadsperiode: Period) =>
+    søknadsperiode.covers(periode) || søknadsperiode.overlapsLeft(periode) || søknadsperiode.overlapsRight(periode);
 
 const Vurderingsnavigasjon = ({
     vurderingselementer,
     onNyVurderingClick,
     onVurderingValgt,
     resterendeVurderingsperioder,
+    søknadsperioderTilBehandling,
 }: VurderingsnavigasjonProps): JSX.Element => {
     const [activeIndex, setActiveIndex] = React.useState(0);
 
-    const harPerioderSomSkalVurderes = resterendeVurderingsperioder && resterendeVurderingsperioder.length > 0;
+    const harPerioderSomSkalVurderes = resterendeVurderingsperioder?.length > 0;
 
     const sorterteVurderingselementer: Vurderingselement[] = React.useMemo(() => {
         return vurderingselementer.sort((p1, p2) => sortPeriodsByFomDate(p1.periode, p2.periode)).reverse();
     }, [vurderingselementer]);
 
     const vurderingsperiodeElements = sorterteVurderingselementer.map(({ periode, resultat }) => (
-        <VurderingsperiodeElement periode={periode} resultat={resultat} />
+        <VurderingsperiodeElement
+            periode={periode}
+            resultat={resultat}
+            harOverlapp={
+                harPerioderSomSkalVurderes &&
+                søknadsperioderTilBehandling.some((søknadsperiode: Period) => harOverlapp(periode, søknadsperiode))
+            }
+        />
     ));
 
     const allElements = [...vurderingsperiodeElements];

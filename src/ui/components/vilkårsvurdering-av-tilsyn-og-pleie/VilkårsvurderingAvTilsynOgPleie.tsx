@@ -86,6 +86,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                     <Vurderingsnavigasjon
                         vurderingselementer={vurderingsoversikt?.vurderingselementer}
                         resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
+                        søknadsperioderTilBehandling={vurderingsoversikt?.søknadsperioderTilBehandling}
                         onVurderingValgt={velgVurderingselement}
                         onNyVurderingClick={visNyVurderingForm}
                     />
