@@ -35,16 +35,20 @@ const Vurderingsnavigasjon = ({
         return vurderingselementer.sort((p1, p2) => sortPeriodsByFomDate(p1.periode, p2.periode)).reverse();
     }, [vurderingselementer]);
 
-    const vurderingsperiodeElements = sorterteVurderingselementer.map(({ periode, resultat }) => (
-        <VurderingsperiodeElement
-            periode={periode}
-            resultat={resultat}
-            harOverlapp={
-                harPerioderSomSkalVurderes &&
-                søknadsperioderTilBehandling.some((søknadsperiode: Period) => harOverlapp(periode, søknadsperiode))
-            }
-        />
-    ));
+    const vurderingsperiodeElements = sorterteVurderingselementer.map(
+        ({ periode, resultat, gjelderForAnnenPart, gjelderForSøker }) => (
+            <VurderingsperiodeElement
+                periode={periode}
+                resultat={resultat}
+                harOverlapp={
+                    harPerioderSomSkalVurderes &&
+                    søknadsperioderTilBehandling.some((søknadsperiode: Period) => harOverlapp(periode, søknadsperiode))
+                }
+                gjelderForAnnenPart={gjelderForAnnenPart}
+                gjelderForSøker={gjelderForSøker}
+            />
+        )
+    );
 
     const allElements = [...vurderingsperiodeElements];
     if (harPerioderSomSkalVurderes) {
