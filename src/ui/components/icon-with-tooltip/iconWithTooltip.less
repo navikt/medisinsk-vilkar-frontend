@@ -1,6 +1,7 @@
 .iconWithTooltip {
     position: relative;
-    .tooltip {
+
+    &__tooltipText {
         display: none;
         flex-direction: row;
         align-items: center;
@@ -15,7 +16,7 @@
         z-index: 1;
     }
 
-    &:hover .tooltip {
+    &:hover .iconWithTooltip__tooltipText {
         display: block;
     }
 }

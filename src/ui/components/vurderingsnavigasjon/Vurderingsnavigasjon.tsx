@@ -17,9 +17,6 @@ interface VurderingsnavigasjonProps {
     søknadsperioderTilBehandling?: Period[];
 }
 
-const harOverlapp = (periode: Period, søknadsperiode: Period) =>
-    søknadsperiode.covers(periode) || søknadsperiode.overlapsLeft(periode) || søknadsperiode.overlapsRight(periode);
-
 const Vurderingsnavigasjon = ({
     vurderingselementer,
     onNyVurderingClick,

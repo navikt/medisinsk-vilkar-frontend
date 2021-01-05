@@ -9,7 +9,7 @@ interface IconWithTooltipProps {
 const IconWithTooltip = ({ renderIcon, tooltipText }: IconWithTooltipProps): JSX.Element => (
     <div className={styles.iconWithTooltip}>
         {renderIcon()}
-        <div className={styles.tooltip}>{tooltipText}</div>
+        <div className={styles.iconWithTooltip__tooltipText}>{tooltipText}</div>
     </div>
 );
 
