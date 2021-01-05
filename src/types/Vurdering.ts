@@ -8,13 +8,13 @@ export interface AnnenInformasjon {
 }
 
 export interface Vurderingsversjon {
-    versjon: string;
+    versjon?: string;
     tekst: string;
     resultat: Vurderingsresultat;
     perioder: Period[];
     dokumenter: Dokument[];
-    endretAv: string;
-    endretTidspunkt: string;
+    endretAv?: string;
+    endretTidspunkt?: string;
 }
 
 interface Vurdering {
