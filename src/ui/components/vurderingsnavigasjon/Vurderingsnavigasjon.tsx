@@ -17,9 +17,6 @@ interface VurderingsnavigasjonProps {
     søknadsperioderTilBehandling?: Period[];
 }
 
-const harOverlapp = (periode: Period, søknadsperiode: Period) =>
-    søknadsperiode.covers(periode) || søknadsperiode.overlapsLeft(periode) || søknadsperiode.overlapsRight(periode);
-
 const Vurderingsnavigasjon = ({
     vurderingselementer,
     onNyVurderingClick,
@@ -35,16 +32,19 @@ const Vurderingsnavigasjon = ({
         return vurderingselementer.sort((p1, p2) => sortPeriodsByFomDate(p1.periode, p2.periode)).reverse();
     }, [vurderingselementer]);
 
-    const vurderingsperiodeElements = sorterteVurderingselementer.map(({ periode, resultat }) => (
-        <VurderingsperiodeElement
-            periode={periode}
-            resultat={resultat}
-            harOverlapp={
-                harPerioderSomSkalVurderes &&
-                søknadsperioderTilBehandling.some((søknadsperiode: Period) => harOverlapp(periode, søknadsperiode))
-            }
-        />
-    ));
+    const vurderingsperiodeElements = sorterteVurderingselementer.map(({ periode, resultat }) => {
+        const visOverlappetikett =
+            harPerioderSomSkalVurderes &&
+            søknadsperioderTilBehandling.some((søknadsperiode: Period) => søknadsperiode.overlapsWith(periode));
+
+        return (
+            <VurderingsperiodeElement
+                periode={periode}
+                resultat={resultat}
+                etikett={visOverlappetikett ? 'Overlapp' : ''}
+            />
+        );
+    });
 
     const allElements = [...vurderingsperiodeElements];
     if (harPerioderSomSkalVurderes) {

@@ -10,7 +10,7 @@ import styles from './vurderingsperiodeElement.less';
 interface VurderingsperiodeElementProps {
     periode: Period;
     resultat: Vurderingsresultat;
-    harOverlapp?: boolean;
+    etikett?: string;
 }
 
 const renderIcon = (resultat: Vurderingsresultat) => {
@@ -31,7 +31,7 @@ const renderResultatText = (resultat: Vurderingsresultat) => {
     }
 };
 
-const VurderingsperiodeElement = ({ periode, resultat, harOverlapp }: VurderingsperiodeElementProps) => {
+const VurderingsperiodeElement = ({ periode, resultat, etikett }: VurderingsperiodeElementProps) => {
     return (
         <div className={styles.vurderingsperiodeElement}>
             {renderIcon(resultat)}
@@ -39,9 +39,9 @@ const VurderingsperiodeElement = ({ periode, resultat, harOverlapp }: Vurderings
                 <p className={styles.vurderingsperiodeElement__texts__period}>{prettifyPeriod(periode)}</p>
                 {renderResultatText(resultat)}
             </div>
-            {harOverlapp && (
+            {etikett && (
                 <div className={styles.vurderingsperiodeElement__etikett}>
-                    <EtikettInfo mini>Overlapp</EtikettInfo>
+                    <EtikettInfo mini>{etikett}</EtikettInfo>
                 </div>
             )}
         </div>
