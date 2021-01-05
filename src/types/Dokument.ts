@@ -8,14 +8,17 @@ export enum Dokumenttype {
 
 export interface Dokument {
     id: string;
-    name: string;
-    mottatt: string;
-    location: string;
+    navn: string;
+    type: Dokumenttype;
+    benyttet: boolean;
+    annenPartErKilde: boolean;
+    datert: Date;
+    fremhevet: boolean;
+    location?: string;
 }
 
 export interface DokumentMedMedisinskeOpplysninger extends Dokument {
     type: Dokumenttype.LEGEERKLÆRING | Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER;
-    datert: string;
     harGyldigSignatur: boolean;
     innleggelsesperioder: Period[];
 }

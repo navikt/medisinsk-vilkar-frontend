@@ -1,26 +1,26 @@
 import dayjs from 'dayjs';
-import { DokumentMedMedisinskeOpplysninger, Dokumenttype } from '../types/Dokument';
+import Dokument, { Dokumenttype } from '../types/Dokument';
 
-const mockedDokumentliste: DokumentMedMedisinskeOpplysninger[] = [
+const mockedDokumentliste: Dokument[] = [
     {
         id: '1',
         type: Dokumenttype.LEGEERKLÆRING,
-        mottatt: dayjs('01-16-2020').utc(true).toDate(),
+        datert: dayjs('01-16-2020').utc(true).toDate(),
+        navn: 'Foobar-lala.pdf',
+        benyttet: true,
+        annenPartErKilde: false,
+        fremhevet: true,
         location: '#',
-        datert: dayjs('01-01-2020').utc(true).toDate(),
-        harGyldigSignatur: true,
-        innleggelsesperioder: [],
-        name: '',
     },
     {
         id: '2',
         type: Dokumenttype.LEGEERKLÆRING,
-        mottatt: dayjs('01-01-2020').utc(true).toDate(),
-        location: '#',
         datert: dayjs('01-01-2020').utc(true).toDate(),
-        harGyldigSignatur: true,
-        innleggelsesperioder: [],
-        name: '',
+        navn: 'Foobar-haha.pdf',
+        benyttet: true,
+        annenPartErKilde: false,
+        fremhevet: true,
+        location: '#',
     },
 ];
 

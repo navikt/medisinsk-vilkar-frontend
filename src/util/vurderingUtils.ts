@@ -1,4 +1,3 @@
-import { TilsynsbehovVurdering, ToOmsorgspersonerVurdering } from '../types/Vurdering';
 import {
     FieldName as TilsynFieldName,
     VurderingAvTilsynsbehovFormState,
@@ -11,11 +10,12 @@ import Vurderingsresultat from '../types/Vurderingsresultat';
 import { Period } from '../types/Period';
 import Dokument from '../types/Dokument';
 import { finnBenyttedeDokumenter } from './dokumentUtils';
+import { Vurderingsversjon } from '../types/Vurdering';
 
 export const lagTilsynsbehovVurdering = (
     formState: VurderingAvTilsynsbehovFormState,
     alleDokumenter: Dokument[]
-): TilsynsbehovVurdering => {
+): Vurderingsversjon => {
     const resultat = formState[TilsynFieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]
         ? Vurderingsresultat.INNVILGET
         : Vurderingsresultat.AVSLÅTT;
@@ -25,10 +25,9 @@ export const lagTilsynsbehovVurdering = (
     const begrunnelse = formState[TilsynFieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE];
 
     return {
-        id: 'someID',
         resultat,
         perioder,
-        begrunnelse,
+        tekst: begrunnelse,
         dokumenter: finnBenyttedeDokumenter(formState[TilsynFieldName.DOKUMENTER], alleDokumenter),
     };
 };
@@ -36,7 +35,7 @@ export const lagTilsynsbehovVurdering = (
 export const lagToOmsorgspersonerVurdering = (
     formState: VurderingAvToOmsorgspersonerFormState,
     alleDokumenter: Dokument[]
-): ToOmsorgspersonerVurdering => {
+): Vurderingsversjon => {
     const resultat = formState[ToOmsorgspersonerFieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]
         ? Vurderingsresultat.INNVILGET
         : Vurderingsresultat.AVSLÅTT;
@@ -46,10 +45,9 @@ export const lagToOmsorgspersonerVurdering = (
     const begrunnelse = formState[ToOmsorgspersonerFieldName.VURDERING_AV_TO_OMSORGSPERSONER];
 
     return {
-        id: 'someID',
         resultat,
         perioder,
-        begrunnelse,
+        tekst: begrunnelse,
         dokumenter: finnBenyttedeDokumenter(formState[TilsynFieldName.DOKUMENTER], alleDokumenter),
     };
 };

@@ -1,22 +1,22 @@
 import React from 'react';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { FormProvider, useForm } from 'react-hook-form';
-import { harBruktDokumentasjon, required, fomDatoErFørTomDato } from '../../form/validators';
+import Dokument from '../../../types/Dokument';
+import { Period } from '../../../types/Period';
+import { Vurderingsversjon } from '../../../types/Vurdering';
+import { getPeriodAsListOfDays } from '../../../util/dateUtils';
+import { convertToInternationalPeriod } from '../../../util/formats';
+import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
+import { lagTilsynsbehovVurdering } from '../../../util/vurderingUtils';
+import { fomDatoErFørTomDato, harBruktDokumentasjon, required } from '../../form/validators';
+import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
+import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import Box, { Margin } from '../box/Box';
 import DetailView from '../detail-view/DetailView';
-import Form from '../form/Form';
-import { Period } from '../../../types/Period';
-import { getPeriodAsListOfDays } from '../../../util/dateUtils';
-import Dokument from '../../../types/Dokument';
-import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
-import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
-import { convertToInternationalPeriod } from '../../../util/formats';
-import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
 import DokumentLink from '../dokument-link/DokumentLink';
-import { TilsynsbehovVurdering } from '../../../types/Vurdering';
-import { lagTilsynsbehovVurdering } from '../../../util/vurderingUtils';
+import Form from '../form/Form';
 import styles from './nyVurderingAvTilsynsbehovForm.less';
 
 export enum FieldName {
@@ -35,7 +35,7 @@ export interface VurderingAvTilsynsbehovFormState {
 
 interface VurderingAvTilsynsbehovFormProps {
     defaultValues: VurderingAvTilsynsbehovFormState;
-    onSubmit: (nyVurdering: TilsynsbehovVurdering) => void;
+    onSubmit: (nyVurdering: Vurderingsversjon) => void;
     resterendeVurderingsperioder?: Period[];
     perioderSomKanVurderes?: Period[];
     dokumenter: Dokument[];
@@ -159,7 +159,7 @@ const VurderingAvTilsynsbehovForm = ({
                                         return 'Perioden som vurderes må være innenfor en eller flere sammenhengede søknadsperioder';
                                     }
 
-                                    return null;
+                                    return true;
                                 },
                                 fomDatoErFørTomDato,
                             }}

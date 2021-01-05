@@ -14,6 +14,7 @@ interface VurderingsnavigasjonProps {
     onNyVurderingClick: (perioder?: Period[]) => void;
     onVurderingValgt: (vurdering: Vurderingselement) => void;
     resterendeVurderingsperioder?: Period[];
+    søknadsperioderTilBehandling?: Period[];
 }
 
 const Vurderingsnavigasjon = ({
@@ -21,18 +22,29 @@ const Vurderingsnavigasjon = ({
     onNyVurderingClick,
     onVurderingValgt,
     resterendeVurderingsperioder,
+    søknadsperioderTilBehandling,
 }: VurderingsnavigasjonProps): JSX.Element => {
-    const [activeIndex, setActiveIndex] = React.useState(0);
+    const [activeIndex, setActiveIndex] = React.useState(-1);
 
-    const harPerioderSomSkalVurderes = resterendeVurderingsperioder && resterendeVurderingsperioder.length > 0;
+    const harPerioderSomSkalVurderes = resterendeVurderingsperioder?.length > 0;
 
     const sorterteVurderingselementer: Vurderingselement[] = React.useMemo(() => {
         return vurderingselementer.sort((p1, p2) => sortPeriodsByFomDate(p1.periode, p2.periode)).reverse();
     }, [vurderingselementer]);
 
-    const vurderingsperiodeElements = sorterteVurderingselementer.map(({ periode, resultat }) => (
-        <VurderingsperiodeElement periode={periode} resultat={resultat} />
-    ));
+    const vurderingsperiodeElements = sorterteVurderingselementer.map(({ periode, resultat }) => {
+        const visOverlappetikett =
+            harPerioderSomSkalVurderes &&
+            søknadsperioderTilBehandling.some((søknadsperiode: Period) => søknadsperiode.overlapsWith(periode));
+
+        return (
+            <VurderingsperiodeElement
+                periode={periode}
+                resultat={resultat}
+                etikett={visOverlappetikett ? 'Overlapp' : ''}
+            />
+        );
+    });
 
     const allElements = [...vurderingsperiodeElements];
     if (harPerioderSomSkalVurderes) {
