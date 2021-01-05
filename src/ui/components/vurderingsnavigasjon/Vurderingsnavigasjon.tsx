@@ -36,18 +36,21 @@ const Vurderingsnavigasjon = ({
     }, [vurderingselementer]);
 
     const vurderingsperiodeElements = sorterteVurderingselementer.map(
-        ({ periode, resultat, gjelderForAnnenPart, gjelderForSøker }) => (
-            <VurderingsperiodeElement
-                periode={periode}
-                resultat={resultat}
-                harOverlapp={
-                    harPerioderSomSkalVurderes &&
-                    søknadsperioderTilBehandling.some((søknadsperiode: Period) => harOverlapp(periode, søknadsperiode))
-                }
-                gjelderForAnnenPart={gjelderForAnnenPart}
-                gjelderForSøker={gjelderForSøker}
-            />
-        )
+        ({ periode, resultat, gjelderForAnnenPart, gjelderForSøker }) => {
+            const visOverlappetikett =
+                harPerioderSomSkalVurderes &&
+                søknadsperioderTilBehandling.some((søknadsperiode: Period) => søknadsperiode.overlapsWith(periode));
+
+            return (
+                <VurderingsperiodeElement
+                    periode={periode}
+                    resultat={resultat}
+                    etikett={visOverlappetikett ? 'Overlapp' : ''}
+                    gjelderForAnnenPart={gjelderForAnnenPart}
+                    gjelderForSøker={gjelderForSøker}
+                />
+            );
+        }
     );
 
     const allElements = [...vurderingsperiodeElements];

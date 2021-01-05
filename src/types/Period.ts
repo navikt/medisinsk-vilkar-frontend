@@ -31,6 +31,10 @@ export class Period {
         return this.includesDate(otherPeriod.tom) && !this.includesDate(otherPeriod.fom);
     }
 
+    overlapsWith(otherPeriod) {
+        return this.covers(otherPeriod) || this.overlapsLeft(otherPeriod) || this.overlapsRight(otherPeriod);
+    }
+
     startsBefore(otherPeriod: Period) {
         const dateInQuestion = dateFromString(otherPeriod.fom);
         const periodFom = dateFromString(this.fom);

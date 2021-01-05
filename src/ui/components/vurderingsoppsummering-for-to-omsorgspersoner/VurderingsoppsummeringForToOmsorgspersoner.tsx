@@ -19,7 +19,7 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
     alleDokumenter,
 }: VurderingsoppsummeringForToOmsorgspersonerProps) => {
     const gjeldendeVurdering = vurdering.versjoner[0];
-    const { perioder, tekst, resultat, dokumenter } = gjeldendeVurdering;
+    const { perioder, tekst, resultat } = gjeldendeVurdering;
     return (
         <DetailView title="Vurdering av to omsorgspersoner">
             <Box marginTop={Margin.medium}>
@@ -28,7 +28,7 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
                     content={
                         <BasicList
                             elements={alleDokumenter
-                                .filter((dokument) => dokumenter.includes(dokument))
+                                .filter((dokument) => gjeldendeVurdering.dokumenter.includes(dokument))
                                 .map((dokument) => (
                                     <DokumentLink dokument={dokument} />
                                 ))}
