@@ -35,7 +35,7 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 valgtVurderingselement,
                 isLoading: false,
                 resterendeVurderingsperioderDefaultValue: resterendeVurderingsperioder,
-                visVurderingDetails: true,
+                visVurderingDetails: false,
             };
         }
         case ActionType.VIS_NY_VURDERING_FORM:

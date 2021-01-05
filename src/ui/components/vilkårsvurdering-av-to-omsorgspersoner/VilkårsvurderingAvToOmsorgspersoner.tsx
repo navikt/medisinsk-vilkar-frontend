@@ -16,7 +16,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const { vurdering, onVurderingValgt } = React.useContext(ContainerContext);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
-        visVurderingDetails: !!vurdering,
+        visVurderingDetails: false,
         isLoading: true,
         vurderingsoversikt: null,
         valgtVurderingselement: null,
