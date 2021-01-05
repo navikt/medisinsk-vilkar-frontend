@@ -8,7 +8,7 @@ interface DokumentLinkProps {
 }
 
 const DokumentLink = ({ dokument }: DokumentLinkProps) => {
-    const { type, mottatt, location } = dokument;
+    const { type, datert, location } = dokument;
     return (
         <Lenke
             href={location}
@@ -17,7 +17,7 @@ const DokumentLink = ({ dokument }: DokumentLinkProps) => {
                 e.stopPropagation();
             }}
         >
-            {type} ({prettifyDate(mottatt.toDateString())})
+            {type} ({prettifyDate(datert.toDateString())})
         </Lenke>
     );
 };

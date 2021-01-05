@@ -1,13 +1,11 @@
 import React from 'react';
-import VurderingAvTilsynsbehovForm, {
-    FieldName,
-} from './../ny-vurdering-av-tilsynsbehov/NyVurderingAvTilsynsbehovForm';
-import VurderingsoppsummeringForKontinuerligTilsynOgPleie from './../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
-import { TilsynsbehovVurdering } from '../../../types/Vurdering';
+import VurderingAvTilsynsbehovForm, { FieldName } from '../ny-vurdering-av-tilsynsbehov/NyVurderingAvTilsynsbehovForm';
+import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
 import { Period } from '../../../types/Period';
 import Dokument from '../../../types/Dokument';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import mockedDokumentliste from '../../../mock/mockedDokumentliste';
+import Vurdering, { Vurderingsversjon } from '../../../types/Vurdering';
 
 interface VurderingDetailsProps {
     vurderingId: string | null;
@@ -16,22 +14,34 @@ interface VurderingDetailsProps {
     onVurderingLagret: () => void;
 }
 
-function lagreVurdering() {
+function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>, vurdering: Vurdering) {
     return new Promise((resolve) => {
         setTimeout(() => resolve({}), 1000);
     });
 }
 
-function hentVurdering(vurderingsid: string) {
+function hentVurdering(vurderingsid: string): Promise<Vurdering> {
     return new Promise((resolve) => {
         setTimeout(
             () =>
                 resolve({
                     id: vurderingsid,
-                    perioder: [new Period('2020-01-01', '2020-01-15')],
-                    resultat: Vurderingsresultat.INNVILGET,
-                    begrunnelse: 'Fordi her er det behov',
-                    dokumenter: mockedDokumentliste,
+                    type: 'KONTINUERLIG_TILSYN_OG_PLEIE',
+                    versjoner: [
+                        {
+                            perioder: [new Period('2020-01-01', '2020-01-15')],
+                            resultat: Vurderingsresultat.INNVILGET,
+                            tekst: 'Fordi her er det behov',
+                            dokumenter: mockedDokumentliste,
+                            versjon: '1',
+                            endretAv: 'SaraSydokke',
+                            endretTidspunkt: '2020-12-18T09:56:50.020321',
+                        },
+                    ],
+                    annenInformasjon: {
+                        resterendeVurderingsperioder: [],
+                        perioderSomKanVurderes: [],
+                    },
                 }),
             1000
         );
@@ -57,7 +67,7 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
     onVurderingLagret,
 }: VurderingDetailsProps) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
-    const [vurdering, setVurdering] = React.useState<TilsynsbehovVurdering>(null);
+    const [vurdering, setVurdering] = React.useState<Vurdering>(null);
     const [alleDokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
     React.useEffect(() => {
@@ -66,7 +76,7 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
         setIsLoading(true);
 
         if (vurderingId) {
-            hentVurdering(vurderingId).then((vurderingResponse: TilsynsbehovVurdering) => {
+            hentVurdering(vurderingId).then((vurderingResponse: Vurdering) => {
                 if (isMounted) {
                     setVurdering(vurderingResponse);
                     setIsLoading(false);
@@ -87,9 +97,9 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
         };
     }, [vurderingId]);
 
-    const lagreVurderingAvTilsynsbehov = (nyVurdering: TilsynsbehovVurdering) => {
+    const lagreVurderingAvTilsynsbehov = (nyVurderingsversjon: Partial<Vurderingsversjon>) => {
         setIsLoading(true);
-        lagreVurdering().then(
+        lagreVurdering(nyVurderingsversjon, vurdering).then(
             () => {
                 onVurderingLagret();
                 setIsLoading(false);
@@ -105,7 +115,9 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
         return <p>Laster</p>;
     }
     if (vurdering !== null) {
-        return <VurderingsoppsummeringForKontinuerligTilsynOgPleie vurdering={vurdering} />;
+        return (
+            <VurderingsoppsummeringForKontinuerligTilsynOgPleie alleDokumenter={alleDokumenter} vurdering={vurdering} />
+        );
     }
 
     return (

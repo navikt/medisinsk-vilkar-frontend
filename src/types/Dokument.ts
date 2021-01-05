@@ -5,9 +5,13 @@ export enum Dokumenttype {
 
 interface Dokument {
     id: string;
+    navn: string;
     type: Dokumenttype;
-    mottatt: Date;
-    location: string;
+    benyttet: boolean;
+    annenPartErKilde: boolean;
+    datert: Date;
+    fremhevet: boolean;
+    location?: string;
 }
 
 export default Dokument;
