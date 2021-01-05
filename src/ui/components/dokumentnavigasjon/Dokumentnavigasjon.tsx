@@ -3,12 +3,13 @@ import { Undertittel } from 'nav-frontend-typografi';
 import InteractiveList from '../interactive-list/InteractiveList';
 import StrukturertDokumentElement from '../strukturet-dokument-element/StrukturertDokumentElement';
 import UstrukturertDokumentElement from '../ustrukturert-dokument-element/UstrukturertDokumentElement';
+import { Dokument, StrukturertDokument } from '../../../types/Dokument';
 import styles from './dokumentnavigasjon.less';
 
 interface DokumentnavigasjonProps {
-    dokumenter: string[];
-    onDokumentValgt: (legerklæring: string) => void;
-    dokumenterSomMåGjennomgås?: string[];
+    dokumenter: StrukturertDokument[];
+    onDokumentValgt: (dokument: StrukturertDokument | Dokument) => void;
+    dokumenterSomMåGjennomgås?: Dokument[];
 }
 
 const Dokumentnavigasjon = ({ dokumenter, onDokumentValgt, dokumenterSomMåGjennomgås }: DokumentnavigasjonProps) => {

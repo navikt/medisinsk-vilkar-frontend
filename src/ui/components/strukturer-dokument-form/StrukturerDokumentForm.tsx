@@ -9,8 +9,9 @@ import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import PeriodWrapper from '../../form/types/PeriodWrapper';
 import { required } from '../../form/validators';
+import { Dokument } from '../../../types/Dokument';
 
-enum InneholderMedisinskeOpplysningerValue {
+export enum InneholderMedisinskeOpplysningerValue {
     LEGEERKLÆRING = 'legeerklæring',
     ANNET = 'annet',
     NEI = 'nei',
@@ -31,10 +32,10 @@ export interface StrukturerDokumentFormState {
 }
 
 interface StrukturerDokumentFormProps {
-    dokumentNavn: string;
+    dokument: Dokument;
 }
 
-const StrukturerDokumentForm = ({ dokumentNavn }: StrukturerDokumentFormProps) => {
+const StrukturerDokumentForm = ({ dokument }: StrukturerDokumentFormProps) => {
     const formMethods = useForm<StrukturerDokumentFormState>({
         defaultValues: {
             innleggelsesperioder: [{ period: { fom: '', tom: '' } }],
@@ -49,7 +50,7 @@ const StrukturerDokumentForm = ({ dokumentNavn }: StrukturerDokumentFormProps) =
         dokumentetErEnLegeerklæring || inneholderMedisinskeOpplysninger === InneholderMedisinskeOpplysningerValue.ANNET;
 
     return (
-        <DetailView title={`Håndter nytt dokument ("${dokumentNavn}")`}>
+        <DetailView title={`Håndter nytt dokument ("${dokument.name}")`}>
             <FormProvider {...formMethods}>
                 <Form buttonLabel="Lagre" onSubmit={formMethods.handleSubmit((data) => {})}>
                     <Box marginTop={Margin.large}>
