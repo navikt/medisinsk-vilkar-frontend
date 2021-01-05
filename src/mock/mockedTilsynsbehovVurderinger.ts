@@ -41,9 +41,6 @@ export const toSøkereMedTilsynsbehovVurderingerMock: Vurdering[] = [
                 resultat: Vurderingsresultat.INNVILGET,
                 dokumenter: mockedDokumentliste,
                 tekst: 'Fordi her er det behov',
-                versjon: '1',
-                endretAv: 'SaraSydokke',
-                endretTidspunkt: '2020-12-18T09:56:50.020321',
             },
         ],
         annenInformasjon: {
@@ -60,9 +57,6 @@ export const toSøkereMedTilsynsbehovVurderingerMock: Vurdering[] = [
                 resultat: Vurderingsresultat.INNVILGET,
                 dokumenter: mockedDokumentliste,
                 tekst: 'Fordi her er det behov',
-                versjon: '1',
-                endretAv: 'SaraSydokke',
-                endretTidspunkt: '2020-12-18T09:56:50.020321',
             },
         ],
         annenInformasjon: {
