@@ -4,9 +4,16 @@ import Dokumentnavigasjon from '../dokumentnavigasjon/Dokumentnavigasjon';
 import StrukturerDokumentForm from '../strukturer-dokument-form/StrukturerDokumentForm';
 import StrukturertDokumentDetaljer from '../strukturert-dokument-detaljer/StrukturertDokumentDetaljer';
 import { hentDokumentoversikt } from '../../../util/httpMock';
-import Dokumentoversikt from '../../../types/Dokument';
+import { Dokumentoversikt, StrukturertDokument } from '../../../types/Dokument';
+
+function lagreStrukturertDokument(dokument: StrukturertDokument) {
+    return new Promise((resolve) => {
+        setTimeout(() => resolve({}), 1000);
+    });
+}
 
 const StruktureringAvDokumentasjon = () => {
+    const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [valgtDokument, setValgtDokument] = React.useState(null);
     const [dokumentoversikt, setDokumentoversikt] = React.useState<Dokumentoversikt>(null);
 
@@ -15,6 +22,7 @@ const StruktureringAvDokumentasjon = () => {
         hentDokumentoversikt().then((nyDokumentoversikt: Dokumentoversikt) => {
             if (isMounted) {
                 setDokumentoversikt(nyDokumentoversikt);
+                setIsLoading(false);
             }
         });
         return () => {
@@ -30,6 +38,22 @@ const StruktureringAvDokumentasjon = () => {
         return [];
     }, [dokumentoversikt]);
 
+    const lagreStruktureringAvDokument = (dokument: StrukturertDokument) => {
+        setIsLoading(true);
+        lagreStrukturertDokument(dokument).then(
+            () => {
+                setIsLoading(false);
+            },
+            () => {
+                // showErrorMessage ??
+                setIsLoading(false);
+            }
+        );
+    };
+
+    if (isLoading) {
+        return <p>Henter dokumenter</p>;
+    }
     return (
         <NavigationWithDetailView
             navigationSection={() => (
@@ -43,7 +67,12 @@ const StruktureringAvDokumentasjon = () => {
                 if (!valgtDokument) {
                     const ustrukturertDokument = dokumentoversikt?.ustrukturerteDokumenter[0];
                     if (ustrukturertDokument) {
-                        return <StrukturerDokumentForm dokument={ustrukturertDokument} />;
+                        return (
+                            <StrukturerDokumentForm
+                                dokument={ustrukturertDokument}
+                                onSubmit={lagreStruktureringAvDokument}
+                            />
+                        );
                     }
                     return 'Ingen dokumenter å vise';
                 }

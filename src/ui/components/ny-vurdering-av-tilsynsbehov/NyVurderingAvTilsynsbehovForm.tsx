@@ -14,10 +14,10 @@ import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import { convertToInternationalPeriod } from '../../../util/formats';
 import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
-import styles from './nyVurderingAvTilsynsbehovForm.less';
 import DokumentLink from '../dokument-link/DokumentLink';
 import { TilsynsbehovVurdering } from '../../../types/Vurdering';
 import { lagTilsynsbehovVurdering } from '../../../util/vurderingUtils';
+import styles from './nyVurderingAvTilsynsbehovForm.less';
 
 export enum FieldName {
     VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
@@ -104,11 +104,13 @@ const VurderingAvTilsynsbehovForm = ({
                     </Box>
                     <Box marginTop={Margin.large}>
                         <TextArea
+                            id="begrunnelsesfelt"
                             textareaClass={styles.begrunnelsesfelt}
                             name={FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE}
                             label={
                                 <div style={{ fontWeight: 400 }}>
-                                    <label style={{ fontWeight: 600 }}>
+                                    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                                    <label style={{ fontWeight: 600 }} htmlFor="begrunnelsesfelt">
                                         Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge
                                         av sykdommen etter § 9-10, første ledd.
                                     </label>
@@ -156,6 +158,8 @@ const VurderingAvTilsynsbehovForm = ({
                                     if (!isOk) {
                                         return 'Perioden som vurderes må være innenfor en eller flere sammenhengede søknadsperioder';
                                     }
+
+                                    return null;
                                 },
                                 fomDatoErFørTomDato,
                             }}

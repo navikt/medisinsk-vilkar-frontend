@@ -2,6 +2,7 @@ import { dateFromString } from '../util/dateUtils';
 
 export class Period {
     fom: string;
+
     tom: string;
 
     constructor(fom: string, tom: string) {

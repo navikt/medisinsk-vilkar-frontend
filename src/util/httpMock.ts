@@ -2,7 +2,7 @@ import mockedTilsynsbehovVurderingsoversikt from '../mock/mockedTilsynsbehovVurd
 import mockedToOmsorgspersonerVurderingsoversikt from '../mock/mockedToOmsorgspersonerVurderingsoversikt';
 import Vurderingsoversikt from '../types/Vurderingsoversikt';
 import mockedDokumentoversikt from '../mock/mockedDokumentoversikt';
-import Dokumentoversikt, { Dokument } from '../types/Dokument';
+import Dokument, { Dokumentoversikt } from '../types/Dokument';
 import mockedDokumentliste from '../mock/mockedDokumentliste';
 
 export const hentTilsynsbehovVurderingsoversikt = (): Promise<Vurderingsoversikt> => {

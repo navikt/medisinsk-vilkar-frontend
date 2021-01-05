@@ -1,8 +1,6 @@
 import React from 'react';
-import VurderingAvTilsynsbehovForm, {
-    FieldName,
-} from './../ny-vurdering-av-tilsynsbehov/NyVurderingAvTilsynsbehovForm';
-import VurderingsoppsummeringForKontinuerligTilsynOgPleie from './../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
+import VurderingAvTilsynsbehovForm, { FieldName } from '../ny-vurdering-av-tilsynsbehov/NyVurderingAvTilsynsbehovForm';
+import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
 import { TilsynsbehovVurdering } from '../../../types/Vurdering';
 import { Period } from '../../../types/Period';
 import Dokument from '../../../types/Dokument';
@@ -74,9 +72,9 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
             });
         } else {
             setVurdering(null);
-            hentNødvendigeDataForÅGjøreVurdering().then((nødvendigeDataForÅGjøreVurdering) => {
+            hentNødvendigeDataForÅGjøreVurdering().then(({ dokumenter }) => {
                 if (isMounted) {
-                    setDokumenter(nødvendigeDataForÅGjøreVurdering.dokumenter);
+                    setDokumenter(dokumenter);
                     setIsLoading(false);
                 }
             });

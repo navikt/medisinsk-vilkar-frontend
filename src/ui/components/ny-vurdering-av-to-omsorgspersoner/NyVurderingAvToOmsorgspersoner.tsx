@@ -128,6 +128,8 @@ const VurderingAvToOmsorgspersonerForm = ({
                                     if (!isOk) {
                                         return 'Perioden som vurderes må være innenfor en eller flere sammenhengede perioder med behov for kontinuerlig tilsyn og pleie';
                                     }
+
+                                    return null;
                                 },
                                 fomDatoErFørTomDato,
                             }}

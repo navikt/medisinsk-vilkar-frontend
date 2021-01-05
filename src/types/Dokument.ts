@@ -9,13 +9,13 @@ export enum Dokumenttype {
 export interface Dokument {
     id: string;
     name: string;
-    mottatt: Date;
+    mottatt: string;
     location: string;
 }
 
 export interface DokumentMedMedisinskeOpplysninger extends Dokument {
     type: Dokumenttype.LEGEERKLÆRING | Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER;
-    datert: Date;
+    datert: string;
     harGyldigSignatur: boolean;
     innleggelsesperioder: Period[];
 }
@@ -26,10 +26,10 @@ export interface DokumentUtenMedisinskeOpplysninger extends Dokument {
 
 export type StrukturertDokument = DokumentUtenMedisinskeOpplysninger | DokumentMedMedisinskeOpplysninger;
 
-interface Dokumentoversikt {
+export interface Dokumentoversikt {
     dokumenterMedMedisinskeOpplysninger: DokumentMedMedisinskeOpplysninger[];
     dokumenterUtenMedisinskeOpplysninger: DokumentUtenMedisinskeOpplysninger[];
     ustrukturerteDokumenter: Dokument[];
 }
 
-export default Dokumentoversikt;
+export default Dokument;

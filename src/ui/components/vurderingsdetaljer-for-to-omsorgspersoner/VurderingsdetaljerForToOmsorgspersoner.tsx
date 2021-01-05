@@ -28,7 +28,7 @@ function hentVurdering(vurderingsid: string): Promise<ToOmsorgspersonerVurdering
             const vurdering = toSøkereMedTilsynsbehovVurderingerMock.find(
                 (vurderingMock) => vurderingMock.id === vurderingsid
             );
-            resolve(vurdering);
+            resolve(vurdering as ToOmsorgspersonerVurdering);
         }, 1000);
     });
 }
