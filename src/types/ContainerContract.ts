@@ -3,7 +3,7 @@ interface ContainerContract {
     onVurderingValgt: (vurdering: string) => void;
     endpoints: {
         kontinuerligTilsynOgPleie: string;
-        toOmsorgspersoner: string;
+        behovForToOmsorgspersoner: string;
     };
 }
 

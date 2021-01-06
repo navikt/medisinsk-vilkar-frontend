@@ -51,6 +51,11 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 valgtVurderingselement: action.vurderingselement,
                 visVurderingDetails: true,
             };
+        case ActionType.PENDING:
+            return {
+                ...state,
+                isLoading: true,
+            };
         default:
             return state;
     }

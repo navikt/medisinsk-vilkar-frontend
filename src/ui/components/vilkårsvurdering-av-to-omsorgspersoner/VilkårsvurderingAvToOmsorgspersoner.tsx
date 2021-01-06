@@ -1,5 +1,5 @@
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import React from 'react';
+import React, { useMemo } from 'react';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { prettifyPeriod } from '../../../util/formats';
 import { hentToOmsorgspersonerVurderingsoversikt } from '../../../util/httpMock';
@@ -11,9 +11,13 @@ import VurderingsdetaljerForToOmsorgspersoner from '../vurderingsdetaljer-for-to
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
+import { fetchData } from '../../../util/httpUtils';
+import processVurderingsoversikt from '../../../util/vurderingsoversiktUtils';
 
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
-    const { vurdering, onVurderingValgt } = React.useContext(ContainerContext);
+    const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
+
+    const controller = useMemo(() => new AbortController(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
         visVurderingDetails: false,
@@ -34,10 +38,17 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
 
     const harPerioderSomSkalVurderes = vurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
 
+    const getVurderingsoversikt = () => {
+        const { signal } = controller;
+
+        return fetchData<Vurderingsoversikt>(endpoints.behovForToOmsorgspersoner, { signal })
+            .then(processVurderingsoversikt)
+            .then((nyVurderingsoversikt) => nyVurderingsoversikt);
+    };
+
     React.useEffect(() => {
         let isMounted = true;
-
-        hentToOmsorgspersonerVurderingsoversikt().then((nyVurderingsoversikt: Vurderingsoversikt) => {
+        getVurderingsoversikt().then((nyVurderingsoversikt) => {
             if (isMounted) {
                 dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
             }
@@ -45,6 +56,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
 
         return () => {
             isMounted = false;
+            controller.abort();
         };
     }, []);
 
@@ -56,6 +68,13 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const velgVurderingselement = (nyvalgtVurderingselement: Vurderingselement) => {
         onVurderingValgt(nyvalgtVurderingselement.id);
         dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, vurderingselement: nyvalgtVurderingselement });
+    };
+
+    const oppdaterVurderingsoversikt = () => {
+        dispatch({ type: ActionType.PENDING });
+        getVurderingsoversikt().then((nyVurderingsoversikt) => {
+            dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
+        });
     };
 
     if (isLoading) {
@@ -100,7 +119,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                         return (
                             <VurderingsdetaljerForToOmsorgspersoner
                                 vurderingId={valgtVurderingselement?.id}
-                                onVurderingLagret={() => null}
+                                onVurderingLagret={oppdaterVurderingsoversikt}
                                 resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
                                 perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}
                             />

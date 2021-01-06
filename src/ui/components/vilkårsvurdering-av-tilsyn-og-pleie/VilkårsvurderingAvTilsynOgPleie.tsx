@@ -1,6 +1,6 @@
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
@@ -13,6 +13,7 @@ import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 import processVurderingsoversikt from '../../../util/vurderingsoversiktUtils';
+import { fetchData } from '../../../util/httpUtils';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     onVilkårVurdert: () => void;
@@ -20,6 +21,8 @@ interface VilkårsvurderingAvTilsynOgPleieProps {
 
 const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
     const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
+
+    const controller = useMemo(() => new AbortController(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
         visVurderingDetails: false,
@@ -43,18 +46,24 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         vurderingsoversikt.resterendeVurderingsperioder &&
         vurderingsoversikt.resterendeVurderingsperioder.length > 0;
 
+    const getVurderingsoversikt = () => {
+        const { signal } = controller;
+
+        return fetchData<Vurderingsoversikt>(endpoints.kontinuerligTilsynOgPleie, { signal })
+            .then(processVurderingsoversikt)
+            .then((nyVurderingsoversikt) => nyVurderingsoversikt);
+    };
+
     React.useEffect(() => {
         let isMounted = true;
-        fetch(endpoints.kontinuerligTilsynOgPleie).then((response: Response) => {
-            const vurderingsoversiktJson: Promise<Vurderingsoversikt> = response.json();
-            vurderingsoversiktJson.then(processVurderingsoversikt).then((nyVurderingsoversikt) => {
-                if (isMounted) {
-                    dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
-                }
-            });
+        getVurderingsoversikt().then((nyVurderingsoversikt) => {
+            if (isMounted) {
+                dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
+            }
         });
         return () => {
             isMounted = false;
+            controller.abort();
         };
     }, []);
 
@@ -66,6 +75,13 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
     const velgVurderingselement = (nyValgtVurderingselement: Vurderingselement) => {
         onVurderingValgt(nyValgtVurderingselement.id);
         dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, vurderingselement: nyValgtVurderingselement });
+    };
+
+    const oppdaterVurderingsoversikt = () => {
+        dispatch({ type: ActionType.PENDING });
+        getVurderingsoversikt().then((nyVurderingsoversikt) => {
+            dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
+        });
     };
 
     if (isLoading) {
@@ -100,7 +116,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                         return (
                             <VurderingsdetaljerForKontinuerligTilsynOgPleie
                                 vurderingId={valgtVurderingselement?.id}
-                                onVurderingLagret={() => null}
+                                onVurderingLagret={oppdaterVurderingsoversikt}
                                 resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
                                 perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}
                             />
