@@ -1,12 +1,27 @@
+import Dokument from './Dokument';
 import { Period } from './Period';
 import Vurderingsresultat from './Vurderingsresultat';
 
-interface Vurdering {
-    id: string;
+export interface AnnenInformasjon {
+    resterendeVurderingsperioder: Period[];
+    perioderSomKanVurderes: Period[];
+}
+
+export interface Vurderingsversjon {
+    versjon?: string;
+    tekst: string;
     resultat: Vurderingsresultat;
     perioder: Period[];
-    begrunnelse: string;
-    dokumenter: string[];
+    dokumenter: Dokument[];
+    endretAv?: string;
+    endretTidspunkt?: string;
+}
+
+interface Vurdering {
+    id: string;
+    type: string;
+    versjoner: Vurderingsversjon[];
+    annenInformasjon: AnnenInformasjon;
 }
 
 export default Vurdering;

@@ -5,12 +5,8 @@ import TwoPersonsWithOneHighlightedIcon from '../icons/TwoPersonsWithOneHighligh
 import styles from './parter.less';
 import OnePersonIconV2 from '../icons/OnePersonIconV2';
 
-interface ParterProps {
-    scenario: number;
-}
-
-const Parter = ({ scenario }: ParterProps): JSX.Element => {
-    const parter = mockedParter[scenario]?.parter;
+const Parter = (): JSX.Element => {
+    const parter = mockedParter[0]?.parter;
 
     return (
         <AlertStripe type="info">

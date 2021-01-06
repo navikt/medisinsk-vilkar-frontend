@@ -2,6 +2,7 @@ import { dateFromString } from '../util/dateUtils';
 
 export class Period {
     fom: string;
+
     tom: string;
 
     constructor(fom: string, tom: string) {
@@ -29,6 +30,10 @@ export class Period {
 
     overlapsRight(otherPeriod) {
         return this.includesDate(otherPeriod.tom) && !this.includesDate(otherPeriod.fom);
+    }
+
+    overlapsWith(otherPeriod) {
+        return this.covers(otherPeriod) || this.overlapsLeft(otherPeriod) || this.overlapsRight(otherPeriod);
     }
 
     startsBefore(otherPeriod: Period) {

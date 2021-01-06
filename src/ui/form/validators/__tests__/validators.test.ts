@@ -48,17 +48,17 @@ test('detErIngenInnleggelsePåDato', () => {
 });
 
 test('datoErIkkeIEtHull', () => {
-    const perioderTilVurdering = [
+    const resterendeVurderingsperioder = [
         new Period('10.02.2020', '20.02.2020'),
         new Period('25.02.2020', '28.02.2020'),
         new Period('03.03.2020', '10.03.2020'),
     ];
 
     const datoIHull = '23.02.2020';
-    const datoSkalVæreIHull = datoErIkkeIEtHull(datoIHull, perioderTilVurdering);
+    const datoSkalVæreIHull = datoErIkkeIEtHull(datoIHull, resterendeVurderingsperioder);
     expect(datoSkalVæreIHull).toBe('Dato må være innenfor periodene som skal vurderes');
 
     const datoUtenforHull = '27.02.2020';
-    const datoSkalVæreUtenforHull = datoErIkkeIEtHull(datoUtenforHull, perioderTilVurdering);
+    const datoSkalVæreUtenforHull = datoErIkkeIEtHull(datoUtenforHull, resterendeVurderingsperioder);
     expect(datoSkalVæreUtenforHull).toBe(true);
 });

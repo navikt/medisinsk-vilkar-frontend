@@ -1,4 +1,3 @@
-import Vurdering from '../types/Vurdering';
 import {
     FieldName as TilsynFieldName,
     VurderingAvTilsynsbehovFormState,
@@ -9,8 +8,14 @@ import {
 } from '../ui/components/ny-vurdering-av-to-omsorgspersoner/NyVurderingAvToOmsorgspersoner';
 import Vurderingsresultat from '../types/Vurderingsresultat';
 import { Period } from '../types/Period';
+import Dokument from '../types/Dokument';
+import { finnBenyttedeDokumenter } from './dokumentUtils';
+import { Vurderingsversjon } from '../types/Vurdering';
 
-export const makeTilsynsbehovFormStateAsVurderingObject = (formState: VurderingAvTilsynsbehovFormState): Vurdering => {
+export const lagTilsynsbehovVurdering = (
+    formState: VurderingAvTilsynsbehovFormState,
+    alleDokumenter: Dokument[]
+): Vurderingsversjon => {
     const resultat = formState[TilsynFieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]
         ? Vurderingsresultat.INNVILGET
         : Vurderingsresultat.AVSLÅTT;
@@ -20,17 +25,17 @@ export const makeTilsynsbehovFormStateAsVurderingObject = (formState: VurderingA
     const begrunnelse = formState[TilsynFieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE];
 
     return {
-        id: 'someID',
         resultat,
         perioder,
-        begrunnelse,
-        dokumenter: formState[TilsynFieldName.DOKUMENTER],
+        tekst: begrunnelse,
+        dokumenter: finnBenyttedeDokumenter(formState[TilsynFieldName.DOKUMENTER], alleDokumenter),
     };
 };
 
-export const makeToOmsorgspersonerFormStateAsVurderingObject = (
-    formState: VurderingAvToOmsorgspersonerFormState
-): Vurdering => {
+export const lagToOmsorgspersonerVurdering = (
+    formState: VurderingAvToOmsorgspersonerFormState,
+    alleDokumenter: Dokument[]
+): Vurderingsversjon => {
     const resultat = formState[ToOmsorgspersonerFieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]
         ? Vurderingsresultat.INNVILGET
         : Vurderingsresultat.AVSLÅTT;
@@ -40,10 +45,9 @@ export const makeToOmsorgspersonerFormStateAsVurderingObject = (
     const begrunnelse = formState[ToOmsorgspersonerFieldName.VURDERING_AV_TO_OMSORGSPERSONER];
 
     return {
-        id: 'someID',
         resultat,
         perioder,
-        begrunnelse,
-        dokumenter: formState[ToOmsorgspersonerFieldName.DOKUMENTER],
+        tekst: begrunnelse,
+        dokumenter: finnBenyttedeDokumenter(formState[TilsynFieldName.DOKUMENTER], alleDokumenter),
     };
 };

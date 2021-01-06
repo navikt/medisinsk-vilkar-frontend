@@ -1,21 +1,23 @@
 import React from 'react';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { FormProvider, useForm } from 'react-hook-form';
-import { harBruktDokumentasjon, required, fomDatoErFørTomDato } from '../../form/validators';
+import Dokument from '../../../types/Dokument';
+import { Period } from '../../../types/Period';
+import { Vurderingsversjon } from '../../../types/Vurdering';
+import { getPeriodAsListOfDays } from '../../../util/dateUtils';
+import { convertToInternationalPeriod } from '../../../util/formats';
+import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
+import { lagTilsynsbehovVurdering } from '../../../util/vurderingUtils';
+import { fomDatoErFørTomDato, harBruktDokumentasjon, required } from '../../form/validators';
+import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
+import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import Box, { Margin } from '../box/Box';
 import DetailView from '../detail-view/DetailView';
-import Form from '../form/Form';
-import { Period } from '../../../types/Period';
-import { getPeriodAsListOfDays } from '../../../util/dateUtils';
-import Dokument from '../../../types/Dokument';
-import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
-import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
-import { convertToInternationalPeriod } from '../../../util/formats';
-import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
-import styles from './nyVurderingAvTilsynsbehovForm.less';
 import DokumentLink from '../dokument-link/DokumentLink';
+import Form from '../form/Form';
+import styles from './nyVurderingAvTilsynsbehovForm.less';
 
 export enum FieldName {
     VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
@@ -33,17 +35,17 @@ export interface VurderingAvTilsynsbehovFormState {
 
 interface VurderingAvTilsynsbehovFormProps {
     defaultValues: VurderingAvTilsynsbehovFormState;
-    onSubmit: (data: VurderingAvTilsynsbehovFormState) => void;
-    perioderSomSkalVurderes?: Period[];
-    sammenhengendeSøknadsperioder?: Period[];
+    onSubmit: (nyVurdering: Vurderingsversjon) => void;
+    resterendeVurderingsperioder?: Period[];
+    perioderSomKanVurderes?: Period[];
     dokumenter: Dokument[];
 }
 
 const VurderingAvTilsynsbehovForm = ({
     defaultValues,
     onSubmit,
-    perioderSomSkalVurderes,
-    sammenhengendeSøknadsperioder,
+    resterendeVurderingsperioder,
+    perioderSomKanVurderes,
     dokumenter,
 }: VurderingAvTilsynsbehovFormProps): JSX.Element => {
     const formMethods = useForm({
@@ -57,7 +59,7 @@ const VurderingAvTilsynsbehovForm = ({
 
     const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
-        const dagerSomSkalVurderes = (perioderSomSkalVurderes || []).flatMap(getPeriodAsListOfDays);
+        const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap(getPeriodAsListOfDays);
         const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])
             .map((period) => {
                 if ((period as any).period) {
@@ -67,22 +69,26 @@ const VurderingAvTilsynsbehovForm = ({
             })
             .flatMap(getPeriodAsListOfDays);
         return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
-    }, [perioderSomSkalVurderes, perioderSomBlirVurdert]);
+    }, [resterendeVurderingsperioder, perioderSomBlirVurdert]);
 
     const hullISøknadsperiodene = React.useMemo(
-        () => finnHullIPerioder(sammenhengendeSøknadsperioder).map((periode) => convertToInternationalPeriod(periode)),
-        [sammenhengendeSøknadsperioder]
+        () => finnHullIPerioder(perioderSomKanVurderes).map((periode) => convertToInternationalPeriod(periode)),
+        [perioderSomKanVurderes]
     );
 
     const avgrensningerForSøknadsperiode = React.useMemo(
-        () => finnMaksavgrensningerForPerioder(sammenhengendeSøknadsperioder),
-        [sammenhengendeSøknadsperioder]
+        () => finnMaksavgrensningerForPerioder(perioderSomKanVurderes),
+        [perioderSomKanVurderes]
     );
+
+    const lagNyTilsynsvurdering = (formState: VurderingAvTilsynsbehovFormState) => {
+        onSubmit(lagTilsynsbehovVurdering(formState, dokumenter));
+    };
 
     return (
         <DetailView title="Vurdering av tilsyn og pleie">
-            <FormProvider {...formMethods} handleSubmit={formMethods.handleSubmit}>
-                <Form buttonLabel="Lagre" onSubmit={formMethods.handleSubmit(onSubmit)}>
+            <FormProvider {...formMethods}>
+                <Form buttonLabel="Lagre" onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}>
                     <Box marginTop={Margin.large}>
                         <CheckboxGroup
                             question="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
@@ -98,11 +104,13 @@ const VurderingAvTilsynsbehovForm = ({
                     </Box>
                     <Box marginTop={Margin.large}>
                         <TextArea
+                            id="begrunnelsesfelt"
                             textareaClass={styles.begrunnelsesfelt}
                             name={FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE}
                             label={
                                 <div style={{ fontWeight: 400 }}>
-                                    <label style={{ fontWeight: 600 }}>
+                                    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                                    <label style={{ fontWeight: 600 }} htmlFor="begrunnelsesfelt">
                                         Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge
                                         av sykdommen etter § 9-10, første ledd.
                                     </label>
@@ -143,13 +151,15 @@ const VurderingAvTilsynsbehovForm = ({
                             validators={{
                                 required,
                                 inngårISammenhengendeSøknadsperiode: (value: Period) => {
-                                    const isOk = sammenhengendeSøknadsperioder.some((sammenhengendeSøknadsperiode) =>
+                                    const isOk = perioderSomKanVurderes.some((sammenhengendeSøknadsperiode) =>
                                         sammenhengendeSøknadsperiode.covers(value)
                                     );
 
                                     if (!isOk) {
                                         return 'Perioden som vurderes må være innenfor en eller flere sammenhengede søknadsperioder';
                                     }
+
+                                    return true;
                                 },
                                 fomDatoErFørTomDato,
                             }}

@@ -1,21 +1,12 @@
-import {
-    genereltTilsynsbehovVurderingerMock,
-    toSøkereMedTilsynsbehovVurderingerMock,
-} from './mockedTilsynsbehovVurderinger';
 import { Period } from '../types/Period';
-import mockedDokumentliste from './mockedDokumentliste';
+import Vurderingsoversikt from '../types/Vurderingsoversikt';
+import { genereltTilsynsbehovVurderingselementerMock } from './mockedTilsynsbehovVurderinger';
 
-export default [
-    {
-        vurderinger: genereltTilsynsbehovVurderingerMock,
-        perioderSomSkalVurderes: [new Period('2020-01-16', '2020-01-20')],
-        søknadsperioder: [new Period('2020-01-01', '2020-01-15'), new Period('2020-01-16', '2020-01-20')],
-        dokumenter: mockedDokumentliste,
-    },
-    {
-        vurderinger: toSøkereMedTilsynsbehovVurderingerMock,
-        perioderSomSkalVurderes: [new Period('2020-01-16', '2020-01-20')],
-        søknadsperioder: [new Period('2020-01-01', '2020-01-15'), new Period('2020-01-16', '2020-01-20')],
-        dokumenter: mockedDokumentliste,
-    },
-];
+const tilsynsbehovVurderingsoversiktMock: Vurderingsoversikt = {
+    vurderingselementer: genereltTilsynsbehovVurderingselementerMock,
+    resterendeVurderingsperioder: [new Period('2020-01-16', '2020-01-20')],
+    perioderSomKanVurderes: [new Period('2020-01-01', '2020-01-15'), new Period('2020-01-16', '2020-01-20')],
+    søknadsperioderTilBehandling: [],
+};
+
+export default tilsynsbehovVurderingsoversiktMock;

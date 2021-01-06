@@ -3,9 +3,9 @@ import classnames from 'classnames';
 import styles from './interactiveList.less';
 
 export interface InteractiveListElement {
-    contentRenderer: (el: InteractiveListElement) => React.ReactNode;
-    onClick: (el: InteractiveListElement) => void;
-    active?: boolean;
+    content: React.ReactNode;
+    onClick: () => void;
+    active: boolean;
 }
 
 interface InteractiveListProps {
@@ -13,33 +13,25 @@ interface InteractiveListProps {
 }
 
 const InteractiveListElement = (props: InteractiveListElement) => {
-    const { contentRenderer, onClick, active } = props;
+    const { content, active, onClick } = props;
     const cls = classnames(styles.interactiveListElement, {
         [styles['interactiveListElement--active']]: active === true,
     });
     return (
         <li className={cls}>
-            <button className={styles.interactiveListElement__button} type="button" onClick={() => onClick(props)}>
-                {contentRenderer(props)}
+            <button className={styles.interactiveListElement__button} type="button" onClick={onClick}>
+                {content}
             </button>
         </li>
     );
 };
 
 const InteractiveList = ({ elements }: InteractiveListProps) => {
-    const [activeElement, setActiveElement] = React.useState(0);
     return (
         <ul className={styles.interactiveList}>
-            {elements.map((elementProps, index) => (
-                <InteractiveListElement
-                    {...elementProps}
-                    active={activeElement === index}
-                    onClick={() => {
-                        elementProps.onClick(elementProps);
-                        setActiveElement(index);
-                    }}
-                />
-            ))}
+            {elements.map((elementProps) => {
+                return <InteractiveListElement {...elementProps} />;
+            })}
         </ul>
     );
 };

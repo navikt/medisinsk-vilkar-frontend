@@ -1,21 +1,22 @@
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import React from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import Dokument from '../../../types/Dokument';
+import { Period } from '../../../types/Period';
+import { Vurderingsversjon } from '../../../types/Vurdering';
 import { getPeriodAsListOfDays } from '../../../util/dateUtils';
-import { harBruktDokumentasjon, required, fomDatoErFørTomDato } from '../../form/validators';
+import { convertToInternationalPeriod } from '../../../util/formats';
+import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
+import { fomDatoErFørTomDato, harBruktDokumentasjon, required } from '../../form/validators';
+import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
-import Box, { Margin } from '../box/Box';
-import { Period } from '../../../types/Period';
-import { FormProvider, useForm } from 'react-hook-form';
-import DetailView from '../detail-view/DetailView';
-import Form from '../form/Form';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
-import { convertToInternationalPeriod } from '../../../util/formats';
-import styles from './nyVurderingAvToOmsorgspersonerForm.less';
-import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
-import Dokument from '../../../types/Dokument';
+import Box, { Margin } from '../box/Box';
+import DetailView from '../detail-view/DetailView';
 import DokumentLink from '../dokument-link/DokumentLink';
+import Form from '../form/Form';
+import styles from './nyVurderingAvToOmsorgspersonerForm.less';
 
 export enum FieldName {
     VURDERING_AV_TO_OMSORGSPERSONER = 'vurderingAvToOmsorgspersoner',
@@ -33,17 +34,17 @@ export interface VurderingAvToOmsorgspersonerFormState {
 
 interface VurderingAvToOmsorgspersonerFormProps {
     defaultValues: VurderingAvToOmsorgspersonerFormState;
-    onSubmit: (data: VurderingAvToOmsorgspersonerFormState) => void;
-    perioderSomSkalVurderes?: Period[];
-    sammenhengendePerioderMedTilsynsbehov: Period[];
+    onSubmit: (nyVurdering: Vurderingsversjon) => void;
+    resterendeVurderingsperioder?: Period[];
+    perioderSomKanVurderes?: Period[];
     dokumenter: Dokument[];
 }
 
 const VurderingAvToOmsorgspersonerForm = ({
     defaultValues,
     onSubmit,
-    perioderSomSkalVurderes,
-    sammenhengendePerioderMedTilsynsbehov,
+    resterendeVurderingsperioder,
+    perioderSomKanVurderes,
     dokumenter,
 }: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
     const formMethods = useForm({
@@ -54,7 +55,7 @@ const VurderingAvToOmsorgspersonerForm = ({
     const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
 
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
-        const dagerSomSkalVurderes = (perioderSomSkalVurderes || []).flatMap(getPeriodAsListOfDays);
+        const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap(getPeriodAsListOfDays);
         const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])
             .map((period) => {
                 if ((period as any).period) {
@@ -64,19 +65,16 @@ const VurderingAvToOmsorgspersonerForm = ({
             })
             .flatMap(getPeriodAsListOfDays);
         return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
-    }, [perioderSomSkalVurderes, perioderSomBlirVurdert]);
+    }, [resterendeVurderingsperioder, perioderSomBlirVurdert]);
 
     const hullISøknadsperiodene = React.useMemo(
-        () =>
-            finnHullIPerioder(sammenhengendePerioderMedTilsynsbehov).map((periode) =>
-                convertToInternationalPeriod(periode)
-            ),
-        [sammenhengendePerioderMedTilsynsbehov]
+        () => finnHullIPerioder(perioderSomKanVurderes).map((periode) => convertToInternationalPeriod(periode)),
+        [perioderSomKanVurderes]
     );
 
     const avgrensningerForSøknadsperiode = React.useMemo(
-        () => finnMaksavgrensningerForPerioder(sammenhengendePerioderMedTilsynsbehov),
-        [sammenhengendePerioderMedTilsynsbehov]
+        () => finnMaksavgrensningerForPerioder(perioderSomKanVurderes),
+        [perioderSomKanVurderes]
     );
     return (
         <DetailView title="Vurdering av to omsorgspersoner">
@@ -123,13 +121,15 @@ const VurderingAvToOmsorgspersonerForm = ({
                             validators={{
                                 required,
                                 inngårISammenhengendePeriodeMedTilsynsbehov: (value: Period) => {
-                                    const isOk = sammenhengendePerioderMedTilsynsbehov.some(
-                                        (sammenhengendeSøknadsperiode) => sammenhengendeSøknadsperiode.covers(value)
+                                    const isOk = perioderSomKanVurderes.some((sammenhengendeSøknadsperiode) =>
+                                        sammenhengendeSøknadsperiode.covers(value)
                                     );
 
                                     if (!isOk) {
                                         return 'Perioden som vurderes må være innenfor en eller flere sammenhengede perioder med behov for kontinuerlig tilsyn og pleie';
                                     }
+
+                                    return true;
                                 },
                                 fomDatoErFørTomDato,
                             }}

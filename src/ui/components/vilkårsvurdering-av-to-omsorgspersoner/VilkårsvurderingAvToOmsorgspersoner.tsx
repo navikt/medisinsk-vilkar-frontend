@@ -1,92 +1,81 @@
-import React, { useMemo } from 'react';
-import Vurdering from '../../../types/Vurdering';
+import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import React from 'react';
+import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
+import { prettifyPeriod } from '../../../util/formats';
+import { hentToOmsorgspersonerVurderingsoversikt } from '../../../util/httpMock';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
-import VurderingAvToOmsorgspersonerForm, {
-    FieldName,
-    VurderingAvToOmsorgspersonerFormState,
-} from '../ny-vurdering-av-to-omsorgspersoner/NyVurderingAvToOmsorgspersoner';
-import VurderingNavigation from '../vurdering-navigation/VurderingNavigation';
+import ActionType from './actionTypes';
+import vilkårsvurderingReducer from './reducer';
 import VurderingsdetaljerForToOmsorgspersoner from '../vurderingsdetaljer-for-to-omsorgspersoner/VurderingsdetaljerForToOmsorgspersoner';
-import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import { makeToOmsorgspersonerFormStateAsVurderingObject } from '../../../util/vurderingUtils';
-import { lagreVurderingIVurderingsoversikt } from '../../../util/vurderingsoversikt';
-import { slåSammenSammenhengendePerioder } from '../../../util/periodUtils';
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { prettifyPeriod } from '../../../util/formats';
+import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
+import { Period } from '../../../types/Period';
+import Vurderingselement from '../../../types/Vurderingselement';
 
-interface VilkårsvurderingAvToOmsorgspersonerProps {
-    defaultVurderingsoversikt: Vurderingsoversikt;
-}
+const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
+    const { vurdering, onVurderingValgt } = React.useContext(ContainerContext);
 
-const VilkårsvurderingAvToOmsorgspersoner = ({
-    defaultVurderingsoversikt,
-}: VilkårsvurderingAvToOmsorgspersonerProps) => {
-    const { onVurderingValgt } = React.useContext(ContainerContext);
+    const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
+        visVurderingDetails: false,
+        isLoading: true,
+        vurderingsoversikt: null,
+        valgtVurderingselement: null,
+        resterendeVurderingsperioderDefaultValue: [],
+        vurdering,
+    });
 
-    const [isLoading, setIsLoading] = React.useState(false);
-    const [vurderingsoversikt, setVurderingsoversikt] = React.useState<Vurderingsoversikt>(defaultVurderingsoversikt);
-    const [valgtVurdering, setValgtVurdering] = React.useState(null);
-    const [nyVurderingOpen, setNyVurderingOpen] = React.useState(false);
-    const [perioderTilVurderingDefaultValue, setPerioderTilVurderingDefaultValue] = React.useState([]);
+    const {
+        vurderingsoversikt,
+        isLoading,
+        visVurderingDetails,
+        valgtVurderingselement,
+        resterendeVurderingsperioderDefaultValue,
+    } = state;
 
-    const visNyVurderingUtenPreutfylling = () => {
-        onVurderingValgt(null);
-        setValgtVurdering(null);
-        setPerioderTilVurderingDefaultValue([]);
-        setNyVurderingOpen(true);
-    };
+    const harPerioderSomSkalVurderes = vurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
 
-    const visPreutfyltVurdering = () => {
-        onVurderingValgt(null);
-        setValgtVurdering(null);
-        setPerioderTilVurderingDefaultValue(vurderingsoversikt?.perioderSomSkalVurderes || []);
-        setNyVurderingOpen(true);
-    };
+    React.useEffect(() => {
+        let isMounted = true;
 
-    const velgVurdering = (v: Vurdering) => {
-        onVurderingValgt(v.id);
-        setValgtVurdering(v);
-        setNyVurderingOpen(false);
-    };
-
-    const lagreVurderingAvToOmsorgspersoner = (data: VurderingAvToOmsorgspersonerFormState) => {
-        setIsLoading(true);
-        lagreVurderingIVurderingsoversikt(
-            makeToOmsorgspersonerFormStateAsVurderingObject(data),
-            vurderingsoversikt
-        ).then((nyVurderingsoversikt) => {
-            setVurderingsoversikt(nyVurderingsoversikt);
-            setIsLoading(false);
-            setNyVurderingOpen(false);
+        hentToOmsorgspersonerVurderingsoversikt().then((nyVurderingsoversikt: Vurderingsoversikt) => {
+            if (isMounted) {
+                dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
+            }
         });
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    const visNyVurderingForm = (resterendeVurderingsperioder?: Period[]) => {
+        onVurderingValgt(null);
+        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, resterendeVurderingsperioder });
     };
 
-    const sammenslåttePerioderMedTilsynsbehov = useMemo(() => {
-        if (vurderingsoversikt) {
-            return slåSammenSammenhengendePerioder(vurderingsoversikt.perioderSomSkalVurderes);
-        }
-        return [];
-    }, [vurderingsoversikt]);
+    const velgVurderingselement = (nyvalgtVurderingselement: Vurderingselement) => {
+        onVurderingValgt(nyvalgtVurderingselement.id);
+        dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, vurderingselement: nyvalgtVurderingselement });
+    };
 
     if (isLoading) {
         return <p>Henter vurderinger</p>;
     }
     return (
         <>
-            {vurderingsoversikt.perioderSomSkalVurderes && vurderingsoversikt.perioderSomSkalVurderes.length > 0 && (
+            {harPerioderSomSkalVurderes && (
                 <div style={{ maxWidth: '1194px' }}>
                     <AlertStripeAdvarsel>
                         {`Vurder behov for to omsorgspersoner for perioden ${prettifyPeriod(
-                            vurderingsoversikt?.perioderSomSkalVurderes[0]
+                            vurderingsoversikt?.resterendeVurderingsperioder[0]
                         )}.`}
                     </AlertStripeAdvarsel>
-                    <div style={{ marginTop: '1rem' }}></div>
+                    <div style={{ marginTop: '1rem' }} />
                 </div>
             )}
             <NavigationWithDetailView
                 navigationSection={() => {
-                    if (defaultVurderingsoversikt?.perioderSomSkalVurderes.length === 0) {
+                    if (vurderingsoversikt?.resterendeVurderingsperioder.length === 0) {
                         return (
                             <div style={{ marginTop: '1rem' }}>
                                 <AlertStripeInfo>
@@ -97,38 +86,23 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                         );
                     }
                     return (
-                        <VurderingNavigation
-                            vurderinger={vurderingsoversikt?.vurderinger}
-                            onVurderingValgt={velgVurdering}
-                            onNyVurderingClick={visNyVurderingUtenPreutfylling}
-                            perioderSomSkalVurderes={vurderingsoversikt?.perioderSomSkalVurderes}
-                            onPerioderSomSkalVurderesClick={visPreutfyltVurdering}
-                            kanOppretteNyeVurderinger={defaultVurderingsoversikt?.perioderSomSkalVurderes.length > 0}
+                        <Vurderingsnavigasjon
+                            vurderingselementer={vurderingsoversikt?.vurderingselementer}
+                            resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
+                            søknadsperioderTilBehandling={vurderingsoversikt?.søknadsperioderTilBehandling}
+                            onVurderingValgt={velgVurderingselement}
+                            onNyVurderingClick={visNyVurderingForm}
                         />
                     );
                 }}
                 detailSection={() => {
-                    if (nyVurderingOpen) {
-                        return (
-                            <VurderingAvToOmsorgspersonerForm
-                                defaultValues={{
-                                    [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]: '',
-                                    [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: undefined,
-                                    [FieldName.PERIODER]: perioderTilVurderingDefaultValue,
-                                    [FieldName.DOKUMENTER]: [],
-                                }}
-                                onSubmit={lagreVurderingAvToOmsorgspersoner}
-                                perioderSomSkalVurderes={vurderingsoversikt.perioderSomSkalVurderes}
-                                sammenhengendePerioderMedTilsynsbehov={sammenslåttePerioderMedTilsynsbehov}
-                                dokumenter={vurderingsoversikt.dokumenter}
-                            />
-                        );
-                    }
-                    if (valgtVurdering !== null) {
+                    if (visVurderingDetails) {
                         return (
                             <VurderingsdetaljerForToOmsorgspersoner
-                                vurdering={valgtVurdering}
-                                dokumenter={vurderingsoversikt.dokumenter}
+                                vurderingId={valgtVurderingselement?.id}
+                                onVurderingLagret={() => null}
+                                resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                                perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}
                             />
                         );
                     }

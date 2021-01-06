@@ -1,66 +1,119 @@
 import React from 'react';
-import Vurdering from '../../../types/Vurdering';
-import { prettifyPeriod } from '../../../util/formats';
-import DetailView from '../detail-view/DetailView';
-import LabelledContent from '../labelled-content/LabelledContent';
-import Box, { Margin } from '../box/Box';
-import Vurderingsresultat from '../../../types/Vurderingsresultat';
+import mockedDokumentliste from '../../../mock/mockedDokumentliste';
+import { toSøkereMedTilsynsbehovVurderingerMock } from '../../../mock/mockedTilsynsbehovVurderinger';
 import Dokument from '../../../types/Dokument';
-import DokumentLink from '../dokument-link/DokumentLink';
-import BasicList from '../basic-list/BasicList';
+import { Period } from '../../../types/Period';
+import Vurdering, { Vurderingsversjon } from '../../../types/Vurdering';
+import VurderingAvToOmsorgspersonerForm, {
+    FieldName,
+} from '../ny-vurdering-av-to-omsorgspersoner/NyVurderingAvToOmsorgspersoner';
+import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
 
 interface VurderingsdetaljerForToOmsorgspersonerProps {
-    vurdering: Vurdering;
-    dokumenter: Dokument[];
+    vurderingId: string | null;
+    resterendeVurderingsperioder: Period[];
+    perioderSomKanVurderes: Period[];
+    onVurderingLagret: () => void;
 }
 
-const VurderingsdetaljerForToOmsorgspersoner = ({
-    vurdering,
-    dokumenter,
-}: VurderingsdetaljerForToOmsorgspersonerProps) => {
-    const { perioder, begrunnelse, resultat } = vurdering;
+function lagreVurdering(nyVurderingsversjon: Vurderingsversjon, vurdering: Vurdering) {
+    return new Promise((resolve) => {
+        setTimeout(() => resolve({}), 1000);
+    });
+}
+
+function hentVurdering(vurderingsid: string): Promise<Vurdering> {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const vurdering = toSøkereMedTilsynsbehovVurderingerMock.find(
+                (vurderingMock) => vurderingMock.id === vurderingsid
+            );
+            resolve(vurdering);
+        }, 1000);
+    });
+}
+
+function hentNødvendigeDataForÅGjøreVurdering() {
+    return new Promise<any>((resolve) => {
+        setTimeout(
+            () =>
+                resolve({
+                    dokumenter: mockedDokumentliste,
+                }),
+            1000
+        );
+    });
+}
+
+const VurderingsdetaljerToOmsorgspersoner = ({
+    vurderingId,
+    resterendeVurderingsperioder,
+    perioderSomKanVurderes,
+    onVurderingLagret,
+}: VurderingsdetaljerForToOmsorgspersonerProps): JSX.Element => {
+    const [isLoading, setIsLoading] = React.useState<boolean>(true);
+    const [vurdering, setVurdering] = React.useState<Vurdering>(null);
+    const [alleDokumenter, setDokumenter] = React.useState<Dokument[]>([]);
+
+    React.useEffect(() => {
+        setIsLoading(true);
+        let isMounted = true;
+        if (vurderingId) {
+            hentVurdering(vurderingId).then((vurderingResponse: Vurdering) => {
+                if (isMounted) {
+                    setVurdering(vurderingResponse);
+                    setIsLoading(false);
+                }
+            });
+        } else {
+            setVurdering(null);
+            hentNødvendigeDataForÅGjøreVurdering().then((nødvendigeDataForÅGjøreVurdering) => {
+                if (isMounted) {
+                    setDokumenter(nødvendigeDataForÅGjøreVurdering.dokumenter);
+                    setIsLoading(false);
+                }
+            });
+        }
+
+        return () => {
+            isMounted = false;
+        };
+    }, [vurderingId]);
+
+    const lagreVurderingAvToOmsorgspersoner = (nyVurderingsversjon: Vurderingsversjon) => {
+        setIsLoading(true);
+        lagreVurdering(nyVurderingsversjon, vurdering).then(
+            () => {
+                onVurderingLagret();
+                setIsLoading(false);
+            },
+            () => {
+                // showErrorMessage ??
+                setIsLoading(false);
+            }
+        );
+    };
+
+    if (isLoading) {
+        return <p>Laster</p>;
+    }
+    if (vurdering !== null) {
+        return <VurderingsoppsummeringForToOmsorgspersoner alleDokumenter={alleDokumenter} vurdering={vurdering} />;
+    }
     return (
-        <DetailView title="Vurdering av to omsorgspersoner">
-            <Box marginTop={Margin.medium}>
-                <LabelledContent
-                    label="Hvilke dokumenter er brukt i vurderingen av behov for to omsorgspersoner?"
-                    content={
-                        <BasicList
-                            elements={dokumenter
-                                .filter((dokument) => vurdering.dokumenter.includes(dokument.id))
-                                .map((dokument) => (
-                                    <DokumentLink dokument={dokument} />
-                                ))}
-                        />
-                    }
-                />
-            </Box>
-            <Box marginTop={Margin.large}>
-                <LabelledContent
-                    label="Gjør en vurdering av om det er behov for to omsorgspersoner etter § 9-10, andre ledd."
-                    content={<span>{begrunnelse}</span>}
-                />
-            </Box>
-            <Box marginTop={Margin.large}>
-                <LabelledContent
-                    label="Er det behov for to omsorgspersoner?"
-                    content={<span>{resultat === Vurderingsresultat.INNVILGET ? 'Ja' : 'Nei'}</span>}
-                />
-            </Box>
-            <Box marginTop={Margin.large}>
-                <LabelledContent
-                    label="Perioder vurdert"
-                    content={
-                        <ul style={{ margin: 0, listStyleType: 'none', padding: 0 }}>
-                            {perioder.map((periode, i) => (
-                                <li key={`${i}`}>{prettifyPeriod(periode)}</li>
-                            ))}
-                        </ul>
-                    }
-                />
-            </Box>
-        </DetailView>
+        <VurderingAvToOmsorgspersonerForm
+            defaultValues={{
+                [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]: '',
+                [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: undefined,
+                [FieldName.PERIODER]: resterendeVurderingsperioder,
+                [FieldName.DOKUMENTER]: [],
+            }}
+            resterendeVurderingsperioder={resterendeVurderingsperioder}
+            perioderSomKanVurderes={perioderSomKanVurderes}
+            dokumenter={alleDokumenter}
+            onSubmit={lagreVurderingAvToOmsorgspersoner}
+        />
     );
 };
 
-export default VurderingsdetaljerForToOmsorgspersoner;
+export default VurderingsdetaljerToOmsorgspersoner;

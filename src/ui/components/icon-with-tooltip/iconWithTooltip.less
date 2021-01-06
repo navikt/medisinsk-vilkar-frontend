@@ -1,0 +1,22 @@
+.iconWithTooltip {
+    position: relative;
+
+    &__tooltipText {
+        display: none;
+        flex-direction: row;
+        align-items: center;
+        padding: 2px 8px;
+        position: absolute;
+        left: 0;
+        top: 28px;
+        background: #fff5e8;
+        box-shadow: 0px 1px 2px #b7b1a9;
+        border-radius: 4px;
+        white-space: pre;
+        z-index: 1;
+    }
+
+    &:hover .iconWithTooltip__tooltipText {
+        display: block;
+    }
+}

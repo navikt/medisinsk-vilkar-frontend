@@ -34,8 +34,8 @@ interface DatepickerProps {
 interface PeriodpickerListProps {
     name: string;
     legend: string;
-    validators: { [key: string]: (v: any) => string | boolean | undefined };
-    defaultValues: Period[];
+    validators?: { [key: string]: (v: any) => string | boolean | undefined };
+    defaultValues?: Period[];
     fromDatepickerProps: DatepickerProps;
     toDatepickerProps: DatepickerProps;
 }
@@ -65,8 +65,8 @@ const PeriodpickerList = ({
                             <div className={styles.flexContainer}>
                                 <Controller
                                     name={`${name}[${index}].period`}
-                                    rules={{ validate: { ...validators } }}
-                                    defaultValue={defaultValues[index] || { fom: '', tom: '' }}
+                                    rules={{ validate: { ...(validators || {}) } }}
+                                    defaultValue={defaultValues && defaultValues[index]}
                                     render={({ value, onChange }) => {
                                         return (
                                             <>

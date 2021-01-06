@@ -37,8 +37,13 @@ export const detErIngenInnleggelsePåDato = (dato: any, innleggelsesperioder: Pe
     return true;
 };
 
-export const datoErInnenforPerioderTilVurdering = (dato: any, perioderTilVurdering: Period[]): string | true => {
-    const datoErInnenfor = perioderTilVurdering.some((period) => new Period(period.fom, period.tom).includesDate(dato));
+export const datoErInnenforResterendeVurderingsperioder = (
+    dato: any,
+    resterendeVurderingsperioder: Period[]
+): string | true => {
+    const datoErInnenfor = resterendeVurderingsperioder.some((period) =>
+        new Period(period.fom, period.tom).includesDate(dato)
+    );
 
     if (datoErInnenfor) {
         return true;
