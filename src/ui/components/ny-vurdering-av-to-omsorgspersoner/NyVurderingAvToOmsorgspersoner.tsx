@@ -34,7 +34,7 @@ export interface VurderingAvToOmsorgspersonerFormState {
 
 interface VurderingAvToOmsorgspersonerFormProps {
     defaultValues: VurderingAvToOmsorgspersonerFormState;
-    onSubmit: (nyVurdering: Partial<Vurderingsversjon>) => void;
+    onSubmit: (nyVurdering: Vurderingsversjon) => void;
     resterendeVurderingsperioder?: Period[];
     perioderSomKanVurderes?: Period[];
     dokumenter: Dokument[];

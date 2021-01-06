@@ -34,8 +34,6 @@ function hentVurdering(vurderingsid: string): Promise<Vurdering> {
                             tekst: 'Fordi her er det behov',
                             dokumenter: mockedDokumentliste,
                             versjon: '1',
-                            endretAv: 'SaraSydokke',
-                            endretTidspunkt: '2020-12-18T09:56:50.020321',
                         },
                     ],
                     annenInformasjon: {
@@ -84,9 +82,9 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
             });
         } else {
             setVurdering(null);
-            hentNødvendigeDataForÅGjøreVurdering().then((nødvendigeDataForÅGjøreVurdering) => {
+            hentNødvendigeDataForÅGjøreVurdering().then(({ dokumenter }) => {
                 if (isMounted) {
-                    setDokumenter(nødvendigeDataForÅGjøreVurdering.dokumenter);
+                    setDokumenter(dokumenter);
                     setIsLoading(false);
                 }
             });

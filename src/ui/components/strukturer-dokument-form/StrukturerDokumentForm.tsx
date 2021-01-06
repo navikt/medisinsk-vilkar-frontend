@@ -9,12 +9,8 @@ import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import PeriodWrapper from '../../form/types/PeriodWrapper';
 import { required } from '../../form/validators';
-
-enum InneholderMedisinskeOpplysningerValue {
-    LEGEERKLÆRING = 'legeerklæring',
-    ANNET = 'annet',
-    NEI = 'nei',
-}
+import { Dokument, Dokumenttype } from '../../../types/Dokument';
+import { lagStrukturertDokument } from '../../../util/dokumentUtils';
 
 export enum FieldName {
     INNEHOLDER_MEDISINSKE_OPPLYSNINGER = 'inneholderMedisinskeOpplysninger',
@@ -24,17 +20,18 @@ export enum FieldName {
 }
 
 export interface StrukturerDokumentFormState {
-    [FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER]?: InneholderMedisinskeOpplysningerValue;
+    [FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER]?: Dokumenttype;
     [FieldName.DATERT]: string;
     [FieldName.SIGNERT_AV_SYKEHUSLEGE_ELLER_LEGE_I_SPESIALISTHELSETJENESTEN]?: boolean;
     [FieldName.INNLEGGELSESPERIODER]: PeriodWrapper[];
 }
 
 interface StrukturerDokumentFormProps {
-    dokumentNavn: string;
+    dokument: Dokument;
+    onSubmit: (nyttDokument: Dokument) => void;
 }
 
-const StrukturerDokumentForm = ({ dokumentNavn }: StrukturerDokumentFormProps) => {
+const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormProps) => {
     const formMethods = useForm<StrukturerDokumentFormState>({
         defaultValues: {
             innleggelsesperioder: [{ period: { fom: '', tom: '' } }],
@@ -43,15 +40,21 @@ const StrukturerDokumentForm = ({ dokumentNavn }: StrukturerDokumentFormProps) =
 
     const inneholderMedisinskeOpplysninger = formMethods.watch(FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER);
 
-    const dokumentetErEnLegeerklæring =
-        inneholderMedisinskeOpplysninger === InneholderMedisinskeOpplysningerValue.LEGEERKLÆRING;
+    const dokumentetErEnLegeerklæring = inneholderMedisinskeOpplysninger === Dokumenttype.LEGEERKLÆRING;
     const dokumentetHarMedisinskeOpplysninger =
-        dokumentetErEnLegeerklæring || inneholderMedisinskeOpplysninger === InneholderMedisinskeOpplysningerValue.ANNET;
+        dokumentetErEnLegeerklæring || inneholderMedisinskeOpplysninger === Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER;
+
+    const lagNyttStrukturertDokument = (formState: StrukturerDokumentFormState) => {
+        onSubmit(lagStrukturertDokument(formState, dokument));
+    };
 
     return (
-        <DetailView title={`Håndter nytt dokument ("${dokumentNavn}")`}>
+        <DetailView title={`Håndter nytt dokument ("${dokument.name}")`}>
             <FormProvider {...formMethods}>
-                <Form buttonLabel="Lagre" onSubmit={formMethods.handleSubmit((data) => {})}>
+                <Form
+                    buttonLabel="Lagre"
+                    onSubmit={formMethods.handleSubmit((formState) => lagNyttStrukturertDokument(formState))}
+                >
                     <Box marginTop={Margin.large}>
                         <RadioGroupPanel
                             name={FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER}
@@ -59,15 +62,15 @@ const StrukturerDokumentForm = ({ dokumentNavn }: StrukturerDokumentFormProps) =
                             radios={[
                                 {
                                     label: 'Ja, legeerklæring',
-                                    value: InneholderMedisinskeOpplysningerValue.LEGEERKLÆRING,
+                                    value: Dokumenttype.LEGEERKLÆRING,
                                 },
                                 {
                                     label: 'Ja, andre medisinske opplysninger (f.eks. ...)',
-                                    value: InneholderMedisinskeOpplysningerValue.ANNET,
+                                    value: Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER,
                                 },
                                 {
                                     label: 'Dokumentet inneholder ikke medisinske opplysninger',
-                                    value: InneholderMedisinskeOpplysningerValue.NEI,
+                                    value: Dokumenttype.MANGLER_MEDISINSKE_OPPLYSNINGER,
                                 },
                             ]}
                             validators={{ required }}

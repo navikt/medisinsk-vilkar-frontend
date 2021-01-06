@@ -16,7 +16,7 @@ interface VurderingsdetaljerForToOmsorgspersonerProps {
     onVurderingLagret: () => void;
 }
 
-function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>, vurdering: Vurdering) {
+function lagreVurdering(nyVurderingsversjon: Vurderingsversjon, vurdering: Vurdering) {
     return new Promise((resolve) => {
         setTimeout(() => resolve({}), 1000);
     });
@@ -80,7 +80,7 @@ const VurderingsdetaljerToOmsorgspersoner = ({
         };
     }, [vurderingId]);
 
-    const lagreVurderingAvToOmsorgspersoner = (nyVurderingsversjon: Partial<Vurderingsversjon>) => {
+    const lagreVurderingAvToOmsorgspersoner = (nyVurderingsversjon: Vurderingsversjon) => {
         setIsLoading(true);
         lagreVurdering(nyVurderingsversjon, vurdering).then(
             () => {

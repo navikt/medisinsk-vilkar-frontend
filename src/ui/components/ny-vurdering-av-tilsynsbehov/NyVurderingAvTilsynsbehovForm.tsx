@@ -1,5 +1,5 @@
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import React from 'react';
+import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
@@ -35,7 +35,7 @@ export interface VurderingAvTilsynsbehovFormState {
 
 interface VurderingAvTilsynsbehovFormProps {
     defaultValues: VurderingAvTilsynsbehovFormState;
-    onSubmit: (nyVurdering: Partial<Vurderingsversjon>) => void;
+    onSubmit: (nyVurdering: Vurderingsversjon) => void;
     resterendeVurderingsperioder?: Period[];
     perioderSomKanVurderes?: Period[];
     dokumenter: Dokument[];
@@ -104,11 +104,13 @@ const VurderingAvTilsynsbehovForm = ({
                     </Box>
                     <Box marginTop={Margin.large}>
                         <TextArea
+                            id="begrunnelsesfelt"
                             textareaClass={styles.begrunnelsesfelt}
                             name={FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE}
                             label={
                                 <div style={{ fontWeight: 400 }}>
-                                    <label style={{ fontWeight: 600 }}>
+                                    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                                    <label style={{ fontWeight: 600 }} htmlFor="begrunnelsesfelt">
                                         Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge
                                         av sykdommen etter § 9-10, første ledd.
                                     </label>

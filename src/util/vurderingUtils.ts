@@ -15,7 +15,7 @@ import { Vurderingsversjon } from '../types/Vurdering';
 export const lagTilsynsbehovVurdering = (
     formState: VurderingAvTilsynsbehovFormState,
     alleDokumenter: Dokument[]
-): Partial<Vurderingsversjon> => {
+): Vurderingsversjon => {
     const resultat = formState[TilsynFieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]
         ? Vurderingsresultat.INNVILGET
         : Vurderingsresultat.AVSLÅTT;
@@ -35,7 +35,7 @@ export const lagTilsynsbehovVurdering = (
 export const lagToOmsorgspersonerVurdering = (
     formState: VurderingAvToOmsorgspersonerFormState,
     alleDokumenter: Dokument[]
-): Partial<Vurderingsversjon> => {
+): Vurderingsversjon => {
     const resultat = formState[ToOmsorgspersonerFieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]
         ? Vurderingsresultat.INNVILGET
         : Vurderingsresultat.AVSLÅTT;

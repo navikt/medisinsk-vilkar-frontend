@@ -24,7 +24,7 @@ const Vurderingsnavigasjon = ({
     resterendeVurderingsperioder,
     søknadsperioderTilBehandling,
 }: VurderingsnavigasjonProps): JSX.Element => {
-    const [activeIndex, setActiveIndex] = React.useState(0);
+    const [activeIndex, setActiveIndex] = React.useState(-1);
 
     const harPerioderSomSkalVurderes = resterendeVurderingsperioder?.length > 0;
 

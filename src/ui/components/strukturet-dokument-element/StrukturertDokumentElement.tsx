@@ -1,11 +1,12 @@
 import React from 'react';
+import { StrukturertDokument } from '../../../types/Dokument';
 
 interface StrukturertDokumentElementProps {
-    dokument: string;
+    dokument: StrukturertDokument;
 }
 
 const StrukturertDokumentElement = ({ dokument }: StrukturertDokumentElementProps) => {
-    return <div>{dokument}</div>;
+    return <div>{dokument.name}</div>;
 };
 
 export default StrukturertDokumentElement;
