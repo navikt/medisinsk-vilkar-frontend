@@ -15,14 +15,19 @@ const webpackConfig = merge(commonWebpackConfig, {
     ],
 });
 
-const devServerOptions = { hot: true };
+const devServerOptions = {
+    hot: true,
+    headers: {
+        'Access-Control-Allow-Origin': '*',
+    },
+};
 WebpackDevServer.addDevServerEntrypoints(webpackConfig, devServerOptions);
 
 const compiler = webpack(webpackConfig);
 const devServer = new WebpackDevServer(compiler, devServerOptions);
 compiler.close(() => console.info('Compiler closed'));
 
-const port = 8080;
+const port = 8081;
 devServer.listen(port, 'localhost', (error) => {
     if (error) {
         return console.error(error);

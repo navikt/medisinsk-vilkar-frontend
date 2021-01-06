@@ -12,13 +12,14 @@ import VurderingsdetaljerForKontinuerligTilsynOgPleie from '../vurderingsdetalje
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
+import processVurderingsoversikt from '../../../util/vurderingsoversiktUtils';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     onVilkårVurdert: () => void;
 }
 
 const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
-    const { vurdering, onVurderingValgt } = React.useContext(ContainerContext);
+    const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
         visVurderingDetails: false,
@@ -44,10 +45,13 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
 
     React.useEffect(() => {
         let isMounted = true;
-        hentTilsynsbehovVurderingsoversikt().then((nyVurderingsoversikt: Vurderingsoversikt) => {
-            if (isMounted) {
-                dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
-            }
+        fetch(endpoints.kontinuerligTilsynOgPleie).then((response: Response) => {
+            const vurderingsoversiktJson: Promise<Vurderingsoversikt> = response.json();
+            vurderingsoversiktJson.then(processVurderingsoversikt).then((nyVurderingsoversikt) => {
+                if (isMounted) {
+                    dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
+                }
+            });
         });
         return () => {
             isMounted = false;
