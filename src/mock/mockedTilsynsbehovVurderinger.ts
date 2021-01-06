@@ -9,8 +9,8 @@ export const genereltTilsynsbehovVurderingselementerMock: Vurderingselement[] = 
         id: '1',
         periode: new Period('2020-01-01', '2020-01-15'),
         resultat: Vurderingsresultat.INNVILGET,
-        gjelderForSøker: true,
-        gjelderForAnnenPart: false,
+        gjelderForSøker: false,
+        gjelderForAnnenPart: true,
     },
 ];
 
