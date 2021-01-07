@@ -1,5 +1,5 @@
-import Dokument, { Dokumenttype } from '../../types/Dokument';
 import dayjs from 'dayjs';
+import Dokument, { Dokumenttype } from '../../types/Dokument';
 import { finnBenyttedeDokumenter } from '../dokumentUtils';
 
 const mottatt = dayjs().toDate();

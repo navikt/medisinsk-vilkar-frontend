@@ -1,5 +1,6 @@
 import React from 'react';
 import Lenke from 'nav-frontend-lenker';
+import dayjs from 'dayjs';
 import Dokument from '../../../types/Dokument';
 import { prettifyDate } from '../../../util/formats';
 
@@ -17,7 +18,7 @@ const DokumentLink = ({ dokument }: DokumentLinkProps) => {
                 e.stopPropagation();
             }}
         >
-            {type} ({prettifyDate(datert.toDateString())})
+            {type} ({prettifyDate(dayjs(datert).utc(true).toISOString())})
         </Lenke>
     );
 };

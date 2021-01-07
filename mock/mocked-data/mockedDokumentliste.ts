@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-import Dokument, { Dokumenttype } from '../types/Dokument';
+import { Dokumenttype } from '../../src/types/Dokument';
 
-const mockedDokumentliste: Dokument[] = [
+export default [
     {
         id: '1',
         type: Dokumenttype.LEGEERKLÆRING,
@@ -23,5 +23,3 @@ const mockedDokumentliste: Dokument[] = [
         location: '#',
     },
 ];
-
-export default mockedDokumentliste;

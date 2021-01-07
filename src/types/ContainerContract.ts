@@ -2,8 +2,12 @@ interface ContainerContract {
     vurdering: string;
     onVurderingValgt: (vurdering: string) => void;
     endpoints: {
-        kontinuerligTilsynOgPleie: string;
-        behovForToOmsorgspersoner: string;
+        vurderingsoversiktKontinuerligTilsynOgPleie: string;
+        vurderingsoversiktBehovForToOmsorgspersoner: string;
+        vurderingKontinuerligTilsynOgPleie: string;
+        vurderingToOmsorgspersoner: string;
+        dokumentoversikt: string;
+        dataTilVurdering: string;
     };
 }
 

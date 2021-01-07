@@ -9,8 +9,8 @@ import {
 import Vurderingsresultat from '../types/Vurderingsresultat';
 import { Period } from '../types/Period';
 import Dokument from '../types/Dokument';
-import { finnBenyttedeDokumenter } from './dokumentUtils';
 import { Vurderingsversjon } from '../types/Vurdering';
+import { finnBenyttedeDokumenter } from './dokumentUtils';
 
 export const lagTilsynsbehovVurdering = (
     formState: VurderingAvTilsynsbehovFormState,

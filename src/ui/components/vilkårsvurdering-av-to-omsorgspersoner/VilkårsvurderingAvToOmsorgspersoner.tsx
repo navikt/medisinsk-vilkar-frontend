@@ -1,8 +1,7 @@
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import React, { useMemo } from 'react';
+import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { prettifyPeriod } from '../../../util/formats';
-import { hentToOmsorgspersonerVurderingsoversikt } from '../../../util/httpMock';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import ActionType from './actionTypes';
@@ -17,7 +16,7 @@ import processVurderingsoversikt from '../../../util/vurderingsoversiktUtils';
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
 
-    const controller = useMemo(() => new AbortController(), []);
+    const fetchAborter = useMemo(() => new AbortController(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
         visVurderingDetails: false,
@@ -39,9 +38,9 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const harPerioderSomSkalVurderes = vurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
 
     const getVurderingsoversikt = () => {
-        const { signal } = controller;
+        const { signal } = fetchAborter;
 
-        return fetchData<Vurderingsoversikt>(endpoints.behovForToOmsorgspersoner, { signal })
+        return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktBehovForToOmsorgspersoner, { signal })
             .then(processVurderingsoversikt)
             .then((nyVurderingsoversikt) => nyVurderingsoversikt);
     };
@@ -56,7 +55,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
 
         return () => {
             isMounted = false;
-            controller.abort();
+            fetchAborter.abort();
         };
     }, []);
 

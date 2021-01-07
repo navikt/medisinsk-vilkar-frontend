@@ -3,9 +3,9 @@ import VurderingAvTilsynsbehovForm, { FieldName } from '../ny-vurdering-av-tilsy
 import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
 import { Period } from '../../../types/Period';
 import Dokument from '../../../types/Dokument';
-import Vurderingsresultat from '../../../types/Vurderingsresultat';
-import mockedDokumentliste from '../../../mock/mockedDokumentliste';
 import Vurdering, { Vurderingsversjon } from '../../../types/Vurdering';
+import { fetchData } from '../../../util/httpUtils';
+import ContainerContext from '../../context/ContainerContext';
 
 interface VurderingDetailsProps {
     vurderingId: string | null;
@@ -20,42 +20,12 @@ function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>, vurderi
     });
 }
 
-function hentVurdering(vurderingsid: string): Promise<Vurdering> {
-    return new Promise((resolve) => {
-        setTimeout(
-            () =>
-                resolve({
-                    id: vurderingsid,
-                    type: 'KONTINUERLIG_TILSYN_OG_PLEIE',
-                    versjoner: [
-                        {
-                            perioder: [new Period('2020-01-01', '2020-01-15')],
-                            resultat: Vurderingsresultat.INNVILGET,
-                            tekst: 'Fordi her er det behov',
-                            dokumenter: mockedDokumentliste,
-                            versjon: '1',
-                        },
-                    ],
-                    annenInformasjon: {
-                        resterendeVurderingsperioder: [],
-                        perioderSomKanVurderes: [],
-                    },
-                }),
-            1000
-        );
-    });
+function hentVurdering(url: string, vurderingId: string): Promise<Vurdering> {
+    return fetchData(`${url}?vurderingId=${vurderingId}`);
 }
 
-function hentNødvendigeDataForÅGjøreVurdering() {
-    return new Promise<any>((resolve) => {
-        setTimeout(
-            () =>
-                resolve({
-                    dokumenter: mockedDokumentliste,
-                }),
-            1000
-        );
-    });
+function hentDataTilVurdering(url: string): Promise<Dokument[]> {
+    return fetchData(url);
 }
 
 const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
@@ -68,13 +38,15 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
     const [vurdering, setVurdering] = React.useState<Vurdering>(null);
     const [alleDokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
+    const { endpoints } = React.useContext(ContainerContext);
+    const vurderingUrl = endpoints.vurderingKontinuerligTilsynOgPleie;
+    const dataTilVurderingUrl = endpoints.dataTilVurdering;
+
     React.useEffect(() => {
         let isMounted = true;
-
         setIsLoading(true);
-
         if (vurderingId) {
-            hentVurdering(vurderingId).then((vurderingResponse: Vurdering) => {
+            hentVurdering(vurderingUrl, vurderingId).then((vurderingResponse: Vurdering) => {
                 if (isMounted) {
                     setVurdering(vurderingResponse);
                     setIsLoading(false);
@@ -82,9 +54,9 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
             });
         } else {
             setVurdering(null);
-            hentNødvendigeDataForÅGjøreVurdering().then(({ dokumenter }) => {
+            hentDataTilVurdering(dataTilVurderingUrl).then((dokumenterResponse: Dokument[]) => {
                 if (isMounted) {
-                    setDokumenter(dokumenter);
+                    setDokumenter(dokumenterResponse);
                     setIsLoading(false);
                 }
             });

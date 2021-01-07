@@ -1,6 +1,4 @@
 import React from 'react';
-import mockedDokumentliste from '../../../mock/mockedDokumentliste';
-import { toSøkereMedTilsynsbehovVurderingerMock } from '../../../mock/mockedTilsynsbehovVurderinger';
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
 import Vurdering, { Vurderingsversjon } from '../../../types/Vurdering';
@@ -8,6 +6,8 @@ import VurderingAvToOmsorgspersonerForm, {
     FieldName,
 } from '../ny-vurdering-av-to-omsorgspersoner/NyVurderingAvToOmsorgspersoner';
 import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
+import { fetchData } from '../../../util/httpUtils';
+import ContainerContext from '../../context/ContainerContext';
 
 interface VurderingsdetaljerForToOmsorgspersonerProps {
     vurderingId: string | null;
@@ -22,27 +22,12 @@ function lagreVurdering(nyVurderingsversjon: Vurderingsversjon, vurdering: Vurde
     });
 }
 
-function hentVurdering(vurderingsid: string): Promise<Vurdering> {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            const vurdering = toSøkereMedTilsynsbehovVurderingerMock.find(
-                (vurderingMock) => vurderingMock.id === vurderingsid
-            );
-            resolve(vurdering);
-        }, 1000);
-    });
+function hentVurdering(url: string, vurderingId: string): Promise<Vurdering> {
+    return fetchData(`${url}?vurderingId=${vurderingId}`);
 }
 
-function hentNødvendigeDataForÅGjøreVurdering() {
-    return new Promise<any>((resolve) => {
-        setTimeout(
-            () =>
-                resolve({
-                    dokumenter: mockedDokumentliste,
-                }),
-            1000
-        );
-    });
+function hentDataTilVurdering(url: string): Promise<Dokument[]> {
+    return fetchData(url);
 }
 
 const VurderingsdetaljerToOmsorgspersoner = ({
@@ -55,11 +40,15 @@ const VurderingsdetaljerToOmsorgspersoner = ({
     const [vurdering, setVurdering] = React.useState<Vurdering>(null);
     const [alleDokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
+    const { endpoints } = React.useContext(ContainerContext);
+    const vurderingUrl = endpoints.vurderingToOmsorgspersoner;
+    const dataTilVurderingUrl = endpoints.dataTilVurdering;
+
     React.useEffect(() => {
         setIsLoading(true);
         let isMounted = true;
         if (vurderingId) {
-            hentVurdering(vurderingId).then((vurderingResponse: Vurdering) => {
+            hentVurdering(vurderingUrl, vurderingId).then((vurderingResponse: Vurdering) => {
                 if (isMounted) {
                     setVurdering(vurderingResponse);
                     setIsLoading(false);
@@ -67,9 +56,9 @@ const VurderingsdetaljerToOmsorgspersoner = ({
             });
         } else {
             setVurdering(null);
-            hentNødvendigeDataForÅGjøreVurdering().then((nødvendigeDataForÅGjøreVurdering) => {
+            hentDataTilVurdering(dataTilVurderingUrl).then((dokumenterResponse: Dokument[]) => {
                 if (isMounted) {
-                    setDokumenter(nødvendigeDataForÅGjøreVurdering.dokumenter);
+                    setDokumenter(dokumenterResponse);
                     setIsLoading(false);
                 }
             });

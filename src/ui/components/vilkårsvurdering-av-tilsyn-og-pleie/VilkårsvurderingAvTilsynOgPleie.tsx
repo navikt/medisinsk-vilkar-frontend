@@ -1,11 +1,10 @@
+import React, { useMemo } from 'react';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
-import React, { useMemo } from 'react';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { prettifyPeriod } from '../../../util/formats';
-import { hentTilsynsbehovVurderingsoversikt } from '../../../util/httpMock';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import VurderingsdetaljerForKontinuerligTilsynOgPleie from '../vurderingsdetaljer-for-kontinuerlig-tilsyn-og-pleie/VurderingsdetaljerForKontinuerligTilsynOgPleie';
@@ -22,7 +21,7 @@ interface VilkårsvurderingAvTilsynOgPleieProps {
 const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
     const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
 
-    const controller = useMemo(() => new AbortController(), []);
+    const fetchAborter = useMemo(() => new AbortController(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
         visVurderingDetails: false,
@@ -47,9 +46,8 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         vurderingsoversikt.resterendeVurderingsperioder.length > 0;
 
     const getVurderingsoversikt = () => {
-        const { signal } = controller;
-
-        return fetchData<Vurderingsoversikt>(endpoints.kontinuerligTilsynOgPleie, { signal })
+        const { signal } = fetchAborter;
+        return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, { signal })
             .then(processVurderingsoversikt)
             .then((nyVurderingsoversikt) => nyVurderingsoversikt);
     };
@@ -63,7 +61,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         });
         return () => {
             isMounted = false;
-            controller.abort();
+            fetchAborter.abort();
         };
     }, []);
 
