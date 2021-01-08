@@ -109,28 +109,33 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
         );
     };
 
-    if (isLoading) {
-        return <p>Laster</p>;
-    }
-    if (vurdering !== null) {
-        return (
-            <VurderingsoppsummeringForKontinuerligTilsynOgPleie alleDokumenter={alleDokumenter} vurdering={vurdering} />
-        );
-    }
+    const perioderDeafultValue = () =>
+        resterendeVurderingsperioder.length ? resterendeVurderingsperioder : [new Period('', '')];
 
     return (
-        <VurderingAvTilsynsbehovForm
-            defaultValues={{
-                [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
-                [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
-                [FieldName.PERIODER]: resterendeVurderingsperioder,
-                [FieldName.DOKUMENTER]: [],
-            }}
-            resterendeVurderingsperioder={resterendeVurderingsperioder}
-            perioderSomKanVurderes={perioderSomKanVurderes}
-            dokumenter={alleDokumenter}
-            onSubmit={lagreVurderingAvTilsynsbehov}
-        />
+        <>
+            {isLoading && <p>Laster</p>}
+            {vurdering !== null && (
+                <VurderingsoppsummeringForKontinuerligTilsynOgPleie
+                    alleDokumenter={alleDokumenter}
+                    vurdering={vurdering}
+                />
+            )}
+            <div style={isLoading || vurdering !== null ? { display: 'none' } : {}}>
+                <VurderingAvTilsynsbehovForm
+                    defaultValues={{
+                        [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
+                        [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
+                        [FieldName.PERIODER]: perioderDeafultValue(),
+                        [FieldName.DOKUMENTER]: [],
+                    }}
+                    resterendeVurderingsperioder={resterendeVurderingsperioder}
+                    perioderSomKanVurderes={perioderSomKanVurderes}
+                    dokumenter={alleDokumenter}
+                    onSubmit={lagreVurderingAvTilsynsbehov}
+                />
+            </div>
+        </>
     );
 };
 

@@ -27,6 +27,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         valgtVurderingselement: null,
         resterendeVurderingsperioderDefaultValue: [],
         vurdering,
+        visRadForNyVurdering: false,
     });
 
     const {
@@ -35,6 +36,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         visVurderingDetails,
         valgtVurderingselement,
         resterendeVurderingsperioderDefaultValue,
+        visRadForNyVurdering,
     } = state;
 
     const harPerioderSomSkalVurderes =
@@ -56,7 +58,14 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
 
     const visNyVurderingForm = (resterendeVurderingsperioder?: Period[]) => {
         onVurderingValgt(null);
-        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, resterendeVurderingsperioder });
+        if (resterendeVurderingsperioder) {
+            dispatch({
+                type: ActionType.VIS_NY_VURDERING_FORM_FOR_PERIODE_TIL_VURDERING,
+                resterendeVurderingsperioder,
+            });
+        } else {
+            dispatch({ type: ActionType.VIS_NY_VURDERING_FORM_FOR_NY_PERIODE });
+        }
     };
 
     const velgVurderingselement = (nyValgtVurderingselement: Vurderingselement) => {
@@ -89,6 +98,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                         søknadsperioderTilBehandling={vurderingsoversikt?.søknadsperioderTilBehandling}
                         onVurderingValgt={velgVurderingselement}
                         onNyVurderingClick={visNyVurderingForm}
+                        visRadForNyVurdering={visRadForNyVurdering}
                     />
                 )}
                 detailSection={() => {

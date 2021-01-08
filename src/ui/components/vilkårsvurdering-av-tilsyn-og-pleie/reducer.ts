@@ -10,6 +10,7 @@ interface State {
     valgtVurderingselement: Vurderingselement;
     resterendeVurderingsperioderDefaultValue: Period[];
     vurdering: string;
+    visRadForNyVurdering: boolean;
 }
 
 interface Action {
@@ -36,14 +37,23 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 isLoading: false,
                 resterendeVurderingsperioderDefaultValue: resterendeVurderingsperioder,
                 visVurderingDetails: false,
+                visRadForNyVurdering: false,
             };
         }
-        case ActionType.VIS_NY_VURDERING_FORM:
+        case ActionType.VIS_NY_VURDERING_FORM_FOR_PERIODE_TIL_VURDERING:
             return {
                 ...state,
                 valgtVurderingselement: null,
                 resterendeVurderingsperioderDefaultValue: action.resterendeVurderingsperioder || [],
                 visVurderingDetails: true,
+            };
+        case ActionType.VIS_NY_VURDERING_FORM_FOR_NY_PERIODE:
+            return {
+                ...state,
+                valgtVurderingselement: null,
+                resterendeVurderingsperioderDefaultValue: [],
+                visVurderingDetails: true,
+                visRadForNyVurdering: true,
             };
         case ActionType.VELG_VURDERINGSELEMENT:
             return {

@@ -5,6 +5,7 @@ import Vurderingselement from '../../../types/Vurderingselement';
 import { sortPeriodsByFomDate } from '../../../util/periodUtils';
 import InteractiveList from '../interactive-list/InteractiveList';
 import NyVurderingKnapp from '../ny-vurdering-knapp/NyVurderingKnapp';
+import NyVurdering from '../ny-vurdering/NyVurdering';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
 import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
 import styles from './vurderingsnavigasjon.less';
@@ -15,6 +16,7 @@ interface VurderingsnavigasjonProps {
     onVurderingValgt: (vurdering: Vurderingselement) => void;
     resterendeVurderingsperioder?: Period[];
     søknadsperioderTilBehandling?: Period[];
+    visRadForNyVurdering: boolean;
 }
 
 const Vurderingsnavigasjon = ({
@@ -23,6 +25,7 @@ const Vurderingsnavigasjon = ({
     onVurderingValgt,
     resterendeVurderingsperioder,
     søknadsperioderTilBehandling,
+    visRadForNyVurdering,
 }: VurderingsnavigasjonProps): JSX.Element => {
     const [activeIndex, setActiveIndex] = React.useState(-1);
 
@@ -55,17 +58,21 @@ const Vurderingsnavigasjon = ({
         allElements.unshift(<PerioderSomSkalVurderes perioder={resterendeVurderingsperioder || []} />);
     }
 
+    if (visRadForNyVurdering) {
+        allElements.unshift(<NyVurdering />);
+    }
+
     return (
         <>
             <Undertittel>Alle perioder</Undertittel>
-            {!harPerioderSomSkalVurderes && (
-                <NyVurderingKnapp
-                    onClick={() => {
-                        setActiveIndex(-1);
-                        onNyVurderingClick();
-                    }}
-                />
-            )}
+            {/* {!harPerioderSomSkalVurderes && ( */}
+            <NyVurderingKnapp
+                onClick={() => {
+                    setActiveIndex(0);
+                    onNyVurderingClick();
+                }}
+            />
+            {/* )} */}
             <div className={styles.vurderingsvelgerContainer}>
                 <InteractiveList
                     elements={allElements.map((element, currentIndex) => ({
@@ -79,6 +86,8 @@ const Vurderingsnavigasjon = ({
                             const erEnEksisterendeVurdering = vurderingsperiodeIndex > -1;
                             if (erEnEksisterendeVurdering) {
                                 onVurderingValgt(sorterteVurderingselementer[vurderingsperiodeIndex]);
+                            } else if (visRadForNyVurdering && currentIndex === 0) {
+                                onNyVurderingClick();
                             } else {
                                 onNyVurderingClick(resterendeVurderingsperioder);
                             }
