@@ -20,19 +20,19 @@ interface VurderingsperiodeElementProps {
 }
 
 const renderIcon = (resultat: Vurderingsresultat) => {
-    if (resultat === Vurderingsresultat.INNVILGET) {
+    if (resultat === Vurderingsresultat.OPPFYLT) {
         return <GreenCheckIconFilled />;
     }
-    if (resultat === Vurderingsresultat.AVSLÅTT) {
+    if (resultat === Vurderingsresultat.IKKE_OPPFYLT) {
         return <RedCrossIconFilled />;
     }
 };
 
 const renderResultatText = (resultat: Vurderingsresultat) => {
-    if (resultat === Vurderingsresultat.INNVILGET) {
+    if (resultat === Vurderingsresultat.OPPFYLT) {
         return <span>Innvilget</span>;
     }
-    if (resultat === Vurderingsresultat.AVSLÅTT) {
+    if (resultat === Vurderingsresultat.IKKE_OPPFYLT) {
         return <span>Avslått</span>;
     }
 };

@@ -102,9 +102,11 @@ const VurderingAvTilsynsbehovForm = ({
                                     />
                                 ),
                             }))}
-                            validators={{
-                                harBruktDokumentasjon,
-                            }}
+                            validators={
+                                {
+                                    // harBruktDokumentasjon,
+                                }
+                            }
                         />
                     </Box>
                     <Box marginTop={Margin.large}>

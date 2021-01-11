@@ -4,8 +4,6 @@ interface ContainerContract {
     endpoints: {
         vurderingsoversiktKontinuerligTilsynOgPleie: string;
         vurderingsoversiktBehovForToOmsorgspersoner: string;
-        vurderingKontinuerligTilsynOgPleie: string;
-        vurderingToOmsorgspersoner: string;
         dokumentoversikt: string;
         dataTilVurdering: string;
     };

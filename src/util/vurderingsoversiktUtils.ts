@@ -6,6 +6,7 @@ function processVurderingsoversikt({
     resterendeVurderingsperioder,
     søknadsperioderTilBehandling,
     vurderingselementer,
+    links,
 }: Vurderingsoversikt): Vurderingsoversikt {
     return {
         perioderSomKanVurderes: perioderSomKanVurderes.map(({ fom, tom }) => new Period(fom, tom)),
@@ -15,6 +16,7 @@ function processVurderingsoversikt({
             ...vurderingselement,
             periode: new Period(vurderingselement.periode.fom, vurderingselement.periode.tom),
         })),
+        links,
     };
 }
 
