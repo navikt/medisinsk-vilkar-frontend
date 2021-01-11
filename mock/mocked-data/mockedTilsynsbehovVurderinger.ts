@@ -20,22 +20,6 @@ const tilsynsbehovVurderingerMock: Vurdering[] = [
             perioderSomKanVurderes: [],
         },
     },
-    {
-        id: '2',
-        type: 'KONTINUERLIG_TILSYN_OG_PLEIE',
-        versjoner: [
-            {
-                perioder: [new Period('2020-01-16', '2020-01-20')],
-                resultat: Vurderingsresultat.OPPFYLT,
-                dokumenter: mockedDokumentliste,
-                tekst: 'Fordi her er det ikke behov',
-            },
-        ],
-        annenInformasjon: {
-            resterendeVurderingsperioder: [],
-            perioderSomKanVurderes: [],
-        },
-    },
 ];
 
 export default tilsynsbehovVurderingerMock;
