@@ -6,7 +6,7 @@ interface StrukturertDokumentElementProps {
 }
 
 const StrukturertDokumentElement = ({ dokument }: StrukturertDokumentElementProps) => {
-    return <div>{dokument.name}</div>;
+    return <div>{dokument.navn}</div>;
 };
 
 export default StrukturertDokumentElement;

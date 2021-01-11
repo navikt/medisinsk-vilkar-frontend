@@ -19,7 +19,7 @@ const fetchDiagnosekoderByQuery = (queryString: string) => {
 const getUpdatedSuggestions = async (queryString: string) => {
     if (queryString.length >= 3) {
         const diagnosekoder = await fetchDiagnosekoderByQuery(queryString);
-        return diagnosekoder.data.map(({ kode, beskrivelse }) => ({
+        return (diagnosekoder as any).map(({ kode, beskrivelse }) => ({
             key: kode,
             value: `${kode} - ${beskrivelse}`,
         }));
