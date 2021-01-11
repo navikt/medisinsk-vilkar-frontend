@@ -49,7 +49,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormPr
     };
 
     return (
-        <DetailView title={`Håndter nytt dokument ("${dokument.name}")`}>
+        <DetailView title={`Håndter nytt dokument ("${dokument.navn}")`}>
             <FormProvider {...formMethods}>
                 <Form
                     buttonLabel="Lagre"

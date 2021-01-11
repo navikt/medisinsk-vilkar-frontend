@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from './detailView.less';
 import { Undertittel } from 'nav-frontend-typografi';
+import styles from './detailView.less';
 
 interface DetailViewProps {
     title: string;

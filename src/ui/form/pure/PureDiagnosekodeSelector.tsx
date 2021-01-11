@@ -1,5 +1,4 @@
 import Autocomplete from '@navikt/nap-autocomplete';
-import axios from 'axios';
 import { Label } from 'nav-frontend-skjema';
 import * as React from 'react';
 import Error from '../../components/error/Error';
@@ -14,7 +13,7 @@ interface DiagnosekodeSelectorProps {
 }
 
 const fetchDiagnosekoderByQuery = (queryString: string) => {
-    return axios.get(`/k9/diagnosekoder?query=${queryString}&max=8`);
+    return fetch(`/k9/diagnosekoder?query=${queryString}&max=8`);
 };
 
 const getUpdatedSuggestions = async (queryString: string) => {
