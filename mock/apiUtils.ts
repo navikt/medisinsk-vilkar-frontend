@@ -36,7 +36,7 @@ export const createVurdering = (requestBody: RequestPayload) => {
     tilsynsbehovVurderingsoversiktMock.resterendeVurderingsperioder = [];
     tilsynsbehovVurderingerMock.push({
         id: `${nyVurderingId}`,
-        type: 'KONTINUERLIG_TILSYN_OG_PLEIE',
+        type: requestBody.type,
         versjoner: [
             {
                 perioder: requestBody.perioder,

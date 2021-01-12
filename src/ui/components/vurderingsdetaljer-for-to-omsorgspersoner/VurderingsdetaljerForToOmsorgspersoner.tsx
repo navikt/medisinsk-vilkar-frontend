@@ -41,7 +41,7 @@ const VurderingsdetaljerToOmsorgspersoner = ({
     const [alleDokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
     const { endpoints } = React.useContext(ContainerContext);
-    const vurderingUrl = endpoints.vurderingToOmsorgspersoner;
+    const vurderingUrl = endpoints.hentVurdering;
     const dataTilVurderingUrl = endpoints.dataTilVurdering;
 
     React.useEffect(() => {

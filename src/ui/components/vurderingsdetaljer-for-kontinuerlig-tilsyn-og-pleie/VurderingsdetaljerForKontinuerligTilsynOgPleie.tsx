@@ -1,22 +1,19 @@
 import React, { useMemo } from 'react';
-import VurderingAvTilsynsbehovForm, { FieldName } from '../ny-vurdering-av-tilsynsbehov/NyVurderingAvTilsynsbehovForm';
-import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
-import { Period } from '../../../types/Period';
 import Dokument from '../../../types/Dokument';
+import { Period } from '../../../types/Period';
+import RequestPayload from '../../../types/RequestPayload';
 import Vurdering, { Vurderingsversjon } from '../../../types/Vurdering';
+import VurderingType from '../../../types/VurderingType';
 import { fetchData, submitData } from '../../../util/httpUtils';
 import ContainerContext from '../../context/ContainerContext';
-import Links from '../../../types/Links';
-import RequestPayload from '../../../types/RequestPayload';
-import VurderingType from '../../../types/VurderingType';
+import VurderingAvTilsynsbehovForm, { FieldName } from '../ny-vurdering-av-tilsynsbehov/NyVurderingAvTilsynsbehovForm';
+import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
 
 interface VurderingDetailsProps {
     vurderingId: string | null;
     resterendeVurderingsperioder: Period[];
     perioderSomKanVurderes: Period[];
     onVurderingLagret: () => void;
-    vurderingsoversiktLinks: Links[];
-    vurderingLinks: Links[];
 }
 
 const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
@@ -24,22 +21,19 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
     resterendeVurderingsperioder,
     perioderSomKanVurderes,
     onVurderingLagret,
-    vurderingsoversiktLinks,
-    vurderingLinks,
 }: VurderingDetailsProps): JSX.Element => {
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [vurdering, setVurdering] = React.useState<Vurdering>(null);
     const [alleDokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
-    const { endpoints } = React.useContext(ContainerContext);
-    const dataTilVurderingUrl = endpoints.dataTilVurdering;
+    const { endpoints, behandlingUuid } = React.useContext(ContainerContext);
     const fetchAborter = useMemo(() => new AbortController(), []);
     const { signal } = fetchAborter;
 
     function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
-        const lagreVurderingLink = vurderingsoversiktLinks.find((link) => link.rel === 'sykdom-vurdering-opprettelse');
-        return submitData<RequestPayload>(lagreVurderingLink.href, lagreVurderingLink.type, {
-            behandlingUuid: lagreVurderingLink.requestPayload.behandlingUuid,
+        const opprettVurderingUrl = endpoints.opprettVurdering;
+        return submitData<RequestPayload>(opprettVurderingUrl, {
+            behandlingUuid,
             perioder: nyVurderingsversjon.perioder,
             resultat: nyVurderingsversjon.resultat,
             tekst: nyVurderingsversjon.tekst,
@@ -49,9 +43,9 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
     }
 
     function endreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
-        const endreVurderingLink = vurderingsoversiktLinks.find((link) => link.rel === 'sykdom-vurdering-endring');
-        return submitData<RequestPayload>(endreVurderingLink.href, endreVurderingLink.type, {
-            behandlingUuid: endreVurderingLink.requestPayload.behandlingUuid,
+        const endreVurderingUrl = endpoints.endreVurdering;
+        return submitData<RequestPayload>(endreVurderingUrl, {
+            behandlingUuid,
             perioder: nyVurderingsversjon.perioder,
             resultat: nyVurderingsversjon.resultat,
             tekst: nyVurderingsversjon.tekst,
@@ -63,12 +57,13 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
     }
 
     function hentVurdering(): Promise<Vurdering> {
-        const hentVurderingLink = vurderingLinks.find((links) => links.rel === 'sykdom-vurdering');
-        return fetchData(hentVurderingLink.href, { signal });
+        const hentVurderingUrl = endpoints.hentVurdering;
+        return fetchData(`${hentVurderingUrl}&sykdomVurderingId=${vurderingId}`, { signal });
     }
 
-    function hentDataTilVurdering(url: string): Promise<Dokument[]> {
-        return fetchData(url, { signal });
+    function hentDataTilVurdering(): Promise<Dokument[]> {
+        const dataTilVurderingUrl = endpoints.dataTilVurdering;
+        return fetchData(dataTilVurderingUrl, { signal });
     }
 
     React.useEffect(() => {
@@ -83,7 +78,7 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
             });
         } else {
             setVurdering(null);
-            // hentDataTilVurdering(dataTilVurderingUrl).then((dokumenterResponse: Dokument[]) => {
+            // hentDataTilVurdering().then((dokumenterResponse: Dokument[]) => {
             if (isMounted) {
                 // setDokumenter(dokumenterResponse);
                 setIsLoading(false);

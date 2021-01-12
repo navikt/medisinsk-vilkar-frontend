@@ -2,9 +2,9 @@ export function fetchData<T>(url: string, requestInit?: RequestInit): Promise<T>
     return fetch(url, requestInit).then((response: Response) => response.json());
 }
 
-export function submitData<P>(url: string, method: string, body: P, abortSignal?: AbortSignal): Promise<Response> {
+export function submitData<P>(url: string, body: P, abortSignal?: AbortSignal): Promise<Response> {
     return fetch(url, {
-        method,
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },

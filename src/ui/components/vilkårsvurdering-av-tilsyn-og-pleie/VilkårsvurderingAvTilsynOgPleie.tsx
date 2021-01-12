@@ -117,8 +117,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                                 onVurderingLagret={oppdaterVurderingsoversikt}
                                 resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
                                 perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}
-                                vurderingsoversiktLinks={vurderingsoversikt?.links}
-                                vurderingLinks={valgtVurderingselement?.links}
                             />
                         );
                     }

@@ -18,21 +18,17 @@ app.use(
     })
 );
 
-app.use('/mock/kontinuerlig-tilsyn-og-pleie/vurdering', (req, res) => {
-    const vurderingId = req.query.vurderingId;
-    const vurdering = mockedTilsynsbehovVurderinger.find(({ id }) => id === vurderingId);
+app.use('/mock/vurdering', (req, res) => {
+    const vurderingId = req.query.sykdomVurderingId;
+    const alleVurderinger = [...mockedTilsynsbehovVurderinger, ...mockedToOmsorgspersonerVurderinger];
+    const vurdering = alleVurderinger.find(({ id }) => id === vurderingId);
+
     res.send(vurdering);
 });
 
-app.use('/mock/kontinuerlig-tilsyn-og-pleie/opprett-vurdering', (req, res) => {
+app.use('/mock/opprett-vurdering', (req, res) => {
     createVurdering(req.body);
     res.send();
-});
-
-app.use('/mock/to-omsorgspersoner/vurdering', (req, res) => {
-    const vurderingId = req.query.vurderingId;
-    const vurdering = mockedToOmsorgspersonerVurderinger.find(({ id }) => id === vurderingId);
-    res.send(vurdering);
 });
 
 app.use('/mock/kontinuerlig-tilsyn-og-pleie/vurderingsoversikt', (req, res) => {

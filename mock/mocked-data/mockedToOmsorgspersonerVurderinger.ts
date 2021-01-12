@@ -5,7 +5,7 @@ import mockedDokumentliste from './mockedDokumentliste';
 
 const toOmsorgspengerVurderingerMock: Vurdering[] = [
     {
-        id: '1',
+        id: '11',
         type: 'TO_OMSORGSPERSONER',
         versjoner: [
             {
@@ -21,7 +21,7 @@ const toOmsorgspengerVurderingerMock: Vurdering[] = [
         },
     },
     {
-        id: '2',
+        id: '22',
         type: 'TO_OMSORGSPERSONER',
         versjoner: [
             {

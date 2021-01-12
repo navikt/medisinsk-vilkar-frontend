@@ -18,7 +18,7 @@ export default [
         datert: dayjs('01-01-2020').utc(true).toDate(),
         navn: 'Foobar-haha.pdf',
         benyttet: true,
-        annenPartErKilde: false,
+        annenPartErKilde: true,
         fremhevet: true,
         location: '#',
     },
