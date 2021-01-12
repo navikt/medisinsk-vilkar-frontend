@@ -7,7 +7,7 @@ function processVurderingsoversikt({
     søknadsperioderTilBehandling,
     vurderingselementer,
 }: Vurderingsoversikt): Promise<Vurderingsoversikt> {
-    const deferred: Promise<Vurderingsoversikt> = new Promise<Vurderingsoversikt>((resolve, reject) => {
+    const deferred: Promise<Vurderingsoversikt> = new Promise<Vurderingsoversikt>((resolve) => {
         try {
             const vurderingsoversikt = {
                 perioderSomKanVurderes: perioderSomKanVurderes.map(({ fom, tom }) => new Period(fom, tom)),
