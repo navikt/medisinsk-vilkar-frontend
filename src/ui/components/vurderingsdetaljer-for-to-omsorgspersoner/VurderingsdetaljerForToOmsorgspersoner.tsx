@@ -8,6 +8,7 @@ import VurderingAvToOmsorgspersonerForm, {
 import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
 import { fetchData } from '../../../util/httpUtils';
 import ContainerContext from '../../context/ContainerContext';
+import PageError from '../page-error/PageError';
 
 interface VurderingsdetaljerForToOmsorgspersonerProps {
     vurderingId: string | null;
@@ -38,30 +39,42 @@ const VurderingsdetaljerToOmsorgspersoner = ({
 }: VurderingsdetaljerForToOmsorgspersonerProps): JSX.Element => {
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [vurdering, setVurdering] = React.useState<Vurdering>(null);
+    const [hentVurderingHarFeilet, setHentVurderingHarFeilet] = React.useState<boolean>(false);
     const [alleDokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
     const { endpoints } = React.useContext(ContainerContext);
     const vurderingUrl = endpoints.vurderingToOmsorgspersoner;
     const dataTilVurderingUrl = endpoints.dataTilVurdering;
 
+    const handleError = () => {
+        setIsLoading(false);
+        setHentVurderingHarFeilet(true);
+    };
+
     React.useEffect(() => {
         setIsLoading(true);
+        setHentVurderingHarFeilet(false);
         let isMounted = true;
         if (vurderingId) {
-            hentVurdering(vurderingUrl, vurderingId).then((vurderingResponse: Vurdering) => {
-                if (isMounted) {
-                    setVurdering(vurderingResponse);
-                    setIsLoading(false);
-                }
-            });
+            hentVurdering(vurderingUrl, vurderingId)
+                .then((vurderingResponse: Vurdering) => {
+                    if (isMounted) {
+                        setVurdering(vurderingResponse);
+                        setIsLoading(false);
+                    }
+                })
+                .catch(handleError);
         } else {
             setVurdering(null);
-            hentDataTilVurdering(dataTilVurderingUrl).then((dokumenterResponse: Dokument[]) => {
-                if (isMounted) {
-                    setDokumenter(dokumenterResponse);
-                    setIsLoading(false);
-                }
-            });
+            hentDataTilVurdering(dataTilVurderingUrl)
+                .then((dokumenterResponse: Dokument[]) => {
+                    if (isMounted) {
+                        setDokumenter(dokumenterResponse);
+                        setIsLoading(false);
+                    }
+                })
+                // todo: should this situation be handled differently?
+                .catch(handleError);
         }
 
         return () => {
@@ -85,6 +98,9 @@ const VurderingsdetaljerToOmsorgspersoner = ({
 
     if (isLoading) {
         return <p>Laster</p>;
+    }
+    if (hentVurderingHarFeilet) {
+        return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
     }
     if (vurdering !== null) {
         return <VurderingsoppsummeringForToOmsorgspersoner alleDokumenter={alleDokumenter} vurdering={vurdering} />;

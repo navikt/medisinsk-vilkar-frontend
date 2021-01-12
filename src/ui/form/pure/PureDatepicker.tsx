@@ -1,8 +1,8 @@
+import * as React from 'react';
 import { Datepicker } from 'nav-datovelger';
 import { DatepickerProps } from 'nav-datovelger/lib/Datepicker';
 import { Label } from 'nav-frontend-skjema';
-import * as React from 'react';
-import Error from '../../components/error/Error';
+import FieldError from '../../components/field-error/FieldError';
 
 interface CustomDatepickerProps {
     label: string;
@@ -36,7 +36,7 @@ const PureDatepicker = ({
                 dayPickerProps={dayPickerProps}
                 inputId={inputId}
             />
-            {errorMessage && <Error message={errorMessage} />}
+            {errorMessage && <FieldError message={errorMessage} />}
         </>
     );
 };
