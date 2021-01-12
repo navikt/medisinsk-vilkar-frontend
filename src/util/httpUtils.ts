@@ -1,10 +1,8 @@
-import RequestPayload from '../types/RequestPayload';
-
 export function fetchData<T>(url: string, requestInit?: RequestInit): Promise<T> {
     return fetch(url, requestInit).then((response: Response) => response.json());
 }
 
-export function submitData<T>(url: string, method: string, body: RequestPayload, abortSignal?: AbortSignal) {
+export function submitData<P>(url: string, method: string, body: P, abortSignal?: AbortSignal): Promise<Response> {
     return fetch(url, {
         method,
         headers: {

@@ -7,6 +7,8 @@ import Vurdering, { Vurderingsversjon } from '../../../types/Vurdering';
 import { fetchData, submitData } from '../../../util/httpUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Links from '../../../types/Links';
+import RequestPayload from '../../../types/RequestPayload';
+import VurderingType from '../../../types/VurderingType';
 
 interface VurderingDetailsProps {
     vurderingId: string | null;
@@ -36,25 +38,25 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
 
     function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
         const lagreVurderingLink = vurderingsoversiktLinks.find((link) => link.rel === 'sykdom-vurdering-opprettelse');
-        return submitData(lagreVurderingLink.href, lagreVurderingLink.type, {
+        return submitData<RequestPayload>(lagreVurderingLink.href, lagreVurderingLink.type, {
             behandlingUuid: lagreVurderingLink.requestPayload.behandlingUuid,
             perioder: nyVurderingsversjon.perioder,
             resultat: nyVurderingsversjon.resultat,
             tekst: nyVurderingsversjon.tekst,
             tilknyttedeDokumenter: nyVurderingsversjon.dokumenter,
-            type: 'KONTINUERLIG_TILSYN_OG_PLEIE',
+            type: VurderingType.KONTINUERLIG_TILSYN_OG_PLEIE,
         });
     }
 
-    function oppdaterVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
-        const oppdaterVurderingLink = vurderingsoversiktLinks.find((link) => link.rel === 'sykdom-vurdering-endring');
-        return submitData(oppdaterVurderingLink.href, oppdaterVurderingLink.type, {
-            behandlingUuid: oppdaterVurderingLink.requestPayload.behandlingUuid,
+    function endreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
+        const endreVurderingLink = vurderingsoversiktLinks.find((link) => link.rel === 'sykdom-vurdering-endring');
+        return submitData<RequestPayload>(endreVurderingLink.href, endreVurderingLink.type, {
+            behandlingUuid: endreVurderingLink.requestPayload.behandlingUuid,
             perioder: nyVurderingsversjon.perioder,
             resultat: nyVurderingsversjon.resultat,
             tekst: nyVurderingsversjon.tekst,
             tilknyttedeDokumenter: nyVurderingsversjon.dokumenter,
-            type: 'KONTINUERLIG_TILSYN_OG_PLEIE',
+            type: VurderingType.KONTINUERLIG_TILSYN_OG_PLEIE,
             id: vurdering.id,
             versjon: vurdering.versjoner[0].versjon,
         });
