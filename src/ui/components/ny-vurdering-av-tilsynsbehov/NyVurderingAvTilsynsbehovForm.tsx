@@ -89,6 +89,26 @@ const VurderingAvTilsynsbehovForm = ({
         <DetailView title="Vurdering av tilsyn og pleie">
             <FormProvider {...formMethods}>
                 <Form buttonLabel="Lagre" onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}>
+                    {dokumenter?.length && (
+                        <Box marginTop={Margin.large}>
+                            <CheckboxGroup
+                                question="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
+                                name={FieldName.DOKUMENTER}
+                                checkboxes={dokumenter.map((dokument) => ({
+                                    value: dokument.id,
+                                    label: (
+                                        <DokumentLink
+                                            dokument={dokument}
+                                            etikett={dokument.annenPartErKilde ? 'Dokument fra annen part' : ''}
+                                        />
+                                    ),
+                                }))}
+                                validators={{
+                                    harBruktDokumentasjon,
+                                }}
+                            />
+                        </Box>
+                    )}
                     <Box marginTop={Margin.large}>
                         <TextArea
                             id="begrunnelsesfelt"

@@ -12,6 +12,7 @@ export async function fetchData<T>(url: string, requestInit?: RequestInit): Prom
             throw new Error(`Parsing JSON\n${error}`);
         }
     } catch (error) {
+        console.error(error);
         throw new Error(error);
     }
 }

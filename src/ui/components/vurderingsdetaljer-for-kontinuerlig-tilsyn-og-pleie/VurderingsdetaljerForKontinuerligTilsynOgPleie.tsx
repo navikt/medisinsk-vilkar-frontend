@@ -10,6 +10,7 @@ import Vurderingstype from '../../../types/Vurderingstype';
 import { fetchData, submitData } from '../../../util/httpUtils';
 import ContainerContext from '../../context/ContainerContext';
 import PageError from '../page-error/PageError';
+import mockedDokumentliste from '../../../../mock/mocked-data/mockedDokumentliste';
 
 interface VurderingDetailsProps {
     vurderingId: string | null;
@@ -30,33 +31,41 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
     const [alleDokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
     const { endpoints, behandlingUuid } = React.useContext(ContainerContext);
-    const fetchAborter = useMemo(() => new AbortController(), []);
+    const fetchAborter = useMemo(() => new AbortController(), [vurderingId]);
     const { signal } = fetchAborter;
 
     function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
         const opprettVurderingUrl = endpoints.opprettVurdering;
-        return submitData<RequestPayload>(opprettVurderingUrl, {
-            behandlingUuid,
-            perioder: nyVurderingsversjon.perioder,
-            resultat: nyVurderingsversjon.resultat,
-            tekst: nyVurderingsversjon.tekst,
-            tilknyttedeDokumenter: nyVurderingsversjon.dokumenter,
-            type: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE,
-        });
+        return submitData<RequestPayload>(
+            opprettVurderingUrl,
+            {
+                behandlingUuid,
+                perioder: nyVurderingsversjon.perioder,
+                resultat: nyVurderingsversjon.resultat,
+                tekst: nyVurderingsversjon.tekst,
+                tilknyttedeDokumenter: nyVurderingsversjon.dokumenter,
+                type: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE,
+            },
+            signal
+        );
     }
 
     function endreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
         const endreVurderingUrl = endpoints.endreVurdering;
-        return submitData<RequestPayload>(endreVurderingUrl, {
-            behandlingUuid,
-            perioder: nyVurderingsversjon.perioder,
-            resultat: nyVurderingsversjon.resultat,
-            tekst: nyVurderingsversjon.tekst,
-            tilknyttedeDokumenter: nyVurderingsversjon.dokumenter,
-            type: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE,
-            id: vurdering.id,
-            versjon: vurdering.versjoner[0].versjon,
-        });
+        return submitData<RequestPayload>(
+            endreVurderingUrl,
+            {
+                behandlingUuid,
+                perioder: nyVurderingsversjon.perioder,
+                resultat: nyVurderingsversjon.resultat,
+                tekst: nyVurderingsversjon.tekst,
+                tilknyttedeDokumenter: nyVurderingsversjon.dokumenter,
+                type: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE,
+                id: vurdering.id,
+                versjon: vurdering.versjoner[0].versjon,
+            },
+            signal
+        );
     }
 
     function hentVurdering(): Promise<Vurdering> {
@@ -66,6 +75,9 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
 
     function hentDataTilVurdering(): Promise<Dokument[]> {
         const dataTilVurderingUrl = endpoints.dataTilVurdering;
+        if (!dataTilVurderingUrl) {
+            return new Promise((resolve) => resolve(mockedDokumentliste));
+        }
         return fetchData(dataTilVurderingUrl, { signal });
     }
 
@@ -102,7 +114,7 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
 
         return () => {
             isMounted = false;
-            // fetchAborter.abort();
+            fetchAborter.abort();
         };
     }, [vurderingId]);
 
