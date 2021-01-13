@@ -1,13 +1,15 @@
 import React, { useMemo } from 'react';
-import Dokument from '../../../types/Dokument';
+import Spinner from 'nav-frontend-spinner';
+import VurderingAvTilsynsbehovForm, { FieldName } from '../ny-vurdering-av-tilsynsbehov/NyVurderingAvTilsynsbehovForm';
+import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
 import { Period } from '../../../types/Period';
+import Dokument from '../../../types/Dokument';
 import RequestPayload from '../../../types/RequestPayload';
 import Vurdering, { Vurderingsversjon } from '../../../types/Vurdering';
 import Vurderingstype from '../../../types/Vurderingstype';
 import { fetchData, submitData } from '../../../util/httpUtils';
 import ContainerContext from '../../context/ContainerContext';
-import VurderingAvTilsynsbehovForm, { FieldName } from '../ny-vurdering-av-tilsynsbehov/NyVurderingAvTilsynsbehovForm';
-import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
+import PageError from '../page-error/PageError';
 
 interface VurderingDetailsProps {
     vurderingId: string | null;
@@ -24,6 +26,7 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
 }: VurderingDetailsProps): JSX.Element => {
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [vurdering, setVurdering] = React.useState<Vurdering>(null);
+    const [hentVurderingHarFeilet, setHentVurderingHarFeilet] = React.useState<boolean>(false);
     const [alleDokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
     const { endpoints, behandlingUuid } = React.useContext(ContainerContext);
@@ -66,24 +69,35 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
         return fetchData(dataTilVurderingUrl, { signal });
     }
 
+    const handleError = () => {
+        setIsLoading(false);
+        setHentVurderingHarFeilet(true);
+    };
+
     React.useEffect(() => {
         let isMounted = true;
         setIsLoading(true);
+        setHentVurderingHarFeilet(false);
         if (vurderingId) {
-            hentVurdering().then((vurderingResponse: Vurdering) => {
-                if (isMounted) {
-                    setVurdering(vurderingResponse);
-                    setIsLoading(false);
-                }
-            });
+            hentVurdering()
+                .then((vurderingResponse: Vurdering) => {
+                    if (isMounted) {
+                        setVurdering(vurderingResponse);
+                        setIsLoading(false);
+                    }
+                })
+                .catch(handleError);
         } else {
             setVurdering(null);
-            // hentDataTilVurdering().then((dokumenterResponse: Dokument[]) => {
-            if (isMounted) {
-                // setDokumenter(dokumenterResponse);
-                setIsLoading(false);
-            }
-            // });
+            hentDataTilVurdering()
+                .then((dokumenterResponse: Dokument[]) => {
+                    if (isMounted) {
+                        setDokumenter(dokumenterResponse);
+                        setIsLoading(false);
+                    }
+                })
+                // todo: should this situation be handled differently?
+                .catch(handleError);
         }
 
         return () => {
@@ -92,7 +106,7 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
         };
     }, [vurderingId]);
 
-    const lagreVurderingAvTilsynsbehov = (nyVurderingsversjon: Partial<Vurderingsversjon>) => {
+    const lagreVurderingAvTilsynsbehov = (nyVurderingsversjon: Vurderingsversjon) => {
         setIsLoading(true);
         lagreVurdering(nyVurderingsversjon).then(
             () => {
@@ -107,7 +121,10 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
     };
 
     if (isLoading) {
-        return <p>Laster</p>;
+        return <Spinner />;
+    }
+    if (hentVurderingHarFeilet) {
+        return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
     }
     if (vurdering !== null) {
         return (

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
+import Spinner from 'nav-frontend-spinner';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
@@ -13,6 +14,7 @@ import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 import processVurderingsoversikt from '../../../util/vurderingsoversiktUtils';
 import { fetchData } from '../../../util/httpUtils';
+import PageError from '../page-error/PageError';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     onVilkårVurdert: () => void;
@@ -30,6 +32,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         valgtVurderingselement: null,
         resterendeVurderingsperioderDefaultValue: [],
         vurdering,
+        vurderingsoversiktFeilet: false,
     });
 
     const {
@@ -38,6 +41,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         visVurderingDetails,
         valgtVurderingselement,
         resterendeVurderingsperioderDefaultValue,
+        vurderingsoversiktFeilet,
     } = state;
 
     const harPerioderSomSkalVurderes =
@@ -47,18 +51,29 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
 
     const getVurderingsoversikt = () => {
         const { signal } = fetchAborter;
-        return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, { signal })
-            .then(processVurderingsoversikt)
-            .then((nyVurderingsoversikt) => nyVurderingsoversikt);
+        return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, {
+            signal,
+        });
+    };
+
+    const visVurderingsoversikt = (nyVurderingsoversikt: Vurderingsoversikt) => {
+        dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
+    };
+
+    const handleError = () => {
+        dispatch({ type: ActionType.VURDERINGSOVERSIKT_FEILET });
     };
 
     React.useEffect(() => {
         let isMounted = true;
-        getVurderingsoversikt().then((nyVurderingsoversikt) => {
-            if (isMounted) {
-                dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
-            }
-        });
+        getVurderingsoversikt()
+            .then(processVurderingsoversikt)
+            .then((nyVurderingsoversikt) => {
+                if (isMounted) {
+                    visVurderingsoversikt(nyVurderingsoversikt);
+                }
+            })
+            .catch(handleError);
         return () => {
             isMounted = false;
             fetchAborter.abort();
@@ -77,13 +92,14 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
 
     const oppdaterVurderingsoversikt = () => {
         dispatch({ type: ActionType.PENDING });
-        getVurderingsoversikt().then((nyVurderingsoversikt) => {
-            dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
-        });
+        getVurderingsoversikt().then(processVurderingsoversikt).then(visVurderingsoversikt);
     };
 
     if (isLoading) {
-        return <p>Henter vurderinger</p>;
+        return <Spinner />;
+    }
+    if (vurderingsoversiktFeilet) {
+        return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
     }
     return (
         <>

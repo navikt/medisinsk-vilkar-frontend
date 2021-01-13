@@ -1,5 +1,19 @@
-export function fetchData<T>(url: string, requestInit?: RequestInit): Promise<T> {
-    return fetch(url, requestInit).then((response: Response) => response.json());
+export async function fetchData<T>(url: string, requestInit?: RequestInit): Promise<T> {
+    try {
+        const response: Response = await fetch(url, requestInit);
+        const { status } = response;
+        if (status > 299) {
+            throw new Error(`Bad status code (${status})`);
+        }
+        try {
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            throw new Error(`Parsing JSON\n${error}`);
+        }
+    } catch (error) {
+        throw new Error(error);
+    }
 }
 
 export function submitData<P>(url: string, body: P, abortSignal?: AbortSignal): Promise<Response> {
