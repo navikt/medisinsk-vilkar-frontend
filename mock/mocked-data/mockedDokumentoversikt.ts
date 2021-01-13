@@ -15,8 +15,7 @@ const mockedDokumentoversikt = {
         {
             id: '3',
             navn: 'Dokument 3',
-            type: Dokumenttype.LEGEERKLÆRING,
-            mottatt: dayjs().toDate().toISOString(),
+            type: Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER,
             location: '#blahblah',
             innleggelsesperioder: [],
             harGyldigSignatur: true,

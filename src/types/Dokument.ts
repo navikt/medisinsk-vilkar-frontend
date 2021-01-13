@@ -1,5 +1,3 @@
-import { Period } from './Period';
-
 export enum Dokumenttype {
     LEGEERKLÆRING = 'Legeerklæring',
     ANDRE_MEDISINSKE_OPPLYSNINGER = 'ANDRE_MEDISINSKE_OPPLYSNINGER',
@@ -17,11 +15,16 @@ export interface Dokument {
     location?: string;
 }
 
-export interface DokumentMedMedisinskeOpplysninger extends Dokument {
-    type: Dokumenttype.LEGEERKLÆRING | Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER;
+export interface Legeerklæring extends Dokument {
+    type: Dokumenttype.LEGEERKLÆRING;
     harGyldigSignatur: boolean;
-    innleggelsesperioder: Period[];
 }
+
+export interface AndreMedisinskeOpplysninger extends Dokument {
+    type: Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER;
+}
+
+type DokumentMedMedisinskeOpplysninger = Legeerklæring | AndreMedisinskeOpplysninger;
 
 export interface DokumentUtenMedisinskeOpplysninger extends Dokument {
     type: Dokumenttype.MANGLER_MEDISINSKE_OPPLYSNINGER;
