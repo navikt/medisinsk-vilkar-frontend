@@ -3,7 +3,7 @@ import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
 import RequestPayload from '../../../types/RequestPayload';
 import Vurdering, { Vurderingsversjon } from '../../../types/Vurdering';
-import VurderingType from '../../../types/VurderingType';
+import Vurderingstype from '../../../types/Vurderingstype';
 import { fetchData, submitData } from '../../../util/httpUtils';
 import ContainerContext from '../../context/ContainerContext';
 import VurderingAvTilsynsbehovForm, { FieldName } from '../ny-vurdering-av-tilsynsbehov/NyVurderingAvTilsynsbehovForm';
@@ -38,7 +38,7 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
             resultat: nyVurderingsversjon.resultat,
             tekst: nyVurderingsversjon.tekst,
             tilknyttedeDokumenter: nyVurderingsversjon.dokumenter,
-            type: VurderingType.KONTINUERLIG_TILSYN_OG_PLEIE,
+            type: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE,
         });
     }
 
@@ -50,7 +50,7 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
             resultat: nyVurderingsversjon.resultat,
             tekst: nyVurderingsversjon.tekst,
             tilknyttedeDokumenter: nyVurderingsversjon.dokumenter,
-            type: VurderingType.KONTINUERLIG_TILSYN_OG_PLEIE,
+            type: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE,
             id: vurdering.id,
             versjon: vurdering.versjoner[0].versjon,
         });

@@ -10,28 +10,6 @@ export const createVurdering = (requestBody: RequestPayload) => {
         resultat: requestBody.resultat,
         gjelderForSøker: true,
         gjelderForAnnenPart: false,
-        links: [
-            {
-                href: `http://localhost:8082/mock/kontinuerlig-tilsyn-og-pleie/vurdering/?vurderingId=${nyVurderingId}`,
-                rel: 'sykdom-vurdering',
-                requestPayload: null,
-                type: 'GET',
-            },
-            {
-                href: 'http://localhost:8082/mock/kontinuerlig-tilsyn-og-pleie/vurdering/versjon',
-                rel: 'sykdom-vurdering-endring',
-                requestPayload: {
-                    behandlingUuid: '71738d05-02d8-4476-833b-d5071146e5cc',
-                    id: null,
-                    versjon: null,
-                    tekst: null,
-                    resultat: null,
-                    perioder: [],
-                    tilknyttedeDokumenter: null,
-                },
-                type: 'POST',
-            },
-        ],
     });
     tilsynsbehovVurderingsoversiktMock.resterendeVurderingsperioder = [];
     tilsynsbehovVurderingerMock.push({
