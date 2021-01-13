@@ -1,7 +1,7 @@
-import Autocomplete from '@navikt/nap-autocomplete';
-import { Label } from 'nav-frontend-skjema';
 import * as React from 'react';
-import Error from '../../components/error/Error';
+import { Label } from 'nav-frontend-skjema';
+import Autocomplete from '@navikt/nap-autocomplete';
+import FieldError from '../../components/field-error/FieldError';
 import styles from './diagnosekodeSelector.less';
 
 interface DiagnosekodeSelectorProps {
@@ -71,7 +71,7 @@ const PureDiagnosekodeSelector = ({
                 ariaLabel="Søk etter diagnose"
                 placeholder="Søk etter diagnose"
             />
-            {errorMessage && <Error message={errorMessage} />}
+            {errorMessage && <FieldError message={errorMessage} />}
         </div>
     );
 };

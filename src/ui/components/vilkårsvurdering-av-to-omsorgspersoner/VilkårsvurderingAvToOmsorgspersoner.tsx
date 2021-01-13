@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import Spinner from 'nav-frontend-spinner';
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { prettifyPeriod } from '../../../util/formats';
@@ -12,6 +13,7 @@ import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import { fetchData } from '../../../util/httpUtils';
 import processVurderingsoversikt from '../../../util/vurderingsoversiktUtils';
+import PageError from '../page-error/PageError';
 
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
@@ -25,6 +27,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         valgtVurderingselement: null,
         resterendeVurderingsperioderDefaultValue: [],
         vurdering,
+        vurderingsoversiktFeilet: false,
     });
 
     const {
@@ -33,26 +36,34 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         visVurderingDetails,
         valgtVurderingselement,
         resterendeVurderingsperioderDefaultValue,
+        vurderingsoversiktFeilet,
     } = state;
 
     const harPerioderSomSkalVurderes = vurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
 
     const getVurderingsoversikt = () => {
         const { signal } = fetchAborter;
+        return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktBehovForToOmsorgspersoner, { signal });
+    };
 
-        return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktBehovForToOmsorgspersoner, { signal })
-            .then(processVurderingsoversikt)
-            .then((nyVurderingsoversikt) => nyVurderingsoversikt);
+    const visVurderingsoversikt = (nyVurderingsoversikt: Vurderingsoversikt) => {
+        dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
+    };
+
+    const handleError = () => {
+        dispatch({ type: ActionType.VURDERINGSOVERSIKT_FEILET });
     };
 
     React.useEffect(() => {
         let isMounted = true;
-        getVurderingsoversikt().then((nyVurderingsoversikt) => {
-            if (isMounted) {
-                dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
-            }
-        });
-
+        getVurderingsoversikt()
+            .then(processVurderingsoversikt)
+            .then((nyVurderingsoversikt) => {
+                if (isMounted) {
+                    visVurderingsoversikt(nyVurderingsoversikt);
+                }
+            })
+            .catch(handleError);
         return () => {
             isMounted = false;
             fetchAborter.abort();
@@ -71,13 +82,14 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
 
     const oppdaterVurderingsoversikt = () => {
         dispatch({ type: ActionType.PENDING });
-        getVurderingsoversikt().then((nyVurderingsoversikt) => {
-            dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
-        });
+        getVurderingsoversikt().then(processVurderingsoversikt).then(visVurderingsoversikt);
     };
 
     if (isLoading) {
-        return <p>Henter vurderinger</p>;
+        return <Spinner />;
+    }
+    if (vurderingsoversiktFeilet) {
+        return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
     }
     return (
         <>

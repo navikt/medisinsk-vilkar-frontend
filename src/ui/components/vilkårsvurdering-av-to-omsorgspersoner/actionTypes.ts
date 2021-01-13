@@ -3,6 +3,7 @@ enum ActionType {
     VIS_NY_VURDERING_FORM = 'visNyVurderingForm',
     VELG_VURDERINGSELEMENT = 'velgVurderingselement',
     PENDING = 'pending',
+    VURDERINGSOVERSIKT_FEILET = 'vurderingsoversiktFeilet',
 }
 
 export default ActionType;
