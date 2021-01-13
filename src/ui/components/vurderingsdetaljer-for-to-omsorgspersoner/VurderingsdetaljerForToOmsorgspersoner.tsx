@@ -1,34 +1,24 @@
-import React from 'react';
+import Spinner from 'nav-frontend-spinner';
+import React, { useMemo } from 'react';
+import mockedDokumentliste from '../../../../mock/mocked-data/mockedDokumentliste';
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
+import RequestPayload from '../../../types/RequestPayload';
 import Vurdering, { Vurderingsversjon } from '../../../types/Vurdering';
+import Vurderingstype from '../../../types/Vurderingstype';
+import { fetchData, submitData } from '../../../util/httpUtils';
+import ContainerContext from '../../context/ContainerContext';
 import VurderingAvToOmsorgspersonerForm, {
     FieldName,
 } from '../ny-vurdering-av-to-omsorgspersoner/NyVurderingAvToOmsorgspersoner';
-import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
-import { fetchData } from '../../../util/httpUtils';
-import ContainerContext from '../../context/ContainerContext';
 import PageError from '../page-error/PageError';
+import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
 
 interface VurderingsdetaljerForToOmsorgspersonerProps {
     vurderingId: string | null;
     resterendeVurderingsperioder: Period[];
     perioderSomKanVurderes: Period[];
     onVurderingLagret: () => void;
-}
-
-function lagreVurdering(nyVurderingsversjon: Vurderingsversjon, vurdering: Vurdering) {
-    return new Promise((resolve) => {
-        setTimeout(() => resolve({}), 1000);
-    });
-}
-
-function hentVurdering(url: string, vurderingId: string): Promise<Vurdering> {
-    return fetchData(`${url}?vurderingId=${vurderingId}`);
-}
-
-function hentDataTilVurdering(url: string): Promise<Dokument[]> {
-    return fetchData(url);
 }
 
 const VurderingsdetaljerToOmsorgspersoner = ({
@@ -42,21 +32,50 @@ const VurderingsdetaljerToOmsorgspersoner = ({
     const [hentVurderingHarFeilet, setHentVurderingHarFeilet] = React.useState<boolean>(false);
     const [alleDokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
-    const { endpoints } = React.useContext(ContainerContext);
-    const vurderingUrl = endpoints.hentVurdering;
-    const dataTilVurderingUrl = endpoints.dataTilVurdering;
+    const { endpoints, behandlingUuid } = React.useContext(ContainerContext);
+    const fetchAborter = useMemo(() => new AbortController(), [vurderingId]);
+    const { signal } = fetchAborter;
 
     const handleError = () => {
         setIsLoading(false);
         setHentVurderingHarFeilet(true);
     };
 
+    function lagreVurdering(nyVurderingsversjon: Vurderingsversjon) {
+        const opprettVurderingUrl = endpoints.opprettVurdering;
+        return submitData<RequestPayload>(
+            opprettVurderingUrl,
+            {
+                behandlingUuid,
+                perioder: nyVurderingsversjon.perioder,
+                resultat: nyVurderingsversjon.resultat,
+                tekst: nyVurderingsversjon.tekst,
+                tilknyttedeDokumenter: nyVurderingsversjon.dokumenter,
+                type: Vurderingstype.TO_OMSORGSPERSONER,
+            },
+            signal
+        );
+    }
+
+    function hentVurdering(): Promise<Vurdering> {
+        const hentVurderingUrl = endpoints.hentVurdering;
+        return fetchData(`${hentVurderingUrl}?sykdomVurderingId=${vurderingId}`, { signal });
+    }
+
+    function hentDataTilVurdering(): Promise<Dokument[]> {
+        const dataTilVurderingUrl = endpoints.dataTilVurdering;
+        if (!dataTilVurderingUrl) {
+            return new Promise((resolve) => resolve(mockedDokumentliste));
+        }
+        return fetchData(dataTilVurderingUrl, { signal });
+    }
+
     React.useEffect(() => {
         setIsLoading(true);
         setHentVurderingHarFeilet(false);
         let isMounted = true;
         if (vurderingId) {
-            hentVurdering(vurderingUrl, vurderingId)
+            hentVurdering()
                 .then((vurderingResponse: Vurdering) => {
                     if (isMounted) {
                         setVurdering(vurderingResponse);
@@ -66,7 +85,7 @@ const VurderingsdetaljerToOmsorgspersoner = ({
                 .catch(handleError);
         } else {
             setVurdering(null);
-            hentDataTilVurdering(dataTilVurderingUrl)
+            hentDataTilVurdering()
                 .then((dokumenterResponse: Dokument[]) => {
                     if (isMounted) {
                         setDokumenter(dokumenterResponse);
@@ -79,12 +98,13 @@ const VurderingsdetaljerToOmsorgspersoner = ({
 
         return () => {
             isMounted = false;
+            fetchAborter.abort();
         };
     }, [vurderingId]);
 
     const lagreVurderingAvToOmsorgspersoner = (nyVurderingsversjon: Vurderingsversjon) => {
         setIsLoading(true);
-        lagreVurdering(nyVurderingsversjon, vurdering).then(
+        lagreVurdering(nyVurderingsversjon).then(
             () => {
                 onVurderingLagret();
                 setIsLoading(false);
@@ -97,7 +117,7 @@ const VurderingsdetaljerToOmsorgspersoner = ({
     };
 
     if (isLoading) {
-        return <p>Laster</p>;
+        return <Spinner />;
     }
     if (hentVurderingHarFeilet) {
         return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
