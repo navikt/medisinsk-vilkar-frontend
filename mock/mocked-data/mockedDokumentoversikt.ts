@@ -7,7 +7,6 @@ const mockedDokumentoversikt = {
             id: '2',
             navn: 'Dokument 2',
             type: Dokumenttype.LEGEERKLÆRING,
-            mottatt: dayjs().toDate().toISOString(),
             location: '#blahblah',
             innleggelsesperioder: [],
             harGyldigSignatur: true,
@@ -29,12 +28,12 @@ const mockedDokumentoversikt = {
             id: '4',
             navn: 'Dokument 4',
             type: Dokumenttype.MANGLER_MEDISINSKE_OPPLYSNINGER,
-            mottatt: dayjs().toDate().toISOString(),
+            datert: dayjs().toDate().toISOString(),
             location: '#blahblah',
         },
     ],
     ustrukturerteDokumenter: [
-        { id: '1', navn: 'Dokument 1', mottatt: dayjs().toDate().toISOString(), location: '#blahblah' },
+        { id: '1', navn: 'Dokument 1', datert: dayjs().toDate().toISOString(), location: '#blahblah' },
     ],
 };
 export default mockedDokumentoversikt;

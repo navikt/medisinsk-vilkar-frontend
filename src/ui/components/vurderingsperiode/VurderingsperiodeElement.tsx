@@ -26,6 +26,7 @@ const renderIcon = (resultat: Vurderingsresultat) => {
     if (resultat === Vurderingsresultat.IKKE_OPPFYLT) {
         return <RedCrossIconFilled />;
     }
+    return null;
 };
 
 const renderResultatText = (resultat: Vurderingsresultat) => {
@@ -35,6 +36,7 @@ const renderResultatText = (resultat: Vurderingsresultat) => {
     if (resultat === Vurderingsresultat.IKKE_OPPFYLT) {
         return <span>Avslått</span>;
     }
+    return null;
 };
 
 const VurderingsperiodeElement = ({

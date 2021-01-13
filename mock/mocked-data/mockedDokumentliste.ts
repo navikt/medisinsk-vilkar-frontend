@@ -5,7 +5,7 @@ export default [
     {
         id: '1',
         type: Dokumenttype.LEGEERKLÆRING,
-        datert: dayjs('01-16-2020').utc(true).toDate(),
+        datert: dayjs('01-16-2020').utc(true).toISOString(),
         navn: 'Foobar-lala.pdf',
         benyttet: true,
         annenPartErKilde: false,
@@ -15,7 +15,7 @@ export default [
     {
         id: '2',
         type: Dokumenttype.LEGEERKLÆRING,
-        datert: dayjs('01-01-2020').utc(true).toDate(),
+        datert: dayjs('01-01-2020').utc(true).toISOString(),
         navn: 'Foobar-haha.pdf',
         benyttet: true,
         annenPartErKilde: true,

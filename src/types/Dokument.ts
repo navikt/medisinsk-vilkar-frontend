@@ -12,7 +12,7 @@ export interface Dokument {
     type: Dokumenttype;
     benyttet: boolean;
     annenPartErKilde: boolean;
-    datert: Date;
+    datert: string;
     fremhevet: boolean;
     location?: string;
 }

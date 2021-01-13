@@ -20,7 +20,7 @@ const PerioderSomSkalVurderes = ({ perioder }: PerioderSomSkalVurderesProps) => 
                     </p>
                 ))}
             </div>
-            <EtikettFokus mini={true}>Må vurderes</EtikettFokus>
+            <EtikettFokus mini>Må vurderes</EtikettFokus>
         </div>
     );
 };
