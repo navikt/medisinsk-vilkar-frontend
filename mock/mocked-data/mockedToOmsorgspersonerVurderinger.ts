@@ -5,12 +5,12 @@ import mockedDokumentliste from './mockedDokumentliste';
 
 const toOmsorgspengerVurderingerMock: Vurdering[] = [
     {
-        id: '1',
+        id: '11',
         type: 'TO_OMSORGSPERSONER',
         versjoner: [
             {
                 perioder: [new Period('2020-01-01', '2020-01-15')],
-                resultat: Vurderingsresultat.INNVILGET,
+                resultat: Vurderingsresultat.OPPFYLT,
                 dokumenter: mockedDokumentliste,
                 tekst: 'Fordi her er det behov',
             },
@@ -21,12 +21,12 @@ const toOmsorgspengerVurderingerMock: Vurdering[] = [
         },
     },
     {
-        id: '2',
+        id: '22',
         type: 'TO_OMSORGSPERSONER',
         versjoner: [
             {
                 perioder: [new Period('2020-01-16', '2020-01-20')],
-                resultat: Vurderingsresultat.AVSLÅTT,
+                resultat: Vurderingsresultat.IKKE_OPPFYLT,
                 dokumenter: mockedDokumentliste,
                 tekst: 'Fordi her er det ikke behov',
             },

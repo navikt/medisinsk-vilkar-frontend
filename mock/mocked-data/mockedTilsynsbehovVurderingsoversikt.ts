@@ -5,7 +5,7 @@ const tilsynsbehovVurderingsoversiktMock = {
         {
             id: '1',
             periode: { fom: '2020-01-01', tom: '2020-01-15' },
-            resultat: Vurderingsresultat.INNVILGET,
+            resultat: Vurderingsresultat.OPPFYLT,
             gjelderForSøker: false,
             gjelderForAnnenPart: true,
         },

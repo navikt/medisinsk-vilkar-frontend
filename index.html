@@ -27,11 +27,13 @@
                     endpoints: {
                         vurderingsoversiktKontinuerligTilsynOgPleie: 'http://localhost:8082/mock/kontinuerlig-tilsyn-og-pleie/vurderingsoversikt',
                         vurderingsoversiktBehovForToOmsorgspersoner: 'http://localhost:8082/mock/to-omsorgspersoner/vurderingsoversikt',
-                        vurderingKontinuerligTilsynOgPleie: 'http://localhost:8082/mock/kontinuerlig-tilsyn-og-pleie/vurdering',
-                        vurderingToOmsorgspersoner: 'http://localhost:8082/mock/to-omsorgspersoner/vurdering',
+                        hentVurdering: 'http://localhost:8082/mock/vurdering?behandlingUuid=123',
+                        opprettVurdering: 'http://localhost:8082/mock/opprett-vurdering',
+                        endreVurdering: 'http://localhost:8082/mock/endre-vurdering',
                         dokumentoversikt: 'http://localhost:8082/mock/dokumentoversikt',
                         dataTilVurdering: 'http://localhost:8082/mock/data-til-vurdering',
-                    }
+                    },
+                    behandlingUuid: '123'
                 });
             }, 300);
         </script>

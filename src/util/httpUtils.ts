@@ -12,6 +12,18 @@ export async function fetchData<T>(url: string, requestInit?: RequestInit): Prom
             throw new Error(`Parsing JSON\n${error}`);
         }
     } catch (error) {
+        console.error(error);
         throw new Error(error);
     }
+}
+
+export function submitData<P>(url: string, body: P, abortSignal?: AbortSignal): Promise<Response> {
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+        signal: abortSignal,
+    });
 }

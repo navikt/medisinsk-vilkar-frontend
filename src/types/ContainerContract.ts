@@ -4,11 +4,13 @@ interface ContainerContract {
     endpoints: {
         vurderingsoversiktKontinuerligTilsynOgPleie: string;
         vurderingsoversiktBehovForToOmsorgspersoner: string;
-        vurderingKontinuerligTilsynOgPleie: string;
-        vurderingToOmsorgspersoner: string;
+        hentVurdering: string;
+        opprettVurdering: string;
+        endreVurdering: string;
         dokumentoversikt: string;
         dataTilVurdering: string;
     };
+    behandlingUuid: string;
 }
 
 export default ContainerContract;

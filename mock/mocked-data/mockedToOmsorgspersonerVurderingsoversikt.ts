@@ -3,16 +3,16 @@ import Vurderingsresultat from '../../src/types/Vurderingsresultat';
 const mockedToOmsorgspersonerVurderingsoversikt = {
     vurderingselementer: [
         {
-            id: '1',
+            id: '11',
             periode: { fom: '2020-01-01', tom: '2020-01-15' },
-            resultat: Vurderingsresultat.INNVILGET,
+            resultat: Vurderingsresultat.OPPFYLT,
             gjelderForSøker: false,
             gjelderForAnnenPart: true,
         },
         {
-            id: '2',
+            id: '22',
             periode: { fom: '2020-01-16', tom: '2020-01-20' },
-            resultat: Vurderingsresultat.AVSLÅTT,
+            resultat: Vurderingsresultat.IKKE_OPPFYLT,
             gjelderForSøker: false,
             gjelderForAnnenPart: true,
         },

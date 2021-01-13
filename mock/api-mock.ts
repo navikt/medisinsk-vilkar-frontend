@@ -6,8 +6,11 @@ import mockedToOmsorgspersonerVurderinger from './mocked-data/mockedToOmsorgsper
 import mockedTilsynsbehovVurderinger from './mocked-data/mockedTilsynsbehovVurderinger';
 import mockedDokumentliste from './mocked-data/mockedDokumentliste';
 import mockedDokumentoversikt from './mocked-data/mockedDokumentoversikt';
+import { createVurdering } from './apiUtils';
 
 const app = express();
+
+app.use(express.json());
 
 app.use(
     cors({
@@ -15,16 +18,17 @@ app.use(
     })
 );
 
-app.use('/mock/kontinuerlig-tilsyn-og-pleie/vurdering', (req, res) => {
-    const vurderingId = req.query.vurderingId;
-    const vurdering = mockedTilsynsbehovVurderinger.find(({ id }) => id === vurderingId);
+app.use('/mock/vurdering', (req, res) => {
+    const vurderingId = req.query.sykdomVurderingId;
+    const alleVurderinger = [...mockedTilsynsbehovVurderinger, ...mockedToOmsorgspersonerVurderinger];
+    const vurdering = alleVurderinger.find(({ id }) => id === vurderingId);
+
     res.send(vurdering);
 });
 
-app.use('/mock/to-omsorgspersoner/vurdering', (req, res) => {
-    const vurderingId = req.query.vurderingId;
-    const vurdering = mockedToOmsorgspersonerVurderinger.find(({ id }) => id === vurderingId);
-    res.send(vurdering);
+app.use('/mock/opprett-vurdering', (req, res) => {
+    createVurdering(req.body);
+    res.send();
 });
 
 app.use('/mock/kontinuerlig-tilsyn-og-pleie/vurderingsoversikt', (req, res) => {
