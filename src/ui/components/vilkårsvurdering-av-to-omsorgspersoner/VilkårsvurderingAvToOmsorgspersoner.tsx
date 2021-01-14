@@ -94,7 +94,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     return (
         <>
             {harPerioderSomSkalVurderes && (
-                <div style={{ maxWidth: '1194px' }}>
+                <div style={{ maxWidth: '1204px' }}>
                     <AlertStripeAdvarsel>
                         {`Vurder behov for to omsorgspersoner for perioden ${prettifyPeriod(
                             vurderingsoversikt?.resterendeVurderingsperioder[0]

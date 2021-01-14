@@ -76,7 +76,7 @@ const VurderingsdetaljerForKontinuerligTilsynOgPleie = ({
     function hentDataTilVurdering(): Promise<Dokument[]> {
         const dataTilVurderingUrl = endpoints.dataTilVurdering;
         if (!dataTilVurderingUrl) {
-            return new Promise((resolve) => resolve(mockedDokumentliste));
+            return new Promise((resolve) => resolve([]));
         }
         return fetchData(dataTilVurderingUrl, { signal });
     }

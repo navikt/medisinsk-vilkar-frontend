@@ -89,7 +89,7 @@ const VurderingAvTilsynsbehovForm = ({
         <DetailView title="Vurdering av tilsyn og pleie">
             <FormProvider {...formMethods}>
                 <Form buttonLabel="Lagre" onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}>
-                    {dokumenter?.length && (
+                    {dokumenter?.length > 0 && (
                         <Box marginTop={Margin.large}>
                             <CheckboxGroup
                                 question="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"

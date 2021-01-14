@@ -7,6 +7,7 @@ import { Vurderingsversjon } from '../../../types/Vurdering';
 import { getPeriodAsListOfDays } from '../../../util/dateUtils';
 import { convertToInternationalPeriod } from '../../../util/formats';
 import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
+import { lagToOmsorgspersonerVurdering } from '../../../util/vurderingUtils';
 import { fomDatoErFørTomDato, harBruktDokumentasjon, required } from '../../form/validators';
 import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
@@ -76,23 +77,33 @@ const VurderingAvToOmsorgspersonerForm = ({
         () => finnMaksavgrensningerForPerioder(perioderSomKanVurderes),
         [perioderSomKanVurderes]
     );
+
+    const lagNyVurdering = (formState: VurderingAvToOmsorgspersonerFormState) => {
+        onSubmit(lagToOmsorgspersonerVurdering(formState, dokumenter));
+    };
+
     return (
         <DetailView title="Vurdering av to omsorgspersoner">
             <FormProvider {...formMethods}>
-                <Form buttonLabel="Lagre og vurder resterende periode" onSubmit={formMethods.handleSubmit(onSubmit)}>
-                    <Box marginTop={Margin.large}>
-                        <CheckboxGroup
-                            question="Hvilke dokumenter er brukt i vurderingen av to omsorgspersoner?"
-                            name={FieldName.DOKUMENTER}
-                            checkboxes={dokumenter.map((dokument) => ({
-                                value: dokument.id,
-                                label: <DokumentLink dokument={dokument} />,
-                            }))}
-                            validators={{
-                                harBruktDokumentasjon,
-                            }}
-                        />
-                    </Box>
+                <Form
+                    buttonLabel="Lagre og vurder resterende periode"
+                    onSubmit={formMethods.handleSubmit(lagNyVurdering)}
+                >
+                    {dokumenter?.length > 0 && (
+                        <Box marginTop={Margin.large}>
+                            <CheckboxGroup
+                                question="Hvilke dokumenter er brukt i vurderingen av to omsorgspersoner?"
+                                name={FieldName.DOKUMENTER}
+                                checkboxes={dokumenter.map((dokument) => ({
+                                    value: dokument.id,
+                                    label: <DokumentLink dokument={dokument} />,
+                                }))}
+                                validators={{
+                                    harBruktDokumentasjon,
+                                }}
+                            />
+                        </Box>
+                    )}
                     <Box marginTop={Margin.large}>
                         <TextArea
                             textareaClass={styles.begrunnelsesfelt}
