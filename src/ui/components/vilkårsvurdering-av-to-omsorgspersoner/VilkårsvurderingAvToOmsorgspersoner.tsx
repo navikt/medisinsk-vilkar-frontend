@@ -1,20 +1,20 @@
-import React, { useMemo } from 'react';
+import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Spinner from 'nav-frontend-spinner';
-import AlertStripe, { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import { prettifyPeriod } from '../../../util/formats';
-import ContainerContext from '../../context/ContainerContext';
-import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
-import ActionType from './actionTypes';
-import vilkårsvurderingReducer from './reducer';
-import VurderingsdetaljerForToOmsorgspersoner from '../vurderingsdetaljer-for-to-omsorgspersoner/VurderingsdetaljerForToOmsorgspersoner';
-import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
+import React, { useMemo } from 'react';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
+import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
+import { prettifyPeriod } from '../../../util/formats';
 import { fetchData } from '../../../util/httpUtils';
 import processVurderingsoversikt from '../../../util/vurderingsoversiktUtils';
-import PageError from '../page-error/PageError';
+import ContainerContext from '../../context/ContainerContext';
 import Box, { Margin } from '../box/Box';
+import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
+import PageError from '../page-error/PageError';
+import VurderingsdetaljerForToOmsorgspersoner from '../vurderingsdetaljer-for-to-omsorgspersoner/VurderingsdetaljerForToOmsorgspersoner';
+import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
+import ActionType from './actionTypes';
+import vilkårsvurderingReducer from './reducer';
 
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
@@ -94,23 +94,21 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
     }
     return (
-        <>
+        <div style={{ maxWidth: '1204px' }}>
             {harPerioderSomSkalVurderes && (
-                <div style={{ maxWidth: '1204px' }}>
-                    <AlertStripeAdvarsel>
-                        {`Vurder behov for to omsorgspersoner for perioden ${prettifyPeriod(
-                            vurderingsoversikt?.resterendeVurderingsperioder[0]
-                        )}.`}
-                    </AlertStripeAdvarsel>
-                </div>
+                <AlertStripeAdvarsel>
+                    {`Vurder behov for to omsorgspersoner for perioden ${prettifyPeriod(
+                        vurderingsoversikt?.resterendeVurderingsperioder[0]
+                    )}.`}
+                </AlertStripeAdvarsel>
             )}
 
             {!skalVurdereToOmsorgspersoner && (
                 <Box marginTop={Margin.large}>
-                    <AlertStripe type="info">
+                    <AlertStripeInfo>
                         To omsorgspersoner skal kun vurderes dersom det er flere parter som har søkt i samme periode,
                         eller det er opplyst i søknaden om at det kommer en søker til.
-                    </AlertStripe>
+                    </AlertStripeInfo>
                 </Box>
             )}
             <Box marginTop={harPerioderSomSkalVurderes || !skalVurdereToOmsorgspersoner ? Margin.medium : null}>
@@ -118,12 +116,12 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                     navigationSection={() => {
                         if (vurderingsoversikt?.resterendeVurderingsperioder.length === 0) {
                             return (
-                                <div style={{ marginTop: '1rem' }}>
+                                <Box marginTop={Margin.medium}>
                                     <AlertStripeInfo>
                                         To omsorgspersoner skal ikke vurderes før tilsyn og pleie er blitt innvilget og
                                         det er to parter i saken.
                                     </AlertStripeInfo>
-                                </div>
+                                </Box>
                             );
                         }
                         return (
@@ -151,7 +149,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                     }}
                 />
             </Box>
-        </>
+        </div>
     );
 };
 
