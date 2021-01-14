@@ -10,7 +10,6 @@ import Vurderingstype from '../../../types/Vurderingstype';
 import { fetchData, submitData } from '../../../util/httpUtils';
 import ContainerContext from '../../context/ContainerContext';
 import PageError from '../page-error/PageError';
-import mockedDokumentliste from '../../../../mock/mocked-data/mockedDokumentliste';
 
 interface VurderingDetailsProps {
     vurderingId: string | null;

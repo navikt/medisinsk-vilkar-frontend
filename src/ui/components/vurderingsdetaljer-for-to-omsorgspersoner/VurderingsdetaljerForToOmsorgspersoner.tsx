@@ -1,6 +1,5 @@
 import Spinner from 'nav-frontend-spinner';
 import React, { useMemo } from 'react';
-import mockedDokumentliste from '../../../../mock/mocked-data/mockedDokumentliste';
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
 import RequestPayload from '../../../types/RequestPayload';
