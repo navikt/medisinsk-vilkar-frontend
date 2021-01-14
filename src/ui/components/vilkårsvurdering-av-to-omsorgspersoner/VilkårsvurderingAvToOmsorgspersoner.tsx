@@ -41,7 +41,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     } = state;
 
     const harPerioderSomSkalVurderes = vurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
-    const skalVurdereToOmsorgspersoner = vurderingsoversikt?.vurderingselementer?.length > 0;
+    const harVurdertePerioder = vurderingsoversikt?.vurderingselementer?.length > 0;
 
     const getVurderingsoversikt = () => {
         const { signal } = fetchAborter;
@@ -103,7 +103,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                 </AlertStripeAdvarsel>
             )}
 
-            {!skalVurdereToOmsorgspersoner && (
+            {!harVurdertePerioder && !harPerioderSomSkalVurderes && (
                 <Box marginTop={Margin.large}>
                     <AlertStripeInfo>
                         To omsorgspersoner skal kun vurderes dersom det er flere parter som har søkt i samme periode,
@@ -111,7 +111,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                     </AlertStripeInfo>
                 </Box>
             )}
-            <Box marginTop={harPerioderSomSkalVurderes || !skalVurdereToOmsorgspersoner ? Margin.medium : null}>
+            <Box marginTop={harPerioderSomSkalVurderes || !harVurdertePerioder ? Margin.medium : null}>
                 <NavigationWithDetailView
                     navigationSection={() => {
                         if (vurderingsoversikt?.resterendeVurderingsperioder.length === 0) {
