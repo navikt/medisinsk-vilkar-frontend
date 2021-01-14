@@ -3,19 +3,10 @@ import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { SkjemaGruppe, SkjemaelementFeilmelding } from 'nav-frontend-skjema';
 import { DatepickerLimitations } from 'nav-datovelger';
 import Box, { Margin } from '../../components/box/Box';
-import PlusIcon from '../../components/icons/PlusIcon';
 import styles from './periodpickerList.less';
 import { Period } from '../../../types/Period';
 import PureDatepicker from '../pure/PureDatepicker';
-
-const AddButton = ({ onClick }) => (
-    <div className={styles.buttonAddContainer}>
-        <PlusIcon />
-        <button className={styles.buttonAdd} type="button" onClick={onClick}>
-            Legg til flere perioder
-        </button>
-    </div>
-);
+import AddButton from '../../components/add-button/AddButton';
 
 const DeleteButton = ({ onClick }) => (
     <div className={styles.buttonDeleteContainer}>
@@ -103,8 +94,8 @@ const PeriodpickerList = ({
                     );
                 })}
             </SkjemaGruppe>
-            <Box marginTop={Margin.large}>
-                <AddButton onClick={() => append({ fom: '', tom: '' })} />
+            <Box marginTop={Margin.xLarge}>
+                <AddButton label="Legg til periode" onClick={() => append({ fom: '', tom: '' })} />
             </Box>
         </div>
     );

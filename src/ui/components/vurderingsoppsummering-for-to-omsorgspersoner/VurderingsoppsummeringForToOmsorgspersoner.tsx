@@ -36,19 +36,19 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
                     }
                 />
             </Box>
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.xLarge}>
                 <LabelledContent
                     label="Gjør en vurdering av om det er behov for to omsorgspersoner etter § 9-10, andre ledd."
                     content={<span>{tekst}</span>}
                 />
             </Box>
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.xLarge}>
                 <LabelledContent
                     label="Er det behov for to omsorgspersoner?"
                     content={<span>{resultat === Vurderingsresultat.OPPFYLT ? 'Ja' : 'Nei'}</span>}
                 />
             </Box>
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.xLarge}>
                 <LabelledContent
                     label="Perioder vurdert"
                     content={

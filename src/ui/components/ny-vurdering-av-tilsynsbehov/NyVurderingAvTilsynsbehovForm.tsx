@@ -90,7 +90,7 @@ const VurderingAvTilsynsbehovForm = ({
             <FormProvider {...formMethods}>
                 <Form buttonLabel="Lagre" onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}>
                     {dokumenter?.length && (
-                        <Box marginTop={Margin.large}>
+                        <Box marginTop={Margin.xLarge}>
                             <CheckboxGroup
                                 question="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
                                 name={FieldName.DOKUMENTER}
@@ -109,7 +109,7 @@ const VurderingAvTilsynsbehovForm = ({
                             />
                         </Box>
                     )}
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
                         <TextArea
                             id="begrunnelsesfelt"
                             textareaClass={styles.begrunnelsesfelt}
@@ -143,14 +143,14 @@ const VurderingAvTilsynsbehovForm = ({
                             validators={{ required }}
                         />
                     </Box>
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
                         <YesOrNoQuestion
                             question="Er det behov for tilsyn og pleie?"
                             name={FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE}
                             validators={{ required }}
                         />
                     </Box>
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
                         <PeriodpickerList
                             legend="Oppgi perioder"
                             name={FieldName.PERIODER}
@@ -191,7 +191,7 @@ const VurderingAvTilsynsbehovForm = ({
                         />
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (
-                        <Box marginTop={Margin.large}>
+                        <Box marginTop={Margin.xLarge}>
                             <AlertStripeAdvarsel>
                                 Du har ikke vurdert alle periodene som må vurderes. Resterende perioder vurderer du
                                 etter at du har lagret denne.

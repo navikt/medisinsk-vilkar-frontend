@@ -80,7 +80,7 @@ const VurderingAvToOmsorgspersonerForm = ({
         <DetailView title="Vurdering av to omsorgspersoner">
             <FormProvider {...formMethods}>
                 <Form buttonLabel="Lagre og vurder resterende periode" onSubmit={formMethods.handleSubmit(onSubmit)}>
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
                         <CheckboxGroup
                             question="Hvilke dokumenter er brukt i vurderingen av to omsorgspersoner?"
                             name={FieldName.DOKUMENTER}
@@ -93,7 +93,7 @@ const VurderingAvToOmsorgspersonerForm = ({
                             }}
                         />
                     </Box>
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
                         <TextArea
                             textareaClass={styles.begrunnelsesfelt}
                             name={FieldName.VURDERING_AV_TO_OMSORGSPERSONER}
@@ -106,14 +106,14 @@ const VurderingAvToOmsorgspersonerForm = ({
                             validators={{ required }}
                         />
                     </Box>
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
                         <YesOrNoQuestion
                             question="Er det behov for to omsorgspersoner?"
                             name={FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER}
                             validators={{ required }}
                         />
                     </Box>
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
                         <PeriodpickerList
                             legend="Oppgi perioder"
                             name={FieldName.PERIODER}
@@ -154,7 +154,7 @@ const VurderingAvToOmsorgspersonerForm = ({
                         />
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (
-                        <Box marginTop={Margin.large}>
+                        <Box marginTop={Margin.xLarge}>
                             <AlertStripeAdvarsel>
                                 Du har ikke vurdert alle periodene som må vurderes. Resterende perioder vurderer du
                                 etter at du har lagret denne.

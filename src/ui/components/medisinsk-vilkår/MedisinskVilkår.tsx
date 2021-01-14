@@ -5,14 +5,17 @@ import Box, { Margin } from '../box/Box';
 import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-pleie/VilkårsvurderingAvTilsynOgPleie';
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
 import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
+import Innleggelsesperiodeoversikt from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
+import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
 import styles from './medisinskVilkår.less';
+import DokumentasjonFooter from '../dokumentasjon-footer/DokumentasjonFooter';
 
 const tabs = ['Legeerklæring', 'Tilsyn og pleie', 'To omsorgspersoner'];
 const MedisinskVilkår = () => {
     const [activeTab, setActiveTab] = React.useState(0);
     return (
         <>
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.xLarge}>
                 <AlertStripe type="info">Sykdomsvurderingen ligger på barnet og er felles</AlertStripe>
             </Box>
             <div className={styles.medisinskVilkår}>
@@ -25,6 +28,12 @@ const MedisinskVilkår = () => {
                     />
                     <div className={styles.medisinskVilkår__vilkårContentContainer}>
                         {activeTab === 0 && <StruktureringAvDokumentasjon />}
+                        {activeTab === 0 && (
+                            <Box marginTop={Margin.xLarge}>
+                                <DokumentasjonFooter />
+                            </Box>
+                        )}
+
                         {activeTab === 1 && <VilkårsvurderingAvTilsynOgPleie onVilkårVurdert={() => setActiveTab(1)} />}
                         {activeTab === 2 && <VilkårsvurderingAvToOmsorgspersoner />}
                     </div>

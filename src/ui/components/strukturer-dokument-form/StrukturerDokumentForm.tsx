@@ -52,12 +52,12 @@ const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormPr
                     onSubmit={formMethods.handleSubmit((formState) => lagNyttStrukturertDokument(formState))}
                     shouldShowSubmitButton={inneholderMedisinskeOpplysninger !== undefined}
                 >
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
                         <Lenke href={dokument.location} target="_blank">
                             Åpne dokument
                         </Lenke>
                     </Box>
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
                         <RadioGroupPanel
                             name={FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER}
                             question="Inneholder dokumentet medisinske opplysninger?"
@@ -79,7 +79,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormPr
                         />
                     </Box>
                     {dokumentetErEnLegeerklæring && (
-                        <Box marginTop={Margin.large}>
+                        <Box marginTop={Margin.xLarge}>
                             <YesOrNoQuestion
                                 name={FieldName.SIGNERT_AV_SYKEHUSLEGE_ELLER_LEGE_I_SPESIALISTHELSETJENESTEN}
                                 question="Er dokumentet signert av en sykehuslege eller en lege i spesialisthelsetjenesten?"
@@ -88,7 +88,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormPr
                         </Box>
                     )}
                     {dokumentetHarMedisinskeOpplysninger && (
-                        <Box marginTop={Margin.large}>
+                        <Box marginTop={Margin.xLarge}>
                             <Datepicker
                                 name={FieldName.DATERT}
                                 label="Hvilken dato er dokumentet datert?"

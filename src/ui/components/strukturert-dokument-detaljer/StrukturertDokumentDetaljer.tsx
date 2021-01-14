@@ -27,26 +27,26 @@ const StrukturertDokumentDetaljer = ({ dokument }: StrukturertDokumentDetaljerPr
     const { type, datert } = dokument;
     return (
         <DetailView title="Om dokumentet">
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.xLarge}>
                 <Lenke href={dokument.location} target="_blank">
                     Åpne dokument
                 </Lenke>
             </Box>
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.xLarge}>
                 <LabelledContent
                     label="Inneholder dokumentet medisinske opplysninger?"
                     content={renderDokumenttypeContent(type)}
                 />
             </Box>
             {type === Dokumenttype.LEGEERKLÆRING && (
-                <Box marginTop={Margin.large}>
+                <Box marginTop={Margin.xLarge}>
                     <LabelledContent
                         label="Er dokumentet signert av en sykehuslege eller en lege i spesialisthelsetjenesten?"
                         content={<span>{(dokument as Legeerklæring).harGyldigSignatur ? 'Ja' : 'Nei'}</span>}
                     />
                 </Box>
             )}
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.xLarge}>
                 <LabelledContent label="Når er dokumentet datert?" content={prettifyDate(datert)} />
             </Box>
         </DetailView>
