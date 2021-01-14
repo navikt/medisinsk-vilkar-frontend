@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import Spinner from 'nav-frontend-spinner';
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import AlertStripe, { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { prettifyPeriod } from '../../../util/formats';
 import ContainerContext from '../../context/ContainerContext';
@@ -14,6 +14,7 @@ import Vurderingselement from '../../../types/Vurderingselement';
 import { fetchData } from '../../../util/httpUtils';
 import processVurderingsoversikt from '../../../util/vurderingsoversiktUtils';
 import PageError from '../page-error/PageError';
+import Box, { Margin } from '../box/Box';
 
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
@@ -40,6 +41,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     } = state;
 
     const harPerioderSomSkalVurderes = vurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
+    const skalVurdereToOmsorgspersoner = vurderingsoversikt?.perioderSomKanVurderes?.length > 0;
 
     const getVurderingsoversikt = () => {
         const { signal } = fetchAborter;
@@ -100,45 +102,55 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                             vurderingsoversikt?.resterendeVurderingsperioder[0]
                         )}.`}
                     </AlertStripeAdvarsel>
-                    <div style={{ marginTop: '1rem' }} />
                 </div>
             )}
-            <NavigationWithDetailView
-                navigationSection={() => {
-                    if (vurderingsoversikt?.resterendeVurderingsperioder.length === 0) {
+
+            {!skalVurdereToOmsorgspersoner && (
+                <Box marginTop={Margin.large}>
+                    <AlertStripe type="info">
+                        To omsorgspersoner skal kun vurderes dersom det er flere parter som har søkt i samme periode,
+                        eller det er opplyst i søknaden om at det kommer en søker til.
+                    </AlertStripe>
+                </Box>
+            )}
+            <Box marginTop={harPerioderSomSkalVurderes || !skalVurdereToOmsorgspersoner ? Margin.medium : null}>
+                <NavigationWithDetailView
+                    navigationSection={() => {
+                        if (vurderingsoversikt?.resterendeVurderingsperioder.length === 0) {
+                            return (
+                                <div style={{ marginTop: '1rem' }}>
+                                    <AlertStripeInfo>
+                                        To omsorgspersoner skal ikke vurderes før tilsyn og pleie er blitt innvilget og
+                                        det er to parter i saken.
+                                    </AlertStripeInfo>
+                                </div>
+                            );
+                        }
                         return (
-                            <div style={{ marginTop: '1rem' }}>
-                                <AlertStripeInfo>
-                                    To omsorgspersoner skal ikke vurderes før tilsyn og pleie er blitt innvilget og det
-                                    er to parter i saken.
-                                </AlertStripeInfo>
-                            </div>
-                        );
-                    }
-                    return (
-                        <Vurderingsnavigasjon
-                            vurderingselementer={vurderingsoversikt?.vurderingselementer}
-                            resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
-                            søknadsperioderTilBehandling={vurderingsoversikt?.søknadsperioderTilBehandling}
-                            onVurderingValgt={velgVurderingselement}
-                            onNyVurderingClick={visNyVurderingForm}
-                        />
-                    );
-                }}
-                detailSection={() => {
-                    if (visVurderingDetails) {
-                        return (
-                            <VurderingsdetaljerForToOmsorgspersoner
-                                vurderingId={valgtVurderingselement?.id}
-                                onVurderingLagret={oppdaterVurderingsoversikt}
-                                resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
-                                perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}
+                            <Vurderingsnavigasjon
+                                vurderingselementer={vurderingsoversikt?.vurderingselementer}
+                                resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
+                                søknadsperioderTilBehandling={vurderingsoversikt?.søknadsperioderTilBehandling}
+                                onVurderingValgt={velgVurderingselement}
+                                onNyVurderingClick={visNyVurderingForm}
                             />
                         );
-                    }
-                    return null;
-                }}
-            />
+                    }}
+                    detailSection={() => {
+                        if (visVurderingDetails) {
+                            return (
+                                <VurderingsdetaljerForToOmsorgspersoner
+                                    vurderingId={valgtVurderingselement?.id}
+                                    onVurderingLagret={oppdaterVurderingsoversikt}
+                                    resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                                    perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}
+                                />
+                            );
+                        }
+                        return null;
+                    }}
+                />
+            </Box>
         </>
     );
 };
