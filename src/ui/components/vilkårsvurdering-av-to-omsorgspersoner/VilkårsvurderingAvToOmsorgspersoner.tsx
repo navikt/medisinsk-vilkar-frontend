@@ -41,7 +41,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     } = state;
 
     const harPerioderSomSkalVurderes = vurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
-    const skalVurdereToOmsorgspersoner = vurderingsoversikt?.perioderSomKanVurderes?.length > 0;
+    const skalVurdereToOmsorgspersoner = vurderingsoversikt?.vurderingselementer?.length > 0;
 
     const getVurderingsoversikt = () => {
         const { signal } = fetchAborter;
