@@ -17,6 +17,17 @@ const Innleggelsesperiodeoversikt = () => {
     const [innleggelsesperiodeBeingEdited, setInnleggelsesperiodeBeingEdited] = React.useState<Period>(
         new Period('', '')
     );
+    const [innleggelsesperiodeToBeReplaced, setInnleggelsesperiodeToBeReplaced] = React.useState<Period>(
+        new Period('', '')
+    );
+    const [isEditingPeriod, setIsEditingPeriod] = React.useState(false);
+
+    const replacePeriod = (innleggelsesperiodeToReplace, newInnleggelsesperiode) => {
+        const updatedInnleggelsesperiodeliste = [...innleggelsesperioder];
+        const indexOfPeriodeToReplace = updatedInnleggelsesperiodeliste.indexOf(innleggelsesperiodeToReplace);
+        updatedInnleggelsesperiodeliste[indexOfPeriodeToReplace] = newInnleggelsesperiode;
+        setInnleggelsesperioder(updatedInnleggelsesperiodeliste);
+    };
     return (
         <div className={styles.innleggelsesperiodeoversikt}>
             <TitleWithUnderline>Innleggelsesperioder</TitleWithUnderline>
@@ -26,7 +37,10 @@ const Innleggelsesperiodeoversikt = () => {
                     <Innleggelsesperiodeliste
                         innleggelsesperioder={innleggelsesperioder}
                         onEditClick={(innleggelsesperiodeToEdit) => {
-                            // todo
+                            setInnleggelsesperiodeToBeReplaced(innleggelsesperiodeToEdit);
+                            setInnleggelsesperiodeBeingEdited(innleggelsesperiodeToEdit);
+                            setModalIsOpen(true);
+                            setIsEditingPeriod(true);
                         }}
                         onDeleteClick={(innleggelsesperiodeToDelete) => {
                             const updatedInnleggelsesperiodeliste = [...innleggelsesperioder];
@@ -47,6 +61,7 @@ const Innleggelsesperiodeoversikt = () => {
                 closeButton
                 onRequestClose={() => {
                     setModalIsOpen(false);
+                    setIsEditingPeriod(false);
                 }}
                 contentLabel="Legg til innleggelsesperiode"
             >
@@ -54,7 +69,14 @@ const Innleggelsesperiodeoversikt = () => {
                     onSubmit={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        setInnleggelsesperioder([innleggelsesperiodeBeingEdited, ...innleggelsesperioder]);
+
+                        if (isEditingPeriod) {
+                            replacePeriod(innleggelsesperiodeToBeReplaced, innleggelsesperiodeBeingEdited);
+                            setInnleggelsesperiodeToBeReplaced(new Period('', ''));
+                            setIsEditingPeriod(false);
+                        } else {
+                            setInnleggelsesperioder([innleggelsesperiodeBeingEdited, ...innleggelsesperioder]);
+                        }
                         setInnleggelsesperiodeBeingEdited(new Period('', ''));
                         setModalIsOpen(false);
                     }}
@@ -99,7 +121,10 @@ const Innleggelsesperiodeoversikt = () => {
                                     mini
                                     style={{ marginLeft: '1rem' }}
                                     htmlType="button"
-                                    onClick={() => setModalIsOpen(false)}
+                                    onClick={() => {
+                                        setModalIsOpen(false);
+                                        setIsEditingPeriod(false);
+                                    }}
                                 >
                                     Avbryt
                                 </Knapp>

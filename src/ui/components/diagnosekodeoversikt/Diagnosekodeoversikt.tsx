@@ -19,7 +19,7 @@ const Diagnosekodeoversikt = () => {
             <TitleWithUnderline>Diagnosekoder</TitleWithUnderline>
             <Box marginTop={Margin.large}>
                 {diagnosekoder.length === 0 && <p>Ingen diagnosekoder registrert</p>}
-                {diagnosekoder.length >= 1 && (
+                {diagnosekoder.length > 0 && (
                     <Diagnosekodeliste
                         diagnosekoder={diagnosekoder}
                         onDeleteClick={(diagnosekodeToDelete) => {
@@ -62,11 +62,11 @@ const Diagnosekodeoversikt = () => {
                             />
                         </Box>
                         <Box marginTop={Margin.xLarge}>
-                            <div style={{ display: 'flex' }}>
+                            <div className={styles.diagnosekodeoversikt__buttonContainer}>
                                 <Hovedknapp mini>Lagre</Hovedknapp>
                                 <Knapp
                                     mini
-                                    style={{ marginLeft: '1rem' }}
+                                    className={styles.diagnosekodeoversikt__abortButton}
                                     htmlType="button"
                                     onClick={() => setModalIsOpen(false)}
                                 >
