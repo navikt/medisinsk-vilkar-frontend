@@ -3,6 +3,7 @@ import { Label } from 'nav-frontend-skjema';
 import Autocomplete from '@navikt/nap-autocomplete';
 import FieldError from '../../components/field-error/FieldError';
 import styles from './diagnosekodeSelector.less';
+import Diagnosekode from '../../../types/Diagnosekode';
 
 interface DiagnosekodeSelectorProps {
     label: string;
@@ -10,16 +11,18 @@ interface DiagnosekodeSelectorProps {
     name: string;
     errorMessage?: string;
     initialDiagnosekodeValue: string;
+    hideLabel?: boolean;
 }
 
 const fetchDiagnosekoderByQuery = (queryString: string) => {
-    return fetch(`/k9/diagnosekoder?query=${queryString}&max=8`);
+    const useMock = window.location.host === 'localhost:8081' ? 'http://localhost:8082' : ''; // TODO: Bedre måte å løse dette
+    return fetch(`${useMock}/k9/diagnosekoder?query=${queryString}&max=8`).then((response) => response.json());
 };
 
 const getUpdatedSuggestions = async (queryString: string) => {
     if (queryString.length >= 3) {
-        const diagnosekoder = await fetchDiagnosekoderByQuery(queryString);
-        return (diagnosekoder as any).map(({ kode, beskrivelse }) => ({
+        const diagnosekoder: Diagnosekode[] = await fetchDiagnosekoderByQuery(queryString);
+        return diagnosekoder.map(({ kode, beskrivelse }) => ({
             key: kode,
             value: `${kode} - ${beskrivelse}`,
         }));
@@ -33,6 +36,7 @@ const PureDiagnosekodeSelector = ({
     name,
     errorMessage,
     initialDiagnosekodeValue,
+    hideLabel,
 }: DiagnosekodeSelectorProps): JSX.Element => {
     const [suggestions, setSuggestions] = React.useState([]);
     const [inputValue, setInputValue] = React.useState('');
@@ -58,7 +62,9 @@ const PureDiagnosekodeSelector = ({
     };
     return (
         <div className={styles.diagnosekodeContainer}>
-            <Label htmlFor={name}>{label}</Label>
+            <div className={hideLabel ? styles.diagnosekodeContainer__hideLabel : ''}>
+                <Label htmlFor={name}>{label}</Label>
+            </div>
             <Autocomplete
                 id={name}
                 suggestions={suggestions}

@@ -1,12 +1,13 @@
-import React from 'react';
-import Modal from 'nav-frontend-modal';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import { Input } from 'nav-frontend-skjema';
-import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
-import Box, { Margin } from '../box/Box';
+import Modal from 'nav-frontend-modal';
+import React from 'react';
+import DiagnosekodeSelektor from '../../form/pure/PureDiagnosekodeSelector';
 import AddButton from '../add-button/AddButton';
-import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
+import Box, { Margin } from '../box/Box';
 import Diagnosekodeliste from '../diagnosekodeliste/Diagnosekodeliste';
+import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
+import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
+import styles from './diagnosekodeoversikt.less';
 
 Modal.setAppElement('#app');
 const Diagnosekodeoversikt = () => {
@@ -39,6 +40,7 @@ const Diagnosekodeoversikt = () => {
                     setModalIsOpen(false);
                 }}
                 contentLabel="Legg til diagnosekode"
+                className={styles.diagnosekodeoversikt__modal}
             >
                 <form
                     onSubmit={(e) => {
@@ -51,7 +53,13 @@ const Diagnosekodeoversikt = () => {
                 >
                     <ModalFormWrapper title="Legg til diagnosekode">
                         <Box marginTop={Margin.large}>
-                            <Input onChange={(event) => setNyDiagnosekode(event.target.value)} label="Diagnosekode" />
+                            <DiagnosekodeSelektor
+                                initialDiagnosekodeValue=""
+                                name="diagnosekode"
+                                onChange={(value) => setNyDiagnosekode(value)}
+                                label="Diagnosekode"
+                                hideLabel
+                            />
                         </Box>
                         <Box marginTop={Margin.xLarge}>
                             <div style={{ display: 'flex' }}>

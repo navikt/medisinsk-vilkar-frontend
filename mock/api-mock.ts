@@ -7,6 +7,7 @@ import mockedTilsynsbehovVurderinger from './mocked-data/mockedTilsynsbehovVurde
 import mockedDokumentliste from './mocked-data/mockedDokumentliste';
 import mockedDokumentoversikt from './mocked-data/mockedDokumentoversikt';
 import { createVurdering } from './apiUtils';
+import mockedDiagnosekoderespons from './mocked-data/mockedDiagnosekoderespons';
 
 const app = express();
 
@@ -45,6 +46,10 @@ app.use('/mock/dokumentoversikt', (req, res) => {
 
 app.use('/mock/data-til-vurdering', (req, res) => {
     res.send(mockedDokumentliste);
+});
+
+app.use('/k9/diagnosekoder', (req, res) => {
+    res.send(mockedDiagnosekoderespons);
 });
 
 const port = 8082;
