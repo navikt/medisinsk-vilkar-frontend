@@ -11,10 +11,14 @@ import ContainerContext from '../../context/ContainerContext';
 import Box, { Margin } from '../box/Box';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import PageError from '../page-error/PageError';
-import VurderingsdetaljerForToOmsorgspersoner from '../vurderingsdetaljer-for-to-omsorgspersoner/VurderingsdetaljerForToOmsorgspersoner';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
+import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
+import LinkRel from '../../../constants/LinkRel';
+import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
+import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
+import NyVurderingAvToOmsorgspersonerController from '../ny-vurdering-av-to-omsorgspersoner-controller/NyVurderingAvToOmsorgspersonerController';
 
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
@@ -136,12 +140,33 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                     }}
                     detailSection={() => {
                         if (visVurderingDetails) {
+                            if (valgtVurderingselement?.id) {
+                                const vurderingUrl = findHrefByRel(
+                                    LinkRel.HENT_VURDERING,
+                                    valgtVurderingselement.links
+                                );
+                                return (
+                                    <VurderingsdetaljerController
+                                        hentVurderingUrl={vurderingUrl}
+                                        contentRenderer={(valgtVurdering) => (
+                                            <VurderingsoppsummeringForToOmsorgspersoner vurdering={valgtVurdering} />
+                                        )}
+                                    />
+                                );
+                            }
+
+                            const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
+                            const dataTilVurderingUrl = findHrefByRel(
+                                LinkRel.DATA_TIL_VURDERING,
+                                vurderingsoversikt.links
+                            );
                             return (
-                                <VurderingsdetaljerForToOmsorgspersoner
-                                    vurderingId={valgtVurderingselement?.id}
+                                <NyVurderingAvToOmsorgspersonerController
+                                    opprettVurderingLink={opprettLink}
+                                    dataTilVurderingUrl={dataTilVurderingUrl}
                                     onVurderingLagret={oppdaterVurderingsoversikt}
+                                    perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
                                     resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
-                                    perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}
                                 />
                             );
                         }

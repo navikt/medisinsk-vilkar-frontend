@@ -2,6 +2,7 @@ import Vurdering from '../../src/types/Vurdering';
 import { Period } from '../../src/types/Period';
 import Vurderingsresultat from '../../src/types/Vurderingsresultat';
 import mockedDokumentliste from './mockedDokumentliste';
+import createMockedVurderingselementLinks from './mockedVurderingselementLinks';
 
 const tilsynsbehovVurderingerMock: Vurdering[] = [
     {
@@ -13,6 +14,7 @@ const tilsynsbehovVurderingerMock: Vurdering[] = [
                 resultat: Vurderingsresultat.OPPFYLT,
                 dokumenter: mockedDokumentliste,
                 tekst: 'Fordi her er det behov',
+                links: createMockedVurderingselementLinks('1'),
             },
         ],
         annenInformasjon: {

@@ -26,28 +26,28 @@ export enum FieldName {
     DOKUMENTER = 'dokumenter',
 }
 
-export interface VurderingAvTilsynsbehovFormState {
+export interface NyVurderingAvTilsynsbehovFormState {
     [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]?: string;
     [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]?: boolean;
     [FieldName.PERIODER]?: Period[];
     [FieldName.DOKUMENTER]: string[];
 }
 
-interface VurderingAvTilsynsbehovFormProps {
-    defaultValues: VurderingAvTilsynsbehovFormState;
-    onSubmit: (nyVurdering: Vurderingsversjon) => void;
+interface NyVurderingAvTilsynsbehovFormProps {
+    defaultValues: NyVurderingAvTilsynsbehovFormState;
+    onSubmit: (nyVurdering: Partial<Vurderingsversjon>) => void;
     resterendeVurderingsperioder?: Period[];
     perioderSomKanVurderes?: Period[];
     dokumenter: Dokument[];
 }
 
-const VurderingAvTilsynsbehovForm = ({
+const NyVurderingAvTilsynsbehovForm = ({
     defaultValues,
     onSubmit,
     resterendeVurderingsperioder,
     perioderSomKanVurderes,
     dokumenter,
-}: VurderingAvTilsynsbehovFormProps): JSX.Element => {
+}: NyVurderingAvTilsynsbehovFormProps): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
         mode: 'onChange',
@@ -81,7 +81,7 @@ const VurderingAvTilsynsbehovForm = ({
         [perioderSomKanVurderes]
     );
 
-    const lagNyTilsynsvurdering = (formState: VurderingAvTilsynsbehovFormState) => {
+    const lagNyTilsynsvurdering = (formState: NyVurderingAvTilsynsbehovFormState) => {
         onSubmit(lagTilsynsbehovVurdering(formState, dokumenter));
     };
 
@@ -204,4 +204,4 @@ const VurderingAvTilsynsbehovForm = ({
     );
 };
 
-export default VurderingAvTilsynsbehovForm;
+export default NyVurderingAvTilsynsbehovForm;

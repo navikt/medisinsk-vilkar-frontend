@@ -26,28 +26,28 @@ export enum FieldName {
     DOKUMENTER = 'dokumenter',
 }
 
-export interface VurderingAvToOmsorgspersonerFormState {
+export interface NyVurderingAvToOmsorgspersonerFormState {
     [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]?: string;
     [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]?: boolean;
     [FieldName.PERIODER]?: Period[];
     [FieldName.DOKUMENTER]: string[];
 }
 
-interface VurderingAvToOmsorgspersonerFormProps {
-    defaultValues: VurderingAvToOmsorgspersonerFormState;
-    onSubmit: (nyVurdering: Vurderingsversjon) => void;
+interface NyVurderingAvToOmsorgspersonerFormProps {
+    defaultValues: NyVurderingAvToOmsorgspersonerFormState;
+    onSubmit: (nyVurdering: Partial<Vurderingsversjon>) => void;
     resterendeVurderingsperioder?: Period[];
     perioderSomKanVurderes?: Period[];
     dokumenter: Dokument[];
 }
 
-const VurderingAvToOmsorgspersonerForm = ({
+const NyVurderingAvToOmsorgspersonerForm = ({
     defaultValues,
     onSubmit,
     resterendeVurderingsperioder,
     perioderSomKanVurderes,
     dokumenter,
-}: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
+}: NyVurderingAvToOmsorgspersonerFormProps): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
         shouldUnregister: false,
@@ -78,7 +78,7 @@ const VurderingAvToOmsorgspersonerForm = ({
         [perioderSomKanVurderes]
     );
 
-    const lagNyVurdering = (formState: VurderingAvToOmsorgspersonerFormState) => {
+    const lagNyVurdering = (formState: NyVurderingAvToOmsorgspersonerFormState) => {
         onSubmit(lagToOmsorgspersonerVurdering(formState, dokumenter));
     };
 
@@ -178,4 +178,4 @@ const VurderingAvToOmsorgspersonerForm = ({
     );
 };
 
-export default VurderingAvToOmsorgspersonerForm;
+export default NyVurderingAvToOmsorgspersonerForm;

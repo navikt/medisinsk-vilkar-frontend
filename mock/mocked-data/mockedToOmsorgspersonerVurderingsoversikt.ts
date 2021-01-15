@@ -1,4 +1,6 @@
 import Vurderingsresultat from '../../src/types/Vurderingsresultat';
+import mockedVurderingsoversiktLinks from './mockedVurderingsoversiktLinks';
+import createMockedVurderingselementLinks from './mockedVurderingselementLinks';
 
 const mockedToOmsorgspersonerVurderingsoversikt = {
     vurderingselementer: [
@@ -8,6 +10,7 @@ const mockedToOmsorgspersonerVurderingsoversikt = {
             resultat: Vurderingsresultat.OPPFYLT,
             gjelderForSøker: false,
             gjelderForAnnenPart: true,
+            links: createMockedVurderingselementLinks('11'),
         },
         {
             id: '22',
@@ -15,6 +18,7 @@ const mockedToOmsorgspersonerVurderingsoversikt = {
             resultat: Vurderingsresultat.IKKE_OPPFYLT,
             gjelderForSøker: false,
             gjelderForAnnenPart: true,
+            links: createMockedVurderingselementLinks('22'),
         },
     ],
     resterendeVurderingsperioder: [{ fom: '2020-01-16', tom: '2020-01-20' }],
@@ -23,6 +27,7 @@ const mockedToOmsorgspersonerVurderingsoversikt = {
         { fom: '2020-01-16', tom: '2020-01-20' },
     ],
     søknadsperioderTilBehandling: [{ fom: '2020-01-16', tom: '2020-01-20' }],
+    links: mockedVurderingsoversiktLinks,
 };
 
 export default mockedToOmsorgspersonerVurderingsoversikt;
