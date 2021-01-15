@@ -1,0 +1,23 @@
+.diagnosekodeliste {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
+  &__element {
+    border-bottom: 1px solid #C8C8C8;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  &__element:first-child {
+    border-top: 1px solid #C8C8C8;
+  }
+
+  &__element:not(:first-child) {
+    margin-top: 0.5rem;
+  }
+}
+
+.lenkeContainer {
+  float: right;
+}

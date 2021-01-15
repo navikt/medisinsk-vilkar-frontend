@@ -14,14 +14,29 @@ Modal.setAppElement('#app');
 const Innleggelsesperiodeoversikt = () => {
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [innleggelsesperioder, setInnleggelsesperioder] = React.useState<Period[]>([]);
-    const [nyInnleggelsesperiode, setNyInnleggelsesperiode] = React.useState<Period>(new Period('', ''));
+    const [innleggelsesperiodeBeingEdited, setInnleggelsesperiodeBeingEdited] = React.useState<Period>(
+        new Period('', '')
+    );
     return (
         <div className={styles.innleggelsesperiodeoversikt}>
             <TitleWithUnderline>Innleggelsesperioder</TitleWithUnderline>
             <Box marginTop={Margin.large}>
                 {innleggelsesperioder.length === 0 && <p>Ingen innleggelsesperioder registrert</p>}
                 {innleggelsesperioder.length >= 1 && (
-                    <Innleggelsesperiodeliste innleggelsesperioder={innleggelsesperioder} />
+                    <Innleggelsesperiodeliste
+                        innleggelsesperioder={innleggelsesperioder}
+                        onEditClick={(innleggelsesperiodeToEdit) => {
+                            // todo
+                        }}
+                        onDeleteClick={(innleggelsesperiodeToDelete) => {
+                            const updatedInnleggelsesperiodeliste = [...innleggelsesperioder];
+                            updatedInnleggelsesperiodeliste.splice(
+                                innleggelsesperioder.indexOf(innleggelsesperiodeToDelete),
+                                1
+                            );
+                            setInnleggelsesperioder(updatedInnleggelsesperiodeliste);
+                        }}
+                    />
                 )}
             </Box>
             <Box marginTop={Margin.large}>
@@ -39,8 +54,8 @@ const Innleggelsesperiodeoversikt = () => {
                     onSubmit={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        setInnleggelsesperioder([nyInnleggelsesperiode, ...innleggelsesperioder]);
-                        setNyInnleggelsesperiode(new Period('', ''));
+                        setInnleggelsesperioder([innleggelsesperiodeBeingEdited, ...innleggelsesperioder]);
+                        setInnleggelsesperiodeBeingEdited(new Period('', ''));
                         setModalIsOpen(false);
                     }}
                 >
@@ -51,10 +66,10 @@ const Innleggelsesperiodeoversikt = () => {
                                     <PureDatepicker
                                         label="Fra"
                                         ariaLabel="fra"
-                                        value={nyInnleggelsesperiode.fom || ''}
+                                        value={innleggelsesperiodeBeingEdited.fom || ''}
                                         onChange={(fomValue) =>
-                                            setNyInnleggelsesperiode(
-                                                new Period(fomValue, nyInnleggelsesperiode.tom || '')
+                                            setInnleggelsesperiodeBeingEdited(
+                                                new Period(fomValue, innleggelsesperiodeBeingEdited.tom || '')
                                             )
                                         }
                                         inputId="nyInnleggelsesperiodeFom"
@@ -65,10 +80,10 @@ const Innleggelsesperiodeoversikt = () => {
                                     <PureDatepicker
                                         label="Til"
                                         ariaLabel="til"
-                                        value={nyInnleggelsesperiode.tom || ''}
+                                        value={innleggelsesperiodeBeingEdited.tom || ''}
                                         onChange={(tomValue) =>
-                                            setNyInnleggelsesperiode(
-                                                new Period(nyInnleggelsesperiode.fom || '', tomValue)
+                                            setInnleggelsesperiodeBeingEdited(
+                                                new Period(innleggelsesperiodeBeingEdited.fom || '', tomValue)
                                             )
                                         }
                                         inputId="nyInnleggelsesperiodeTom"

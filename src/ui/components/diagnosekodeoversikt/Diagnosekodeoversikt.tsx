@@ -6,6 +6,7 @@ import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
 import Box, { Margin } from '../box/Box';
 import AddButton from '../add-button/AddButton';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
+import Diagnosekodeliste from '../diagnosekodeliste/Diagnosekodeliste';
 
 Modal.setAppElement('#app');
 const Diagnosekodeoversikt = () => {
@@ -18,11 +19,14 @@ const Diagnosekodeoversikt = () => {
             <Box marginTop={Margin.large}>
                 {diagnosekoder.length === 0 && <p>Ingen diagnosekoder registrert</p>}
                 {diagnosekoder.length >= 1 && (
-                    <ul style={{ listStyleType: 'none', margin: 0, padding: 0 }}>
-                        {diagnosekoder.map((diagnosekode) => (
-                            <li key={diagnosekode}>{diagnosekode}</li>
-                        ))}
-                    </ul>
+                    <Diagnosekodeliste
+                        diagnosekoder={diagnosekoder}
+                        onDeleteClick={(diagnosekodeToDelete) => {
+                            const updatedDiagnosekoder = [...diagnosekoder];
+                            updatedDiagnosekoder.splice(diagnosekoder.indexOf(diagnosekodeToDelete), 1);
+                            setDiagnosekoder(updatedDiagnosekoder);
+                        }}
+                    />
                 )}
             </Box>
             <Box marginTop={Margin.large}>
