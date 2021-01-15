@@ -6,7 +6,8 @@ import mockedToOmsorgspersonerVurderinger from './mocked-data/mockedToOmsorgsper
 import mockedTilsynsbehovVurderinger from './mocked-data/mockedTilsynsbehovVurderinger';
 import mockedDokumentliste from './mocked-data/mockedDokumentliste';
 import mockedDokumentoversikt from './mocked-data/mockedDokumentoversikt';
-import { createVurdering } from './apiUtils';
+import { createKontinuerligTilsynVurdering, createToOmsorgspersonerVurdering } from './apiUtils';
+import Vurderingstype from '../src/types/Vurderingstype';
 
 const app = express();
 
@@ -27,7 +28,11 @@ app.use('/mock/vurdering', (req, res) => {
 });
 
 app.use('/mock/opprett-vurdering', (req, res) => {
-    createVurdering(req.body);
+    if (req.body.type === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
+        createKontinuerligTilsynVurdering(req.body);
+    } else {
+        createToOmsorgspersonerVurdering(req.body);
+    }
     res.send();
 });
 

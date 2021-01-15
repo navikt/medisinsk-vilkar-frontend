@@ -114,7 +114,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
             <Box marginTop={harPerioderSomSkalVurderes || !harVurdertePerioder ? Margin.medium : null}>
                 <NavigationWithDetailView
                     navigationSection={() => {
-                        if (vurderingsoversikt?.resterendeVurderingsperioder.length === 0) {
+                        if (!harPerioderSomSkalVurderes && !harVurdertePerioder) {
                             return (
                                 <Box marginTop={Margin.medium}>
                                     <AlertStripeInfo>

@@ -3,7 +3,7 @@ import { Period } from '../../src/types/Period';
 import Vurderingsresultat from '../../src/types/Vurderingsresultat';
 import mockedDokumentliste from './mockedDokumentliste';
 
-const toOmsorgspengerVurderingerMock: Vurdering[] = [
+const toOmsorgspersonerVurderingerMock: Vurdering[] = [
     {
         id: '11',
         type: 'TO_OMSORGSPERSONER',
@@ -38,4 +38,4 @@ const toOmsorgspengerVurderingerMock: Vurdering[] = [
     },
 ];
 
-export default toOmsorgspengerVurderingerMock;
+export default toOmsorgspersonerVurderingerMock;
