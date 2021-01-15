@@ -1,7 +1,7 @@
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import Modal from 'nav-frontend-modal';
 import React from 'react';
-import DiagnosekodeSelektor from '../../form/pure/PureDiagnosekodeSelector';
+import DiagnosekodeSelector from '../../form/pure/PureDiagnosekodeSelector';
 import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
 import Diagnosekodeliste from '../diagnosekodeliste/Diagnosekodeliste';
@@ -53,7 +53,7 @@ const Diagnosekodeoversikt = () => {
                 >
                     <ModalFormWrapper title="Legg til diagnosekode">
                         <Box marginTop={Margin.large}>
-                            <DiagnosekodeSelektor
+                            <DiagnosekodeSelector
                                 initialDiagnosekodeValue=""
                                 name="diagnosekode"
                                 onChange={(value) => setNyDiagnosekode(value)}
