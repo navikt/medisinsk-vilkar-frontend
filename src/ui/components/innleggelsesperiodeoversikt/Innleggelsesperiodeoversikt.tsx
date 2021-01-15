@@ -20,7 +20,7 @@ const Innleggelsesperiodeoversikt = () => {
     const [innleggelsesperiodeToBeReplaced, setInnleggelsesperiodeToBeReplaced] = React.useState<Period>(
         new Period('', '')
     );
-    const [isEditingPeriod, setIsEditingPeriod] = React.useState(false);
+    const [isReplacingPeriod, setIsReplacingPeriod] = React.useState(false);
 
     const replacePeriod = (innleggelsesperiodeToReplace, newInnleggelsesperiode) => {
         const updatedInnleggelsesperiodeliste = [...innleggelsesperioder];
@@ -40,7 +40,7 @@ const Innleggelsesperiodeoversikt = () => {
                             setInnleggelsesperiodeToBeReplaced(innleggelsesperiodeToEdit);
                             setInnleggelsesperiodeBeingEdited(innleggelsesperiodeToEdit);
                             setModalIsOpen(true);
-                            setIsEditingPeriod(true);
+                            setIsReplacingPeriod(true);
                         }}
                         onDeleteClick={(innleggelsesperiodeToDelete) => {
                             const updatedInnleggelsesperiodeliste = [...innleggelsesperioder];
@@ -61,7 +61,7 @@ const Innleggelsesperiodeoversikt = () => {
                 closeButton
                 onRequestClose={() => {
                     setModalIsOpen(false);
-                    setIsEditingPeriod(false);
+                    setIsReplacingPeriod(false);
                 }}
                 contentLabel="Legg til innleggelsesperiode"
             >
@@ -70,10 +70,10 @@ const Innleggelsesperiodeoversikt = () => {
                         e.preventDefault();
                         e.stopPropagation();
 
-                        if (isEditingPeriod) {
+                        if (isReplacingPeriod) {
                             replacePeriod(innleggelsesperiodeToBeReplaced, innleggelsesperiodeBeingEdited);
                             setInnleggelsesperiodeToBeReplaced(new Period('', ''));
-                            setIsEditingPeriod(false);
+                            setIsReplacingPeriod(false);
                         } else {
                             setInnleggelsesperioder([innleggelsesperiodeBeingEdited, ...innleggelsesperioder]);
                         }
@@ -123,7 +123,7 @@ const Innleggelsesperiodeoversikt = () => {
                                     htmlType="button"
                                     onClick={() => {
                                         setModalIsOpen(false);
-                                        setIsEditingPeriod(false);
+                                        setIsReplacingPeriod(false);
                                     }}
                                 >
                                     Avbryt
