@@ -6,6 +6,7 @@ function processVurderingsoversikt({
     resterendeVurderingsperioder,
     søknadsperioderTilBehandling,
     vurderingselementer,
+    links,
 }: Vurderingsoversikt): Promise<Vurderingsoversikt> {
     const deferred: Promise<Vurderingsoversikt> = new Promise<Vurderingsoversikt>((resolve) => {
         try {
@@ -17,6 +18,7 @@ function processVurderingsoversikt({
                     ...vurderingselement,
                     periode: new Period(vurderingselement.periode.fom, vurderingselement.periode.tom),
                 })),
+                links,
             };
             resolve(vurderingsoversikt);
         } catch (error) {

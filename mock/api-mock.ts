@@ -23,7 +23,6 @@ app.use('/mock/vurdering', (req, res) => {
     const vurderingId = req.query.sykdomVurderingId;
     const alleVurderinger = [...mockedTilsynsbehovVurderinger, ...mockedToOmsorgspersonerVurderinger];
     const vurdering = alleVurderinger.find(({ id }) => id === vurderingId);
-
     res.send(vurdering);
 });
 

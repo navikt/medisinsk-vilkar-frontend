@@ -7,16 +7,13 @@ import Box, { Margin } from '../box/Box';
 import BasicList from '../basic-list/BasicList';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Vurdering from '../../../types/Vurdering';
-import Dokument from '../../../types/Dokument';
 
 interface VurderingsoppsummeringForKontinuerligTilsynOgPleieProps {
     vurdering: Vurdering;
-    alleDokumenter: Dokument[];
 }
 
 const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
     vurdering,
-    alleDokumenter,
 }: VurderingsoppsummeringForKontinuerligTilsynOgPleieProps) => {
     const gjeldendeVurdering = vurdering.versjoner[0];
     const { perioder, tekst, resultat } = gjeldendeVurdering;
@@ -27,7 +24,7 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
                     label="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
                     content={
                         <BasicList
-                            elements={alleDokumenter
+                            elements={vurdering.versjoner[0].dokumenter
                                 .filter((dokument) => gjeldendeVurdering.dokumenter.includes(dokument))
                                 .map((dokument) => (
                                     <DokumentLink dokument={dokument} />

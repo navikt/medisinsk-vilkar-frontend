@@ -1,4 +1,6 @@
 import Vurderingsresultat from '../../src/types/Vurderingsresultat';
+import mockedVurderingsoversiktLinks from './mockedVurderingsoversiktLinks';
+import createMockedVurderingselementLinks from './mockedVurderingselementLinks';
 
 const tilsynsbehovVurderingsoversiktMock = {
     vurderingselementer: [
@@ -8,6 +10,7 @@ const tilsynsbehovVurderingsoversiktMock = {
             resultat: Vurderingsresultat.OPPFYLT,
             gjelderForSøker: false,
             gjelderForAnnenPart: true,
+            links: createMockedVurderingselementLinks('1'),
         },
     ],
     resterendeVurderingsperioder: [{ fom: '2020-01-16', tom: '2020-01-20' }],
@@ -16,6 +19,7 @@ const tilsynsbehovVurderingsoversiktMock = {
         { fom: '2020-01-16', tom: '2020-01-20' },
     ],
     søknadsperioderTilBehandling: [],
+    links: mockedVurderingsoversiktLinks,
 };
 
 export default tilsynsbehovVurderingsoversiktMock;
