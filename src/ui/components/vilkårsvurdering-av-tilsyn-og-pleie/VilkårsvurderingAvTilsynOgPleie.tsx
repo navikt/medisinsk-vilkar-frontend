@@ -145,16 +145,12 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                             );
                         }
 
+                        const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
+                        const dataTilVurderingUrl = findHrefByRel(LinkRel.DATA_TIL_VURDERING, vurderingsoversikt.links);
                         return (
                             <NyVurderingAvTilsynsbehovController
-                                opprettVurderingLink={findLinkByRel(
-                                    LinkRel.OPPRETT_VURDERING,
-                                    vurderingsoversikt.links
-                                )}
-                                dataTilVurderingUrl={findHrefByRel(
-                                    LinkRel.DATA_TIL_VURDERING,
-                                    vurderingsoversikt.links
-                                )}
+                                opprettVurderingLink={opprettLink}
+                                dataTilVurderingUrl={dataTilVurderingUrl}
                                 onVurderingLagret={oppdaterVurderingsoversikt}
                                 perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
                                 resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
