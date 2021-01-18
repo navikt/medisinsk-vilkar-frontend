@@ -3,8 +3,10 @@ import NavigationWithDetailView from '../navigation-with-detail-view/NavigationW
 import Dokumentnavigasjon from '../dokumentnavigasjon/Dokumentnavigasjon';
 import StrukturerDokumentForm from '../strukturer-dokument-form/StrukturerDokumentForm';
 import StrukturertDokumentDetaljer from '../strukturert-dokument-detaljer/StrukturertDokumentDetaljer';
-import { hentDokumentoversikt } from '../../../util/httpMock';
 import { Dokumentoversikt, StrukturertDokument } from '../../../types/Dokument';
+import ContainerContext from '../../context/ContainerContext';
+import { fetchData } from '../../../util/httpUtils';
+import PageError from '../page-error/PageError';
 
 function lagreStrukturertDokument(dokument: StrukturertDokument) {
     return new Promise((resolve) => {
@@ -16,15 +18,26 @@ const StruktureringAvDokumentasjon = () => {
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [valgtDokument, setValgtDokument] = React.useState(null);
     const [dokumentoversikt, setDokumentoversikt] = React.useState<Dokumentoversikt>(null);
+    const [dokumentoversiktHarFeilet, setDokumentoversiktHarFeilet] = React.useState<boolean>(false);
+
+    const { endpoints } = React.useContext(ContainerContext);
+    const dokumentoversiktUrl = endpoints.dokumentoversikt;
+
+    const handleError = () => {
+        setIsLoading(false);
+        setDokumentoversiktHarFeilet(true);
+    };
 
     React.useEffect(() => {
         let isMounted = true;
-        hentDokumentoversikt().then((nyDokumentoversikt: Dokumentoversikt) => {
-            if (isMounted) {
-                setDokumentoversikt(nyDokumentoversikt);
-                setIsLoading(false);
-            }
-        });
+        fetchData(dokumentoversiktUrl)
+            .then((nyDokumentoversikt: Dokumentoversikt) => {
+                if (isMounted) {
+                    setDokumentoversikt(nyDokumentoversikt);
+                    setIsLoading(false);
+                }
+            })
+            .catch(handleError);
         return () => {
             isMounted = false;
         };
@@ -53,6 +66,9 @@ const StruktureringAvDokumentasjon = () => {
 
     if (isLoading) {
         return <p>Henter dokumenter</p>;
+    }
+    if (dokumentoversiktHarFeilet) {
+        return <PageError message="Noe gikk galt, vennligst prøv igjen senere." />;
     }
     return (
         <NavigationWithDetailView

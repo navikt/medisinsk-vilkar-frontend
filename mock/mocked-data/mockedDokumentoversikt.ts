@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
-import { Dokumenttype, Dokumentoversikt } from '../types/Dokument';
+import { Dokumenttype } from '../../src/types/Dokument';
 
-const mockedDokumentoversikt: Dokumentoversikt = {
+const mockedDokumentoversikt = {
     dokumenterMedMedisinskeOpplysninger: [
         {
             id: '2',
-            name: 'Dokument 2',
+            navn: 'Dokument 2',
             type: Dokumenttype.LEGEERKLÆRING,
             mottatt: dayjs().toDate().toISOString(),
             location: '#blahblah',
@@ -15,7 +15,7 @@ const mockedDokumentoversikt: Dokumentoversikt = {
         },
         {
             id: '3',
-            name: 'Dokument 2',
+            navn: 'Dokument 3',
             type: Dokumenttype.LEGEERKLÆRING,
             mottatt: dayjs().toDate().toISOString(),
             location: '#blahblah',
@@ -26,15 +26,15 @@ const mockedDokumentoversikt: Dokumentoversikt = {
     ],
     dokumenterUtenMedisinskeOpplysninger: [
         {
-            id: '3',
-            name: 'Dokument 2',
+            id: '4',
+            navn: 'Dokument 4',
             type: Dokumenttype.MANGLER_MEDISINSKE_OPPLYSNINGER,
             mottatt: dayjs().toDate().toISOString(),
             location: '#blahblah',
         },
     ],
     ustrukturerteDokumenter: [
-        { id: '1', name: 'Dokument 1', mottatt: dayjs().toDate().toISOString(), location: '#blahblah' },
+        { id: '1', navn: 'Dokument 1', mottatt: dayjs().toDate().toISOString(), location: '#blahblah' },
     ],
 };
 export default mockedDokumentoversikt;

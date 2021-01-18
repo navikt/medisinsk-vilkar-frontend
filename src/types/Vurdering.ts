@@ -13,8 +13,6 @@ export interface Vurderingsversjon {
     resultat: Vurderingsresultat;
     perioder: Period[];
     dokumenter: Dokument[];
-    endretAv?: string;
-    endretTidspunkt?: string;
 }
 
 interface Vurdering {

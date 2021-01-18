@@ -46,12 +46,12 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
             <Box marginTop={Margin.large}>
                 <LabelledContent
                     label="Er det behov for tilsyn og pleie?"
-                    content={<span>{resultat === Vurderingsresultat.INNVILGET ? 'Ja' : 'Nei'}</span>}
+                    content={<span>{resultat === Vurderingsresultat.OPPFYLT ? 'Ja' : 'Nei'}</span>}
                 />
             </Box>
             <Box marginTop={Margin.large}>
                 <LabelledContent
-                    label={resultat === Vurderingsresultat.INNVILGET ? 'Perioder innvilget' : 'Perioder avslått'}
+                    label={resultat === Vurderingsresultat.OPPFYLT ? 'Perioder innvilget' : 'Perioder avslått'}
                     content={
                         <ul style={{ margin: 0, listStyleType: 'none', padding: 0 }}>
                             {perioder.map((periode, i) => (

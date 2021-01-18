@@ -1,24 +1,29 @@
+import React, { useMemo } from 'react';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
-import React from 'react';
+import Spinner from 'nav-frontend-spinner';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { prettifyPeriod } from '../../../util/formats';
-import { hentTilsynsbehovVurderingsoversikt } from '../../../util/httpMock';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import VurderingsdetaljerForKontinuerligTilsynOgPleie from '../vurderingsdetaljer-for-kontinuerlig-tilsyn-og-pleie/VurderingsdetaljerForKontinuerligTilsynOgPleie';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
+import processVurderingsoversikt from '../../../util/vurderingsoversiktUtils';
+import { fetchData } from '../../../util/httpUtils';
+import PageError from '../page-error/PageError';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     onVilkårVurdert: () => void;
 }
 
 const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
-    const { vurdering, onVurderingValgt } = React.useContext(ContainerContext);
+    const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
+
+    const fetchAborter = useMemo(() => new AbortController(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
         visVurderingDetails: false,
@@ -28,6 +33,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         resterendeVurderingsperioderDefaultValue: [],
         vurdering,
         visRadForNyVurdering: false,
+        vurderingsoversiktFeilet: false,
     });
 
     const {
@@ -37,6 +43,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         valgtVurderingselement,
         resterendeVurderingsperioderDefaultValue,
         visRadForNyVurdering,
+        vurderingsoversiktFeilet,
     } = state;
 
     const harPerioderSomSkalVurderes =
@@ -44,15 +51,34 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         vurderingsoversikt.resterendeVurderingsperioder &&
         vurderingsoversikt.resterendeVurderingsperioder.length > 0;
 
+    const getVurderingsoversikt = () => {
+        const { signal } = fetchAborter;
+        return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, {
+            signal,
+        });
+    };
+
+    const visVurderingsoversikt = (nyVurderingsoversikt: Vurderingsoversikt) => {
+        dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
+    };
+
+    const handleError = () => {
+        dispatch({ type: ActionType.VURDERINGSOVERSIKT_FEILET });
+    };
+
     React.useEffect(() => {
         let isMounted = true;
-        hentTilsynsbehovVurderingsoversikt().then((nyVurderingsoversikt: Vurderingsoversikt) => {
-            if (isMounted) {
-                dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
-            }
-        });
+        getVurderingsoversikt()
+            .then(processVurderingsoversikt)
+            .then((nyVurderingsoversikt) => {
+                if (isMounted) {
+                    visVurderingsoversikt(nyVurderingsoversikt);
+                }
+            })
+            .catch(handleError);
         return () => {
             isMounted = false;
+            fetchAborter.abort();
         };
     }, []);
 
@@ -73,13 +99,21 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, vurderingselement: nyValgtVurderingselement });
     };
 
+    const oppdaterVurderingsoversikt = () => {
+        dispatch({ type: ActionType.PENDING });
+        getVurderingsoversikt().then(processVurderingsoversikt).then(visVurderingsoversikt);
+    };
+
     if (isLoading) {
-        return <p>Henter vurderinger</p>;
+        return <Spinner />;
+    }
+    if (vurderingsoversiktFeilet) {
+        return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
     }
     return (
         <>
             {harPerioderSomSkalVurderes && (
-                <div style={{ maxWidth: '1194px' }}>
+                <div style={{ maxWidth: '1204px' }}>
                     <AlertStripeAdvarsel>
                         {`Vurder behov for tilsyn og pleie for perioden ${prettifyPeriod(
                             vurderingsoversikt?.resterendeVurderingsperioder[0]
@@ -106,7 +140,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                         return (
                             <VurderingsdetaljerForKontinuerligTilsynOgPleie
                                 vurderingId={valgtVurderingselement?.id}
-                                onVurderingLagret={() => null}
+                                onVurderingLagret={oppdaterVurderingsoversikt}
                                 resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
                                 perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}
                             />

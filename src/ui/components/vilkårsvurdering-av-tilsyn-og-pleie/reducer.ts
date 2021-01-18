@@ -11,6 +11,7 @@ interface State {
     resterendeVurderingsperioderDefaultValue: Period[];
     vurdering: string;
     visRadForNyVurdering: boolean;
+    vurderingsoversiktFeilet: boolean;
 }
 
 interface Action {
@@ -38,6 +39,14 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 resterendeVurderingsperioderDefaultValue: resterendeVurderingsperioder,
                 visVurderingDetails: false,
                 visRadForNyVurdering: false,
+                vurderingsoversiktFeilet: false,
+            };
+        }
+        case ActionType.VURDERINGSOVERSIKT_FEILET: {
+            return {
+                ...state,
+                isLoading: false,
+                vurderingsoversiktFeilet: true,
             };
         }
         case ActionType.VIS_NY_VURDERING_FORM_FOR_PERIODE_TIL_VURDERING:
@@ -60,6 +69,12 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 ...state,
                 valgtVurderingselement: action.vurderingselement,
                 visVurderingDetails: true,
+            };
+        case ActionType.PENDING:
+            return {
+                ...state,
+                isLoading: true,
+                vurderingsoversiktFeilet: false,
             };
         default:
             return state;

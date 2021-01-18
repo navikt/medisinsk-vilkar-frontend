@@ -9,16 +9,16 @@ import {
 import Vurderingsresultat from '../types/Vurderingsresultat';
 import { Period } from '../types/Period';
 import Dokument from '../types/Dokument';
-import { finnBenyttedeDokumenter } from './dokumentUtils';
 import { Vurderingsversjon } from '../types/Vurdering';
+import { finnBenyttedeDokumenter } from './dokumentUtils';
 
 export const lagTilsynsbehovVurdering = (
     formState: VurderingAvTilsynsbehovFormState,
     alleDokumenter: Dokument[]
 ): Vurderingsversjon => {
     const resultat = formState[TilsynFieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]
-        ? Vurderingsresultat.INNVILGET
-        : Vurderingsresultat.AVSLÅTT;
+        ? Vurderingsresultat.OPPFYLT
+        : Vurderingsresultat.IKKE_OPPFYLT;
     const perioder = formState[TilsynFieldName.PERIODER].map((periodeWrapper) => {
         return new Period((periodeWrapper as any).period.fom, (periodeWrapper as any).period.tom);
     });
@@ -37,8 +37,8 @@ export const lagToOmsorgspersonerVurdering = (
     alleDokumenter: Dokument[]
 ): Vurderingsversjon => {
     const resultat = formState[ToOmsorgspersonerFieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]
-        ? Vurderingsresultat.INNVILGET
-        : Vurderingsresultat.AVSLÅTT;
+        ? Vurderingsresultat.OPPFYLT
+        : Vurderingsresultat.IKKE_OPPFYLT;
     const perioder = formState[TilsynFieldName.PERIODER].map(
         (periodeWrapper) => new Period((periodeWrapper as any).period.fom, (periodeWrapper as any).period.tom)
     );

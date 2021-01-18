@@ -7,8 +7,8 @@ interface StrukturertDokumentDetaljerProps {
 }
 
 const StrukturertDokumentDetaljer = ({ dokument }: StrukturertDokumentDetaljerProps) => {
-    const { name } = dokument;
-    return <DetailView title={`Detaljer for dokument: ${name}`}>Her er detaljene</DetailView>;
+    const { navn } = dokument;
+    return <DetailView title={`Detaljer for dokument: ${navn}`}>Her er detaljene</DetailView>;
 };
 
 export default StrukturertDokumentDetaljer;

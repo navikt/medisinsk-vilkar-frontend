@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-import Dokument, { Dokumenttype } from '../types/Dokument';
+import { Dokumenttype } from '../../src/types/Dokument';
 
-const mockedDokumentliste: Dokument[] = [
+export default [
     {
         id: '1',
         type: Dokumenttype.LEGEERKLÆRING,
@@ -18,10 +18,8 @@ const mockedDokumentliste: Dokument[] = [
         datert: dayjs('01-01-2020').utc(true).toDate(),
         navn: 'Foobar-haha.pdf',
         benyttet: true,
-        annenPartErKilde: false,
+        annenPartErKilde: true,
         fremhevet: true,
         location: '#',
     },
 ];
-
-export default mockedDokumentliste;

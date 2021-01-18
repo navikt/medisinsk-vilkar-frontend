@@ -1,8 +1,7 @@
-import Autocomplete from '@navikt/nap-autocomplete';
-import axios from 'axios';
-import { Label } from 'nav-frontend-skjema';
 import * as React from 'react';
-import Error from '../../components/error/Error';
+import { Label } from 'nav-frontend-skjema';
+import Autocomplete from '@navikt/nap-autocomplete';
+import FieldError from '../../components/field-error/FieldError';
 import styles from './diagnosekodeSelector.less';
 
 interface DiagnosekodeSelectorProps {
@@ -14,13 +13,13 @@ interface DiagnosekodeSelectorProps {
 }
 
 const fetchDiagnosekoderByQuery = (queryString: string) => {
-    return axios.get(`/k9/diagnosekoder?query=${queryString}&max=8`);
+    return fetch(`/k9/diagnosekoder?query=${queryString}&max=8`);
 };
 
 const getUpdatedSuggestions = async (queryString: string) => {
     if (queryString.length >= 3) {
         const diagnosekoder = await fetchDiagnosekoderByQuery(queryString);
-        return diagnosekoder.data.map(({ kode, beskrivelse }) => ({
+        return (diagnosekoder as any).map(({ kode, beskrivelse }) => ({
             key: kode,
             value: `${kode} - ${beskrivelse}`,
         }));
@@ -72,7 +71,7 @@ const PureDiagnosekodeSelector = ({
                 ariaLabel="Søk etter diagnose"
                 placeholder="Søk etter diagnose"
             />
-            {errorMessage && <Error message={errorMessage} />}
+            {errorMessage && <FieldError message={errorMessage} />}
         </div>
     );
 };

@@ -6,7 +6,7 @@ interface UstrukturertDokumentElementProps {
 }
 
 const UstrukturertDokumentElement = ({ dokument }: UstrukturertDokumentElementProps) => {
-    return <div>{dokument.name}</div>;
+    return <div>{dokument.navn}</div>;
 };
 
 export default UstrukturertDokumentElement;

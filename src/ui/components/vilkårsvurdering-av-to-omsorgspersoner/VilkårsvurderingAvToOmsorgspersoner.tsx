@@ -1,19 +1,25 @@
 import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import React from 'react';
-import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import { prettifyPeriod } from '../../../util/formats';
-import { hentToOmsorgspersonerVurderingsoversikt } from '../../../util/httpMock';
-import ContainerContext from '../../context/ContainerContext';
-import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
-import ActionType from './actionTypes';
-import vilkårsvurderingReducer from './reducer';
-import VurderingsdetaljerForToOmsorgspersoner from '../vurderingsdetaljer-for-to-omsorgspersoner/VurderingsdetaljerForToOmsorgspersoner';
-import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
+import Spinner from 'nav-frontend-spinner';
+import React, { useMemo } from 'react';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
+import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
+import { prettifyPeriod } from '../../../util/formats';
+import { fetchData } from '../../../util/httpUtils';
+import processVurderingsoversikt from '../../../util/vurderingsoversiktUtils';
+import ContainerContext from '../../context/ContainerContext';
+import Box, { Margin } from '../box/Box';
+import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
+import PageError from '../page-error/PageError';
+import VurderingsdetaljerForToOmsorgspersoner from '../vurderingsdetaljer-for-to-omsorgspersoner/VurderingsdetaljerForToOmsorgspersoner';
+import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
+import ActionType from './actionTypes';
+import vilkårsvurderingReducer from './reducer';
 
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
-    const { vurdering, onVurderingValgt } = React.useContext(ContainerContext);
+    const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
+
+    const fetchAborter = useMemo(() => new AbortController(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
         visVurderingDetails: false,
@@ -22,6 +28,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         valgtVurderingselement: null,
         resterendeVurderingsperioderDefaultValue: [],
         vurdering,
+        vurderingsoversiktFeilet: false,
     });
 
     const {
@@ -30,21 +37,38 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         visVurderingDetails,
         valgtVurderingselement,
         resterendeVurderingsperioderDefaultValue,
+        vurderingsoversiktFeilet,
     } = state;
 
     const harPerioderSomSkalVurderes = vurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
+    const harVurdertePerioder = vurderingsoversikt?.vurderingselementer?.length > 0;
+
+    const getVurderingsoversikt = () => {
+        const { signal } = fetchAborter;
+        return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktBehovForToOmsorgspersoner, { signal });
+    };
+
+    const visVurderingsoversikt = (nyVurderingsoversikt: Vurderingsoversikt) => {
+        dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
+    };
+
+    const handleError = () => {
+        dispatch({ type: ActionType.VURDERINGSOVERSIKT_FEILET });
+    };
 
     React.useEffect(() => {
         let isMounted = true;
-
-        hentToOmsorgspersonerVurderingsoversikt().then((nyVurderingsoversikt: Vurderingsoversikt) => {
-            if (isMounted) {
-                dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });
-            }
-        });
-
+        getVurderingsoversikt()
+            .then(processVurderingsoversikt)
+            .then((nyVurderingsoversikt) => {
+                if (isMounted) {
+                    visVurderingsoversikt(nyVurderingsoversikt);
+                }
+            })
+            .catch(handleError);
         return () => {
             isMounted = false;
+            fetchAborter.abort();
         };
     }, []);
 
@@ -58,58 +82,74 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, vurderingselement: nyvalgtVurderingselement });
     };
 
+    const oppdaterVurderingsoversikt = () => {
+        dispatch({ type: ActionType.PENDING });
+        getVurderingsoversikt().then(processVurderingsoversikt).then(visVurderingsoversikt);
+    };
+
     if (isLoading) {
-        return <p>Henter vurderinger</p>;
+        return <Spinner />;
+    }
+    if (vurderingsoversiktFeilet) {
+        return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
     }
     return (
-        <>
+        <div style={{ maxWidth: '1204px' }}>
             {harPerioderSomSkalVurderes && (
-                <div style={{ maxWidth: '1194px' }}>
-                    <AlertStripeAdvarsel>
-                        {`Vurder behov for to omsorgspersoner for perioden ${prettifyPeriod(
-                            vurderingsoversikt?.resterendeVurderingsperioder[0]
-                        )}.`}
-                    </AlertStripeAdvarsel>
-                    <div style={{ marginTop: '1rem' }} />
-                </div>
+                <AlertStripeAdvarsel>
+                    {`Vurder behov for to omsorgspersoner for perioden ${prettifyPeriod(
+                        vurderingsoversikt?.resterendeVurderingsperioder[0]
+                    )}.`}
+                </AlertStripeAdvarsel>
             )}
-            <NavigationWithDetailView
-                navigationSection={() => {
-                    if (vurderingsoversikt?.resterendeVurderingsperioder.length === 0) {
+
+            {!harVurdertePerioder && !harPerioderSomSkalVurderes && (
+                <Box marginTop={Margin.large}>
+                    <AlertStripeInfo>
+                        To omsorgspersoner skal kun vurderes dersom det er flere parter som har søkt i samme periode,
+                        eller det er opplyst i søknaden om at det kommer en søker til.
+                    </AlertStripeInfo>
+                </Box>
+            )}
+            <Box marginTop={harPerioderSomSkalVurderes || !harVurdertePerioder ? Margin.medium : null}>
+                <NavigationWithDetailView
+                    navigationSection={() => {
+                        if (!harPerioderSomSkalVurderes && !harVurdertePerioder) {
+                            return (
+                                <Box marginTop={Margin.medium}>
+                                    <AlertStripeInfo>
+                                        To omsorgspersoner skal ikke vurderes før tilsyn og pleie er blitt innvilget og
+                                        det er to parter i saken.
+                                    </AlertStripeInfo>
+                                </Box>
+                            );
+                        }
                         return (
-                            <div style={{ marginTop: '1rem' }}>
-                                <AlertStripeInfo>
-                                    To omsorgspersoner skal ikke vurderes før tilsyn og pleie er blitt innvilget og det
-                                    er to parter i saken.
-                                </AlertStripeInfo>
-                            </div>
-                        );
-                    }
-                    return (
-                        <Vurderingsnavigasjon
-                            vurderingselementer={vurderingsoversikt?.vurderingselementer}
-                            resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
-                            søknadsperioderTilBehandling={vurderingsoversikt?.søknadsperioderTilBehandling}
-                            onVurderingValgt={velgVurderingselement}
-                            onNyVurderingClick={visNyVurderingForm}
-                        />
-                    );
-                }}
-                detailSection={() => {
-                    if (visVurderingDetails) {
-                        return (
-                            <VurderingsdetaljerForToOmsorgspersoner
-                                vurderingId={valgtVurderingselement?.id}
-                                onVurderingLagret={() => null}
-                                resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
-                                perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}
+                            <Vurderingsnavigasjon
+                                vurderingselementer={vurderingsoversikt?.vurderingselementer}
+                                resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
+                                søknadsperioderTilBehandling={vurderingsoversikt?.søknadsperioderTilBehandling}
+                                onVurderingValgt={velgVurderingselement}
+                                onNyVurderingClick={visNyVurderingForm}
                             />
                         );
-                    }
-                    return null;
-                }}
-            />
-        </>
+                    }}
+                    detailSection={() => {
+                        if (visVurderingDetails) {
+                            return (
+                                <VurderingsdetaljerForToOmsorgspersoner
+                                    vurderingId={valgtVurderingselement?.id}
+                                    onVurderingLagret={oppdaterVurderingsoversikt}
+                                    resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                                    perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}
+                                />
+                            );
+                        }
+                        return null;
+                    }}
+                />
+            </Box>
+        </div>
     );
 };
 

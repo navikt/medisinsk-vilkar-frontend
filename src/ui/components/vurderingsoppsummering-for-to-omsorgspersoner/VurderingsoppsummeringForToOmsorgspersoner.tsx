@@ -45,7 +45,7 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
             <Box marginTop={Margin.large}>
                 <LabelledContent
                     label="Er det behov for to omsorgspersoner?"
-                    content={<span>{resultat === Vurderingsresultat.INNVILGET ? 'Ja' : 'Nei'}</span>}
+                    content={<span>{resultat === Vurderingsresultat.OPPFYLT ? 'Ja' : 'Nei'}</span>}
                 />
             </Box>
             <Box marginTop={Margin.large}>
