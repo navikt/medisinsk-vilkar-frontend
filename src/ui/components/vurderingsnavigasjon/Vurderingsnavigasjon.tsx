@@ -36,7 +36,7 @@ const Vurderingsnavigasjon = ({
         ({ periode, resultat, gjelderForAnnenPart, gjelderForSøker }) => {
             const visOverlappetikett =
                 harPerioderSomSkalVurderes &&
-                søknadsperioderTilBehandling.some((søknadsperiode: Period) => søknadsperiode.overlapsWith(periode));
+                resterendeVurderingsperioder.some((søknadsperiode: Period) => søknadsperiode.overlapsWith(periode));
 
             return (
                 <VurderingsperiodeElement

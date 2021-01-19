@@ -2,8 +2,9 @@ import Vurdering from '../../src/types/Vurdering';
 import { Period } from '../../src/types/Period';
 import Vurderingsresultat from '../../src/types/Vurderingsresultat';
 import mockedDokumentliste from './mockedDokumentliste';
+import createMockedVurderingselementLinks from './mockedVurderingselementLinks';
 
-const toOmsorgspengerVurderingerMock: Vurdering[] = [
+const toOmsorgspersonerVurderingerMock: Vurdering[] = [
     {
         id: '11',
         type: 'TO_OMSORGSPERSONER',
@@ -13,6 +14,7 @@ const toOmsorgspengerVurderingerMock: Vurdering[] = [
                 resultat: Vurderingsresultat.OPPFYLT,
                 dokumenter: mockedDokumentliste,
                 tekst: 'Fordi her er det behov',
+                links: createMockedVurderingselementLinks('11'),
             },
         ],
         annenInformasjon: {
@@ -29,6 +31,7 @@ const toOmsorgspengerVurderingerMock: Vurdering[] = [
                 resultat: Vurderingsresultat.IKKE_OPPFYLT,
                 dokumenter: mockedDokumentliste,
                 tekst: 'Fordi her er det ikke behov',
+                links: createMockedVurderingselementLinks('22'),
             },
         ],
         annenInformasjon: {
@@ -38,4 +41,4 @@ const toOmsorgspengerVurderingerMock: Vurdering[] = [
     },
 ];
 
-export default toOmsorgspengerVurderingerMock;
+export default toOmsorgspersonerVurderingerMock;

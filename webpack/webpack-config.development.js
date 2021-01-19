@@ -18,7 +18,7 @@ const webpackConfig = merge(commonWebpackConfig, {
 const devServerOptions = {
     hot: true,
     headers: {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'http://localhost:9000',
     },
 };
 WebpackDevServer.addDevServerEntrypoints(webpackConfig, devServerOptions);

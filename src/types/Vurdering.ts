@@ -1,6 +1,7 @@
 import Dokument from './Dokument';
 import { Period } from './Period';
 import Vurderingsresultat from './Vurderingsresultat';
+import Link from './Link';
 
 export interface AnnenInformasjon {
     resterendeVurderingsperioder: Period[];
@@ -13,8 +14,7 @@ export interface Vurderingsversjon {
     resultat: Vurderingsresultat;
     perioder: Period[];
     dokumenter: Dokument[];
-    endretAv?: string;
-    endretTidspunkt?: string;
+    links: Link[];
 }
 
 interface Vurdering {

@@ -1,5 +1,4 @@
 import React from 'react';
-import Dokument from '../../../types/Dokument';
 import Vurdering from '../../../types/Vurdering';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import { prettifyPeriod } from '../../../util/formats';
@@ -11,15 +10,11 @@ import LabelledContent from '../labelled-content/LabelledContent';
 
 interface VurderingsoppsummeringForToOmsorgspersonerProps {
     vurdering: Vurdering;
-    alleDokumenter: Dokument[];
 }
 
-const VurderingsoppsummeringForToOmsorgspersoner = ({
-    vurdering,
-    alleDokumenter,
-}: VurderingsoppsummeringForToOmsorgspersonerProps) => {
+const VurderingsoppsummeringForToOmsorgspersoner = ({ vurdering }: VurderingsoppsummeringForToOmsorgspersonerProps) => {
     const gjeldendeVurdering = vurdering.versjoner[0];
-    const { perioder, tekst, resultat } = gjeldendeVurdering;
+    const { perioder, tekst, resultat, dokumenter } = gjeldendeVurdering;
     return (
         <DetailView title="Vurdering av to omsorgspersoner">
             <Box marginTop={Margin.medium}>
@@ -27,11 +22,9 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
                     label="Hvilke dokumenter er brukt i vurderingen av behov for to omsorgspersoner?"
                     content={
                         <BasicList
-                            elements={alleDokumenter
-                                .filter((dokument) => gjeldendeVurdering.dokumenter.includes(dokument))
-                                .map((dokument) => (
-                                    <DokumentLink dokument={dokument} />
-                                ))}
+                            elements={dokumenter.map((dokument) => (
+                                <DokumentLink dokument={dokument} />
+                            ))}
                         />
                     }
                 />
