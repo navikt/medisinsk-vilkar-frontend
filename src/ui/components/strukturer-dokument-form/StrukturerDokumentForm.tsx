@@ -34,12 +34,6 @@ interface StrukturerDokumentFormProps {
 const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormProps) => {
     const formMethods = useForm<StrukturerDokumentFormState>();
 
-    const inneholderMedisinskeOpplysninger = formMethods.watch(FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER);
-
-    const dokumentetErEnLegeerklæring = inneholderMedisinskeOpplysninger === Dokumenttype.LEGEERKLÆRING;
-    const dokumentetHarMedisinskeOpplysninger =
-        dokumentetErEnLegeerklæring || inneholderMedisinskeOpplysninger === Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER;
-
     const lagNyttStrukturertDokument = (formState: StrukturerDokumentFormState) => {
         onSubmit(lagStrukturertDokument(formState, dokument));
     };
@@ -50,7 +44,6 @@ const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormPr
                 <Form
                     buttonLabel="Bekreft"
                     onSubmit={formMethods.handleSubmit((formState) => lagNyttStrukturertDokument(formState))}
-                    shouldShowSubmitButton={inneholderMedisinskeOpplysninger !== undefined}
                 >
                     <Box marginTop={Margin.xLarge}>
                         <Lenke href={dokument.location} target="_blank">
@@ -78,25 +71,14 @@ const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormPr
                             validators={{ required }}
                         />
                     </Box>
-                    {dokumentetErEnLegeerklæring && (
-                        <Box marginTop={Margin.xLarge}>
-                            <YesOrNoQuestion
-                                name={FieldName.SIGNERT_AV_SYKEHUSLEGE_ELLER_LEGE_I_SPESIALISTHELSETJENESTEN}
-                                question="Er dokumentet signert av en sykehuslege eller en lege i spesialisthelsetjenesten?"
-                                validators={{ required }}
-                            />
-                        </Box>
-                    )}
-                    {dokumentetHarMedisinskeOpplysninger && (
-                        <Box marginTop={Margin.xLarge}>
-                            <Datepicker
-                                name={FieldName.DATERT}
-                                label="Hvilken dato er dokumentet datert?"
-                                defaultValue=""
-                                validators={{ required }}
-                            />
-                        </Box>
-                    )}
+                    <Box marginTop={Margin.xLarge}>
+                        <Datepicker
+                            name={FieldName.DATERT}
+                            label="Hvilken dato er dokumentet datert?"
+                            defaultValue=""
+                            validators={{ required }}
+                        />
+                    </Box>
                 </Form>
             </FormProvider>
         </DetailView>

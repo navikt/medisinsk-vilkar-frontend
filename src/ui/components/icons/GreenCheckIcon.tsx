@@ -1,8 +1,12 @@
 import React from 'react';
 import Icon from '../icon/Icon';
 
-const GreenCheckIcon = () => (
-    <Icon size={24}>
+interface GreenCheckIconProps {
+    size?: number;
+}
+
+const GreenCheckIcon = ({ size }: GreenCheckIconProps) => (
+    <Icon size={size || 24}>
         <path
             fillRule="evenodd"
             clipRule="evenodd"

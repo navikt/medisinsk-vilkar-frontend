@@ -5,8 +5,6 @@ import Box, { Margin } from '../box/Box';
 import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-pleie/VilkårsvurderingAvTilsynOgPleie';
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
 import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
-import Innleggelsesperiodeoversikt from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
-import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
 import styles from './medisinskVilkår.less';
 import DokumentasjonFooter from '../dokumentasjon-footer/DokumentasjonFooter';
 

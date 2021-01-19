@@ -8,6 +8,8 @@ import Diagnosekodeliste from '../diagnosekodeliste/Diagnosekodeliste';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
 import styles from './diagnosekodeoversikt.less';
+import IconWithText from '../icon-with-text/IconWithText';
+import WarningIcon from '../icons/WarningIcon';
 
 Modal.setAppElement('#app');
 const Diagnosekodeoversikt = () => {
@@ -18,7 +20,9 @@ const Diagnosekodeoversikt = () => {
         <div>
             <TitleWithUnderline>Diagnosekoder</TitleWithUnderline>
             <Box marginTop={Margin.large}>
-                {diagnosekoder.length === 0 && <p>Ingen diagnosekoder registrert</p>}
+                {diagnosekoder.length === 0 && (
+                    <IconWithText iconRenderer={() => <WarningIcon />} text="Ingen diagnosekode registrert." />
+                )}
                 {diagnosekoder.length >= 1 && (
                     <Diagnosekodeliste
                         diagnosekoder={diagnosekoder}

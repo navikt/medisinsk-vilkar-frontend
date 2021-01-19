@@ -38,14 +38,6 @@ const StrukturertDokumentDetaljer = ({ dokument }: StrukturertDokumentDetaljerPr
                     content={renderDokumenttypeContent(type)}
                 />
             </Box>
-            {type === Dokumenttype.LEGEERKLÆRING && (
-                <Box marginTop={Margin.xLarge}>
-                    <LabelledContent
-                        label="Er dokumentet signert av en sykehuslege eller en lege i spesialisthelsetjenesten?"
-                        content={<span>{(dokument as Legeerklæring).harGyldigSignatur ? 'Ja' : 'Nei'}</span>}
-                    />
-                </Box>
-            )}
             <Box marginTop={Margin.xLarge}>
                 <LabelledContent label="Når er dokumentet datert?" content={prettifyDate(datert)} />
             </Box>
