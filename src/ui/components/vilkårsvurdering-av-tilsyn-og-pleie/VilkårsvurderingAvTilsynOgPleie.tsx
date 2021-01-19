@@ -25,7 +25,7 @@ interface VilkårsvurderingAvTilsynOgPleieProps {
 }
 
 const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
-    const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
+    const { vurdering, onVurderingValgt, endpoints, httpErrorHandler } = React.useContext(ContainerContext);
 
     const fetchAborter = useMemo(() => new AbortController(), []);
 
@@ -55,9 +55,13 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
 
     const getVurderingsoversikt = () => {
         const { signal } = fetchAborter;
-        return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, {
-            signal,
-        });
+        return fetchData<Vurderingsoversikt>(
+            endpoints.vurderingsoversiktKontinuerligTilsynOgPleie,
+            {
+                signal,
+            },
+            httpErrorHandler
+        );
     };
 
     const visVurderingsoversikt = (nyVurderingsoversikt: Vurderingsoversikt) => {

@@ -1,8 +1,15 @@
-export async function fetchData<T>(url: string, requestInit?: RequestInit): Promise<T> {
+export async function fetchData<T>(
+    url: string,
+    requestInit?: RequestInit,
+    httpErrorHandler?: (status: number) => void
+): Promise<T> {
     try {
         const response: Response = await fetch(url, requestInit);
         const { status } = response;
         if (status > 299) {
+            if (status === 401 || status === 403) {
+                httpErrorHandler(status);
+            }
             throw new Error(`Bad status code (${status})`);
         }
         try {

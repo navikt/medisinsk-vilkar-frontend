@@ -15,7 +15,7 @@ app.use(express.json());
 
 app.use(
     cors({
-        origin: 'http://localhost:8081',
+        origin: 'http://localhost:9000',
     })
 );
 
@@ -36,7 +36,8 @@ app.use('/mock/opprett-vurdering', (req, res) => {
 });
 
 app.use('/mock/kontinuerlig-tilsyn-og-pleie/vurderingsoversikt', (req, res) => {
-    res.send(mockedTilsynsbehovVurderingsoversikt);
+    // res.send(mockedTilsynsbehovVurderingsoversikt);
+    res.sendStatus(401);
 });
 
 app.use('/mock/to-omsorgspersoner/vurderingsoversikt', (req, res) => {
