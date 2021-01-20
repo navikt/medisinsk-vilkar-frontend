@@ -1,4 +1,4 @@
-import { Dokument, StrukturertDokument } from '../types/Dokument';
+import { Dokument } from '../types/Dokument';
 import {
     FieldName,
     StrukturerDokumentFormState,
@@ -10,14 +10,10 @@ export const finnBenyttedeDokumenter = (benyttedeDokumentIder: string[], alleDok
     });
 };
 
-export const lagStrukturertDokument = (
-    formState: StrukturerDokumentFormState,
-    dokument: Dokument
-): StrukturertDokument => {
+export const lagStrukturertDokument = (formState: StrukturerDokumentFormState, dokument: Dokument): Dokument => {
     return {
+        ...dokument,
         type: formState[FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER],
         datert: formState[FieldName.DATERT],
-        harGyldigSignatur: formState[FieldName.SIGNERT_AV_SYKEHUSLEGE_ELLER_LEGE_I_SPESIALISTHELSETJENESTEN] === true,
-        ...dokument,
     };
 };

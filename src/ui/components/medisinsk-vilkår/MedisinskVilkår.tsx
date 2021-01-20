@@ -6,7 +6,6 @@ import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
 import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
 import styles from './medisinskVilkår.less';
-import DokumentasjonFooter from '../dokumentasjon-footer/DokumentasjonFooter';
 
 const tabs = ['Legeerklæring', 'Tilsyn og pleie', 'To omsorgspersoner'];
 const MedisinskVilkår = () => {
@@ -26,12 +25,6 @@ const MedisinskVilkår = () => {
                     />
                     <div className={styles.medisinskVilkår__vilkårContentContainer}>
                         {activeTab === 0 && <StruktureringAvDokumentasjon />}
-                        {activeTab === 0 && (
-                            <Box marginTop={Margin.xLarge}>
-                                <DokumentasjonFooter />
-                            </Box>
-                        )}
-
                         {activeTab === 1 && <VilkårsvurderingAvTilsynOgPleie onVilkårVurdert={() => setActiveTab(1)} />}
                         {activeTab === 2 && <VilkårsvurderingAvToOmsorgspersoner />}
                     </div>

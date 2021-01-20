@@ -1,11 +1,11 @@
 import React from 'react';
-import { StrukturertDokument } from '../../../types/Dokument';
+import Dokument from '../../../types/Dokument';
 import { prettifyDate } from '../../../util/formats';
 import GreenCheckIconFilled from '../icons/GreenCheckIconFilled';
 import styles from './strukturertDokumentElement.less';
 
 interface StrukturertDokumentElementProps {
-    dokument: StrukturertDokument;
+    dokument: Dokument;
 }
 
 const StrukturertDokumentElement = ({ dokument: { navn, datert } }: StrukturertDokumentElementProps) => {

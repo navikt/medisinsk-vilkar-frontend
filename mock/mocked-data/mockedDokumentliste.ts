@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { Dokumenttype } from '../../src/types/Dokument';
+import createMockedDokumentelementLinks from './createMockedDokumentelementLinks';
 
 export default [
     {
@@ -10,7 +11,9 @@ export default [
         benyttet: true,
         annenPartErKilde: false,
         fremhevet: true,
+        behandlet: true,
         location: '#',
+        links: createMockedDokumentelementLinks('1'),
     },
     {
         id: '2',
@@ -20,6 +23,8 @@ export default [
         benyttet: true,
         annenPartErKilde: true,
         fremhevet: true,
+        behandlet: true,
         location: '#',
+        links: createMockedDokumentelementLinks('2'),
     },
 ];

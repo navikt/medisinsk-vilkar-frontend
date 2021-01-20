@@ -14,7 +14,6 @@ interface VurderingsnavigasjonProps {
     onNyVurderingClick: (perioder?: Period[]) => void;
     onVurderingValgt: (vurdering: Vurderingselement) => void;
     resterendeVurderingsperioder?: Period[];
-    søknadsperioderTilBehandling?: Period[];
 }
 
 const Vurderingsnavigasjon = ({
@@ -22,7 +21,6 @@ const Vurderingsnavigasjon = ({
     onNyVurderingClick,
     onVurderingValgt,
     resterendeVurderingsperioder,
-    søknadsperioderTilBehandling,
 }: VurderingsnavigasjonProps): JSX.Element => {
     const [activeIndex, setActiveIndex] = React.useState(-1);
 

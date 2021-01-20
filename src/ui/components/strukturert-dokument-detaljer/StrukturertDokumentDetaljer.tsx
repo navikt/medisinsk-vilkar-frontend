@@ -1,13 +1,13 @@
 import React from 'react';
 import Lenke from 'nav-frontend-lenker';
 import DetailView from '../detail-view/DetailView';
-import { Dokumenttype, Legeerklæring, StrukturertDokument } from '../../../types/Dokument';
+import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import Box, { Margin } from '../box/Box';
 import LabelledContent from '../labelled-content/LabelledContent';
 import { prettifyDate } from '../../../util/formats';
 
 interface StrukturertDokumentDetaljerProps {
-    dokument: StrukturertDokument;
+    dokument: Dokument;
 }
 
 const renderDokumenttypeContent = (dokumenttype: Dokumenttype) => {

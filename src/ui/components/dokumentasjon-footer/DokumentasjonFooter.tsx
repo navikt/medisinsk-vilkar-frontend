@@ -4,7 +4,11 @@ import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
 import SignertSeksjon from '../signert-seksjon/SignertSeksjon';
 import styles from './dokumentasjonFooter.less';
 
-const DokumentasjonFooter = () => {
+interface DokumentasjonFooterProps {
+    harGyldigSignatur: boolean;
+}
+
+const DokumentasjonFooter = ({ harGyldigSignatur }: DokumentasjonFooterProps) => {
     return (
         <div className={styles.dokumentasjonFooter}>
             <div className={styles.dokumentasjonFooter__firstSection}>
@@ -14,7 +18,7 @@ const DokumentasjonFooter = () => {
                 <Diagnosekodeoversikt />
             </div>
             <div className={styles.dokumentasjonFooter__thirdSection}>
-                <SignertSeksjon harGyldigSignatur={false} />
+                <SignertSeksjon harGyldigSignatur={harGyldigSignatur} />
             </div>
         </div>
     );

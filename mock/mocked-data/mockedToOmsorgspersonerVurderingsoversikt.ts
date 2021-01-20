@@ -1,6 +1,6 @@
 import Vurderingsresultat from '../../src/types/Vurderingsresultat';
 import mockedVurderingsoversiktLinks from './mockedVurderingsoversiktLinks';
-import createMockedVurderingselementLinks from './mockedVurderingselementLinks';
+import createMockedVurderingselementLinks from './createMockedVurderingselementLinks';
 
 const mockedToOmsorgspersonerVurderingsoversikt = {
     vurderingselementer: [

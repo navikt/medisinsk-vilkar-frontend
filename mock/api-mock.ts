@@ -9,6 +9,7 @@ import mockedDokumentoversikt from './mocked-data/mockedDokumentoversikt';
 import { createKontinuerligTilsynVurdering, createToOmsorgspersonerVurdering } from './apiUtils';
 import Vurderingstype from '../src/types/Vurderingstype';
 import mockedDiagnosekoderespons from './mocked-data/mockedDiagnosekoderespons';
+import createStrukturertDokument from './mocked-data/createStrukturertDokument';
 
 const app = express();
 
@@ -46,6 +47,11 @@ app.use('/mock/to-omsorgspersoner/vurderingsoversikt', (req, res) => {
 
 app.use('/mock/dokumentoversikt', (req, res) => {
     res.send(mockedDokumentoversikt);
+});
+
+app.use('/mock/endre-dokument', (req, res) => {
+    createStrukturertDokument(req.body);
+    res.sendStatus(200);
 });
 
 app.use('/mock/data-til-vurdering', (req, res) => {

@@ -83,7 +83,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
 
     const velgVurderingselement = (nyvalgtVurderingselement: Vurderingselement) => {
         onVurderingValgt(nyvalgtVurderingselement.id);
-        dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, vurderingselement: nyvalgtVurderingselement });
+        dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, valgtVurderingselement: nyvalgtVurderingselement });
     };
 
     const oppdaterVurderingsoversikt = () => {
@@ -132,7 +132,6 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                             <Vurderingsnavigasjon
                                 vurderingselementer={vurderingsoversikt?.vurderingselementer}
                                 resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
-                                søknadsperioderTilBehandling={vurderingsoversikt?.søknadsperioderTilBehandling}
                                 onVurderingValgt={velgVurderingselement}
                                 onNyVurderingClick={visNyVurderingForm}
                             />

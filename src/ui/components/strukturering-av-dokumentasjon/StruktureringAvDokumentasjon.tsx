@@ -1,100 +1,118 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import Spinner from 'nav-frontend-spinner';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import Dokumentnavigasjon from '../dokumentnavigasjon/Dokumentnavigasjon';
-import StrukturerDokumentForm from '../strukturer-dokument-form/StrukturerDokumentForm';
 import StrukturertDokumentDetaljer from '../strukturert-dokument-detaljer/StrukturertDokumentDetaljer';
-import { Dokumentoversikt, StrukturertDokument } from '../../../types/Dokument';
+import Dokument, { Dokumentoversikt, Dokumenttype } from '../../../types/Dokument';
 import ContainerContext from '../../context/ContainerContext';
 import { fetchData } from '../../../util/httpUtils';
 import PageError from '../page-error/PageError';
-
-function lagreStrukturertDokument(dokument: StrukturertDokument) {
-    return new Promise((resolve) => {
-        setTimeout(() => resolve({}), 1000);
-    });
-}
+import dokumentReducer from './reducer';
+import ActionType from './actionTypes';
+import { findLinkByRel } from '../../../util/linkUtils';
+import LinkRel from '../../../constants/LinkRel';
+import StrukturerDokumentController from '../strukturer-dokument-controller/StrukturerDokumentController';
+import DokumentasjonFooter from '../dokumentasjon-footer/DokumentasjonFooter';
+import Box, { Margin } from '../box/Box';
 
 const StruktureringAvDokumentasjon = () => {
-    const [isLoading, setIsLoading] = React.useState<boolean>(true);
-    const [valgtDokument, setValgtDokument] = React.useState(null);
-    const [dokumentoversikt, setDokumentoversikt] = React.useState<Dokumentoversikt>(null);
-    const [dokumentoversiktHarFeilet, setDokumentoversiktHarFeilet] = React.useState<boolean>(false);
+    const { dokument, endpoints, onDokumentValgt } = React.useContext(ContainerContext);
+    const fetchAborter = useMemo(() => new AbortController(), []);
 
-    const { endpoints } = React.useContext(ContainerContext);
-    const dokumentoversiktUrl = endpoints.dokumentoversikt;
+    const [state, dispatch] = React.useReducer(dokumentReducer, {
+        visDokumentDetails: false,
+        isLoading: true,
+        dokumentoversikt: null,
+        valgtDokument: null,
+        dokument,
+        dokumentoversiktFeilet: false,
+    });
+
+    const { dokumentoversikt, isLoading, visDokumentDetails, valgtDokument, dokumentoversiktFeilet } = state;
+
+    const getDokumentoversikt = () => {
+        const { signal } = fetchAborter;
+        return fetchData<Dokumentoversikt>(endpoints.dokumentoversikt, {
+            signal,
+        });
+    };
+
+    const visDokumentoversikt = (nyDokumentoversikt: Dokumentoversikt) => {
+        dispatch({ type: ActionType.VIS_DOKUMENTOVERSIKT, dokumentoversikt: nyDokumentoversikt });
+    };
 
     const handleError = () => {
-        setIsLoading(false);
-        setDokumentoversiktHarFeilet(true);
+        dispatch({ type: ActionType.DOKUMENTOVERSIKT_FEILET });
     };
 
     React.useEffect(() => {
         let isMounted = true;
-        fetchData(dokumentoversiktUrl)
-            .then((nyDokumentoversikt: Dokumentoversikt) => {
+        getDokumentoversikt()
+            .then((nyDokumentoversikt) => {
                 if (isMounted) {
-                    setDokumentoversikt(nyDokumentoversikt);
-                    setIsLoading(false);
+                    visDokumentoversikt(nyDokumentoversikt);
                 }
             })
             .catch(handleError);
         return () => {
             isMounted = false;
+            fetchAborter.abort();
         };
     }, []);
 
-    const strukturerteDokumenter = React.useMemo(() => {
-        if (dokumentoversikt) {
-            const { dokumenterMedMedisinskeOpplysninger, dokumenterUtenMedisinskeOpplysninger } = dokumentoversikt;
-            return [...dokumenterMedMedisinskeOpplysninger, ...dokumenterUtenMedisinskeOpplysninger];
-        }
-        return [];
-    }, [dokumentoversikt]);
+    const velgDokument = (nyttValgtDokument: Dokument) => {
+        onDokumentValgt(nyttValgtDokument.id);
+        dispatch({ type: ActionType.VELG_DOKUMENT, valgtDokument: nyttValgtDokument });
+    };
 
-    const lagreStruktureringAvDokument = (dokument: StrukturertDokument) => {
-        setIsLoading(true);
-        lagreStrukturertDokument(dokument).then(
-            () => {
-                setIsLoading(false);
-            },
-            () => {
-                // showErrorMessage ??
-                setIsLoading(false);
-            }
-        );
+    const oppdaterDokumentoversikt = () => {
+        dispatch({ type: ActionType.PENDING });
+        getDokumentoversikt().then(visDokumentoversikt);
     };
 
     if (isLoading) {
-        return <p>Henter dokumenter</p>;
+        return <Spinner />;
     }
-    if (dokumentoversiktHarFeilet) {
-        return <PageError message="Noe gikk galt, vennligst prøv igjen senere." />;
+    if (dokumentoversiktFeilet) {
+        return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
     }
+
+    const strukturerteDokumenter = dokumentoversikt.dokumenter.filter(({ behandlet }) => behandlet);
+    const ustrukturerteDokumenter = dokumentoversikt.dokumenter.filter(({ behandlet }) => !behandlet);
+    const harGyldigSignatur = strukturerteDokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING);
+
     return (
-        <NavigationWithDetailView
-            navigationSection={() => (
-                <Dokumentnavigasjon
-                    dokumenter={strukturerteDokumenter}
-                    dokumenterSomMåGjennomgås={dokumentoversikt?.ustrukturerteDokumenter}
-                    onDokumentValgt={(legeerklæring) => setValgtDokument(legeerklæring)}
-                />
-            )}
-            detailSection={() => {
-                if (!valgtDokument) {
-                    const ustrukturertDokument = dokumentoversikt?.ustrukturerteDokumenter[0];
-                    if (ustrukturertDokument) {
+        <>
+            <NavigationWithDetailView
+                navigationSection={() => (
+                    <Dokumentnavigasjon
+                        dokumenter={strukturerteDokumenter}
+                        dokumenterSomMåGjennomgås={ustrukturerteDokumenter}
+                        onDokumentValgt={velgDokument}
+                    />
+                )}
+                detailSection={() => {
+                    if (visDokumentDetails) {
+                        if (valgtDokument.behandlet) {
+                            return <StrukturertDokumentDetaljer dokument={valgtDokument} />;
+                        }
+
+                        const strukturerDokumentLink = findLinkByRel(LinkRel.ENDRE_DOKUMENT, valgtDokument.links);
                         return (
-                            <StrukturerDokumentForm
-                                dokument={ustrukturertDokument}
-                                onSubmit={lagreStruktureringAvDokument}
+                            <StrukturerDokumentController
+                                ustrukturertDokument={valgtDokument}
+                                strukturerDokumentUrl={strukturerDokumentLink.href}
+                                onDokumentStrukturert={oppdaterDokumentoversikt}
                             />
                         );
                     }
-                    return 'Ingen dokumenter å vise';
-                }
-                return <StrukturertDokumentDetaljer dokument={valgtDokument} />;
-            }}
-        />
+                    return null;
+                }}
+            />
+            <Box marginTop={Margin.xLarge}>
+                <DokumentasjonFooter harGyldigSignatur={harGyldigSignatur} />
+            </Box>
+        </>
     );
 };
 

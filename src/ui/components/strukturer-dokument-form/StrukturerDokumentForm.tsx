@@ -6,12 +6,9 @@ import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import Form from '../form/Form';
 import Datepicker from '../../form/wrappers/Datepicker';
 import Box, { Margin } from '../box/Box';
-import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
-import PeriodWrapper from '../../form/types/PeriodWrapper';
 import { required } from '../../form/validators';
 import { Dokument, Dokumenttype } from '../../../types/Dokument';
 import { lagStrukturertDokument } from '../../../util/dokumentUtils';
-import { prettifyDate } from '../../../util/formats';
 
 export enum FieldName {
     INNEHOLDER_MEDISINSKE_OPPLYSNINGER = 'inneholderMedisinskeOpplysninger',

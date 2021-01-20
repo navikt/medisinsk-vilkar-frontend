@@ -26,7 +26,6 @@ interface VilkårsvurderingAvTilsynOgPleieProps {
 
 const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
     const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
-
     const fetchAborter = useMemo(() => new AbortController(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
@@ -91,7 +90,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
 
     const velgVurderingselement = (nyValgtVurderingselement: Vurderingselement) => {
         onVurderingValgt(nyValgtVurderingselement.id);
-        dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, vurderingselement: nyValgtVurderingselement });
+        dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, valgtVurderingselement: nyValgtVurderingselement });
     };
 
     const oppdaterVurderingsoversikt = () => {
@@ -124,7 +123,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                     <Vurderingsnavigasjon
                         vurderingselementer={vurderingsoversikt?.vurderingselementer}
                         resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
-                        søknadsperioderTilBehandling={vurderingsoversikt?.søknadsperioderTilBehandling}
                         onVurderingValgt={velgVurderingselement}
                         onNyVurderingClick={visNyVurderingForm}
                     />

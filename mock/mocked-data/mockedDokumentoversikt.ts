@@ -1,38 +1,57 @@
 import dayjs from 'dayjs';
-import { Dokumenttype } from '../../src/types/Dokument';
+import { Dokumentoversikt, Dokumenttype } from '../../src/types/Dokument';
+import createMockedDokumentelementLinks from './createMockedDokumentelementLinks';
 
-const mockedDokumentoversikt = {
-    dokumenterMedMedisinskeOpplysninger: [
+const mockedDokumentoversikt: Dokumentoversikt = {
+    dokumenter: [
         {
             id: '2',
             navn: 'Dokument 2',
-            type: Dokumenttype.LEGEERKLÆRING,
+            type: Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER,
             location: '#blahblah',
-            innleggelsesperioder: [],
-            harGyldigSignatur: true,
             datert: dayjs().toDate().toISOString(),
+            links: createMockedDokumentelementLinks('2'),
+            benyttet: true,
+            annenPartErKilde: false,
+            fremhevet: false,
+            behandlet: true,
         },
         {
             id: '3',
             navn: 'Dokument 3',
             type: Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER,
             location: '#blahblah',
-            innleggelsesperioder: [],
-            harGyldigSignatur: true,
             datert: dayjs().toDate().toISOString(),
+            links: createMockedDokumentelementLinks('3'),
+            benyttet: true,
+            annenPartErKilde: false,
+            fremhevet: false,
+            behandlet: true,
         },
-    ],
-    dokumenterUtenMedisinskeOpplysninger: [
         {
             id: '4',
             navn: 'Dokument 4',
             type: Dokumenttype.MANGLER_MEDISINSKE_OPPLYSNINGER,
             datert: dayjs().toDate().toISOString(),
             location: '#blahblah',
+            links: createMockedDokumentelementLinks('4'),
+            benyttet: true,
+            annenPartErKilde: false,
+            fremhevet: false,
+            behandlet: true,
         },
-    ],
-    ustrukturerteDokumenter: [
-        { id: '1', navn: 'Dokument 1', datert: dayjs().toDate().toISOString(), location: '#blahblah' },
+        {
+            id: '1',
+            navn: 'Dokument 1',
+            type: undefined,
+            datert: dayjs().toDate().toISOString(),
+            location: '#blahblah',
+            links: createMockedDokumentelementLinks('4'),
+            benyttet: true,
+            annenPartErKilde: false,
+            fremhevet: false,
+            behandlet: false,
+        },
     ],
 };
 export default mockedDokumentoversikt;
