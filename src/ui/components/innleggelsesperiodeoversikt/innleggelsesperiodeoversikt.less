@@ -1,3 +1,33 @@
 .innleggelsesperiodeoversikt {
-  width: 100%;
+    width: 100%;
+
+    &__modal {
+        overflow: visible;
+        max-width: 600px;
+
+        legend {
+            clip: rect(0 0 0 0);
+            clip-path: inset(50%);
+            height: 1px;
+            overflow: hidden;
+            position: absolute;
+            white-space: nowrap;
+            width: 1px;
+        }
+    }
+
+    &__titleContainer {
+        display: flex;
+    }
+
+    &__editButton {
+        padding: 0;
+        color: #0067c5;
+        border: none;
+        background: none;
+        margin-left: 1.5rem;
+        border-bottom: 1px solid #0067c5;
+        height: 16px;
+        align-self: center;
+    }
 }

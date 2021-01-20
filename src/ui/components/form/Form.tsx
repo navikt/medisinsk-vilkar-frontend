@@ -4,8 +4,8 @@ import Box, { Margin } from '../box/Box';
 
 interface FormProps {
     children: React.ReactNode;
-    buttonLabel: string;
-    onSubmit: () => void;
+    buttonLabel?: string;
+    onSubmit: (e?: any) => void;
     shouldShowSubmitButton?: boolean;
 }
 
