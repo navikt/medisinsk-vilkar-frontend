@@ -39,9 +39,13 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
     const lagreInnleggelsesperioder = (formState) => {
         const { signal } = fetchAborter;
         setIsLoading(true);
-        const perioder = formState.innleggelsesperioder.map(
-            (periodeWrapper) => new Period(periodeWrapper.period.fom, periodeWrapper.period.tom)
-        );
+        let perioder = [];
+        if (formState.innleggelsesperioder?.length > 0) {
+            perioder = formState.innleggelsesperioder
+                .filter((periodeWrapper) => periodeWrapper.period?.fom && periodeWrapper.period?.tom)
+                .map((periodeWrapper) => new Period(periodeWrapper.period.fom, periodeWrapper.period.tom));
+        }
+
         submitData(endpoints.lagreInnleggelsesperioder, perioder, signal)
             .then((nyeInnleggelsesperioder) => {
                 setInnleggelsesperioder(nyeInnleggelsesperioder);
