@@ -1,19 +1,20 @@
 import React from 'react';
 import Lenke from 'nav-frontend-lenker';
 import styles from './diagnosekodeliste.less';
+import Diagnosekode from '../../../types/Diagnosekode';
 
 interface DiagnosekodelisteProps {
-    diagnosekoder: string[];
-    onDeleteClick: (diagnosekode: string) => void;
+    diagnosekoder: Diagnosekode[];
+    onDeleteClick: (diagnosekode: Diagnosekode) => void;
 }
 
 const Diagnosekodeliste = ({ diagnosekoder, onDeleteClick }: DiagnosekodelisteProps) => {
     return (
         <ul className={styles.diagnosekodeliste}>
-            {diagnosekoder.map((diagnosekode) => {
+            {diagnosekoder.map((diagnosekode, index) => {
                 return (
-                    <li key={diagnosekode} className={styles.diagnosekodeliste__element}>
-                        {diagnosekode}
+                    <li key={`${diagnosekode.kode}${index}`} className={styles.diagnosekodeliste__element}>
+                        <p className={styles.beskrivelse}>{diagnosekode.beskrivelse}</p>
                         <div className={styles.lenkeContainer}>
                             <Lenke
                                 className={styles.lenkeContainer__slettLenke}

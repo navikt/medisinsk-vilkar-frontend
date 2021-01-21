@@ -8,7 +8,8 @@ import mockedDokumentliste from './mocked-data/mockedDokumentliste';
 import mockedDokumentoversikt from './mocked-data/mockedDokumentoversikt';
 import { createKontinuerligTilsynVurdering, createToOmsorgspersonerVurdering } from './apiUtils';
 import Vurderingstype from '../src/types/Vurderingstype';
-import mockedDiagnosekoderespons from './mocked-data/mockedDiagnosekoderespons';
+import mockedDiagnosekoderesponse from './mocked-data/mockedDiagnosekodeResponse';
+import mockedDiagnosekodeSearchResponse from './mocked-data/mockedDiagnosekodeSearchResponse';
 import createStrukturertDokument from './mocked-data/createStrukturertDokument';
 
 const app = express();
@@ -58,8 +59,23 @@ app.use('/mock/data-til-vurdering', (req, res) => {
     res.send(mockedDokumentliste);
 });
 
-app.use('/k9/diagnosekoder', (req, res) => {
-    res.send(mockedDiagnosekoderespons);
+app.use('/mock/diagnosekode-search', (req, res) => {
+    res.send(mockedDiagnosekodeSearchResponse);
+});
+
+app.use('/mock/diagnosekoder', (req, res) => {
+    res.send(mockedDiagnosekoderesponse);
+});
+
+app.use('/mock/legg-til-diagnosekode', (req, res) => {
+    mockedDiagnosekoderesponse.push(req.body);
+    res.sendStatus(200);
+});
+
+app.use('/mock/slett-diagnosekode', (req, res) => {
+    const index = mockedDiagnosekoderesponse.findIndex((el) => el.kode === req.query.kode);
+    mockedDiagnosekoderesponse.splice(index, 1);
+    res.send(mockedDiagnosekoderesponse);
 });
 
 const port = 8082;

@@ -1,25 +1,22 @@
 import React from 'react';
-import Innleggelsesperiodeoversikt from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
-import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
-import SignertSeksjon from '../signert-seksjon/SignertSeksjon';
 import styles from './dokumentasjonFooter.less';
 
 interface DokumentasjonFooterProps {
-    harGyldigSignatur: boolean;
+    firstSectionRenderer: () => React.ReactNode;
+    secondSectionRenderer: () => React.ReactNode;
+    thirdSectionRenderer: () => React.ReactNode;
 }
 
-const DokumentasjonFooter = ({ harGyldigSignatur }: DokumentasjonFooterProps) => {
+const DokumentasjonFooter = ({
+    firstSectionRenderer,
+    secondSectionRenderer,
+    thirdSectionRenderer,
+}: DokumentasjonFooterProps) => {
     return (
         <div className={styles.dokumentasjonFooter}>
-            <div className={styles.dokumentasjonFooter__firstSection}>
-                <Innleggelsesperiodeoversikt />
-            </div>
-            <div className={styles.dokumentasjonFooter__secondSection}>
-                <Diagnosekodeoversikt />
-            </div>
-            <div className={styles.dokumentasjonFooter__thirdSection}>
-                <SignertSeksjon harGyldigSignatur={harGyldigSignatur} />
-            </div>
+            <div className={styles.dokumentasjonFooter__firstSection}>{firstSectionRenderer()}</div>
+            <div className={styles.dokumentasjonFooter__secondSection}>{secondSectionRenderer()}</div>
+            <div className={styles.dokumentasjonFooter__thirdSection}>{thirdSectionRenderer()}</div>
         </div>
     );
 };
