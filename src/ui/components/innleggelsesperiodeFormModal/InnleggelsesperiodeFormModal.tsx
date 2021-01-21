@@ -9,10 +9,10 @@ import Box, { Margin } from '../box/Box';
 import DeleteButton from '../delete-button/DeleteButton';
 import Form from '../form/Form';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
-import { FieldName } from './Innleggelsesperiodeoversikt';
-import styles from './innleggelsesperiodeoversikt.less';
+import { FieldName } from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
+import styles from './innleggelsesperiodeFormModal.less';
 
-const NyInnleggelsesperiodeForm = ({ defaultValues, setModalIsOpen, saveInnleggelsesperioder }) => {
+const InnleggelsesperiodeFormModal = ({ defaultValues, setModalIsOpen, lagreInnleggelsesperioder }) => {
     const formMethods = useForm({
         defaultValues,
     });
@@ -20,7 +20,7 @@ const NyInnleggelsesperiodeForm = ({ defaultValues, setModalIsOpen, saveInnlegge
     const [showDeletedWarning, setShowDeletedWarning] = React.useState(false);
 
     const handleSubmit = (formState) => {
-        saveInnleggelsesperioder(formState);
+        lagreInnleggelsesperioder(formState);
         setShowDeletedWarning(false);
     };
 
@@ -33,7 +33,7 @@ const NyInnleggelsesperiodeForm = ({ defaultValues, setModalIsOpen, saveInnlegge
                 setShowDeletedWarning(false);
             }}
             contentLabel="Legg til innleggelsesperiode"
-            className={styles.innleggelsesperiodeoversikt__modal}
+            className={styles.innleggelsesperiodeFormModal}
         >
             <FormProvider {...formMethods}>
                 <Form onSubmit={formMethods.handleSubmit(handleSubmit)} shouldShowSubmitButton={false}>
@@ -61,16 +61,12 @@ const NyInnleggelsesperiodeForm = ({ defaultValues, setModalIsOpen, saveInnlegge
                                 )}
                                 renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => {
                                     return (
-                                        <>
-                                            {numberOfItems > 1 && (
-                                                <DeleteButton
-                                                    onClick={() => {
-                                                        fieldArrayMethods.remove(index);
-                                                        setShowDeletedWarning(true);
-                                                    }}
-                                                />
-                                            )}
-                                        </>
+                                        <DeleteButton
+                                            onClick={() => {
+                                                fieldArrayMethods.remove(index);
+                                                setShowDeletedWarning(true);
+                                            }}
+                                        />
                                     );
                                 }}
                             />
@@ -105,4 +101,4 @@ const NyInnleggelsesperiodeForm = ({ defaultValues, setModalIsOpen, saveInnlegge
         </Modal>
     );
 };
-export default NyInnleggelsesperiodeForm;
+export default InnleggelsesperiodeFormModal;

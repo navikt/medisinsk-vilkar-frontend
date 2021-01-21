@@ -1,5 +1,5 @@
 import * as React from 'react';
-import IconWithTooltip from '../icon-with-tooltip/IconWithTooltip';
+import IconWithTooltip from '../../icon-with-tooltip/IconWithTooltip';
 import styles from './nyLabel.less';
 
 const NyLabel = () => (

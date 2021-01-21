@@ -8,6 +8,7 @@ interface ContainerContract {
         vurderingsoversiktBehovForToOmsorgspersoner: string;
         dokumentoversikt: string;
         innleggelsesperioder: string;
+        lagreInnleggelsesperioder: string;
         diagnosekodeSearch: string;
         diagnosekoder: string;
         leggTilDiagnosekode: string;
