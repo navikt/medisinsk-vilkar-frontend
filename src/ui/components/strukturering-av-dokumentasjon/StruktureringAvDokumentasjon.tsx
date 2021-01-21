@@ -125,9 +125,12 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
                             godkjent signatur, eller sett saken på vent mens du innhenter mer dokumentasjon.
                         </Alertstripe>
                     </Box>
-                    <Box marginBottom={Margin.large}>
-                        <FristForDokumentasjonUtløptPanel onProceedClick={() => console.log('1')} />
-                    </Box>
+                    {
+                        ustrukturerteDokumenter.length === 0 &&
+                        <Box marginBottom={Margin.large}>
+                            <FristForDokumentasjonUtløptPanel onProceedClick={() => console.log('1')} />
+                        </Box>
+                    }
                 </>
             )}
             <NavigationWithDetailView
