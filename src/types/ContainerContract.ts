@@ -7,6 +7,7 @@ interface ContainerContract {
         vurderingsoversiktKontinuerligTilsynOgPleie: string;
         vurderingsoversiktBehovForToOmsorgspersoner: string;
         dokumentoversikt: string;
+        innleggelsesperioder: string;
     };
     behandlingUuid: string;
 }

@@ -10,6 +10,7 @@ import { createKontinuerligTilsynVurdering, createToOmsorgspersonerVurdering } f
 import Vurderingstype from '../src/types/Vurderingstype';
 import mockedDiagnosekoderespons from './mocked-data/mockedDiagnosekoderespons';
 import createStrukturertDokument from './mocked-data/createStrukturertDokument';
+import mockedInnleggelsesperioder from './mocked-data/mockedInnleggelsesperioder';
 
 const app = express();
 
@@ -60,6 +61,10 @@ app.use('/mock/data-til-vurdering', (req, res) => {
 
 app.use('/k9/diagnosekoder', (req, res) => {
     res.send(mockedDiagnosekoderespons);
+});
+
+app.use('/mock/innleggelsesperioder', (req, res) => {
+    res.send(mockedInnleggelsesperioder);
 });
 
 const port = 8082;
