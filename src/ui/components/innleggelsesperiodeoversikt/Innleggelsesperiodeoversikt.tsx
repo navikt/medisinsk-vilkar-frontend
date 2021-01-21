@@ -8,6 +8,7 @@ import ContainerContext from '../../context/ContainerContext';
 import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
 import Innleggelsesperiodeliste from '../innleggelsesperiodeliste/Innleggelsesperiodeliste';
+import PageError from '../page-error/PageError';
 import styles from './innleggelsesperiodeoversikt.less';
 import NyInnleggelsesperiodeForm from './NyInnleggelsesperiodeForm';
 
@@ -19,12 +20,13 @@ export interface Innleggelsesperiodeoversikt {
 }
 
 Modal.setAppElement('#app');
-const Innleggelsesperiodeoversikt = () => {
+const Innleggelsesperiodeoversikt = (): JSX.Element => {
     const { endpoints } = React.useContext(ContainerContext);
 
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [innleggelsesperioder, setInnleggelsesperioder] = React.useState<Period[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
+    const [hasError, setHasError] = React.useState(false);
     const fetchAborter = useMemo(() => new AbortController(), []);
 
     const getInnleggelsesperioder = () => {
@@ -32,27 +34,30 @@ const Innleggelsesperiodeoversikt = () => {
         return fetchData(endpoints.innleggelsesperioder, { signal });
     };
 
+    const handleError = () => setHasError(true);
+
     useEffect(() => {
         let isMounted = true;
         getInnleggelsesperioder()
-            .then((nyeInnleggelsesperioder: Period[]) =>
-                nyeInnleggelsesperioder.map(
-                    (nyInnleggelsesperiode) => new Period(nyInnleggelsesperiode.fom, nyInnleggelsesperiode.tom)
-                )
-            )
-            .then((nyeInnleggelsesperioder) => {
+            .then((nyeInnleggelsesperioder: Period[]) => {
                 if (isMounted) {
                     setInnleggelsesperioder(nyeInnleggelsesperioder);
                     setIsLoading(false);
                 }
-            });
+            })
+            .catch(handleError);
         return () => {
             isMounted = false;
+            fetchAborter.abort();
         };
     }, []);
 
     if (isLoading) {
         return <Spinner />;
+    }
+
+    if (hasError) {
+        return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
     }
 
     return (
