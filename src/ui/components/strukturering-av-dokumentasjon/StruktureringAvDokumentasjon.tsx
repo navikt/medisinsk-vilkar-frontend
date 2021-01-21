@@ -19,6 +19,7 @@ import Box, { Margin } from '../box/Box';
 import Innleggelsesperiodeoversikt from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
 import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
 import SignertSeksjon from '../signert-seksjon/SignertSeksjon';
+import FristForDokumentasjonUtløptPanel from '../frist-for-dokumentasjon-utløpt-panel/FristForDokumentasjonUtløptPanel';
 
 interface StruktureringAvDokumentasjonProps {
     onProgressButtonClick: () => void;
@@ -109,20 +110,25 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
                     </Alertstripe>
                 </Box>
             )}
-            {!harGyldigSignatur && (
-                <Box marginBottom={Margin.large}>
-                    <Alertstripe type="advarsel">
-                        Opplysinger om dokumentasjonsom er signert av sykehuslege mangler. Knytt dokument med godkjent
-                        signatur, eller sett saken på vent mens du innhenter mer dokumentasjon.
-                    </Alertstripe>
-                </Box>
-            )}
             {harRegistrertDiagnosekode === false && (
-                <Box marginBottom={Margin.large}>
+                <Box marginBottom={Margin.medium}>
                     <Alertstripe type="advarsel">
                         Diagnosekode mangler. Du må legge til en diagnosekode for å vurdere tilsyn og pleie.
                     </Alertstripe>
                 </Box>
+            )}
+            {!harGyldigSignatur && (
+                <>
+                    <Box marginBottom={Margin.medium}>
+                        <Alertstripe type="advarsel">
+                            Opplysinger om dokumentasjonsom er signert av sykehuslege mangler. Knytt dokument med
+                            godkjent signatur, eller sett saken på vent mens du innhenter mer dokumentasjon.
+                        </Alertstripe>
+                    </Box>
+                    <Box marginBottom={Margin.large}>
+                        <FristForDokumentasjonUtløptPanel onProceedClick={() => console.log('1')} />
+                    </Box>
+                </>
             )}
             <NavigationWithDetailView
                 navigationSection={() => (
