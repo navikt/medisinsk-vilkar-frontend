@@ -37,6 +37,7 @@ const Innleggelsesperiodeoversikt = () => {
         );
         setInnleggelsesperioder(perioder);
         setModalIsOpen(false);
+        setShowDeletedWarning(false);
     };
 
     return (
@@ -75,6 +76,7 @@ const Innleggelsesperiodeoversikt = () => {
                 closeButton
                 onRequestClose={() => {
                     setModalIsOpen(false);
+                    setShowDeletedWarning(false);
                 }}
                 contentLabel="Legg til innleggelsesperiode"
                 className={styles.innleggelsesperiodeoversikt__modal}
@@ -134,7 +136,10 @@ const Innleggelsesperiodeoversikt = () => {
                                         mini
                                         style={{ marginLeft: '1rem' }}
                                         htmlType="button"
-                                        onClick={() => setModalIsOpen(false)}
+                                        onClick={() => {
+                                            setModalIsOpen(false);
+                                            setShowDeletedWarning(false);
+                                        }}
                                     >
                                         Avbryt
                                     </Knapp>
