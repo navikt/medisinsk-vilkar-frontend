@@ -13,7 +13,9 @@ import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
+import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
+import DeleteButton from '../delete-button/DeleteButton';
 import DetailView from '../detail-view/DetailView';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Form from '../form/Form';
@@ -162,6 +164,27 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                                     invalidDateRanges: hullISøknadsperiodene,
                                 },
                             }}
+                            renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => {
+                                return (
+                                    <>
+                                        {numberOfItems > 1 && (
+                                            <DeleteButton
+                                                onClick={() => {
+                                                    fieldArrayMethods.remove(index);
+                                                }}
+                                            />
+                                        )}
+                                    </>
+                                );
+                            }}
+                            renderAfterFieldArray={(fieldArrayMethods) => (
+                                <Box marginTop={Margin.large}>
+                                    <AddButton
+                                        label="Legg til periode"
+                                        onClick={() => fieldArrayMethods.append({ fom: '', tom: '' })}
+                                    />
+                                </Box>
+                            )}
                         />
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (

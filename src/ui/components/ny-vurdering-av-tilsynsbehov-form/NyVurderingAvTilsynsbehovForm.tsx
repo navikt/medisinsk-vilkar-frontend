@@ -193,11 +193,13 @@ const NyVurderingAvTilsynsbehovForm = ({
                             renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => {
                                 return (
                                     <>
-                                        <DeleteButton
-                                            onClick={() => {
-                                                fieldArrayMethods.remove(index);
-                                            }}
-                                        />
+                                        {numberOfItems > 1 && (
+                                            <DeleteButton
+                                                onClick={() => {
+                                                    fieldArrayMethods.remove(index);
+                                                }}
+                                            />
+                                        )}
                                     </>
                                 );
                             }}
