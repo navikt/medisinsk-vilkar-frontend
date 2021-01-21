@@ -83,10 +83,6 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
         return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
     }
 
-    if (isLoading) {
-        return <Spinner />;
-    }
-
     return (
         <div className={styles.innleggelsesperiodeoversikt}>
             <TitleWithUnderline>
@@ -101,21 +97,27 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
                     </button>
                 )}
             </TitleWithUnderline>
-            <Box marginTop={Margin.large}>
-                {innleggelsesperioder.length === 0 && <p>Ingen innleggelsesperioder registrert</p>}
-                {innleggelsesperioder.length > 0 && (
-                    <>
-                        <Element>Periode</Element>
-                        <Box marginTop={Margin.small}>
-                            <Innleggelsesperiodeliste innleggelsesperioder={innleggelsesperioder} />
+            {isLoading ? (
+                <Spinner />
+            ) : (
+                <>
+                    <Box marginTop={Margin.large}>
+                        {innleggelsesperioder.length === 0 && <p>Ingen innleggelsesperioder registrert</p>}
+                        {innleggelsesperioder.length > 0 && (
+                            <>
+                                <Element>Periode</Element>
+                                <Box marginTop={Margin.small}>
+                                    <Innleggelsesperiodeliste innleggelsesperioder={innleggelsesperioder} />
+                                </Box>
+                            </>
+                        )}
+                    </Box>
+                    {innleggelsesperioder.length === 0 && (
+                        <Box marginTop={Margin.large}>
+                            <AddButton label="Legg til innleggelsesperiode" onClick={() => setModalIsOpen(true)} />
                         </Box>
-                    </>
-                )}
-            </Box>
-            {innleggelsesperioder.length === 0 && (
-                <Box marginTop={Margin.large}>
-                    <AddButton label="Legg til innleggelsesperiode" onClick={() => setModalIsOpen(true)} />
-                </Box>
+                    )}
+                </>
             )}
             {modalIsOpen && (
                 <InnleggelsesperiodeFormModal
@@ -124,6 +126,7 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
                     }}
                     setModalIsOpen={setModalIsOpen}
                     lagreInnleggelsesperioder={lagreInnleggelsesperioder}
+                    isLoading={isLoading}
                 />
             )}
         </div>

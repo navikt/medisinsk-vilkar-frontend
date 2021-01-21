@@ -1,7 +1,7 @@
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import Modal from 'nav-frontend-modal';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import AddButton from '../add-button/AddButton';
@@ -11,8 +11,23 @@ import Form from '../form/Form';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import { FieldName } from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
 import styles from './innleggelsesperiodeFormModal.less';
+import { Period } from '../../../types/Period';
 
-const InnleggelsesperiodeFormModal = ({ defaultValues, setModalIsOpen, lagreInnleggelsesperioder }) => {
+interface InnleggelsesperiodeFormModal {
+    defaultValues: {
+        [FieldName.INNLEGGELSESPERIODER]: Period[];
+    };
+    setModalIsOpen: (isOpen: boolean) => void;
+    lagreInnleggelsesperioder: (formState) => void;
+    isLoading: boolean;
+}
+
+const InnleggelsesperiodeFormModal = ({
+    defaultValues,
+    setModalIsOpen,
+    lagreInnleggelsesperioder,
+    isLoading,
+}: InnleggelsesperiodeFormModal): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
     });
@@ -21,8 +36,11 @@ const InnleggelsesperiodeFormModal = ({ defaultValues, setModalIsOpen, lagreInnl
 
     const handleSubmit = (formState) => {
         lagreInnleggelsesperioder(formState);
-        setShowDeletedWarning(false);
     };
+
+    useEffect(() => {
+        return () => setShowDeletedWarning(false);
+    }, []);
 
     return (
         <Modal
@@ -81,7 +99,9 @@ const InnleggelsesperiodeFormModal = ({ defaultValues, setModalIsOpen, lagreInnl
                         </Box>
                         <Box marginTop={Margin.xLarge}>
                             <div style={{ display: 'flex' }}>
-                                <Hovedknapp mini>Lagre</Hovedknapp>
+                                <Hovedknapp spinner={isLoading} autoDisableVedSpinner mini>
+                                    Lagre
+                                </Hovedknapp>
                                 <Knapp
                                     mini
                                     style={{ marginLeft: '1rem' }}
@@ -90,6 +110,7 @@ const InnleggelsesperiodeFormModal = ({ defaultValues, setModalIsOpen, lagreInnl
                                         setModalIsOpen(false);
                                         setShowDeletedWarning(false);
                                     }}
+                                    disabled={isLoading}
                                 >
                                     Avbryt
                                 </Knapp>
