@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
 import Spinner from 'nav-frontend-spinner';
+import { Hovedknapp } from 'nav-frontend-knapper';
+import Alertstripe from 'nav-frontend-alertstriper';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import Dokumentnavigasjon from '../dokumentnavigasjon/Dokumentnavigasjon';
 import StrukturertDokumentDetaljer from '../strukturert-dokument-detaljer/StrukturertDokumentDetaljer';
@@ -14,8 +16,16 @@ import LinkRel from '../../../constants/LinkRel';
 import StrukturerDokumentController from '../strukturer-dokument-controller/StrukturerDokumentController';
 import DokumentasjonFooter from '../dokumentasjon-footer/DokumentasjonFooter';
 import Box, { Margin } from '../box/Box';
+import Innleggelsesperiodeoversikt from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
+import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
+import SignertSeksjon from '../signert-seksjon/SignertSeksjon';
 
-const StruktureringAvDokumentasjon = () => {
+interface StruktureringAvDokumentasjonProps {
+    onProgressButtonClick: () => void;
+}
+
+const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAvDokumentasjonProps) => {
+    const [harRegistrertDiagnosekode, setHarRegistrertDiagnosekode] = React.useState<boolean | undefined>();
     const { dokument, endpoints, onDokumentValgt } = React.useContext(ContainerContext);
     const fetchAborter = useMemo(() => new AbortController(), []);
 
@@ -80,9 +90,40 @@ const StruktureringAvDokumentasjon = () => {
     const strukturerteDokumenter = dokumentoversikt.dokumenter.filter(({ behandlet }) => behandlet);
     const ustrukturerteDokumenter = dokumentoversikt.dokumenter.filter(({ behandlet }) => !behandlet);
     const harGyldigSignatur = strukturerteDokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING);
+    const kanGåVidere = harGyldigSignatur && harRegistrertDiagnosekode && ustrukturerteDokumenter.length === 0;
 
     return (
         <>
+            {kanGåVidere && (
+                <Box marginBottom={Margin.large}>
+                    <Alertstripe type="suksess">
+                        Alle dokumenter er ferdig håndtert
+                        <Hovedknapp
+                            htmlType="button"
+                            mini
+                            style={{ marginLeft: '2rem' }}
+                            onClick={onProgressButtonClick}
+                        >
+                            Gå videre
+                        </Hovedknapp>
+                    </Alertstripe>
+                </Box>
+            )}
+            {!harGyldigSignatur && (
+                <Box marginBottom={Margin.large}>
+                    <Alertstripe type="advarsel">
+                        Opplysinger om dokumentasjonsom er signert av sykehuslege mangler. Knytt dokument med godkjent
+                        signatur, eller sett saken på vent mens du innhenter mer dokumentasjon.
+                    </Alertstripe>
+                </Box>
+            )}
+            {harRegistrertDiagnosekode === false && (
+                <Box marginBottom={Margin.large}>
+                    <Alertstripe type="advarsel">
+                        Diagnosekode mangler. Du må legge til en diagnosekode for å vurdere tilsyn og pleie.
+                    </Alertstripe>
+                </Box>
+            )}
             <NavigationWithDetailView
                 navigationSection={() => (
                     <Dokumentnavigasjon
@@ -110,7 +151,17 @@ const StruktureringAvDokumentasjon = () => {
                 }}
             />
             <Box marginTop={Margin.xLarge}>
-                <DokumentasjonFooter harGyldigSignatur={harGyldigSignatur} />
+                <DokumentasjonFooter
+                    firstSectionRenderer={() => <Innleggelsesperiodeoversikt />}
+                    secondSectionRenderer={() => (
+                        <Diagnosekodeoversikt
+                            onDiagnosekoderUpdated={(diagnosekoder) => {
+                                setHarRegistrertDiagnosekode(diagnosekoder && diagnosekoder.length > 0);
+                            }}
+                        />
+                    )}
+                    thirdSectionRenderer={() => <SignertSeksjon harGyldigSignatur={harGyldigSignatur} />}
+                />
             </Box>
         </>
     );

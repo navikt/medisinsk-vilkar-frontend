@@ -1,21 +1,78 @@
+import React, { useMemo } from 'react';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import Modal from 'nav-frontend-modal';
-import React from 'react';
+import Spinner from 'nav-frontend-spinner';
 import DiagnosekodeSelector from '../../form/pure/PureDiagnosekodeSelector';
 import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
 import Diagnosekodeliste from '../diagnosekodeliste/Diagnosekodeliste';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
-import styles from './diagnosekodeoversikt.less';
 import IconWithText from '../icon-with-text/IconWithText';
 import WarningIcon from '../icons/WarningIcon';
+import ContainerContext from '../../context/ContainerContext';
+import { deleteData, fetchData, submitData } from '../../../util/httpUtils';
+import Diagnosekode from '../../../types/Diagnosekode';
+import styles from './diagnosekodeoversikt.less';
 
 Modal.setAppElement('#app');
-const Diagnosekodeoversikt = () => {
+
+interface DiagnosekodeoversiktProps {
+    onDiagnosekoderUpdated: (diagnosekoder: Diagnosekode[]) => void;
+}
+
+const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktProps) => {
+    const { endpoints } = React.useContext(ContainerContext);
+    const [isLoading, setIsLoading] = React.useState(true);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
-    const [diagnosekoder, setDiagnosekoder] = React.useState<string[]>([]);
+    const [diagnosekoder, setDiagnosekoder] = React.useState<Diagnosekode[]>([]);
     const [nyDiagnosekode, setNyDiagnosekode] = React.useState<string>('');
+
+    const fetchAborter = useMemo(() => new AbortController(), []);
+
+    React.useEffect(() => {
+        return () => {
+            fetchAborter.abort();
+        };
+    }, []);
+
+    const hentDiagnosekoder = () => {
+        setIsLoading(true);
+        return fetchData(endpoints.diagnosekoder, { signal: fetchAborter.signal }).then(
+            (newDiagnosekodeList: Diagnosekode[]) => {
+                setDiagnosekoder(newDiagnosekodeList);
+                onDiagnosekoderUpdated(newDiagnosekodeList);
+                setIsLoading(false);
+            }
+        );
+    };
+
+    const lagreDiagnosekode = () => {
+        return submitData(
+            endpoints.leggTilDiagnosekode,
+            { kode: 'mock', beskrivelse: nyDiagnosekode },
+            fetchAborter.signal
+        );
+    };
+
+    const slettDiagnosekode = (diagnosekode: Diagnosekode) => {
+        return deleteData<Diagnosekode[]>(
+            `${endpoints.slettDiagnosekode}?kode=${diagnosekode.kode}`,
+            fetchAborter.signal
+        ).then((newDiagnosekodeList) => {
+            setDiagnosekoder(newDiagnosekodeList);
+            onDiagnosekoderUpdated(newDiagnosekodeList);
+        });
+    };
+
+    React.useEffect(() => {
+        hentDiagnosekoder();
+    }, []);
+
+    if (isLoading) {
+        return <Spinner />;
+    }
+
     return (
         <div>
             <TitleWithUnderline>Diagnosekoder</TitleWithUnderline>
@@ -26,11 +83,7 @@ const Diagnosekodeoversikt = () => {
                 {diagnosekoder.length >= 1 && (
                     <Diagnosekodeliste
                         diagnosekoder={diagnosekoder}
-                        onDeleteClick={(diagnosekodeToDelete) => {
-                            const updatedDiagnosekoder = [...diagnosekoder];
-                            updatedDiagnosekoder.splice(diagnosekoder.indexOf(diagnosekodeToDelete), 1);
-                            setDiagnosekoder(updatedDiagnosekoder);
-                        }}
+                        onDeleteClick={(diagnosekodeToDelete) => slettDiagnosekode(diagnosekodeToDelete)}
                     />
                 )}
             </Box>
@@ -50,9 +103,9 @@ const Diagnosekodeoversikt = () => {
                     onSubmit={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        setDiagnosekoder([nyDiagnosekode, ...diagnosekoder]);
-                        setNyDiagnosekode('');
-                        setModalIsOpen(false);
+                        lagreDiagnosekode()
+                            .then(() => setModalIsOpen(false))
+                            .then(hentDiagnosekoder);
                     }}
                 >
                     <ModalFormWrapper title="Legg til diagnosekode">

@@ -24,8 +24,10 @@ const MedisinskVilkår = () => {
                         onChange={(event, clickedIndex) => setActiveTab(clickedIndex)}
                     />
                     <div className={styles.medisinskVilkår__vilkårContentContainer}>
-                        {activeTab === 0 && <StruktureringAvDokumentasjon />}
-                        {activeTab === 1 && <VilkårsvurderingAvTilsynOgPleie onVilkårVurdert={() => setActiveTab(1)} />}
+                        {activeTab === 0 && (
+                            <StruktureringAvDokumentasjon onProgressButtonClick={() => setActiveTab(1)} />
+                        )}
+                        {activeTab === 1 && <VilkårsvurderingAvTilsynOgPleie onVilkårVurdert={() => setActiveTab(2)} />}
                         {activeTab === 2 && <VilkårsvurderingAvToOmsorgspersoner />}
                     </div>
                 </div>

@@ -8,6 +8,10 @@ interface ContainerContract {
         vurderingsoversiktBehovForToOmsorgspersoner: string;
         dokumentoversikt: string;
         innleggelsesperioder: string;
+        diagnosekodeSearch: string;
+        diagnosekoder: string;
+        leggTilDiagnosekode: string;
+        slettDiagnosekode: string;
     };
     behandlingUuid: string;
 }
