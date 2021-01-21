@@ -1,6 +1,6 @@
 import { CalendarPlacement, DatepickerLimitations } from 'nav-datovelger';
 import { SkjemaelementFeilmelding, SkjemaGruppe } from 'nav-frontend-skjema';
-import React, { useState } from 'react';
+import React from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { Period } from '../../../types/Period';
 import Box, { Margin } from '../../components/box/Box';
@@ -44,7 +44,6 @@ const PeriodpickerList = ({
         name,
     });
     const { fields } = fieldArrayMethods;
-    // const [showHiddenPeriods, setShowHiddenPeriods] = useState(false);
 
     return (
         <div className={styles.periodpickerList}>
@@ -52,24 +51,6 @@ const PeriodpickerList = ({
             <SkjemaGruppe legend={legend}>
                 {fields.map((item, index) => {
                     const errorMessage = errors[name] && errors[name][index]?.period.message;
-                    // if (fields.length > 7 && !showHiddenPeriods) {
-                    //     if (index === 7) {
-                    //         return (
-                    //             <button
-                    //                 onClick={(e) => {
-                    //                     e.preventDefault();
-                    //                     setShowHiddenPeriods(true);
-                    //                 }}
-                    //                 type="button"
-                    //             >
-                    //                 Vis eldre innleggelsesperioder
-                    //             </button>
-                    //         );
-                    //     }
-                    //     if (index > 7) {
-                    //         return null;
-                    //     }
-                    // }
                     return (
                         <Box key={item.id} marginTop={Margin.medium}>
                             <div className={styles.flexContainer}>
