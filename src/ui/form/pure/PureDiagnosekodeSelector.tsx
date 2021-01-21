@@ -43,11 +43,7 @@ const PureDiagnosekodeSelector = ({
     const [inputValue, setInputValue] = React.useState('');
     React.useEffect(() => {
         const getInitialDiagnosekode = async () => {
-            const diagnosekode:
-                | {
-                      value: string;
-                  }[]
-                | [] = await getUpdatedSuggestions(initialDiagnosekodeValue, endpoints.diagnosekodeSearch);
+            const diagnosekode = await getUpdatedSuggestions(initialDiagnosekodeValue, endpoints.diagnosekodeSearch);
             if (diagnosekode.length > 0 && diagnosekode[0].value) {
                 setInputValue(diagnosekode[0].value);
             }
@@ -72,7 +68,7 @@ const PureDiagnosekodeSelector = ({
                 onChange={onInputValueChange}
                 onSelect={(e) => {
                     onInputValueChange(e.value);
-                    onChange(e.value);
+                    onChange(e);
                 }}
                 ariaLabel="Søk etter diagnose"
                 placeholder="Søk etter diagnose"
