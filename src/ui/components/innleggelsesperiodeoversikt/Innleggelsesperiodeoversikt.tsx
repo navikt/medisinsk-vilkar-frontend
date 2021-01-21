@@ -3,7 +3,7 @@ import Spinner from 'nav-frontend-spinner';
 import { Element, Undertittel } from 'nav-frontend-typografi';
 import React, { useEffect, useMemo } from 'react';
 import { Period } from '../../../types/Period';
-import { fetchData } from '../../../util/httpUtils';
+import { fetchData, submitData } from '../../../util/httpUtils';
 import ContainerContext from '../../context/ContainerContext';
 import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
@@ -36,6 +36,21 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
 
     const handleError = () => setHasError(true);
 
+    const saveInnleggelsesperioder = (formState) => {
+        const { signal } = fetchAborter;
+        setModalIsOpen(false);
+        setIsLoading(true);
+        const perioder = formState.innleggelsesperioder.map(
+            (periodeWrapper) => new Period(periodeWrapper.period.fom, periodeWrapper.period.tom)
+        );
+        submitData(endpoints.innleggelsesperioder, perioder, signal)
+            .then((nyeInnleggelsesperioder) => {
+                setInnleggelsesperioder(nyeInnleggelsesperioder);
+                setIsLoading(false);
+            })
+            .catch(handleError);
+    };
+
     useEffect(() => {
         let isMounted = true;
         getInnleggelsesperioder()
@@ -52,12 +67,12 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
         };
     }, []);
 
-    if (isLoading) {
-        return <Spinner />;
-    }
-
     if (hasError) {
         return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
+    }
+
+    if (isLoading) {
+        return <Spinner />;
     }
 
     return (
@@ -96,8 +111,8 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
                     defaultValues={{
                         [FieldName.INNLEGGELSESPERIODER]: innleggelsesperioder,
                     }}
-                    setInnleggelsesperioder={setInnleggelsesperioder}
                     setModalIsOpen={setModalIsOpen}
+                    saveInnleggelsesperioder={saveInnleggelsesperioder}
                 />
             )}
         </div>

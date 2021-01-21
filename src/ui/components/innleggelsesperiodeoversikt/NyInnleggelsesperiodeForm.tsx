@@ -3,7 +3,6 @@ import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import Modal from 'nav-frontend-modal';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Period } from '../../../types/Period';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
@@ -13,7 +12,7 @@ import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import { FieldName } from './Innleggelsesperiodeoversikt';
 import styles from './innleggelsesperiodeoversikt.less';
 
-const NyInnleggelsesperiodeForm = ({ setInnleggelsesperioder, defaultValues, setModalIsOpen }) => {
+const NyInnleggelsesperiodeForm = ({ defaultValues, setModalIsOpen, saveInnleggelsesperioder }) => {
     const formMethods = useForm({
         defaultValues,
     });
@@ -21,11 +20,7 @@ const NyInnleggelsesperiodeForm = ({ setInnleggelsesperioder, defaultValues, set
     const [showDeletedWarning, setShowDeletedWarning] = React.useState(false);
 
     const handleSubmit = (formState) => {
-        const perioder = formState.innleggelsesperioder.map(
-            (periodeWrapper) => new Period(periodeWrapper.period.fom, periodeWrapper.period.tom)
-        );
-        setInnleggelsesperioder(perioder);
-        setModalIsOpen(false);
+        saveInnleggelsesperioder(formState);
         setShowDeletedWarning(false);
     };
 

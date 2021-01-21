@@ -80,7 +80,12 @@ app.use('/mock/slett-diagnosekode', (req, res) => {
 });
 
 app.use('/mock/innleggelsesperioder', (req, res) => {
-    res.send(mockedInnleggelsesperioder);
+    if (req.method === 'GET') {
+        res.send(mockedInnleggelsesperioder);
+    } else if (req.method === 'POST') {
+        mockedInnleggelsesperioder.splice(0, mockedInnleggelsesperioder.length, ...req.body);
+        res.send(mockedInnleggelsesperioder);
+    }
 });
 
 const port = 8082;
