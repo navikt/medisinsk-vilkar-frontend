@@ -12,6 +12,7 @@ import mockedDiagnosekoderesponse from './mocked-data/mockedDiagnosekodeResponse
 import mockedDiagnosekodeSearchResponse from './mocked-data/mockedDiagnosekodeSearchResponse';
 import createStrukturertDokument from './mocked-data/createStrukturertDokument';
 import mockedInnleggelsesperioder from './mocked-data/mockedInnleggelsesperioder';
+import { Dokumenttype } from '../src/types/Dokument';
 
 const app = express();
 
@@ -40,11 +41,17 @@ app.use('/mock/opprett-vurdering', (req, res) => {
 });
 
 app.use('/mock/kontinuerlig-tilsyn-og-pleie/vurderingsoversikt', (req, res) => {
-    res.send(mockedTilsynsbehovVurderingsoversikt);
+    res.send({
+        ...mockedTilsynsbehovVurderingsoversikt,
+        harGyldigSignatur: mockedDokumentoversikt.dokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING),
+    });
 });
 
 app.use('/mock/to-omsorgspersoner/vurderingsoversikt', (req, res) => {
-    res.send(mockedToOmsorgspersonerVurderingsoversikt);
+    res.send({
+        ...mockedToOmsorgspersonerVurderingsoversikt,
+        harGyldigSignatur: mockedDokumentoversikt.dokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING),
+    });
 });
 
 app.use('/mock/dokumentoversikt', (req, res) => {
@@ -53,7 +60,7 @@ app.use('/mock/dokumentoversikt', (req, res) => {
 
 app.use('/mock/endre-dokument', (req, res) => {
     createStrukturertDokument(req.body);
-    res.sendStatus(200);
+    res.send(mockedDokumentoversikt);
 });
 
 app.use('/mock/data-til-vurdering', (req, res) => {
@@ -70,7 +77,7 @@ app.use('/mock/diagnosekoder', (req, res) => {
 
 app.use('/mock/legg-til-diagnosekode', (req, res) => {
     mockedDiagnosekoderesponse.push(req.body);
-    res.sendStatus(200);
+    res.send(mockedDiagnosekoderesponse);
 });
 
 app.use('/mock/slett-diagnosekode', (req, res) => {

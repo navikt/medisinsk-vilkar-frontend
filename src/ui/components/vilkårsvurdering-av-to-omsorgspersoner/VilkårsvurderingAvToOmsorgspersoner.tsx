@@ -1,4 +1,4 @@
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Alertstripe, { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Spinner from 'nav-frontend-spinner';
 import React, { useMemo } from 'react';
 import { Period } from '../../../types/Period';
@@ -46,6 +46,8 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
 
     const harPerioderSomSkalVurderes = vurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
     const harVurdertePerioder = vurderingsoversikt?.vurderingselementer?.length > 0;
+
+    const harGyldigSignatur = vurderingsoversikt && vurderingsoversikt.harGyldigSignatur === true;
 
     const getVurderingsoversikt = () => {
         const { signal } = fetchAborter;
@@ -96,6 +98,14 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     }
     if (vurderingsoversiktFeilet) {
         return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
+    }
+    if (harGyldigSignatur === false) {
+        return (
+            <Alertstripe type="info">
+                Du kan ikke vurdere behov for to omsorgspersoner før søker har sendt inn legeerklæring fra
+                sykehus/spesialisthelsetjenesten.
+            </Alertstripe>
+        );
     }
     return (
         <div style={{ maxWidth: '1204px' }}>
