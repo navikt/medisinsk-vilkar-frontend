@@ -1,27 +1,20 @@
+import { CalendarPlacement, DatepickerLimitations } from 'nav-datovelger';
+import { SkjemaelementFeilmelding, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
-import { SkjemaGruppe, SkjemaelementFeilmelding } from 'nav-frontend-skjema';
-import { DatepickerLimitations } from 'nav-datovelger';
-import Box, { Margin } from '../../components/box/Box';
-import styles from './periodpickerList.less';
 import { Period } from '../../../types/Period';
+import Box, { Margin } from '../../components/box/Box';
 import PureDatepicker from '../pure/PureDatepicker';
-import AddButton from '../../components/add-button/AddButton';
-
-const DeleteButton = ({ onClick }) => (
-    <div className={styles.buttonDeleteContainer}>
-        <button className={styles.buttonDelete} type="button" onClick={onClick}>
-            Fjern periode
-        </button>
-    </div>
-);
+import styles from './periodpickerList.less';
 
 interface DatepickerProps {
     label?: string;
     ariaLabel?: string;
     limitations?: DatepickerLimitations;
+    calendarSettings?: {
+        position?: CalendarPlacement;
+    };
 }
-
 interface PeriodpickerListProps {
     name: string;
     legend: string;
@@ -29,8 +22,10 @@ interface PeriodpickerListProps {
     defaultValues?: Period[];
     fromDatepickerProps: DatepickerProps;
     toDatepickerProps: DatepickerProps;
+    renderContentAfterElement?: (index: number, numberOfItems: number, fieldArrayMethods) => void;
+    renderBeforeFieldArray?: (fieldArrayMethods) => void;
+    renderAfterFieldArray?: (fieldArrayMethods) => void;
 }
-
 const PeriodpickerList = ({
     name,
     legend,
@@ -38,16 +33,21 @@ const PeriodpickerList = ({
     fromDatepickerProps,
     toDatepickerProps,
     defaultValues,
+    renderBeforeFieldArray,
+    renderAfterFieldArray,
+    renderContentAfterElement,
 }: PeriodpickerListProps): JSX.Element => {
     const formMethods = useFormContext();
     const { control, errors } = formMethods;
-    const { fields, append, remove } = useFieldArray({
+    const fieldArrayMethods = useFieldArray({
         control,
         name,
     });
+    const { fields } = fieldArrayMethods;
 
     return (
         <div className={styles.periodpickerList}>
+            {renderBeforeFieldArray && renderBeforeFieldArray(fieldArrayMethods)}
             <SkjemaGruppe legend={legend}>
                 {fields.map((item, index) => {
                     const errorMessage = errors[name] && errors[name][index]?.period.message;
@@ -87,18 +87,16 @@ const PeriodpickerList = ({
                                         );
                                     }}
                                 />
-                                {fields.length > 1 && <DeleteButton onClick={() => remove(index)} />}
+                                {renderContentAfterElement &&
+                                    renderContentAfterElement(index, fields.length, fieldArrayMethods)}
                             </div>
                             {errorMessage && <SkjemaelementFeilmelding>{errorMessage}</SkjemaelementFeilmelding>}
                         </Box>
                     );
                 })}
             </SkjemaGruppe>
-            <Box marginTop={Margin.xLarge}>
-                <AddButton label="Legg til periode" onClick={() => append({ fom: '', tom: '' })} />
-            </Box>
+            {renderAfterFieldArray && renderAfterFieldArray(fieldArrayMethods)}
         </div>
     );
 };
-
 export default PeriodpickerList;

@@ -11,6 +11,7 @@ import Vurderingstype from '../src/types/Vurderingstype';
 import mockedDiagnosekoderesponse from './mocked-data/mockedDiagnosekodeResponse';
 import mockedDiagnosekodeSearchResponse from './mocked-data/mockedDiagnosekodeSearchResponse';
 import createStrukturertDokument from './mocked-data/createStrukturertDokument';
+import mockedInnleggelsesperioder from './mocked-data/mockedInnleggelsesperioder';
 
 const app = express();
 
@@ -76,6 +77,15 @@ app.use('/mock/slett-diagnosekode', (req, res) => {
     const index = mockedDiagnosekoderesponse.findIndex((el) => el.kode === req.query.kode);
     mockedDiagnosekoderesponse.splice(index, 1);
     res.send(mockedDiagnosekoderesponse);
+});
+
+app.use('/mock/innleggelsesperioder', (req, res) => {
+    if (req.method === 'GET') {
+        res.send(mockedInnleggelsesperioder);
+    } else if (req.method === 'POST') {
+        mockedInnleggelsesperioder.splice(0, mockedInnleggelsesperioder.length, ...req.body);
+        res.send(mockedInnleggelsesperioder);
+    }
 });
 
 const port = 8082;
