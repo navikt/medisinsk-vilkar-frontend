@@ -55,7 +55,6 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
             .catch((error) => {
                 console.error(error);
                 setLagreInnleggelsesperioderFeilet(true);
-                setModalIsOpen(true);
                 setIsLoading(false);
             });
     };
