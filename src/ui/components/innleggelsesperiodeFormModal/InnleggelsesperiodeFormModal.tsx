@@ -12,6 +12,7 @@ import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import { FieldName } from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
 import styles from './innleggelsesperiodeFormModal.less';
 import { Period } from '../../../types/Period';
+import { Element } from 'nav-frontend-typografi';
 
 interface InnleggelsesperiodeFormModal {
     defaultValues: {
@@ -78,12 +79,25 @@ const InnleggelsesperiodeFormModal = ({
                                 }}
                                 defaultValues={defaultValues[FieldName.INNLEGGELSESPERIODER] || []}
                                 renderBeforeFieldArray={(fieldArrayMethods) => (
-                                    <Box marginTop={Margin.large} marginBottom={Margin.medium}>
-                                        <AddButton
-                                            label="Legg til innleggelsesperiode"
-                                            onClick={() => fieldArrayMethods.append({ fom: '', tom: '' })}
-                                        />
-                                    </Box>
+                                    <>
+                                        <Box marginTop={Margin.large} marginBottom={Margin.medium}>
+                                            <AddButton
+                                                label="Legg til innleggelsesperiode"
+                                                onClick={() => fieldArrayMethods.append({ fom: '', tom: '' })}
+                                            />
+                                        </Box>
+                                        <Box marginTop={Margin.medium}>
+                                            <div className={styles.innleggelsesperiodeFormModal__pickerLabels}>
+                                                <Element
+                                                    className={styles.innleggelsesperiodeFormModal__firstLabel}
+                                                    aria-hidden
+                                                >
+                                                    Fra
+                                                </Element>
+                                                <Element aria-hidden>Til</Element>
+                                            </div>
+                                        </Box>
+                                    </>
                                 )}
                                 renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => {
                                     return (
