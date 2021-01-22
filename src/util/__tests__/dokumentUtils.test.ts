@@ -17,6 +17,8 @@ describe('dokumentUtils', () => {
             fremhevet: false,
             annenPartErKilde: false,
             benyttet: false,
+            behandlet: false,
+            links: [],
         },
         {
             id: '2',
@@ -27,6 +29,8 @@ describe('dokumentUtils', () => {
             fremhevet: false,
             annenPartErKilde: false,
             benyttet: false,
+            behandlet: false,
+            links: [],
         },
         {
             id: '3',
@@ -37,6 +41,8 @@ describe('dokumentUtils', () => {
             fremhevet: false,
             annenPartErKilde: false,
             benyttet: false,
+            behandlet: false,
+            links: [],
         },
     ];
 
