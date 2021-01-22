@@ -1,19 +1,16 @@
 import React, { useMemo } from 'react';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import Modal from 'nav-frontend-modal';
 import Spinner from 'nav-frontend-spinner';
-import DiagnosekodeSelector from '../../form/pure/PureDiagnosekodeSelector';
 import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
 import Diagnosekodeliste from '../diagnosekodeliste/Diagnosekodeliste';
-import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
 import IconWithText from '../icon-with-text/IconWithText';
 import WarningIcon from '../icons/WarningIcon';
 import ContainerContext from '../../context/ContainerContext';
 import { deleteData, fetchData, submitData } from '../../../util/httpUtils';
 import Diagnosekode from '../../../types/Diagnosekode';
-import styles from './diagnosekodeoversikt.less';
+import DiagnosekodeModal from '../diagnosekode-modal/DiagnosekodeModal';
 
 Modal.setAppElement('#app');
 
@@ -26,7 +23,6 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
     const [isLoading, setIsLoading] = React.useState(true);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [diagnosekoder, setDiagnosekoder] = React.useState<Diagnosekode[]>([]);
-    const [nyDiagnosekode, setNyDiagnosekode] = React.useState<string>('');
 
     const fetchAborter = useMemo(() => new AbortController(), []);
 
@@ -44,14 +40,6 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                 onDiagnosekoderUpdated(newDiagnosekodeList);
                 setIsLoading(false);
             }
-        );
-    };
-
-    const lagreDiagnosekode = () => {
-        return submitData(
-            endpoints.leggTilDiagnosekode,
-            { kode: 'mock', beskrivelse: nyDiagnosekode },
-            fetchAborter.signal
         );
     };
 
@@ -90,50 +78,11 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             <Box marginTop={Margin.large}>
                 <AddButton label="Legg til diagnosekode" onClick={() => setModalIsOpen(true)} />
             </Box>
-            <Modal
+            <DiagnosekodeModal
                 isOpen={modalIsOpen}
-                closeButton
-                onRequestClose={() => {
-                    setModalIsOpen(false);
-                }}
-                contentLabel="Legg til diagnosekode"
-                className={styles.diagnosekodeoversikt__modal}
-            >
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        lagreDiagnosekode()
-                            .then(() => setModalIsOpen(false))
-                            .then(hentDiagnosekoder);
-                    }}
-                >
-                    <ModalFormWrapper title="Legg til diagnosekode">
-                        <Box marginTop={Margin.large}>
-                            <DiagnosekodeSelector
-                                initialDiagnosekodeValue=""
-                                name="diagnosekode"
-                                onChange={(value) => setNyDiagnosekode(value)}
-                                label="Diagnosekode"
-                                hideLabel
-                            />
-                        </Box>
-                        <Box marginTop={Margin.xLarge}>
-                            <div style={{ display: 'flex' }}>
-                                <Hovedknapp mini>Lagre</Hovedknapp>
-                                <Knapp
-                                    mini
-                                    style={{ marginLeft: '1rem' }}
-                                    htmlType="button"
-                                    onClick={() => setModalIsOpen(false)}
-                                >
-                                    Avbryt
-                                </Knapp>
-                            </div>
-                        </Box>
-                    </ModalFormWrapper>
-                </form>
-            </Modal>
+                onDiagnosekodeSaved={() => hentDiagnosekoder().then(() => setModalIsOpen(false))}
+                onRequestClose={() => setModalIsOpen(false)}
+            />
         </div>
     );
 };
