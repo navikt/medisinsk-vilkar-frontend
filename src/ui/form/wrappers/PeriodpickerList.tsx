@@ -51,13 +51,14 @@ const PeriodpickerList = ({
             <SkjemaGruppe legend={legend}>
                 {fields.map((item, index) => {
                     const errorMessage = errors[name] && errors[name][index]?.period.message;
+                    const hasDefaultValue = defaultValues && defaultValues[index];
                     return (
                         <Box key={item.id} marginTop={Margin.medium}>
                             <div className={styles.flexContainer}>
                                 <Controller
                                     name={`${name}[${index}].period`}
                                     rules={{ validate: { ...(validators || {}) } }}
-                                    defaultValue={defaultValues && defaultValues[index]}
+                                    defaultValue={hasDefaultValue ? defaultValues[index] : new Period('', '')}
                                     render={({ value, onChange }) => {
                                         return (
                                             <>
