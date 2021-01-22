@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import Alertstripe, { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import Spinner from 'nav-frontend-spinner';
 import { Period } from '../../../types/Period';
@@ -51,6 +51,8 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         vurderingsoversikt &&
         vurderingsoversikt.resterendeVurderingsperioder &&
         vurderingsoversikt.resterendeVurderingsperioder.length > 0;
+
+    const harGyldigSignatur = vurderingsoversikt && vurderingsoversikt.harGyldigSignatur === true;
 
     const getVurderingsoversikt = () => {
         const { signal } = fetchAborter;
@@ -104,17 +106,25 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
     if (vurderingsoversiktFeilet) {
         return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
     }
+    if (harGyldigSignatur === false) {
+        return (
+            <Alertstripe type="info">
+                Du kan ikke vurdere tilsyn og pleie før søker har sendt inn legeerklæring fra
+                sykehus/spesialisthelsetjenesten.
+            </Alertstripe>
+        );
+    }
     return (
         <>
             {harPerioderSomSkalVurderes && (
                 <div style={{ maxWidth: '1204px' }}>
-                    <AlertStripeAdvarsel>
+                    <Alertstripe type="advarsel">
                         {`Vurder behov for tilsyn og pleie for perioden ${prettifyPeriod(
                             vurderingsoversikt?.resterendeVurderingsperioder[0]
                         )}.`}
                         Perioden som skal vurderes overlapper med tidligere vurderinger. Vurder om det er grunnlag for å
                         gjøre en ny vurdering.
-                    </AlertStripeAdvarsel>
+                    </Alertstripe>
                     <div style={{ marginTop: '1rem' }} />
                 </div>
             )}

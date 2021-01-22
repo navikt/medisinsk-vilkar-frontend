@@ -8,6 +8,7 @@ interface Vurderingsoversikt {
     søknadsperioderTilBehandling: Period[];
     perioderSomKanVurderes: Period[];
     links: Link[];
+    harGyldigSignatur: boolean;
 }
 
 export default Vurderingsoversikt;
