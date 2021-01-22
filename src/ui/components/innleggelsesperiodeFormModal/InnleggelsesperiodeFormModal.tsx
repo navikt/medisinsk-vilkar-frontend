@@ -32,6 +32,10 @@ const InnleggelsesperiodeFormModal = ({
         defaultValues,
     });
 
+    const {
+        formState: { isDirty },
+    } = formMethods;
+
     const [showDeletedWarning, setShowDeletedWarning] = React.useState(false);
 
     const handleSubmit = (formState) => {
@@ -42,14 +46,18 @@ const InnleggelsesperiodeFormModal = ({
         return () => setShowDeletedWarning(false);
     }, []);
 
+    const handleCloseModal = () => {
+        if ((isDirty && window.confirm('Du vil miste alle endringer du har gjort')) || !isDirty) {
+            setModalIsOpen(false);
+            setShowDeletedWarning(false);
+        }
+    };
+
     return (
         <Modal
             isOpen
             closeButton
-            onRequestClose={() => {
-                setModalIsOpen(false);
-                setShowDeletedWarning(false);
-            }}
+            onRequestClose={handleCloseModal}
             contentLabel="Legg til innleggelsesperiode"
             className={styles.innleggelsesperiodeFormModal}
         >
@@ -106,10 +114,7 @@ const InnleggelsesperiodeFormModal = ({
                                     mini
                                     style={{ marginLeft: '1rem' }}
                                     htmlType="button"
-                                    onClick={() => {
-                                        setModalIsOpen(false);
-                                        setShowDeletedWarning(false);
-                                    }}
+                                    onClick={handleCloseModal}
                                     disabled={isLoading}
                                 >
                                     Avbryt
