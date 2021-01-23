@@ -6,15 +6,14 @@ import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
 import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
 import styles from './medisinskVilkår.less';
+import Infostripe from '../infostripe/Infostripe';
 
 const tabs = ['Legeerklæring', 'Tilsyn og pleie', 'To omsorgspersoner'];
 const MedisinskVilkår = () => {
     const [activeTab, setActiveTab] = React.useState(0);
     return (
         <>
-            <Box marginTop={Margin.large}>
-                <AlertStripe type="info">Sykdomsvurderingen ligger på barnet og er felles</AlertStripe>
-            </Box>
+            <Infostripe />
             <div className={styles.medisinskVilkår}>
                 <h1 style={{ fontSize: 22 }}>Sykdom</h1>
                 <div style={{ marginTop: '1rem' }}>

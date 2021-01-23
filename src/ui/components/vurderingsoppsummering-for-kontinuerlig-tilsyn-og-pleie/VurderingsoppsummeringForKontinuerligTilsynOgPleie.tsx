@@ -7,19 +7,16 @@ import Box, { Margin } from '../box/Box';
 import BasicList from '../basic-list/BasicList';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Vurdering from '../../../types/Vurdering';
-import Dokument from '../../../types/Dokument';
 
 interface VurderingsoppsummeringForKontinuerligTilsynOgPleieProps {
     vurdering: Vurdering;
-    alleDokumenter: Dokument[];
 }
 
 const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
     vurdering,
-    alleDokumenter,
 }: VurderingsoppsummeringForKontinuerligTilsynOgPleieProps) => {
     const gjeldendeVurdering = vurdering.versjoner[0];
-    const { perioder, tekst, resultat } = gjeldendeVurdering;
+    const { perioder, tekst, resultat, dokumenter } = gjeldendeVurdering;
     return (
         <DetailView title="Vurdering av behov for kontinuerlig tilsyn og pleie">
             <Box marginTop={Margin.medium}>
@@ -27,11 +24,9 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
                     label="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
                     content={
                         <BasicList
-                            elements={alleDokumenter
-                                .filter((dokument) => gjeldendeVurdering.dokumenter.includes(dokument))
-                                .map((dokument) => (
-                                    <DokumentLink dokument={dokument} />
-                                ))}
+                            elements={dokumenter.map((dokument) => (
+                                <DokumentLink dokument={dokument} />
+                            ))}
                         />
                     }
                 />

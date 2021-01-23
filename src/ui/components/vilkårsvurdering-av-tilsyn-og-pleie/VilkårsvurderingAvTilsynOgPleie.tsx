@@ -8,13 +8,17 @@ import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { prettifyPeriod } from '../../../util/formats';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
-import VurderingsdetaljerForKontinuerligTilsynOgPleie from '../vurderingsdetaljer-for-kontinuerlig-tilsyn-og-pleie/VurderingsdetaljerForKontinuerligTilsynOgPleie';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 import processVurderingsoversikt from '../../../util/vurderingsoversiktUtils';
 import { fetchData } from '../../../util/httpUtils';
 import PageError from '../page-error/PageError';
+import LinkRel from '../../../constants/LinkRel';
+import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
+import NyVurderingAvTilsynsbehovController from '../ny-vurdering-av-tilsynsbehov-controller/NyVurderingAvTilsynsbehovController';
+import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
+import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     onVilkårVurdert: () => void;
@@ -137,12 +141,29 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                 )}
                 detailSection={() => {
                     if (visVurderingDetails) {
+                        if (valgtVurderingselement?.id) {
+                            const url = findHrefByRel(LinkRel.HENT_VURDERING, valgtVurderingselement.links);
+                            return (
+                                <VurderingsdetaljerController
+                                    hentVurderingUrl={url}
+                                    contentRenderer={(valgtVurdering) => (
+                                        <VurderingsoppsummeringForKontinuerligTilsynOgPleie
+                                            vurdering={valgtVurdering}
+                                        />
+                                    )}
+                                />
+                            );
+                        }
+
+                        const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
+                        const dataTilVurderingUrl = findHrefByRel(LinkRel.DATA_TIL_VURDERING, vurderingsoversikt.links);
                         return (
-                            <VurderingsdetaljerForKontinuerligTilsynOgPleie
-                                vurderingId={valgtVurderingselement?.id}
+                            <NyVurderingAvTilsynsbehovController
+                                opprettVurderingLink={opprettLink}
+                                dataTilVurderingUrl={dataTilVurderingUrl}
                                 onVurderingLagret={oppdaterVurderingsoversikt}
+                                perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
                                 resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
-                                perioderSomKanVurderes={vurderingsoversikt?.perioderSomKanVurderes}
                             />
                         );
                     }
