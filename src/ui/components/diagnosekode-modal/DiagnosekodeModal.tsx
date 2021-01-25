@@ -26,7 +26,7 @@ const DiagnosekodeModal = ({ isOpen, onRequestClose, onDiagnosekodeSaved }: Diag
     }, []);
 
     const saveDiagnosekode = (diagnosekode: Diagnosekode) => {
-        return submitData(endpoints.leggTilDiagnosekode, { body: diagnosekode, cancelToken: httpCanceler.token });
+        return submitData(endpoints.leggTilDiagnosekode, diagnosekode, { cancelToken: httpCanceler.token });
     };
 
     return (

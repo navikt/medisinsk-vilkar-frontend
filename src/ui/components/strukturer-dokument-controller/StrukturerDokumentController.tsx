@@ -27,7 +27,7 @@ const StrukturerDokumentController = ({
 
     const strukturerDokument = (strukturertDokument) => {
         setIsLoading(true);
-        submitData(strukturerDokumentUrl, { body: strukturertDokument, cancelToken: httpCanceler.token }).then(
+        submitData(strukturerDokumentUrl, strukturertDokument, { cancelToken: httpCanceler.token }).then(
             () => {
                 setIsLoading(false);
                 onDokumentStrukturert();

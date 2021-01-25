@@ -12,7 +12,7 @@ export async function fetchData<T>(url: string, requestConfig?: AxiosRequestConf
 
 export async function submitData<T>(url: string, body: T, requestConfig?: AxiosRequestConfig): Promise<T> {
     try {
-        const response: AxiosResponse = await axios.post(url, requestConfig);
+        const response: AxiosResponse = await axios.post(url, body, requestConfig);
         return response.data;
     } catch (error) {
         console.error(error);
