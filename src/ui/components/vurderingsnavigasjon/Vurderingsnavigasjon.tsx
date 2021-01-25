@@ -5,7 +5,7 @@ import Vurderingselement from '../../../types/Vurderingselement';
 import { sortPeriodsByFomDate } from '../../../util/periodUtils';
 import InteractiveList from '../interactive-list/InteractiveList';
 import NyVurderingKnapp from '../ny-vurdering-knapp/NyVurderingKnapp';
-import NyVurdering from '../ny-vurdering/NyVurdering';
+import NyVurderingetikett from '../ny-vurderingetikett/NyVurderingetikett';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
 import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
 import styles from './vurderingsnavigasjon.less';
@@ -59,7 +59,7 @@ const Vurderingsnavigasjon = ({
     }
 
     if (visRadForNyVurdering) {
-        allElements.unshift(<NyVurdering />);
+        allElements.unshift(<NyVurderingetikett />);
     }
 
     return (

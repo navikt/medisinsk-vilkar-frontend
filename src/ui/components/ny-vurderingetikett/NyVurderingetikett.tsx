@@ -1,13 +1,13 @@
 import { EtikettInfo } from 'nav-frontend-etiketter';
 import React from 'react';
-import styles from './nyVurdering.less';
+import styles from './nyVurderingetikett.less';
 
-const NyVurdering = () => {
+const NyVurderingetikett = () => {
     return (
-        <div className={styles.nyVurdering}>
+        <div className={styles.nyVurderingetikett}>
             <EtikettInfo mini={true}>Ny vurdering</EtikettInfo>
         </div>
     );
 };
 
-export default NyVurdering;
+export default NyVurderingetikett;
