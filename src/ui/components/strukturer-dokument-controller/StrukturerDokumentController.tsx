@@ -3,6 +3,7 @@ import Spinner from 'nav-frontend-spinner';
 import Dokument from '../../../types/Dokument';
 import StrukturerDokumentForm from '../strukturer-dokument-form/StrukturerDokumentForm';
 import { submitData } from '../../../util/httpUtils';
+import axios from 'axios';
 
 interface StrukturerDokumentControllerProps {
     strukturerDokumentUrl: string;
@@ -16,18 +17,17 @@ const StrukturerDokumentController = ({
     onDokumentStrukturert,
 }: StrukturerDokumentControllerProps) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
-    const fetchAborter = useMemo(() => new AbortController(), []);
-    const { signal } = fetchAborter;
+    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     React.useEffect(() => {
         return () => {
-            fetchAborter.abort();
+            httpCanceler.cancel();
         };
     }, []);
 
     const strukturerDokument = (strukturertDokument) => {
         setIsLoading(true);
-        submitData(strukturerDokumentUrl, strukturertDokument, signal).then(
+        submitData(strukturerDokumentUrl, { body: strukturertDokument, cancelToken: httpCanceler.token }).then(
             () => {
                 setIsLoading(false);
                 onDokumentStrukturert();

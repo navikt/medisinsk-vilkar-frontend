@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import Alertstripe, { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import axios from 'axios';
+import Alertstripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import Spinner from 'nav-frontend-spinner';
 import { Period } from '../../../types/Period';
@@ -26,7 +27,7 @@ interface VilkårsvurderingAvTilsynOgPleieProps {
 
 const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
     const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
-    const fetchAborter = useMemo(() => new AbortController(), []);
+    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
         visVurderingDetails: false,
@@ -55,9 +56,8 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
     const harGyldigSignatur = vurderingsoversikt && vurderingsoversikt.harGyldigSignatur === true;
 
     const getVurderingsoversikt = () => {
-        const { signal } = fetchAborter;
         return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, {
-            signal,
+            cancelToken: httpCanceler.token,
         });
     };
 
@@ -81,7 +81,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
             .catch(handleError);
         return () => {
             isMounted = false;
-            fetchAborter.abort();
+            httpCanceler.cancel();
         };
     }, []);
 

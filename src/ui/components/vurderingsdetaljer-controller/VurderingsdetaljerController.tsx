@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import axios from 'axios';
 import Spinner from 'nav-frontend-spinner';
 import Vurdering from '../../../types/Vurdering';
 import { fetchData } from '../../../util/httpUtils';
@@ -17,11 +18,10 @@ const VurderingsdetaljerController = ({
     const [vurdering, setVurdering] = React.useState<Vurdering>(null);
     const [hentVurderingHarFeilet, setHentVurderingHarFeilet] = React.useState<boolean>(false);
 
-    const fetchAborter = useMemo(() => new AbortController(), [hentVurderingUrl]);
-    const { signal } = fetchAborter;
+    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     function hentVurdering(): Promise<Vurdering> {
-        return fetchData(hentVurderingUrl, { signal });
+        return fetchData(hentVurderingUrl, { cancelToken: httpCanceler.token });
     }
 
     const handleError = () => {
@@ -44,7 +44,7 @@ const VurderingsdetaljerController = ({
 
         return () => {
             isMounted = false;
-            fetchAborter.abort();
+            httpCanceler.cancel();
         };
     }, [hentVurderingUrl]);
 

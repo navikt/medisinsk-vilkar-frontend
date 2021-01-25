@@ -1,6 +1,7 @@
 import Modal from 'nav-frontend-modal';
 import Spinner from 'nav-frontend-spinner';
-import { Element, Undertittel } from 'nav-frontend-typografi';
+import { Element } from 'nav-frontend-typografi';
+import axios from 'axios';
 import React, { useEffect, useMemo } from 'react';
 import { Period } from '../../../types/Period';
 import { fetchData, submitData } from '../../../util/httpUtils';
@@ -16,9 +17,6 @@ import InnleggelsesperiodeFormModal from '../innleggelsesperiodeFormModal/Innleg
 export enum FieldName {
     INNLEGGELSESPERIODER = 'innleggelsesperioder',
 }
-export interface Innleggelsesperiodeoversikt {
-    [FieldName.INNLEGGELSESPERIODER]?: Period[];
-}
 
 Modal.setAppElement('#app');
 const Innleggelsesperiodeoversikt = (): JSX.Element => {
@@ -29,15 +27,13 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
     const [isLoading, setIsLoading] = React.useState(true);
     const [hentInnleggelsesperioderFeilet, setHentInnleggelsesperioderFeilet] = React.useState(false);
     const [lagreInnleggelsesperioderFeilet, setLagreInnleggelsesperioderFeilet] = React.useState(false);
-    const fetchAborter = useMemo(() => new AbortController(), []);
+    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const hentInnleggelsesperioder = () => {
-        const { signal } = fetchAborter;
-        return fetchData(endpoints.innleggelsesperioder, { signal });
+        return fetchData(endpoints.innleggelsesperioder, { cancelToken: httpCanceler.token });
     };
 
     const lagreInnleggelsesperioder = (formState) => {
-        const { signal } = fetchAborter;
         setIsLoading(true);
         let perioder = [];
         if (formState.innleggelsesperioder?.length > 0) {
@@ -46,7 +42,7 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
                 .map((periodeWrapper) => new Period(periodeWrapper.period.fom, periodeWrapper.period.tom));
         }
 
-        submitData(endpoints.lagreInnleggelsesperioder, perioder, signal)
+        submitData(endpoints.lagreInnleggelsesperioder, perioder, { cancelToken: httpCanceler.token })
             .then((nyeInnleggelsesperioder) => {
                 setInnleggelsesperioder(nyeInnleggelsesperioder);
                 setIsLoading(false);
@@ -74,7 +70,7 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
             });
         return () => {
             isMounted = false;
-            fetchAborter.abort();
+            httpCanceler.cancel();
         };
     }, []);
 

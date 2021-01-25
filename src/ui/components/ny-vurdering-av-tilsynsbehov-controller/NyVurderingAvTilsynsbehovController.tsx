@@ -11,6 +11,7 @@ import RequestPayload from '../../../types/RequestPayload';
 import Vurderingstype from '../../../types/Vurderingstype';
 import Link from '../../../types/Link';
 import PageError from '../page-error/PageError';
+import axios from 'axios';
 
 interface NyVurderingAvTilsynsbehovControllerProps {
     opprettVurderingLink: Link;
@@ -31,8 +32,7 @@ const NyVurderingAvTilsynsbehovController = ({
     const [hentDataTilVurderingHarFeilet, setHentDataTilVurderingHarFeilet] = React.useState<boolean>(false);
     const [dokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
-    const fetchAborter = useMemo(() => new AbortController(), []);
-    const { signal } = fetchAborter;
+    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
         return submitData<RequestPayload>(
@@ -45,7 +45,7 @@ const NyVurderingAvTilsynsbehovController = ({
                 tilknyttedeDokumenter: nyVurderingsversjon.dokumenter,
                 type: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE,
             },
-            signal
+            { cancelToken: httpCanceler.token }
         );
     }
 
@@ -67,7 +67,7 @@ const NyVurderingAvTilsynsbehovController = ({
         if (!dataTilVurderingUrl) {
             return new Promise((resolve) => resolve([]));
         }
-        return fetchData(dataTilVurderingUrl, { signal });
+        return fetchData(dataTilVurderingUrl, { cancelToken: httpCanceler.token });
     }
 
     const handleError = () => {
@@ -90,7 +90,7 @@ const NyVurderingAvTilsynsbehovController = ({
 
         return () => {
             isMounted = false;
-            fetchAborter.abort();
+            httpCanceler.cancel();
         };
     }, []);
 

@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import Spinner from 'nav-frontend-spinner';
+import axios from 'axios';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import Alertstripe from 'nav-frontend-alertstriper';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
@@ -28,7 +29,7 @@ interface StruktureringAvDokumentasjonProps {
 const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAvDokumentasjonProps) => {
     const [harRegistrertDiagnosekode, setHarRegistrertDiagnosekode] = React.useState<boolean | undefined>();
     const { dokument, endpoints, onDokumentValgt } = React.useContext(ContainerContext);
-    const fetchAborter = useMemo(() => new AbortController(), []);
+    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(dokumentReducer, {
         visDokumentDetails: false,
@@ -42,9 +43,8 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
     const { dokumentoversikt, isLoading, visDokumentDetails, valgtDokument, dokumentoversiktFeilet } = state;
 
     const getDokumentoversikt = () => {
-        const { signal } = fetchAborter;
         return fetchData<Dokumentoversikt>(endpoints.dokumentoversikt, {
-            signal,
+            cancelToken: httpCanceler.token,
         });
     };
 
@@ -67,7 +67,7 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
             .catch(handleError);
         return () => {
             isMounted = false;
-            fetchAborter.abort();
+            httpCanceler.cancel();
         };
     }, []);
 
@@ -125,12 +125,11 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
                             godkjent signatur, eller sett saken på vent mens du innhenter mer dokumentasjon.
                         </Alertstripe>
                     </Box>
-                    {
-                        ustrukturerteDokumenter.length === 0 &&
+                    {ustrukturerteDokumenter.length === 0 && (
                         <Box marginBottom={Margin.large}>
                             <FristForDokumentasjonUtløptPanel onProceedClick={() => console.log('1')} />
                         </Box>
-                    }
+                    )}
                 </>
             )}
             <NavigationWithDetailView

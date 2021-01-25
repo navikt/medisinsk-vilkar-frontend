@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Modal from 'nav-frontend-modal';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import axios from 'axios';
 import styles from '../diagnosekodeoversikt/diagnosekodeoversikt.less';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import Box, { Margin } from '../box/Box';
@@ -18,14 +19,14 @@ interface DiagnosekodeModalProps {
 const DiagnosekodeModal = ({ isOpen, onRequestClose, onDiagnosekodeSaved }: DiagnosekodeModalProps) => {
     const [selectedDiagnosekode, setSelectedDiagnosekode] = React.useState<Diagnosekode>(null);
     const { endpoints } = React.useContext(ContainerContext);
-    const fetchAborter = React.useMemo(() => new AbortController(), []);
+    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     React.useEffect(() => {
-        return () => fetchAborter.abort();
+        return () => httpCanceler.cancel();
     }, []);
 
     const saveDiagnosekode = (diagnosekode: Diagnosekode) => {
-        return submitData(endpoints.leggTilDiagnosekode, diagnosekode, fetchAborter.signal);
+        return submitData(endpoints.leggTilDiagnosekode, { body: diagnosekode, cancelToken: httpCanceler.token });
     };
 
     return (

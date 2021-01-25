@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import axios from 'axios';
 import Modal from 'nav-frontend-modal';
 import Spinner from 'nav-frontend-spinner';
 import AddButton from '../add-button/AddButton';
@@ -8,7 +9,7 @@ import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
 import IconWithText from '../icon-with-text/IconWithText';
 import WarningIcon from '../icons/WarningIcon';
 import ContainerContext from '../../context/ContainerContext';
-import { deleteData, fetchData, submitData } from '../../../util/httpUtils';
+import { deleteData, fetchData } from '../../../util/httpUtils';
 import Diagnosekode from '../../../types/Diagnosekode';
 import DiagnosekodeModal from '../diagnosekode-modal/DiagnosekodeModal';
 
@@ -23,18 +24,11 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
     const [isLoading, setIsLoading] = React.useState(true);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [diagnosekoder, setDiagnosekoder] = React.useState<Diagnosekode[]>([]);
-
-    const fetchAborter = useMemo(() => new AbortController(), []);
-
-    React.useEffect(() => {
-        return () => {
-            fetchAborter.abort();
-        };
-    }, []);
+    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const hentDiagnosekoder = () => {
         setIsLoading(true);
-        return fetchData(endpoints.diagnosekoder, { signal: fetchAborter.signal }).then(
+        return fetchData(endpoints.diagnosekoder, { cancelToken: httpCanceler.token }).then(
             (newDiagnosekodeList: Diagnosekode[]) => {
                 setDiagnosekoder(newDiagnosekodeList);
                 onDiagnosekoderUpdated(newDiagnosekodeList);
@@ -44,10 +38,9 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
     };
 
     const slettDiagnosekode = (diagnosekode: Diagnosekode) => {
-        return deleteData<Diagnosekode[]>(
-            `${endpoints.slettDiagnosekode}?kode=${diagnosekode.kode}`,
-            fetchAborter.signal
-        ).then((newDiagnosekodeList) => {
+        return deleteData<Diagnosekode[]>(`${endpoints.slettDiagnosekode}?kode=${diagnosekode.kode}`, {
+            cancelToken: httpCanceler.token,
+        }).then((newDiagnosekodeList) => {
             setDiagnosekoder(newDiagnosekodeList);
             onDiagnosekoderUpdated(newDiagnosekodeList);
         });
@@ -55,6 +48,9 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
 
     React.useEffect(() => {
         hentDiagnosekoder();
+        return () => {
+            httpCanceler.cancel();
+        };
     }, []);
 
     if (isLoading) {

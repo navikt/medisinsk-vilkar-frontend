@@ -1,6 +1,7 @@
+import React, { useMemo } from 'react';
 import Alertstripe, { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Spinner from 'nav-frontend-spinner';
-import React, { useMemo } from 'react';
+import axios from 'axios';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
@@ -22,8 +23,7 @@ import NyVurderingAvToOmsorgspersonerController from '../ny-vurdering-av-to-omso
 
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
-
-    const fetchAborter = useMemo(() => new AbortController(), []);
+    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
         visVurderingDetails: false,
@@ -50,8 +50,9 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const harGyldigSignatur = vurderingsoversikt && vurderingsoversikt.harGyldigSignatur === true;
 
     const getVurderingsoversikt = () => {
-        const { signal } = fetchAborter;
-        return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktBehovForToOmsorgspersoner, { signal });
+        return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktBehovForToOmsorgspersoner, {
+            cancelToken: httpCanceler.token,
+        });
     };
 
     const visVurderingsoversikt = (nyVurderingsoversikt: Vurderingsoversikt) => {
@@ -74,7 +75,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
             .catch(handleError);
         return () => {
             isMounted = false;
-            fetchAborter.abort();
+            httpCanceler.cancel();
         };
     }, []);
 
