@@ -88,14 +88,10 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
 
     const visNyVurderingForm = (resterendeVurderingsperioder?: Period[]) => {
         onVurderingValgt(null);
-        if (resterendeVurderingsperioder) {
-            dispatch({
-                type: ActionType.VIS_NY_VURDERING_FORM_FOR_PERIODE_TIL_VURDERING,
-                resterendeVurderingsperioder,
-            });
-        } else {
-            dispatch({ type: ActionType.VIS_NY_VURDERING_FORM_FOR_NY_PERIODE });
-        }
+        dispatch({
+            type: ActionType.VIS_NY_VURDERING_FORM,
+            resterendeVurderingsperioder,
+        });
     };
 
     const velgVurderingselement = (nyValgtVurderingselement: Vurderingselement) => {

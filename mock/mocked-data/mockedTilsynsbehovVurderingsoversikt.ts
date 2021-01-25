@@ -13,9 +13,7 @@ const tilsynsbehovVurderingsoversiktMock = {
             links: createMockedVurderingselementLinks('1'),
         },
     ],
-    resterendeVurderingsperioder: [
-        // { fom: '2020-01-16', tom: '2020-01-20' }
-    ],
+    resterendeVurderingsperioder: [{ fom: '2020-01-16', tom: '2020-01-20' }],
     perioderSomKanVurderes: [
         { fom: '2020-01-01', tom: '2020-01-15' },
         { fom: '2020-01-16', tom: '2020-01-20' },

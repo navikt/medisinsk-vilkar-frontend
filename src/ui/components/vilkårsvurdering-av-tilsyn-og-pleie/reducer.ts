@@ -49,20 +49,13 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 vurderingsoversiktFeilet: true,
             };
         }
-        case ActionType.VIS_NY_VURDERING_FORM_FOR_PERIODE_TIL_VURDERING:
+        case ActionType.VIS_NY_VURDERING_FORM:
             return {
                 ...state,
                 valgtVurderingselement: null,
                 resterendeVurderingsperioderDefaultValue: action.resterendeVurderingsperioder || [],
                 visVurderingDetails: true,
-            };
-        case ActionType.VIS_NY_VURDERING_FORM_FOR_NY_PERIODE:
-            return {
-                ...state,
-                valgtVurderingselement: null,
-                resterendeVurderingsperioderDefaultValue: [],
-                visVurderingDetails: true,
-                visRadForNyVurdering: true,
+                visRadForNyVurdering: !action.resterendeVurderingsperioder,
             };
         case ActionType.VELG_VURDERINGSELEMENT:
             return {

@@ -65,14 +65,14 @@ const Vurderingsnavigasjon = ({
     return (
         <>
             <Undertittel>Alle perioder</Undertittel>
-            {/* {!harPerioderSomSkalVurderes && ( */}
-            <NyVurderingKnapp
-                onClick={() => {
-                    setActiveIndex(0);
-                    onNyVurderingClick();
-                }}
-            />
-            {/* )} */}
+            {!harPerioderSomSkalVurderes && (
+                <NyVurderingKnapp
+                    onClick={() => {
+                        setActiveIndex(0);
+                        onNyVurderingClick();
+                    }}
+                />
+            )}
             <div className={styles.vurderingsvelgerContainer}>
                 <InteractiveList
                     elements={allElements.map((element, currentIndex) => ({

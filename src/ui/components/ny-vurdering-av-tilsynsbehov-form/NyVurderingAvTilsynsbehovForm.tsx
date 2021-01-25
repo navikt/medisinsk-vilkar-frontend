@@ -53,10 +53,6 @@ const NyVurderingAvTilsynsbehovForm = ({
         mode: 'onChange',
     });
 
-    // React.useEffect(() => {
-    //     formMethods.reset(defaultValues);
-    // }, [defaultValues]);
-
     const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
         const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap(getPeriodAsListOfDays);
