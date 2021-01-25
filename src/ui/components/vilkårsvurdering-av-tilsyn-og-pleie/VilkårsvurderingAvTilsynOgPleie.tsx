@@ -140,31 +140,35 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                     />
                 )}
                 detailSection={() => {
+                    const harValgtVurderingselement = !!valgtVurderingselement?.id;
                     if (visVurderingDetails) {
-                        if (valgtVurderingselement?.id) {
-                            const url = findHrefByRel(LinkRel.HENT_VURDERING, valgtVurderingselement.links);
-                            return (
-                                <VurderingsdetaljerController
-                                    hentVurderingUrl={url}
-                                    contentRenderer={(valgtVurdering) => (
-                                        <VurderingsoppsummeringForKontinuerligTilsynOgPleie
-                                            vurdering={valgtVurdering}
-                                        />
-                                    )}
-                                />
-                            );
-                        }
-
+                        const url = harValgtVurderingselement
+                            ? findHrefByRel(LinkRel.HENT_VURDERING, valgtVurderingselement.links)
+                            : '';
                         const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
                         const dataTilVurderingUrl = findHrefByRel(LinkRel.DATA_TIL_VURDERING, vurderingsoversikt.links);
                         return (
-                            <NyVurderingAvTilsynsbehovController
-                                opprettVurderingLink={opprettLink}
-                                dataTilVurderingUrl={dataTilVurderingUrl}
-                                onVurderingLagret={oppdaterVurderingsoversikt}
-                                perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
-                                resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
-                            />
+                            <>
+                                {harValgtVurderingselement && (
+                                    <VurderingsdetaljerController
+                                        hentVurderingUrl={url}
+                                        contentRenderer={(valgtVurdering) => (
+                                            <VurderingsoppsummeringForKontinuerligTilsynOgPleie
+                                                vurdering={valgtVurdering}
+                                            />
+                                        )}
+                                    />
+                                )}
+                                <div style={{ display: harValgtVurderingselement ? 'none' : '' }}>
+                                    <NyVurderingAvTilsynsbehovController
+                                        opprettVurderingLink={opprettLink}
+                                        dataTilVurderingUrl={dataTilVurderingUrl}
+                                        onVurderingLagret={oppdaterVurderingsoversikt}
+                                        perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
+                                        resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                                    />
+                                </div>
+                            </>
                         );
                     }
                     return null;

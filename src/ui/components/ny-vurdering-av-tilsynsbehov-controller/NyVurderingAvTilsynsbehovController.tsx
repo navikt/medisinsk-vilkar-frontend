@@ -94,25 +94,25 @@ const NyVurderingAvTilsynsbehovController = ({
         };
     }, []);
 
-    if (isLoading) {
-        return <Spinner />;
-    }
-    if (hentDataTilVurderingHarFeilet) {
-        return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
-    }
     return (
-        <NyVurderingAvTilsynsbehovForm
-            defaultValues={{
-                [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
-                [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
-                [FieldName.PERIODER]: resterendeVurderingsperioder,
-                [FieldName.DOKUMENTER]: [],
-            }}
-            resterendeVurderingsperioder={resterendeVurderingsperioder}
-            perioderSomKanVurderes={perioderSomKanVurderes}
-            dokumenter={dokumenter}
-            onSubmit={lagreVurderingAvTilsynsbehov}
-        />
+        <>
+            {isLoading && <Spinner />}
+            {hentDataTilVurderingHarFeilet && <PageError message="Noe gikk galt, vennligst prøv igjen senere" />}
+            <div style={{ display: isLoading || hentDataTilVurderingHarFeilet ? 'none' : '' }}>
+                <NyVurderingAvTilsynsbehovForm
+                    defaultValues={{
+                        [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
+                        [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
+                        [FieldName.PERIODER]: resterendeVurderingsperioder,
+                        [FieldName.DOKUMENTER]: [],
+                    }}
+                    resterendeVurderingsperioder={resterendeVurderingsperioder}
+                    perioderSomKanVurderes={perioderSomKanVurderes}
+                    dokumenter={dokumenter}
+                    onSubmit={lagreVurderingAvTilsynsbehov}
+                />
+            </div>
+        </>
     );
 };
 
