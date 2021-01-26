@@ -18,7 +18,7 @@ const VurderingsdetaljerController = ({
     const [vurdering, setVurdering] = React.useState<Vurdering>(null);
     const [hentVurderingHarFeilet, setHentVurderingHarFeilet] = React.useState<boolean>(false);
 
-    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
+    const httpCanceler = useMemo(() => axios.CancelToken.source(), [hentVurderingUrl]);
 
     function hentVurdering(): Promise<Vurdering> {
         return fetchData(hentVurderingUrl, { cancelToken: httpCanceler.token });

@@ -1,10 +1,9 @@
-import React from 'react';
 import { TabsPure } from 'nav-frontend-tabs';
-import AlertStripe from 'nav-frontend-alertstriper';
-import Box, { Margin } from '../box/Box';
+import React from 'react';
+import Infostripe from '../infostripe/Infostripe';
+import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
 import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-pleie/VilkårsvurderingAvTilsynOgPleie';
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
-import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
 import styles from './medisinskVilkår.less';
 
 const tabs = ['Legeerklæring', 'Tilsyn og pleie', 'To omsorgspersoner'];
@@ -12,9 +11,7 @@ const MedisinskVilkår = () => {
     const [activeTab, setActiveTab] = React.useState(0);
     return (
         <>
-            <Box marginTop={Margin.xLarge}>
-                <AlertStripe type="info">Sykdomsvurderingen ligger på barnet og er felles</AlertStripe>
-            </Box>
+            <Infostripe />
             <div className={styles.medisinskVilkår}>
                 <h1 style={{ fontSize: 22 }}>Sykdom</h1>
                 <div style={{ marginTop: '1rem' }}>
