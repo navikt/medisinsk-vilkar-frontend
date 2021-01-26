@@ -3,6 +3,8 @@ import { Label } from 'nav-frontend-skjema';
 import Autocomplete from '@navikt/nap-autocomplete';
 import FieldError from '../../components/field-error/FieldError';
 import styles from './diagnosekodeSelector.less';
+import Diagnosekode from '../../../types/Diagnosekode';
+import ContainerContext from '../../context/ContainerContext';
 
 interface DiagnosekodeSelectorProps {
     label: string;
@@ -10,16 +12,17 @@ interface DiagnosekodeSelectorProps {
     name: string;
     errorMessage?: string;
     initialDiagnosekodeValue: string;
+    hideLabel?: boolean;
 }
 
-const fetchDiagnosekoderByQuery = (queryString: string) => {
-    return fetch(`/k9/diagnosekoder?query=${queryString}&max=8`);
+const fetchDiagnosekoderByQuery = (queryString: string, diagnosekodeUrl: string) => {
+    return fetch(`${diagnosekodeUrl}?query=${queryString}&max=8`).then((response) => response.json());
 };
 
-const getUpdatedSuggestions = async (queryString: string) => {
+const getUpdatedSuggestions = async (queryString: string, diagnosekodeUrl: string) => {
     if (queryString.length >= 3) {
-        const diagnosekoder = await fetchDiagnosekoderByQuery(queryString);
-        return (diagnosekoder as any).map(({ kode, beskrivelse }) => ({
+        const diagnosekoder: Diagnosekode[] = await fetchDiagnosekoderByQuery(queryString, diagnosekodeUrl);
+        return diagnosekoder.map(({ kode, beskrivelse }) => ({
             key: kode,
             value: `${kode} - ${beskrivelse}`,
         }));
@@ -33,17 +36,14 @@ const PureDiagnosekodeSelector = ({
     name,
     errorMessage,
     initialDiagnosekodeValue,
+    hideLabel,
 }: DiagnosekodeSelectorProps): JSX.Element => {
+    const { endpoints } = React.useContext(ContainerContext);
     const [suggestions, setSuggestions] = React.useState([]);
     const [inputValue, setInputValue] = React.useState('');
-
     React.useEffect(() => {
         const getInitialDiagnosekode = async () => {
-            const diagnosekode:
-                | {
-                      value: string;
-                  }[]
-                | [] = await getUpdatedSuggestions(initialDiagnosekodeValue);
+            const diagnosekode = await getUpdatedSuggestions(initialDiagnosekodeValue, endpoints.diagnosekodeSearch);
             if (diagnosekode.length > 0 && diagnosekode[0].value) {
                 setInputValue(diagnosekode[0].value);
             }
@@ -53,12 +53,14 @@ const PureDiagnosekodeSelector = ({
 
     const onInputValueChange = async (v) => {
         setInputValue(v);
-        const newSuggestionList = await getUpdatedSuggestions(v);
+        const newSuggestionList = await getUpdatedSuggestions(v, endpoints.diagnosekodeSearch);
         setSuggestions(newSuggestionList);
     };
     return (
         <div className={styles.diagnosekodeContainer}>
-            <Label htmlFor={name}>{label}</Label>
+            <div className={hideLabel ? styles.diagnosekodeContainer__hideLabel : ''}>
+                <Label htmlFor={name}>{label}</Label>
+            </div>
             <Autocomplete
                 id={name}
                 suggestions={suggestions}
@@ -66,7 +68,7 @@ const PureDiagnosekodeSelector = ({
                 onChange={onInputValueChange}
                 onSelect={(e) => {
                     onInputValueChange(e.value);
-                    onChange(e.value);
+                    onChange(e);
                 }}
                 ariaLabel="Søk etter diagnose"
                 placeholder="Søk etter diagnose"

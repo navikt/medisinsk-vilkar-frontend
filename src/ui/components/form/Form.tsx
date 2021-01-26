@@ -4,8 +4,8 @@ import Box, { Margin } from '../box/Box';
 
 interface FormProps {
     children: React.ReactNode;
-    buttonLabel: string;
-    onSubmit: () => void;
+    buttonLabel?: string;
+    onSubmit: (e?: any) => void;
     shouldShowSubmitButton?: boolean;
 }
 
@@ -14,7 +14,7 @@ const Form = ({ children, onSubmit, buttonLabel, shouldShowSubmitButton }: FormP
         <form onSubmit={onSubmit}>
             {children}
             {shouldShowSubmitButton !== false && (
-                <Box marginTop={Margin.xLarge}>
+                <Box marginTop={Margin.xxLarge}>
                     <Hovedknapp>{buttonLabel}</Hovedknapp>
                 </Box>
             )}

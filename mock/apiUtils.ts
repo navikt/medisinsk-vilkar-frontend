@@ -3,7 +3,7 @@ import tilsynsbehovVurderingerMock from './mocked-data/mockedTilsynsbehovVurderi
 import tilsynsbehovVurderingsoversiktMock from './mocked-data/mockedTilsynsbehovVurderingsoversikt';
 import mockedToOmsorgspersonerVurderingsoversikt from './mocked-data/mockedToOmsorgspersonerVurderingsoversikt';
 import toOmsorgspersonerVurderingerMock from './mocked-data/mockedToOmsorgspersonerVurderinger';
-import createMockedVurderingselementLinks from './mocked-data/mockedVurderingselementLinks';
+import createMockedVurderingselementLinks from './mocked-data/createMockedVurderingselementLinks';
 
 export const createKontinuerligTilsynVurdering = (requestBody: RequestPayload) => {
     const nyVurderingId = tilsynsbehovVurderingsoversiktMock.vurderingselementer.length + 1;
@@ -27,7 +27,6 @@ export const createKontinuerligTilsynVurdering = (requestBody: RequestPayload) =
                 resultat: resultat,
                 dokumenter: tilknyttedeDokumenter,
                 tekst: tekst,
-                links: createMockedVurderingselementLinks(nyVurderingId),
             },
         ],
         annenInformasjon: {
@@ -59,7 +58,6 @@ export const createToOmsorgspersonerVurdering = (requestBody: RequestPayload) =>
                 resultat: resultat,
                 dokumenter: tilknyttedeDokumenter,
                 tekst: tekst,
-                links: createMockedVurderingselementLinks(nyVurderingId),
             },
         ],
         annenInformasjon: {

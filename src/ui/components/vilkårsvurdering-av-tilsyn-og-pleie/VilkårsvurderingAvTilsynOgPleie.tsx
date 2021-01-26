@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import axios from 'axios';
+import Alertstripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import Spinner from 'nav-frontend-spinner';
 import { Period } from '../../../types/Period';
@@ -26,8 +27,7 @@ interface VilkårsvurderingAvTilsynOgPleieProps {
 
 const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
     const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
-
-    const fetchAborter = useMemo(() => new AbortController(), []);
+    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
         visVurderingDetails: false,
@@ -53,10 +53,11 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         vurderingsoversikt.resterendeVurderingsperioder &&
         vurderingsoversikt.resterendeVurderingsperioder.length > 0;
 
+    const harGyldigSignatur = vurderingsoversikt && vurderingsoversikt.harGyldigSignatur === true;
+
     const getVurderingsoversikt = () => {
-        const { signal } = fetchAborter;
         return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, {
-            signal,
+            cancelToken: httpCanceler.token,
         });
     };
 
@@ -80,7 +81,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
             .catch(handleError);
         return () => {
             isMounted = false;
-            fetchAborter.abort();
+            httpCanceler.cancel();
         };
     }, []);
 
@@ -91,7 +92,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
 
     const velgVurderingselement = (nyValgtVurderingselement: Vurderingselement) => {
         onVurderingValgt(nyValgtVurderingselement.id);
-        dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, vurderingselement: nyValgtVurderingselement });
+        dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, valgtVurderingselement: nyValgtVurderingselement });
     };
 
     const oppdaterVurderingsoversikt = () => {
@@ -105,17 +106,25 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
     if (vurderingsoversiktFeilet) {
         return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
     }
+    if (harGyldigSignatur === false) {
+        return (
+            <Alertstripe type="info">
+                Du kan ikke vurdere tilsyn og pleie før søker har sendt inn legeerklæring fra
+                sykehus/spesialisthelsetjenesten.
+            </Alertstripe>
+        );
+    }
     return (
         <>
             {harPerioderSomSkalVurderes && (
                 <div style={{ maxWidth: '1204px' }}>
-                    <AlertStripeAdvarsel>
+                    <Alertstripe type="advarsel">
                         {`Vurder behov for tilsyn og pleie for perioden ${prettifyPeriod(
                             vurderingsoversikt?.resterendeVurderingsperioder[0]
                         )}.`}
                         Perioden som skal vurderes overlapper med tidligere vurderinger. Vurder om det er grunnlag for å
                         gjøre en ny vurdering.
-                    </AlertStripeAdvarsel>
+                    </Alertstripe>
                     <div style={{ marginTop: '1rem' }} />
                 </div>
             )}
@@ -124,7 +133,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                     <Vurderingsnavigasjon
                         vurderingselementer={vurderingsoversikt?.vurderingselementer}
                         resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
-                        søknadsperioderTilBehandling={vurderingsoversikt?.søknadsperioderTilBehandling}
                         onVurderingValgt={velgVurderingselement}
                         onNyVurderingClick={visNyVurderingForm}
                     />

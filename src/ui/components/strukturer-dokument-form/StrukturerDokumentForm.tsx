@@ -1,13 +1,11 @@
 import React from 'react';
+import Lenke from 'nav-frontend-lenker';
 import { FormProvider, useForm } from 'react-hook-form';
 import DetailView from '../detail-view/DetailView';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import Form from '../form/Form';
 import Datepicker from '../../form/wrappers/Datepicker';
 import Box, { Margin } from '../box/Box';
-import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
-import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
-import PeriodWrapper from '../../form/types/PeriodWrapper';
 import { required } from '../../form/validators';
 import { Dokument, Dokumenttype } from '../../../types/Dokument';
 import { lagStrukturertDokument } from '../../../util/dokumentUtils';
@@ -23,7 +21,6 @@ export interface StrukturerDokumentFormState {
     [FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER]?: Dokumenttype;
     [FieldName.DATERT]: string;
     [FieldName.SIGNERT_AV_SYKEHUSLEGE_ELLER_LEGE_I_SPESIALISTHELSETJENESTEN]?: boolean;
-    [FieldName.INNLEGGELSESPERIODER]: PeriodWrapper[];
 }
 
 interface StrukturerDokumentFormProps {
@@ -32,30 +29,25 @@ interface StrukturerDokumentFormProps {
 }
 
 const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormProps) => {
-    const formMethods = useForm<StrukturerDokumentFormState>({
-        defaultValues: {
-            innleggelsesperioder: [{ period: { fom: '', tom: '' } }],
-        },
-    });
-
-    const inneholderMedisinskeOpplysninger = formMethods.watch(FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER);
-
-    const dokumentetErEnLegeerklæring = inneholderMedisinskeOpplysninger === Dokumenttype.LEGEERKLÆRING;
-    const dokumentetHarMedisinskeOpplysninger =
-        dokumentetErEnLegeerklæring || inneholderMedisinskeOpplysninger === Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER;
+    const formMethods = useForm<StrukturerDokumentFormState>();
 
     const lagNyttStrukturertDokument = (formState: StrukturerDokumentFormState) => {
         onSubmit(lagStrukturertDokument(formState, dokument));
     };
 
     return (
-        <DetailView title={`Håndter nytt dokument ("${dokument.navn}")`}>
+        <DetailView title="Om dokumentet">
             <FormProvider {...formMethods}>
                 <Form
-                    buttonLabel="Lagre"
+                    buttonLabel="Bekreft"
                     onSubmit={formMethods.handleSubmit((formState) => lagNyttStrukturertDokument(formState))}
                 >
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
+                        <Lenke href={dokument.location} target="_blank">
+                            Åpne dokument
+                        </Lenke>
+                    </Box>
+                    <Box marginTop={Margin.xLarge}>
                         <RadioGroupPanel
                             name={FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER}
                             question="Inneholder dokumentet medisinske opplysninger?"
@@ -76,41 +68,14 @@ const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormPr
                             validators={{ required }}
                         />
                     </Box>
-                    {dokumentetHarMedisinskeOpplysninger && (
-                        <Box marginTop={Margin.large}>
-                            <Datepicker
-                                name={FieldName.DATERT}
-                                label="Hvilken dato er dokumentet datert?"
-                                defaultValue=""
-                                validators={{ required }}
-                            />
-                        </Box>
-                    )}
-                    {dokumentetErEnLegeerklæring && (
-                        <Box marginTop={Margin.large}>
-                            <YesOrNoQuestion
-                                name={FieldName.SIGNERT_AV_SYKEHUSLEGE_ELLER_LEGE_I_SPESIALISTHELSETJENESTEN}
-                                question="Er dokumentet signert av en sykehuslege eller en lege i spesialisthelsetjenesten?"
-                                validators={{ required }}
-                            />
-                        </Box>
-                    )}
-                    {dokumentetHarMedisinskeOpplysninger && (
-                        <Box marginTop={Margin.large}>
-                            <PeriodpickerList
-                                name={FieldName.INNLEGGELSESPERIODER}
-                                legend="Periode for eventuelle innleggelser"
-                                fromDatepickerProps={{
-                                    label: 'Fra',
-                                    ariaLabel: 'fra',
-                                }}
-                                toDatepickerProps={{
-                                    label: 'Til',
-                                    ariaLabel: 'til',
-                                }}
-                            />
-                        </Box>
-                    )}
+                    <Box marginTop={Margin.xLarge}>
+                        <Datepicker
+                            name={FieldName.DATERT}
+                            label="Hvilken dato er dokumentet datert?"
+                            defaultValue=""
+                            validators={{ required }}
+                        />
+                    </Box>
                 </Form>
             </FormProvider>
         </DetailView>

@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import Dokument, { Dokumenttype } from '../../types/Dokument';
 import { finnBenyttedeDokumenter } from '../dokumentUtils';
 
-const datert = dayjs().toDate();
+const datert = dayjs().toDate().toISOString();
 
 describe('dokumentUtils', () => {
     let result: Dokument[] = [];
@@ -17,6 +17,8 @@ describe('dokumentUtils', () => {
             fremhevet: false,
             annenPartErKilde: false,
             benyttet: false,
+            behandlet: false,
+            links: [],
         },
         {
             id: '2',
@@ -27,6 +29,8 @@ describe('dokumentUtils', () => {
             fremhevet: false,
             annenPartErKilde: false,
             benyttet: false,
+            behandlet: false,
+            links: [],
         },
         {
             id: '3',
@@ -37,6 +41,8 @@ describe('dokumentUtils', () => {
             fremhevet: false,
             annenPartErKilde: false,
             benyttet: false,
+            behandlet: false,
+            links: [],
         },
     ];
 

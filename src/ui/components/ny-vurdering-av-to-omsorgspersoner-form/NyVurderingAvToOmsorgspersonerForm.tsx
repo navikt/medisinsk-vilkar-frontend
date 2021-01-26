@@ -13,7 +13,9 @@ import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
+import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
+import DeleteButton from '../delete-button/DeleteButton';
 import DetailView from '../detail-view/DetailView';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Form from '../form/Form';
@@ -90,7 +92,7 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                     onSubmit={formMethods.handleSubmit(lagNyVurdering)}
                 >
                     {dokumenter?.length > 0 && (
-                        <Box marginTop={Margin.large}>
+                        <Box marginTop={Margin.xLarge}>
                             <CheckboxGroup
                                 question="Hvilke dokumenter er brukt i vurderingen av to omsorgspersoner?"
                                 name={FieldName.DOKUMENTER}
@@ -104,7 +106,7 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                             />
                         </Box>
                     )}
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
                         <TextArea
                             textareaClass={styles.begrunnelsesfelt}
                             name={FieldName.VURDERING_AV_TO_OMSORGSPERSONER}
@@ -117,14 +119,14 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                             validators={{ required }}
                         />
                     </Box>
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
                         <YesOrNoQuestion
                             question="Er det behov for to omsorgspersoner?"
                             name={FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER}
                             validators={{ required }}
                         />
                     </Box>
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
                         <PeriodpickerList
                             legend="Oppgi perioder"
                             name={FieldName.PERIODER}
@@ -162,10 +164,31 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                                     invalidDateRanges: hullISøknadsperiodene,
                                 },
                             }}
+                            renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => {
+                                return (
+                                    <>
+                                        {numberOfItems > 1 && (
+                                            <DeleteButton
+                                                onClick={() => {
+                                                    fieldArrayMethods.remove(index);
+                                                }}
+                                            />
+                                        )}
+                                    </>
+                                );
+                            }}
+                            renderAfterFieldArray={(fieldArrayMethods) => (
+                                <Box marginTop={Margin.large}>
+                                    <AddButton
+                                        label="Legg til periode"
+                                        onClick={() => fieldArrayMethods.append({ fom: '', tom: '' })}
+                                    />
+                                </Box>
+                            )}
                         />
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (
-                        <Box marginTop={Margin.large}>
+                        <Box marginTop={Margin.xLarge}>
                             <AlertStripeAdvarsel>
                                 Du har ikke vurdert alle periodene som må vurderes. Resterende perioder vurderer du
                                 etter at du har lagret denne.

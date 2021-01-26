@@ -1,6 +1,7 @@
-import { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
-import Spinner from 'nav-frontend-spinner';
 import React, { useMemo } from 'react';
+import Alertstripe, { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Spinner from 'nav-frontend-spinner';
+import axios from 'axios';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
@@ -22,8 +23,7 @@ import NyVurderingAvToOmsorgspersonerController from '../ny-vurdering-av-to-omso
 
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
-
-    const fetchAborter = useMemo(() => new AbortController(), []);
+    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
         visVurderingDetails: false,
@@ -47,9 +47,12 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const harPerioderSomSkalVurderes = vurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
     const harVurdertePerioder = vurderingsoversikt?.vurderingselementer?.length > 0;
 
+    const harGyldigSignatur = vurderingsoversikt && vurderingsoversikt.harGyldigSignatur === true;
+
     const getVurderingsoversikt = () => {
-        const { signal } = fetchAborter;
-        return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktBehovForToOmsorgspersoner, { signal });
+        return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktBehovForToOmsorgspersoner, {
+            cancelToken: httpCanceler.token,
+        });
     };
 
     const visVurderingsoversikt = (nyVurderingsoversikt: Vurderingsoversikt) => {
@@ -72,7 +75,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
             .catch(handleError);
         return () => {
             isMounted = false;
-            fetchAborter.abort();
+            httpCanceler.cancel();
         };
     }, []);
 
@@ -83,7 +86,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
 
     const velgVurderingselement = (nyvalgtVurderingselement: Vurderingselement) => {
         onVurderingValgt(nyvalgtVurderingselement.id);
-        dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, vurderingselement: nyvalgtVurderingselement });
+        dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, valgtVurderingselement: nyvalgtVurderingselement });
     };
 
     const oppdaterVurderingsoversikt = () => {
@@ -96,6 +99,14 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     }
     if (vurderingsoversiktFeilet) {
         return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
+    }
+    if (harGyldigSignatur === false) {
+        return (
+            <Alertstripe type="info">
+                Du kan ikke vurdere behov for to omsorgspersoner før søker har sendt inn legeerklæring fra
+                sykehus/spesialisthelsetjenesten.
+            </Alertstripe>
+        );
     }
     return (
         <div style={{ maxWidth: '1204px' }}>
@@ -132,7 +143,6 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                             <Vurderingsnavigasjon
                                 vurderingselementer={vurderingsoversikt?.vurderingselementer}
                                 resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
-                                søknadsperioderTilBehandling={vurderingsoversikt?.søknadsperioderTilBehandling}
                                 onVurderingValgt={velgVurderingselement}
                                 onNyVurderingClick={visNyVurderingForm}
                             />

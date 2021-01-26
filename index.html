@@ -23,12 +23,25 @@
                             window.location.hash = '';
                         }
                     },
+                    onDokumentValgt: (dokument) => {
+                        if (dokument !== null) {
+                            history.pushState('', '', `#dokument=${dokument}`);
+                        } else {
+                            window.location.hash = '';
+                        }
+                    },
                     vurdering: new URLSearchParams(`?${window.location.hash.substr(1)}`).get('vurdering'),
                     endpoints: {
                         vurderingsoversiktKontinuerligTilsynOgPleie: 'http://localhost:8082/mock/kontinuerlig-tilsyn-og-pleie/vurderingsoversikt',
                         vurderingsoversiktBehovForToOmsorgspersoner: 'http://localhost:8082/mock/to-omsorgspersoner/vurderingsoversikt',
                         dokumentoversikt: 'http://localhost:8082/mock/dokumentoversikt',
                         dataTilVurdering: 'http://localhost:8082/mock/data-til-vurdering',
+                        innleggelsesperioder: 'http://localhost:8082/mock/innleggelsesperioder',
+                        lagreInnleggelsesperioder: 'http://localhost:8082/mock/innleggelsesperioder',
+                        diagnosekoder: 'http://localhost:8082/mock/diagnosekoder',
+                        diagnosekodeSearch: 'http://localhost:8082/mock/diagnosekode-search',
+                        leggTilDiagnosekode: 'http://localhost:8082/mock/legg-til-diagnosekode',
+                        slettDiagnosekode: 'http://localhost:8082/mock/slett-diagnosekode',
                     },
                     behandlingUuid: '123'
                 });
