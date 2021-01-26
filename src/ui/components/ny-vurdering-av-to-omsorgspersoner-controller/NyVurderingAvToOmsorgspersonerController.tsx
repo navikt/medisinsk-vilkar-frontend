@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import Spinner from 'nav-frontend-spinner';
+import axios from 'axios';
 import NyVurderingAvToOmsorgspersonerForm, {
     FieldName,
 } from '../ny-vurdering-av-to-omsorgspersoner-form/NyVurderingAvToOmsorgspersonerForm';
@@ -31,8 +32,7 @@ const NyVurderingAvToOmsorgspersonerController = ({
     const [hentDataTilVurderingHarFeilet, setHentDataTilVurderingHarFeilet] = React.useState<boolean>(false);
     const [dokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
-    const fetchAborter = useMemo(() => new AbortController(), []);
-    const { signal } = fetchAborter;
+    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
         return submitData<RequestPayload>(
@@ -45,7 +45,7 @@ const NyVurderingAvToOmsorgspersonerController = ({
                 tilknyttedeDokumenter: nyVurderingsversjon.dokumenter,
                 type: Vurderingstype.TO_OMSORGSPERSONER,
             },
-            signal
+            { cancelToken: httpCanceler.token }
         );
     }
 
@@ -67,7 +67,7 @@ const NyVurderingAvToOmsorgspersonerController = ({
         if (!dataTilVurderingUrl) {
             return new Promise((resolve) => resolve([]));
         }
-        return fetchData(dataTilVurderingUrl, { signal });
+        return fetchData(dataTilVurderingUrl, { cancelToken: httpCanceler.token });
     }
 
     const handleError = () => {
@@ -90,7 +90,7 @@ const NyVurderingAvToOmsorgspersonerController = ({
 
         return () => {
             isMounted = false;
-            fetchAborter.abort();
+            httpCanceler.cancel();
         };
     }, []);
 

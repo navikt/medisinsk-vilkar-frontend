@@ -1,5 +1,5 @@
-import Icon from '../icon/Icon';
 import * as React from 'react';
+import Icon from '../icon/Icon';
 
 const PlusIcon = () => (
     <Icon size={24}>

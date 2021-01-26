@@ -1,29 +1,31 @@
-export async function fetchData<T>(url: string, requestInit?: RequestInit): Promise<T> {
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+
+export async function fetchData<T>(url: string, requestConfig?: AxiosRequestConfig): Promise<T> {
     try {
-        const response: Response = await fetch(url, requestInit);
-        const { status } = response;
-        if (status > 299) {
-            throw new Error(`Bad status code (${status})`);
-        }
-        try {
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            throw new Error(`Parsing JSON\n${error}`);
-        }
+        const response: AxiosResponse<T> = await axios.get(url, requestConfig);
+        return response.data;
     } catch (error) {
         console.error(error);
         throw new Error(error);
     }
 }
 
-export function submitData<P>(url: string, body: P, abortSignal?: AbortSignal): Promise<Response> {
-    return fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-        signal: abortSignal,
-    });
+export async function submitData<T>(url: string, body: T, requestConfig?: AxiosRequestConfig): Promise<T> {
+    try {
+        const response: AxiosResponse = await axios.post(url, body, requestConfig);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw new Error(error);
+    }
+}
+
+export async function deleteData<T>(url: string, requestConfig?: AxiosRequestConfig): Promise<T> {
+    try {
+        const response = await axios.delete(url, requestConfig);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw new Error(error);
+    }
 }

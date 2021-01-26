@@ -18,6 +18,8 @@ import DetailView from '../detail-view/DetailView';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Form from '../form/Form';
 import styles from './nyVurderingAvTilsynsbehovForm.less';
+import DeleteButton from '../delete-button/DeleteButton';
+import AddButton from '../add-button/AddButton';
 
 export enum FieldName {
     VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
@@ -86,7 +88,7 @@ const NyVurderingAvTilsynsbehovForm = ({
             <FormProvider {...formMethods}>
                 <Form buttonLabel="Lagre" onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}>
                     {dokumenter?.length > 0 && (
-                        <Box marginTop={Margin.large}>
+                        <Box marginTop={Margin.xLarge}>
                             <CheckboxGroup
                                 question="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
                                 name={FieldName.DOKUMENTER}
@@ -105,7 +107,7 @@ const NyVurderingAvTilsynsbehovForm = ({
                             />
                         </Box>
                     )}
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
                         <TextArea
                             id="begrunnelsesfelt"
                             textareaClass={styles.begrunnelsesfelt}
@@ -139,14 +141,14 @@ const NyVurderingAvTilsynsbehovForm = ({
                             validators={{ required }}
                         />
                     </Box>
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
                         <YesOrNoQuestion
                             question="Er det behov for tilsyn og pleie?"
                             name={FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE}
                             validators={{ required }}
                         />
                     </Box>
-                    <Box marginTop={Margin.large}>
+                    <Box marginTop={Margin.xLarge}>
                         <PeriodpickerList
                             legend="Oppgi perioder"
                             name={FieldName.PERIODER}
@@ -184,10 +186,31 @@ const NyVurderingAvTilsynsbehovForm = ({
                                     invalidDateRanges: hullISøknadsperiodene,
                                 },
                             }}
+                            renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => {
+                                return (
+                                    <>
+                                        {numberOfItems > 1 && (
+                                            <DeleteButton
+                                                onClick={() => {
+                                                    fieldArrayMethods.remove(index);
+                                                }}
+                                            />
+                                        )}
+                                    </>
+                                );
+                            }}
+                            renderAfterFieldArray={(fieldArrayMethods) => (
+                                <Box marginTop={Margin.large}>
+                                    <AddButton
+                                        label="Legg til periode"
+                                        onClick={() => fieldArrayMethods.append({ fom: '', tom: '' })}
+                                    />
+                                </Box>
+                            )}
                         />
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (
-                        <Box marginTop={Margin.large}>
+                        <Box marginTop={Margin.xLarge}>
                             <AlertStripeAdvarsel>
                                 Du har ikke vurdert alle periodene som må vurderes. Resterende perioder vurderer du
                                 etter at du har lagret denne.

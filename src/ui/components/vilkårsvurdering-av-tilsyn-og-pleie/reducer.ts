@@ -17,7 +17,7 @@ interface State {
 interface Action {
     type: ActionType;
     vurderingsoversikt?: Vurderingsoversikt;
-    vurderingselement?: Vurderingselement;
+    valgtVurderingselement?: Vurderingselement;
     resterendeVurderingsperioder?: Period[];
 }
 
@@ -60,7 +60,7 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
         case ActionType.VELG_VURDERINGSELEMENT:
             return {
                 ...state,
-                valgtVurderingselement: action.vurderingselement,
+                valgtVurderingselement: action.valgtVurderingselement,
                 visVurderingDetails: true,
             };
         case ActionType.PENDING:

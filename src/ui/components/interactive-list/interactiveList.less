@@ -8,6 +8,7 @@
     padding: 0.5rem;
     border-bottom: 1px solid #c6c2bf;
     border-left: 5px solid transparent;
+    position: relative;
 
     &:hover {
         background: #f2f7fc;
@@ -17,10 +18,27 @@
 .interactiveListElement--active {
     background: #f2f7fc;
     border-left: 5px solid rgba(0, 103, 197, 1);
+    border-right: 1px solid #0067c5;
+    border-bottom: 1px solid #0067c5;
+    border-top: 1px solid #0067c5;
 }
 
 .interactiveListElement:first-child {
     border-top: 1px solid #c6c2bf;
+}
+
+.interactiveListElement--active:first-child {
+    border-top: 1px solid #0067c5;
+}
+
+.interactiveListElement--active:first-child {
+    border-top: 1px solid #0067c5;
+}
+
+
+.interactiveListElement--active:not(:first-child) {
+    border-top: 1px solid #0067c5;
+    top: -1px;
 }
 
 .interactiveListElement__button {

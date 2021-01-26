@@ -1,12 +1,10 @@
-import React from 'react';
 import { TabsPure } from 'nav-frontend-tabs';
-import AlertStripe from 'nav-frontend-alertstriper';
-import Box, { Margin } from '../box/Box';
+import React from 'react';
+import Infostripe from '../infostripe/Infostripe';
+import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
 import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-pleie/VilkårsvurderingAvTilsynOgPleie';
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
-import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
 import styles from './medisinskVilkår.less';
-import Infostripe from '../infostripe/Infostripe';
 
 const tabs = ['Legeerklæring', 'Tilsyn og pleie', 'To omsorgspersoner'];
 const MedisinskVilkår = () => {
@@ -23,8 +21,10 @@ const MedisinskVilkår = () => {
                         onChange={(event, clickedIndex) => setActiveTab(clickedIndex)}
                     />
                     <div className={styles.medisinskVilkår__vilkårContentContainer}>
-                        {activeTab === 0 && <StruktureringAvDokumentasjon />}
-                        {activeTab === 1 && <VilkårsvurderingAvTilsynOgPleie onVilkårVurdert={() => setActiveTab(1)} />}
+                        {activeTab === 0 && (
+                            <StruktureringAvDokumentasjon onProgressButtonClick={() => setActiveTab(1)} />
+                        )}
+                        {activeTab === 1 && <VilkårsvurderingAvTilsynOgPleie onVilkårVurdert={() => setActiveTab(2)} />}
                         {activeTab === 2 && <VilkårsvurderingAvToOmsorgspersoner />}
                     </div>
                 </div>

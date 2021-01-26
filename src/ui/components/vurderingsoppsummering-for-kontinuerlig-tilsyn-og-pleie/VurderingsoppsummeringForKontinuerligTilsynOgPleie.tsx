@@ -31,20 +31,20 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
                     }
                 />
             </Box>
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.xLarge}>
                 <LabelledContent
                     label="Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge
                                         av sykdommen etter § 9-10, første ledd."
                     content={<span>{tekst}</span>}
                 />
             </Box>
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.xLarge}>
                 <LabelledContent
                     label="Er det behov for tilsyn og pleie?"
                     content={<span>{resultat === Vurderingsresultat.OPPFYLT ? 'Ja' : 'Nei'}</span>}
                 />
             </Box>
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.xLarge}>
                 <LabelledContent
                     label={resultat === Vurderingsresultat.OPPFYLT ? 'Perioder innvilget' : 'Perioder avslått'}
                     content={
