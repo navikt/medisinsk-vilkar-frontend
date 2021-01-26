@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
+import axios from 'axios';
 import Alertstripe, { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Spinner from 'nav-frontend-spinner';
-import axios from 'axios';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
@@ -49,9 +49,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
 
     const harPerioderSomSkalVurderes = vurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
     const harVurdertePerioder = vurderingsoversikt?.vurderingselementer?.length > 0;
-
     const harGyldigSignatur = vurderingsoversikt && vurderingsoversikt.harGyldigSignatur === true;
-
     const overlappendeVurderingsperioder = finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder(vurderingsoversikt);
 
     const getVurderingsoversikt = () => {
