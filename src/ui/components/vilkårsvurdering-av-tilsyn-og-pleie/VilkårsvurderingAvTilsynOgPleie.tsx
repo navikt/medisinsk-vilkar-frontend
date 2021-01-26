@@ -12,7 +12,9 @@ import NavigationWithDetailView from '../navigation-with-detail-view/NavigationW
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
-import processVurderingsoversikt from '../../../util/vurderingsoversiktUtils';
+import processVurderingsoversikt, {
+    finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder,
+} from '../../../util/vurderingsoversiktUtils';
 import { fetchData } from '../../../util/httpUtils';
 import PageError from '../page-error/PageError';
 import LinkRel from '../../../constants/LinkRel';
@@ -20,6 +22,8 @@ import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
 import NyVurderingAvTilsynsbehovController from '../ny-vurdering-av-tilsynsbehov-controller/NyVurderingAvTilsynsbehovController';
 import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
 import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
+import Box, { Margin } from '../box/Box';
+import OverlappendeSøknadsperiodePanel from '../overlappende-søknadsperiode-panel/OverlappendeSøknadsperiodePanel';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     onVilkårVurdert: () => void;
@@ -54,6 +58,8 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         vurderingsoversikt.resterendeVurderingsperioder.length > 0;
 
     const harGyldigSignatur = vurderingsoversikt && vurderingsoversikt.harGyldigSignatur === true;
+
+    const overlappendeVurderingsperioder = finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder(vurderingsoversikt);
 
     const getVurderingsoversikt = () => {
         return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, {
@@ -116,15 +122,37 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
     }
     return (
         <>
+            {!harPerioderSomSkalVurderes && (
+                <Box marginBottom={Margin.large}>
+                    <Alertstripe type="suksess">
+                        Behov for kontinuerlig tilsyn og pleie er ferdig vurdert
+                        <Knapp
+                            type="hoved"
+                            htmlType="button"
+                            style={{ marginLeft: '2rem' }}
+                            onClick={onVilkårVurdert}
+                            mini
+                        >
+                            Gå videre
+                        </Knapp>
+                    </Alertstripe>
+                </Box>
+            )}
             {harPerioderSomSkalVurderes && (
                 <div style={{ maxWidth: '1204px' }}>
                     <Alertstripe type="advarsel">
                         {`Vurder behov for tilsyn og pleie for perioden ${prettifyPeriod(
                             vurderingsoversikt?.resterendeVurderingsperioder[0]
                         )}.`}
-                        Perioden som skal vurderes overlapper med tidligere vurderinger. Vurder om det er grunnlag for å
-                        gjøre en ny vurdering.
                     </Alertstripe>
+                    {overlappendeVurderingsperioder && overlappendeVurderingsperioder.length > 0 && (
+                        <Box marginTop={Margin.medium}>
+                            <OverlappendeSøknadsperiodePanel
+                                onProgressButtonClick={() => console.log('does something')}
+                                overlappendeVurderingsperioder={overlappendeVurderingsperioder}
+                            />
+                        </Box>
+                    )}
                     <div style={{ marginTop: '1rem' }} />
                 </div>
             )}

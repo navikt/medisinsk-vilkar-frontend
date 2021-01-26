@@ -7,7 +7,9 @@ import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { prettifyPeriod } from '../../../util/formats';
 import { fetchData } from '../../../util/httpUtils';
-import processVurderingsoversikt from '../../../util/vurderingsoversiktUtils';
+import processVurderingsoversikt, {
+    finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder,
+} from '../../../util/vurderingsoversiktUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Box, { Margin } from '../box/Box';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
@@ -20,6 +22,7 @@ import LinkRel from '../../../constants/LinkRel';
 import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
 import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
 import NyVurderingAvToOmsorgspersonerController from '../ny-vurdering-av-to-omsorgspersoner-controller/NyVurderingAvToOmsorgspersonerController';
+import OverlappendeSøknadsperiodePanel from '../overlappende-søknadsperiode-panel/OverlappendeSøknadsperiodePanel';
 
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
@@ -48,6 +51,8 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const harVurdertePerioder = vurderingsoversikt?.vurderingselementer?.length > 0;
 
     const harGyldigSignatur = vurderingsoversikt && vurderingsoversikt.harGyldigSignatur === true;
+
+    const overlappendeVurderingsperioder = finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder(vurderingsoversikt);
 
     const getVurderingsoversikt = () => {
         return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktBehovForToOmsorgspersoner, {
@@ -111,11 +116,21 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     return (
         <div style={{ maxWidth: '1204px' }}>
             {harPerioderSomSkalVurderes && (
-                <AlertStripeAdvarsel>
-                    {`Vurder behov for to omsorgspersoner for perioden ${prettifyPeriod(
-                        vurderingsoversikt?.resterendeVurderingsperioder[0]
-                    )}.`}
-                </AlertStripeAdvarsel>
+                <>
+                    <AlertStripeAdvarsel>
+                        {`Vurder behov for to omsorgspersoner for perioden ${prettifyPeriod(
+                            vurderingsoversikt?.resterendeVurderingsperioder[0]
+                        )}.`}
+                    </AlertStripeAdvarsel>
+                    {overlappendeVurderingsperioder && overlappendeVurderingsperioder.length > 0 && (
+                        <Box marginTop={Margin.medium}>
+                            <OverlappendeSøknadsperiodePanel
+                                onProgressButtonClick={() => console.log('does something')}
+                                overlappendeVurderingsperioder={overlappendeVurderingsperioder}
+                            />
+                        </Box>
+                    )}
+                </>
             )}
 
             {!harVurdertePerioder && !harPerioderSomSkalVurderes && (

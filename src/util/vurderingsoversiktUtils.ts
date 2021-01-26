@@ -31,3 +31,21 @@ function processVurderingsoversikt({
 }
 
 export default processVurderingsoversikt;
+
+export const finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder = (
+    vurderingsoversikt: Vurderingsoversikt
+): Period[] => {
+    return (
+        vurderingsoversikt?.vurderingselementer
+            .filter(({ periode }) => {
+                const vurdertPeriode = new Period(periode.fom, periode.tom);
+                const overlapperMedEnSøknadsperiode = vurderingsoversikt?.resterendeVurderingsperioder.some(
+                    ({ fom, tom }) => {
+                        return vurdertPeriode.overlapsWith(new Period(fom, tom));
+                    }
+                );
+                return overlapperMedEnSøknadsperiode;
+            })
+            .map(({ periode }) => periode) || []
+    );
+};
