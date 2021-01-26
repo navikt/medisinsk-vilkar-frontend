@@ -1,3 +1,4 @@
+import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
 import { Period } from '../../../types/Period';
@@ -5,7 +6,6 @@ import Vurderingselement from '../../../types/Vurderingselement';
 import { sortPeriodsByFomDate } from '../../../util/periodUtils';
 import InteractiveList from '../interactive-list/InteractiveList';
 import NyVurderingKnapp from '../ny-vurdering-knapp/NyVurderingKnapp';
-import NyVurderingetikett from '../ny-vurderingetikett/NyVurderingetikett';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
 import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
 import styles from './vurderingsnavigasjon.less';
@@ -15,7 +15,7 @@ interface VurderingsnavigasjonProps {
     onNyVurderingClick: (perioder?: Period[]) => void;
     onVurderingValgt: (vurdering: Vurderingselement) => void;
     resterendeVurderingsperioder?: Period[];
-    visRadForNyVurdering: boolean;
+    visRadForNyVurdering?: boolean;
 }
 
 const Vurderingsnavigasjon = ({
@@ -57,7 +57,7 @@ const Vurderingsnavigasjon = ({
     }
 
     if (visRadForNyVurdering) {
-        allElements.unshift(<NyVurderingetikett />);
+        allElements.unshift(<EtikettInfo mini>Ny vurdering</EtikettInfo>);
     }
 
     return (
