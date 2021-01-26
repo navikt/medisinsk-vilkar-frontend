@@ -1,3 +1,4 @@
+import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
 import { Period } from '../../../types/Period';
@@ -14,6 +15,7 @@ interface VurderingsnavigasjonProps {
     onNyVurderingClick: (perioder?: Period[]) => void;
     onVurderingValgt: (vurdering: Vurderingselement) => void;
     resterendeVurderingsperioder?: Period[];
+    visRadForNyVurdering?: boolean;
 }
 
 const Vurderingsnavigasjon = ({
@@ -21,6 +23,7 @@ const Vurderingsnavigasjon = ({
     onNyVurderingClick,
     onVurderingValgt,
     resterendeVurderingsperioder,
+    visRadForNyVurdering,
 }: VurderingsnavigasjonProps): JSX.Element => {
     const [activeIndex, setActiveIndex] = React.useState(-1);
 
@@ -53,13 +56,17 @@ const Vurderingsnavigasjon = ({
         allElements.unshift(<PerioderSomSkalVurderes perioder={resterendeVurderingsperioder || []} />);
     }
 
+    if (visRadForNyVurdering) {
+        allElements.unshift(<EtikettInfo mini>Ny vurdering</EtikettInfo>);
+    }
+
     return (
         <>
             <Undertittel>Alle perioder</Undertittel>
             {!harPerioderSomSkalVurderes && (
                 <NyVurderingKnapp
                     onClick={() => {
-                        setActiveIndex(-1);
+                        setActiveIndex(0);
                         onNyVurderingClick();
                     }}
                 />
@@ -77,6 +84,8 @@ const Vurderingsnavigasjon = ({
                             const erEnEksisterendeVurdering = vurderingsperiodeIndex > -1;
                             if (erEnEksisterendeVurdering) {
                                 onVurderingValgt(sorterteVurderingselementer[vurderingsperiodeIndex]);
+                            } else if (visRadForNyVurdering && currentIndex === 0) {
+                                onNyVurderingClick();
                             } else {
                                 onNyVurderingClick(resterendeVurderingsperioder);
                             }

@@ -1,17 +1,16 @@
+import axios from 'axios';
 import React, { useMemo } from 'react';
-import Spinner from 'nav-frontend-spinner';
+import Dokument from '../../../types/Dokument';
+import Link from '../../../types/Link';
+import { Period } from '../../../types/Period';
+import RequestPayload from '../../../types/RequestPayload';
+import { Vurderingsversjon } from '../../../types/Vurdering';
+import Vurderingstype from '../../../types/Vurderingstype';
+import { fetchData, submitData } from '../../../util/httpUtils';
 import NyVurderingAvTilsynsbehovForm, {
     FieldName,
 } from '../ny-vurdering-av-tilsynsbehov-form/NyVurderingAvTilsynsbehovForm';
-import { Period } from '../../../types/Period';
-import Dokument from '../../../types/Dokument';
-import { Vurderingsversjon } from '../../../types/Vurdering';
-import { fetchData, submitData } from '../../../util/httpUtils';
-import RequestPayload from '../../../types/RequestPayload';
-import Vurderingstype from '../../../types/Vurderingstype';
-import Link from '../../../types/Link';
-import PageError from '../page-error/PageError';
-import axios from 'axios';
+import PageContainer from '../page-container/PageContainer';
 
 interface NyVurderingAvTilsynsbehovControllerProps {
     opprettVurderingLink: Link;
@@ -94,25 +93,21 @@ const NyVurderingAvTilsynsbehovController = ({
         };
     }, []);
 
-    if (isLoading) {
-        return <Spinner />;
-    }
-    if (hentDataTilVurderingHarFeilet) {
-        return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
-    }
     return (
-        <NyVurderingAvTilsynsbehovForm
-            defaultValues={{
-                [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
-                [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
-                [FieldName.PERIODER]: resterendeVurderingsperioder,
-                [FieldName.DOKUMENTER]: [],
-            }}
-            resterendeVurderingsperioder={resterendeVurderingsperioder}
-            perioderSomKanVurderes={perioderSomKanVurderes}
-            dokumenter={dokumenter}
-            onSubmit={lagreVurderingAvTilsynsbehov}
-        />
+        <PageContainer isLoading={isLoading} hasError={hentDataTilVurderingHarFeilet} preventUnmount>
+            <NyVurderingAvTilsynsbehovForm
+                defaultValues={{
+                    [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
+                    [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
+                    [FieldName.PERIODER]: resterendeVurderingsperioder,
+                    [FieldName.DOKUMENTER]: [],
+                }}
+                resterendeVurderingsperioder={resterendeVurderingsperioder}
+                perioderSomKanVurderes={perioderSomKanVurderes}
+                dokumenter={dokumenter}
+                onSubmit={lagreVurderingAvTilsynsbehov}
+            />
+        </PageContainer>
     );
 };
 
