@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import axios from 'axios';
 import Spinner from 'nav-frontend-spinner';
 import NyVurderingAvTilsynsbehovForm, {
     FieldName,
@@ -11,7 +12,6 @@ import RequestPayload from '../../../types/RequestPayload';
 import Vurderingstype from '../../../types/Vurderingstype';
 import Link from '../../../types/Link';
 import PageError from '../page-error/PageError';
-import axios from 'axios';
 
 interface NyVurderingAvTilsynsbehovControllerProps {
     opprettVurderingLink: Link;
