@@ -9,6 +9,7 @@ import NyVurderingKnapp from '../ny-vurdering-knapp/NyVurderingKnapp';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
 import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
 import styles from './vurderingsnavigasjon.less';
+import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 
 interface VurderingsnavigasjonProps {
     vurderingselementer: Vurderingselement[];
@@ -63,14 +64,17 @@ const Vurderingsnavigasjon = ({
     return (
         <>
             <Undertittel>Alle perioder</Undertittel>
-            {!harPerioderSomSkalVurderes && (
-                <NyVurderingKnapp
-                    onClick={() => {
-                        setActiveIndex(0);
-                        onNyVurderingClick();
-                    }}
-                />
-            )}
+            <WriteAccessBoundContent
+                otherRequirementsAreMet={!harPerioderSomSkalVurderes}
+                contentRenderer={() => (
+                    <NyVurderingKnapp
+                        onClick={() => {
+                            setActiveIndex(0);
+                            onNyVurderingClick();
+                        }}
+                    />
+                )}
+            />
             <div className={styles.vurderingsvelgerContainer}>
                 <InteractiveList
                     elements={allElements.map((element, currentIndex) => ({

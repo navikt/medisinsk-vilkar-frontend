@@ -12,6 +12,7 @@ import ContainerContext from '../../context/ContainerContext';
 import { deleteData, fetchData } from '../../../util/httpUtils';
 import Diagnosekode from '../../../types/Diagnosekode';
 import DiagnosekodeModal from '../diagnosekode-modal/DiagnosekodeModal';
+import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 
 Modal.setAppElement('#app');
 
@@ -71,9 +72,13 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                     />
                 )}
             </Box>
-            <Box marginTop={Margin.large}>
-                <AddButton label="Legg til diagnosekode" onClick={() => setModalIsOpen(true)} />
-            </Box>
+            <WriteAccessBoundContent
+                contentRenderer={() => (
+                    <Box marginTop={Margin.large}>
+                        <AddButton label="Legg til diagnosekode" onClick={() => setModalIsOpen(true)} />
+                    </Box>
+                )}
+            />
             <DiagnosekodeModal
                 isOpen={modalIsOpen}
                 onDiagnosekodeSaved={() => hentDiagnosekoder().then(() => setModalIsOpen(false))}

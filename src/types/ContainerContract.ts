@@ -15,6 +15,7 @@ interface ContainerContract {
         slettDiagnosekode: string;
     };
     behandlingUuid: string;
+    readOnly: boolean;
 }
 
 export default ContainerContract;

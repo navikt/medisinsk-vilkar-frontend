@@ -13,6 +13,7 @@ import PageError from '../page-error/PageError';
 import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
 import styles from './innleggelsesperiodeoversikt.less';
 import InnleggelsesperiodeFormModal from '../innleggelsesperiodeFormModal/InnleggelsesperiodeFormModal';
+import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 
 export enum FieldName {
     INNLEGGELSESPERIODER = 'innleggelsesperioder',
@@ -82,15 +83,18 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
         <div className={styles.innleggelsesperiodeoversikt}>
             <TitleWithUnderline>
                 Innleggelsesperioder
-                {innleggelsesperioder.length > 0 && (
-                    <button
-                        type="button"
-                        className={styles.innleggelsesperiodeoversikt__editButton}
-                        onClick={() => setModalIsOpen(true)}
-                    >
-                        Rediger liste
-                    </button>
-                )}
+                <WriteAccessBoundContent
+                    otherRequirementsAreMet={innleggelsesperioder.length > 0}
+                    contentRenderer={() => (
+                        <button
+                            type="button"
+                            className={styles.innleggelsesperiodeoversikt__editButton}
+                            onClick={() => setModalIsOpen(true)}
+                        >
+                            Rediger liste
+                        </button>
+                    )}
+                />
             </TitleWithUnderline>
             {isLoading ? (
                 <Spinner />
@@ -107,11 +111,14 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
                             </>
                         )}
                     </Box>
-                    {innleggelsesperioder.length === 0 && (
-                        <Box marginTop={Margin.large}>
-                            <AddButton label="Legg til innleggelsesperiode" onClick={() => setModalIsOpen(true)} />
-                        </Box>
-                    )}
+                    <WriteAccessBoundContent
+                        otherRequirementsAreMet={innleggelsesperioder.length === 0}
+                        contentRenderer={() => (
+                            <Box marginTop={Margin.large}>
+                                <AddButton label="Legg til innleggelsesperiode" onClick={() => setModalIsOpen(true)} />
+                            </Box>
+                        )}
+                    />
                 </>
             )}
             {modalIsOpen && (

@@ -24,6 +24,7 @@ import VurderingsdetaljerController from '../vurderingsdetaljer-controller/Vurde
 import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
 import Box, { Margin } from '../box/Box';
 import OverlappendeSøknadsperiodePanel from '../overlappende-søknadsperiode-panel/OverlappendeSøknadsperiodePanel';
+import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     onVilkårVurdert: () => void;
@@ -131,15 +132,19 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                 <Box marginBottom={Margin.large}>
                     <Alertstripe type="suksess">
                         Behov for kontinuerlig tilsyn og pleie er ferdig vurdert
-                        <Knapp
-                            type="hoved"
-                            htmlType="button"
-                            style={{ marginLeft: '2rem' }}
-                            onClick={onVilkårVurdert}
-                            mini
-                        >
-                            Gå videre
-                        </Knapp>
+                        <WriteAccessBoundContent
+                            contentRenderer={() => (
+                                <Knapp
+                                    type="hoved"
+                                    htmlType="button"
+                                    style={{ marginLeft: '2rem' }}
+                                    onClick={onVilkårVurdert}
+                                    mini
+                                >
+                                    Gå videre
+                                </Knapp>
+                            )}
+                        />
                     </Alertstripe>
                 </Box>
             )}
@@ -208,11 +213,13 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                     return null;
                 }}
             />
-            {!harPerioderSomSkalVurderes && (
-                <Knapp style={{ marginTop: '2rem' }} onClick={() => onVilkårVurdert()}>
-                    Gå videre til vurdering av to omsorgspersoner
-                </Knapp>
-            )}
+            <WriteAccessBoundContent
+                contentRenderer={() => (
+                    <Knapp style={{ marginTop: '2rem' }} onClick={() => onVilkårVurdert()}>
+                        Gå videre til vurdering av to omsorgspersoner
+                    </Knapp>
+                )}
+            />
         </>
     );
 };

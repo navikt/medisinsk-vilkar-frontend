@@ -21,6 +21,7 @@ import Innleggelsesperiodeoversikt from '../innleggelsesperiodeoversikt/Innlegge
 import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
 import SignertSeksjon from '../signert-seksjon/SignertSeksjon';
 import FristForDokumentasjonUtløptPanel from '../frist-for-dokumentasjon-utløpt-panel/FristForDokumentasjonUtløptPanel';
+import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 
 interface StruktureringAvDokumentasjonProps {
     onProgressButtonClick: () => void;
@@ -99,14 +100,18 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
                 <Box marginBottom={Margin.large}>
                     <Alertstripe type="suksess">
                         Alle dokumenter er ferdig håndtert
-                        <Hovedknapp
-                            htmlType="button"
-                            mini
-                            style={{ marginLeft: '2rem' }}
-                            onClick={onProgressButtonClick}
-                        >
-                            Gå videre
-                        </Hovedknapp>
+                        <WriteAccessBoundContent
+                            contentRenderer={() => (
+                                <Hovedknapp
+                                    htmlType="button"
+                                    mini
+                                    style={{ marginLeft: '2rem' }}
+                                    onClick={onProgressButtonClick}
+                                >
+                                    Gå videre
+                                </Hovedknapp>
+                            )}
+                        />
                     </Alertstripe>
                 </Box>
             )}
