@@ -16,6 +16,7 @@ export const createKontinuerligTilsynVurdering = (requestBody: RequestPayload) =
         gjelderForSøker: true,
         gjelderForAnnenPart: false,
         links: createMockedVurderingselementLinks(nyVurderingId),
+        endretIDenneBehandlingen: true,
     });
     tilsynsbehovVurderingsoversiktMock.resterendeVurderingsperioder = [];
     tilsynsbehovVurderingerMock.push({
@@ -47,6 +48,7 @@ export const createToOmsorgspersonerVurdering = (requestBody: RequestPayload) =>
         gjelderForSøker: true,
         gjelderForAnnenPart: false,
         links: createMockedVurderingselementLinks(nyVurderingId),
+        endretIDenneBehandlingen: true,
     });
     mockedToOmsorgspersonerVurderingsoversikt.resterendeVurderingsperioder = [];
     toOmsorgspersonerVurderingerMock.push({

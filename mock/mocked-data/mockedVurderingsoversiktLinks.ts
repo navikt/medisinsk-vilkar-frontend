@@ -6,7 +6,7 @@ const links: Link[] = [
         rel: LinkRel.OPPRETT_VURDERING,
         type: 'POST',
         href: 'http://localhost:8082/mock/opprett-vurdering',
-        payload: {
+        requestPayload: {
             behandlingUuid: 'mockedUuid',
         },
     },

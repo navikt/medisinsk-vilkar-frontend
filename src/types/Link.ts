@@ -4,7 +4,7 @@ interface Link {
     rel: LinkRel;
     type: 'GET' | 'POST';
     href: string;
-    payload?: {
+    requestPayload?: {
         behandlingUuid: string;
     };
 }

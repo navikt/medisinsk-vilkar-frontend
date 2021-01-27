@@ -11,6 +11,7 @@ const mockedToOmsorgspersonerVurderingsoversikt = {
             gjelderForSøker: false,
             gjelderForAnnenPart: true,
             links: createMockedVurderingselementLinks('11'),
+            endretIDenneBehandlingen: false,
         },
         {
             id: '22',
@@ -19,6 +20,7 @@ const mockedToOmsorgspersonerVurderingsoversikt = {
             gjelderForSøker: false,
             gjelderForAnnenPart: true,
             links: createMockedVurderingselementLinks('22'),
+            endretIDenneBehandlingen: false,
         },
     ],
     resterendeVurderingsperioder: [{ fom: '2020-01-16', tom: '2020-01-20' }],
