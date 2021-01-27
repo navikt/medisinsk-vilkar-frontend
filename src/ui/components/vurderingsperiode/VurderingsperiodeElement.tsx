@@ -16,7 +16,7 @@ interface VurderingsperiodeElementProps {
     resultat: Vurderingsresultat;
     gjelderForAnnenPart?: boolean;
     gjelderForSøker?: boolean;
-    etikett?: string;
+    renderAfterElement?: () => React.ReactNode;
 }
 
 const renderIcon = (resultat: Vurderingsresultat) => {
@@ -42,7 +42,7 @@ const renderResultatText = (resultat: Vurderingsresultat) => {
 const VurderingsperiodeElement = ({
     periode,
     resultat,
-    etikett,
+    renderAfterElement,
     gjelderForAnnenPart,
     gjelderForSøker,
 }: VurderingsperiodeElementProps): JSX.Element => {
@@ -69,11 +69,7 @@ const VurderingsperiodeElement = ({
                 <div className={styles.vurderingsperiodeElement__texts__parterIcon}>{parterLabel()}</div>
                 <p className={styles.vurderingsperiodeElement__texts__parter}>{renderResultatText(resultat)}</p>
             </div>
-            {etikett && (
-                <div className={styles.vurderingsperiodeElement__etikett}>
-                    <EtikettInfo mini>{etikett}</EtikettInfo>
-                </div>
-            )}
+            {renderAfterElement && renderAfterElement()}
         </div>
     );
 };

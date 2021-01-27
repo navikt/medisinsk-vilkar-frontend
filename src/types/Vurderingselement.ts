@@ -9,6 +9,7 @@ interface Vurderingselement {
     gjelderForSøker: boolean;
     gjelderForAnnenPart: boolean;
     links: Link[];
+    endretIDenneBehandlingen: boolean;
 }
 
 export default Vurderingselement;

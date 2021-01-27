@@ -38,7 +38,7 @@ const NyVurderingAvToOmsorgspersonerController = ({
         return submitData<RequestPayload>(
             opprettVurderingLink.href,
             {
-                behandlingUuid: opprettVurderingLink.payload.behandlingUuid,
+                behandlingUuid: opprettVurderingLink.requestPayload.behandlingUuid,
                 perioder: nyVurderingsversjon.perioder,
                 resultat: nyVurderingsversjon.resultat,
                 tekst: nyVurderingsversjon.tekst,

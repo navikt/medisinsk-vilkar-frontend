@@ -11,6 +11,7 @@ const tilsynsbehovVurderingsoversiktMock = {
             gjelderForSøker: false,
             gjelderForAnnenPart: true,
             links: createMockedVurderingselementLinks('1'),
+            endretIDenneBehandlingen: false,
         },
     ],
     resterendeVurderingsperioder: [{ fom: '2020-01-16', tom: '2020-01-20' }],

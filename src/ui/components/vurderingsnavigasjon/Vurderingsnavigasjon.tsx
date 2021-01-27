@@ -4,6 +4,8 @@ import React from 'react';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import { sortPeriodsByFomDate } from '../../../util/periodUtils';
+import IconWithTooltip from '../icon-with-tooltip/IconWithTooltip';
+import EditedBySaksbehandlerIcon from '../icons/EditedBySaksbehandlerIcon';
 import InteractiveList from '../interactive-list/InteractiveList';
 import NyVurderingKnapp from '../ny-vurdering-knapp/NyVurderingKnapp';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
@@ -35,7 +37,7 @@ const Vurderingsnavigasjon = ({
     }, [vurderingselementer]);
 
     const vurderingsperiodeElements = sorterteVurderingselementer.map(
-        ({ periode, resultat, gjelderForAnnenPart, gjelderForSøker }) => {
+        ({ periode, resultat, gjelderForAnnenPart, gjelderForSøker, endretIDenneBehandlingen }) => {
             const visOverlappetikett =
                 harPerioderSomSkalVurderes &&
                 resterendeVurderingsperioder.some((søknadsperiode: Period) => søknadsperiode.overlapsWith(periode));
@@ -44,7 +46,18 @@ const Vurderingsnavigasjon = ({
                 <VurderingsperiodeElement
                     periode={periode}
                     resultat={resultat}
-                    etikett={visOverlappetikett ? 'Overlapp' : ''}
+                    renderAfterElement={() => (
+                        <div className={styles.vurderingsperiode__postElementContainer}>
+                            {endretIDenneBehandlingen && (
+                                <IconWithTooltip
+                                    renderIcon={() => <EditedBySaksbehandlerIcon />}
+                                    tooltipText="Saksbehandler har opprettet ny vurdering i denne perioden"
+                                />
+                            )}
+
+                            {visOverlappetikett && <EtikettInfo mini>Overlapp</EtikettInfo>}
+                        </div>
+                    )}
                     gjelderForAnnenPart={gjelderForAnnenPart}
                     gjelderForSøker={gjelderForSøker}
                 />
