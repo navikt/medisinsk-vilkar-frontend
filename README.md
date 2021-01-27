@@ -3,7 +3,7 @@ Frontend for medisinsk vilkårsvurdering
 
 Dette er en frontend for medisinsk vilkårsvurdering i saksbehandlingen av pleiepenger ved sykt barn.
 
-# Komme i gang
+## Komme i gang
 
 For å kjøre frontend-appen i utvikling, kjør `npm install` etterfulgt av `npm run dev` på rot av prosjektet. 
 
@@ -15,27 +15,27 @@ For enkelthet i utvikling ligger det et eget mockup-api under `/mock` som server
 opp ved å kjøre `npm run api-mock` på rot av prosjektet.
 
 
-## Kjøring av tester
+### Kjøring av tester
 
 `npm test` på rot av prosjektet
 
-## Bygging av appen
+### Bygging av appen
 
 `npm run build` på rot av prosjektet
 
 Denne kommandoen vil se på `version` spesifisert i `package.json`, opprette en ny katalog under `build`
 som samsvarer med det versjonsnummeret, og legge de bygde filene der.
 
-## Kjøring av bygg
+### Kjøring av bygg
 
 `npm run start` kjører opp en server som statisk hoster innholdet under `build`
 
 ---
 
-# Henvendelser
+## Henvendelser
 
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub
 
-## For NAV-ansatte
+### For NAV-ansatte
 
 Interne henvendelser kan sendes via Slack i kanalen #sif_pleiepenger.
