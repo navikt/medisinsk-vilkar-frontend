@@ -3,14 +3,15 @@ import axios from 'axios';
 import Dokument from '../../../types/Dokument';
 import Link from '../../../types/Link';
 import { Period } from '../../../types/Period';
-import RequestPayload from '../../../types/RequestPayload';
 import { Vurderingsversjon } from '../../../types/Vurdering';
 import Vurderingstype from '../../../types/Vurderingstype';
-import { fetchData, submitData } from '../../../util/httpUtils';
+import { fetchData, postNyVurdering, postNyVurderingDryRun } from '../../../util/httpUtils';
 import NyVurderingAvTilsynsbehovForm, {
     FieldName,
 } from '../ny-vurdering-av-tilsynsbehov-form/NyVurderingAvTilsynsbehovForm';
 import PageContainer from '../page-container/PageContainer';
+import { PeriodeMedEndring, PerioderMedEndringResponse } from '../../../types/PeriodeMedEndring';
+import OverlappendePeriodeModal from '../overlappende-periode-modal/OverlappendePeriodeModal';
 
 interface NyVurderingAvTilsynsbehovControllerProps {
     opprettVurderingLink: Link;
@@ -31,35 +32,52 @@ const NyVurderingAvTilsynsbehovController = ({
     const [hentDataTilVurderingHarFeilet, setHentDataTilVurderingHarFeilet] = React.useState<boolean>(false);
     const [dokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
+    const [visOverlappModal, setVisOverlappModal] = React.useState<boolean>(false);
+    const [perioderMedEndringS, setPerioderMedEndring] = React.useState<PeriodeMedEndring[]>([]);
+
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
-        return submitData<RequestPayload>(
-            opprettVurderingLink.href,
-            {
-                behandlingUuid: opprettVurderingLink.requestPayload.behandlingUuid,
-                perioder: nyVurderingsversjon.perioder,
-                resultat: nyVurderingsversjon.resultat,
-                tekst: nyVurderingsversjon.tekst,
-                tilknyttedeDokumenter: nyVurderingsversjon.dokumenter,
-                type: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE,
-            },
-            { cancelToken: httpCanceler.token }
-        );
-    }
-
-    const lagreVurderingAvTilsynsbehov = (nyVurderingsversjon: Vurderingsversjon) => {
         setIsLoading(true);
-        lagreVurdering(nyVurderingsversjon).then(
+        return postNyVurdering(
+            opprettVurderingLink,
+            { ...nyVurderingsversjon, type: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE },
+            httpCanceler.token
+        ).then(
             () => {
                 onVurderingLagret();
                 setIsLoading(false);
             },
             () => {
-                // showErrorMessage ??
                 setIsLoading(false);
             }
         );
+    }
+
+    const sjekkForEksisterendeVurderinger = (
+        nyVurderingsversjon: Vurderingsversjon
+    ): Promise<PerioderMedEndringResponse> => {
+        return postNyVurderingDryRun(
+            opprettVurderingLink,
+            { ...nyVurderingsversjon, type: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE },
+            httpCanceler.token
+        );
+    };
+
+    const advarOmEksisterendeVurderinger = (perioderMedEndring: PeriodeMedEndring[]) => {
+        setPerioderMedEndring(perioderMedEndring);
+        setVisOverlappModal(true);
+    };
+
+    const lagreVurderingAvTilsynsbehov = (nyVurderingsversjon: Vurderingsversjon) => {
+        sjekkForEksisterendeVurderinger(nyVurderingsversjon).then(({ perioderMedEndringer }) => {
+            const harOverlappendePerioder = perioderMedEndringer.length > 0;
+            if (harOverlappendePerioder) {
+                advarOmEksisterendeVurderinger(perioderMedEndringer);
+            } else {
+                lagreVurdering(nyVurderingsversjon);
+            }
+        });
     };
 
     function hentDataTilVurdering(): Promise<Dokument[]> {
@@ -106,6 +124,13 @@ const NyVurderingAvTilsynsbehovController = ({
                 perioderSomKanVurderes={perioderSomKanVurderes}
                 dokumenter={dokumenter}
                 onSubmit={lagreVurderingAvTilsynsbehov}
+            />
+            <OverlappendePeriodeModal
+                appElementId="app"
+                perioderMedEndring={perioderMedEndringS}
+                onCancel={() => 1}
+                onConfirm={() => 2}
+                isOpen={visOverlappModal}
             />
         </PageContainer>
     );

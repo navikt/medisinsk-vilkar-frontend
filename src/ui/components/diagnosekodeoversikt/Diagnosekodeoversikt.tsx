@@ -29,7 +29,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
 
     const hentDiagnosekoder = () => {
         setIsLoading(true);
-        return fetchData(endpoints.diagnosekoder, { cancelToken: httpCanceler.token }).then(
+        return fetchData<Diagnosekode[]>(endpoints.diagnosekoder, { cancelToken: httpCanceler.token }).then(
             (newDiagnosekodeList: Diagnosekode[]) => {
                 setDiagnosekoder(newDiagnosekodeList);
                 onDiagnosekoderUpdated(newDiagnosekodeList);

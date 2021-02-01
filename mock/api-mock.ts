@@ -32,12 +32,27 @@ app.use('/mock/vurdering', (req, res) => {
 });
 
 app.use('/mock/opprett-vurdering', (req, res) => {
-    if (req.body.type === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
-        createKontinuerligTilsynVurdering(req.body);
+    if (req.body.dryRun === true) {
+        res.send({
+            perioderMedEndringer: [
+                {
+                    periode: {
+                        fom: '2024-01-01',
+                        tom: '2024-01-10',
+                    },
+                    endrerVurderingSammeBehandling: true,
+                    endrerAnnenVurdering: false,
+                },
+            ],
+        });
     } else {
-        createToOmsorgspersonerVurdering(req.body);
+        if (req.body.type === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
+            createKontinuerligTilsynVurdering(req.body);
+        } else {
+            createToOmsorgspersonerVurdering(req.body);
+        }
+        res.send();
     }
-    res.send();
 });
 
 app.use('/mock/kontinuerlig-tilsyn-og-pleie/vurderingsoversikt', (req, res) => {
