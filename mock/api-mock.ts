@@ -87,7 +87,7 @@ app.use('/mock/diagnosekode-search', (req, res) => {
 });
 
 app.use('/mock/diagnosekoder', (req, res) => {
-    res.send(mockedDiagnosekoderesponse);
+    res.send({ diagnosekoder: mockedDiagnosekoderesponse });
 });
 
 app.use('/mock/legg-til-diagnosekode', (req, res) => {
@@ -103,10 +103,10 @@ app.use('/mock/slett-diagnosekode', (req, res) => {
 
 app.use('/mock/innleggelsesperioder', (req, res) => {
     if (req.method === 'GET') {
-        res.send(mockedInnleggelsesperioder);
+        res.send({ perioder: mockedInnleggelsesperioder });
     } else if (req.method === 'POST') {
         mockedInnleggelsesperioder.splice(0, mockedInnleggelsesperioder.length, ...req.body);
-        res.send(mockedInnleggelsesperioder);
+        res.send({ perioder: mockedInnleggelsesperioder });
     }
 });
 

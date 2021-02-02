@@ -14,6 +14,7 @@ import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
 import styles from './innleggelsesperiodeoversikt.less';
 import InnleggelsesperiodeFormModal from '../innleggelsesperiodeFormModal/InnleggelsesperiodeFormModal';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
+import { InnleggelsesperiodeResponse } from '../../../types/InnleggelsesperiodeResponse';
 
 export enum FieldName {
     INNLEGGELSESPERIODER = 'innleggelsesperioder',
@@ -59,9 +60,9 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
     useEffect(() => {
         let isMounted = true;
         hentInnleggelsesperioder()
-            .then((nyeInnleggelsesperioder: Period[]) => {
+            .then(({ perioder }: InnleggelsesperiodeResponse) => {
                 if (isMounted) {
-                    setInnleggelsesperioder(nyeInnleggelsesperioder);
+                    setInnleggelsesperioder(perioder);
                     setIsLoading(false);
                 }
             })

@@ -13,6 +13,7 @@ import { deleteData, fetchData } from '../../../util/httpUtils';
 import Diagnosekode from '../../../types/Diagnosekode';
 import DiagnosekodeModal from '../diagnosekode-modal/DiagnosekodeModal';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
+import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
 
 Modal.setAppElement('#app');
 
@@ -29,10 +30,10 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
 
     const hentDiagnosekoder = () => {
         setIsLoading(true);
-        return fetchData<Diagnosekode[]>(endpoints.diagnosekoder, { cancelToken: httpCanceler.token }).then(
-            (newDiagnosekodeList: Diagnosekode[]) => {
-                setDiagnosekoder(newDiagnosekodeList);
-                onDiagnosekoderUpdated(newDiagnosekodeList);
+        return fetchData<DiagnosekodeResponse>(endpoints.diagnosekoder, { cancelToken: httpCanceler.token }).then(
+            (diagnosekodeResponse: DiagnosekodeResponse) => {
+                setDiagnosekoder(diagnosekodeResponse.diagnosekoder);
+                onDiagnosekoderUpdated(diagnosekodeResponse.diagnosekoder);
                 setIsLoading(false);
             }
         );
