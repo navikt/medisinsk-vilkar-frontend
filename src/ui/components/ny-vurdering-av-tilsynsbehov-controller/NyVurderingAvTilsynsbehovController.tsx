@@ -12,6 +12,8 @@ import NyVurderingAvTilsynsbehovForm, {
 import PageContainer from '../page-container/PageContainer';
 import { PeriodeMedEndring, PerioderMedEndringResponse } from '../../../types/PeriodeMedEndring';
 import OverlappendePeriodeModal from '../overlappende-periode-modal/OverlappendePeriodeModal';
+import ActionType from './actionTypes';
+import nyVurderingAvTilsynsbehovReducer from './reducer';
 
 interface NyVurderingAvTilsynsbehovControllerProps {
     opprettVurderingLink: Link;
@@ -21,8 +23,6 @@ interface NyVurderingAvTilsynsbehovControllerProps {
     onVurderingLagret: () => void;
 }
 
-type LagreVurderingFunction = () => Promise<void>;
-
 const NyVurderingAvTilsynsbehovController = ({
     opprettVurderingLink,
     dataTilVurderingUrl,
@@ -30,18 +30,27 @@ const NyVurderingAvTilsynsbehovController = ({
     perioderSomKanVurderes,
     onVurderingLagret,
 }: NyVurderingAvTilsynsbehovControllerProps) => {
-    const [isLoading, setIsLoading] = React.useState<boolean>(true);
-    const [hentDataTilVurderingHarFeilet, setHentDataTilVurderingHarFeilet] = React.useState<boolean>(false);
-    const [dokumenter, setDokumenter] = React.useState<Dokument[]>([]);
+    const [state, dispatch] = React.useReducer(nyVurderingAvTilsynsbehovReducer, {
+        isLoading: true,
+        dokumenter: [],
+        hentDataTilVurderingHarFeilet: false,
+        perioderMedEndring: [],
+        lagreVurderingFn: null,
+        overlappendePeriodeModalOpen: false,
+    });
 
-    const [visOverlappModal, setVisOverlappModal] = React.useState<boolean>(false);
-    const [perioderMedEndring, setPerioderMedEndring] = React.useState<PeriodeMedEndring[]>([]);
-    const [lagreVurderingFn, setLagreVurderingFn] = React.useState<LagreVurderingFunction>(null);
-
+    const {
+        isLoading,
+        dokumenter,
+        hentDataTilVurderingHarFeilet,
+        perioderMedEndring,
+        lagreVurderingFn,
+        overlappendePeriodeModalOpen,
+    } = state;
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
-        setIsLoading(true);
+        dispatch({ type: ActionType.PENDING });
         return postNyVurdering(
             opprettVurderingLink,
             { ...nyVurderingsversjon, type: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE },
@@ -49,10 +58,10 @@ const NyVurderingAvTilsynsbehovController = ({
         ).then(
             () => {
                 onVurderingLagret();
-                setIsLoading(false);
+                dispatch({ type: ActionType.VURDERING_LAGRET });
             },
             () => {
-                setIsLoading(false);
+                dispatch({ type: ActionType.LAGRE_VURDERING_FEILET });
             }
         );
     }
@@ -67,17 +76,22 @@ const NyVurderingAvTilsynsbehovController = ({
         );
     };
 
-    const advarOmEksisterendeVurderinger = (perioderMedEndringValue: PeriodeMedEndring[]) => {
-        setVisOverlappModal(true);
-        setPerioderMedEndring(perioderMedEndringValue);
+    const advarOmEksisterendeVurderinger = (
+        nyVurderingsversjon: Vurderingsversjon,
+        perioderMedEndringValue: PeriodeMedEndring[]
+    ) => {
+        dispatch({
+            type: ActionType.ADVAR_OM_EKSISTERENDE_VURDERINGER,
+            perioderMedEndring: perioderMedEndringValue,
+            lagreVurderingFn: () => lagreVurdering(nyVurderingsversjon),
+        });
     };
 
     const lagreVurderingAvTilsynsbehov = (nyVurderingsversjon: Vurderingsversjon) => {
         sjekkForEksisterendeVurderinger(nyVurderingsversjon).then((perioderMedEndringerResponse) => {
             const harOverlappendePerioder = perioderMedEndringerResponse.perioderMedEndringer.length > 0;
             if (harOverlappendePerioder) {
-                setLagreVurderingFn(() => lagreVurdering(nyVurderingsversjon));
-                advarOmEksisterendeVurderinger(perioderMedEndringerResponse.perioderMedEndringer);
+                advarOmEksisterendeVurderinger(nyVurderingsversjon, perioderMedEndringerResponse.perioderMedEndringer);
             } else {
                 lagreVurdering(nyVurderingsversjon);
             }
@@ -91,23 +105,20 @@ const NyVurderingAvTilsynsbehovController = ({
         return fetchData(dataTilVurderingUrl, { cancelToken: httpCanceler.token });
     }
 
-    const handleError = () => {
-        setIsLoading(false);
-        setHentDataTilVurderingHarFeilet(true);
+    const handleHentDataTilVurderingError = () => {
+        dispatch({ type: ActionType.HENT_DATA_TIL_VURDERING_HAR_FEILET });
     };
 
     React.useEffect(() => {
         let isMounted = true;
-        setIsLoading(true);
-        setHentDataTilVurderingHarFeilet(false);
+        dispatch({ type: ActionType.HENT_DATA_TIL_VURDERING });
         hentDataTilVurdering()
             .then((dokumenterResponse: Dokument[]) => {
                 if (isMounted) {
-                    setDokumenter(dokumenterResponse);
-                    setIsLoading(false);
+                    dispatch({ type: ActionType.HENTET_DATA_TIL_VURDERING, dokumenter: dokumenterResponse });
                 }
             })
-            .catch(handleError);
+            .catch(handleHentDataTilVurderingError);
 
         return () => {
             isMounted = false;
@@ -132,13 +143,14 @@ const NyVurderingAvTilsynsbehovController = ({
             <OverlappendePeriodeModal
                 appElementId="app"
                 perioderMedEndring={perioderMedEndring}
-                onCancel={() => setVisOverlappModal(false)}
+                onCancel={() => dispatch({ type: ActionType.LAGRING_AV_VURDERING_AVBRUTT })}
                 onConfirm={() => {
                     lagreVurderingFn().then(() => {
-                        setVisOverlappModal(false);
+                        dispatch({ type: ActionType.VURDERING_LAGRET, perioderMedEndring });
                     });
                 }}
-                isOpen={visOverlappModal}
+                isOpen={overlappendePeriodeModalOpen}
+                isLoading={isLoading}
             />
         </PageContainer>
     );

@@ -1,77 +1,77 @@
-import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import { Period } from '../../../types/Period';
 import ActionType from './actionTypes';
-import Vurderingselement from '../../../types/Vurderingselement';
+import Dokument from '../../../types/Dokument';
+import { PeriodeMedEndring } from '../../../types/PeriodeMedEndring';
+
+type LagreVurderingFunction = () => Promise<void>;
 
 interface State {
-    visVurderingDetails: boolean;
     isLoading: boolean;
-    vurderingsoversikt: Vurderingsoversikt;
-    valgtVurderingselement: Vurderingselement;
-    resterendeVurderingsperioderDefaultValue: Period[];
-    vurdering: string;
-    visRadForNyVurdering: boolean;
-    vurderingsoversiktFeilet: boolean;
+    dokumenter: Dokument[];
+    hentDataTilVurderingHarFeilet: boolean;
+    perioderMedEndring: PeriodeMedEndring[];
+    lagreVurderingFn: LagreVurderingFunction;
+    overlappendePeriodeModalOpen: boolean;
 }
 
 interface Action {
     type: ActionType;
-    vurderingsoversikt?: Vurderingsoversikt;
-    valgtVurderingselement?: Vurderingselement;
-    resterendeVurderingsperioder?: Period[];
+    perioderMedEndring?: PeriodeMedEndring[];
+    lagreVurderingFn?: LagreVurderingFunction;
+    dokumenter?: Dokument[];
 }
 
-const finnvalgtVurderingselement = (vurderingselementer, vurderingId) => {
-    return vurderingselementer.find(({ id }) => vurderingId === id);
-};
-
-const vilkårsvurderingReducer = (state: State, action: Action): State => {
+const nyVurderingAvTilsynsbehovReducer = (state: State, action: Action): State => {
     switch (action.type) {
-        case ActionType.VIS_VURDERINGSOVERSIKT: {
-            const valgtVurderingselement =
-                finnvalgtVurderingselement(action.vurderingsoversikt.vurderingselementer, state.vurdering) || null;
-            const resterendeVurderingsperioder = action.vurderingsoversikt?.resterendeVurderingsperioder || [];
-            return {
-                ...state,
-                vurderingsoversikt: action.vurderingsoversikt,
-                valgtVurderingselement,
-                isLoading: false,
-                resterendeVurderingsperioderDefaultValue: resterendeVurderingsperioder,
-                visVurderingDetails: false,
-                visRadForNyVurdering: false,
-                vurderingsoversiktFeilet: false,
-            };
-        }
-        case ActionType.VURDERINGSOVERSIKT_FEILET: {
-            return {
-                ...state,
-                isLoading: false,
-                vurderingsoversiktFeilet: true,
-            };
-        }
-        case ActionType.VIS_NY_VURDERING_FORM:
-            return {
-                ...state,
-                valgtVurderingselement: null,
-                resterendeVurderingsperioderDefaultValue: action.resterendeVurderingsperioder || [],
-                visVurderingDetails: true,
-                visRadForNyVurdering: !action.resterendeVurderingsperioder,
-            };
-        case ActionType.VELG_VURDERINGSELEMENT:
-            return {
-                ...state,
-                valgtVurderingselement: action.valgtVurderingselement,
-                visVurderingDetails: true,
-            };
         case ActionType.PENDING:
             return {
                 ...state,
                 isLoading: true,
-                vurderingsoversiktFeilet: false,
+            };
+        case ActionType.VURDERING_LAGRET:
+            return {
+                ...state,
+                isLoading: false,
+                perioderMedEndring: null,
+                overlappendePeriodeModalOpen: false,
+            };
+        case ActionType.LAGRE_VURDERING_FEILET:
+            return {
+                ...state,
+                isLoading: false,
+            };
+        case ActionType.LAGRING_AV_VURDERING_AVBRUTT:
+            return {
+                ...state,
+                overlappendePeriodeModalOpen: false,
+            };
+        case ActionType.ADVAR_OM_EKSISTERENDE_VURDERINGER:
+            return {
+                ...state,
+                overlappendePeriodeModalOpen: true,
+                perioderMedEndring: action.perioderMedEndring,
+                lagreVurderingFn: action.lagreVurderingFn,
+            };
+        case ActionType.HENT_DATA_TIL_VURDERING:
+            return {
+                ...state,
+                isLoading: true,
+                hentDataTilVurderingHarFeilet: false,
+            };
+        case ActionType.HENTET_DATA_TIL_VURDERING:
+            return {
+                ...state,
+                dokumenter: action.dokumenter,
+                isLoading: false,
+            };
+        case ActionType.HENT_DATA_TIL_VURDERING_HAR_FEILET:
+            return {
+                ...state,
+                isLoading: false,
+                hentDataTilVurderingHarFeilet: true,
             };
         default:
             return state;
     }
 };
 
-export default vilkårsvurderingReducer;
+export default nyVurderingAvTilsynsbehovReducer;
