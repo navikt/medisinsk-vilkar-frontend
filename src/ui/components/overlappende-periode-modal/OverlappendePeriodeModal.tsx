@@ -22,7 +22,7 @@ const OverlappendePeriodeModal = ({
 }: OverlappendePeriodeModalProps) => {
     Modal.setAppElement(`#${appElementId}`);
     return (
-        <ConfirmationModal promiseAttacher={(promise) => promise.then(onConfirm, onCancel)} isOpen={isOpen}>
+        <ConfirmationModal onConfirm={onConfirm} onCancel={onCancel} isOpen={isOpen}>
             {perioderMedEndring.map(({ periode }) => {
                 return <Alertstripe type="advarsel">{prettifyPeriod(periode)}</Alertstripe>;
             })}

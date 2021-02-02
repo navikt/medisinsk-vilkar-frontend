@@ -213,13 +213,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                     return null;
                 }}
             />
-            <WriteAccessBoundContent
-                contentRenderer={() => (
-                    <Knapp style={{ marginTop: '2rem' }} onClick={() => onVilkårVurdert()}>
-                        Gå videre til vurdering av to omsorgspersoner
-                    </Knapp>
-                )}
-            />
         </>
     );
 };

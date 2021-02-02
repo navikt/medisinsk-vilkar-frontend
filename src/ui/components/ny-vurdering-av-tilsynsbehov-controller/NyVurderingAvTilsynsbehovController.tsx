@@ -21,6 +21,8 @@ interface NyVurderingAvTilsynsbehovControllerProps {
     onVurderingLagret: () => void;
 }
 
+type LagreVurderingFunction = () => Promise<void>;
+
 const NyVurderingAvTilsynsbehovController = ({
     opprettVurderingLink,
     dataTilVurderingUrl,
@@ -33,7 +35,8 @@ const NyVurderingAvTilsynsbehovController = ({
     const [dokumenter, setDokumenter] = React.useState<Dokument[]>([]);
 
     const [visOverlappModal, setVisOverlappModal] = React.useState<boolean>(false);
-    const [perioderMedEndringS, setPerioderMedEndring] = React.useState<PeriodeMedEndring[]>([]);
+    const [perioderMedEndring, setPerioderMedEndring] = React.useState<PeriodeMedEndring[]>([]);
+    const [lagreVurderingFn, setLagreVurderingFn] = React.useState<LagreVurderingFunction>(null);
 
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
@@ -64,16 +67,17 @@ const NyVurderingAvTilsynsbehovController = ({
         );
     };
 
-    const advarOmEksisterendeVurderinger = (perioderMedEndring: PeriodeMedEndring[]) => {
-        setPerioderMedEndring(perioderMedEndring);
+    const advarOmEksisterendeVurderinger = (perioderMedEndringValue: PeriodeMedEndring[]) => {
         setVisOverlappModal(true);
+        setPerioderMedEndring(perioderMedEndringValue);
     };
 
     const lagreVurderingAvTilsynsbehov = (nyVurderingsversjon: Vurderingsversjon) => {
-        sjekkForEksisterendeVurderinger(nyVurderingsversjon).then(({ perioderMedEndringer }) => {
-            const harOverlappendePerioder = perioderMedEndringer.length > 0;
+        sjekkForEksisterendeVurderinger(nyVurderingsversjon).then((perioderMedEndringerResponse) => {
+            const harOverlappendePerioder = perioderMedEndringerResponse.perioderMedEndringer.length > 0;
             if (harOverlappendePerioder) {
-                advarOmEksisterendeVurderinger(perioderMedEndringer);
+                setLagreVurderingFn(() => lagreVurdering(nyVurderingsversjon));
+                advarOmEksisterendeVurderinger(perioderMedEndringerResponse.perioderMedEndringer);
             } else {
                 lagreVurdering(nyVurderingsversjon);
             }
@@ -127,9 +131,13 @@ const NyVurderingAvTilsynsbehovController = ({
             />
             <OverlappendePeriodeModal
                 appElementId="app"
-                perioderMedEndring={perioderMedEndringS}
-                onCancel={() => 1}
-                onConfirm={() => 2}
+                perioderMedEndring={perioderMedEndring}
+                onCancel={() => setVisOverlappModal(false)}
+                onConfirm={() => {
+                    lagreVurderingFn().then(() => {
+                        setVisOverlappModal(false);
+                    });
+                }}
                 isOpen={visOverlappModal}
             />
         </PageContainer>

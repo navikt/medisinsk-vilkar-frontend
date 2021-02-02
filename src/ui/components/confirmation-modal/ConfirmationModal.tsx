@@ -4,28 +4,17 @@ import Modal from 'nav-frontend-modal';
 
 interface ConfirmationModalProps {
     children: React.ReactNode;
-    promiseAttacher: (promise: Promise<void>) => void;
+    onConfirm: () => void;
+    onCancel: () => void;
     isOpen: boolean;
 }
 
-const ConfirmationModal = ({ children, promiseAttacher, isOpen }: ConfirmationModalProps) => {
-    const [resolver, setResolver] = React.useState(null);
-    const [rejecter, setRejecter] = React.useState(null);
-
-    React.useEffect(() => {
-        promiseAttacher(
-            new Promise((resolve, reject) => {
-                setResolver(resolve);
-                setRejecter(reject);
-            })
-        );
-    }, [isOpen]);
-
+const ConfirmationModal = ({ children, onConfirm, onCancel, isOpen }: ConfirmationModalProps) => {
     return (
-        <Modal isOpen={isOpen} onRequestClose={rejecter} contentLabel="">
+        <Modal isOpen={isOpen} onRequestClose={onCancel} contentLabel="">
             {children}
-            <Knapp onClick={resolver}>Bekreft</Knapp>
-            <Knapp onClick={rejecter}>Avbryt</Knapp>
+            <Knapp onClick={onConfirm}>Bekreft</Knapp>
+            <Knapp onClick={onCancel}>Avbryt</Knapp>
         </Modal>
     );
 };
