@@ -22,7 +22,7 @@ interface DiagnosekodeoversiktProps {
 }
 
 const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktProps) => {
-    const { endpoints } = React.useContext(ContainerContext);
+    const { endpoints, behandlingUuid } = React.useContext(ContainerContext);
     const [isLoading, setIsLoading] = React.useState(true);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [diagnosekoder, setDiagnosekoder] = React.useState<Diagnosekode[]>([]);
@@ -30,13 +30,13 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
 
     const hentDiagnosekoder = () => {
         setIsLoading(true);
-        return fetchData<DiagnosekodeResponse>(endpoints.diagnosekoder, { cancelToken: httpCanceler.token }).then(
-            (diagnosekodeResponse: DiagnosekodeResponse) => {
-                setDiagnosekoder(diagnosekodeResponse.diagnosekoder);
-                onDiagnosekoderUpdated(diagnosekodeResponse.diagnosekoder);
-                setIsLoading(false);
-            }
-        );
+        return fetchData<DiagnosekodeResponse>(`${endpoints.diagnosekoder}?behandlingUuid=${behandlingUuid}`, {
+            cancelToken: httpCanceler.token,
+        }).then((diagnosekodeResponse: DiagnosekodeResponse) => {
+            setDiagnosekoder(diagnosekodeResponse.diagnosekoder);
+            onDiagnosekoderUpdated(diagnosekodeResponse.diagnosekoder);
+            setIsLoading(false);
+        });
     };
 
     const slettDiagnosekode = (diagnosekode: Diagnosekode) => {
