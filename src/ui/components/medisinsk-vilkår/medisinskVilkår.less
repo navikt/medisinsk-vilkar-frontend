@@ -1,7 +1,17 @@
 .medisinskVilkår {
-  padding: 1rem;
+    padding: 1rem;
 
-  &__vilkårContentContainer {
-    margin-top: 2rem;
-  }
+    &__vilkårContentContainer {
+        margin-top: 2rem;
+    }
+
+    :global {
+        .nav-frontend-tabs__tab-label {
+            padding-bottom: 0.1rem;
+        }
+
+        .nav-frontend-tabs__tab-inner--aktiv .nav-frontend-tabs__tab-label {
+            border-bottom: 2px solid #0067c5;
+        }
+    }
 }
