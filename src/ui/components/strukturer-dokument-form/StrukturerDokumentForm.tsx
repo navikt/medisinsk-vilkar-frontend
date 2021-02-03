@@ -53,11 +53,12 @@ const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormPr
                             question="Inneholder dokumentet medisinske opplysninger?"
                             radios={[
                                 {
-                                    label: 'Ja, legeerklæring',
+                                    label: 'Ja, legeerklæring fra sykehus/spesialisthelsetjenesten',
                                     value: Dokumenttype.LEGEERKLÆRING,
                                 },
                                 {
-                                    label: 'Ja, andre medisinske opplysninger (f.eks. ...)',
+                                    label:
+                                        'Ja, andre medisinske opplysninger (f.eks. legeerklæring fra fastlege, uttalelse fra psykolog)',
                                     value: Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER,
                                 },
                                 {
