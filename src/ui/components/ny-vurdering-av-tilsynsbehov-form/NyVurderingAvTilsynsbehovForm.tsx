@@ -131,13 +131,6 @@ const NyVurderingAvTilsynsbehovForm = ({
                                         <li>Om det er årsakssammenheng mellom sykdom og pleiebehov</li>
                                         <li>Om behovet er kontinuerlig og ikke situasjonsbestemt</li>
                                     </ul>
-                                    <p>Husk:</p>
-                                    <ul>
-                                        <li>
-                                            Pleiepenger kan innvilges selv om barnet ikke har behov for tilsyn om natten
-                                        </li>
-                                        <li>Pleiepenger kan innvilges selv om barnet kan være noe alene på dagtid</li>
-                                    </ul>
                                 </div>
                             }
                             validators={{ required }}

@@ -2,35 +2,31 @@ import React, { useMemo } from 'react';
 import axios from 'axios';
 import Dokument from '../../../types/Dokument';
 import Link from '../../../types/Link';
-import { Period } from '../../../types/Period';
 import { Vurderingsversjon } from '../../../types/Vurdering';
 import Vurderingstype from '../../../types/Vurderingstype';
 import { fetchData, postNyVurdering, postNyVurderingDryRun } from '../../../util/httpUtils';
-import NyVurderingAvTilsynsbehovForm, {
-    FieldName,
-} from '../ny-vurdering-av-tilsynsbehov-form/NyVurderingAvTilsynsbehovForm';
 import PageContainer from '../page-container/PageContainer';
 import { PeriodeMedEndring, PerioderMedEndringResponse } from '../../../types/PeriodeMedEndring';
 import OverlappendePeriodeModal from '../overlappende-periode-modal/OverlappendePeriodeModal';
 import ActionType from './actionTypes';
-import nyVurderingAvTilsynsbehovReducer from './reducer';
+import nyVurderingControllerReducer from './reducer';
 
-interface NyVurderingAvTilsynsbehovControllerProps {
+interface NyVurderingController {
     opprettVurderingLink: Link;
     dataTilVurderingUrl: string;
-    resterendeVurderingsperioder: Period[];
-    perioderSomKanVurderes: Period[];
     onVurderingLagret: () => void;
+    formRenderer: (dokumenter: Dokument[], onSubmit: (vurderingsversjon: Vurderingsversjon) => void) => React.ReactNode;
+    vurderingstype: Vurderingstype;
 }
 
-const NyVurderingAvTilsynsbehovController = ({
+const NyVurderingController = ({
     opprettVurderingLink,
     dataTilVurderingUrl,
-    resterendeVurderingsperioder,
-    perioderSomKanVurderes,
     onVurderingLagret,
-}: NyVurderingAvTilsynsbehovControllerProps) => {
-    const [state, dispatch] = React.useReducer(nyVurderingAvTilsynsbehovReducer, {
+    formRenderer,
+    vurderingstype,
+}: NyVurderingController) => {
+    const [state, dispatch] = React.useReducer(nyVurderingControllerReducer, {
         isLoading: true,
         dokumenter: [],
         hentDataTilVurderingHarFeilet: false,
@@ -53,7 +49,7 @@ const NyVurderingAvTilsynsbehovController = ({
         dispatch({ type: ActionType.PENDING });
         return postNyVurdering(
             opprettVurderingLink,
-            { ...nyVurderingsversjon, type: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE },
+            { ...nyVurderingsversjon, type: vurderingstype },
             httpCanceler.token
         ).then(
             () => {
@@ -71,7 +67,7 @@ const NyVurderingAvTilsynsbehovController = ({
     ): Promise<PerioderMedEndringResponse> => {
         return postNyVurderingDryRun(
             opprettVurderingLink,
-            { ...nyVurderingsversjon, type: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE },
+            { ...nyVurderingsversjon, type: vurderingstype },
             httpCanceler.token
         );
     };
@@ -87,7 +83,7 @@ const NyVurderingAvTilsynsbehovController = ({
         });
     };
 
-    const lagreVurderingAvTilsynsbehov = (nyVurderingsversjon: Vurderingsversjon) => {
+    const beOmBekreftelseFørLagringHvisNødvendig = (nyVurderingsversjon: Vurderingsversjon) => {
         sjekkForEksisterendeVurderinger(nyVurderingsversjon).then((perioderMedEndringerResponse) => {
             const harOverlappendePerioder = perioderMedEndringerResponse.perioderMedEndringer.length > 0;
             if (harOverlappendePerioder) {
@@ -128,18 +124,7 @@ const NyVurderingAvTilsynsbehovController = ({
 
     return (
         <PageContainer isLoading={isLoading} hasError={hentDataTilVurderingHarFeilet} preventUnmount>
-            <NyVurderingAvTilsynsbehovForm
-                defaultValues={{
-                    [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
-                    [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
-                    [FieldName.PERIODER]: resterendeVurderingsperioder,
-                    [FieldName.DOKUMENTER]: [],
-                }}
-                resterendeVurderingsperioder={resterendeVurderingsperioder}
-                perioderSomKanVurderes={perioderSomKanVurderes}
-                dokumenter={dokumenter}
-                onSubmit={lagreVurderingAvTilsynsbehov}
-            />
+            {formRenderer(dokumenter, beOmBekreftelseFørLagringHvisNødvendig)}
             <OverlappendePeriodeModal
                 appElementId="app"
                 perioderMedEndring={perioderMedEndring}
@@ -156,4 +141,4 @@ const NyVurderingAvTilsynsbehovController = ({
     );
 };
 
-export default NyVurderingAvTilsynsbehovController;
+export default NyVurderingController;

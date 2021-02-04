@@ -19,12 +19,16 @@ import { fetchData } from '../../../util/httpUtils';
 import PageError from '../page-error/PageError';
 import LinkRel from '../../../constants/LinkRel';
 import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
-import NyVurderingAvTilsynsbehovController from '../ny-vurdering-av-tilsynsbehov-controller/NyVurderingAvTilsynsbehovController';
+import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
 import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
 import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
 import Box, { Margin } from '../box/Box';
 import OverlappendeSøknadsperiodePanel from '../overlappende-søknadsperiode-panel/OverlappendeSøknadsperiodePanel';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
+import NyVurderingAvTilsynsbehovForm, {
+    FieldName,
+} from '../ny-vurdering-av-tilsynsbehov-form/NyVurderingAvTilsynsbehovForm';
+import Vurderingstype from '../../../types/Vurderingstype';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     onVilkårVurdert: () => void;
@@ -154,8 +158,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                         {`Vurder behov for tilsyn og pleie for perioden ${prettifyPeriod(
                             vurderingsoversikt?.resterendeVurderingsperioder[0]
                         )}.`}
-                        Perioden som skal vurderes overlapper med tidligere vurderinger. Vurder om det er grunnlag for å
-                        gjøre en ny vurdering.
                     </Alertstripe>
                     {overlappendeVurderingsperioder && overlappendeVurderingsperioder.length > 0 && (
                         <Box marginTop={Margin.medium}>
@@ -199,12 +201,25 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                                     />
                                 )}
                                 <div style={{ display: harValgtVurderingselement ? 'none' : '' }}>
-                                    <NyVurderingAvTilsynsbehovController
+                                    <NyVurderingController
+                                        vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
                                         opprettVurderingLink={opprettLink}
                                         dataTilVurderingUrl={dataTilVurderingUrl}
                                         onVurderingLagret={oppdaterVurderingsoversikt}
-                                        perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
-                                        resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                                        formRenderer={(dokumenter, onSubmit) => (
+                                            <NyVurderingAvTilsynsbehovForm
+                                                defaultValues={{
+                                                    [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
+                                                    [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
+                                                    [FieldName.PERIODER]: resterendeVurderingsperioderDefaultValue,
+                                                    [FieldName.DOKUMENTER]: [],
+                                                }}
+                                                resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                                                perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
+                                                dokumenter={dokumenter}
+                                                onSubmit={onSubmit}
+                                            />
+                                        )}
                                     />
                                 </div>
                             </>
