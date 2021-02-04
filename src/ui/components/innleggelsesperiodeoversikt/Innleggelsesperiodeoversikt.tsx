@@ -14,6 +14,7 @@ import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
 import styles from './innleggelsesperiodeoversikt.less';
 import InnleggelsesperiodeFormModal from '../innleggelsesperiodeFormModal/InnleggelsesperiodeFormModal';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
+import { InnleggelsesperiodeResponse } from '../../../types/InnleggelsesperiodeResponse';
 
 export enum FieldName {
     INNLEGGELSESPERIODER = 'innleggelsesperioder',
@@ -21,7 +22,7 @@ export enum FieldName {
 
 Modal.setAppElement('#app');
 const Innleggelsesperiodeoversikt = (): JSX.Element => {
-    const { endpoints } = React.useContext(ContainerContext);
+    const { endpoints, behandlingUuid } = React.useContext(ContainerContext);
 
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [innleggelsesperioder, setInnleggelsesperioder] = React.useState<Period[]>([]);
@@ -31,7 +32,9 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const hentInnleggelsesperioder = () => {
-        return fetchData(endpoints.innleggelsesperioder, { cancelToken: httpCanceler.token });
+        return fetchData(`${endpoints.innleggelsesperioder}?behandlingUuid=${behandlingUuid}`, {
+            cancelToken: httpCanceler.token,
+        });
     };
 
     const lagreInnleggelsesperioder = (formState) => {
@@ -59,9 +62,9 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
     useEffect(() => {
         let isMounted = true;
         hentInnleggelsesperioder()
-            .then((nyeInnleggelsesperioder: Period[]) => {
+            .then(({ perioder }: InnleggelsesperiodeResponse) => {
                 if (isMounted) {
-                    setInnleggelsesperioder(nyeInnleggelsesperioder);
+                    setInnleggelsesperioder(perioder);
                     setIsLoading(false);
                 }
             })

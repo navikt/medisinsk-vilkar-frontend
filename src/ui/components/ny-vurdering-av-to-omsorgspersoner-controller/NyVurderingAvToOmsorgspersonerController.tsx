@@ -8,7 +8,6 @@ import { Period } from '../../../types/Period';
 import Dokument from '../../../types/Dokument';
 import { Vurderingsversjon } from '../../../types/Vurdering';
 import { fetchData, submitData } from '../../../util/httpUtils';
-import RequestPayload from '../../../types/RequestPayload';
 import Vurderingstype from '../../../types/Vurderingstype';
 import Link from '../../../types/Link';
 import PageError from '../page-error/PageError';
@@ -35,7 +34,7 @@ const NyVurderingAvToOmsorgspersonerController = ({
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
-        return submitData<RequestPayload>(
+        return submitData<any>(
             opprettVurderingLink.href,
             {
                 behandlingUuid: opprettVurderingLink.requestPayload.behandlingUuid,

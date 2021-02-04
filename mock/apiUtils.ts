@@ -1,11 +1,11 @@
-import RequestPayload from '../src/types/RequestPayload';
 import tilsynsbehovVurderingerMock from './mocked-data/mockedTilsynsbehovVurderinger';
 import tilsynsbehovVurderingsoversiktMock from './mocked-data/mockedTilsynsbehovVurderingsoversikt';
 import mockedToOmsorgspersonerVurderingsoversikt from './mocked-data/mockedToOmsorgspersonerVurderingsoversikt';
 import toOmsorgspersonerVurderingerMock from './mocked-data/mockedToOmsorgspersonerVurderinger';
 import createMockedVurderingselementLinks from './mocked-data/createMockedVurderingselementLinks';
+import NyVurderingsversjon from '../src/types/NyVurderingsversjon';
 
-export const createKontinuerligTilsynVurdering = (requestBody: RequestPayload) => {
+export const createKontinuerligTilsynVurdering = (requestBody: NyVurderingsversjon) => {
     const nyVurderingId = tilsynsbehovVurderingsoversiktMock.vurderingselementer.length + 1;
     const { type, perioder, resultat, tilknyttedeDokumenter, tekst } = requestBody;
 
@@ -37,7 +37,7 @@ export const createKontinuerligTilsynVurdering = (requestBody: RequestPayload) =
     });
 };
 
-export const createToOmsorgspersonerVurdering = (requestBody: RequestPayload) => {
+export const createToOmsorgspersonerVurdering = (requestBody: NyVurderingsversjon) => {
     const nyVurderingId = mockedToOmsorgspersonerVurderingsoversikt.vurderingselementer.length + 11;
     const { type, perioder, resultat, tilknyttedeDokumenter, tekst } = requestBody;
 

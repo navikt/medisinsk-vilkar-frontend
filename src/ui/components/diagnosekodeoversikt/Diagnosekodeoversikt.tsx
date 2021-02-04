@@ -13,6 +13,7 @@ import { deleteData, fetchData } from '../../../util/httpUtils';
 import Diagnosekode from '../../../types/Diagnosekode';
 import DiagnosekodeModal from '../diagnosekode-modal/DiagnosekodeModal';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
+import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
 
 Modal.setAppElement('#app');
 
@@ -21,7 +22,7 @@ interface DiagnosekodeoversiktProps {
 }
 
 const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktProps) => {
-    const { endpoints } = React.useContext(ContainerContext);
+    const { endpoints, behandlingUuid } = React.useContext(ContainerContext);
     const [isLoading, setIsLoading] = React.useState(true);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [diagnosekoder, setDiagnosekoder] = React.useState<Diagnosekode[]>([]);
@@ -29,13 +30,13 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
 
     const hentDiagnosekoder = () => {
         setIsLoading(true);
-        return fetchData(endpoints.diagnosekoder, { cancelToken: httpCanceler.token }).then(
-            (newDiagnosekodeList: Diagnosekode[]) => {
-                setDiagnosekoder(newDiagnosekodeList);
-                onDiagnosekoderUpdated(newDiagnosekodeList);
-                setIsLoading(false);
-            }
-        );
+        return fetchData<DiagnosekodeResponse>(`${endpoints.diagnosekoder}?behandlingUuid=${behandlingUuid}`, {
+            cancelToken: httpCanceler.token,
+        }).then((diagnosekodeResponse: DiagnosekodeResponse) => {
+            setDiagnosekoder(diagnosekodeResponse.diagnosekoder);
+            onDiagnosekoderUpdated(diagnosekodeResponse.diagnosekoder);
+            setIsLoading(false);
+        });
     };
 
     const slettDiagnosekode = (diagnosekode: Diagnosekode) => {

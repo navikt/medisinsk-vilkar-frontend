@@ -20,6 +20,7 @@ import Form from '../form/Form';
 import styles from './nyVurderingAvTilsynsbehovForm.less';
 import DeleteButton from '../delete-button/DeleteButton';
 import AddButton from '../add-button/AddButton';
+import OverlappendePeriodeModal from '../overlappende-periode-modal/OverlappendePeriodeModal';
 
 export enum FieldName {
     VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
@@ -85,6 +86,7 @@ const NyVurderingAvTilsynsbehovForm = ({
 
     return (
         <DetailView title="Vurdering av tilsyn og pleie">
+            <div id="modal" />
             <FormProvider {...formMethods}>
                 <Form buttonLabel="Lagre" onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}>
                     {dokumenter?.length > 0 && (
@@ -128,13 +130,6 @@ const NyVurderingAvTilsynsbehovForm = ({
                                     <ul>
                                         <li>Om det er årsakssammenheng mellom sykdom og pleiebehov</li>
                                         <li>Om behovet er kontinuerlig og ikke situasjonsbestemt</li>
-                                    </ul>
-                                    <p>Husk:</p>
-                                    <ul>
-                                        <li>
-                                            Pleiepenger kan innvilges selv om barnet ikke har behov for tilsyn om natten
-                                        </li>
-                                        <li>Pleiepenger kan innvilges selv om barnet kan være noe alene på dagtid</li>
                                     </ul>
                                 </div>
                             }

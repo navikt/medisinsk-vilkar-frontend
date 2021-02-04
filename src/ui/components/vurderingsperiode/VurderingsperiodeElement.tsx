@@ -31,10 +31,10 @@ const renderIcon = (resultat: Vurderingsresultat) => {
 
 const renderResultatText = (resultat: Vurderingsresultat) => {
     if (resultat === Vurderingsresultat.OPPFYLT) {
-        return <span>Innvilget</span>;
+        return <span>Oppfylt</span>;
     }
     if (resultat === Vurderingsresultat.IKKE_OPPFYLT) {
-        return <span>Avslått</span>;
+        return <span>Ikke oppfylt</span>;
     }
     return null;
 };

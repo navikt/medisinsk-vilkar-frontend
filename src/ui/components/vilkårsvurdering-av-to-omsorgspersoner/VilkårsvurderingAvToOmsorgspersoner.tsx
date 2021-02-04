@@ -21,8 +21,12 @@ import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
 import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
 import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
-import NyVurderingAvToOmsorgspersonerController from '../ny-vurdering-av-to-omsorgspersoner-controller/NyVurderingAvToOmsorgspersonerController';
 import OverlappendeSøknadsperiodePanel from '../overlappende-søknadsperiode-panel/OverlappendeSøknadsperiodePanel';
+import Vurderingstype from '../../../types/Vurderingstype';
+import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
+import NyVurderingAvToOmsorgspersonerForm, {
+    FieldName,
+} from '../ny-vurdering-av-to-omsorgspersoner-form/NyVurderingAvToOmsorgspersonerForm';
 
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
@@ -184,12 +188,25 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                                 vurderingsoversikt.links
                             );
                             return (
-                                <NyVurderingAvToOmsorgspersonerController
+                                <NyVurderingController
+                                    vurderingstype={Vurderingstype.TO_OMSORGSPERSONER}
                                     opprettVurderingLink={opprettLink}
                                     dataTilVurderingUrl={dataTilVurderingUrl}
                                     onVurderingLagret={oppdaterVurderingsoversikt}
-                                    perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
-                                    resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                                    formRenderer={(dokumenter, onSubmit) => (
+                                        <NyVurderingAvToOmsorgspersonerForm
+                                            defaultValues={{
+                                                [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]: '',
+                                                [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: undefined,
+                                                [FieldName.PERIODER]: resterendeVurderingsperioderDefaultValue,
+                                                [FieldName.DOKUMENTER]: [],
+                                            }}
+                                            resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                                            perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
+                                            dokumenter={dokumenter}
+                                            onSubmit={onSubmit}
+                                        />
+                                    )}
                                 />
                             );
                         }
