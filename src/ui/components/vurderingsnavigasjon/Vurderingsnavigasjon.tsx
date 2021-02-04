@@ -51,7 +51,7 @@ const Vurderingsnavigasjon = ({
                             {endretIDenneBehandlingen && (
                                 <IconWithTooltip
                                     renderIcon={() => <EditedBySaksbehandlerIcon />}
-                                    tooltipText="Saksbehandler har opprettet ny vurdering i denne perioden"
+                                    tooltipText="Vurderingen er opprettet i denne behandlingen"
                                 />
                             )}
 
