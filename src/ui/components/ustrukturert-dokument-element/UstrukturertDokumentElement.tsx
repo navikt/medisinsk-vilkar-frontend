@@ -8,12 +8,12 @@ interface UstrukturertDokumentElementProps {
     dokument: Dokument;
 }
 
-const UstrukturertDokumentElement = ({ dokument: { navn, datert } }: UstrukturertDokumentElementProps) => {
+const UstrukturertDokumentElement = ({ dokument: { datert } }: UstrukturertDokumentElementProps) => {
     return (
         <div className={styles.ustrukturertDokumentElement}>
             <WarningIcon />
             <div className={styles.ustrukturertDokumentElement__texts}>
-                <span>{navn}</span>
+                <span className={styles.ustrukturertDokumentElement__texts__type}>Ikke klassifisert</span>
                 <span className={styles.ustrukturertDokumentElement__texts__date}>{prettifyDate(datert)}</span>
                 <span className={styles.ustrukturertDokumentElement__texts__status}>Ikke håndtert</span>
             </div>
