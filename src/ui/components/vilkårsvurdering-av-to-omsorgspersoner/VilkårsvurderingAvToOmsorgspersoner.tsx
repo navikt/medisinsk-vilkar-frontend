@@ -31,7 +31,7 @@ import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
-    const { vurdering, onVurderingValgt, endpoints, løsAksjonspunkt } = React.useContext(ContainerContext);
+    const { vurdering, onVurderingValgt, endpoints, onFinished } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
@@ -157,7 +157,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                                     type="hoved"
                                     htmlType="button"
                                     style={{ marginLeft: '2rem' }}
-                                    onClick={løsAksjonspunkt}
+                                    onClick={onFinished}
                                     mini
                                 >
                                     Gå videre

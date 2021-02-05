@@ -16,7 +16,7 @@ interface ContainerContract {
     };
     behandlingUuid: string;
     readOnly: boolean;
-    løsAksjonspunkt: () => void;
+    onFinished: () => void;
 }
 
 export default ContainerContract;
