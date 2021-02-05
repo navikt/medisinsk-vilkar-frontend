@@ -63,13 +63,3 @@ export async function submitData<T>(url: string, body: T, requestConfig?: AxiosR
         throw new Error(error);
     }
 }
-
-export async function deleteData<T>(url: string, requestConfig?: AxiosRequestConfig): Promise<T> {
-    try {
-        const response = await axios.delete(url, requestConfig);
-        return response.data;
-    } catch (error) {
-        console.error(error);
-        throw new Error(error);
-    }
-}

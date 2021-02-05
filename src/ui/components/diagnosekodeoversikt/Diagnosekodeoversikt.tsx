@@ -9,7 +9,7 @@ import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
 import IconWithText from '../icon-with-text/IconWithText';
 import WarningIcon from '../icons/WarningIcon';
 import ContainerContext from '../../context/ContainerContext';
-import { deleteData, fetchData } from '../../../util/httpUtils';
+import { fetchData, submitData } from '../../../util/httpUtils';
 import Diagnosekode from '../../../types/Diagnosekode';
 import DiagnosekodeModal from '../diagnosekode-modal/DiagnosekodeModal';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
@@ -34,6 +34,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const { diagnosekoder, links } = diagnosekodeResponse;
+    const endreDiagnosekoderLink = findLinkByRel(LinkRel.ENDRE_DIAGNOSEKODER, links);
 
     const hentDiagnosekoder = () => {
         setIsLoading(true);
@@ -47,15 +48,11 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
     };
 
     const slettDiagnosekode = (diagnosekode: Diagnosekode) => {
-        const deleteLink = findLinkByRel(LinkRel.SLETT_DIAGNOSEKODE, diagnosekode.links);
-        const deleteUrl = `${deleteLink.href}?kode=${diagnosekode.kode}`;
-        return deleteData<DiagnosekodeResponse>(deleteUrl, {
-            cancelToken: httpCanceler.token,
-            data: deleteLink.requestPayload,
-        }).then((response) => {
-            setDiagnosekodeResponse(response);
-            onDiagnosekoderUpdated(response.diagnosekoder);
-        });
+        return submitData<DiagnosekodeResponse>(endreDiagnosekoderLink.href, {
+            ...endreDiagnosekoderLink.requestPayload,
+            diagnosekoder: diagnosekoder.filter(({ kode }) => kode !== diagnosekode.kode),
+            links: [],
+        }).then(hentDiagnosekoder);
     };
 
     React.useEffect(() => {
@@ -89,9 +86,19 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             />
             <DiagnosekodeModal
                 isOpen={modalIsOpen}
-                onDiagnosekodeSaved={() => hentDiagnosekoder().then(() => setModalIsOpen(false))}
+                onSaveClick={(nyDiagnosekode: Diagnosekode) =>
+                    submitData(
+                        endreDiagnosekoderLink.href,
+                        {
+                            ...endreDiagnosekoderLink.requestPayload,
+                            diagnosekoder: [...diagnosekoder, nyDiagnosekode],
+                        },
+                        { cancelToken: httpCanceler.token }
+                    )
+                        .then(hentDiagnosekoder)
+                        .then(() => setModalIsOpen(false))
+                }
                 onRequestClose={() => setModalIsOpen(false)}
-                lagreDiagnosekodeLink={findLinkByRel(LinkRel.LEGG_TIL_DIAGNOSEKODE, links)}
             />
         </div>
     );

@@ -91,26 +91,9 @@ app.use('/mock/diagnosekoder', (req, res) => {
     res.send(mockedDiagnosekoderesponse);
 });
 
-app.use('/mock/legg-til-diagnosekode', (req, res) => {
-    const diagnosekodeData = req.body;
-    mockedDiagnosekoderesponse.diagnosekoder.push({
-        ...diagnosekodeData.diagnosekode,
-        links: [
-            {
-                type: 'DELETE',
-                href: 'http://localhost:8082/mock/slett-diagnosekode',
-                rel: LinkRel.SLETT_DIAGNOSEKODE,
-                requestPayload: { behandlingUuid: 'HER_ER_BEHANDLINGSID', versjon: null },
-            },
-        ],
-    });
-    res.send(mockedDiagnosekoderesponse);
-});
-
-app.use('/mock/slett-diagnosekode', (req, res) => {
-    const index = mockedDiagnosekoderesponse.diagnosekoder.findIndex((el) => el.kode === req.query.kode);
-    mockedDiagnosekoderesponse.diagnosekoder.splice(index, 1);
-    res.send(mockedDiagnosekoderesponse);
+app.use('/mock/endre-diagnosekoder', (req, res) => {
+    mockedDiagnosekoderesponse.diagnosekoder = req.body.diagnosekoder || [];
+    res.send({});
 });
 
 app.use('/mock/innleggelsesperioder', (req, res) => {
@@ -118,8 +101,8 @@ app.use('/mock/innleggelsesperioder', (req, res) => {
 });
 
 app.use('/mock/endre-innleggelsesperioder', (req, res) => {
-    mockedInnleggelsesperioder.perioder = req.body.perioder;
-    res.send(mockedInnleggelsesperioder);
+    mockedInnleggelsesperioder.perioder = req.body.perioder || [];
+    res.send({});
 });
 
 const port = 8082;

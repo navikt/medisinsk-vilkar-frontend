@@ -55,7 +55,8 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
 
         const { href, requestPayload } = findLinkByRel(LinkRel.ENDRE_INNLEGGELSESPERIODER, links);
         submitData(href, { ...requestPayload, perioder: nyeInnleggelsesperioder }, { cancelToken: httpCanceler.token })
-            .then((response) => {
+            .then(hentInnleggelsesperioder)
+            .then((response: InnleggelsesperiodeResponse) => {
                 setInnleggelsesperioderResponse(response);
                 setIsLoading(false);
                 setModalIsOpen(false);

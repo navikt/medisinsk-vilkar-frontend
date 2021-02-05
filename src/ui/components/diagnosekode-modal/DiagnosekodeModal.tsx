@@ -1,45 +1,20 @@
 import React, { useMemo } from 'react';
 import Modal from 'nav-frontend-modal';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import axios from 'axios';
 import styles from '../diagnosekodeoversikt/diagnosekodeoversikt.less';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import Box, { Margin } from '../box/Box';
 import DiagnosekodeSelector from '../../form/pure/PureDiagnosekodeSelector';
 import Diagnosekode from '../../../types/Diagnosekode';
-import { submitData } from '../../../util/httpUtils';
-import Link from '../../../types/Link';
 
 interface DiagnosekodeModalProps {
     isOpen: boolean;
-    onDiagnosekodeSaved: () => void;
     onRequestClose: () => void;
-    lagreDiagnosekodeLink: Link;
+    onSaveClick: (nyDiagnosekode: Diagnosekode) => void;
 }
 
-const DiagnosekodeModal = ({
-    isOpen,
-    onRequestClose,
-    onDiagnosekodeSaved,
-    lagreDiagnosekodeLink,
-}: DiagnosekodeModalProps) => {
+const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick }: DiagnosekodeModalProps) => {
     const [selectedDiagnosekode, setSelectedDiagnosekode] = React.useState<Diagnosekode>(null);
-    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
-
-    React.useEffect(() => {
-        return () => httpCanceler.cancel();
-    }, []);
-
-    const saveDiagnosekode = (diagnosekode: Diagnosekode) => {
-        return submitData(
-            lagreDiagnosekodeLink.href,
-            { ...lagreDiagnosekodeLink.requestPayload, diagnosekode },
-            {
-                cancelToken: httpCanceler.token,
-            }
-        );
-    };
-
     return (
         <Modal
             isOpen={isOpen}
@@ -52,7 +27,7 @@ const DiagnosekodeModal = ({
                 onSubmit={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    saveDiagnosekode(selectedDiagnosekode).then(onDiagnosekodeSaved);
+                    onSaveClick(selectedDiagnosekode);
                 }}
             >
                 <ModalFormWrapper title="Legg til diagnosekode">
@@ -61,7 +36,7 @@ const DiagnosekodeModal = ({
                             initialDiagnosekodeValue=""
                             name="diagnosekode"
                             onChange={({ key, value }) => {
-                                setSelectedDiagnosekode({ kode: key, beskrivelse: value, links: [] });
+                                setSelectedDiagnosekode({ kode: key, beskrivelse: value });
                             }}
                             label="Diagnosekode"
                             hideLabel
