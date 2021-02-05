@@ -44,7 +44,8 @@
                         slettDiagnosekode: 'http://localhost:8082/mock/slett-diagnosekode',
                     },
                     behandlingUuid: '123',
-                    readOnly: false
+                    readOnly: false,
+                    onFinished: () => console.log('Aksjonspunkt løst')
                 });
             }, 300);
         </script>

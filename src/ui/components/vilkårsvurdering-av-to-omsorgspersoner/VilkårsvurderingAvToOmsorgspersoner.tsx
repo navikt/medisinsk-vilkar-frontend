@@ -1,35 +1,37 @@
-import React, { useMemo } from 'react';
 import axios from 'axios';
 import Alertstripe, { AlertStripeAdvarsel, AlertStripeInfo } from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
 import Spinner from 'nav-frontend-spinner';
+import React, { useMemo } from 'react';
+import LinkRel from '../../../constants/LinkRel';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
+import Vurderingstype from '../../../types/Vurderingstype';
 import { prettifyPeriod } from '../../../util/formats';
 import { fetchData } from '../../../util/httpUtils';
+import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
 import processVurderingsoversikt, {
     finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder,
 } from '../../../util/vurderingsoversiktUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Box, { Margin } from '../box/Box';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
-import PageError from '../page-error/PageError';
-import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
-import ActionType from './actionTypes';
-import vilkårsvurderingReducer from './reducer';
-import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
-import LinkRel from '../../../constants/LinkRel';
-import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
-import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
-import OverlappendeSøknadsperiodePanel from '../overlappende-søknadsperiode-panel/OverlappendeSøknadsperiodePanel';
-import Vurderingstype from '../../../types/Vurderingstype';
-import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
 import NyVurderingAvToOmsorgspersonerForm, {
     FieldName,
 } from '../ny-vurdering-av-to-omsorgspersoner-form/NyVurderingAvToOmsorgspersonerForm';
+import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
+import OverlappendeSøknadsperiodePanel from '../overlappende-søknadsperiode-panel/OverlappendeSøknadsperiodePanel';
+import PageError from '../page-error/PageError';
+import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
+import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
+import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
+import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
+import ActionType from './actionTypes';
+import vilkårsvurderingReducer from './reducer';
 
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
-    const { vurdering, onVurderingValgt, endpoints } = React.useContext(ContainerContext);
+    const { vurdering, onVurderingValgt, endpoints, onFinished } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
@@ -141,6 +143,28 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                         To omsorgspersoner skal kun vurderes dersom det er flere parter som har søkt i samme periode,
                         eller det er opplyst i søknaden om at det kommer en søker til.
                     </AlertStripeInfo>
+                </Box>
+            )}
+            {!harPerioderSomSkalVurderes && (
+                <Box marginBottom={Margin.large}>
+                    <Alertstripe type="suksess">
+                        {!harVurdertePerioder
+                            ? 'Ingen perioder å vurdere'
+                            : 'Behov for to omsorgspersoner er ferdig vurdert'}
+                        <WriteAccessBoundContent
+                            contentRenderer={() => (
+                                <Knapp
+                                    type="hoved"
+                                    htmlType="button"
+                                    style={{ marginLeft: '2rem' }}
+                                    onClick={onFinished}
+                                    mini
+                                >
+                                    Gå videre
+                                </Knapp>
+                            )}
+                        />
+                    </Alertstripe>
                 </Box>
             )}
             <Box marginTop={harPerioderSomSkalVurderes || !harVurdertePerioder ? Margin.medium : null}>
