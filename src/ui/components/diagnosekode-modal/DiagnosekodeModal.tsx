@@ -7,18 +7,23 @@ import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import Box, { Margin } from '../box/Box';
 import DiagnosekodeSelector from '../../form/pure/PureDiagnosekodeSelector';
 import Diagnosekode from '../../../types/Diagnosekode';
-import ContainerContext from '../../context/ContainerContext';
 import { submitData } from '../../../util/httpUtils';
+import Link from '../../../types/Link';
 
 interface DiagnosekodeModalProps {
     isOpen: boolean;
     onDiagnosekodeSaved: () => void;
     onRequestClose: () => void;
+    lagreDiagnosekodeLink: Link;
 }
 
-const DiagnosekodeModal = ({ isOpen, onRequestClose, onDiagnosekodeSaved }: DiagnosekodeModalProps) => {
+const DiagnosekodeModal = ({
+    isOpen,
+    onRequestClose,
+    onDiagnosekodeSaved,
+    lagreDiagnosekodeLink,
+}: DiagnosekodeModalProps) => {
     const [selectedDiagnosekode, setSelectedDiagnosekode] = React.useState<Diagnosekode>(null);
-    const { endpoints } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     React.useEffect(() => {
@@ -26,7 +31,13 @@ const DiagnosekodeModal = ({ isOpen, onRequestClose, onDiagnosekodeSaved }: Diag
     }, []);
 
     const saveDiagnosekode = (diagnosekode: Diagnosekode) => {
-        return submitData(endpoints.leggTilDiagnosekode, diagnosekode, { cancelToken: httpCanceler.token });
+        return submitData(
+            lagreDiagnosekodeLink.href,
+            { ...lagreDiagnosekodeLink.requestPayload, diagnosekode },
+            {
+                cancelToken: httpCanceler.token,
+            }
+        );
     };
 
     return (
@@ -50,7 +61,7 @@ const DiagnosekodeModal = ({ isOpen, onRequestClose, onDiagnosekodeSaved }: Diag
                             initialDiagnosekodeValue=""
                             name="diagnosekode"
                             onChange={({ key, value }) => {
-                                setSelectedDiagnosekode({ kode: key, beskrivelse: value });
+                                setSelectedDiagnosekode({ kode: key, beskrivelse: value, links: [] });
                             }}
                             label="Diagnosekode"
                             hideLabel

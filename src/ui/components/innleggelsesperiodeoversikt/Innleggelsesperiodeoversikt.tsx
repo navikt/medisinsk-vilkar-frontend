@@ -15,6 +15,8 @@ import styles from './innleggelsesperiodeoversikt.less';
 import InnleggelsesperiodeFormModal from '../innleggelsesperiodeFormModal/InnleggelsesperiodeFormModal';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import { InnleggelsesperiodeResponse } from '../../../types/InnleggelsesperiodeResponse';
+import { findLinkByRel } from '../../../util/linkUtils';
+import LinkRel from '../../../constants/LinkRel';
 
 export enum FieldName {
     INNLEGGELSESPERIODER = 'innleggelsesperioder',
@@ -25,11 +27,16 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
     const { endpoints, behandlingUuid } = React.useContext(ContainerContext);
 
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
-    const [innleggelsesperioder, setInnleggelsesperioder] = React.useState<Period[]>([]);
+    const [innleggelsesperioderResponse, setInnleggelsesperioderResponse] = React.useState<InnleggelsesperiodeResponse>(
+        { perioder: [], links: [] }
+    );
     const [isLoading, setIsLoading] = React.useState(true);
     const [hentInnleggelsesperioderFeilet, setHentInnleggelsesperioderFeilet] = React.useState(false);
     const [lagreInnleggelsesperioderFeilet, setLagreInnleggelsesperioderFeilet] = React.useState(false);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
+
+    const innleggelsesperioder = innleggelsesperioderResponse.perioder;
+    const links = innleggelsesperioderResponse.links;
 
     const hentInnleggelsesperioder = () => {
         return fetchData(`${endpoints.innleggelsesperioder}?behandlingUuid=${behandlingUuid}`, {
@@ -39,16 +46,17 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
 
     const lagreInnleggelsesperioder = (formState) => {
         setIsLoading(true);
-        let perioder = [];
+        let nyeInnleggelsesperioder = [];
         if (formState.innleggelsesperioder?.length > 0) {
-            perioder = formState.innleggelsesperioder
+            nyeInnleggelsesperioder = formState.innleggelsesperioder
                 .filter((periodeWrapper) => periodeWrapper.period?.fom && periodeWrapper.period?.tom)
                 .map((periodeWrapper) => new Period(periodeWrapper.period.fom, periodeWrapper.period.tom));
         }
 
-        submitData(endpoints.lagreInnleggelsesperioder, perioder, { cancelToken: httpCanceler.token })
-            .then((nyeInnleggelsesperioder) => {
-                setInnleggelsesperioder(nyeInnleggelsesperioder);
+        const { href, requestPayload } = findLinkByRel(LinkRel.ENDRE_INNLEGGELSESPERIODER, links);
+        submitData(href, { ...requestPayload, perioder: nyeInnleggelsesperioder }, { cancelToken: httpCanceler.token })
+            .then((response) => {
+                setInnleggelsesperioderResponse(response);
                 setIsLoading(false);
                 setModalIsOpen(false);
             })
@@ -62,9 +70,9 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
     useEffect(() => {
         let isMounted = true;
         hentInnleggelsesperioder()
-            .then(({ perioder }: InnleggelsesperiodeResponse) => {
+            .then((response: InnleggelsesperiodeResponse) => {
                 if (isMounted) {
-                    setInnleggelsesperioder(perioder);
+                    setInnleggelsesperioderResponse(response);
                     setIsLoading(false);
                 }
             })

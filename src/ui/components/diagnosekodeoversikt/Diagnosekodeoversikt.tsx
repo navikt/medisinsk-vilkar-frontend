@@ -14,6 +14,8 @@ import Diagnosekode from '../../../types/Diagnosekode';
 import DiagnosekodeModal from '../diagnosekode-modal/DiagnosekodeModal';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
+import { findLinkByRel } from '../../../util/linkUtils';
+import LinkRel from '../../../constants/LinkRel';
 
 Modal.setAppElement('#app');
 
@@ -25,26 +27,34 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
     const { endpoints, behandlingUuid } = React.useContext(ContainerContext);
     const [isLoading, setIsLoading] = React.useState(true);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
-    const [diagnosekoder, setDiagnosekoder] = React.useState<Diagnosekode[]>([]);
+    const [diagnosekodeResponse, setDiagnosekodeResponse] = React.useState<DiagnosekodeResponse>({
+        diagnosekoder: [],
+        links: [],
+    });
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
+
+    const { diagnosekoder, links } = diagnosekodeResponse;
 
     const hentDiagnosekoder = () => {
         setIsLoading(true);
         return fetchData<DiagnosekodeResponse>(`${endpoints.diagnosekoder}?behandlingUuid=${behandlingUuid}`, {
             cancelToken: httpCanceler.token,
-        }).then((diagnosekodeResponse: DiagnosekodeResponse) => {
-            setDiagnosekoder(diagnosekodeResponse.diagnosekoder);
-            onDiagnosekoderUpdated(diagnosekodeResponse.diagnosekoder);
+        }).then((response: DiagnosekodeResponse) => {
+            setDiagnosekodeResponse(response);
+            onDiagnosekoderUpdated(response.diagnosekoder);
             setIsLoading(false);
         });
     };
 
     const slettDiagnosekode = (diagnosekode: Diagnosekode) => {
-        return deleteData<Diagnosekode[]>(`${endpoints.slettDiagnosekode}?kode=${diagnosekode.kode}`, {
+        const deleteLink = findLinkByRel(LinkRel.SLETT_DIAGNOSEKODE, diagnosekode.links);
+        const deleteUrl = `${deleteLink.href}?kode=${diagnosekode.kode}`;
+        return deleteData<DiagnosekodeResponse>(deleteUrl, {
             cancelToken: httpCanceler.token,
-        }).then((newDiagnosekodeList) => {
-            setDiagnosekoder(newDiagnosekodeList);
-            onDiagnosekoderUpdated(newDiagnosekodeList);
+            data: deleteLink.requestPayload,
+        }).then((response) => {
+            setDiagnosekodeResponse(response);
+            onDiagnosekoderUpdated(response.diagnosekoder);
         });
     };
 
@@ -67,10 +77,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                     <IconWithText iconRenderer={() => <WarningIcon />} text="Ingen diagnosekode registrert." />
                 )}
                 {diagnosekoder.length >= 1 && (
-                    <Diagnosekodeliste
-                        diagnosekoder={diagnosekoder}
-                        onDeleteClick={(diagnosekodeToDelete) => slettDiagnosekode(diagnosekodeToDelete)}
-                    />
+                    <Diagnosekodeliste diagnosekoder={diagnosekoder} onDeleteClick={slettDiagnosekode} />
                 )}
             </Box>
             <WriteAccessBoundContent
@@ -84,6 +91,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                 isOpen={modalIsOpen}
                 onDiagnosekodeSaved={() => hentDiagnosekoder().then(() => setModalIsOpen(false))}
                 onRequestClose={() => setModalIsOpen(false)}
+                lagreDiagnosekodeLink={findLinkByRel(LinkRel.LEGG_TIL_DIAGNOSEKODE, links)}
             />
         </div>
     );
