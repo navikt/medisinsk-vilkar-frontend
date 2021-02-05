@@ -14,7 +14,7 @@ const MedisinskVilkår = () => {
             <Infostripe />
             <div className={styles.medisinskVilkår}>
                 <h1 style={{ fontSize: 22 }}>Sykdom</h1>
-                <div style={{ marginTop: '1rem' }}>
+                <div style={{ marginTop: '1rem', maxWidth: '1204px' }}>
                     <TabsPure
                         kompakt
                         tabs={tabs.map((tabName, index) => ({ label: tabName, aktiv: activeTab === index }))}

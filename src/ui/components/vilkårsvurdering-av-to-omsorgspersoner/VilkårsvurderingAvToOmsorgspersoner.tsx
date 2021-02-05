@@ -118,7 +118,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         );
     }
     return (
-        <div style={{ maxWidth: '1204px' }}>
+        <div>
             {harPerioderSomSkalVurderes && (
                 <>
                     <AlertStripeAdvarsel>

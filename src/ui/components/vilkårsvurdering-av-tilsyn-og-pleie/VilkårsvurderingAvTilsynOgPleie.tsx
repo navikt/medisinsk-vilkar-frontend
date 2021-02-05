@@ -153,7 +153,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                 </Box>
             )}
             {harPerioderSomSkalVurderes && (
-                <div style={{ maxWidth: '1204px' }}>
+                <div>
                     <Alertstripe type="advarsel">
                         {`Vurder behov for tilsyn og pleie for perioden ${prettifyPeriod(
                             vurderingsoversikt?.resterendeVurderingsperioder[0]
