@@ -14,10 +14,10 @@ interface DokumentLinkProps {
 
 const renderDokumenttypeText = (dokumenttype: Dokumenttype) => {
     if (dokumenttype === Dokumenttype.LEGEERKLÆRING) {
-        return 'Legeerklæring';
+        return 'Sykehus/spesialist.';
     }
     if (dokumenttype === Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER) {
-        return 'Andre medisinske opplysninger';
+        return 'Andre med. oppl.';
     }
 };
 
@@ -31,7 +31,7 @@ const DokumentLink = ({ dokument, etikett }: DokumentLinkProps) => {
                 e.stopPropagation();
             }}
         >
-            {renderDokumenttypeText(type)} ({prettifyDate(dayjs(datert).utc(true).toISOString())})
+            {renderDokumenttypeText(type)} {prettifyDate(dayjs(datert).utc(true).toISOString())}
             <div className={styles.dokumentLink__etikett}>
                 {etikett && (
                     <IconWithTooltip
