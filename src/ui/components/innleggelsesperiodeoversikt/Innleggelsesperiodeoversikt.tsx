@@ -28,7 +28,7 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
 
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [innleggelsesperioderResponse, setInnleggelsesperioderResponse] = React.useState<InnleggelsesperiodeResponse>(
-        { perioder: [], links: [] }
+        { perioder: [], links: [], versjon: null, behandlingUuid: '' }
     );
     const [isLoading, setIsLoading] = React.useState(true);
     const [hentInnleggelsesperioderFeilet, setHentInnleggelsesperioderFeilet] = React.useState(false);
@@ -53,8 +53,13 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
                 .map((periodeWrapper) => new Period(periodeWrapper.period.fom, periodeWrapper.period.tom));
         }
 
-        const { href, requestPayload } = findLinkByRel(LinkRel.ENDRE_INNLEGGELSESPERIODER, links);
-        submitData(href, { ...requestPayload, perioder: nyeInnleggelsesperioder }, { cancelToken: httpCanceler.token })
+        const { href } = findLinkByRel(LinkRel.ENDRE_INNLEGGELSESPERIODER, innleggelsesperioderResponse.links);
+        const { behandlingUuid, versjon } = innleggelsesperioderResponse;
+        submitData(
+            href,
+            { behandlingUuid, versjon, perioder: nyeInnleggelsesperioder },
+            { cancelToken: httpCanceler.token }
+        )
             .then(hentInnleggelsesperioder)
             .then((response: InnleggelsesperiodeResponse) => {
                 setInnleggelsesperioderResponse(response);
