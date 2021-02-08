@@ -9,11 +9,13 @@ import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
 import IconWithText from '../icon-with-text/IconWithText';
 import WarningIcon from '../icons/WarningIcon';
 import ContainerContext from '../../context/ContainerContext';
-import { deleteData, fetchData } from '../../../util/httpUtils';
+import { fetchData, submitData } from '../../../util/httpUtils';
 import Diagnosekode from '../../../types/Diagnosekode';
 import DiagnosekodeModal from '../diagnosekode-modal/DiagnosekodeModal';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
+import { findLinkByRel } from '../../../util/linkUtils';
+import LinkRel from '../../../constants/LinkRel';
 
 Modal.setAppElement('#app');
 
@@ -25,27 +27,31 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
     const { endpoints, behandlingUuid } = React.useContext(ContainerContext);
     const [isLoading, setIsLoading] = React.useState(true);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
-    const [diagnosekoder, setDiagnosekoder] = React.useState<Diagnosekode[]>([]);
+    const [diagnosekodeResponse, setDiagnosekodeResponse] = React.useState<DiagnosekodeResponse>({
+        diagnosekoder: [],
+        links: [],
+    });
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
+
+    const { diagnosekoder, links } = diagnosekodeResponse;
+    const endreDiagnosekoderLink = findLinkByRel(LinkRel.ENDRE_DIAGNOSEKODER, links);
 
     const hentDiagnosekoder = () => {
         setIsLoading(true);
         return fetchData<DiagnosekodeResponse>(`${endpoints.diagnosekoder}?behandlingUuid=${behandlingUuid}`, {
             cancelToken: httpCanceler.token,
-        }).then((diagnosekodeResponse: DiagnosekodeResponse) => {
-            setDiagnosekoder(diagnosekodeResponse.diagnosekoder);
-            onDiagnosekoderUpdated(diagnosekodeResponse.diagnosekoder);
+        }).then((response: DiagnosekodeResponse) => {
+            setDiagnosekodeResponse(response);
+            onDiagnosekoderUpdated(response.diagnosekoder);
             setIsLoading(false);
         });
     };
 
     const slettDiagnosekode = (diagnosekode: Diagnosekode) => {
-        return deleteData<Diagnosekode[]>(`${endpoints.slettDiagnosekode}?kode=${diagnosekode.kode}`, {
-            cancelToken: httpCanceler.token,
-        }).then((newDiagnosekodeList) => {
-            setDiagnosekoder(newDiagnosekodeList);
-            onDiagnosekoderUpdated(newDiagnosekodeList);
-        });
+        return submitData<DiagnosekodeResponse>(endreDiagnosekoderLink.href, {
+            ...endreDiagnosekoderLink.requestPayload,
+            diagnosekoder: diagnosekoder.filter(({ kode }) => kode !== diagnosekode.kode),
+        }).then(hentDiagnosekoder);
     };
 
     React.useEffect(() => {
@@ -67,10 +73,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                     <IconWithText iconRenderer={() => <WarningIcon />} text="Ingen diagnosekode registrert." />
                 )}
                 {diagnosekoder.length >= 1 && (
-                    <Diagnosekodeliste
-                        diagnosekoder={diagnosekoder}
-                        onDeleteClick={(diagnosekodeToDelete) => slettDiagnosekode(diagnosekodeToDelete)}
-                    />
+                    <Diagnosekodeliste diagnosekoder={diagnosekoder} onDeleteClick={slettDiagnosekode} />
                 )}
             </Box>
             <WriteAccessBoundContent
@@ -82,7 +85,18 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             />
             <DiagnosekodeModal
                 isOpen={modalIsOpen}
-                onDiagnosekodeSaved={() => hentDiagnosekoder().then(() => setModalIsOpen(false))}
+                onSaveClick={(nyDiagnosekode: Diagnosekode) =>
+                    submitData(
+                        endreDiagnosekoderLink.href,
+                        {
+                            ...endreDiagnosekoderLink.requestPayload,
+                            diagnosekoder: [...diagnosekoder, nyDiagnosekode],
+                        },
+                        { cancelToken: httpCanceler.token }
+                    )
+                        .then(hentDiagnosekoder)
+                        .then(() => setModalIsOpen(false))
+                }
                 onRequestClose={() => setModalIsOpen(false)}
             />
         </div>

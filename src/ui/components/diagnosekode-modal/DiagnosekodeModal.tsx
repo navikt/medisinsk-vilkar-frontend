@@ -1,34 +1,20 @@
 import React, { useMemo } from 'react';
 import Modal from 'nav-frontend-modal';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import axios from 'axios';
 import styles from '../diagnosekodeoversikt/diagnosekodeoversikt.less';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import Box, { Margin } from '../box/Box';
 import DiagnosekodeSelector from '../../form/pure/PureDiagnosekodeSelector';
 import Diagnosekode from '../../../types/Diagnosekode';
-import ContainerContext from '../../context/ContainerContext';
-import { submitData } from '../../../util/httpUtils';
 
 interface DiagnosekodeModalProps {
     isOpen: boolean;
-    onDiagnosekodeSaved: () => void;
     onRequestClose: () => void;
+    onSaveClick: (nyDiagnosekode: Diagnosekode) => void;
 }
 
-const DiagnosekodeModal = ({ isOpen, onRequestClose, onDiagnosekodeSaved }: DiagnosekodeModalProps) => {
+const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick }: DiagnosekodeModalProps) => {
     const [selectedDiagnosekode, setSelectedDiagnosekode] = React.useState<Diagnosekode>(null);
-    const { endpoints } = React.useContext(ContainerContext);
-    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
-
-    React.useEffect(() => {
-        return () => httpCanceler.cancel();
-    }, []);
-
-    const saveDiagnosekode = (diagnosekode: Diagnosekode) => {
-        return submitData(endpoints.leggTilDiagnosekode, diagnosekode, { cancelToken: httpCanceler.token });
-    };
-
     return (
         <Modal
             isOpen={isOpen}
@@ -41,7 +27,7 @@ const DiagnosekodeModal = ({ isOpen, onRequestClose, onDiagnosekodeSaved }: Diag
                 onSubmit={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    saveDiagnosekode(selectedDiagnosekode).then(onDiagnosekodeSaved);
+                    onSaveClick(selectedDiagnosekode);
                 }}
             >
                 <ModalFormWrapper title="Legg til diagnosekode">

@@ -13,6 +13,7 @@ import mockedDiagnosekodeSearchResponse from './mocked-data/mockedDiagnosekodeSe
 import createStrukturertDokument from './mocked-data/createStrukturertDokument';
 import mockedInnleggelsesperioder from './mocked-data/mockedInnleggelsesperioder';
 import { Dokumenttype } from '../src/types/Dokument';
+import LinkRel from '../src/constants/LinkRel';
 
 const app = express();
 
@@ -87,27 +88,21 @@ app.use('/mock/diagnosekode-search', (req, res) => {
 });
 
 app.use('/mock/diagnosekoder', (req, res) => {
-    res.send({ diagnosekoder: mockedDiagnosekoderesponse });
-});
-
-app.use('/mock/legg-til-diagnosekode', (req, res) => {
-    mockedDiagnosekoderesponse.push(req.body);
     res.send(mockedDiagnosekoderesponse);
 });
 
-app.use('/mock/slett-diagnosekode', (req, res) => {
-    const index = mockedDiagnosekoderesponse.findIndex((el) => el.kode === req.query.kode);
-    mockedDiagnosekoderesponse.splice(index, 1);
-    res.send(mockedDiagnosekoderesponse);
+app.use('/mock/endre-diagnosekoder', (req, res) => {
+    mockedDiagnosekoderesponse.diagnosekoder = req.body.diagnosekoder || [];
+    res.send({});
 });
 
 app.use('/mock/innleggelsesperioder', (req, res) => {
-    if (req.method === 'GET') {
-        res.send({ perioder: mockedInnleggelsesperioder });
-    } else if (req.method === 'POST') {
-        mockedInnleggelsesperioder.splice(0, mockedInnleggelsesperioder.length, ...req.body);
-        res.send({ perioder: mockedInnleggelsesperioder });
-    }
+    res.send(mockedInnleggelsesperioder);
+});
+
+app.use('/mock/endre-innleggelsesperioder', (req, res) => {
+    mockedInnleggelsesperioder.perioder = req.body.perioder || [];
+    res.send({});
 });
 
 const port = 8082;
