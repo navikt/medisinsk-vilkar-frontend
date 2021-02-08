@@ -43,7 +43,7 @@ const mockedDokumentoversikt: Dokumentoversikt = {
         {
             id: '1',
             navn: 'Dokument 1',
-            type: undefined,
+            type: Dokumenttype.UKLASSIFISERT,
             datert: dayjs().toDate().toISOString(),
             location: '#blahblah',
             links: createMockedDokumentelementLinks('4'),

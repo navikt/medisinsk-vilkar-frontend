@@ -89,8 +89,12 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
         return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
     }
 
-    const strukturerteDokumenter = dokumentoversikt.dokumenter.filter(({ behandlet }) => behandlet);
-    const ustrukturerteDokumenter = dokumentoversikt.dokumenter.filter(({ behandlet }) => !behandlet);
+    const strukturerteDokumenter = dokumentoversikt.dokumenter.filter(
+        ({ type }) => type !== Dokumenttype.UKLASSIFISERT
+    );
+    const ustrukturerteDokumenter = dokumentoversikt.dokumenter.filter(
+        ({ type }) => type === Dokumenttype.UKLASSIFISERT
+    );
     const harGyldigSignatur = strukturerteDokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING);
     const kanGåVidere = harGyldigSignatur && harRegistrertDiagnosekode && ustrukturerteDokumenter.length === 0;
 
@@ -147,18 +151,17 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
                 )}
                 detailSection={() => {
                     if (visDokumentDetails) {
-                        if (valgtDokument.behandlet) {
-                            return <StrukturertDokumentDetaljer dokument={valgtDokument} />;
+                        if (valgtDokument.type === Dokumenttype.UKLASSIFISERT) {
+                            const strukturerDokumentLink = findLinkByRel(LinkRel.ENDRE_DOKUMENT, valgtDokument.links);
+                            return (
+                                <StrukturerDokumentController
+                                    ustrukturertDokument={valgtDokument}
+                                    strukturerDokumentLink={strukturerDokumentLink}
+                                    onDokumentStrukturert={oppdaterDokumentoversikt}
+                                />
+                            );
                         }
-
-                        const strukturerDokumentLink = findLinkByRel(LinkRel.ENDRE_DOKUMENT, valgtDokument.links);
-                        return (
-                            <StrukturerDokumentController
-                                ustrukturertDokument={valgtDokument}
-                                strukturerDokumentLink={strukturerDokumentLink}
-                                onDokumentStrukturert={oppdaterDokumentoversikt}
-                            />
-                        );
+                        return <StrukturertDokumentDetaljer dokument={valgtDokument} />;
                     }
                     return null;
                 }}
