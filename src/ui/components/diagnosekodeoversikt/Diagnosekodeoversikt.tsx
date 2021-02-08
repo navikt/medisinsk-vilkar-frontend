@@ -51,7 +51,6 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
         return submitData<DiagnosekodeResponse>(endreDiagnosekoderLink.href, {
             ...endreDiagnosekoderLink.requestPayload,
             diagnosekoder: diagnosekoder.filter(({ kode }) => kode !== diagnosekode.kode),
-            links: [],
         }).then(hentDiagnosekoder);
     };
 
