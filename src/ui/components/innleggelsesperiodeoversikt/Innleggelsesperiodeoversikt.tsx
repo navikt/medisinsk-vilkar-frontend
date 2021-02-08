@@ -24,7 +24,7 @@ export enum FieldName {
 
 Modal.setAppElement('#app');
 const Innleggelsesperiodeoversikt = (): JSX.Element => {
-    const { endpoints, behandlingUuid } = React.useContext(ContainerContext);
+    const { endpoints } = React.useContext(ContainerContext);
 
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [innleggelsesperioderResponse, setInnleggelsesperioderResponse] = React.useState<InnleggelsesperiodeResponse>(
@@ -36,7 +36,7 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const innleggelsesperioder = innleggelsesperioderResponse.perioder;
-    const links = innleggelsesperioderResponse.links;
+    const { links } = innleggelsesperioderResponse;
 
     const hentInnleggelsesperioder = () => {
         return fetchData(`${endpoints.innleggelsesperioder}`, {

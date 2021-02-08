@@ -24,7 +24,7 @@ interface DiagnosekodeoversiktProps {
 }
 
 const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktProps) => {
-    const { endpoints, behandlingUuid } = React.useContext(ContainerContext);
+    const { endpoints } = React.useContext(ContainerContext);
     const [isLoading, setIsLoading] = React.useState(true);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [diagnosekodeResponse, setDiagnosekodeResponse] = React.useState<DiagnosekodeResponse>({
