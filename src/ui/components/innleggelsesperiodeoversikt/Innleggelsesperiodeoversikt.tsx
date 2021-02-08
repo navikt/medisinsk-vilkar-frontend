@@ -39,7 +39,7 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
     const links = innleggelsesperioderResponse.links;
 
     const hentInnleggelsesperioder = () => {
-        return fetchData(`${endpoints.innleggelsesperioder}?behandlingUuid=${behandlingUuid}`, {
+        return fetchData(`${endpoints.innleggelsesperioder}`, {
             cancelToken: httpCanceler.token,
         });
     };
