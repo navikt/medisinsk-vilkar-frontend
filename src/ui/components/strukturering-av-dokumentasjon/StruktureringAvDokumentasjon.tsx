@@ -155,7 +155,7 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
                         return (
                             <StrukturerDokumentController
                                 ustrukturertDokument={valgtDokument}
-                                strukturerDokumentUrl={strukturerDokumentLink.href}
+                                strukturerDokumentLink={strukturerDokumentLink}
                                 onDokumentStrukturert={oppdaterDokumentoversikt}
                             />
                         );

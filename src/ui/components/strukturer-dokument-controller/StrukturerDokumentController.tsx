@@ -1,19 +1,20 @@
 import React, { useMemo } from 'react';
+import axios from 'axios';
 import Spinner from 'nav-frontend-spinner';
 import Dokument from '../../../types/Dokument';
 import StrukturerDokumentForm from '../strukturer-dokument-form/StrukturerDokumentForm';
 import { submitData } from '../../../util/httpUtils';
-import axios from 'axios';
+import Link from '../../../types/Link';
 
 interface StrukturerDokumentControllerProps {
-    strukturerDokumentUrl: string;
+    strukturerDokumentLink: Link;
     ustrukturertDokument: Dokument;
     onDokumentStrukturert: () => void;
 }
 
 const StrukturerDokumentController = ({
     ustrukturertDokument,
-    strukturerDokumentUrl,
+    strukturerDokumentLink: { requestPayload, href },
     onDokumentStrukturert,
 }: StrukturerDokumentControllerProps) => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -27,7 +28,7 @@ const StrukturerDokumentController = ({
 
     const strukturerDokument = (strukturertDokument) => {
         setIsLoading(true);
-        submitData(strukturerDokumentUrl, strukturertDokument, { cancelToken: httpCanceler.token }).then(
+        submitData(href, { ...requestPayload, ...strukturertDokument }, { cancelToken: httpCanceler.token }).then(
             () => {
                 setIsLoading(false);
                 onDokumentStrukturert();
