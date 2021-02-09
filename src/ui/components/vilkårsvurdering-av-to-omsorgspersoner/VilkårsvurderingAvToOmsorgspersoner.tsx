@@ -156,7 +156,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                                 <Knapp
                                     type="hoved"
                                     htmlType="button"
-                                    style={{ marginLeft: '2rem' }}
+                                    style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
                                     onClick={onFinished}
                                     mini
                                 >
