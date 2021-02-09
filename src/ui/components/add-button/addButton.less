@@ -1,15 +1,21 @@
-.addButtonContainer {
-  display: flex;
-}
-
 .addButton {
-  padding: 0;
-  color: #0067c5;
-  border: none;
-  border-bottom: 1px solid #0067c5;
-  background: none;
-  height: 23px;
-  margin-left: 0.5rem;
-  border-bottom: 1px solid #0067c5;
-  position: relative;
+    display: flex;
+    padding: 0;
+    color: #0067c5;
+    border: none;
+    background: none;
+    height: 23px;
+    margin-left: 0.5rem;
+    position: relative;
+    cursor: pointer;
+
+    &__text {
+        margin-left: 38px;
+        margin-top: 2px;
+        border-bottom: 1px solid #0067c5;
+    }
+
+    svg {
+        position: absolute;
+    }
 }
