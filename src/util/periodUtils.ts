@@ -1,5 +1,6 @@
 import { Period } from '../types/Period';
 import { dateFromString, isSameOrBefore } from './dateUtils';
+import { prettifyPeriod } from './formats';
 
 export const sortPeriodsByFomDate = (period1: Period, period2: Period): number => {
     if (period1.startsBefore(period2)) {
@@ -142,4 +143,24 @@ export const finnMaksavgrensningerForPerioder = (perioder: Period[]): Period => 
     });
 
     return maksimalSøknadsperiode;
+};
+
+export const getStringMedPerioder = (perioder: Period[]): string => {
+    if (perioder.length === 1) {
+        return `perioden ${prettifyPeriod(perioder[0])}.`;
+    }
+
+    let perioderString = '';
+    perioder.forEach((periode, index) => {
+        const prettyPeriod = prettifyPeriod(periode);
+        if (index === 0) {
+            perioderString = prettyPeriod;
+        } else if (index === perioder.length - 1) {
+            perioderString = `${perioderString} og ${prettyPeriod}`;
+        } else {
+            perioderString = `${perioderString}, ${prettyPeriod}`;
+        }
+    });
+
+    return `periodene ${perioderString}`;
 };

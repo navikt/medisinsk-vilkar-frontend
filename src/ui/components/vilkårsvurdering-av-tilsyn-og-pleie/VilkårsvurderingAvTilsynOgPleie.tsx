@@ -29,6 +29,7 @@ import NyVurderingAvTilsynsbehovForm, {
     FieldName,
 } from '../ny-vurdering-av-tilsynsbehov-form/NyVurderingAvTilsynsbehovForm';
 import Vurderingstype from '../../../types/Vurderingstype';
+import { getStringMedPerioder } from '../../../util/periodUtils';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     onVilkårVurdert: () => void;
@@ -155,8 +156,8 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
             {harPerioderSomSkalVurderes && (
                 <div>
                     <Alertstripe type="advarsel">
-                        {`Vurder behov for tilsyn og pleie for perioden ${prettifyPeriod(
-                            vurderingsoversikt?.resterendeVurderingsperioder[0]
+                        {`Vurder behov for tilsyn og pleie for ${getStringMedPerioder(
+                            vurderingsoversikt.resterendeVurderingsperioder
                         )}.`}
                     </Alertstripe>
                     {overlappendeVurderingsperioder && overlappendeVurderingsperioder.length > 0 && (

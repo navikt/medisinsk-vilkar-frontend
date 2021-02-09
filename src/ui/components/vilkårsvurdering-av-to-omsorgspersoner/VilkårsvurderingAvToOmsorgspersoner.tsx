@@ -8,9 +8,9 @@ import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import Vurderingstype from '../../../types/Vurderingstype';
-import { prettifyPeriod } from '../../../util/formats';
 import { fetchData } from '../../../util/httpUtils';
 import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
+import { getStringMedPerioder } from '../../../util/periodUtils';
 import processVurderingsoversikt, {
     finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder,
 } from '../../../util/vurderingsoversiktUtils';
@@ -122,8 +122,8 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
             {harPerioderSomSkalVurderes && (
                 <>
                     <AlertStripeAdvarsel>
-                        {`Vurder behov for to omsorgspersoner for perioden ${prettifyPeriod(
-                            vurderingsoversikt?.resterendeVurderingsperioder[0]
+                        {`Vurder behov for to omsorgspersoner for ${getStringMedPerioder(
+                            vurderingsoversikt.resterendeVurderingsperioder
                         )}.`}
                     </AlertStripeAdvarsel>
                     {overlappendeVurderingsperioder && overlappendeVurderingsperioder.length > 0 && (
