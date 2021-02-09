@@ -30,6 +30,8 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
     const [diagnosekodeResponse, setDiagnosekodeResponse] = React.useState<DiagnosekodeResponse>({
         diagnosekoder: [],
         links: [],
+        behandlingUuid: '',
+        versjon: null,
     });
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
@@ -49,8 +51,8 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
 
     const slettDiagnosekode = (diagnosekode: Diagnosekode) => {
         return submitData(endreDiagnosekoderLink.href, {
-            behandlingUuid: endreDiagnosekoderLink.behandlingUuid,
-            versjon: endreDiagnosekoderLink.versjon,
+            behandlingUuid: diagnosekodeResponse.behandlingUuid,
+            versjon: diagnosekodeResponse.versjon,
             diagnosekoder: diagnosekoder.filter((kode) => kode !== diagnosekode),
         }).then(hentDiagnosekoder);
     };
@@ -90,8 +92,8 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                     submitData(
                         endreDiagnosekoderLink.href,
                         {
-                            behandlingUuid: endreDiagnosekoderLink.behandlingUuid,
-                            versjon: endreDiagnosekoderLink.versjon,
+                            behandlingUuid: diagnosekodeResponse.behandlingUuid,
+                            versjon: diagnosekodeResponse.versjon,
                             diagnosekoder: [...diagnosekoder, nyDiagnosekode.kode],
                         },
                         { cancelToken: httpCanceler.token }
