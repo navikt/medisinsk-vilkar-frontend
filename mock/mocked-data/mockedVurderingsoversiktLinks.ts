@@ -8,6 +8,9 @@ const links: Link[] = [
         href: 'http://localhost:8082/mock/opprett-vurdering',
         versjon: null,
         behandlingUuid: 'HER_ER_BEHANDLINGSID',
+        requestPayload: {
+            behandlingUuid: 'HER_ER_BEHANDLINGSID',
+        },
     },
     {
         rel: LinkRel.DATA_TIL_VURDERING,
