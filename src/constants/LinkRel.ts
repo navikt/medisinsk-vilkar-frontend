@@ -5,7 +5,7 @@ enum LinkRel {
     DATA_TIL_VURDERING = 'data-til-vurdering',
     ENDRE_DOKUMENT = 'sykdom-dokument-endring',
     ENDRE_INNLEGGELSESPERIODER = 'sykdom-innleggelse-endring',
-    ENDRE_DIAGNOSEKODER = 'sykdom-diagnosekode-endring',
+    ENDRE_DIAGNOSEKODER = 'sykdom-diagnosekoder-endring',
 }
 
 export default LinkRel;
