@@ -48,9 +48,10 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
     };
 
     const slettDiagnosekode = (diagnosekode: Diagnosekode) => {
-        return submitData<DiagnosekodeResponse>(endreDiagnosekoderLink.href, {
-            ...endreDiagnosekoderLink.requestPayload,
-            diagnosekoder: diagnosekoder.filter(({ kode }) => kode !== diagnosekode.kode),
+        return submitData(endreDiagnosekoderLink.href, {
+            behandlingUuid: endreDiagnosekoderLink.behandlingUuid,
+            versjon: endreDiagnosekoderLink.versjon,
+            diagnosekoder: diagnosekoder.filter((kode) => kode !== diagnosekode),
         }).then(hentDiagnosekoder);
     };
 
@@ -89,8 +90,9 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                     submitData(
                         endreDiagnosekoderLink.href,
                         {
-                            ...endreDiagnosekoderLink.requestPayload,
-                            diagnosekoder: [...diagnosekoder, nyDiagnosekode],
+                            behandlingUuid: endreDiagnosekoderLink.behandlingUuid,
+                            versjon: endreDiagnosekoderLink.versjon,
+                            diagnosekoder: [...diagnosekoder, nyDiagnosekode.kode],
                         },
                         { cancelToken: httpCanceler.token }
                     )

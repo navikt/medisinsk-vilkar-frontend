@@ -6,14 +6,15 @@ const links: Link[] = [
         rel: LinkRel.OPPRETT_VURDERING,
         type: 'POST',
         href: 'http://localhost:8082/mock/opprett-vurdering',
-        requestPayload: {
-            behandlingUuid: 'mockedUuid',
-        },
+        versjon: null,
+        behandlingUuid: 'HER_ER_BEHANDLINGSID',
     },
     {
         rel: LinkRel.DATA_TIL_VURDERING,
         type: 'GET',
         href: 'http://localhost:8082/mock/data-til-vurdering',
+        versjon: null,
+        behandlingUuid: 'HER_ER_BEHANDLINGSID',
     },
 ];
 

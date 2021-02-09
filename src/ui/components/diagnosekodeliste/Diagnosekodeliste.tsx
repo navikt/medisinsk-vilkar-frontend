@@ -14,8 +14,8 @@ const Diagnosekodeliste = ({ diagnosekoder, onDeleteClick }: DiagnosekodelistePr
         <ul className={styles.diagnosekodeliste}>
             {diagnosekoder.map((diagnosekode, index) => {
                 return (
-                    <li key={`${diagnosekode.kode}${index}`} className={styles.diagnosekodeliste__element}>
-                        <p className={styles.beskrivelse}>{diagnosekode.beskrivelse}</p>
+                    <li key={`${diagnosekode}${index}`} className={styles.diagnosekodeliste__element}>
+                        <p className={styles.beskrivelse}>{diagnosekode}</p>
                         <WriteAccessBoundContent
                             contentRenderer={() => (
                                 <div className={styles.lenkeContainer}>
