@@ -147,7 +147,7 @@ export const finnMaksavgrensningerForPerioder = (perioder: Period[]): Period => 
 
 export const getStringMedPerioder = (perioder: Period[]): string => {
     if (perioder.length === 1) {
-        return `perioden ${prettifyPeriod(perioder[0])}.`;
+        return `perioden ${prettifyPeriod(perioder[0])}`;
     }
 
     let perioderString = '';
