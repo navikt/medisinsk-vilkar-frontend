@@ -8,12 +8,10 @@ interface AddButtonProps {
 }
 
 const AddButton = ({ label, onClick }: AddButtonProps) => (
-    <div className={styles.addButtonContainer}>
+    <button className={styles.addButton} type="button" onClick={onClick}>
         <PlusIcon />
-        <button className={styles.addButton} type="button" onClick={onClick}>
-            {label}
-        </button>
-    </div>
+        <span className={styles.addButton__text}>{label}</span>
+    </button>
 );
 
 export default AddButton;
