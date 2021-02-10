@@ -1,8 +1,9 @@
+import React, { useEffect } from 'react';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import Modal from 'nav-frontend-modal';
-import React, { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { Element } from 'nav-frontend-typografi';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
@@ -12,7 +13,6 @@ import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import { FieldName } from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
 import styles from './innleggelsesperiodeFormModal.less';
 import { Period } from '../../../types/Period';
-import { Element } from 'nav-frontend-typografi';
 
 interface InnleggelsesperiodeFormModal {
     defaultValues: {
@@ -31,13 +31,16 @@ const InnleggelsesperiodeFormModal = ({
 }: InnleggelsesperiodeFormModal): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
+        mode: 'onChange',
     });
 
     const {
         formState: { isDirty },
+        watch,
     } = formMethods;
 
     const [showDeletedWarning, setShowDeletedWarning] = React.useState(false);
+    const innleggelsesperioder = watch(FieldName.INNLEGGELSESPERIODER);
 
     const handleSubmit = (formState) => {
         lagreInnleggelsesperioder(formState);
@@ -78,6 +81,26 @@ const InnleggelsesperiodeFormModal = ({
                                     calendarSettings: { position: 'fullscreen' },
                                 }}
                                 defaultValues={defaultValues[FieldName.INNLEGGELSESPERIODER] || []}
+                                validators={{
+                                    overlaps: (periodValue: Period) => {
+                                        const innleggelsesperioderFormValue = innleggelsesperioder
+                                            .filter(({ period }: any) => period !== periodValue)
+                                            .map(({ period }: any) => new Period(period.fom, period.tom));
+
+                                        const period = new Period(periodValue.fom, periodValue.tom);
+                                        if (period.overlapsWithSomePeriodInList(innleggelsesperioderFormValue)) {
+                                            return 'Innleggelsesperiodene kan ikke overlappe';
+                                        }
+                                        return null;
+                                    },
+                                    fomIsBeforeOrSameAsTom: (periodValue: Period) => {
+                                        const period = new Period(periodValue.fom, periodValue.tom);
+                                        if (period.fomIsBeforeOrSameAsTom() === false) {
+                                            return 'Fra-dato må være tidligere eller samme som til-dato';
+                                        }
+                                        return null;
+                                    },
+                                }}
                                 renderBeforeFieldArray={(fieldArrayMethods) => (
                                     <>
                                         <Box marginTop={Margin.large} marginBottom={Margin.medium}>

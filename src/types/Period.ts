@@ -47,4 +47,14 @@ export class Period {
         const periodTom = dateFromString(this.tom);
         return periodTom.isAfter(dateInQuestion);
     }
+
+    overlapsWithSomePeriodInList(periodList: Period[]) {
+        return periodList.some((currentPeriod) => this.overlapsWith(currentPeriod));
+    }
+
+    fomIsBeforeOrSameAsTom() {
+        const fomDate = dateFromString(this.fom);
+        const tomDate = dateFromString(this.tom);
+        return fomDate.isBefore(tomDate) || fomDate.isSame(tomDate);
+    }
 }
