@@ -146,7 +146,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                 </Box>
             )}
             {!harPerioderSomSkalVurderes && (
-                <Box marginBottom={Margin.large}>
+                <Box marginTop={Margin.large} marginBottom={Margin.medium}>
                     <Alertstripe type="suksess">
                         {!harVurdertePerioder
                             ? 'Ingen perioder å vurdere'
