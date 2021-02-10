@@ -1,4 +1,4 @@
-import { RadioPanelGruppe as RadioPanelGroup } from 'nav-frontend-skjema';
+import { RadioGruppe, Radio } from 'nav-frontend-skjema';
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
@@ -31,19 +31,22 @@ const RadioGroupPanel = ({ question, name, validators, radios, onChange }: Radio
             render={(props) => {
                 const reactHookFormOnChange = props.onChange;
                 return (
-                    <RadioPanelGroup
-                        legend={question}
-                        name={name}
-                        onChange={(event, newValue) => {
-                            if (customOnChange) {
-                                customOnChange(newValue);
-                            }
-                            reactHookFormOnChange(newValue);
-                        }}
-                        radios={radios}
-                        checked={props.value}
-                        feil={errors[name]?.message}
-                    />
+                    <RadioGruppe legend={question} feil={errors[name]?.message}>
+                        {radios.map((radio) => (
+                            <Radio
+                                key={radio.value}
+                                label={radio.label}
+                                name={name}
+                                onChange={() => {
+                                    if (customOnChange) {
+                                        customOnChange(radio.value);
+                                    }
+                                    reactHookFormOnChange(radio.value);
+                                }}
+                                checked={radio.value === props.value}
+                            />
+                        ))}
+                    </RadioGruppe>
                 );
             }}
         />
