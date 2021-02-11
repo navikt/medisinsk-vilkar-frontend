@@ -166,7 +166,7 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
                     return null;
                 }}
             />
-            <Box marginTop={Margin.xLarge}>
+            <Box marginTop={Margin.xxLarge}>
                 <DokumentasjonFooter
                     firstSectionRenderer={() => <Innleggelsesperiodeoversikt />}
                     secondSectionRenderer={() => (
