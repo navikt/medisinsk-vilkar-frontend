@@ -24,7 +24,7 @@ export async function postNyVurdering(
                 perioder,
                 resultat,
                 tekst,
-                tilknyttedeDokumenter: dokumenter,
+                tilknyttedeDokumenter: dokumenter.map((dokument) => dokument.id),
                 dryRun: dryRun || false,
             },
             { cancelToken }
