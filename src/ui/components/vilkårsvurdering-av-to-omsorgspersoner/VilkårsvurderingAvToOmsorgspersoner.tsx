@@ -207,15 +207,12 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                             }
 
                             const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
-                            const dataTilVurderingUrl = findHrefByRel(
-                                LinkRel.DATA_TIL_VURDERING,
-                                vurderingsoversikt.links
-                            );
+
                             return (
                                 <NyVurderingController
                                     vurderingstype={Vurderingstype.TO_OMSORGSPERSONER}
                                     opprettVurderingLink={opprettLink}
-                                    dataTilVurderingUrl={dataTilVurderingUrl}
+                                    dataTilVurderingUrl={endpoints.dataTilVurdering}
                                     onVurderingLagret={oppdaterVurderingsoversikt}
                                     formRenderer={(dokumenter, onSubmit) => (
                                         <NyVurderingAvToOmsorgspersonerForm

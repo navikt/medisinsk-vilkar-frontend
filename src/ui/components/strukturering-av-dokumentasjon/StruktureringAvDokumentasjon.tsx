@@ -109,7 +109,7 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
                                 <Hovedknapp
                                     htmlType="button"
                                     mini
-                                    style={{ marginLeft: '2rem' }}
+                                    style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
                                     onClick={onProgressButtonClick}
                                 >
                                     Gå videre

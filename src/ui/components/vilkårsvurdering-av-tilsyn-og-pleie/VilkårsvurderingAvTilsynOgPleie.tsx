@@ -141,7 +141,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                                 <Knapp
                                     type="hoved"
                                     htmlType="button"
-                                    style={{ marginLeft: '2rem' }}
+                                    style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
                                     onClick={onVilkårVurdert}
                                     mini
                                 >
@@ -187,7 +187,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                             ? findHrefByRel(LinkRel.HENT_VURDERING, valgtVurderingselement.links)
                             : '';
                         const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
-                        const dataTilVurderingUrl = findHrefByRel(LinkRel.DATA_TIL_VURDERING, vurderingsoversikt.links);
                         return (
                             <>
                                 {harValgtVurderingselement && (
@@ -204,7 +203,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                                     <NyVurderingController
                                         vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
                                         opprettVurderingLink={opprettLink}
-                                        dataTilVurderingUrl={dataTilVurderingUrl}
+                                        dataTilVurderingUrl={endpoints.dataTilVurdering}
                                         onVurderingLagret={oppdaterVurderingsoversikt}
                                         formRenderer={(dokumenter, onSubmit) => (
                                             <NyVurderingAvTilsynsbehovForm

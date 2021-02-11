@@ -13,6 +13,7 @@ interface ContainerContract {
         diagnosekoder: string;
         leggTilDiagnosekode: string;
         slettDiagnosekode: string;
+        dataTilVurdering: string;
     };
     behandlingUuid: string;
     readOnly: boolean;
