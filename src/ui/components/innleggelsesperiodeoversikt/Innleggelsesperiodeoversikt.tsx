@@ -4,7 +4,7 @@ import { Element } from 'nav-frontend-typografi';
 import axios from 'axios';
 import React, { useEffect, useMemo } from 'react';
 import { Period } from '../../../types/Period';
-import { fetchData, submitData } from '../../../util/httpUtils';
+import { get } from '../../../util/httpUtils';
 import ContainerContext from '../../context/ContainerContext';
 import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
@@ -17,6 +17,7 @@ import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBo
 import { InnleggelsesperiodeResponse } from '../../../types/InnleggelsesperiodeResponse';
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
+import { postInnleggelsesperioder, postInnleggelsesperioderDryRun } from '../../../api/api';
 
 export enum FieldName {
     INNLEGGELSESPERIODER = 'innleggelsesperioder',
@@ -36,10 +37,9 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const innleggelsesperioder = innleggelsesperioderResponse.perioder;
-    const { links } = innleggelsesperioderResponse;
 
     const hentInnleggelsesperioder = () => {
-        return fetchData(`${endpoints.innleggelsesperioder}`, {
+        return get(`${endpoints.innleggelsesperioder}`, {
             cancelToken: httpCanceler.token,
         });
     };
@@ -55,10 +55,10 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
 
         const { href } = findLinkByRel(LinkRel.ENDRE_INNLEGGELSESPERIODER, innleggelsesperioderResponse.links);
         const { behandlingUuid, versjon } = innleggelsesperioderResponse;
-        submitData(
+        postInnleggelsesperioder(
             href,
             { behandlingUuid, versjon, perioder: nyeInnleggelsesperioder },
-            { cancelToken: httpCanceler.token }
+            httpCanceler.token
         )
             .then(hentInnleggelsesperioder)
             .then((response: InnleggelsesperiodeResponse) => {
@@ -144,8 +144,19 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
                         [FieldName.INNLEGGELSESPERIODER]: innleggelsesperioder,
                     }}
                     setModalIsOpen={setModalIsOpen}
-                    lagreInnleggelsesperioder={lagreInnleggelsesperioder}
+                    onSubmit={lagreInnleggelsesperioder}
                     isLoading={isLoading}
+                    endringerPåvirkerAndreBehandlinger={(nyeInnleggelsesperioder) => {
+                        const { href, requestPayload } = findLinkByRel(
+                            LinkRel.ENDRE_INNLEGGELSESPERIODER,
+                            innleggelsesperioderResponse.links
+                        );
+                        return postInnleggelsesperioderDryRun(
+                            href,
+                            { ...requestPayload, perioder: nyeInnleggelsesperioder },
+                            httpCanceler.token
+                        );
+                    }}
                 />
             )}
         </div>

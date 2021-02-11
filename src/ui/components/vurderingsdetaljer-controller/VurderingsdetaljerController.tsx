@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import axios from 'axios';
 import Spinner from 'nav-frontend-spinner';
 import Vurdering from '../../../types/Vurdering';
-import { fetchData } from '../../../util/httpUtils';
+import { get } from '../../../util/httpUtils';
 import PageError from '../page-error/PageError';
 
 interface VurderingsdetaljerControllerProps {
@@ -21,7 +21,7 @@ const VurderingsdetaljerController = ({
     const httpCanceler = useMemo(() => axios.CancelToken.source(), [hentVurderingUrl]);
 
     function hentVurdering(): Promise<Vurdering> {
-        return fetchData(hentVurderingUrl, { cancelToken: httpCanceler.token });
+        return get(hentVurderingUrl, { cancelToken: httpCanceler.token });
     }
 
     const handleError = () => {

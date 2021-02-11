@@ -13,21 +13,24 @@ import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import { FieldName } from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
 import styles from './innleggelsesperiodeFormModal.less';
 import { Period } from '../../../types/Period';
+import { InnleggelsesperiodeDryRunResponse } from '../../../api/api';
 
 interface InnleggelsesperiodeFormModal {
     defaultValues: {
         [FieldName.INNLEGGELSESPERIODER]: Period[];
     };
     setModalIsOpen: (isOpen: boolean) => void;
-    lagreInnleggelsesperioder: (formState) => void;
+    onSubmit: (formState) => void;
     isLoading: boolean;
+    endringerPåvirkerAndreBehandlinger: (innleggelsesperioder: Period[]) => Promise<InnleggelsesperiodeDryRunResponse>;
 }
 
 const InnleggelsesperiodeFormModal = ({
     defaultValues,
     setModalIsOpen,
-    lagreInnleggelsesperioder,
+    onSubmit,
     isLoading,
+    endringerPåvirkerAndreBehandlinger,
 }: InnleggelsesperiodeFormModal): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
@@ -37,23 +40,20 @@ const InnleggelsesperiodeFormModal = ({
     const {
         formState: { isDirty },
         watch,
+        getValues,
     } = formMethods;
 
-    const [showDeletedWarning, setShowDeletedWarning] = React.useState(false);
+    const [showWarningMessage, setShowWarningMessage] = React.useState(false);
     const innleggelsesperioder = watch(FieldName.INNLEGGELSESPERIODER);
 
     const handleSubmit = (formState) => {
-        lagreInnleggelsesperioder(formState);
+        onSubmit(formState);
     };
-
-    useEffect(() => {
-        return () => setShowDeletedWarning(false);
-    }, []);
 
     const handleCloseModal = () => {
         if ((isDirty && window.confirm('Du vil miste alle endringer du har gjort')) || !isDirty) {
             setModalIsOpen(false);
-            setShowDeletedWarning(false);
+            setShowWarningMessage(false);
         }
     };
 
@@ -80,11 +80,18 @@ const InnleggelsesperiodeFormModal = ({
                                     ariaLabel: 'Til',
                                     calendarSettings: { position: 'fullscreen' },
                                 }}
+                                afterOnChange={() => {
+                                    endringerPåvirkerAndreBehandlinger(
+                                        innleggelsesperioder
+                                    ).then(({ førerTilRevurdering }) => setShowWarningMessage(førerTilRevurdering));
+                                }}
                                 defaultValues={defaultValues[FieldName.INNLEGGELSESPERIODER] || []}
                                 validators={{
                                     overlaps: (periodValue: Period) => {
-                                        const innleggelsesperioderFormValue = innleggelsesperioder
-                                            .filter(({ period }: any) => period !== periodValue)
+                                        const innleggelsesperioderFormValue = getValues()
+                                            .innleggelsesperioder.filter(
+                                                (periodWrapper: any) => periodWrapper.period !== periodValue
+                                            )
                                             .map(({ period }: any) => new Period(period.fom, period.tom));
 
                                         const period = new Period(periodValue.fom, periodValue.tom);
@@ -123,21 +130,14 @@ const InnleggelsesperiodeFormModal = ({
                                     </>
                                 )}
                                 renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => {
-                                    return (
-                                        <DeleteButton
-                                            onClick={() => {
-                                                fieldArrayMethods.remove(index);
-                                                setShowDeletedWarning(true);
-                                            }}
-                                        />
-                                    );
+                                    return <DeleteButton onClick={() => fieldArrayMethods.remove(index)} />;
                                 }}
                             />
-                            {showDeletedWarning && (
+                            {showWarningMessage && (
                                 <Box marginTop={Margin.large}>
                                     <AlertStripeAdvarsel>
-                                        Ved å slette en innleggelsesperiode setter du i gang en revurdering.. Når du
-                                        trykker lagre vil revurderingen starte automatisk. Påvirker alle søkere.
+                                        Endringene du har gjort på innleggelsesperiodene vil føre til en ny revurdering
+                                        av en annen behandling. Påvirker alle søkere.
                                     </AlertStripeAdvarsel>
                                 </Box>
                             )}

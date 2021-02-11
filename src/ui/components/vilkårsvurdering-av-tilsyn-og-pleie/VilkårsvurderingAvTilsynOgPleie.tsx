@@ -6,7 +6,6 @@ import Spinner from 'nav-frontend-spinner';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import { prettifyPeriod } from '../../../util/formats';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
@@ -15,7 +14,7 @@ import vilkårsvurderingReducer from './reducer';
 import processVurderingsoversikt, {
     finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder,
 } from '../../../util/vurderingsoversiktUtils';
-import { fetchData } from '../../../util/httpUtils';
+import { get } from '../../../util/httpUtils';
 import PageError from '../page-error/PageError';
 import LinkRel from '../../../constants/LinkRel';
 import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
@@ -70,7 +69,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
     const overlappendeVurderingsperioder = finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder(vurderingsoversikt);
 
     const getVurderingsoversikt = () => {
-        return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, {
+        return get<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, {
             cancelToken: httpCanceler.token,
         });
     };

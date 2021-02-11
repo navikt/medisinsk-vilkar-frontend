@@ -9,7 +9,7 @@ import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
 import IconWithText from '../icon-with-text/IconWithText';
 import WarningIcon from '../icons/WarningIcon';
 import ContainerContext from '../../context/ContainerContext';
-import { fetchData, submitData } from '../../../util/httpUtils';
+import { get, post } from '../../../util/httpUtils';
 import Diagnosekode from '../../../types/Diagnosekode';
 import DiagnosekodeModal from '../diagnosekode-modal/DiagnosekodeModal';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
@@ -40,7 +40,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
 
     const hentDiagnosekoder = () => {
         setIsLoading(true);
-        return fetchData<DiagnosekodeResponse>(`${endpoints.diagnosekoder}`, {
+        return get<DiagnosekodeResponse>(`${endpoints.diagnosekoder}`, {
             cancelToken: httpCanceler.token,
         }).then((response: DiagnosekodeResponse) => {
             setDiagnosekodeResponse(response);
@@ -50,7 +50,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
     };
 
     const slettDiagnosekode = (diagnosekode: Diagnosekode) => {
-        return submitData(endreDiagnosekoderLink.href, {
+        return post(endreDiagnosekoderLink.href, {
             behandlingUuid: diagnosekodeResponse.behandlingUuid,
             versjon: diagnosekodeResponse.versjon,
             diagnosekoder: diagnosekoder.filter((kode) => kode !== diagnosekode),
@@ -89,7 +89,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             <DiagnosekodeModal
                 isOpen={modalIsOpen}
                 onSaveClick={(nyDiagnosekode: Diagnosekode) =>
-                    submitData(
+                    post(
                         endreDiagnosekoderLink.href,
                         {
                             behandlingUuid: diagnosekodeResponse.behandlingUuid,

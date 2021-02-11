@@ -13,7 +13,6 @@ import mockedDiagnosekodeSearchResponse from './mocked-data/mockedDiagnosekodeSe
 import createStrukturertDokument from './mocked-data/createStrukturertDokument';
 import mockedInnleggelsesperioder from './mocked-data/mockedInnleggelsesperioder';
 import { Dokumenttype } from '../src/types/Dokument';
-import LinkRel from '../src/constants/LinkRel';
 
 const app = express();
 
@@ -101,8 +100,12 @@ app.use('/mock/innleggelsesperioder', (req, res) => {
 });
 
 app.use('/mock/endre-innleggelsesperioder', (req, res) => {
-    mockedInnleggelsesperioder.perioder = req.body.perioder || [];
-    res.send({});
+    if (req.body.dryRun === true) {
+        res.send({ førerTilRevurdering: true });
+    } else {
+        mockedInnleggelsesperioder.perioder = req.body.perioder || [];
+        res.send({});
+    }
 });
 
 const port = 8082;

@@ -8,7 +8,7 @@ import Dokumentnavigasjon from '../dokumentnavigasjon/Dokumentnavigasjon';
 import StrukturertDokumentDetaljer from '../strukturert-dokument-detaljer/StrukturertDokumentDetaljer';
 import Dokument, { Dokumentoversikt, Dokumenttype } from '../../../types/Dokument';
 import ContainerContext from '../../context/ContainerContext';
-import { fetchData } from '../../../util/httpUtils';
+import { get } from '../../../util/httpUtils';
 import PageError from '../page-error/PageError';
 import dokumentReducer from './reducer';
 import ActionType from './actionTypes';
@@ -44,7 +44,7 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
     const { dokumentoversikt, isLoading, visDokumentDetails, valgtDokument, dokumentoversiktFeilet } = state;
 
     const getDokumentoversikt = () => {
-        return fetchData<Dokumentoversikt>(endpoints.dokumentoversikt, {
+        return get<Dokumentoversikt>(endpoints.dokumentoversikt, {
             cancelToken: httpCanceler.token,
         });
     };
