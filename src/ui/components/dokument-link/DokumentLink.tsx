@@ -6,6 +6,8 @@ import { prettifyDate } from '../../../util/formats';
 import IconWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import OnePersonOutline from '../icons/OnePersonOutline';
 import styles from './dokumentLink.less';
+import { findLinkByRel } from '../../../util/linkUtils';
+import LinkRel from '../../../constants/LinkRel';
 
 interface DokumentLinkProps {
     dokument: Dokument;
@@ -22,15 +24,10 @@ const renderDokumenttypeText = (dokumenttype: Dokumenttype) => {
 };
 
 const DokumentLink = ({ dokument, etikett }: DokumentLinkProps) => {
-    const { type, datert, location } = dokument;
+    const { type, datert, links } = dokument;
+    const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
     return (
-        <Lenke
-            href={location}
-            onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-            }}
-        >
+        <Lenke href={dokumentLink.href} target="_blank" rel="noopener">
             {renderDokumenttypeText(type)} {prettifyDate(dayjs(datert).utc(true).toISOString())}
             <div className={styles.dokumentLink__etikett}>
                 {etikett && (
