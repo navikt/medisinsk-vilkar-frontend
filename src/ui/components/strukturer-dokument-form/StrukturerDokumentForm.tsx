@@ -9,6 +9,8 @@ import Box, { Margin } from '../box/Box';
 import { required } from '../../form/validators';
 import { Dokument, Dokumenttype } from '../../../types/Dokument';
 import { lagStrukturertDokument } from '../../../util/dokumentUtils';
+import { findLinkByRel } from '../../../util/linkUtils';
+import LinkRel from '../../../constants/LinkRel';
 
 export enum FieldName {
     INNEHOLDER_MEDISINSKE_OPPLYSNINGER = 'inneholderMedisinskeOpplysninger',
@@ -30,6 +32,7 @@ interface StrukturerDokumentFormProps {
 
 const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormProps) => {
     const formMethods = useForm<StrukturerDokumentFormState>();
+    const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, dokument.links);
 
     const lagNyttStrukturertDokument = (formState: StrukturerDokumentFormState) => {
         onSubmit(lagStrukturertDokument(formState, dokument));
@@ -43,7 +46,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormPr
                     onSubmit={formMethods.handleSubmit((formState) => lagNyttStrukturertDokument(formState))}
                 >
                     <Box marginTop={Margin.xLarge}>
-                        <Lenke href={dokument.location} target="_blank">
+                        <Lenke href={dokumentLink.href} target="_blank">
                             Åpne dokument
                         </Lenke>
                     </Box>

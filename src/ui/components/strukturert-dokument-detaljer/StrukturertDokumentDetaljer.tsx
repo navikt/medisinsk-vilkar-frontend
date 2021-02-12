@@ -5,6 +5,8 @@ import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import Box, { Margin } from '../box/Box';
 import LabelledContent from '../labelled-content/LabelledContent';
 import { prettifyDate } from '../../../util/formats';
+import { findLinkByRel } from '../../../util/linkUtils';
+import LinkRel from '../../../constants/LinkRel';
 
 interface StrukturertDokumentDetaljerProps {
     dokument: Dokument;
@@ -24,11 +26,12 @@ const renderDokumenttypeContent = (dokumenttype: Dokumenttype) => {
 };
 
 const StrukturertDokumentDetaljer = ({ dokument }: StrukturertDokumentDetaljerProps) => {
-    const { type, datert } = dokument;
+    const { type, datert, links } = dokument;
+    const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
     return (
         <DetailView title="Om dokumentet">
             <Box marginTop={Margin.xLarge}>
-                <Lenke href={dokument.location} target="_blank">
+                <Lenke href={dokumentLink.href} target="_blank">
                     Åpne dokument
                 </Lenke>
             </Box>
