@@ -7,7 +7,7 @@ import NyVurderingAvToOmsorgspersonerForm, {
 import { Period } from '../../../types/Period';
 import Dokument from '../../../types/Dokument';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-import { fetchData, submitData } from '../../../util/httpUtils';
+import { get, post } from '../../../util/httpUtils';
 import Vurderingstype from '../../../types/Vurderingstype';
 import Link from '../../../types/Link';
 import PageError from '../page-error/PageError';
@@ -34,7 +34,7 @@ const NyVurderingAvToOmsorgspersonerController = ({
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
-        return submitData<any>(
+        return post<any>(
             opprettVurderingLink.href,
             {
                 behandlingUuid: opprettVurderingLink.requestPayload.behandlingUuid,
@@ -66,7 +66,7 @@ const NyVurderingAvToOmsorgspersonerController = ({
         if (!dataTilVurderingUrl) {
             return new Promise((resolve) => resolve([]));
         }
-        return fetchData(dataTilVurderingUrl, { cancelToken: httpCanceler.token });
+        return get(dataTilVurderingUrl, { cancelToken: httpCanceler.token });
     }
 
     const handleError = () => {

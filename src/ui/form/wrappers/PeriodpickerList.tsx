@@ -25,6 +25,7 @@ interface PeriodpickerListProps {
     renderContentAfterElement?: (index: number, numberOfItems: number, fieldArrayMethods) => void;
     renderBeforeFieldArray?: (fieldArrayMethods) => void;
     renderAfterFieldArray?: (fieldArrayMethods) => void;
+    afterOnChange?: () => void;
 }
 const PeriodpickerList = ({
     name,
@@ -36,6 +37,7 @@ const PeriodpickerList = ({
     renderBeforeFieldArray,
     renderAfterFieldArray,
     renderContentAfterElement,
+    afterOnChange,
 }: PeriodpickerListProps): JSX.Element => {
     const formMethods = useFormContext();
     const { control, errors } = formMethods;
@@ -67,9 +69,10 @@ const PeriodpickerList = ({
                                                     label={fromDatepickerProps.label}
                                                     ariaLabel={fromDatepickerProps.ariaLabel}
                                                     value={value?.fom || ''}
-                                                    onChange={(fomValue) =>
-                                                        onChange(new Period(fomValue, value?.tom || ''))
-                                                    }
+                                                    onChange={(fomValue) => {
+                                                        onChange(new Period(fomValue, value?.tom || ''));
+                                                        if (afterOnChange) afterOnChange();
+                                                    }}
                                                     inputId={`${name}[${index}].fom`}
                                                 />
                                                 <div style={{ display: 'flex', marginLeft: '1rem' }}>
@@ -78,9 +81,10 @@ const PeriodpickerList = ({
                                                         label={toDatepickerProps.label}
                                                         ariaLabel={toDatepickerProps.ariaLabel}
                                                         value={value?.tom || ''}
-                                                        onChange={(tomValue) =>
-                                                            onChange(new Period(value?.fom || '', tomValue))
-                                                        }
+                                                        onChange={(tomValue) => {
+                                                            onChange(new Period(value?.fom || '', tomValue));
+                                                            if (afterOnChange) afterOnChange();
+                                                        }}
                                                         inputId={`${name}[${index}].tom`}
                                                     />
                                                 </div>

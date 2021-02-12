@@ -4,12 +4,13 @@ import Dokument from '../../../types/Dokument';
 import Link from '../../../types/Link';
 import { Vurderingsversjon } from '../../../types/Vurdering';
 import Vurderingstype from '../../../types/Vurderingstype';
-import { fetchData, postNyVurdering, postNyVurderingDryRun } from '../../../util/httpUtils';
+import { get } from '../../../util/httpUtils';
 import PageContainer from '../page-container/PageContainer';
 import { PeriodeMedEndring, PerioderMedEndringResponse } from '../../../types/PeriodeMedEndring';
 import OverlappendePeriodeModal from '../overlappende-periode-modal/OverlappendePeriodeModal';
 import ActionType from './actionTypes';
 import nyVurderingControllerReducer from './reducer';
+import { postNyVurdering, postNyVurderingDryRun } from '../../../api/api';
 
 interface NyVurderingController {
     opprettVurderingLink: Link;
@@ -48,7 +49,8 @@ const NyVurderingController = ({
     function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
         dispatch({ type: ActionType.PENDING });
         return postNyVurdering(
-            opprettVurderingLink,
+            opprettVurderingLink.href,
+            opprettVurderingLink.behandlingUuid,
             { ...nyVurderingsversjon, type: vurderingstype },
             httpCanceler.token
         ).then(
@@ -66,7 +68,8 @@ const NyVurderingController = ({
         nyVurderingsversjon: Vurderingsversjon
     ): Promise<PerioderMedEndringResponse> => {
         return postNyVurderingDryRun(
-            opprettVurderingLink,
+            opprettVurderingLink.href,
+            opprettVurderingLink.behandlingUuid,
             { ...nyVurderingsversjon, type: vurderingstype },
             httpCanceler.token
         );
@@ -98,7 +101,7 @@ const NyVurderingController = ({
         if (!dataTilVurderingUrl) {
             return new Promise((resolve) => resolve([]));
         }
-        return fetchData(dataTilVurderingUrl, { cancelToken: httpCanceler.token });
+        return get(dataTilVurderingUrl, { cancelToken: httpCanceler.token });
     }
 
     const handleHentDataTilVurderingError = () => {

@@ -8,7 +8,7 @@ import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import Vurderingstype from '../../../types/Vurderingstype';
-import { fetchData } from '../../../util/httpUtils';
+import { get } from '../../../util/httpUtils';
 import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
 import { getStringMedPerioder } from '../../../util/periodUtils';
 import processVurderingsoversikt, {
@@ -59,7 +59,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const overlappendeVurderingsperioder = finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder(vurderingsoversikt);
 
     const getVurderingsoversikt = () => {
-        return fetchData<Vurderingsoversikt>(endpoints.vurderingsoversiktBehovForToOmsorgspersoner, {
+        return get<Vurderingsoversikt>(endpoints.vurderingsoversiktBehovForToOmsorgspersoner, {
             cancelToken: httpCanceler.token,
         });
     };

@@ -3,7 +3,7 @@ import axios from 'axios';
 import Spinner from 'nav-frontend-spinner';
 import Dokument from '../../../types/Dokument';
 import StrukturerDokumentForm from '../strukturer-dokument-form/StrukturerDokumentForm';
-import { submitData } from '../../../util/httpUtils';
+import { post } from '../../../util/httpUtils';
 import Link from '../../../types/Link';
 
 interface StrukturerDokumentControllerProps {
@@ -28,7 +28,7 @@ const StrukturerDokumentController = ({
 
     const strukturerDokument = (strukturertDokument) => {
         setIsLoading(true);
-        submitData(href, { ...requestPayload, ...strukturertDokument }, { cancelToken: httpCanceler.token }).then(
+        post(href, { ...requestPayload, ...strukturertDokument }, { cancelToken: httpCanceler.token }).then(
             () => {
                 setIsLoading(false);
                 onDokumentStrukturert();
