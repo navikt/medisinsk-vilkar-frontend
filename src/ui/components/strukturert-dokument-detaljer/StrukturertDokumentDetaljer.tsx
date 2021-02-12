@@ -31,7 +31,7 @@ const StrukturertDokumentDetaljer = ({ dokument }: StrukturertDokumentDetaljerPr
     return (
         <DetailView title="Om dokumentet">
             <Box marginTop={Margin.xLarge}>
-                <Lenke href={dokumentLink.href} target="_blank" rel="noopener">
+                <Lenke href={dokumentLink.href} target="_blank">
                     Åpne dokument
                 </Lenke>
             </Box>

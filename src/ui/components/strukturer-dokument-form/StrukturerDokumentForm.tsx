@@ -46,7 +46,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormPr
                     onSubmit={formMethods.handleSubmit((formState) => lagNyttStrukturertDokument(formState))}
                 >
                     <Box marginTop={Margin.xLarge}>
-                        <Lenke href={dokumentLink.href} target="_blank" rel="noopener">
+                        <Lenke href={dokumentLink.href} target="_blank">
                             Åpne dokument
                         </Lenke>
                     </Box>

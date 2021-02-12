@@ -27,7 +27,7 @@ const DokumentLink = ({ dokument, etikett }: DokumentLinkProps) => {
     const { type, datert, links } = dokument;
     const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
     return (
-        <Lenke href={dokumentLink.href} target="_blank" rel="noopener">
+        <Lenke href={dokumentLink.href} target="_blank">
             {renderDokumenttypeText(type)} {prettifyDate(dayjs(datert).utc(true).toISOString())}
             <div className={styles.dokumentLink__etikett}>
                 {etikett && (
