@@ -130,7 +130,7 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
                 <>
                     <Box marginBottom={Margin.medium}>
                         <Alertstripe type="advarsel">
-                            Opplysinger om dokumentasjonsom er signert av sykehuslege mangler. Knytt dokument med
+                            Opplysinger om dokumentasjon som er signert av sykehuslege mangler. Knytt dokument med
                             godkjent signatur, eller sett saken på vent mens du innhenter mer dokumentasjon.
                         </Alertstripe>
                     </Box>
