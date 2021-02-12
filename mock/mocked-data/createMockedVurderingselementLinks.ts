@@ -8,14 +8,12 @@ function createMockedVurderingselementLinks(id): Link[] {
             type: 'GET',
             href: `http://localhost:8082/mock/vurdering?sykdomVurderingId=${id}`,
             versjon: null,
-            behandlingUuid: 'HER_ER_BEHANDLINGSID',
         },
         {
             rel: LinkRel.ENDRE_VURDERING,
             type: 'POST',
             href: `http://localhost:8082/mock/vurdering?sykdomVurderingId=${id}`,
             versjon: null,
-            behandlingUuid: 'HER_ER_BEHANDLINGSID',
         },
     ];
 }

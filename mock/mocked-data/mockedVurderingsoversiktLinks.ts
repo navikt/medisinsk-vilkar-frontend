@@ -7,7 +7,6 @@ const links: Link[] = [
         type: 'POST',
         href: 'http://localhost:8082/mock/opprett-vurdering',
         versjon: null,
-        behandlingUuid: 'HER_ER_BEHANDLINGSID',
         requestPayload: {
             behandlingUuid: 'HER_ER_BEHANDLINGSID',
         },
@@ -17,7 +16,6 @@ const links: Link[] = [
         type: 'GET',
         href: 'http://localhost:8082/mock/data-til-vurdering',
         versjon: null,
-        behandlingUuid: 'HER_ER_BEHANDLINGSID',
     },
 ];
 
