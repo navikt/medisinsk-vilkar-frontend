@@ -1,5 +1,5 @@
 import React from 'react';
-import { Undertittel } from 'nav-frontend-typografi';
+import { Element, Undertittel } from 'nav-frontend-typografi';
 import InteractiveList from '../interactive-list/InteractiveList';
 import StrukturertDokumentElement from '../strukturet-dokument-element/StrukturertDokumentElement';
 import UstrukturertDokumentElement from '../ustrukturert-dokument-element/UstrukturertDokumentElement';
@@ -35,6 +35,11 @@ const Dokumentnavigasjon = ({ dokumenter, onDokumentValgt, dokumenterSomMåGjenn
         <>
             <Undertittel>Alle dokumenter</Undertittel>
             <div className={styles.dokumentnavigasjonContainer}>
+                <div className={styles.dokumentnavigasjonContainer__columnHeadings}>
+                    <Element>Type</Element>
+                    <Element className={styles['dokumentnavigasjonContainer__columnHeading--second']}>Datert</Element>
+                    <Element className={styles['dokumentnavigasjonContainer__columnHeading--third']}>Status</Element>
+                </div>
                 <InteractiveList
                     elements={allElements.map((element, currentIndex) => ({
                         content: element.renderer(),

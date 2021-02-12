@@ -28,9 +28,18 @@ const StrukturertDokumentElement = ({
         <div className={styles.strukturertDokumentElement}>
             <GreenCheckIconFilled />
             <div className={styles.strukturertDokumentElement__texts}>
-                <span className={styles.strukturertDokumentElement__texts__type}>{getDokumenttype()}</span>
-                <span className={styles.strukturertDokumentElement__texts__date}>{prettifyDate(datert)}</span>
-                <span className={styles.strukturertDokumentElement__texts__status}>Ferdig håndtert</span>
+                <span className={styles.strukturertDokumentElement__texts__type}>
+                    <span className={styles.visuallyHidden}>Type</span>
+                    {getDokumenttype()}
+                </span>
+                <span className={styles.strukturertDokumentElement__texts__date}>
+                    <span className={styles.visuallyHidden}>Datert</span>
+                    {prettifyDate(datert)}
+                </span>
+                <span className={styles.strukturertDokumentElement__texts__status}>
+                    <span className={styles.visuallyHidden}>Status</span>
+                    Ferdig håndtert
+                </span>
             </div>
         </div>
     );
