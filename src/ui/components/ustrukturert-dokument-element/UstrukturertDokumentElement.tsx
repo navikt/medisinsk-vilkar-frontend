@@ -13,9 +13,18 @@ const UstrukturertDokumentElement = ({ dokument: { datert } }: UstrukturertDokum
         <div className={styles.ustrukturertDokumentElement}>
             <WarningIcon />
             <div className={styles.ustrukturertDokumentElement__texts}>
-                <span className={styles.ustrukturertDokumentElement__texts__type}>Ikke klassifisert</span>
-                <span className={styles.ustrukturertDokumentElement__texts__date}>{prettifyDate(datert)}</span>
-                <span className={styles.ustrukturertDokumentElement__texts__status}>Ikke håndtert</span>
+                <span className={styles.ustrukturertDokumentElement__texts__type}>
+                    <span className={styles.visuallyHidden}>Type</span>
+                    Ikke klassifisert
+                </span>
+                <span className={styles.ustrukturertDokumentElement__texts__date}>
+                    <span className={styles.visuallyHidden}>Datert</span>
+                    {prettifyDate(datert)}
+                </span>
+                <span className={styles.ustrukturertDokumentElement__texts__status}>
+                    <span className={styles.visuallyHidden}>Status</span>
+                    Ikke håndtert
+                </span>
             </div>
         </div>
     );
