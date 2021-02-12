@@ -4,7 +4,7 @@ import React from 'react';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import { sortPeriodsByFomDate } from '../../../util/periodUtils';
-import IconWithTooltip from '../icon-with-tooltip/IconWithTooltip';
+import IconWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import EditedBySaksbehandlerIcon from '../icons/EditedBySaksbehandlerIcon';
 import InteractiveList from '../interactive-list/InteractiveList';
 import NyVurderingKnapp from '../ny-vurdering-knapp/NyVurderingKnapp';
@@ -49,10 +49,9 @@ const Vurderingsnavigasjon = ({
                     renderAfterElement={() => (
                         <div className={styles.vurderingsperiode__postElementContainer}>
                             {endretIDenneBehandlingen && (
-                                <IconWithTooltip
-                                    renderIcon={() => <EditedBySaksbehandlerIcon />}
-                                    tooltipText="Vurderingen er opprettet i denne behandlingen"
-                                />
+                                <IconWithTooltip tooltipText="Vurderingen er opprettet i denne behandlingen">
+                                    <EditedBySaksbehandlerIcon />
+                                </IconWithTooltip>
                             )}
 
                             {visOverlappetikett && <EtikettInfo mini>Overlapp</EtikettInfo>}

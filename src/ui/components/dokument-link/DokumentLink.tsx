@@ -3,7 +3,7 @@ import Lenke from 'nav-frontend-lenker';
 import dayjs from 'dayjs';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import { prettifyDate } from '../../../util/formats';
-import IconWithTooltip from '../icon-with-tooltip/IconWithTooltip';
+import IconWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import OnePersonOutline from '../icons/OnePersonOutline';
 import styles from './dokumentLink.less';
 
@@ -34,11 +34,9 @@ const DokumentLink = ({ dokument, etikett }: DokumentLinkProps) => {
             {renderDokumenttypeText(type)} {prettifyDate(dayjs(datert).utc(true).toISOString())}
             <div className={styles.dokumentLink__etikett}>
                 {etikett && (
-                    <IconWithTooltip
-                        renderIcon={() => <OnePersonOutline />}
-                        tooltipText={etikett}
-                        tooltipDirectionRight
-                    />
+                    <IconWithTooltip tooltipText={etikett} tooltipDirectionRight>
+                        <OnePersonOutline />
+                    </IconWithTooltip>
                 )}
             </div>
         </Lenke>
