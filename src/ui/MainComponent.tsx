@@ -9,7 +9,7 @@ interface MainComponentProps {
 
 const MainComponent = ({ containerData }: MainComponentProps): JSX.Element => {
     return (
-        <div style={{ padding: '1rem' }}>
+        <div>
             <ContainerContext.Provider value={containerData}>
                 <MedisinskVilkår />
             </ContainerContext.Provider>
