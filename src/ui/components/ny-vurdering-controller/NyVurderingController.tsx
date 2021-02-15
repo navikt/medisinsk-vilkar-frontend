@@ -50,7 +50,7 @@ const NyVurderingController = ({
         dispatch({ type: ActionType.PENDING });
         return postNyVurdering(
             opprettVurderingLink.href,
-            opprettVurderingLink.behandlingUuid,
+            opprettVurderingLink.requestPayload.behandlingUuid,
             { ...nyVurderingsversjon, type: vurderingstype },
             httpCanceler.token
         ).then(
@@ -69,7 +69,7 @@ const NyVurderingController = ({
     ): Promise<PerioderMedEndringResponse> => {
         return postNyVurderingDryRun(
             opprettVurderingLink.href,
-            opprettVurderingLink.behandlingUuid,
+            opprettVurderingLink.requestPayload.behandlingUuid,
             { ...nyVurderingsversjon, type: vurderingstype },
             httpCanceler.token
         );

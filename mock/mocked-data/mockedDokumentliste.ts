@@ -12,7 +12,6 @@ export default [
         annenPartErKilde: false,
         fremhevet: true,
         behandlet: true,
-        location: '#',
         links: createMockedDokumentelementLinks('1'),
     },
     {
@@ -24,7 +23,6 @@ export default [
         annenPartErKilde: true,
         fremhevet: true,
         behandlet: true,
-        location: '#',
         links: createMockedDokumentelementLinks('2'),
     },
 ];

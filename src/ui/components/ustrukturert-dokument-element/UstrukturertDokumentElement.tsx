@@ -3,6 +3,7 @@ import { Dokument } from '../../../types/Dokument';
 import WarningIcon from '../icons/WarningIcon';
 import styles from './ustrukturertDokumentElement.less';
 import { prettifyDate } from '../../../util/formats';
+import IconWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 
 interface UstrukturertDokumentElementProps {
     dokument: Dokument;
@@ -19,7 +20,9 @@ const UstrukturertDokumentElement = ({ dokument: { datert } }: UstrukturertDokum
                 </span>
                 <span className={styles.ustrukturertDokumentElement__texts__date}>
                     <span className={styles.visuallyHidden}>Datert</span>
-                    {prettifyDate(datert)}
+                    <IconWithTooltip inline tooltipText="Dato dokumentet ble mottatt">
+                        {`${prettifyDate(datert)}*`}
+                    </IconWithTooltip>
                 </span>
                 <span className={styles.ustrukturertDokumentElement__texts__status}>
                     <span className={styles.visuallyHidden}>Status</span>

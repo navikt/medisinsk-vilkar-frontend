@@ -11,7 +11,6 @@ describe('dokumentUtils', () => {
         {
             id: '1',
             type: Dokumenttype.LEGEERKLÆRING,
-            location: '#',
             datert,
             navn: 'foo',
             fremhevet: false,
@@ -23,7 +22,6 @@ describe('dokumentUtils', () => {
         {
             id: '2',
             type: Dokumenttype.LEGEERKLÆRING,
-            location: '#',
             datert,
             navn: 'foo',
             fremhevet: false,
@@ -35,7 +33,6 @@ describe('dokumentUtils', () => {
         {
             id: '3',
             type: Dokumenttype.LEGEERKLÆRING,
-            location: '#',
             datert,
             navn: 'foo',
             fremhevet: false,

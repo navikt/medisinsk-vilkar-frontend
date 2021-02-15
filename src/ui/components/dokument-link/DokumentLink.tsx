@@ -3,9 +3,11 @@ import Lenke from 'nav-frontend-lenker';
 import dayjs from 'dayjs';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import { prettifyDate } from '../../../util/formats';
-import IconWithTooltip from '../icon-with-tooltip/IconWithTooltip';
+import IconWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import OnePersonOutline from '../icons/OnePersonOutline';
 import styles from './dokumentLink.less';
+import { findLinkByRel } from '../../../util/linkUtils';
+import LinkRel from '../../../constants/LinkRel';
 
 interface DokumentLinkProps {
     dokument: Dokument;
@@ -22,23 +24,16 @@ const renderDokumenttypeText = (dokumenttype: Dokumenttype) => {
 };
 
 const DokumentLink = ({ dokument, etikett }: DokumentLinkProps) => {
-    const { type, datert, location } = dokument;
+    const { type, datert, links } = dokument;
+    const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
     return (
-        <Lenke
-            href={location}
-            onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-            }}
-        >
+        <Lenke href={dokumentLink.href} target="_blank">
             {renderDokumenttypeText(type)} {prettifyDate(dayjs(datert).utc(true).toISOString())}
             <div className={styles.dokumentLink__etikett}>
                 {etikett && (
-                    <IconWithTooltip
-                        renderIcon={() => <OnePersonOutline />}
-                        tooltipText={etikett}
-                        tooltipDirectionRight
-                    />
+                    <IconWithTooltip tooltipText={etikett} tooltipDirectionRight>
+                        <OnePersonOutline />
+                    </IconWithTooltip>
                 )}
             </div>
         </Lenke>

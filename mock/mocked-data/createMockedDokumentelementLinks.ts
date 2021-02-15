@@ -8,7 +8,12 @@ const createMockedDokumentelementLinks = (id: string): Link[] => {
             type: 'POST',
             href: `http://localhost:8082/mock/endre-dokument?dokumentId=${id}`,
             versjon: null,
-            behandlingUuid: 'HER_ER_BEHANDLINGSID',
+        },
+        {
+            rel: LinkRel.DOKUMENT_INNHOLD,
+            type: 'GET',
+            href: `#`,
+            versjon: null,
         },
     ];
 };

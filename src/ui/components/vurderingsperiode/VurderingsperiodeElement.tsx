@@ -8,7 +8,7 @@ import OnePersonIconBlue from '../icons/OnePersonIconBlue';
 import OnePersonOutline from '../icons/OnePersonOutline';
 import RedCrossIconFilled from '../icons/RedCrossIconFilled';
 import TwoPersonsWithOneHighlightedIconBlue from '../icons/TwoPersonsWithOneHighlightedIconBlue';
-import IconWithTooltip from '../icon-with-tooltip/IconWithTooltip';
+import IconWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import styles from './vurderingsperiodeElement.less';
 
 interface VurderingsperiodeElementProps {
@@ -49,16 +49,23 @@ const VurderingsperiodeElement = ({
     const parterLabel = () => {
         if (gjelderForAnnenPart && gjelderForSøker) {
             return (
-                <IconWithTooltip
-                    renderIcon={() => <TwoPersonsWithOneHighlightedIconBlue />}
-                    tooltipText="Søker og annen part"
-                />
+                <IconWithTooltip tooltipText="Søker og annen part">
+                    <TwoPersonsWithOneHighlightedIconBlue />
+                </IconWithTooltip>
             );
         }
         if (gjelderForAnnenPart) {
-            return <IconWithTooltip renderIcon={() => <OnePersonOutline />} tooltipText="Annen part" />;
+            return (
+                <IconWithTooltip tooltipText="Annen part">
+                    <OnePersonOutline />
+                </IconWithTooltip>
+            );
         }
-        return <IconWithTooltip renderIcon={() => <OnePersonIconBlue />} tooltipText="Søker" />;
+        return (
+            <IconWithTooltip tooltipText="Søker">
+                <OnePersonIconBlue />
+            </IconWithTooltip>
+        );
     };
 
     return (

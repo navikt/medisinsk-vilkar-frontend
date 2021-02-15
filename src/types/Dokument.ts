@@ -16,7 +16,6 @@ export interface Dokument {
     annenPartErKilde: boolean;
     datert: string;
     fremhevet: boolean;
-    location?: string;
     links: Link[];
 }
 
