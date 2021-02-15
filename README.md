@@ -1,11 +1,41 @@
-To run app in development:
+Frontend for medisinsk vilkårsvurdering
+================
 
-`npm run dev`
+Dette er en frontend for medisinsk vilkårsvurdering i saksbehandlingen av pleiepenger ved sykt barn.
 
-To make a production build of the app:
+## Komme i gang
 
-`npm run build`
+For å kjøre frontend-appen i utvikling, kjør `npm install` etterfulgt av `npm run dev` på rot av prosjektet. 
 
-To run a production build locally:
+Utviklingsmiljøet er konfigurert opp med en egen webpack-konfig som hoster `index.html` som ligger på rot.
+Denne index-filen er kun ment for utvikling.
 
-`npm run start`
+For enkelthet i utvikling ligger det et eget mockup-api under `/mock` som server mockede data, og som
+`index.html` på rot by default konfigurerer frontenden til å gjøre sine api-kall mot. Mockup-apiet kjøres
+opp ved å kjøre `npm run api-mock` på rot av prosjektet.
+
+
+### Kjøring av tester
+
+`npm test` på rot av prosjektet
+
+### Bygging av appen
+
+`npm run build` på rot av prosjektet
+
+Denne kommandoen vil se på `version` spesifisert i `package.json`, opprette en ny katalog under `build`
+som samsvarer med det versjonsnummeret, og legge de bygde filene der.
+
+### Kjøring av bygg
+
+`npm run start` kjører opp en server som statisk hoster innholdet under `build`
+
+---
+
+## Henvendelser
+
+Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub
+
+### For NAV-ansatte
+
+Interne henvendelser kan sendes via Slack i kanalen #sif_pleiepenger.

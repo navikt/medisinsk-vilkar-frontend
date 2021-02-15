@@ -8,7 +8,7 @@ import OnePersonIconBlue from '../icons/OnePersonIconBlue';
 import OnePersonOutline from '../icons/OnePersonOutline';
 import RedCrossIconFilled from '../icons/RedCrossIconFilled';
 import TwoPersonsWithOneHighlightedIconBlue from '../icons/TwoPersonsWithOneHighlightedIconBlue';
-import IconWithTooltip from '../icon-with-tooltip/IconWithTooltip';
+import IconWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import styles from './vurderingsperiodeElement.less';
 
 interface VurderingsperiodeElementProps {
@@ -16,47 +16,56 @@ interface VurderingsperiodeElementProps {
     resultat: Vurderingsresultat;
     gjelderForAnnenPart?: boolean;
     gjelderForSøker?: boolean;
-    etikett?: string;
+    renderAfterElement?: () => React.ReactNode;
 }
 
 const renderIcon = (resultat: Vurderingsresultat) => {
-    if (resultat === Vurderingsresultat.INNVILGET) {
+    if (resultat === Vurderingsresultat.OPPFYLT) {
         return <GreenCheckIconFilled />;
     }
-    if (resultat === Vurderingsresultat.AVSLÅTT) {
+    if (resultat === Vurderingsresultat.IKKE_OPPFYLT) {
         return <RedCrossIconFilled />;
     }
+    return null;
 };
 
 const renderResultatText = (resultat: Vurderingsresultat) => {
-    if (resultat === Vurderingsresultat.INNVILGET) {
-        return <span>Innvilget</span>;
+    if (resultat === Vurderingsresultat.OPPFYLT) {
+        return <span>Oppfylt</span>;
     }
-    if (resultat === Vurderingsresultat.AVSLÅTT) {
-        return <span>Avslått</span>;
+    if (resultat === Vurderingsresultat.IKKE_OPPFYLT) {
+        return <span>Ikke oppfylt</span>;
     }
+    return null;
 };
 
 const VurderingsperiodeElement = ({
     periode,
     resultat,
-    etikett,
+    renderAfterElement,
     gjelderForAnnenPart,
     gjelderForSøker,
 }: VurderingsperiodeElementProps): JSX.Element => {
     const parterLabel = () => {
         if (gjelderForAnnenPart && gjelderForSøker) {
             return (
-                <IconWithTooltip
-                    renderIcon={() => <TwoPersonsWithOneHighlightedIconBlue />}
-                    tooltipText="Søker og annen part"
-                />
+                <IconWithTooltip tooltipText="Søker og annen part">
+                    <TwoPersonsWithOneHighlightedIconBlue />
+                </IconWithTooltip>
             );
         }
         if (gjelderForAnnenPart) {
-            return <IconWithTooltip renderIcon={() => <OnePersonOutline />} tooltipText="Annen part" />;
+            return (
+                <IconWithTooltip tooltipText="Annen part">
+                    <OnePersonOutline />
+                </IconWithTooltip>
+            );
         }
-        return <IconWithTooltip renderIcon={() => <OnePersonIconBlue />} tooltipText="Søker" />;
+        return (
+            <IconWithTooltip tooltipText="Søker">
+                <OnePersonIconBlue />
+            </IconWithTooltip>
+        );
     };
 
     return (
@@ -67,11 +76,7 @@ const VurderingsperiodeElement = ({
                 <div className={styles.vurderingsperiodeElement__texts__parterIcon}>{parterLabel()}</div>
                 <p className={styles.vurderingsperiodeElement__texts__parter}>{renderResultatText(resultat)}</p>
             </div>
-            {etikett && (
-                <div className={styles.vurderingsperiodeElement__etikett}>
-                    <EtikettInfo mini>{etikett}</EtikettInfo>
-                </div>
-            )}
+            {renderAfterElement && renderAfterElement()}
         </div>
     );
 };

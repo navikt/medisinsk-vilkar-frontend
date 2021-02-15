@@ -7,19 +7,16 @@ import Box, { Margin } from '../box/Box';
 import BasicList from '../basic-list/BasicList';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Vurdering from '../../../types/Vurdering';
-import Dokument from '../../../types/Dokument';
 
 interface VurderingsoppsummeringForKontinuerligTilsynOgPleieProps {
     vurdering: Vurdering;
-    alleDokumenter: Dokument[];
 }
 
 const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
     vurdering,
-    alleDokumenter,
 }: VurderingsoppsummeringForKontinuerligTilsynOgPleieProps) => {
     const gjeldendeVurdering = vurdering.versjoner[0];
-    const { perioder, tekst, resultat } = gjeldendeVurdering;
+    const { perioder, tekst, resultat, dokumenter } = gjeldendeVurdering;
     return (
         <DetailView title="Vurdering av behov for kontinuerlig tilsyn og pleie">
             <Box marginTop={Margin.medium}>
@@ -27,31 +24,29 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
                     label="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
                     content={
                         <BasicList
-                            elements={alleDokumenter
-                                .filter((dokument) => gjeldendeVurdering.dokumenter.includes(dokument))
-                                .map((dokument) => (
-                                    <DokumentLink dokument={dokument} />
-                                ))}
+                            elements={dokumenter.map((dokument) => (
+                                <DokumentLink dokument={dokument} />
+                            ))}
                         />
                     }
                 />
             </Box>
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.xLarge}>
                 <LabelledContent
                     label="Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge
                                         av sykdommen etter § 9-10, første ledd."
                     content={<span>{tekst}</span>}
                 />
             </Box>
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.xLarge}>
                 <LabelledContent
                     label="Er det behov for tilsyn og pleie?"
-                    content={<span>{resultat === Vurderingsresultat.INNVILGET ? 'Ja' : 'Nei'}</span>}
+                    content={<span>{resultat === Vurderingsresultat.OPPFYLT ? 'Ja' : 'Nei'}</span>}
                 />
             </Box>
-            <Box marginTop={Margin.large}>
+            <Box marginTop={Margin.xLarge}>
                 <LabelledContent
-                    label={resultat === Vurderingsresultat.INNVILGET ? 'Perioder innvilget' : 'Perioder avslått'}
+                    label={resultat === Vurderingsresultat.OPPFYLT ? 'Perioder innvilget' : 'Perioder avslått'}
                     content={
                         <ul style={{ margin: 0, listStyleType: 'none', padding: 0 }}>
                             {perioder.map((periode, i) => (

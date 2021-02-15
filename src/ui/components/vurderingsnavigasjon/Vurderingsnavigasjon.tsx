@@ -1,20 +1,24 @@
+import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import { sortPeriodsByFomDate } from '../../../util/periodUtils';
+import IconWithTooltip from '../content-with-tooltip/ContentWithTooltip';
+import EditedBySaksbehandlerIcon from '../icons/EditedBySaksbehandlerIcon';
 import InteractiveList from '../interactive-list/InteractiveList';
 import NyVurderingKnapp from '../ny-vurdering-knapp/NyVurderingKnapp';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
 import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
 import styles from './vurderingsnavigasjon.less';
+import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 
 interface VurderingsnavigasjonProps {
     vurderingselementer: Vurderingselement[];
     onNyVurderingClick: (perioder?: Period[]) => void;
     onVurderingValgt: (vurdering: Vurderingselement) => void;
     resterendeVurderingsperioder?: Period[];
-    søknadsperioderTilBehandling?: Period[];
+    visRadForNyVurdering?: boolean;
 }
 
 const Vurderingsnavigasjon = ({
@@ -22,7 +26,7 @@ const Vurderingsnavigasjon = ({
     onNyVurderingClick,
     onVurderingValgt,
     resterendeVurderingsperioder,
-    søknadsperioderTilBehandling,
+    visRadForNyVurdering,
 }: VurderingsnavigasjonProps): JSX.Element => {
     const [activeIndex, setActiveIndex] = React.useState(-1);
 
@@ -33,16 +37,26 @@ const Vurderingsnavigasjon = ({
     }, [vurderingselementer]);
 
     const vurderingsperiodeElements = sorterteVurderingselementer.map(
-        ({ periode, resultat, gjelderForAnnenPart, gjelderForSøker }) => {
+        ({ periode, resultat, gjelderForAnnenPart, gjelderForSøker, endretIDenneBehandlingen }) => {
             const visOverlappetikett =
                 harPerioderSomSkalVurderes &&
-                søknadsperioderTilBehandling.some((søknadsperiode: Period) => søknadsperiode.overlapsWith(periode));
+                resterendeVurderingsperioder.some((søknadsperiode: Period) => søknadsperiode.overlapsWith(periode));
 
             return (
                 <VurderingsperiodeElement
                     periode={periode}
                     resultat={resultat}
-                    etikett={visOverlappetikett ? 'Overlapp' : ''}
+                    renderAfterElement={() => (
+                        <div className={styles.vurderingsperiode__postElementContainer}>
+                            {endretIDenneBehandlingen && (
+                                <IconWithTooltip tooltipText="Vurderingen er opprettet i denne behandlingen">
+                                    <EditedBySaksbehandlerIcon />
+                                </IconWithTooltip>
+                            )}
+
+                            {visOverlappetikett && <EtikettInfo mini>Overlapp</EtikettInfo>}
+                        </div>
+                    )}
                     gjelderForAnnenPart={gjelderForAnnenPart}
                     gjelderForSøker={gjelderForSøker}
                 />
@@ -55,17 +69,24 @@ const Vurderingsnavigasjon = ({
         allElements.unshift(<PerioderSomSkalVurderes perioder={resterendeVurderingsperioder || []} />);
     }
 
+    if (visRadForNyVurdering) {
+        allElements.unshift(<EtikettInfo mini>Ny vurdering</EtikettInfo>);
+    }
+
     return (
         <>
             <Undertittel>Alle perioder</Undertittel>
-            {!harPerioderSomSkalVurderes && (
-                <NyVurderingKnapp
-                    onClick={() => {
-                        setActiveIndex(-1);
-                        onNyVurderingClick();
-                    }}
-                />
-            )}
+            <WriteAccessBoundContent
+                otherRequirementsAreMet={!harPerioderSomSkalVurderes}
+                contentRenderer={() => (
+                    <NyVurderingKnapp
+                        onClick={() => {
+                            setActiveIndex(0);
+                            onNyVurderingClick();
+                        }}
+                    />
+                )}
+            />
             <div className={styles.vurderingsvelgerContainer}>
                 <InteractiveList
                     elements={allElements.map((element, currentIndex) => ({
@@ -79,6 +100,8 @@ const Vurderingsnavigasjon = ({
                             const erEnEksisterendeVurdering = vurderingsperiodeIndex > -1;
                             if (erEnEksisterendeVurdering) {
                                 onVurderingValgt(sorterteVurderingselementer[vurderingsperiodeIndex]);
+                            } else if (visRadForNyVurdering && currentIndex === 0) {
+                                onNyVurderingClick();
                             } else {
                                 onNyVurderingClick(resterendeVurderingsperioder);
                             }

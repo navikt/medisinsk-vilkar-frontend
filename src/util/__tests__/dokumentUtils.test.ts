@@ -1,16 +1,46 @@
-import Dokument, { Dokumenttype } from '../../types/Dokument';
 import dayjs from 'dayjs';
+import Dokument, { Dokumenttype } from '../../types/Dokument';
 import { finnBenyttedeDokumenter } from '../dokumentUtils';
 
-const mottatt = dayjs().toDate();
+const datert = dayjs().toDate().toISOString();
 
 describe('dokumentUtils', () => {
     let result: Dokument[] = [];
 
     const dokumenter: Dokument[] = [
-        { id: '1', type: Dokumenttype.LEGEERKLÆRING, location: '#', mottatt },
-        { id: '2', type: Dokumenttype.LEGEERKLÆRING, location: '#', mottatt },
-        { id: '3', type: Dokumenttype.LEGEERKLÆRING, location: '#', mottatt },
+        {
+            id: '1',
+            type: Dokumenttype.LEGEERKLÆRING,
+            datert,
+            navn: 'foo',
+            fremhevet: false,
+            annenPartErKilde: false,
+            benyttet: false,
+            behandlet: false,
+            links: [],
+        },
+        {
+            id: '2',
+            type: Dokumenttype.LEGEERKLÆRING,
+            datert,
+            navn: 'foo',
+            fremhevet: false,
+            annenPartErKilde: false,
+            benyttet: false,
+            behandlet: false,
+            links: [],
+        },
+        {
+            id: '3',
+            type: Dokumenttype.LEGEERKLÆRING,
+            datert,
+            navn: 'foo',
+            fremhevet: false,
+            annenPartErKilde: false,
+            benyttet: false,
+            behandlet: false,
+            links: [],
+        },
     ];
 
     beforeAll(() => {

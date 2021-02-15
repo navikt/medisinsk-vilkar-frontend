@@ -1,5 +1,5 @@
 import React from 'react';
-import { RadioPanelGruppe as RadioPanelGroup } from 'nav-frontend-skjema';
+import { RadioGruppe, Radio } from 'nav-frontend-skjema';
 
 interface YesOrNoQuestionProps {
     question: string;
@@ -24,24 +24,25 @@ const resolveYesOrNoLiteral = (value: boolean | undefined) => {
     return undefined;
 };
 
-const PureYesOrNoQuestion = ({
-    question,
-    value,
-    onChange,
-    name,
-    errorMessage,
-}: YesOrNoQuestionProps) => (
-    <RadioPanelGroup
-        legend={question}
-        name={name}
-        checked={resolveYesOrNoLiteral(value)}
-        onChange={(event, value) => onChange(value === YesOrNo.YES)}
-        radios={[
-            { label: 'Ja', value: YesOrNo.YES },
-            { label: 'Nei', value: YesOrNo.NO },
-        ]}
-        feil={errorMessage}
-    />
+const radios = [
+    { label: 'Ja', value: YesOrNo.YES },
+    { label: 'Nei', value: YesOrNo.NO },
+];
+
+const PureYesOrNoQuestion = ({ question, value, onChange, name, errorMessage }: YesOrNoQuestionProps) => (
+    <RadioGruppe legend={question} feil={errorMessage}>
+        {radios.map((radio) => (
+            <Radio
+                key={radio.value}
+                label={radio.label}
+                name={name}
+                onChange={() => {
+                    onChange(radio.value === YesOrNo.YES);
+                }}
+                checked={resolveYesOrNoLiteral(value) === radio.value}
+            />
+        ))}
+    </RadioGruppe>
 );
 
 export default PureYesOrNoQuestion;

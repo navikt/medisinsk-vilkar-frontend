@@ -26,7 +26,7 @@ function renderPaneler(perioderMedGradAvTilsynsbehov: PeriodeMedGradAvTilsynsbeh
         const statusEl = <TilsynStatusPanel periode={periode} grad={grad} key={`panel-${index}`} />;
         if (index > 0) {
             return (
-                <Box marginTop={Margin.large} key={`panel-${index}`}>
+                <Box marginTop={Margin.xLarge} key={`panel-${index}`}>
                     {statusEl}
                 </Box>
             );

@@ -1,6 +1,6 @@
 enum Vurderingsresultat {
-    INNVILGET = 'innvilget',
-    AVSLÅTT = 'avslått',
+    OPPFYLT = 'OPPFYLT',
+    IKKE_OPPFYLT = 'IKKE_OPPFYLT',
 }
 
 export default Vurderingsresultat;

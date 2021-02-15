@@ -1,0 +1,32 @@
+.ustrukturertDokumentElement {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &__texts {
+        margin-left: 1rem;
+
+        &__type {
+            display: inline-block;
+            min-width: 128px;
+        }
+
+        &__date {
+            margin-left: 2rem;
+        }
+
+        &__status {
+            margin-left: 2rem;
+        }
+    }
+    .visuallyHidden {
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+    }
+}

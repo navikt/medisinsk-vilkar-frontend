@@ -12,7 +12,7 @@
         </style>
     </head>
     <body>
-        <div id="app"></div>
+        <div id="app" style="padding:2rem"}}></div>
         <script type="text/javascript">
             setTimeout(() => {
                 window.renderMedisinskVilkarApp('app', {
@@ -23,7 +23,26 @@
                             window.location.hash = '';
                         }
                     },
-                    vurdering: new URLSearchParams(`?${window.location.hash.substr(1)}`).get('vurdering')
+                    onDokumentValgt: (dokument) => {
+                        if (dokument !== null) {
+                            history.pushState('', '', `#dokument=${dokument}`);
+                        } else {
+                            window.location.hash = '';
+                        }
+                    },
+                    vurdering: new URLSearchParams(`?${window.location.hash.substr(1)}`).get('vurdering'),
+                    endpoints: {
+                        vurderingsoversiktKontinuerligTilsynOgPleie: 'http://localhost:8082/mock/kontinuerlig-tilsyn-og-pleie/vurderingsoversikt',
+                        vurderingsoversiktBehovForToOmsorgspersoner: 'http://localhost:8082/mock/to-omsorgspersoner/vurderingsoversikt',
+                        dokumentoversikt: 'http://localhost:8082/mock/dokumentoversikt',
+                        dataTilVurdering: 'http://localhost:8082/mock/data-til-vurdering',
+                        innleggelsesperioder: 'http://localhost:8082/mock/innleggelsesperioder',
+                        diagnosekoder: 'http://localhost:8082/mock/diagnosekoder',
+                        diagnosekodeSearch: 'http://localhost:8082/mock/diagnosekode-search'
+                    },
+                    behandlingUuid: '123',
+                    readOnly: false,
+                    onFinished: () => console.log('Aksjonspunkt løst')
                 });
             }, 300);
         </script>

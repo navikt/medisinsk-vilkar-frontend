@@ -1,9 +1,10 @@
-import { Period } from './Period';
+import Link from './Link';
 
 export enum Dokumenttype {
-    LEGEERKLÆRING = 'Legeerklæring',
-    ANDRE_MEDISINSKE_OPPLYSNINGER = 'ANDRE_MEDISINSKE_OPPLYSNINGER',
-    MANGLER_MEDISINSKE_OPPLYSNINGER = 'MANGLER_MEDISINSKE_OPPLYSNINGER',
+    LEGEERKLÆRING = 'LEGEERKLÆRING_SYKEHUS',
+    ANDRE_MEDISINSKE_OPPLYSNINGER = 'MEDISINSKE_OPPLYSNINGER',
+    MANGLER_MEDISINSKE_OPPLYSNINGER = 'ANNET',
+    UKLASSIFISERT = 'UKLASSIFISERT',
 }
 
 export interface Dokument {
@@ -11,28 +12,15 @@ export interface Dokument {
     navn: string;
     type: Dokumenttype;
     benyttet: boolean;
+    behandlet: boolean;
     annenPartErKilde: boolean;
-    datert: Date;
+    datert: string;
     fremhevet: boolean;
-    location?: string;
+    links: Link[];
 }
-
-export interface DokumentMedMedisinskeOpplysninger extends Dokument {
-    type: Dokumenttype.LEGEERKLÆRING | Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER;
-    harGyldigSignatur: boolean;
-    innleggelsesperioder: Period[];
-}
-
-export interface DokumentUtenMedisinskeOpplysninger extends Dokument {
-    type: Dokumenttype.MANGLER_MEDISINSKE_OPPLYSNINGER;
-}
-
-export type StrukturertDokument = DokumentUtenMedisinskeOpplysninger | DokumentMedMedisinskeOpplysninger;
 
 export interface Dokumentoversikt {
-    dokumenterMedMedisinskeOpplysninger: DokumentMedMedisinskeOpplysninger[];
-    dokumenterUtenMedisinskeOpplysninger: DokumentUtenMedisinskeOpplysninger[];
-    ustrukturerteDokumenter: Dokument[];
+    dokumenter: Dokument[];
 }
 
 export default Dokument;

@@ -9,6 +9,7 @@ export enum Margin {
     medium = 'medium',
     large = 'large',
     xLarge = 'xLarge',
+    xxLarge = 'xxLarge',
 }
 
 interface BoxProps {

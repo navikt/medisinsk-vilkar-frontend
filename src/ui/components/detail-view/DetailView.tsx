@@ -1,6 +1,6 @@
 import React from 'react';
+import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
 import styles from './detailView.less';
-import { Undertittel } from 'nav-frontend-typografi';
 
 interface DetailViewProps {
     title: string;
@@ -9,8 +9,7 @@ interface DetailViewProps {
 
 const DetailView = ({ title, children }: DetailViewProps) => (
     <div className={styles.detailView}>
-        <Undertittel>{title}</Undertittel>
-        <hr style={{ color: '#B7B1A9' }} />
+        <TitleWithUnderline>{title}</TitleWithUnderline>
         {children}
     </div>
 );

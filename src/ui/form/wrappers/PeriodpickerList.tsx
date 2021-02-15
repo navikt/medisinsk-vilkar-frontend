@@ -1,36 +1,20 @@
+import { CalendarPlacement, DatepickerLimitations } from 'nav-datovelger';
+import { SkjemaelementFeilmelding, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
-import { SkjemaGruppe, SkjemaelementFeilmelding } from 'nav-frontend-skjema';
-import { DatepickerLimitations } from 'nav-datovelger';
-import Box, { Margin } from '../../components/box/Box';
-import PlusIcon from '../../components/icons/PlusIcon';
-import styles from './periodpickerList.less';
 import { Period } from '../../../types/Period';
+import Box, { Margin } from '../../components/box/Box';
 import PureDatepicker from '../pure/PureDatepicker';
-
-const AddButton = ({ onClick }) => (
-    <div className={styles.buttonAddContainer}>
-        <PlusIcon />
-        <button className={styles.buttonAdd} type="button" onClick={onClick}>
-            Legg til flere perioder
-        </button>
-    </div>
-);
-
-const DeleteButton = ({ onClick }) => (
-    <div className={styles.buttonDeleteContainer}>
-        <button className={styles.buttonDelete} type="button" onClick={onClick}>
-            Fjern periode
-        </button>
-    </div>
-);
+import styles from './periodpickerList.less';
 
 interface DatepickerProps {
     label?: string;
     ariaLabel?: string;
     limitations?: DatepickerLimitations;
+    calendarSettings?: {
+        position?: CalendarPlacement;
+    };
 }
-
 interface PeriodpickerListProps {
     name: string;
     legend: string;
@@ -38,8 +22,11 @@ interface PeriodpickerListProps {
     defaultValues?: Period[];
     fromDatepickerProps: DatepickerProps;
     toDatepickerProps: DatepickerProps;
+    renderContentAfterElement?: (index: number, numberOfItems: number, fieldArrayMethods) => void;
+    renderBeforeFieldArray?: (fieldArrayMethods) => void;
+    renderAfterFieldArray?: (fieldArrayMethods) => void;
+    afterOnChange?: () => void;
 }
-
 const PeriodpickerList = ({
     name,
     legend,
@@ -47,26 +34,33 @@ const PeriodpickerList = ({
     fromDatepickerProps,
     toDatepickerProps,
     defaultValues,
+    renderBeforeFieldArray,
+    renderAfterFieldArray,
+    renderContentAfterElement,
+    afterOnChange,
 }: PeriodpickerListProps): JSX.Element => {
     const formMethods = useFormContext();
     const { control, errors } = formMethods;
-    const { fields, append, remove } = useFieldArray({
+    const fieldArrayMethods = useFieldArray({
         control,
         name,
     });
+    const { fields } = fieldArrayMethods;
 
     return (
         <div className={styles.periodpickerList}>
+            {renderBeforeFieldArray && renderBeforeFieldArray(fieldArrayMethods)}
             <SkjemaGruppe legend={legend}>
                 {fields.map((item, index) => {
                     const errorMessage = errors[name] && errors[name][index]?.period.message;
+                    const hasDefaultValue = defaultValues && defaultValues[index];
                     return (
                         <Box key={item.id} marginTop={Margin.medium}>
                             <div className={styles.flexContainer}>
                                 <Controller
                                     name={`${name}[${index}].period`}
                                     rules={{ validate: { ...(validators || {}) } }}
-                                    defaultValue={defaultValues && defaultValues[index]}
+                                    defaultValue={hasDefaultValue ? defaultValues[index] : new Period('', '')}
                                     render={({ value, onChange }) => {
                                         return (
                                             <>
@@ -75,9 +69,10 @@ const PeriodpickerList = ({
                                                     label={fromDatepickerProps.label}
                                                     ariaLabel={fromDatepickerProps.ariaLabel}
                                                     value={value?.fom || ''}
-                                                    onChange={(fomValue) =>
-                                                        onChange(new Period(fomValue, value?.tom || ''))
-                                                    }
+                                                    onChange={(fomValue) => {
+                                                        onChange(new Period(fomValue, value?.tom || ''));
+                                                        if (afterOnChange) afterOnChange();
+                                                    }}
                                                     inputId={`${name}[${index}].fom`}
                                                 />
                                                 <div style={{ display: 'flex', marginLeft: '1rem' }}>
@@ -86,9 +81,10 @@ const PeriodpickerList = ({
                                                         label={toDatepickerProps.label}
                                                         ariaLabel={toDatepickerProps.ariaLabel}
                                                         value={value?.tom || ''}
-                                                        onChange={(tomValue) =>
-                                                            onChange(new Period(value?.fom || '', tomValue))
-                                                        }
+                                                        onChange={(tomValue) => {
+                                                            onChange(new Period(value?.fom || '', tomValue));
+                                                            if (afterOnChange) afterOnChange();
+                                                        }}
                                                         inputId={`${name}[${index}].tom`}
                                                     />
                                                 </div>
@@ -96,18 +92,16 @@ const PeriodpickerList = ({
                                         );
                                     }}
                                 />
-                                {fields.length > 1 && <DeleteButton onClick={() => remove(index)} />}
+                                {renderContentAfterElement &&
+                                    renderContentAfterElement(index, fields.length, fieldArrayMethods)}
                             </div>
                             {errorMessage && <SkjemaelementFeilmelding>{errorMessage}</SkjemaelementFeilmelding>}
                         </Box>
                     );
                 })}
             </SkjemaGruppe>
-            <Box marginTop={Margin.large}>
-                <AddButton onClick={() => append({ fom: '', tom: '' })} />
-            </Box>
+            {renderAfterFieldArray && renderAfterFieldArray(fieldArrayMethods)}
         </div>
     );
 };
-
 export default PeriodpickerList;
