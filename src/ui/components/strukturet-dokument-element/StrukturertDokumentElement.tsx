@@ -51,7 +51,9 @@ const StrukturertDokumentElement = ({
     return (
         <div className={styles.strukturertDokumentElement}>
             <span className={styles.visuallyHidden}>Status</span>
-            <GreenCheckIconFilled />
+            <ContentWithTooltip tooltipText="Dokumentet er ferdig håndtert">
+                <GreenCheckIconFilled />
+            </ContentWithTooltip>
             <div className={styles.strukturertDokumentElement__texts}>
                 <span className={styles.strukturertDokumentElement__texts__type}>
                     <span className={styles.visuallyHidden}>Type</span>

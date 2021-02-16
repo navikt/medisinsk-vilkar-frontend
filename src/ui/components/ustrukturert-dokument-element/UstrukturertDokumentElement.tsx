@@ -37,7 +37,9 @@ const UstrukturertDokumentElement = ({
 
     return (
         <div className={styles.ustrukturertDokumentElement}>
-            <WarningIcon />
+            <ContentWithTooltip tooltipText="Dokumentet må håndteres">
+                <WarningIcon />
+            </ContentWithTooltip>
             <div className={styles.ustrukturertDokumentElement__texts}>
                 <span className={styles.ustrukturertDokumentElement__texts__type}>
                     <span className={styles.visuallyHidden}>Type</span>

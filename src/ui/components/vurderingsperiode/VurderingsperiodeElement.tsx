@@ -21,10 +21,18 @@ interface VurderingsperiodeElementProps {
 
 const renderIcon = (resultat: Vurderingsresultat) => {
     if (resultat === Vurderingsresultat.OPPFYLT) {
-        return <GreenCheckIconFilled />;
+        return (
+            <ContentWithTooltip tooltipText="Vilkåret er oppfylt">
+                <GreenCheckIconFilled />
+            </ContentWithTooltip>
+        );
     }
     if (resultat === Vurderingsresultat.IKKE_OPPFYLT) {
-        return <RedCrossIconFilled />;
+        return (
+            <ContentWithTooltip tooltipText="Vilkåret er ikke oppfylt">
+                <RedCrossIconFilled />
+            </ContentWithTooltip>
+        );
     }
     return null;
 };

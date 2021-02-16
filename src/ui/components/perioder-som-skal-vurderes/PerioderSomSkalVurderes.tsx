@@ -16,7 +16,9 @@ const PerioderSomSkalVurderes = ({ perioder, visParterLabel }: PerioderSomSkalVu
     return (
         <div className={styles.perioderSomSkalVurderes}>
             <span className={styles.visuallyHidden}>Type</span>
-            <WarningIcon />
+            <ContentWithTooltip tooltipText="Perioden må vurderes">
+                <WarningIcon />
+            </ContentWithTooltip>
             <div className={styles.perioderSomSkalVurderes__texts}>
                 {perioder.map((periode, index) => (
                     <p key={`${periode.fom}_${periode.tom}`} className={styles.perioderSomSkalVurderes__texts__period}>
