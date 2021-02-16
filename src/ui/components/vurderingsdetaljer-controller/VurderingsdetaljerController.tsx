@@ -4,6 +4,7 @@ import Spinner from 'nav-frontend-spinner';
 import Vurdering from '../../../types/Vurdering';
 import { get } from '../../../util/httpUtils';
 import PageError from '../page-error/PageError';
+import ContainerContext from '../../context/ContainerContext';
 
 interface VurderingsdetaljerControllerProps {
     hentVurderingUrl: string;
@@ -14,6 +15,8 @@ const VurderingsdetaljerController = ({
     hentVurderingUrl,
     contentRenderer,
 }: VurderingsdetaljerControllerProps): JSX.Element => {
+    const { httpErrorHandler } = React.useContext(ContainerContext);
+
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [vurdering, setVurdering] = React.useState<Vurdering>(null);
     const [hentVurderingHarFeilet, setHentVurderingHarFeilet] = React.useState<boolean>(false);
@@ -21,7 +24,7 @@ const VurderingsdetaljerController = ({
     const httpCanceler = useMemo(() => axios.CancelToken.source(), [hentVurderingUrl]);
 
     function hentVurdering(): Promise<Vurdering> {
-        return get(hentVurderingUrl, { cancelToken: httpCanceler.token });
+        return get(hentVurderingUrl, httpErrorHandler, { cancelToken: httpCanceler.token });
     }
 
     const handleError = () => {

@@ -31,7 +31,7 @@ import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 
 const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
-    const { vurdering, onVurderingValgt, endpoints, onFinished } = React.useContext(ContainerContext);
+    const { vurdering, onVurderingValgt, endpoints, onFinished, httpErrorHandler } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
@@ -59,7 +59,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
     const overlappendeVurderingsperioder = finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder(vurderingsoversikt);
 
     const getVurderingsoversikt = () => {
-        return get<Vurderingsoversikt>(endpoints.vurderingsoversiktBehovForToOmsorgspersoner, {
+        return get<Vurderingsoversikt>(endpoints.vurderingsoversiktBehovForToOmsorgspersoner, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         });
     };

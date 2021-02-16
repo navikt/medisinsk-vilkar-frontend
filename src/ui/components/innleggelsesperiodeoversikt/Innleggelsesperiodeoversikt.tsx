@@ -25,7 +25,7 @@ export enum FieldName {
 
 Modal.setAppElement('#app');
 const Innleggelsesperiodeoversikt = (): JSX.Element => {
-    const { endpoints } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
 
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [innleggelsesperioderResponse, setInnleggelsesperioderResponse] = React.useState<InnleggelsesperiodeResponse>(
@@ -39,7 +39,7 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
     const innleggelsesperioder = innleggelsesperioderResponse.perioder;
 
     const hentInnleggelsesperioder = () => {
-        return get(`${endpoints.innleggelsesperioder}`, {
+        return get(`${endpoints.innleggelsesperioder}`, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         });
     };
@@ -58,6 +58,7 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
         postInnleggelsesperioder(
             href,
             { behandlingUuid, versjon, perioder: nyeInnleggelsesperioder },
+            httpErrorHandler,
             httpCanceler.token
         )
             .then(hentInnleggelsesperioder)
@@ -154,6 +155,7 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
                         return postInnleggelsesperioderDryRun(
                             href,
                             { ...requestPayload, perioder: nyeInnleggelsesperioder },
+                            httpErrorHandler,
                             httpCanceler.token
                         );
                     }}

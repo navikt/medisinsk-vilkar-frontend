@@ -1,3 +1,5 @@
+import { HttpErrorHandler } from './HttpErrorHandler';
+
 interface ContainerContract {
     vurdering: string;
     dokument: string;
@@ -18,6 +20,7 @@ interface ContainerContract {
     behandlingUuid: string;
     readOnly: boolean;
     onFinished: () => void;
+    httpErrorHandler: HttpErrorHandler;
 }
 
 export default ContainerContract;

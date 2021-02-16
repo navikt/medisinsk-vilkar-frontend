@@ -1,21 +1,38 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { HttpErrorHandler } from '../types/HttpErrorHandler';
+import { handleErrorExternally, httpErrorShouldBeHandledExternally } from './responseHelpers';
 
-export async function get<T>(url: string, requestConfig?: AxiosRequestConfig): Promise<T> {
+export async function get<T>(
+    url: string,
+    httpErrorHandler: HttpErrorHandler,
+    requestConfig?: AxiosRequestConfig
+): Promise<T> {
     try {
         const response: AxiosResponse<T> = await axios.get(url, requestConfig);
         return response.data;
     } catch (error) {
         console.error(error);
-        throw new Error(error);
+        if (httpErrorShouldBeHandledExternally(error)) {
+            handleErrorExternally(error, httpErrorHandler);
+        }
+        return error;
     }
 }
 
-export async function post<T>(url: string, body: T, requestConfig?: AxiosRequestConfig): Promise<any> {
+export async function post<T>(
+    url: string,
+    body: T,
+    httpErrorHandler: HttpErrorHandler,
+    requestConfig?: AxiosRequestConfig
+): Promise<any> {
     try {
         const response: AxiosResponse = await axios.post(url, body, requestConfig);
         return response.data;
     } catch (error) {
         console.error(error);
-        throw new Error(error);
+        if (httpErrorShouldBeHandledExternally(error)) {
+            handleErrorExternally(error, httpErrorHandler);
+        }
+        return error;
     }
 }
