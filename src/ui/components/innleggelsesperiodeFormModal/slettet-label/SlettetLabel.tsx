@@ -1,13 +1,13 @@
 import * as React from 'react';
-import IconWithTooltip from '../../content-with-tooltip/ContentWithTooltip';
+import ContentWithTooltip from '../../content-with-tooltip/ContentWithTooltip';
 import ExclamationMarkIcon from '../../icons/ExclamationMarkIcon';
 import styles from './slettetLabel.less';
 
 const SlettetLabel = () => (
     <div className={styles.slettetLabel__container}>
-        <IconWithTooltip tooltipText="Slettet">
+        <ContentWithTooltip tooltipText="Slettet">
             <ExclamationMarkIcon />
-        </IconWithTooltip>
+        </ContentWithTooltip>
     </div>
 );
 
