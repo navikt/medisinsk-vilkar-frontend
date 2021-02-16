@@ -1,4 +1,3 @@
-import { EtikettInfo } from 'nav-frontend-etiketter';
 import React from 'react';
 import { Period } from '../../../types/Period';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
@@ -8,7 +7,7 @@ import OnePersonIconBlue from '../icons/OnePersonIconBlue';
 import OnePersonOutline from '../icons/OnePersonOutline';
 import RedCrossIconFilled from '../icons/RedCrossIconFilled';
 import TwoPersonsWithOneHighlightedIconBlue from '../icons/TwoPersonsWithOneHighlightedIconBlue';
-import IconWithTooltip from '../content-with-tooltip/ContentWithTooltip';
+import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import styles from './vurderingsperiodeElement.less';
 
 interface VurderingsperiodeElementProps {
@@ -17,6 +16,7 @@ interface VurderingsperiodeElementProps {
     gjelderForAnnenPart?: boolean;
     gjelderForSøker?: boolean;
     renderAfterElement?: () => React.ReactNode;
+    visParterLabel?: boolean;
 }
 
 const renderIcon = (resultat: Vurderingsresultat) => {
@@ -45,36 +45,49 @@ const VurderingsperiodeElement = ({
     renderAfterElement,
     gjelderForAnnenPart,
     gjelderForSøker,
+    visParterLabel,
 }: VurderingsperiodeElementProps): JSX.Element => {
     const parterLabel = () => {
         if (gjelderForAnnenPart && gjelderForSøker) {
             return (
-                <IconWithTooltip tooltipText="Søker og annen part">
+                <ContentWithTooltip tooltipText="Søker og annen part">
                     <TwoPersonsWithOneHighlightedIconBlue />
-                </IconWithTooltip>
+                </ContentWithTooltip>
             );
         }
         if (gjelderForAnnenPart) {
             return (
-                <IconWithTooltip tooltipText="Annen part">
+                <ContentWithTooltip tooltipText="Annen part">
                     <OnePersonOutline />
-                </IconWithTooltip>
+                </ContentWithTooltip>
             );
         }
         return (
-            <IconWithTooltip tooltipText="Søker">
+            <ContentWithTooltip tooltipText="Søker">
                 <OnePersonIconBlue />
-            </IconWithTooltip>
+            </ContentWithTooltip>
         );
     };
 
     return (
         <div className={styles.vurderingsperiodeElement}>
+            <span className={styles.visuallyHidden}>Type</span>
             {renderIcon(resultat)}
             <div className={styles.vurderingsperiodeElement__texts}>
-                <p className={styles.vurderingsperiodeElement__texts__period}>{prettifyPeriod(periode)}</p>
-                <div className={styles.vurderingsperiodeElement__texts__parterIcon}>{parterLabel()}</div>
-                <p className={styles.vurderingsperiodeElement__texts__parter}>{renderResultatText(resultat)}</p>
+                <p className={styles.vurderingsperiodeElement__texts__period}>
+                    <span className={styles.visuallyHidden}>Periode</span>
+                    {prettifyPeriod(periode)}
+                </p>
+                {visParterLabel && (
+                    <div className={styles.vurderingsperiodeElement__texts__parterIcon}>
+                        <span className={styles.visuallyHidden}>Parter</span>
+                        {parterLabel()}
+                    </div>
+                )}
+                <p className={styles.vurderingsperiodeElement__texts__resultat}>
+                    <span className={styles.visuallyHidden}>Resultat</span>
+                    {renderResultatText(resultat)}
+                </p>
             </div>
             {renderAfterElement && renderAfterElement()}
         </div>

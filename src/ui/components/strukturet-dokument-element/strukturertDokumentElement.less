@@ -4,7 +4,9 @@
     cursor: pointer;
 
     &__texts {
-        margin-left: 1rem;
+        margin-left: 2rem;
+        display: flex;
+        align-items: center;
 
         &__type {
             display: inline-block;
@@ -12,11 +14,24 @@
         }
 
         &__date {
-            margin-left: 2rem;
+            margin-left: 1rem;
         }
 
-        &__status {
-            margin-left: 2rem;
+        &__part {
+            margin-left: 1.375rem;
+            margin-bottom: -0.25rem;
+            display: inline-block;
+        }
+
+        &__document {
+            margin-left: 1.5rem;
+            margin-bottom: -0.125rem;
+
+            svg {
+                width: 22px;
+                height: 24px;
+                stroke: none;
+            }
         }
     }
     .visuallyHidden {

@@ -36,9 +36,10 @@ const Dokumentnavigasjon = ({ dokumenter, onDokumentValgt, dokumenterSomMåGjenn
             <Undertittel>Alle dokumenter</Undertittel>
             <div className={styles.dokumentnavigasjonContainer}>
                 <div className={styles.dokumentnavigasjonContainer__columnHeadings}>
-                    <Element>Type</Element>
-                    <Element className={styles['dokumentnavigasjonContainer__columnHeading--second']}>Datert</Element>
-                    <Element className={styles['dokumentnavigasjonContainer__columnHeading--third']}>Status</Element>
+                    <Element className={styles['dokumentnavigasjonContainer__columnHeading--first']}>Status</Element>
+                    <Element className={styles['dokumentnavigasjonContainer__columnHeading--second']}>Type</Element>
+                    <Element className={styles['dokumentnavigasjonContainer__columnHeading--third']}>Datert</Element>
+                    <Element className={styles['dokumentnavigasjonContainer__columnHeading--fourth']}>Part</Element>
                 </div>
                 <InteractiveList
                     elements={allElements.map((element, currentIndex) => ({

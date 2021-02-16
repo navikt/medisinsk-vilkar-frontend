@@ -1,10 +1,10 @@
 import { EtikettInfo } from 'nav-frontend-etiketter';
-import { Undertittel } from 'nav-frontend-typografi';
+import { Element, Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import { sortPeriodsByFomDate } from '../../../util/periodUtils';
-import IconWithTooltip from '../content-with-tooltip/ContentWithTooltip';
+import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import EditedBySaksbehandlerIcon from '../icons/EditedBySaksbehandlerIcon';
 import InteractiveList from '../interactive-list/InteractiveList';
 import NyVurderingKnapp from '../ny-vurdering-knapp/NyVurderingKnapp';
@@ -19,6 +19,7 @@ interface VurderingsnavigasjonProps {
     onVurderingValgt: (vurdering: Vurderingselement) => void;
     resterendeVurderingsperioder?: Period[];
     visRadForNyVurdering?: boolean;
+    visParterLabel?: boolean;
 }
 
 const Vurderingsnavigasjon = ({
@@ -27,6 +28,7 @@ const Vurderingsnavigasjon = ({
     onVurderingValgt,
     resterendeVurderingsperioder,
     visRadForNyVurdering,
+    visParterLabel,
 }: VurderingsnavigasjonProps): JSX.Element => {
     const [activeIndex, setActiveIndex] = React.useState(-1);
 
@@ -49,9 +51,9 @@ const Vurderingsnavigasjon = ({
                     renderAfterElement={() => (
                         <div className={styles.vurderingsperiode__postElementContainer}>
                             {endretIDenneBehandlingen && (
-                                <IconWithTooltip tooltipText="Vurderingen er opprettet i denne behandlingen">
+                                <ContentWithTooltip tooltipText="Vurderingen er opprettet i denne behandlingen">
                                     <EditedBySaksbehandlerIcon />
-                                </IconWithTooltip>
+                                </ContentWithTooltip>
                             )}
 
                             {visOverlappetikett && <EtikettInfo mini>Overlapp</EtikettInfo>}
@@ -59,6 +61,7 @@ const Vurderingsnavigasjon = ({
                     )}
                     gjelderForAnnenPart={gjelderForAnnenPart}
                     gjelderForSøker={gjelderForSøker}
+                    visParterLabel={visParterLabel}
                 />
             );
         }
@@ -66,7 +69,9 @@ const Vurderingsnavigasjon = ({
 
     const allElements = [...vurderingsperiodeElements];
     if (harPerioderSomSkalVurderes) {
-        allElements.unshift(<PerioderSomSkalVurderes perioder={resterendeVurderingsperioder || []} />);
+        allElements.unshift(
+            <PerioderSomSkalVurderes visParterLabel={visParterLabel} perioder={resterendeVurderingsperioder || []} />
+        );
     }
 
     if (visRadForNyVurdering) {
@@ -88,6 +93,13 @@ const Vurderingsnavigasjon = ({
                 )}
             />
             <div className={styles.vurderingsvelgerContainer}>
+                <div className={styles.vurderingsvelgerContainer__columnHeadings}>
+                    <Element className={styles['vurderingsvelgerContainer__columnHeading--first']}>Status</Element>
+                    <Element className={styles['vurderingsvelgerContainer__columnHeading--second']}>Periode</Element>
+                    {visParterLabel && (
+                        <Element className={styles['vurderingsvelgerContainer__columnHeading--third']}>Part</Element>
+                    )}
+                </div>
                 <InteractiveList
                     elements={allElements.map((element, currentIndex) => ({
                         content: element,
