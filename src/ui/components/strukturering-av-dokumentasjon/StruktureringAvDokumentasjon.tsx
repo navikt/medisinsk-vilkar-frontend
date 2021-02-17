@@ -29,7 +29,7 @@ interface StruktureringAvDokumentasjonProps {
 
 const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAvDokumentasjonProps) => {
     const [harRegistrertDiagnosekode, setHarRegistrertDiagnosekode] = React.useState<boolean | undefined>();
-    const { dokument, endpoints, onDokumentValgt } = React.useContext(ContainerContext);
+    const { dokument, endpoints, onDokumentValgt, httpErrorHandler } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(dokumentReducer, {
@@ -44,7 +44,7 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
     const { dokumentoversikt, isLoading, visDokumentDetails, valgtDokument, dokumentoversiktFeilet } = state;
 
     const getDokumentoversikt = () => {
-        return get<Dokumentoversikt>(endpoints.dokumentoversikt, {
+        return get<Dokumentoversikt>(endpoints.dokumentoversikt, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         });
     };

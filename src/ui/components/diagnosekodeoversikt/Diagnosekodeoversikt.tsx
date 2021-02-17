@@ -24,7 +24,7 @@ interface DiagnosekodeoversiktProps {
 }
 
 const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktProps) => {
-    const { endpoints } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
     const [isLoading, setIsLoading] = React.useState(true);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [diagnosekodeResponse, setDiagnosekodeResponse] = React.useState<DiagnosekodeResponse>({
@@ -40,7 +40,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
 
     const hentDiagnosekoder = () => {
         setIsLoading(true);
-        return get<DiagnosekodeResponse>(`${endpoints.diagnosekoder}`, {
+        return get<DiagnosekodeResponse>(`${endpoints.diagnosekoder}`, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         }).then((response: DiagnosekodeResponse) => {
             setDiagnosekodeResponse(response);
@@ -50,11 +50,15 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
     };
 
     const slettDiagnosekode = (diagnosekode: Diagnosekode) => {
-        return post(endreDiagnosekoderLink.href, {
-            behandlingUuid: diagnosekodeResponse.behandlingUuid,
-            versjon: diagnosekodeResponse.versjon,
-            diagnosekoder: diagnosekoder.filter((kode) => kode !== diagnosekode),
-        }).then(hentDiagnosekoder);
+        return post(
+            endreDiagnosekoderLink.href,
+            {
+                behandlingUuid: diagnosekodeResponse.behandlingUuid,
+                versjon: diagnosekodeResponse.versjon,
+                diagnosekoder: diagnosekoder.filter((kode) => kode !== diagnosekode),
+            },
+            httpErrorHandler
+        ).then(hentDiagnosekoder);
     };
 
     React.useEffect(() => {
@@ -96,6 +100,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                             versjon: diagnosekodeResponse.versjon,
                             diagnosekoder: [...diagnosekoder, nyDiagnosekode.kode],
                         },
+                        httpErrorHandler,
                         { cancelToken: httpCanceler.token }
                     )
                         .then(hentDiagnosekoder)

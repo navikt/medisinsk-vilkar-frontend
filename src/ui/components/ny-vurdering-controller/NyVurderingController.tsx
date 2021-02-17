@@ -11,6 +11,7 @@ import OverlappendePeriodeModal from '../overlappende-periode-modal/Overlappende
 import ActionType from './actionTypes';
 import nyVurderingControllerReducer from './reducer';
 import { postNyVurdering, postNyVurderingDryRun } from '../../../api/api';
+import ContainerContext from '../../context/ContainerContext';
 
 interface NyVurderingController {
     opprettVurderingLink: Link;
@@ -27,6 +28,8 @@ const NyVurderingController = ({
     formRenderer,
     vurderingstype,
 }: NyVurderingController) => {
+    const { httpErrorHandler } = React.useContext(ContainerContext);
+
     const [state, dispatch] = React.useReducer(nyVurderingControllerReducer, {
         isLoading: true,
         dokumenter: [],
@@ -52,6 +55,7 @@ const NyVurderingController = ({
             opprettVurderingLink.href,
             opprettVurderingLink.requestPayload.behandlingUuid,
             { ...nyVurderingsversjon, type: vurderingstype },
+            httpErrorHandler,
             httpCanceler.token
         ).then(
             () => {
@@ -71,6 +75,7 @@ const NyVurderingController = ({
             opprettVurderingLink.href,
             opprettVurderingLink.requestPayload.behandlingUuid,
             { ...nyVurderingsversjon, type: vurderingstype },
+            httpErrorHandler,
             httpCanceler.token
         );
     };
@@ -101,7 +106,7 @@ const NyVurderingController = ({
         if (!dataTilVurderingUrl) {
             return new Promise((resolve) => resolve([]));
         }
-        return get(dataTilVurderingUrl, { cancelToken: httpCanceler.token });
+        return get(dataTilVurderingUrl, httpErrorHandler, { cancelToken: httpCanceler.token });
     }
 
     const handleHentDataTilVurderingError = () => {
