@@ -14,13 +14,15 @@ interface StrukturertDokumentDetaljerProps {
 
 const renderDokumenttypeContent = (dokumenttype: Dokumenttype) => {
     if (dokumenttype === Dokumenttype.LEGEERKLÆRING) {
-        return <span>Ja, det er en legeerklæring</span>;
+        return <span>Ja, legeerklæring fra sykehus/spesialisthelsetjenesten</span>;
     }
     if (dokumenttype === Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER) {
-        return <span>Ja, men det er ikke en legeerklæring</span>;
+        return (
+            <span>Ja, andre medisinske opplysninger (f.eks. legeerklæring fra fastlege, uttalelse fra psykolog)</span>
+        );
     }
     if (dokumenttype === Dokumenttype.MANGLER_MEDISINSKE_OPPLYSNINGER) {
-        return <span>Nei</span>;
+        return <span>Dokumentet inneholder ikke medisinske opplysninger</span>;
     }
     return null;
 };
