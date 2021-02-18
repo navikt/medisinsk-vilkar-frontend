@@ -20,6 +20,7 @@ interface VurderingsnavigasjonProps {
     resterendeVurderingsperioder?: Period[];
     visRadForNyVurdering?: boolean;
     visParterLabel?: boolean;
+    visResultat?: boolean;
 }
 
 const Vurderingsnavigasjon = ({
@@ -29,6 +30,7 @@ const Vurderingsnavigasjon = ({
     resterendeVurderingsperioder,
     visRadForNyVurdering,
     visParterLabel,
+    visResultat,
 }: VurderingsnavigasjonProps): JSX.Element => {
     const [activeIndex, setActiveIndex] = React.useState(-1);
 
@@ -62,6 +64,7 @@ const Vurderingsnavigasjon = ({
                     gjelderForAnnenPart={gjelderForAnnenPart}
                     gjelderForSøker={gjelderForSøker}
                     visParterLabel={visParterLabel}
+                    visResultat={visResultat}
                 />
             );
         }

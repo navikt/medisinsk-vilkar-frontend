@@ -17,6 +17,7 @@ interface VurderingsperiodeElementProps {
     gjelderForSøker?: boolean;
     renderAfterElement?: () => React.ReactNode;
     visParterLabel?: boolean;
+    visResultat?: boolean;
 }
 
 const renderIcon = (resultat: Vurderingsresultat) => {
@@ -54,6 +55,7 @@ const VurderingsperiodeElement = ({
     gjelderForAnnenPart,
     gjelderForSøker,
     visParterLabel,
+    visResultat,
 }: VurderingsperiodeElementProps): JSX.Element => {
     const parterLabel = () => {
         if (gjelderForAnnenPart && gjelderForSøker) {
@@ -92,10 +94,9 @@ const VurderingsperiodeElement = ({
                         {parterLabel()}
                     </div>
                 )}
-                <p className={styles.vurderingsperiodeElement__texts__resultat}>
-                    <span className={styles.visuallyHidden}>Resultat</span>
-                    {renderResultatText(resultat)}
-                </p>
+                {visResultat && (
+                    <p className={styles.vurderingsperiodeElement__texts__resultat}>{renderResultatText(resultat)}</p>
+                )}
             </div>
             {renderAfterElement && renderAfterElement()}
         </div>

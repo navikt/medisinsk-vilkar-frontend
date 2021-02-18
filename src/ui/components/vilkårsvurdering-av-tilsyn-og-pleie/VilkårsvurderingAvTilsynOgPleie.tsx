@@ -179,6 +179,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                         onNyVurderingClick={visNyVurderingForm}
                         visRadForNyVurdering={visRadForNyVurdering}
                         visParterLabel
+                        visResultat
                     />
                 )}
                 detailSection={() => {
