@@ -20,12 +20,17 @@ const PerioderSomSkalVurderes = ({ perioder, visParterLabel }: PerioderSomSkalVu
                 <WarningIcon />
             </ContentWithTooltip>
             <div className={styles.perioderSomSkalVurderes__texts}>
-                {perioder.map((periode, index) => (
-                    <p key={`${periode.fom}_${periode.tom}`} className={styles.perioderSomSkalVurderes__texts__period}>
-                        {index === 0 && <span className={styles.visuallyHidden}>Perioder</span>}
-                        {prettifyPeriod(periode)}
-                    </p>
-                ))}
+                <div>
+                    {perioder.map((periode, index) => (
+                        <p
+                            key={`${periode.fom}_${periode.tom}`}
+                            className={styles.perioderSomSkalVurderes__texts__period}
+                        >
+                            {index === 0 && <span className={styles.visuallyHidden}>Perioder</span>}
+                            {prettifyPeriod(periode)}
+                        </p>
+                    ))}
+                </div>
                 {visParterLabel && (
                     <div className={styles.perioderSomSkalVurderes__texts__parterIcon}>
                         <span className={styles.visuallyHidden}>Parter</span>
