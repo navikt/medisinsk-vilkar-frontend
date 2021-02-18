@@ -15,7 +15,7 @@ interface DiagnosekodeSelectorProps {
 }
 
 const fetchDiagnosekoderByQuery = (queryString: string) => {
-    return fetch(`/k9/diagnosekoder?query=${queryString}&max=8`).then((response) => response.json());
+    return fetch(`/k9/diagnosekoder/?query=${queryString}&max=8`).then((response) => response.json());
 };
 
 const getUpdatedSuggestions = async (queryString: string) => {
