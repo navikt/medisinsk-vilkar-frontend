@@ -6,7 +6,7 @@ import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
 import styles from './medisinskVilkår.less';
 
-const tabs = ['Legeerklæring', 'Tilsyn og pleie', 'To omsorgspersoner'];
+const tabs = ['Dokumentasjon av sykdom', 'Tilsyn og pleie', 'To omsorgspersoner'];
 const MedisinskVilkår = () => {
     const [activeTab, setActiveTab] = React.useState(0);
     return (
