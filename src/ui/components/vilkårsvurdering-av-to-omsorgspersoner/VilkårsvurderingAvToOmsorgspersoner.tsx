@@ -137,14 +137,6 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                 </>
             )}
 
-            {!harVurdertePerioder && !harPerioderSomSkalVurderes && (
-                <Box marginTop={Margin.large}>
-                    <AlertStripeInfo>
-                        To omsorgspersoner skal kun vurderes dersom det er flere parter som har søkt i samme periode,
-                        eller det er opplyst i søknaden om at det kommer en søker til.
-                    </AlertStripeInfo>
-                </Box>
-            )}
             {!harPerioderSomSkalVurderes && (
                 <Box marginTop={Margin.large} marginBottom={Margin.medium}>
                     <Alertstripe type="suksess">
@@ -167,27 +159,27 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                     </Alertstripe>
                 </Box>
             )}
+            {!harVurdertePerioder && !harPerioderSomSkalVurderes && (
+                <Box marginTop={Margin.large}>
+                    <AlertStripeInfo>
+                        To omsorgspersoner skal kun vurderes dersom det er flere parter som har søkt i samme periode,
+                        eller det er opplyst i søknaden om at det kommer en søker til.
+                    </AlertStripeInfo>
+                </Box>
+            )}
             <Box marginTop={harPerioderSomSkalVurderes || !harVurdertePerioder ? Margin.medium : null}>
                 <NavigationWithDetailView
                     navigationSection={() => {
-                        if (!harPerioderSomSkalVurderes && !harVurdertePerioder) {
+                        if (harPerioderSomSkalVurderes || harVurdertePerioder) {
                             return (
-                                <Box marginTop={Margin.medium}>
-                                    <AlertStripeInfo>
-                                        To omsorgspersoner skal ikke vurderes før tilsyn og pleie er blitt innvilget og
-                                        det er to parter i saken.
-                                    </AlertStripeInfo>
-                                </Box>
+                                <Vurderingsnavigasjon
+                                    vurderingselementer={vurderingsoversikt?.vurderingselementer}
+                                    resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
+                                    onVurderingValgt={velgVurderingselement}
+                                    onNyVurderingClick={visNyVurderingForm}
+                                />
                             );
                         }
-                        return (
-                            <Vurderingsnavigasjon
-                                vurderingselementer={vurderingsoversikt?.vurderingselementer}
-                                resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
-                                onVurderingValgt={velgVurderingselement}
-                                onNyVurderingClick={visNyVurderingForm}
-                            />
-                        );
                     }}
                     detailSection={() => {
                         if (visVurderingDetails) {

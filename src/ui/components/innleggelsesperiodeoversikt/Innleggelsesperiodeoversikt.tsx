@@ -100,7 +100,7 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
 
     return (
         <div className={styles.innleggelsesperiodeoversikt}>
-            <TitleWithUnderline>
+            <TitleWithUnderline titleClass={styles.innleggelsesperiodeoversikt__title}>
                 Innleggelsesperioder
                 <WriteAccessBoundContent
                     otherRequirementsAreMet={innleggelsesperioder.length > 0}
@@ -122,7 +122,6 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
                         {innleggelsesperioder.length === 0 && <p>Ingen innleggelsesperioder registrert</p>}
                         {innleggelsesperioder.length > 0 && (
                             <>
-                                <Element>Periode</Element>
                                 <Box marginTop={Margin.small}>
                                     <Innleggelsesperiodeliste innleggelsesperioder={innleggelsesperioder} />
                                 </Box>
