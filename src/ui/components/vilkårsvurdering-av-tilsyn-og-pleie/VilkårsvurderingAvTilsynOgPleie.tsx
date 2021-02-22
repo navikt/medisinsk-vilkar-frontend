@@ -145,7 +145,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                                     onClick={onVilkårVurdert}
                                     mini
                                 >
-                                    Gå videre
+                                    Fortsett
                                 </Knapp>
                             )}
                         />

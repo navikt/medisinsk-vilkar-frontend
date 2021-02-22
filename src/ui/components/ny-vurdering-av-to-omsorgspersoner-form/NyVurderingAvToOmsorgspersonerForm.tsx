@@ -87,7 +87,7 @@ const NyVurderingAvToOmsorgspersonerForm = ({
     return (
         <DetailView title="Vurdering av to omsorgspersoner">
             <FormProvider {...formMethods}>
-                <Form buttonLabel="Lagre" onSubmit={formMethods.handleSubmit(lagNyVurdering)}>
+                <Form buttonLabel="Bekreft" onSubmit={formMethods.handleSubmit(lagNyVurdering)}>
                     {dokumenter?.length > 0 && (
                         <Box marginTop={Margin.xLarge}>
                             <CheckboxGroup

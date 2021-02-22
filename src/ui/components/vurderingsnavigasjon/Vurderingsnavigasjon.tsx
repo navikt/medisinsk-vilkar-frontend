@@ -7,11 +7,12 @@ import { sortPeriodsByFomDate } from '../../../util/periodUtils';
 import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import EditedBySaksbehandlerIcon from '../icons/EditedBySaksbehandlerIcon';
 import InteractiveList from '../interactive-list/InteractiveList';
-import NyVurderingKnapp from '../ny-vurdering-knapp/NyVurderingKnapp';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
 import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
-import styles from './vurderingsnavigasjon.less';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
+import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
+import LinkButton from '../link-button/LinkButton';
+import styles from './vurderingsnavigasjon.less';
 
 interface VurderingsnavigasjonProps {
     vurderingselementer: Vurderingselement[];
@@ -82,17 +83,20 @@ const Vurderingsnavigasjon = ({
     }
 
     return (
-        <>
+        <div className={styles.vurderingsnavigasjon}>
             <Undertittel>Alle perioder</Undertittel>
             <WriteAccessBoundContent
                 otherRequirementsAreMet={!harPerioderSomSkalVurderes}
                 contentRenderer={() => (
-                    <NyVurderingKnapp
+                    <LinkButton
+                        className={styles.vurderingsnavigasjon__opprettVurderingKnapp}
                         onClick={() => {
                             setActiveIndex(0);
                             onNyVurderingClick();
                         }}
-                    />
+                    >
+                        Opprett vurdering
+                    </LinkButton>
                 )}
             />
             <div className={styles.vurderingsvelgerContainer}>
@@ -124,7 +128,7 @@ const Vurderingsnavigasjon = ({
                     }))}
                 />
             </div>
-        </>
+        </div>
     );
 };
 
