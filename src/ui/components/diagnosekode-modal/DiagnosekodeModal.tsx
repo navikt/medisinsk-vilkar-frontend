@@ -44,7 +44,7 @@ const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick }: Diagnosekode
                     </Box>
                     <Box marginTop={Margin.xLarge}>
                         <div style={{ display: 'flex' }}>
-                            <Hovedknapp mini>Lagre</Hovedknapp>
+                            <Hovedknapp mini>Bekreft</Hovedknapp>
                             <Knapp mini style={{ marginLeft: '1rem' }} htmlType="button" onClick={onRequestClose}>
                                 Avbryt
                             </Knapp>

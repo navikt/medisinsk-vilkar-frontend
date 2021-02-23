@@ -145,7 +145,7 @@ const InnleggelsesperiodeFormModal = ({
                         <Box marginTop={Margin.xLarge}>
                             <div style={{ display: 'flex' }}>
                                 <Hovedknapp spinner={isLoading} autoDisableVedSpinner mini>
-                                    Lagre
+                                    Bekreft
                                 </Hovedknapp>
                                 <Knapp
                                     mini

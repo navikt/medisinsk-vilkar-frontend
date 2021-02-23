@@ -95,6 +95,7 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
     const ustrukturerteDokumenter = dokumentoversikt.dokumenter.filter(
         ({ type }) => type === Dokumenttype.UKLASSIFISERT
     );
+    const harDokumenter = strukturerteDokumenter.length > 0 || ustrukturerteDokumenter.length > 0;
     const harGyldigSignatur = strukturerteDokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING);
     const kanGåVidere = harGyldigSignatur && harRegistrertDiagnosekode && ustrukturerteDokumenter.length === 0;
 
@@ -112,7 +113,7 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
                                     style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
                                     onClick={onProgressButtonClick}
                                 >
-                                    Gå videre
+                                    Fortsett
                                 </Hovedknapp>
                             )}
                         />
@@ -126,12 +127,12 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
                     </Alertstripe>
                 </Box>
             )}
-            {!harGyldigSignatur && (
+            {!harGyldigSignatur && harDokumenter && (
                 <>
                     <Box marginBottom={Margin.medium}>
                         <Alertstripe type="advarsel">
-                            Opplysinger om dokumentasjon som er signert av sykehuslege mangler. Knytt dokument med
-                            godkjent signatur, eller sett saken på vent mens du innhenter mer dokumentasjon.
+                            Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler. Håndter eventuelle
+                            nye dokumenter, eller sett saken på vent mens du innhenter mer dokumentasjon.
                         </Alertstripe>
                     </Box>
                     {ustrukturerteDokumenter.length === 0 && (
@@ -141,44 +142,53 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
                     )}
                 </>
             )}
-            <NavigationWithDetailView
-                navigationSection={() => (
-                    <Dokumentnavigasjon
-                        dokumenter={strukturerteDokumenter}
-                        dokumenterSomMåGjennomgås={ustrukturerteDokumenter}
-                        onDokumentValgt={velgDokument}
+            {harDokumenter === false && <Alertstripe type="info">Ingen dokumenter å vise</Alertstripe>}
+            {harDokumenter === true && (
+                <>
+                    <NavigationWithDetailView
+                        navigationSection={() => (
+                            <Dokumentnavigasjon
+                                dokumenter={strukturerteDokumenter}
+                                dokumenterSomMåGjennomgås={ustrukturerteDokumenter}
+                                onDokumentValgt={velgDokument}
+                            />
+                        )}
+                        detailSection={() => {
+                            if (visDokumentDetails) {
+                                if (valgtDokument.type === Dokumenttype.UKLASSIFISERT) {
+                                    const strukturerDokumentLink = findLinkByRel(
+                                        LinkRel.ENDRE_DOKUMENT,
+                                        valgtDokument.links
+                                    );
+                                    return (
+                                        <StrukturerDokumentController
+                                            ustrukturertDokument={valgtDokument}
+                                            strukturerDokumentLink={strukturerDokumentLink}
+                                            onDokumentStrukturert={oppdaterDokumentoversikt}
+                                        />
+                                    );
+                                }
+                                return <StrukturertDokumentDetaljer dokument={valgtDokument} />;
+                            }
+                            return null;
+                        }}
                     />
-                )}
-                detailSection={() => {
-                    if (visDokumentDetails) {
-                        if (valgtDokument.type === Dokumenttype.UKLASSIFISERT) {
-                            const strukturerDokumentLink = findLinkByRel(LinkRel.ENDRE_DOKUMENT, valgtDokument.links);
-                            return (
-                                <StrukturerDokumentController
-                                    ustrukturertDokument={valgtDokument}
-                                    strukturerDokumentLink={strukturerDokumentLink}
-                                    onDokumentStrukturert={oppdaterDokumentoversikt}
+
+                    <Box marginTop={Margin.xxLarge}>
+                        <DokumentasjonFooter
+                            firstSectionRenderer={() => <Innleggelsesperiodeoversikt />}
+                            secondSectionRenderer={() => (
+                                <Diagnosekodeoversikt
+                                    onDiagnosekoderUpdated={(diagnosekoder) => {
+                                        setHarRegistrertDiagnosekode(diagnosekoder && diagnosekoder.length > 0);
+                                    }}
                                 />
-                            );
-                        }
-                        return <StrukturertDokumentDetaljer dokument={valgtDokument} />;
-                    }
-                    return null;
-                }}
-            />
-            <Box marginTop={Margin.xxLarge}>
-                <DokumentasjonFooter
-                    firstSectionRenderer={() => <Innleggelsesperiodeoversikt />}
-                    secondSectionRenderer={() => (
-                        <Diagnosekodeoversikt
-                            onDiagnosekoderUpdated={(diagnosekoder) => {
-                                setHarRegistrertDiagnosekode(diagnosekoder && diagnosekoder.length > 0);
-                            }}
+                            )}
+                            thirdSectionRenderer={() => <SignertSeksjon harGyldigSignatur={harGyldigSignatur} />}
                         />
-                    )}
-                    thirdSectionRenderer={() => <SignertSeksjon harGyldigSignatur={harGyldigSignatur} />}
-                />
-            </Box>
+                    </Box>
+                </>
+            )}
         </>
     );
 };

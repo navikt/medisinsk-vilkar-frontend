@@ -18,6 +18,7 @@ import { InnleggelsesperiodeResponse } from '../../../types/InnleggelsesperiodeR
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
 import { postInnleggelsesperioder, postInnleggelsesperioderDryRun } from '../../../api/api';
+import LinkButton from '../link-button/LinkButton';
 
 export enum FieldName {
     INNLEGGELSESPERIODER = 'innleggelsesperioder',
@@ -104,13 +105,12 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
                 <WriteAccessBoundContent
                     otherRequirementsAreMet={innleggelsesperioder.length > 0}
                     contentRenderer={() => (
-                        <button
-                            type="button"
-                            className={styles.innleggelsesperiodeoversikt__editButton}
+                        <LinkButton
+                            className={styles.innleggelsesperiodeoversikt__redigerListeKnapp}
                             onClick={() => setModalIsOpen(true)}
                         >
                             Rediger liste
-                        </button>
+                        </LinkButton>
                     )}
                 />
             </TitleWithUnderline>
@@ -132,7 +132,7 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
                         otherRequirementsAreMet={innleggelsesperioder.length === 0}
                         contentRenderer={() => (
                             <Box marginTop={Margin.large}>
-                                <AddButton label="Legg til innleggelsesperiode" onClick={() => setModalIsOpen(true)} />
+                                <AddButton label="Legg til periode" onClick={() => setModalIsOpen(true)} />
                             </Box>
                         )}
                     />

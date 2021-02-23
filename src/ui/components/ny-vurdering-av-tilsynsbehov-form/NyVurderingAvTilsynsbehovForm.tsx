@@ -88,7 +88,7 @@ const NyVurderingAvTilsynsbehovForm = ({
         <DetailView title="Vurdering av tilsyn og pleie">
             <div id="modal" />
             <FormProvider {...formMethods}>
-                <Form buttonLabel="Lagre" onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}>
+                <Form buttonLabel="Bekreft" onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}>
                     {dokumenter?.length > 0 && (
                         <Box marginTop={Margin.xLarge}>
                             <CheckboxGroup

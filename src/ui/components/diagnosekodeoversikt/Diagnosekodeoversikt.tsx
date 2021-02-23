@@ -40,7 +40,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
 
     const hentDiagnosekoder = () => {
         setIsLoading(true);
-        return get<DiagnosekodeResponse>(`${endpoints.diagnosekoder}`, httpErrorHandler, {
+        return get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         }).then((response: DiagnosekodeResponse) => {
             setDiagnosekodeResponse(response);
