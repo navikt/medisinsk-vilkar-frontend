@@ -4,10 +4,11 @@ import mockedToOmsorgspersonerVurderingsoversikt from './mocked-data/mockedToOms
 import toOmsorgspersonerVurderingerMock from './mocked-data/mockedToOmsorgspersonerVurderinger';
 import createMockedVurderingselementLinks from './mocked-data/createMockedVurderingselementLinks';
 import NyVurderingsversjon from '../src/types/NyVurderingsversjon';
+import mockedDokumentliste from './mocked-data/mockedDokumentliste';
 
 export const createKontinuerligTilsynVurdering = (requestBody: NyVurderingsversjon) => {
     const nyVurderingId = tilsynsbehovVurderingsoversiktMock.vurderingselementer.length + 1;
-    const { type, perioder, resultat, tilknyttedeDokumenter, tekst } = requestBody;
+    const { type, perioder, resultat, tekst } = requestBody;
 
     tilsynsbehovVurderingsoversiktMock.vurderingselementer.push({
         id: `${nyVurderingId}`,
@@ -26,7 +27,7 @@ export const createKontinuerligTilsynVurdering = (requestBody: NyVurderingsversj
             {
                 perioder: perioder,
                 resultat: resultat,
-                dokumenter: tilknyttedeDokumenter,
+                dokumenter: mockedDokumentliste,
                 tekst: tekst,
             },
         ],
@@ -39,7 +40,7 @@ export const createKontinuerligTilsynVurdering = (requestBody: NyVurderingsversj
 
 export const createToOmsorgspersonerVurdering = (requestBody: NyVurderingsversjon) => {
     const nyVurderingId = mockedToOmsorgspersonerVurderingsoversikt.vurderingselementer.length + 11;
-    const { type, perioder, resultat, tilknyttedeDokumenter, tekst } = requestBody;
+    const { type, perioder, resultat, tekst } = requestBody;
 
     mockedToOmsorgspersonerVurderingsoversikt.vurderingselementer.push({
         id: `${nyVurderingId}`,
@@ -58,7 +59,7 @@ export const createToOmsorgspersonerVurdering = (requestBody: NyVurderingsversjo
             {
                 perioder: perioder,
                 resultat: resultat,
-                dokumenter: tilknyttedeDokumenter,
+                dokumenter: mockedDokumentliste,
                 tekst: tekst,
             },
         ],

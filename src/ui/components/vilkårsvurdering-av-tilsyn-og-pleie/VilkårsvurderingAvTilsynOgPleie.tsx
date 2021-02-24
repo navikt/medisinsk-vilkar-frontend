@@ -65,7 +65,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         vurderingsoversikt.resterendeVurderingsperioder.length > 0;
 
     const harGyldigSignatur = vurderingsoversikt && vurderingsoversikt.harGyldigSignatur === true;
-
     const overlappendeVurderingsperioder = finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder(vurderingsoversikt);
 
     const getVurderingsoversikt = () => {

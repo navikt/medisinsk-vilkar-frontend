@@ -6,7 +6,11 @@ import { Period } from '../../../types/Period';
 import { Vurderingsversjon } from '../../../types/Vurdering';
 import { getPeriodAsListOfDays } from '../../../util/dateUtils';
 import { convertToInternationalPeriod } from '../../../util/formats';
-import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
+import {
+    finnHullIPerioder,
+    finnMaksavgrensningerForPerioder,
+    slåSammenSammenhengendePerioder,
+} from '../../../util/periodUtils';
 import { lagTilsynsbehovVurdering } from '../../../util/vurderingUtils';
 import { fomDatoErFørTomDato, harBruktDokumentasjon, required } from '../../form/validators';
 import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
@@ -84,6 +88,10 @@ const NyVurderingAvTilsynsbehovForm = ({
         onSubmit(lagTilsynsbehovVurdering(formState, dokumenter));
     };
 
+    const sammenhengendeSøknadsperioder = React.useMemo(() => {
+        return slåSammenSammenhengendePerioder(perioderSomKanVurderes);
+    }, [perioderSomKanVurderes]);
+
     return (
         <DetailView title="Vurdering av tilsyn og pleie">
             <div id="modal" />
@@ -151,7 +159,7 @@ const NyVurderingAvTilsynsbehovForm = ({
                             validators={{
                                 required,
                                 inngårISammenhengendeSøknadsperiode: (value: Period) => {
-                                    const isOk = perioderSomKanVurderes.some((sammenhengendeSøknadsperiode) =>
+                                    const isOk = sammenhengendeSøknadsperioder.some((sammenhengendeSøknadsperiode) =>
                                         sammenhengendeSøknadsperiode.covers(value)
                                     );
 
