@@ -102,6 +102,9 @@ const InnleggelsesperiodeFormModal = ({
                                     },
                                     fomIsBeforeOrSameAsTom: (periodValue: Period) => {
                                         const period = new Period(periodValue.fom, periodValue.tom);
+                                        if (!periodValue.fom || !periodValue.tom) {
+                                            return '';
+                                        }
                                         if (period.fomIsBeforeOrSameAsTom() === false) {
                                             return 'Fra-dato må være tidligere eller samme som til-dato';
                                         }
