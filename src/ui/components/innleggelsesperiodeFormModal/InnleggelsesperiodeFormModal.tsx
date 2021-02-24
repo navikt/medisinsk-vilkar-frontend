@@ -34,7 +34,6 @@ const InnleggelsesperiodeFormModal = ({
 }: InnleggelsesperiodeFormModal): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
-        mode: 'onChange',
     });
 
     const {
@@ -100,11 +99,18 @@ const InnleggelsesperiodeFormModal = ({
                                         }
                                         return null;
                                     },
+                                    hasEmptyPeriodInputs: (periodValue: Period) => {
+                                        if (!periodValue.fom) {
+                                            return 'Fra-dato er påkrevd';
+                                        }
+                                        if (!periodValue.tom) {
+                                            return 'Til-dato er påkrevd';
+                                        }
+                                        return null;
+                                    },
                                     fomIsBeforeOrSameAsTom: (periodValue: Period) => {
                                         const period = new Period(periodValue.fom, periodValue.tom);
-                                        if (!periodValue.fom || !periodValue.tom) {
-                                            return '';
-                                        }
+
                                         if (period.fomIsBeforeOrSameAsTom() === false) {
                                             return 'Fra-dato må være tidligere eller samme som til-dato';
                                         }
