@@ -41,7 +41,7 @@ const UstrukturertDokumentElement = ({
                 <WarningIcon />
             </ContentWithTooltip>
             <div className={styles.ustrukturertDokumentElement__texts}>
-                <span className={styles.ustrukturertDokumentElement__texts__type}>
+                <span className={styles.ustrukturertDokumentElement__texts__type} id="ikkeKlassifisertText">
                     <span className={styles.visuallyHidden}>Type</span>
                     Ikke klassifisert
                 </span>

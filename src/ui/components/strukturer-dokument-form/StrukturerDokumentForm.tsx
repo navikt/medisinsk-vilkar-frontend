@@ -78,6 +78,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormPr
                             label="Hvilken dato er dokumentet datert?"
                             defaultValue=""
                             validators={{ required }}
+                            inputId="datertField"
                         />
                     </Box>
                 </Form>

@@ -51,6 +51,7 @@ const TextArea = ({ label, name, validators, helptext, textareaClass, id }: Text
                         label={label}
                         maxLength={0}
                         feil={errors[name]?.message}
+                        id={id}
                         name={name}
                         onChange={onChange}
                         textareaClass={textareaClass}

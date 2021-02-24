@@ -15,7 +15,7 @@ const Form = ({ children, onSubmit, buttonLabel, shouldShowSubmitButton }: FormP
             {children}
             {shouldShowSubmitButton !== false && (
                 <Box marginTop={Margin.xxLarge}>
-                    <Hovedknapp>{buttonLabel}</Hovedknapp>
+                    <Hovedknapp id="submitButton">{buttonLabel}</Hovedknapp>
                 </Box>
             )}
         </form>
