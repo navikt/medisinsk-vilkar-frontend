@@ -199,6 +199,7 @@ const NyVurderingAvTilsynsbehovForm = ({
                                     <AddButton
                                         label="Legg til periode"
                                         onClick={() => fieldArrayMethods.append({ fom: '', tom: '' })}
+                                        id="leggTilPeriodeKnapp"
                                     />
                                 </Box>
                             )}

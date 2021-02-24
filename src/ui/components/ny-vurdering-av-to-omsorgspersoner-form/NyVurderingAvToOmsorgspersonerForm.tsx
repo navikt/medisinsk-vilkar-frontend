@@ -114,6 +114,7 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                                 </b>
                             }
                             validators={{ required }}
+                            id="begrunnelsesfelt"
                         />
                     </Box>
                     <Box marginTop={Margin.xLarge}>
@@ -179,6 +180,7 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                                     <AddButton
                                         label="Legg til periode"
                                         onClick={() => fieldArrayMethods.append({ fom: '', tom: '' })}
+                                        id="leggTilPeriodeKnapp"
                                     />
                                 </Box>
                             )}

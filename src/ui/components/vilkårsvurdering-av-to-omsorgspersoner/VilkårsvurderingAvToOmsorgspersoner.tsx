@@ -151,8 +151,9 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                                     style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
                                     onClick={onFinished}
                                     mini
+                                    id="fortsettKnapp"
                                 >
-                                    Gå videre
+                                    Fortsett
                                 </Knapp>
                             )}
                         />

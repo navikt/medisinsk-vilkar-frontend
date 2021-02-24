@@ -123,6 +123,7 @@ const InnleggelsesperiodeFormModal = ({
                                             <AddButton
                                                 label="Legg til innleggelsesperiode"
                                                 onClick={() => fieldArrayMethods.append({ fom: '', tom: '' })}
+                                                id="leggTilInnleggelsesperiodeKnapp"
                                             />
                                         </Box>
                                         <Box marginTop={Margin.medium}>

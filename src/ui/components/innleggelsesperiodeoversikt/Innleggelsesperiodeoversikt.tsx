@@ -132,7 +132,11 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
                         otherRequirementsAreMet={innleggelsesperioder.length === 0}
                         contentRenderer={() => (
                             <Box marginTop={Margin.large}>
-                                <AddButton label="Legg til periode" onClick={() => setModalIsOpen(true)} />
+                                <AddButton
+                                    label="Legg til periode"
+                                    onClick={() => setModalIsOpen(true)}
+                                    id="leggTilPeriodeKnapp"
+                                />
                             </Box>
                         )}
                     />

@@ -112,6 +112,7 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
                                     mini
                                     style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
                                     onClick={onProgressButtonClick}
+                                    id="fortsettKnapp"
                                 >
                                     Fortsett
                                 </Hovedknapp>

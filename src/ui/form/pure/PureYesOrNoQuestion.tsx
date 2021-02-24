@@ -33,6 +33,7 @@ const PureYesOrNoQuestion = ({ question, value, onChange, name, errorMessage }: 
     <RadioGruppe legend={question} feil={errorMessage}>
         {radios.map((radio) => (
             <Radio
+                id={`${name}${radio.value}`}
                 key={radio.value}
                 label={radio.label}
                 name={name}

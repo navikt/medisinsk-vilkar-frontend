@@ -86,7 +86,11 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             <WriteAccessBoundContent
                 contentRenderer={() => (
                     <Box marginTop={Margin.large}>
-                        <AddButton label="Legg til diagnosekode" onClick={() => setModalIsOpen(true)} />
+                        <AddButton
+                            id="leggTilDiagnosekodeKnapp"
+                            label="Legg til diagnosekode"
+                            onClick={() => setModalIsOpen(true)}
+                        />
                     </Box>
                 )}
             />

@@ -35,6 +35,7 @@ const RadioGroupPanel = ({ question, name, validators, radios, onChange }: Radio
                         {radios.map((radio) => (
                             <Radio
                                 key={radio.value}
+                                id={radio.value}
                                 label={radio.label}
                                 name={name}
                                 onChange={() => {

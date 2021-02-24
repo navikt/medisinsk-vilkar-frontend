@@ -144,6 +144,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                                     style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
                                     onClick={onVilkårVurdert}
                                     mini
+                                    id="fortsettKnapp"
                                 >
                                     Fortsett
                                 </Knapp>
