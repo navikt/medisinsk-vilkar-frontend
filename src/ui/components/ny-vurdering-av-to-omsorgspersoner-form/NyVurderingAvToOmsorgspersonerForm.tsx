@@ -6,7 +6,11 @@ import { Period } from '../../../types/Period';
 import { Vurderingsversjon } from '../../../types/Vurdering';
 import { getPeriodAsListOfDays } from '../../../util/dateUtils';
 import { convertToInternationalPeriod } from '../../../util/formats';
-import { finnHullIPerioder, finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
+import {
+    finnHullIPerioder,
+    finnMaksavgrensningerForPerioder,
+    slåSammenSammenhengendePerioder,
+} from '../../../util/periodUtils';
 import { lagToOmsorgspersonerVurdering } from '../../../util/vurderingUtils';
 import { fomDatoErFørTomDato, harBruktDokumentasjon, required } from '../../form/validators';
 import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
@@ -84,6 +88,10 @@ const NyVurderingAvToOmsorgspersonerForm = ({
         onSubmit(lagToOmsorgspersonerVurdering(formState, dokumenter));
     };
 
+    const sammenhengendePerioderMedTilsynsbehov = React.useMemo(() => {
+        return slåSammenSammenhengendePerioder(perioderSomKanVurderes);
+    }, [perioderSomKanVurderes]);
+
     return (
         <DetailView title="Vurdering av to omsorgspersoner">
             <FormProvider {...formMethods}>
@@ -132,8 +140,8 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                             validators={{
                                 required,
                                 inngårISammenhengendePeriodeMedTilsynsbehov: (value: Period) => {
-                                    const isOk = perioderSomKanVurderes.some((sammenhengendeSøknadsperiode) =>
-                                        sammenhengendeSøknadsperiode.covers(value)
+                                    const isOk = sammenhengendePerioderMedTilsynsbehov.some(
+                                        (sammenhengendeSøknadsperiode) => sammenhengendeSøknadsperiode.covers(value)
                                     );
 
                                     if (!isOk) {
