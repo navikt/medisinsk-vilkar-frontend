@@ -64,7 +64,6 @@ const Vurderingsnavigasjon = ({
                     gjelderForAnnenPart={gjelderForAnnenPart}
                     gjelderForSøker={gjelderForSøker}
                     visParterLabel={visParterLabel}
-                    visResultat={visResultat}
                 />
             );
         }
