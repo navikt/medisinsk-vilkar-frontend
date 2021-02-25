@@ -13,7 +13,7 @@ interface DokumentnavigasjonProps {
 }
 
 const Dokumentnavigasjon = ({ dokumenter, onDokumentValgt, dokumenterSomMåGjennomgås }: DokumentnavigasjonProps) => {
-    const [activeIndex, setActiveIndex] = React.useState(0);
+    const [activeIndex, setActiveIndex] = React.useState(-1);
 
     const dokumentElementer = dokumenter.map((dokument) => ({
         renderer: () => <StrukturertDokumentElement dokument={dokument} />,
