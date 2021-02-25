@@ -23,7 +23,7 @@ const SignertSeksjon = ({ harGyldigSignatur }: SignertSeksjonProps) => {
                 {!harGyldigSignatur && (
                     <IconWithText
                         iconRenderer={() => <WarningIcon />}
-                        text="Ingen legeerklæring fra spesialisthelsetjenesten registrert."
+                        text="Ingen legeerklæring fra sykehuslege/spesialisthelsetjenesten registrert."
                     />
                 )}
             </Box>
