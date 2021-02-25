@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import axios from 'axios';
 import Alertstripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
-import Spinner from 'nav-frontend-spinner';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
@@ -15,20 +14,19 @@ import processVurderingsoversikt, {
     finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder,
 } from '../../../util/vurderingsoversiktUtils';
 import { get } from '../../../util/httpUtils';
-import PageError from '../page-error/PageError';
 import LinkRel from '../../../constants/LinkRel';
 import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
 import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
 import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
 import Box, { Margin } from '../box/Box';
-import OverlappendeSøknadsperiodePanel from '../overlappende-søknadsperiode-panel/OverlappendeSøknadsperiodePanel';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import NyVurderingAvTilsynsbehovForm, {
     FieldName,
 } from '../ny-vurdering-av-tilsynsbehov-form/NyVurderingAvTilsynsbehovForm';
 import Vurderingstype from '../../../types/Vurderingstype';
 import { getStringMedPerioder } from '../../../util/periodUtils';
+import PageContainer from '../page-container/PageContainer';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     onVilkårVurdert: () => void;
@@ -63,6 +61,11 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         vurderingsoversikt &&
         vurderingsoversikt.resterendeVurderingsperioder &&
         vurderingsoversikt.resterendeVurderingsperioder.length > 0;
+
+    const harVurdertePerioder =
+        vurderingsoversikt &&
+        vurderingsoversikt.vurderingselementer &&
+        vurderingsoversikt.vurderingselementer.length > 0;
 
     const harGyldigSignatur = vurderingsoversikt && vurderingsoversikt.harGyldigSignatur === true;
     const overlappendeVurderingsperioder = finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder(vurderingsoversikt);
@@ -115,13 +118,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         getVurderingsoversikt().then(processVurderingsoversikt).then(visVurderingsoversikt);
     };
 
-    if (isLoading) {
-        return <Spinner />;
-    }
-    if (vurderingsoversiktFeilet) {
-        return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
-    }
-    if (harGyldigSignatur === false) {
+    if (!harGyldigSignatur) {
         return (
             <Alertstripe type="info">
                 Du kan ikke vurdere tilsyn og pleie før søker har sendt inn legeerklæring fra
@@ -130,9 +127,14 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         );
     }
     return (
-        <>
+        <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet}>
             {!harPerioderSomSkalVurderes && (
                 <Box marginBottom={Margin.large}>
+                    {!harVurdertePerioder && (
+                        <Box marginBottom={Margin.medium}>
+                            <Alertstripe type="info">Ingen perioder å vurdere</Alertstripe>
+                        </Box>
+                    )}
                     <Alertstripe type="suksess">
                         Behov for kontinuerlig tilsyn og pleie er ferdig vurdert
                         <WriteAccessBoundContent
@@ -159,14 +161,18 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                             vurderingsoversikt.resterendeVurderingsperioder
                         )}.`}
                     </Alertstripe>
-                    {overlappendeVurderingsperioder && overlappendeVurderingsperioder.length > 0 && (
+                    {/*
+                        Please note:
+                        So long as this doesnt actually do anything upon the click-event, it should be commented out.
+
+                        overlappendeVurderingsperioder && overlappendeVurderingsperioder.length > 0 && (
                         <Box marginTop={Margin.medium}>
                             <OverlappendeSøknadsperiodePanel
                                 onProgressButtonClick={() => console.log('does something')}
                                 overlappendeVurderingsperioder={overlappendeVurderingsperioder}
                             />
-                        </Box>
-                    )}
+                        </Box>)
+                    */}
                     <div style={{ marginTop: '1rem' }} />
                 </div>
             )}
@@ -179,7 +185,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                         onNyVurderingClick={visNyVurderingForm}
                         visRadForNyVurdering={visRadForNyVurdering}
                         visParterLabel
-                        visResultat
                     />
                 )}
                 detailSection={() => {
@@ -229,7 +234,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                     return null;
                 }}
             />
-        </>
+        </PageContainer>
     );
 };
 

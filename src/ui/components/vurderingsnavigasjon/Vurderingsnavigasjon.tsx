@@ -20,7 +20,6 @@ interface VurderingsnavigasjonProps {
     resterendeVurderingsperioder?: Period[];
     visRadForNyVurdering?: boolean;
     visParterLabel?: boolean;
-    visResultat?: boolean;
 }
 
 const Vurderingsnavigasjon = ({
@@ -30,7 +29,6 @@ const Vurderingsnavigasjon = ({
     resterendeVurderingsperioder,
     visRadForNyVurdering,
     visParterLabel,
-    visResultat,
 }: VurderingsnavigasjonProps): JSX.Element => {
     const [activeIndex, setActiveIndex] = React.useState(-1);
 
@@ -84,7 +82,6 @@ const Vurderingsnavigasjon = ({
         <div className={styles.vurderingsnavigasjon}>
             <Undertittel>Alle perioder</Undertittel>
             <WriteAccessBoundContent
-                otherRequirementsAreMet={!harPerioderSomSkalVurderes}
                 contentRenderer={() => (
                     <LinkButton
                         className={styles.vurderingsnavigasjon__opprettVurderingKnapp}
@@ -97,35 +94,42 @@ const Vurderingsnavigasjon = ({
                     </LinkButton>
                 )}
             />
-            <div className={styles.vurderingsvelgerContainer}>
-                <div className={styles.vurderingsvelgerContainer__columnHeadings}>
-                    <Element className={styles['vurderingsvelgerContainer__columnHeading--first']}>Status</Element>
-                    <Element className={styles['vurderingsvelgerContainer__columnHeading--second']}>Periode</Element>
-                    {visParterLabel && (
-                        <Element className={styles['vurderingsvelgerContainer__columnHeading--third']}>Part</Element>
-                    )}
-                </div>
-                <InteractiveList
-                    elements={allElements.map((element, currentIndex) => ({
-                        content: element,
-                        active: activeIndex === currentIndex,
-                        key: `${currentIndex}`,
-                        onClick: () => {
-                            setActiveIndex(currentIndex);
+            {allElements.length === 0 && <p>Ingen vurderinger å vise</p>}
+            {allElements.length > 0 && (
+                <div className={styles.vurderingsvelgerContainer}>
+                    <div className={styles.vurderingsvelgerContainer__columnHeadings}>
+                        <Element className={styles['vurderingsvelgerContainer__columnHeading--first']}>Status</Element>
+                        <Element className={styles['vurderingsvelgerContainer__columnHeading--second']}>
+                            Periode
+                        </Element>
+                        {visParterLabel && (
+                            <Element className={styles['vurderingsvelgerContainer__columnHeading--third']}>
+                                Part
+                            </Element>
+                        )}
+                    </div>
+                    <InteractiveList
+                        elements={allElements.map((element, currentIndex) => ({
+                            content: element,
+                            active: activeIndex === currentIndex,
+                            key: `${currentIndex}`,
+                            onClick: () => {
+                                setActiveIndex(currentIndex);
 
-                            const vurderingsperiodeIndex = vurderingsperiodeElements.indexOf(element);
-                            const erEnEksisterendeVurdering = vurderingsperiodeIndex > -1;
-                            if (erEnEksisterendeVurdering) {
-                                onVurderingValgt(sorterteVurderingselementer[vurderingsperiodeIndex]);
-                            } else if (visRadForNyVurdering && currentIndex === 0) {
-                                onNyVurderingClick();
-                            } else {
-                                onNyVurderingClick(resterendeVurderingsperioder);
-                            }
-                        },
-                    }))}
-                />
-            </div>
+                                const vurderingsperiodeIndex = vurderingsperiodeElements.indexOf(element);
+                                const erEnEksisterendeVurdering = vurderingsperiodeIndex > -1;
+                                if (erEnEksisterendeVurdering) {
+                                    onVurderingValgt(sorterteVurderingselementer[vurderingsperiodeIndex]);
+                                } else if (visRadForNyVurdering && currentIndex === 0) {
+                                    onNyVurderingClick();
+                                } else {
+                                    onNyVurderingClick(resterendeVurderingsperioder);
+                                }
+                            },
+                        }))}
+                    />
+                </div>
+            )}
         </div>
     );
 };
