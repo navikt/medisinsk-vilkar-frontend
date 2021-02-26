@@ -7,8 +7,8 @@ import { findLinkByRel } from '../../../util/linkUtils';
 import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import DocumentIcon from '../icons/DocumentIcon';
 import GreenCheckIconFilled from '../icons/GreenCheckIconFilled';
-import OnePersonIconBlue from '../icons/OnePersonIconBlue';
-import OnePersonOutline from '../icons/OnePersonOutline';
+import OnePersonIconGray from '../icons/OnePersonIconGray';
+import OnePersonOutlineGray from '../icons/OnePersonOutlineGray';
 import styles from './strukturertDokumentElement.less';
 
 interface StrukturertDokumentElementProps {
@@ -37,13 +37,13 @@ const StrukturertDokumentElement = ({
         if (annenPartErKilde) {
             return (
                 <ContentWithTooltip tooltipText="Annen part" inline>
-                    <OnePersonOutline />
+                    <OnePersonOutlineGray />
                 </ContentWithTooltip>
             );
         }
         return (
             <ContentWithTooltip tooltipText="Søker" inline>
-                <OnePersonIconBlue />
+                <OnePersonIconGray />
             </ContentWithTooltip>
         );
     };

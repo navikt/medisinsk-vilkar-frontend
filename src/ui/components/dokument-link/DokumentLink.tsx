@@ -1,13 +1,13 @@
-import React from 'react';
-import Lenke from 'nav-frontend-lenker';
 import dayjs from 'dayjs';
+import Lenke from 'nav-frontend-lenker';
+import React from 'react';
+import LinkRel from '../../../constants/LinkRel';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import { prettifyDate } from '../../../util/formats';
-import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
-import OnePersonOutline from '../icons/OnePersonOutline';
-import styles from './dokumentLink.less';
 import { findLinkByRel } from '../../../util/linkUtils';
-import LinkRel from '../../../constants/LinkRel';
+import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
+import OnePersonOutlineGray from '../icons/OnePersonOutlineGray';
+import styles from './dokumentLink.less';
 
 interface DokumentLinkProps {
     dokument: Dokument;
@@ -32,7 +32,7 @@ const DokumentLink = ({ dokument, etikett }: DokumentLinkProps) => {
             <div className={styles.dokumentLink__etikett}>
                 {etikett && (
                     <ContentWithTooltip tooltipText={etikett} tooltipDirectionRight>
-                        <OnePersonOutline />
+                        <OnePersonOutlineGray />
                     </ContentWithTooltip>
                 )}
             </div>

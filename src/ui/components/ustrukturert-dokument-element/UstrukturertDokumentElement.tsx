@@ -1,15 +1,15 @@
+import Lenke from 'nav-frontend-lenker';
 import React from 'react';
+import LinkRel from '../../../constants/LinkRel';
 import { Dokument } from '../../../types/Dokument';
+import { prettifyDate } from '../../../util/formats';
+import { findLinkByRel } from '../../../util/linkUtils';
+import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
+import DocumentIcon from '../icons/DocumentIcon';
+import OnePersonIconGray from '../icons/OnePersonIconGray';
+import OnePersonOutlineGray from '../icons/OnePersonOutlineGray';
 import WarningIcon from '../icons/WarningIcon';
 import styles from './ustrukturertDokumentElement.less';
-import { prettifyDate } from '../../../util/formats';
-import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
-import OnePersonIconBlue from '../icons/OnePersonIconBlue';
-import OnePersonOutline from '../icons/OnePersonOutline';
-import Lenke from 'nav-frontend-lenker';
-import { findLinkByRel } from '../../../util/linkUtils';
-import LinkRel from '../../../constants/LinkRel';
-import DocumentIcon from '../icons/DocumentIcon';
 
 interface UstrukturertDokumentElementProps {
     dokument: Dokument;
@@ -24,13 +24,13 @@ const UstrukturertDokumentElement = ({
         if (annenPartErKilde) {
             return (
                 <ContentWithTooltip tooltipText="Annen part" inline>
-                    <OnePersonOutline />
+                    <OnePersonOutlineGray />
                 </ContentWithTooltip>
             );
         }
         return (
             <ContentWithTooltip tooltipText="Søker" inline>
-                <OnePersonIconBlue />
+                <OnePersonIconGray />
             </ContentWithTooltip>
         );
     };

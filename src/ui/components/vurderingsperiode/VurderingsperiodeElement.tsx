@@ -2,12 +2,12 @@ import React from 'react';
 import { Period } from '../../../types/Period';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import { prettifyPeriod } from '../../../util/formats';
+import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import GreenCheckIconFilled from '../icons/GreenCheckIconFilled';
-import OnePersonIconBlue from '../icons/OnePersonIconBlue';
-import OnePersonOutline from '../icons/OnePersonOutline';
+import OnePersonIconGray from '../icons/OnePersonIconGray';
+import OnePersonOutlineGray from '../icons/OnePersonOutlineGray';
 import RedCrossIconFilled from '../icons/RedCrossIconFilled';
 import TwoPersonsWithOneHighlightedIconBlue from '../icons/TwoPersonsWithOneHighlightedIconBlue';
-import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import styles from './vurderingsperiodeElement.less';
 
 interface VurderingsperiodeElementProps {
@@ -56,13 +56,13 @@ const VurderingsperiodeElement = ({
         if (gjelderForAnnenPart) {
             return (
                 <ContentWithTooltip tooltipText="Annen part">
-                    <OnePersonOutline />
+                    <OnePersonOutlineGray />
                 </ContentWithTooltip>
             );
         }
         return (
             <ContentWithTooltip tooltipText="Søker">
-                <OnePersonIconBlue />
+                <OnePersonIconGray />
             </ContentWithTooltip>
         );
     };

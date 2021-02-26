@@ -1,11 +1,11 @@
-import React from 'react';
 import { EtikettFokus } from 'nav-frontend-etiketter';
-import { prettifyPeriod } from '../../../util/formats';
-import WarningIcon from '../icons/WarningIcon';
+import React from 'react';
 import { Period } from '../../../types/Period';
-import styles from './perioderSomSkalVurderes.less';
+import { prettifyPeriod } from '../../../util/formats';
 import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
-import OnePersonIconBlue from '../icons/OnePersonIconBlue';
+import OnePersonIconGray from '../icons/OnePersonIconGray';
+import WarningIcon from '../icons/WarningIcon';
+import styles from './perioderSomSkalVurderes.less';
 
 interface PerioderSomSkalVurderesProps {
     perioder: Period[];
@@ -35,7 +35,7 @@ const PerioderSomSkalVurderes = ({ perioder, visParterLabel }: PerioderSomSkalVu
                     <div className={styles.perioderSomSkalVurderes__texts__parterIcon}>
                         <span className={styles.visuallyHidden}>Parter</span>
                         <ContentWithTooltip tooltipText="Søker">
-                            <OnePersonIconBlue />
+                            <OnePersonIconGray />
                         </ContentWithTooltip>
                     </div>
                 )}
