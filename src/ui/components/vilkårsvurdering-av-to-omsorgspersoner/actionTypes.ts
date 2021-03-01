@@ -4,6 +4,7 @@ enum ActionType {
     VELG_VURDERINGSELEMENT = 'velgVurderingselement',
     PENDING = 'pending',
     VURDERINGSOVERSIKT_FEILET = 'vurderingsoversiktFeilet',
+    SUBMITTING = 'submitting',
 }
 
 export default ActionType;

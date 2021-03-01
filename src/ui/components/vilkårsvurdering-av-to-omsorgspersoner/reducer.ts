@@ -11,6 +11,7 @@ interface State {
     resterendeVurderingsperioderDefaultValue: Period[];
     vurdering: string;
     vurderingsoversiktFeilet: boolean;
+    isSubmitting: boolean;
 }
 
 interface Action {
@@ -65,6 +66,11 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 ...state,
                 isLoading: true,
                 vurderingsoversiktFeilet: false,
+            };
+        case ActionType.SUBMITTING:
+            return {
+                ...state,
+                isSubmitting: true,
             };
         default:
             return state;

@@ -42,6 +42,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         resterendeVurderingsperioderDefaultValue: [],
         vurdering,
         vurderingsoversiktFeilet: false,
+        isSubmitting: false,
     });
 
     const {
@@ -51,6 +52,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         valgtVurderingselement,
         resterendeVurderingsperioderDefaultValue,
         vurderingsoversiktFeilet,
+        isSubmitting,
     } = state;
 
     const harPerioderSomSkalVurderes = vurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
@@ -70,6 +72,11 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
 
     const handleError = () => {
         dispatch({ type: ActionType.VURDERINGSOVERSIKT_FEILET });
+    };
+
+    const handleSubmit = () => {
+        dispatch({ type: ActionType.SUBMITTING });
+        onFinished();
     };
 
     React.useEffect(() => {
@@ -149,9 +156,10 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                                     type="hoved"
                                     htmlType="button"
                                     style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
-                                    onClick={onFinished}
+                                    onClick={handleSubmit}
                                     mini
                                     id="fortsettKnapp"
+                                    disabled={isSubmitting}
                                 >
                                     Fortsett
                                 </Knapp>
