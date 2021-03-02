@@ -1,5 +1,4 @@
 import React from 'react';
-import Lenke from 'nav-frontend-lenker';
 import { FormProvider, useForm } from 'react-hook-form';
 import DetailView from '../detail-view/DetailView';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
@@ -13,40 +12,43 @@ import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
 import { today } from '../../../constants/dateConstants';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
+import { prettifyDate } from '../../../util/formats';
 
 export enum FieldName {
     INNEHOLDER_MEDISINSKE_OPPLYSNINGER = 'inneholderMedisinskeOpplysninger',
     DATERT = 'datert',
-    SIGNERT_AV_SYKEHUSLEGE_ELLER_LEGE_I_SPESIALISTHELSETJENESTEN = 'signertAvSykehuslegeEllerLegeISpesialisthelsetjenesten',
-    INNLEGGELSESPERIODER = 'innleggelsesperioder',
 }
 
 export interface StrukturerDokumentFormState {
     [FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER]?: Dokumenttype;
     [FieldName.DATERT]: string;
-    [FieldName.SIGNERT_AV_SYKEHUSLEGE_ELLER_LEGE_I_SPESIALISTHELSETJENESTEN]?: boolean;
 }
 
 interface StrukturerDokumentFormProps {
     dokument: Dokument;
     onSubmit: (nyttDokument: Dokument) => void;
+    editMode?: boolean;
 }
 
-const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormProps) => {
-    const formMethods = useForm<StrukturerDokumentFormState>();
+const StrukturerDokumentForm = ({ dokument, onSubmit, editMode }: StrukturerDokumentFormProps) => {
+    const formMethods = useForm<StrukturerDokumentFormState>({
+        defaultValues: editMode && {
+            [FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER]: dokument.type,
+            [FieldName.DATERT]: prettifyDate(dokument.datert),
+        },
+    });
     const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, dokument.links);
 
     const lagNyttStrukturertDokument = (formState: StrukturerDokumentFormState) => {
         onSubmit(lagStrukturertDokument(formState, dokument));
     };
 
+    const buttonLabel = editMode === true ? 'Oppdater' : 'Bekreft';
+
     return (
         <DetailView title="Om dokumentet">
             <FormProvider {...formMethods}>
-                <Form
-                    buttonLabel="Bekreft"
-                    onSubmit={formMethods.handleSubmit((formState) => lagNyttStrukturertDokument(formState))}
-                >
+                <Form buttonLabel={buttonLabel} onSubmit={formMethods.handleSubmit(lagNyttStrukturertDokument)}>
                     <Box marginTop={Margin.xLarge}>
                         <DokumentKnapp href={dokumentLink.href} />
                     </Box>

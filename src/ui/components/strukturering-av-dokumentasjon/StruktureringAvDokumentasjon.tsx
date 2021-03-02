@@ -39,9 +39,17 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
         valgtDokument: null,
         dokument,
         dokumentoversiktFeilet: false,
+        visRedigeringAvDokument: false,
     });
 
-    const { dokumentoversikt, isLoading, visDokumentDetails, valgtDokument, dokumentoversiktFeilet } = state;
+    const {
+        dokumentoversikt,
+        isLoading,
+        visDokumentDetails,
+        valgtDokument,
+        dokumentoversiktFeilet,
+        visRedigeringAvDokument,
+    } = state;
 
     const getDokumentoversikt = () => {
         return get<Dokumentoversikt>(endpoints.dokumentoversikt, httpErrorHandler, {
@@ -156,20 +164,26 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
                         )}
                         detailSection={() => {
                             if (visDokumentDetails) {
-                                if (valgtDokument.type === Dokumenttype.UKLASSIFISERT) {
+                                if (valgtDokument.type === Dokumenttype.UKLASSIFISERT || visRedigeringAvDokument) {
                                     const strukturerDokumentLink = findLinkByRel(
                                         LinkRel.ENDRE_DOKUMENT,
                                         valgtDokument.links
                                     );
                                     return (
                                         <StrukturerDokumentController
-                                            ustrukturertDokument={valgtDokument}
+                                            dokument={valgtDokument}
                                             strukturerDokumentLink={strukturerDokumentLink}
                                             onDokumentStrukturert={oppdaterDokumentoversikt}
+                                            editMode={visRedigeringAvDokument}
                                         />
                                     );
                                 }
-                                return <StrukturertDokumentDetaljer dokument={valgtDokument} />;
+                                return (
+                                    <StrukturertDokumentDetaljer
+                                        dokument={valgtDokument}
+                                        onEditDokumentClick={() => dispatch({ type: ActionType.REDIGER_DOKUMENT })}
+                                    />
+                                );
                             }
                             return null;
                         }}

@@ -8,6 +8,7 @@ interface State {
     valgtDokument: Dokument;
     dokument: string;
     dokumentoversiktFeilet: boolean;
+    visRedigeringAvDokument: boolean;
 }
 
 interface Action {
@@ -45,6 +46,7 @@ const vilkårsdokumentReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 valgtDokument: action.valgtDokument,
+                visRedigeringAvDokument: false,
                 visDokumentDetails: true,
             };
         case ActionType.PENDING:
@@ -52,6 +54,11 @@ const vilkårsdokumentReducer = (state: State, action: Action): State => {
                 ...state,
                 isLoading: true,
                 dokumentoversiktFeilet: false,
+            };
+        case ActionType.REDIGER_DOKUMENT:
+            return {
+                ...state,
+                visRedigeringAvDokument: true,
             };
         default:
             return state;

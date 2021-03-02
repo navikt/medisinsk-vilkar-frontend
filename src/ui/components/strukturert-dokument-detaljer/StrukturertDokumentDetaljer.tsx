@@ -7,9 +7,12 @@ import { prettifyDate } from '../../../util/formats';
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
+import LinkButton from '../link-button/LinkButton';
+import styles from './strukturertDokumentDetaljer.less';
 
 interface StrukturertDokumentDetaljerProps {
     dokument: Dokument;
+    onEditDokumentClick: () => void;
 }
 
 const renderDokumenttypeContent = (dokumenttype: Dokumenttype) => {
@@ -27,11 +30,18 @@ const renderDokumenttypeContent = (dokumenttype: Dokumenttype) => {
     return null;
 };
 
-const StrukturertDokumentDetaljer = ({ dokument }: StrukturertDokumentDetaljerProps) => {
+const StrukturertDokumentDetaljer = ({ dokument, onEditDokumentClick }: StrukturertDokumentDetaljerProps) => {
     const { type, datert, links } = dokument;
     const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
     return (
-        <DetailView title="Om dokumentet">
+        <DetailView
+            title="Om dokumentet"
+            contentAfterTitleRenderer={() => (
+                <LinkButton className={styles.endreLink} onClick={onEditDokumentClick}>
+                    Endre informasjon
+                </LinkButton>
+            )}
+        >
             <Box marginTop={Margin.xLarge}>
                 <DokumentKnapp href={dokumentLink.href} />
             </Box>
