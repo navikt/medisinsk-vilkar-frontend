@@ -12,6 +12,7 @@ import { lagStrukturertDokument } from '../../../util/dokumentUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
 import { today } from '../../../constants/dateConstants';
+import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
 
 export enum FieldName {
     INNEHOLDER_MEDISINSKE_OPPLYSNINGER = 'inneholderMedisinskeOpplysninger',
@@ -47,9 +48,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormPr
                     onSubmit={formMethods.handleSubmit((formState) => lagNyttStrukturertDokument(formState))}
                 >
                     <Box marginTop={Margin.xLarge}>
-                        <Lenke href={dokumentLink.href} target="_blank">
-                            Åpne dokument
-                        </Lenke>
+                        <DokumentKnapp href={dokumentLink.href} />
                     </Box>
                     <Box marginTop={Margin.xLarge}>
                         <RadioGroupPanel

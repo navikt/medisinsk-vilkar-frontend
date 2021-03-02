@@ -1,5 +1,4 @@
 import React from 'react';
-import Lenke from 'nav-frontend-lenker';
 import DetailView from '../detail-view/DetailView';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import Box, { Margin } from '../box/Box';
@@ -7,6 +6,7 @@ import LabelledContent from '../labelled-content/LabelledContent';
 import { prettifyDate } from '../../../util/formats';
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
+import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
 
 interface StrukturertDokumentDetaljerProps {
     dokument: Dokument;
@@ -33,9 +33,7 @@ const StrukturertDokumentDetaljer = ({ dokument }: StrukturertDokumentDetaljerPr
     return (
         <DetailView title="Om dokumentet">
             <Box marginTop={Margin.xLarge}>
-                <Lenke href={dokumentLink.href} target="_blank">
-                    Åpne dokument
-                </Lenke>
+                <DokumentKnapp href={dokumentLink.href} />
             </Box>
             <Box marginTop={Margin.xLarge}>
                 <LabelledContent
