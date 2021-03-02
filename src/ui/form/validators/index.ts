@@ -1,10 +1,20 @@
+import { Dayjs } from 'dayjs';
 import { Period } from '../../../types/Period';
 import { dateFromString } from '../../../util/dateUtils';
 import { finnHullIPerioder } from '../../../util/periodUtils';
+import { tomorrow } from '../../../constants/dateConstants';
 
 export function required(v: any) {
     if (v === null || v === undefined || v === '') {
         return 'Du må oppgi en verdi';
+    }
+    return true;
+}
+
+export function dateIsNotInTheFuture(dateString: string): string | boolean {
+    const date: Dayjs = dateFromString(dateString);
+    if (date.isSame(tomorrow) || date.isAfter(tomorrow)) {
+        return 'Datoen kan ikke settes senere enn dagens dato';
     }
     return true;
 }
