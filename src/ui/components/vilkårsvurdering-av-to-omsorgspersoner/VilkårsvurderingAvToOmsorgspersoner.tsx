@@ -126,14 +126,19 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                             vurderingsoversikt.resterendeVurderingsperioder
                         )}.`}
                     </AlertStripeAdvarsel>
-                    {overlappendeVurderingsperioder && overlappendeVurderingsperioder.length > 0 && (
-                        <Box marginTop={Margin.medium}>
-                            <OverlappendeSøknadsperiodePanel
-                                onProgressButtonClick={() => console.log('does something')}
-                                overlappendeVurderingsperioder={overlappendeVurderingsperioder}
-                            />
-                        </Box>
-                    )}
+                    {/*
+                        Please note:
+                        So long as this doesnt actually do anything upon the click-event, it should be commented out.
+
+                        overlappendeVurderingsperioder && overlappendeVurderingsperioder.length > 0 && (
+                            <Box marginTop={Margin.medium}>
+                                <OverlappendeSøknadsperiodePanel
+                                    onProgressButtonClick={() => console.log('does something')}
+                                    overlappendeVurderingsperioder={overlappendeVurderingsperioder}
+                                />
+                            </Box>
+                        )
+                    */}
                 </>
             )}
 
