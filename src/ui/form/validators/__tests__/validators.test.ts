@@ -1,4 +1,5 @@
 import {
+    dateIsNotInTheFuture,
     datoenInngårISøknadsperioden,
     datoErIkkeIEtHull,
     detErIngenInnleggelsePåDato,
@@ -6,6 +7,7 @@ import {
     required,
 } from '..';
 import { Period } from '../../../../types/Period';
+import { today, tomorrow } from '../../../../constants/dateConstants';
 
 test('required', () => {
     const feilmelding = 'Du må oppgi en verdi';
@@ -14,6 +16,11 @@ test('required', () => {
     expect(required(null)).toBe(feilmelding);
     expect(required(undefined)).toBe(feilmelding);
     expect(required('')).toBe(feilmelding);
+});
+
+test('dateIsNotInTheFuture-validator', () => {
+    expect(dateIsNotInTheFuture(today.toISOString())).toBe(true);
+    expect(dateIsNotInTheFuture(tomorrow.toISOString())).toBe('Datoen kan ikke settes senere enn dagens dato');
 });
 
 test('detErTilsynsbehovPåDatoen', () => {

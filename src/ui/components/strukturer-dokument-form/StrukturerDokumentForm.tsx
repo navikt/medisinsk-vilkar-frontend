@@ -6,11 +6,12 @@ import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
 import Form from '../form/Form';
 import Datepicker from '../../form/wrappers/Datepicker';
 import Box, { Margin } from '../box/Box';
-import { required } from '../../form/validators';
+import { dateIsNotInTheFuture, required } from '../../form/validators';
 import { Dokument, Dokumenttype } from '../../../types/Dokument';
 import { lagStrukturertDokument } from '../../../util/dokumentUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
+import { today } from '../../../constants/dateConstants';
 
 export enum FieldName {
     INNEHOLDER_MEDISINSKE_OPPLYSNINGER = 'inneholderMedisinskeOpplysninger',
@@ -77,7 +78,8 @@ const StrukturerDokumentForm = ({ dokument, onSubmit }: StrukturerDokumentFormPr
                             name={FieldName.DATERT}
                             label="Hvilken dato er dokumentet datert?"
                             defaultValue=""
-                            validators={{ required }}
+                            validators={{ required, dateIsNotInTheFuture }}
+                            limitations={{ maxDate: today.toISOString() }}
                             inputId="datertField"
                         />
                     </Box>
