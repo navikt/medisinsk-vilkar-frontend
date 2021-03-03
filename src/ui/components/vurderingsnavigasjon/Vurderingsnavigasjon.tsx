@@ -12,6 +12,7 @@ import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElem
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import LinkButton from '../link-button/LinkButton';
 import styles from './vurderingsnavigasjon.less';
+import AddButton from '../add-button/AddButton';
 
 interface VurderingsnavigasjonProps {
     vurderingselementer: Vurderingselement[];
@@ -83,15 +84,14 @@ const Vurderingsnavigasjon = ({
             <Undertittel>Alle perioder</Undertittel>
             <WriteAccessBoundContent
                 contentRenderer={() => (
-                    <LinkButton
+                    <AddButton
+                        label="Opprett vurdering"
                         className={styles.vurderingsnavigasjon__opprettVurderingKnapp}
                         onClick={() => {
                             setActiveIndex(0);
                             onNyVurderingClick();
                         }}
-                    >
-                        Opprett vurdering
-                    </LinkButton>
+                    />
                 )}
             />
             {allElements.length === 0 && <p>Ingen vurderinger å vise</p>}

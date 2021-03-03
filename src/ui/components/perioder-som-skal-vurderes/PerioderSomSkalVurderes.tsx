@@ -40,11 +40,6 @@ const PerioderSomSkalVurderes = ({ perioder, visParterLabel }: PerioderSomSkalVu
                     </div>
                 )}
             </div>
-            <div className={styles.perioderSomSkalVurderes__etikett}>
-                <EtikettFokus mini id="måVurderesEtikett">
-                    Må vurderes
-                </EtikettFokus>
-            </div>
         </div>
     );
 };
