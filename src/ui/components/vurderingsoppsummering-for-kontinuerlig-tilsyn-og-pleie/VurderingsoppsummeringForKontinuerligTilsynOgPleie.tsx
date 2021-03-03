@@ -23,11 +23,13 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
                 <LabelledContent
                     label="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
                     content={
-                        <BasicList
-                            elements={dokumenter.map((dokument) => (
-                                <DokumentLink dokument={dokument} />
-                            ))}
-                        />
+                        <Box marginTop={Margin.medium}>
+                            <BasicList
+                                elements={dokumenter.map((dokument) => (
+                                    <DokumentLink dokument={dokument} visDokumentIkon />
+                                ))}
+                            />
+                        </Box>
                     }
                 />
             </Box>
