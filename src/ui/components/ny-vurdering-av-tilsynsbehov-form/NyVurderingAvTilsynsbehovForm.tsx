@@ -1,5 +1,5 @@
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import React from 'react';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
@@ -17,14 +17,13 @@ import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
+import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
+import DeleteButton from '../delete-button/DeleteButton';
 import DetailView from '../detail-view/DetailView';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Form from '../form/Form';
 import styles from './nyVurderingAvTilsynsbehovForm.less';
-import DeleteButton from '../delete-button/DeleteButton';
-import AddButton from '../add-button/AddButton';
-import OverlappendePeriodeModal from '../overlappende-periode-modal/OverlappendePeriodeModal';
 
 export enum FieldName {
     VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
@@ -215,10 +214,10 @@ const NyVurderingAvTilsynsbehovForm = ({
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (
                         <Box marginTop={Margin.xLarge}>
-                            <AlertStripeAdvarsel>
+                            <AlertStripeInfo>
                                 Du har ikke vurdert alle periodene som må vurderes. Resterende perioder vurderer du
                                 etter at du har lagret denne.
-                            </AlertStripeAdvarsel>
+                            </AlertStripeInfo>
                         </Box>
                     )}
                 </Form>

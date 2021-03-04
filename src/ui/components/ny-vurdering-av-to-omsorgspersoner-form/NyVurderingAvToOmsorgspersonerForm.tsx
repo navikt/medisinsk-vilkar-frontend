@@ -1,4 +1,4 @@
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
@@ -196,10 +196,10 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (
                         <Box marginTop={Margin.xLarge}>
-                            <AlertStripeAdvarsel>
+                            <AlertStripeInfo>
                                 Du har ikke vurdert alle periodene som må vurderes. Resterende perioder vurderer du
                                 etter at du har lagret denne.
-                            </AlertStripeAdvarsel>
+                            </AlertStripeInfo>
                         </Box>
                     )}
                 </Form>
