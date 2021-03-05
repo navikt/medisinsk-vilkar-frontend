@@ -49,6 +49,11 @@ const NyVurderingController = ({
     } = state;
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
+    const scrollUp = () => {
+        const element = document.getElementById('medisinskVilkår');
+        element.scrollIntoView();
+    };
+
     function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
         dispatch({ type: ActionType.PENDING });
         return postNyVurdering(
@@ -61,6 +66,7 @@ const NyVurderingController = ({
             () => {
                 onVurderingLagret();
                 dispatch({ type: ActionType.VURDERING_LAGRET });
+                scrollUp();
             },
             () => {
                 dispatch({ type: ActionType.LAGRE_VURDERING_FEILET });

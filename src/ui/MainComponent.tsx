@@ -9,7 +9,7 @@ interface MainComponentProps {
 
 const MainComponent = ({ containerData }: MainComponentProps): JSX.Element => {
     return (
-        <div>
+        <div id="medisinskVilkår">
             <ContainerContext.Provider value={containerData}>
                 <MedisinskVilkår />
             </ContainerContext.Provider>
