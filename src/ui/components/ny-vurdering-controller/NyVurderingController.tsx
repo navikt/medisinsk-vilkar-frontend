@@ -12,6 +12,7 @@ import ActionType from './actionTypes';
 import nyVurderingControllerReducer from './reducer';
 import { postNyVurdering, postNyVurderingDryRun } from '../../../api/api';
 import ContainerContext from '../../context/ContainerContext';
+import { scrollUp } from '../../../util/viewUtils';
 
 interface NyVurderingController {
     opprettVurderingLink: Link;
@@ -61,9 +62,11 @@ const NyVurderingController = ({
             () => {
                 onVurderingLagret();
                 dispatch({ type: ActionType.VURDERING_LAGRET });
+                scrollUp();
             },
             () => {
                 dispatch({ type: ActionType.LAGRE_VURDERING_FEILET });
+                scrollUp();
             }
         );
     }
