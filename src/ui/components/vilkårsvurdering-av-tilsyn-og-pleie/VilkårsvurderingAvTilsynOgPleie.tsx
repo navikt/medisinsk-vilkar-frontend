@@ -68,7 +68,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         vurderingsoversikt.vurderingselementer.length > 0;
 
     const harGyldigSignatur = vurderingsoversikt && vurderingsoversikt.harGyldigSignatur === true;
-    const overlappendeVurderingsperioder = finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder(vurderingsoversikt);
 
     const getVurderingsoversikt = () => {
         return get<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, httpErrorHandler, {
@@ -118,6 +117,11 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         getVurderingsoversikt().then(processVurderingsoversikt).then(visVurderingsoversikt);
     };
 
+    const defaultPerioder =
+        resterendeVurderingsperioderDefaultValue.length > 0
+            ? resterendeVurderingsperioderDefaultValue
+            : [new Period('', '')];
+
     if (!harGyldigSignatur) {
         return (
             <Alertstripe type="info">
@@ -126,6 +130,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
             </Alertstripe>
         );
     }
+
     return (
         <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet}>
             {!harPerioderSomSkalVurderes && (
@@ -217,7 +222,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                                                 defaultValues={{
                                                     [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
                                                     [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
-                                                    [FieldName.PERIODER]: resterendeVurderingsperioderDefaultValue,
+                                                    [FieldName.PERIODER]: defaultPerioder,
                                                     [FieldName.DOKUMENTER]: [],
                                                 }}
                                                 resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}

@@ -38,6 +38,7 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const innleggelsesperioder = innleggelsesperioderResponse.perioder;
+    const innleggelsesperioderDefault = innleggelsesperioder?.length > 0 ? innleggelsesperioder : [new Period('', '')];
 
     const hentInnleggelsesperioder = () => {
         return get(`${endpoints.innleggelsesperioder}`, httpErrorHandler, {
@@ -145,7 +146,7 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
             {modalIsOpen && (
                 <InnleggelsesperiodeFormModal
                     defaultValues={{
-                        [FieldName.INNLEGGELSESPERIODER]: innleggelsesperioder,
+                        [FieldName.INNLEGGELSESPERIODER]: innleggelsesperioderDefault,
                     }}
                     setModalIsOpen={setModalIsOpen}
                     onSubmit={lagreInnleggelsesperioder}
