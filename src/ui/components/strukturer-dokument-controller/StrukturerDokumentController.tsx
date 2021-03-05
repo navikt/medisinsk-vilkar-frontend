@@ -6,6 +6,7 @@ import StrukturerDokumentForm from '../strukturer-dokument-form/StrukturerDokume
 import { post } from '../../../util/httpUtils';
 import Link from '../../../types/Link';
 import ContainerContext from '../../context/ContainerContext';
+import { scrollUp } from '../../../util/viewUtils';
 
 interface StrukturerDokumentControllerProps {
     strukturerDokumentLink: Link;
@@ -36,10 +37,12 @@ const StrukturerDokumentController = ({
             () => {
                 setIsLoading(false);
                 onDokumentStrukturert();
+                scrollUp();
             },
             (error) => {
                 setIsLoading(false);
                 console.error(error);
+                scrollUp();
             }
         );
     };

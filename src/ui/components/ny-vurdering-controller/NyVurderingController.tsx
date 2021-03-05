@@ -12,6 +12,7 @@ import ActionType from './actionTypes';
 import nyVurderingControllerReducer from './reducer';
 import { postNyVurdering, postNyVurderingDryRun } from '../../../api/api';
 import ContainerContext from '../../context/ContainerContext';
+import { scrollUp } from '../../../util/viewUtils';
 
 interface NyVurderingController {
     opprettVurderingLink: Link;
@@ -49,11 +50,6 @@ const NyVurderingController = ({
     } = state;
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
-    const scrollUp = () => {
-        const element = document.getElementById('medisinskVilkår');
-        element.scrollIntoView();
-    };
-
     function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
         dispatch({ type: ActionType.PENDING });
         return postNyVurdering(
@@ -70,6 +66,7 @@ const NyVurderingController = ({
             },
             () => {
                 dispatch({ type: ActionType.LAGRE_VURDERING_FEILET });
+                scrollUp();
             }
         );
     }
