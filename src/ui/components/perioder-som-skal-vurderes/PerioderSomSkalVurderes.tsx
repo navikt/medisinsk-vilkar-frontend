@@ -14,7 +14,7 @@ interface PerioderSomSkalVurderesProps {
 
 const PerioderSomSkalVurderes = ({ perioder, visParterLabel }: PerioderSomSkalVurderesProps) => {
     return (
-        <div className={styles.perioderSomSkalVurderes}>
+        <div className={styles.perioderSomSkalVurderes} id="perioderSomSkalVurderes">
             <span className={styles.visuallyHidden}>Type</span>
             <ContentWithTooltip tooltipText="Perioden må vurderes">
                 <WarningIcon />
