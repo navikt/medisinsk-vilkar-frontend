@@ -17,6 +17,8 @@ export interface Dokument {
     datert: string;
     fremhevet: boolean;
     links: Link[];
+    mottattDato: string;
+    mottattTidspunkt: string;
 }
 
 export interface Dokumentoversikt {

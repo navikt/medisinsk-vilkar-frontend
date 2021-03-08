@@ -22,6 +22,7 @@ import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
 import SignertSeksjon from '../signert-seksjon/SignertSeksjon';
 import FristForDokumentasjonUtløptPanel from '../frist-for-dokumentasjon-utløpt-panel/FristForDokumentasjonUtløptPanel';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
+import { sorterDokumenter } from '../../../util/dokumentUtils';
 
 interface StruktureringAvDokumentasjonProps {
     onProgressButtonClick: () => void;
@@ -63,9 +64,9 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
     };
 
     const åpneDokumentSomMåBehandles = (nyDokumentoversikt: Dokumentoversikt) => {
-        const ustrukturerteDokumenter = nyDokumentoversikt.dokumenter.filter(
-            ({ type }) => type === Dokumenttype.UKLASSIFISERT
-        );
+        const ustrukturerteDokumenter = nyDokumentoversikt.dokumenter
+            .filter(({ type }) => type === Dokumenttype.UKLASSIFISERT)
+            .sort(sorterDokumenter);
         const førsteDokumentSomMåBehandles = ustrukturerteDokumenter?.length > 0 ? ustrukturerteDokumenter[0] : null;
         if (førsteDokumentSomMåBehandles) {
             velgDokument(førsteDokumentSomMåBehandles);
@@ -103,9 +104,9 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
     const strukturerteDokumenter = dokumentoversikt.dokumenter.filter(
         ({ type }) => type !== Dokumenttype.UKLASSIFISERT
     );
-    const ustrukturerteDokumenter = dokumentoversikt.dokumenter.filter(
-        ({ type }) => type === Dokumenttype.UKLASSIFISERT
-    );
+    const ustrukturerteDokumenter = dokumentoversikt.dokumenter
+        .filter(({ type }) => type === Dokumenttype.UKLASSIFISERT)
+        .sort(sorterDokumenter);
     const harDokumenter = strukturerteDokumenter.length > 0 || ustrukturerteDokumenter.length > 0;
     const harGyldigSignatur = strukturerteDokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING);
     const kanGåVidere = harGyldigSignatur && harRegistrertDiagnosekode && ustrukturerteDokumenter.length === 0;

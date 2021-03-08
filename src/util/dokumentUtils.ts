@@ -19,15 +19,14 @@ export const lagStrukturertDokument = (formState: StrukturerDokumentFormState, d
     };
 };
 
-export const sorterDokumenter = (dokumenter: Dokument[]): Dokument[] =>
-    dokumenter.sort((dok1, dok2) => {
-        const dok1Date = dateFromString(dok1.datert);
-        const dok2Date = dateFromString(dok2.datert);
-        if (dok1Date.isBefore(dok2Date)) {
-            return 1;
-        }
-        if (dok2Date.isBefore(dok1Date)) {
-            return -1;
-        }
-        return 0;
-    });
+export const sorterDokumenter = (dok1: Dokument, dok2: Dokument): number => {
+    const dok1Date = dateFromString(dok1.mottattTidspunkt);
+    const dok2Date = dateFromString(dok2.mottattTidspunkt);
+    if (dok1Date.isBefore(dok2Date)) {
+        return 1;
+    }
+    if (dok2Date.isBefore(dok1Date)) {
+        return -1;
+    }
+    return 0;
+};

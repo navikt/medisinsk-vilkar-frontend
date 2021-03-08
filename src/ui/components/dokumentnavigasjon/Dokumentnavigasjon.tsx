@@ -1,11 +1,10 @@
-import React from 'react';
 import { Element, Undertittel } from 'nav-frontend-typografi';
+import React from 'react';
+import { Dokument } from '../../../types/Dokument';
 import InteractiveList from '../interactive-list/InteractiveList';
 import StrukturertDokumentElement from '../strukturet-dokument-element/StrukturertDokumentElement';
 import UstrukturertDokumentElement from '../ustrukturert-dokument-element/UstrukturertDokumentElement';
-import { Dokument } from '../../../types/Dokument';
 import styles from './dokumentnavigasjon.less';
-import { sorterDokumenter } from '../../../util/dokumentUtils';
 
 interface DokumentnavigasjonProps {
     dokumenter: Dokument[];
@@ -24,7 +23,7 @@ const Dokumentnavigasjon = ({ dokumenter, onDokumentValgt, dokumenterSomMåGjenn
     const allElements = [...dokumentElementer];
 
     if (harDokumentasjonSomMåGjennomgås) {
-        sorterDokumenter(dokumenterSomMåGjennomgås).forEach((dokument) =>
+        dokumenterSomMåGjennomgås.forEach((dokument) =>
             allElements.unshift({
                 renderer: () => <UstrukturertDokumentElement dokument={dokument} />,
                 dokument,
