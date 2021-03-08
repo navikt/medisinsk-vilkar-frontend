@@ -103,6 +103,11 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         getVurderingsoversikt().then(processVurderingsoversikt).then(visVurderingsoversikt);
     };
 
+    const defaultPerioder =
+        resterendeVurderingsperioderDefaultValue?.length > 0
+            ? resterendeVurderingsperioderDefaultValue
+            : [new Period('', '')];
+
     if (isLoading) {
         return <Spinner />;
     }
@@ -217,7 +222,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                                             defaultValues={{
                                                 [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]: '',
                                                 [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: undefined,
-                                                [FieldName.PERIODER]: resterendeVurderingsperioderDefaultValue,
+                                                [FieldName.PERIODER]: defaultPerioder,
                                                 [FieldName.DOKUMENTER]: [],
                                             }}
                                             resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
