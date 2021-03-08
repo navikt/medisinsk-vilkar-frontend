@@ -57,12 +57,28 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
         dispatch({ type: ActionType.DOKUMENTOVERSIKT_FEILET });
     };
 
+    const velgDokument = (nyttValgtDokument: Dokument) => {
+        onDokumentValgt(nyttValgtDokument.id);
+        dispatch({ type: ActionType.VELG_DOKUMENT, valgtDokument: nyttValgtDokument });
+    };
+
+    const åpneDokumentSomMåBehandles = (nyDokumentoversikt: Dokumentoversikt) => {
+        const ustrukturerteDokumenter = nyDokumentoversikt.dokumenter.filter(
+            ({ type }) => type === Dokumenttype.UKLASSIFISERT
+        );
+        const førsteDokumentSomMåBehandles = ustrukturerteDokumenter?.length > 0 ? ustrukturerteDokumenter[0] : null;
+        if (førsteDokumentSomMåBehandles) {
+            velgDokument(førsteDokumentSomMåBehandles);
+        }
+    };
+
     React.useEffect(() => {
         let isMounted = true;
         getDokumentoversikt()
             .then((nyDokumentoversikt) => {
                 if (isMounted) {
                     visDokumentoversikt(nyDokumentoversikt);
+                    åpneDokumentSomMåBehandles(nyDokumentoversikt);
                 }
             })
             .catch(handleError);
@@ -71,11 +87,6 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
             httpCanceler.cancel();
         };
     }, []);
-
-    const velgDokument = (nyttValgtDokument: Dokument) => {
-        onDokumentValgt(nyttValgtDokument.id);
-        dispatch({ type: ActionType.VELG_DOKUMENT, valgtDokument: nyttValgtDokument });
-    };
 
     const oppdaterDokumentoversikt = () => {
         dispatch({ type: ActionType.PENDING });

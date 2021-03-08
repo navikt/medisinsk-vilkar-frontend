@@ -84,6 +84,22 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         dispatch({ type: ActionType.VURDERINGSOVERSIKT_FEILET });
     };
 
+    const visNyVurderingForm = (resterendeVurderingsperioder?: Period[]) => {
+        onVurderingValgt(null);
+        dispatch({
+            type: ActionType.VIS_NY_VURDERING_FORM,
+            resterendeVurderingsperioder,
+        });
+    };
+
+    const åpneFørstePeriodeSomMåBehandles = (nyVurderingsoversikt: Vurderingsoversikt) => {
+        const harEnPeriodeSomMåBehandles = nyVurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
+
+        if (harEnPeriodeSomMåBehandles) {
+            visNyVurderingForm(nyVurderingsoversikt.resterendeVurderingsperioder);
+        }
+    };
+
     React.useEffect(() => {
         let isMounted = true;
         getVurderingsoversikt()
@@ -91,6 +107,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
             .then((nyVurderingsoversikt) => {
                 if (isMounted) {
                     visVurderingsoversikt(nyVurderingsoversikt);
+                    åpneFørstePeriodeSomMåBehandles(nyVurderingsoversikt);
                 }
             })
             .catch(handleError);
@@ -99,14 +116,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
             httpCanceler.cancel();
         };
     }, []);
-
-    const visNyVurderingForm = (resterendeVurderingsperioder?: Period[]) => {
-        onVurderingValgt(null);
-        dispatch({
-            type: ActionType.VIS_NY_VURDERING_FORM,
-            resterendeVurderingsperioder,
-        });
-    };
 
     const velgVurderingselement = (nyValgtVurderingselement: Vurderingselement) => {
         onVurderingValgt(nyValgtVurderingselement.id);

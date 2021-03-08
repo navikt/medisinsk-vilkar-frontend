@@ -72,6 +72,19 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         dispatch({ type: ActionType.VURDERINGSOVERSIKT_FEILET });
     };
 
+    const visNyVurderingForm = (resterendeVurderingsperioder?: Period[]) => {
+        onVurderingValgt(null);
+        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, resterendeVurderingsperioder });
+    };
+
+    const åpneFørstePeriodeSomMåBehandles = (nyVurderingsoversikt: Vurderingsoversikt) => {
+        const harEnPeriodeSomMåBehandles = nyVurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
+
+        if (harEnPeriodeSomMåBehandles) {
+            visNyVurderingForm(nyVurderingsoversikt.resterendeVurderingsperioder);
+        }
+    };
+
     React.useEffect(() => {
         let isMounted = true;
         getVurderingsoversikt()
@@ -79,6 +92,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
             .then((nyVurderingsoversikt) => {
                 if (isMounted) {
                     visVurderingsoversikt(nyVurderingsoversikt);
+                    åpneFørstePeriodeSomMåBehandles(nyVurderingsoversikt);
                 }
             })
             .catch(handleError);
@@ -87,11 +101,6 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
             httpCanceler.cancel();
         };
     }, []);
-
-    const visNyVurderingForm = (resterendeVurderingsperioder?: Period[]) => {
-        onVurderingValgt(null);
-        dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, resterendeVurderingsperioder });
-    };
 
     const velgVurderingselement = (nyvalgtVurderingselement: Vurderingselement) => {
         onVurderingValgt(nyvalgtVurderingselement.id);
