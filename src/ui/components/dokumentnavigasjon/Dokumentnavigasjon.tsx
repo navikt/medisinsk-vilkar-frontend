@@ -5,6 +5,7 @@ import StrukturertDokumentElement from '../strukturet-dokument-element/Strukture
 import UstrukturertDokumentElement from '../ustrukturert-dokument-element/UstrukturertDokumentElement';
 import { Dokument } from '../../../types/Dokument';
 import styles from './dokumentnavigasjon.less';
+import { sorterDokumenter } from '../../../util/dokumentUtils';
 
 interface DokumentnavigasjonProps {
     dokumenter: Dokument[];
@@ -23,7 +24,7 @@ const Dokumentnavigasjon = ({ dokumenter, onDokumentValgt, dokumenterSomMåGjenn
     const allElements = [...dokumentElementer];
 
     if (harDokumentasjonSomMåGjennomgås) {
-        dokumenterSomMåGjennomgås.forEach((dokument) =>
+        sorterDokumenter(dokumenterSomMåGjennomgås).forEach((dokument) =>
             allElements.unshift({
                 renderer: () => <UstrukturertDokumentElement dokument={dokument} />,
                 dokument,
