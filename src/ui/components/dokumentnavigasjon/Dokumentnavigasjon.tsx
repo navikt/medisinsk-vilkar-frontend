@@ -1,9 +1,9 @@
-import React from 'react';
 import { Element, Undertittel } from 'nav-frontend-typografi';
+import React from 'react';
+import { Dokument } from '../../../types/Dokument';
 import InteractiveList from '../interactive-list/InteractiveList';
 import StrukturertDokumentElement from '../strukturet-dokument-element/StrukturertDokumentElement';
 import UstrukturertDokumentElement from '../ustrukturert-dokument-element/UstrukturertDokumentElement';
-import { Dokument } from '../../../types/Dokument';
 import styles from './dokumentnavigasjon.less';
 
 interface DokumentnavigasjonProps {
@@ -13,7 +13,8 @@ interface DokumentnavigasjonProps {
 }
 
 const Dokumentnavigasjon = ({ dokumenter, onDokumentValgt, dokumenterSomMåGjennomgås }: DokumentnavigasjonProps) => {
-    const [activeIndex, setActiveIndex] = React.useState(-1);
+    const harDokumentasjonSomMåGjennomgås = dokumenterSomMåGjennomgås && dokumenterSomMåGjennomgås.length > 0;
+    const [activeIndex, setActiveIndex] = React.useState(harDokumentasjonSomMåGjennomgås ? 0 : -1);
 
     const dokumentElementer = dokumenter.map((dokument) => ({
         renderer: () => <StrukturertDokumentElement dokument={dokument} />,
@@ -21,7 +22,6 @@ const Dokumentnavigasjon = ({ dokumenter, onDokumentValgt, dokumenterSomMåGjenn
     }));
     const allElements = [...dokumentElementer];
 
-    const harDokumentasjonSomMåGjennomgås = dokumenterSomMåGjennomgås && dokumenterSomMåGjennomgås.length > 0;
     if (harDokumentasjonSomMåGjennomgås) {
         dokumenterSomMåGjennomgås.forEach((dokument) =>
             allElements.unshift({

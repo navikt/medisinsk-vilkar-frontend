@@ -31,9 +31,8 @@ const Vurderingsnavigasjon = ({
     visRadForNyVurdering,
     visParterLabel,
 }: VurderingsnavigasjonProps): JSX.Element => {
-    const [activeIndex, setActiveIndex] = React.useState(-1);
-
     const harPerioderSomSkalVurderes = resterendeVurderingsperioder?.length > 0;
+    const [activeIndex, setActiveIndex] = React.useState(harPerioderSomSkalVurderes ? 0 : -1);
 
     const sorterteVurderingselementer: Vurderingselement[] = React.useMemo(() => {
         return vurderingselementer.sort((p1, p2) => sortPeriodsByFomDate(p1.periode, p2.periode)).reverse();
