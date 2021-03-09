@@ -31,8 +31,8 @@ describe('dokumentUtils', () => {
             benyttet: false,
             behandlet: false,
             links: [],
-            mottattDato: '2021-03-05',
-            mottattTidspunkt: '2021-03-05T10:23:13.309267',
+            mottattDato: '2021-03-06',
+            mottattTidspunkt: '2021-03-06T10:23:13.309267',
         },
         {
             id: '3',
@@ -44,8 +44,8 @@ describe('dokumentUtils', () => {
             benyttet: false,
             behandlet: false,
             links: [],
-            mottattDato: '2021-03-05',
-            mottattTidspunkt: '2021-03-05T10:23:13.309267',
+            mottattDato: '2021-03-07',
+            mottattTidspunkt: '2021-03-07T10:23:13.309267',
         },
     ];
 
