@@ -1,9 +1,12 @@
-import { Dokument } from '../types/Dokument';
+import { Dokument, Dokumenttype } from '../types/Dokument';
 import {
     FieldName,
     StrukturerDokumentFormState,
 } from '../ui/components/strukturer-dokument-form/StrukturerDokumentForm';
 import { dateFromString } from './dateUtils';
+
+export const strukturertDokumentFilter = (dokument: Dokument) => dokument.type !== Dokumenttype.UKLASSIFISERT;
+export const ustrukturertDokumentFilter = (dokument: Dokument) => dokument.type === Dokumenttype.UKLASSIFISERT;
 
 export const finnBenyttedeDokumenter = (benyttedeDokumentIder: string[], alleDokumenter: Dokument[]): Dokument[] => {
     return alleDokumenter.filter((dokument) => {

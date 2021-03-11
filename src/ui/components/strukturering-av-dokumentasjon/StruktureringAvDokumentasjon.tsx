@@ -22,7 +22,7 @@ import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
 import SignertSeksjon from '../signert-seksjon/SignertSeksjon';
 import FristForDokumentasjonUtløptPanel from '../frist-for-dokumentasjon-utløpt-panel/FristForDokumentasjonUtløptPanel';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
-import { sorterDokumenter } from '../../../util/dokumentUtils';
+import { sorterDokumenter, strukturertDokumentFilter, ustrukturertDokumentFilter } from '../../../util/dokumentUtils';
 
 interface StruktureringAvDokumentasjonProps {
     onProgressButtonClick: () => void;
@@ -101,11 +101,9 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
         return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
     }
 
-    const strukturerteDokumenter = dokumentoversikt.dokumenter.filter(
-        ({ type }) => type !== Dokumenttype.UKLASSIFISERT
-    );
+    const strukturerteDokumenter = dokumentoversikt.dokumenter.filter(strukturertDokumentFilter);
     const ustrukturerteDokumenter = dokumentoversikt.dokumenter
-        .filter(({ type }) => type === Dokumenttype.UKLASSIFISERT)
+        .filter(ustrukturertDokumentFilter)
         .sort(sorterDokumenter);
     const harDokumenter = strukturerteDokumenter.length > 0 || ustrukturerteDokumenter.length > 0;
     const harGyldigSignatur = strukturerteDokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING);
