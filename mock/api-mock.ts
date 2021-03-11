@@ -24,6 +24,17 @@ app.use(
     })
 );
 
+app.use('/mock/status', (req, res) => {
+    res.send({
+        kanLøseAksjonspunkt: false,
+        harUklassifiserteDokumenter: false,
+        manglerDiagnosekode: false,
+        manglerGodkjentLegeerklæring: false,
+        manglerVurderingAvKontinuerligTilsynOgPleie: true,
+        manglerVurderingAvToOmsorgspersoner: false,
+    });
+});
+
 app.use('/mock/vurdering', (req, res) => {
     const vurderingId = req.query.sykdomVurderingId;
     const alleVurderinger = [...mockedTilsynsbehovVurderinger, ...mockedToOmsorgspersonerVurderinger];

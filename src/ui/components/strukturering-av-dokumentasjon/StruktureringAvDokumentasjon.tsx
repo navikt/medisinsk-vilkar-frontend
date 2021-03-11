@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import Spinner from 'nav-frontend-spinner';
 import axios from 'axios';
-import { Hovedknapp } from 'nav-frontend-knapper';
 import Alertstripe from 'nav-frontend-alertstriper';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import Dokumentnavigasjon from '../dokumentnavigasjon/Dokumentnavigasjon';
@@ -21,16 +20,22 @@ import Innleggelsesperiodeoversikt from '../innleggelsesperiodeoversikt/Innlegge
 import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
 import SignertSeksjon from '../signert-seksjon/SignertSeksjon';
 import FristForDokumentasjonUtløptPanel from '../frist-for-dokumentasjon-utløpt-panel/FristForDokumentasjonUtløptPanel';
-import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
-import { sorterDokumenter, strukturertDokumentFilter, ustrukturertDokumentFilter } from '../../../util/dokumentUtils';
+import { sorterDokumenter } from '../../../util/dokumentUtils';
+import { finnNesteSteg } from '../../../util/statusUtils';
+import Steg, { dokumentSteg } from '../../../types/Steg';
+import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 
 interface StruktureringAvDokumentasjonProps {
-    onProgressButtonClick: () => void;
+    navigerTilNesteSteg: (steg: Steg) => void;
+    hentSykdomsstegStatus: () => Promise<SykdomsstegStatusResponse>;
 }
 
-const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAvDokumentasjonProps) => {
+const StruktureringAvDokumentasjon = ({
+    navigerTilNesteSteg,
+    hentSykdomsstegStatus,
+}: StruktureringAvDokumentasjonProps) => {
     const [harRegistrertDiagnosekode, setHarRegistrertDiagnosekode] = React.useState<boolean | undefined>();
-    const { dokument, endpoints, onDokumentValgt, httpErrorHandler } = React.useContext(ContainerContext);
+    const { dokument, endpoints, onDokumentValgt, httpErrorHandler, onFinished } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(dokumentReducer, {
@@ -89,9 +94,20 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
         };
     }, []);
 
-    const oppdaterDokumentoversikt = () => {
+    const onDokumentStrukturert = () => {
         dispatch({ type: ActionType.PENDING });
-        getDokumentoversikt().then(visDokumentoversikt);
+        hentSykdomsstegStatus().then((status) => {
+            if (status.kanLøseAksjonspunkt) {
+                onFinished();
+            }
+
+            const nesteSteg = finnNesteSteg(status);
+            if (nesteSteg === dokumentSteg) {
+                getDokumentoversikt().then(visDokumentoversikt);
+            } else {
+                navigerTilNesteSteg(nesteSteg);
+            }
+        });
     };
 
     if (isLoading) {
@@ -101,36 +117,17 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
         return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
     }
 
-    const strukturerteDokumenter = dokumentoversikt.dokumenter.filter(strukturertDokumentFilter);
+    const strukturerteDokumenter = dokumentoversikt.dokumenter.filter(
+        ({ type }) => type !== Dokumenttype.UKLASSIFISERT
+    );
     const ustrukturerteDokumenter = dokumentoversikt.dokumenter
-        .filter(ustrukturertDokumentFilter)
+        .filter(({ type }) => type === Dokumenttype.UKLASSIFISERT)
         .sort(sorterDokumenter);
     const harDokumenter = strukturerteDokumenter.length > 0 || ustrukturerteDokumenter.length > 0;
     const harGyldigSignatur = strukturerteDokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING);
-    const kanGåVidere = harGyldigSignatur && harRegistrertDiagnosekode && ustrukturerteDokumenter.length === 0;
 
     return (
         <>
-            {kanGåVidere && (
-                <Box marginBottom={Margin.large}>
-                    <Alertstripe type="suksess">
-                        Alle dokumenter er ferdig håndtert
-                        <WriteAccessBoundContent
-                            contentRenderer={() => (
-                                <Hovedknapp
-                                    htmlType="button"
-                                    mini
-                                    style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
-                                    onClick={onProgressButtonClick}
-                                    id="fortsettKnapp"
-                                >
-                                    Fortsett
-                                </Hovedknapp>
-                            )}
-                        />
-                    </Alertstripe>
-                </Box>
-            )}
             {harRegistrertDiagnosekode === false && (
                 <Box marginBottom={Margin.medium}>
                     <Alertstripe type="advarsel">
@@ -175,7 +172,7 @@ const StruktureringAvDokumentasjon = ({ onProgressButtonClick }: StruktureringAv
                                         <StrukturerDokumentController
                                             ustrukturertDokument={valgtDokument}
                                             strukturerDokumentLink={strukturerDokumentLink}
-                                            onDokumentStrukturert={oppdaterDokumentoversikt}
+                                            onDokumentStrukturert={onDokumentStrukturert}
                                         />
                                     );
                                 }

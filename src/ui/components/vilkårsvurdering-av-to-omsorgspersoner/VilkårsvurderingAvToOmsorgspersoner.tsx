@@ -21,7 +21,6 @@ import NyVurderingAvToOmsorgspersonerForm, {
     FieldName,
 } from '../ny-vurdering-av-to-omsorgspersoner-form/NyVurderingAvToOmsorgspersonerForm';
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
-import OverlappendeSøknadsperiodePanel from '../overlappende-søknadsperiode-panel/OverlappendeSøknadsperiodePanel';
 import PageError from '../page-error/PageError';
 import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
@@ -29,8 +28,19 @@ import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummerin
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
+import Steg, { tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Steg';
+import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
+import { finnNesteSteg } from '../../../util/statusUtils';
 
-const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
+interface VilkårsvurderingAvTilsynOgPleieProps {
+    navigerTilNesteSteg: (steg: Steg) => void;
+    hentSykdomsstegStatus: () => Promise<SykdomsstegStatusResponse>;
+}
+
+const VilkårsvurderingAvToOmsorgspersoner = ({
+    navigerTilNesteSteg,
+    hentSykdomsstegStatus,
+}: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
     const { vurdering, onVurderingValgt, endpoints, onFinished, httpErrorHandler } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
@@ -112,6 +122,22 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
         getVurderingsoversikt().then(processVurderingsoversikt).then(visVurderingsoversikt);
     };
 
+    const onVurderingLagret = () => {
+        dispatch({ type: ActionType.PENDING });
+        hentSykdomsstegStatus().then((status) => {
+            if (status.kanLøseAksjonspunkt) {
+                onFinished();
+            }
+
+            const nesteSteg = finnNesteSteg(status);
+            if (nesteSteg === toOmsorgspersonerSteg) {
+                oppdaterVurderingsoversikt();
+            } else {
+                navigerTilNesteSteg(nesteSteg);
+            }
+        });
+    };
+
     const defaultPerioder =
         resterendeVurderingsperioderDefaultValue?.length > 0
             ? resterendeVurderingsperioderDefaultValue
@@ -162,20 +188,6 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                         {!harVurdertePerioder
                             ? 'Ingen perioder å vurdere'
                             : 'Behov for to omsorgspersoner er ferdig vurdert'}
-                        <WriteAccessBoundContent
-                            contentRenderer={() => (
-                                <Knapp
-                                    type="hoved"
-                                    htmlType="button"
-                                    style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
-                                    onClick={onFinished}
-                                    mini
-                                    id="fortsettKnapp"
-                                >
-                                    Fortsett
-                                </Knapp>
-                            )}
-                        />
                     </Alertstripe>
                 </Box>
             )}
@@ -225,7 +237,7 @@ const VilkårsvurderingAvToOmsorgspersoner = (): JSX.Element => {
                                     vurderingstype={Vurderingstype.TO_OMSORGSPERSONER}
                                     opprettVurderingLink={opprettLink}
                                     dataTilVurderingUrl={endpoints.dataTilVurdering}
-                                    onVurderingLagret={oppdaterVurderingsoversikt}
+                                    onVurderingLagret={onVurderingLagret}
                                     formRenderer={(dokumenter, onSubmit) => (
                                         <NyVurderingAvToOmsorgspersonerForm
                                             defaultValues={{

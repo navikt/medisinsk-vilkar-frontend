@@ -27,13 +27,20 @@ import NyVurderingAvTilsynsbehovForm, {
 import Vurderingstype from '../../../types/Vurderingstype';
 import { getStringMedPerioder } from '../../../util/periodUtils';
 import PageContainer from '../page-container/PageContainer';
+import Steg, { dokumentSteg, tilsynOgPleieSteg } from '../../../types/Steg';
+import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
+import { finnNesteSteg } from '../../../util/statusUtils';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
-    onVilkårVurdert: () => void;
+    navigerTilNesteSteg: (steg: Steg) => void;
+    hentSykdomsstegStatus: () => Promise<SykdomsstegStatusResponse>;
 }
 
-const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
-    const { vurdering, onVurderingValgt, endpoints, httpErrorHandler } = React.useContext(ContainerContext);
+const VilkårsvurderingAvTilsynOgPleie = ({
+    navigerTilNesteSteg,
+    hentSykdomsstegStatus,
+}: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
+    const { vurdering, onVurderingValgt, endpoints, httpErrorHandler, onFinished } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
@@ -126,6 +133,22 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         getVurderingsoversikt().then(processVurderingsoversikt).then(visVurderingsoversikt);
     };
 
+    const onVurderingLagret = () => {
+        dispatch({ type: ActionType.PENDING });
+        hentSykdomsstegStatus().then((status) => {
+            if (status.kanLøseAksjonspunkt) {
+                onFinished();
+            }
+
+            const nesteSteg = finnNesteSteg(status);
+            if (nesteSteg === tilsynOgPleieSteg) {
+                oppdaterVurderingsoversikt();
+            } else {
+                navigerTilNesteSteg(nesteSteg);
+            }
+        });
+    };
+
     const defaultPerioder =
         resterendeVurderingsperioderDefaultValue.length > 0
             ? resterendeVurderingsperioderDefaultValue
@@ -149,23 +172,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                             <Alertstripe type="info">Ingen perioder å vurdere</Alertstripe>
                         </Box>
                     )}
-                    <Alertstripe type="suksess">
-                        Behov for kontinuerlig tilsyn og pleie er ferdig vurdert
-                        <WriteAccessBoundContent
-                            contentRenderer={() => (
-                                <Knapp
-                                    type="hoved"
-                                    htmlType="button"
-                                    style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
-                                    onClick={onVilkårVurdert}
-                                    mini
-                                    id="fortsettKnapp"
-                                >
-                                    Fortsett
-                                </Knapp>
-                            )}
-                        />
-                    </Alertstripe>
                 </Box>
             )}
             {harPerioderSomSkalVurderes && (
@@ -225,7 +231,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                                         vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
                                         opprettVurderingLink={opprettLink}
                                         dataTilVurderingUrl={endpoints.dataTilVurdering}
-                                        onVurderingLagret={oppdaterVurderingsoversikt}
+                                        onVurderingLagret={onVurderingLagret}
                                         formRenderer={(dokumenter, onSubmit) => (
                                             <NyVurderingAvTilsynsbehovForm
                                                 defaultValues={{
