@@ -7,11 +7,12 @@ interface AddButtonProps {
     label: string;
     id?: string;
     className?: string;
+    noIcon?: boolean;
 }
 
-const AddButton = ({ className, label, onClick, id }: AddButtonProps) => (
+const AddButton = ({ className, label, onClick, id, noIcon }: AddButtonProps) => (
     <button className={`${styles.addButton} ${className || ''}`} type="button" onClick={onClick} id={id || ''}>
-        <PlusIcon />
+        {!noIcon && <PlusIcon />}
         <span className={styles.addButton__text}>{label}</span>
     </button>
 );

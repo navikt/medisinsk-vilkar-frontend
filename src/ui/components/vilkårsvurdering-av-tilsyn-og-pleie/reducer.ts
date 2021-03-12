@@ -69,6 +69,13 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 isLoading: true,
                 vurderingsoversiktFeilet: false,
             };
+        case ActionType.AVBRYT_FORM:
+            return {
+                ...state,
+                visVurderingDetails: false,
+                valgtVurderingselement: null,
+                visRadForNyVurdering: false,
+            };
         default:
             return state;
     }
