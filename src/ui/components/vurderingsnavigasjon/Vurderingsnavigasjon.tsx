@@ -3,16 +3,16 @@ import { Element, Undertittel } from 'nav-frontend-typografi';
 import React, { useEffect } from 'react';
 import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
+import { usePrevious } from '../../../util/hooks';
 import { sortPeriodsByFomDate } from '../../../util/periodUtils';
+import AddButton from '../add-button/AddButton';
 import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import EditedBySaksbehandlerIcon from '../icons/EditedBySaksbehandlerIcon';
 import InteractiveList from '../interactive-list/InteractiveList';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
 import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
-import LinkButton from '../link-button/LinkButton';
 import styles from './vurderingsnavigasjon.less';
-import AddButton from '../add-button/AddButton';
 
 interface VurderingsnavigasjonProps {
     vurderingselementer: Vurderingselement[];
@@ -35,12 +35,13 @@ const Vurderingsnavigasjon = ({
 }: VurderingsnavigasjonProps): JSX.Element => {
     const harPerioderSomSkalVurderes = resterendeVurderingsperioder?.length > 0;
     const [activeIndex, setActiveIndex] = React.useState(harPerioderSomSkalVurderes ? 0 : -1);
+    const previousVisRadForNyVurdering = usePrevious(visRadForNyVurdering);
 
     useEffect(() => {
-        if (visOpprettVurderingKnapp) {
+        if (visRadForNyVurdering === false && previousVisRadForNyVurdering === true) {
             setActiveIndex(-1);
         }
-    }, [visOpprettVurderingKnapp]);
+    }, [visRadForNyVurdering]);
 
     const sorterteVurderingselementer: Vurderingselement[] = React.useMemo(() => {
         return vurderingselementer.sort((p1, p2) => sortPeriodsByFomDate(p1.periode, p2.periode)).reverse();
