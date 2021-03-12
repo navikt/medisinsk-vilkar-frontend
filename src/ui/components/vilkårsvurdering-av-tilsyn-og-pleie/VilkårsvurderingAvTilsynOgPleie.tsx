@@ -91,6 +91,12 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         });
     };
 
+    const onAvbryt = () => {
+        dispatch({
+            type: ActionType.AVBRYT_FORM,
+        });
+    };
+
     const åpneFørstePeriodeSomMåBehandles = (nyVurderingsoversikt: Vurderingsoversikt) => {
         const harEnPeriodeSomMåBehandles = nyVurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
 
@@ -199,6 +205,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                         onNyVurderingClick={visNyVurderingForm}
                         visRadForNyVurdering={visRadForNyVurdering}
                         visParterLabel
+                        visOpprettVurderingKnapp={!harPerioderSomSkalVurderes && !visRadForNyVurdering}
                     />
                 )}
                 detailSection={() => {
@@ -238,6 +245,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
                                                 perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
                                                 dokumenter={dokumenter}
                                                 onSubmit={onSubmit}
+                                                onAvbryt={visRadForNyVurdering ? onAvbryt : undefined}
                                             />
                                         )}
                                     />
