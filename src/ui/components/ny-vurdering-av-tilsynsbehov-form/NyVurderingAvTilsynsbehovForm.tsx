@@ -4,8 +4,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-import { getPeriodAsListOfDays } from '../../../util/dateUtils';
-import { convertToInternationalPeriod } from '../../../util/formats';
+import { getPeriodAsListOfDays, isValidPeriod } from '../../../util/dateUtils';
+import { convertToInternationalPeriod, prettifyPeriod } from '../../../util/formats';
 import {
     finnHullIPerioder,
     finnMaksavgrensningerForPerioder,
@@ -93,8 +93,15 @@ const NyVurderingAvTilsynsbehovForm = ({
         return slåSammenSammenhengendePerioder(perioderSomKanVurderes);
     }, [perioderSomKanVurderes]);
 
+    const førsteDefaultPeriode = defaultValues[FieldName.PERIODER][0];
+
     return (
-        <DetailView title="Vurdering av tilsyn og pleie">
+        <DetailView
+            title="Vurdering av tilsyn og pleie"
+            renderNextToTitle={() =>
+                isValidPeriod(førsteDefaultPeriode) ? prettifyPeriod(førsteDefaultPeriode) : 'Ny vurdering'
+            }
+        >
             <div id="modal" />
             <FormProvider {...formMethods}>
                 <Form

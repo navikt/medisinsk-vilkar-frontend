@@ -5,7 +5,7 @@ import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
 import { Vurderingsversjon } from '../../../types/Vurdering';
 import { getPeriodAsListOfDays } from '../../../util/dateUtils';
-import { convertToInternationalPeriod } from '../../../util/formats';
+import { convertToInternationalPeriod, prettifyPeriod } from '../../../util/formats';
 import {
     finnHullIPerioder,
     finnMaksavgrensningerForPerioder,
@@ -92,8 +92,13 @@ const NyVurderingAvToOmsorgspersonerForm = ({
         return slåSammenSammenhengendePerioder(perioderSomKanVurderes);
     }, [perioderSomKanVurderes]);
 
+    const førsteDefaultPeriode = defaultValues[FieldName.PERIODER][0];
+
     return (
-        <DetailView title="Vurdering av to omsorgspersoner">
+        <DetailView
+            title="Vurdering av to omsorgspersoner"
+            renderNextToTitle={() => prettifyPeriod(førsteDefaultPeriode)}
+        >
             <FormProvider {...formMethods}>
                 <Form buttonLabel="Bekreft" onSubmit={formMethods.handleSubmit(lagNyVurdering)}>
                     {dokumenter?.length > 0 && (
