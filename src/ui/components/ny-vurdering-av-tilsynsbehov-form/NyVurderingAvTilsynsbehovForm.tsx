@@ -5,7 +5,7 @@ import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
 import { Vurderingsversjon } from '../../../types/Vurdering';
 import { getPeriodAsListOfDays, isValidPeriod } from '../../../util/dateUtils';
-import { convertToInternationalPeriod, prettifyPeriod } from '../../../util/formats';
+import { convertToInternationalPeriod, prettifyPeriodList } from '../../../util/formats';
 import {
     finnHullIPerioder,
     finnMaksavgrensningerForPerioder,
@@ -99,7 +99,9 @@ const NyVurderingAvTilsynsbehovForm = ({
         <DetailView
             title="Vurdering av tilsyn og pleie"
             renderNextToTitle={() =>
-                isValidPeriod(førsteDefaultPeriode) ? prettifyPeriod(førsteDefaultPeriode) : 'Ny vurdering'
+                isValidPeriod(førsteDefaultPeriode)
+                    ? prettifyPeriodList(defaultValues[FieldName.PERIODER])
+                    : 'Ny vurdering'
             }
         >
             <div id="modal" />
