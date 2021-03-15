@@ -10,7 +10,6 @@ import InteractiveList from '../interactive-list/InteractiveList';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
 import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
-import LinkButton from '../link-button/LinkButton';
 import styles from './vurderingsnavigasjon.less';
 import AddButton from '../add-button/AddButton';
 

@@ -18,6 +18,7 @@ interface Action {
     vurderingsoversikt?: Vurderingsoversikt;
     valgtVurderingselement?: Vurderingselement;
     resterendeVurderingsperioder?: Period[];
+    harGyldigSignatur?: boolean;
 }
 
 const finnvalgtVurderingselement = (vurderingselementer, vurderingId) => {

@@ -42,6 +42,7 @@ const MedisinskVilkår = () => {
     const [isLoading, setIsLoading] = React.useState(true);
     const [aktivtSteg, setAktivtSteg] = React.useState<Steg>(null);
     const [markertSteg, setMarkertSteg] = React.useState(null);
+    const [harGyldigSignatur, setHarGyldigSignatur] = React.useState(undefined);
     const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
@@ -54,6 +55,7 @@ const MedisinskVilkår = () => {
             const steg = finnNesteSteg(status);
             setAktivtSteg(steg || dokumentSteg);
             setMarkertSteg(steg);
+            setHarGyldigSignatur(!status.manglerGodkjentLegeerklæring);
             setIsLoading(false);
         });
     }, []);
@@ -90,12 +92,14 @@ const MedisinskVilkår = () => {
                             <VilkårsvurderingAvTilsynOgPleie
                                 navigerTilNesteSteg={navigerTilSteg}
                                 hentSykdomsstegStatus={hentSykdomsstegStatus}
+                                harGyldigSignatur={harGyldigSignatur}
                             />
                         )}
                         {aktivtSteg === toOmsorgspersonerSteg && (
                             <VilkårsvurderingAvToOmsorgspersoner
                                 navigerTilNesteSteg={navigerTilSteg}
                                 hentSykdomsstegStatus={hentSykdomsstegStatus}
+                                harGyldigSignatur={harGyldigSignatur}
                             />
                         )}
                     </div>
