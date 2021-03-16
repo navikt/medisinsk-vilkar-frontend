@@ -98,7 +98,7 @@ const StruktureringAvDokumentasjon = ({
         dispatch({ type: ActionType.PENDING });
         hentSykdomsstegStatus().then((status) => {
             if (status.kanLøseAksjonspunkt) {
-                onFinished();
+                return onFinished();
             }
 
             const nesteSteg = finnNesteSteg(status);
