@@ -40,6 +40,7 @@ const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick }: Diagnosekode
                             }}
                             label="Diagnosekode"
                             hideLabel
+                            showSpinner
                         />
                     </Box>
                     <Box marginTop={Margin.xLarge}>
