@@ -22,10 +22,11 @@ describe('httpUtils', () => {
             expect(data).toEqual(goodResponseMock.data);
         });
 
-        it('should console.error the error when the promise is rejected', async () => {
+        it('should throw an error and console.error when the promise is rejected', async () => {
             axiosMock.get.mockImplementation(() => Promise.reject(badRequestResponseMock));
-            const error = await get('', () => null);
-            expect(console.error).toHaveBeenCalledWith(error);
+            const error = get('', () => null);
+            await expect(error).rejects.toThrow();
+            expect(console.error).toHaveBeenCalledWith(badRequestResponseMock);
         });
 
         it('should call function triggering the provided httpErrorHandler when required', async () => {
@@ -35,8 +36,9 @@ describe('httpUtils', () => {
 
             axiosMock.get.mockImplementation(() => Promise.reject(badRequestResponseMock));
 
-            const error = await get('', mockedErrorHandler);
-            expect(httpErrorHandlerCaller).toHaveBeenCalledWith(error as any, mockedErrorHandler);
+            const error = get('', mockedErrorHandler);
+            await expect(error).rejects.toThrow('');
+            expect(httpErrorHandlerCaller).toHaveBeenCalledWith(badRequestResponseMock, mockedErrorHandler);
             httpErrorHandlerCaller.mockReset();
         });
 
@@ -47,7 +49,7 @@ describe('httpUtils', () => {
 
             axiosMock.get.mockImplementation(() => Promise.reject(badRequestResponseMock));
 
-            await get('', mockedErrorHandler);
+            await expect(get('', mockedErrorHandler)).rejects.toThrow('');
             expect(httpErrorHandlerCaller).not.toHaveBeenCalled();
             httpErrorHandlerCaller.mockReset();
         });
@@ -63,10 +65,11 @@ describe('httpUtils', () => {
             expect(data).toEqual(goodResponseMock.data);
         });
 
-        it('should console.error the error when the promise is rejected', async () => {
+        it('should throw an error and console.error when the promise is rejected', async () => {
             axiosMock.post.mockImplementation(() => Promise.reject(badRequestResponseMock));
-            const error = await post('', null, null);
-            expect(console.error).toHaveBeenCalledWith(error);
+            const error = post('', null, null);
+            await expect(error).rejects.toThrow();
+            expect(console.error).toHaveBeenCalledWith(badRequestResponseMock);
         });
 
         it('should call function triggering the provided httpErrorHandler when required', async () => {
@@ -76,8 +79,9 @@ describe('httpUtils', () => {
 
             axiosMock.post.mockImplementation(() => Promise.reject(badRequestResponseMock));
 
-            const error = await post('', null, mockedErrorHandler);
-            expect(httpErrorHandlerCaller).toHaveBeenCalledWith(error as any, mockedErrorHandler);
+            const error = post('', null, mockedErrorHandler);
+            await expect(error).rejects.toThrow('');
+            expect(httpErrorHandlerCaller).toHaveBeenCalledWith(badRequestResponseMock, mockedErrorHandler);
             httpErrorHandlerCaller.mockReset();
         });
 
@@ -88,7 +92,7 @@ describe('httpUtils', () => {
 
             axiosMock.post.mockImplementation(() => Promise.reject(badRequestResponseMock));
 
-            await post('', null, mockedErrorHandler);
+            await expect(post('', null, mockedErrorHandler)).rejects.toThrow('');
             expect(httpErrorHandlerCaller).not.toHaveBeenCalled();
             httpErrorHandlerCaller.mockReset();
         });
