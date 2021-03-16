@@ -123,7 +123,8 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
         dispatch({ type: ActionType.PENDING });
         hentSykdomsstegStatus().then((status) => {
             if (status.kanLøseAksjonspunkt) {
-                return onFinished();
+                onFinished();
+                return;
             }
 
             const nesteSteg = finnNesteSteg(status);
