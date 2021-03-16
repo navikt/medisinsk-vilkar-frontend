@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './labelledContent.less';
 
 interface LabelledContentProps {
-    label: string;
+    label: string | React.ReactNode;
     content: React.ReactNode;
 }
 

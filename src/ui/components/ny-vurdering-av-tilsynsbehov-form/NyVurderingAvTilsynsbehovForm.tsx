@@ -1,4 +1,5 @@
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Lenke from 'nav-frontend-lenker';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
@@ -137,23 +138,33 @@ const NyVurderingAvTilsynsbehovForm = ({
                             textareaClass={styles.begrunnelsesfelt}
                             name={FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE}
                             label={
-                                <div style={{ fontWeight: 400 }}>
+                                <>
                                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                                    <label style={{ fontWeight: 600 }} htmlFor="begrunnelsesfelt">
+                                    <b>
                                         Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge
                                         av sykdommen etter § 9-10, første ledd.
-                                    </label>
-                                    <p>
-                                        Du skal ta utgangspunkt i § 9-10, første ledd og rundskrivet når du skriver
-                                        vurderingen.
+                                    </b>
+                                    <p className={styles.begrunnelsesfelt__labeltekst}>
+                                        Du skal ta utgangspunkt i{' '}
+                                        <Lenke href="https://lovdata.no/nav/folketrygdloven/kap9" target="_blank">
+                                            lovteksten
+                                        </Lenke>{' '}
+                                        og{' '}
+                                        <Lenke
+                                            href="https://lovdata.no/nav/rundskriv/r09-00#ref/lov/1997-02-28-19/%C2%A79-10"
+                                            target="_blank"
+                                        >
+                                            rundskrivet
+                                        </Lenke>{' '}
+                                        når du skriver vurderingen.
                                     </p>
 
-                                    <p>Vurderingen skal beskrive:</p>
-                                    <ul>
+                                    <p className={styles.begrunnelsesfelt__labeltekst}>Vurderingen skal beskrive:</p>
+                                    <ul className={styles.begrunnelsesfelt__liste}>
                                         <li>Om det er årsakssammenheng mellom sykdom og pleiebehov</li>
                                         <li>Om behovet er kontinuerlig og ikke situasjonsbestemt</li>
                                     </ul>
-                                </div>
+                                </>
                             }
                             validators={{ required }}
                         />

@@ -1,4 +1,5 @@
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Lenke from 'nav-frontend-lenker';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
@@ -119,10 +120,33 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                             textareaClass={styles.begrunnelsesfelt}
                             name={FieldName.VURDERING_AV_TO_OMSORGSPERSONER}
                             label={
-                                <b>
-                                    Gjør en vurdering av om det er behov for to omsorgspersoner etter § 9-10, andre
-                                    ledd.
-                                </b>
+                                <>
+                                    <b>
+                                        Gjør en vurdering av om det er behov for to omsorgspersoner etter § 9-10, andre
+                                        ledd.
+                                    </b>
+                                    <p className={styles.begrunnelsesfelt__labeltekst}>
+                                        Du skal ta utgangspunkt i{' '}
+                                        <Lenke href="https://lovdata.no/nav/folketrygdloven/kap9" target="_blank">
+                                            lovteksten
+                                        </Lenke>{' '}
+                                        og{' '}
+                                        <Lenke
+                                            href="https://lovdata.no/nav/rundskriv/r09-00#ref/lov/1997-02-28-19/%C2%A79-10"
+                                            target="_blank"
+                                        >
+                                            rundskrivet
+                                        </Lenke>{' '}
+                                        når du skriver vurderingen.
+                                    </p>
+                                    <p className={styles.begrunnelsesfelt__labeltekst}>Vurderingen skal beskrive:</p>
+                                    <ul className={styles.begrunnelsesfelt__liste}>
+                                        <li>
+                                            Om tilsyn og pleie kan ivaretas av én person alene i hele eller deler av
+                                            perioden.
+                                        </li>
+                                    </ul>
+                                </>
                             }
                             validators={{ required }}
                             id="begrunnelsesfelt"
