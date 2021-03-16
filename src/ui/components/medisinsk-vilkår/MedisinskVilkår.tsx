@@ -51,13 +51,19 @@ const MedisinskVilkår = () => {
     };
 
     React.useEffect(() => {
-        hentSykdomsstegStatus().then((status) => {
-            const steg = finnNesteSteg(status);
-            setAktivtSteg(steg || dokumentSteg);
-            setMarkertSteg(steg);
-            setHarGyldigSignatur(!status.manglerGodkjentLegeerklæring);
-            setIsLoading(false);
-        });
+        hentSykdomsstegStatus().then(
+            (status) => {
+                const steg = finnNesteSteg(status);
+                setAktivtSteg(steg || dokumentSteg);
+                setMarkertSteg(steg);
+                setHarGyldigSignatur(!status.manglerGodkjentLegeerklæring);
+                setIsLoading(false);
+            },
+            () => {
+                setAktivtSteg(dokumentSteg);
+                setIsLoading(false);
+            }
+        );
     }, []);
 
     const navigerTilSteg = (steg: Steg) => {

@@ -19,7 +19,6 @@ interface Action {
     vurderingsoversikt?: Vurderingsoversikt;
     valgtVurderingselement?: Vurderingselement;
     resterendeVurderingsperioder?: Period[];
-    harGyldigSignatur?: boolean;
 }
 
 const finnvalgtVurderingselement = (vurderingselementer, vurderingId) => {
@@ -56,7 +55,7 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 valgtVurderingselement: null,
                 resterendeVurderingsperioderDefaultValue: action.resterendeVurderingsperioder || [],
                 visVurderingDetails: true,
-                visRadForNyVurdering: !action.resterendeVurderingsperioder && action.harGyldigSignatur,
+                visRadForNyVurdering: !action.resterendeVurderingsperioder,
             };
         case ActionType.VELG_VURDERINGSELEMENT:
             return {
@@ -69,6 +68,13 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 ...state,
                 isLoading: true,
                 vurderingsoversiktFeilet: false,
+            };
+        case ActionType.AVBRYT_FORM:
+            return {
+                ...state,
+                visVurderingDetails: false,
+                valgtVurderingselement: null,
+                visRadForNyVurdering: false,
             };
         default:
             return state;

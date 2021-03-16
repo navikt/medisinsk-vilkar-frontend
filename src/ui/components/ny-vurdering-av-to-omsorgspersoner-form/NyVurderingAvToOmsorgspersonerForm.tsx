@@ -5,7 +5,7 @@ import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
 import { Vurderingsversjon } from '../../../types/Vurdering';
 import { getPeriodAsListOfDays } from '../../../util/dateUtils';
-import { convertToInternationalPeriod } from '../../../util/formats';
+import { convertToInternationalPeriod, prettifyPeriodList } from '../../../util/formats';
 import {
     finnHullIPerioder,
     finnMaksavgrensningerForPerioder,
@@ -93,7 +93,10 @@ const NyVurderingAvToOmsorgspersonerForm = ({
     }, [perioderSomKanVurderes]);
 
     return (
-        <DetailView title="Vurdering av to omsorgspersoner">
+        <DetailView
+            title="Vurdering av to omsorgspersoner"
+            renderNextToTitle={() => prettifyPeriodList(defaultValues[FieldName.PERIODER])}
+        >
             <FormProvider {...formMethods}>
                 <Form buttonLabel="Bekreft" onSubmit={formMethods.handleSubmit(lagNyVurdering)}>
                     {dokumenter?.length > 0 && (

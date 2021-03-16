@@ -79,7 +79,12 @@ const VilkårsvurderingAvTilsynOgPleie = ({
         dispatch({
             type: ActionType.VIS_NY_VURDERING_FORM,
             resterendeVurderingsperioder,
-            harGyldigSignatur,
+        });
+    };
+
+    const onAvbryt = () => {
+        dispatch({
+            type: ActionType.AVBRYT_FORM,
         });
     };
 
@@ -124,7 +129,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
         dispatch({ type: ActionType.PENDING });
         hentSykdomsstegStatus().then((status) => {
             if (status.kanLøseAksjonspunkt) {
-                onFinished();
+                return onFinished();
             }
 
             const nesteSteg = finnNesteSteg(status);
@@ -140,6 +145,9 @@ const VilkårsvurderingAvTilsynOgPleie = ({
         resterendeVurderingsperioderDefaultValue.length > 0
             ? resterendeVurderingsperioderDefaultValue
             : [new Period('', '')];
+
+    const skalViseOpprettVurderingKnapp =
+        !vurderingsoversikt?.harPerioderSomSkalVurderes() && !visRadForNyVurdering && harGyldigSignatur;
 
     return (
         <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet}>
@@ -163,6 +171,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                                 onNyVurderingClick={visNyVurderingForm}
                                 visRadForNyVurdering={visRadForNyVurdering}
                                 visParterLabel
+                                visOpprettVurderingKnapp={skalViseOpprettVurderingKnapp}
                             />
                         )}
                         detailSection={() => {
@@ -206,6 +215,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                                                         }
                                                         dokumenter={dokumenter}
                                                         onSubmit={onSubmit}
+                                                        onAvbryt={visRadForNyVurdering ? onAvbryt : undefined}
                                                     />
                                                 )}
                                             />

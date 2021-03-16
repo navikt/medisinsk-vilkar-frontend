@@ -4,8 +4,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-import { getPeriodAsListOfDays } from '../../../util/dateUtils';
-import { convertToInternationalPeriod } from '../../../util/formats';
+import { getPeriodAsListOfDays, isValidPeriod } from '../../../util/dateUtils';
+import { convertToInternationalPeriod, prettifyPeriodList } from '../../../util/formats';
 import {
     finnHullIPerioder,
     finnMaksavgrensningerForPerioder,
@@ -45,6 +45,7 @@ interface NyVurderingAvTilsynsbehovFormProps {
     resterendeVurderingsperioder?: Period[];
     perioderSomKanVurderes?: Period[];
     dokumenter: Dokument[];
+    onAvbryt: () => void;
 }
 
 const NyVurderingAvTilsynsbehovForm = ({
@@ -53,6 +54,7 @@ const NyVurderingAvTilsynsbehovForm = ({
     resterendeVurderingsperioder,
     perioderSomKanVurderes,
     dokumenter,
+    onAvbryt,
 }: NyVurderingAvTilsynsbehovFormProps): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
@@ -91,11 +93,24 @@ const NyVurderingAvTilsynsbehovForm = ({
         return slåSammenSammenhengendePerioder(perioderSomKanVurderes);
     }, [perioderSomKanVurderes]);
 
+    const førsteDefaultPeriode = defaultValues[FieldName.PERIODER][0];
+
     return (
-        <DetailView title="Vurdering av tilsyn og pleie">
+        <DetailView
+            title="Vurdering av tilsyn og pleie"
+            renderNextToTitle={() =>
+                isValidPeriod(førsteDefaultPeriode)
+                    ? prettifyPeriodList(defaultValues[FieldName.PERIODER])
+                    : 'Ny vurdering'
+            }
+        >
             <div id="modal" />
             <FormProvider {...formMethods}>
-                <Form buttonLabel="Bekreft" onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}>
+                <Form
+                    buttonLabel="Bekreft"
+                    onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}
+                    onAvbryt={onAvbryt}
+                >
                     {dokumenter?.length > 0 && (
                         <Box marginTop={Margin.xLarge}>
                             <CheckboxGroup

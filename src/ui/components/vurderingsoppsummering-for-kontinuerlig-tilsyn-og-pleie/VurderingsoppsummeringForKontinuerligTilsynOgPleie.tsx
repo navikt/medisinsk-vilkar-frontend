@@ -1,5 +1,5 @@
 import React from 'react';
-import { prettifyPeriod } from '../../../util/formats';
+import { prettifyPeriod, prettifyPeriodList } from '../../../util/formats';
 import DetailView from '../detail-view/DetailView';
 import LabelledContent from '../labelled-content/LabelledContent';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
@@ -17,8 +17,12 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
 }: VurderingsoppsummeringForKontinuerligTilsynOgPleieProps) => {
     const gjeldendeVurdering = vurdering.versjoner[0];
     const { perioder, tekst, resultat, dokumenter } = gjeldendeVurdering;
+
     return (
-        <DetailView title="Vurdering av behov for kontinuerlig tilsyn og pleie">
+        <DetailView
+            title="Vurdering av behov for kontinuerlig tilsyn og pleie"
+            renderNextToTitle={() => prettifyPeriodList(perioder)}
+        >
             <Box marginTop={Margin.medium}>
                 <LabelledContent
                     label="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"

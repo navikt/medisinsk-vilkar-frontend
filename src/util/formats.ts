@@ -14,3 +14,5 @@ export const convertToInternationalPeriod = ({ fom, tom }: Period) => ({
     from: fom,
     to: tom,
 });
+
+export const prettifyPeriodList = (perioder: Period[]) => perioder.map((periode) => prettifyPeriod(periode)).join(', ');

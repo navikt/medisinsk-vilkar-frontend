@@ -24,7 +24,7 @@ const vilkårsdokumentReducer = (state: State, action: Action): State => {
     switch (action.type) {
         case ActionType.VIS_DOKUMENTOVERSIKT: {
             const alleDokumenter = action.dokumentoversikt.dokumenter;
-            const valgtDokument = finnValgtDokument(alleDokumenter, state.dokument) || null;
+            const valgtDokument = finnValgtDokument(alleDokumenter || [], state.dokument) || null;
             return {
                 ...state,
                 dokumentoversikt: action.dokumentoversikt,

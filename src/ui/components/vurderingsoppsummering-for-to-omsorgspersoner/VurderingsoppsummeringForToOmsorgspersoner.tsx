@@ -1,7 +1,7 @@
 import React from 'react';
 import Vurdering from '../../../types/Vurdering';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
-import { prettifyPeriod } from '../../../util/formats';
+import { prettifyPeriod, prettifyPeriodList } from '../../../util/formats';
 import BasicList from '../basic-list/BasicList';
 import Box, { Margin } from '../box/Box';
 import DetailView from '../detail-view/DetailView';
@@ -16,7 +16,7 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({ vurdering }: Vurderingsopp
     const gjeldendeVurdering = vurdering.versjoner[0];
     const { perioder, tekst, resultat, dokumenter } = gjeldendeVurdering;
     return (
-        <DetailView title="Vurdering av to omsorgspersoner">
+        <DetailView title="Vurdering av to omsorgspersoner" renderNextToTitle={() => prettifyPeriodList(perioder)}>
             <Box marginTop={Margin.medium}>
                 <LabelledContent
                     label="Hvilke dokumenter er brukt i vurderingen av behov for to omsorgspersoner?"

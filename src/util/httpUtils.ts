@@ -15,7 +15,7 @@ export async function get<T>(
         if (httpErrorShouldBeHandledExternally(error)) {
             handleErrorExternally(error, httpErrorHandler);
         }
-        return error;
+        throw new Error(error);
     }
 }
 
@@ -33,6 +33,6 @@ export async function post<T>(
         if (httpErrorShouldBeHandledExternally(error)) {
             handleErrorExternally(error, httpErrorHandler);
         }
-        return error;
+        throw new Error(error);
     }
 }
