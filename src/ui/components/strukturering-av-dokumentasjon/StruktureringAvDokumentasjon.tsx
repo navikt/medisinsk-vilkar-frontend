@@ -1,14 +1,11 @@
 import React, { useMemo } from 'react';
-import Spinner from 'nav-frontend-spinner';
 import axios from 'axios';
-import Alertstripe from 'nav-frontend-alertstriper';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import Dokumentnavigasjon from '../dokumentnavigasjon/Dokumentnavigasjon';
 import StrukturertDokumentDetaljer from '../strukturert-dokument-detaljer/StrukturertDokumentDetaljer';
-import Dokument, { Dokumentoversikt, Dokumenttype } from '../../../types/Dokument';
+import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import ContainerContext from '../../context/ContainerContext';
 import { get } from '../../../util/httpUtils';
-import PageError from '../page-error/PageError';
 import dokumentReducer from './reducer';
 import ActionType from './actionTypes';
 import { findLinkByRel } from '../../../util/linkUtils';
@@ -19,22 +16,25 @@ import Box, { Margin } from '../box/Box';
 import Innleggelsesperiodeoversikt from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
 import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
 import SignertSeksjon from '../signert-seksjon/SignertSeksjon';
-import FristForDokumentasjonUtløptPanel from '../frist-for-dokumentasjon-utløpt-panel/FristForDokumentasjonUtløptPanel';
-import { sorterDokumenter } from '../../../util/dokumentUtils';
 import { finnNesteSteg } from '../../../util/statusUtils';
-import Steg, { dokumentSteg } from '../../../types/Steg';
+import Step, { dokumentSteg, StepId } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
+import PageContainer from '../page-container/PageContainer';
+import { Dokumentoversikt } from '../../../types/Dokumentoversikt';
+import { DokumentoversiktResponse } from '../../../types/DokumentoversiktResponse';
+import DokumentoversiktMessages from '../dokumentoversikt-messages/DokmentoversiktMessages';
 
 interface StruktureringAvDokumentasjonProps {
-    navigerTilNesteSteg: (steg: Steg) => void;
+    navigerTilNesteSteg: (steg: Step) => void;
     hentSykdomsstegStatus: () => Promise<SykdomsstegStatusResponse>;
+    harRegistrertDiagnosekode: boolean;
 }
 
 const StruktureringAvDokumentasjon = ({
     navigerTilNesteSteg,
     hentSykdomsstegStatus,
+    harRegistrertDiagnosekode,
 }: StruktureringAvDokumentasjonProps) => {
-    const [harRegistrertDiagnosekode, setHarRegistrertDiagnosekode] = React.useState<boolean | undefined>();
     const { dokument, endpoints, onDokumentValgt, httpErrorHandler, onFinished } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
@@ -50,7 +50,7 @@ const StruktureringAvDokumentasjon = ({
     const { dokumentoversikt, isLoading, visDokumentDetails, valgtDokument, dokumentoversiktFeilet } = state;
 
     const getDokumentoversikt = () => {
-        return get<Dokumentoversikt>(endpoints.dokumentoversikt, httpErrorHandler, {
+        return get<DokumentoversiktResponse>(endpoints.dokumentoversikt, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         });
     };
@@ -68,10 +68,7 @@ const StruktureringAvDokumentasjon = ({
         dispatch({ type: ActionType.VELG_DOKUMENT, valgtDokument: nyttValgtDokument });
     };
 
-    const åpneDokumentSomMåBehandles = (nyDokumentoversikt: Dokumentoversikt) => {
-        const ustrukturerteDokumenter = nyDokumentoversikt.dokumenter
-            .filter(({ type }) => type === Dokumenttype.UKLASSIFISERT)
-            .sort(sorterDokumenter);
+    const åpneDokumentSomMåBehandles = ({ ustrukturerteDokumenter }: Dokumentoversikt) => {
         const førsteDokumentSomMåBehandles = ustrukturerteDokumenter?.length > 0 ? ustrukturerteDokumenter[0] : null;
         if (førsteDokumentSomMåBehandles) {
             velgDokument(førsteDokumentSomMåBehandles);
@@ -81,8 +78,9 @@ const StruktureringAvDokumentasjon = ({
     React.useEffect(() => {
         let isMounted = true;
         getDokumentoversikt()
-            .then((nyDokumentoversikt) => {
+            .then(({ dokumenter }: DokumentoversiktResponse) => {
                 if (isMounted) {
+                    const nyDokumentoversikt = new Dokumentoversikt(dokumenter);
                     visDokumentoversikt(nyDokumentoversikt);
                     åpneDokumentSomMåBehandles(nyDokumentoversikt);
                 }
@@ -94,7 +92,7 @@ const StruktureringAvDokumentasjon = ({
         };
     }, []);
 
-    const onDokumentStrukturert = () => {
+    const sjekkStatus = () => {
         dispatch({ type: ActionType.PENDING });
         hentSykdomsstegStatus().then((status) => {
             if (status.kanLøseAksjonspunkt) {
@@ -104,61 +102,29 @@ const StruktureringAvDokumentasjon = ({
 
             const nesteSteg = finnNesteSteg(status);
             if (nesteSteg === dokumentSteg) {
-                getDokumentoversikt().then(visDokumentoversikt);
+                getDokumentoversikt().then(({ dokumenter }: DokumentoversiktResponse) => {
+                    const nyDokumentoversikt = new Dokumentoversikt(dokumenter);
+                    visDokumentoversikt(nyDokumentoversikt);
+                });
             } else {
                 navigerTilNesteSteg(nesteSteg);
             }
         });
     };
 
-    if (isLoading) {
-        return <Spinner />;
-    }
-    if (dokumentoversiktFeilet) {
-        return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
-    }
-
-    const strukturerteDokumenter = dokumentoversikt.dokumenter.filter(
-        ({ type }) => type !== Dokumenttype.UKLASSIFISERT
-    );
-    const ustrukturerteDokumenter = dokumentoversikt.dokumenter
-        .filter(({ type }) => type === Dokumenttype.UKLASSIFISERT)
-        .sort(sorterDokumenter);
-    const harDokumenter = strukturerteDokumenter.length > 0 || ustrukturerteDokumenter.length > 0;
-    const harGyldigSignatur = strukturerteDokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING);
-
     return (
-        <>
-            {harRegistrertDiagnosekode === false && (
-                <Box marginBottom={Margin.medium}>
-                    <Alertstripe type="advarsel">
-                        Diagnosekode mangler. Du må legge til en diagnosekode for å vurdere tilsyn og pleie.
-                    </Alertstripe>
-                </Box>
-            )}
-            {!harGyldigSignatur && harDokumenter && (
-                <>
-                    <Box marginBottom={Margin.medium}>
-                        <Alertstripe type="advarsel">
-                            Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler. Håndter eventuelle
-                            nye dokumenter, eller sett saken på vent mens du innhenter mer dokumentasjon.
-                        </Alertstripe>
-                    </Box>
-                    {ustrukturerteDokumenter.length === 0 && (
-                        <Box marginBottom={Margin.large}>
-                            <FristForDokumentasjonUtløptPanel onProceedClick={() => console.log('1')} />
-                        </Box>
-                    )}
-                </>
-            )}
-            {harDokumenter === false && <Alertstripe type="info">Ingen dokumenter å vise</Alertstripe>}
-            {harDokumenter === true && (
+        <PageContainer isLoading={isLoading} hasError={dokumentoversiktFeilet} key={StepId.Dokument}>
+            <DokumentoversiktMessages
+                dokumentoversikt={dokumentoversikt}
+                harRegistrertDiagnosekode={harRegistrertDiagnosekode}
+            />
+            {dokumentoversikt?.harDokumenter() === true && (
                 <>
                     <NavigationWithDetailView
                         navigationSection={() => (
                             <Dokumentnavigasjon
-                                dokumenter={strukturerteDokumenter}
-                                dokumenterSomMåGjennomgås={ustrukturerteDokumenter}
+                                dokumenter={dokumentoversikt.strukturerteDokumenter}
+                                dokumenterSomMåGjennomgås={dokumentoversikt.ustrukturerteDokumenter}
                                 onDokumentValgt={velgDokument}
                             />
                         )}
@@ -173,7 +139,7 @@ const StruktureringAvDokumentasjon = ({
                                         <StrukturerDokumentController
                                             ustrukturertDokument={valgtDokument}
                                             strukturerDokumentLink={strukturerDokumentLink}
-                                            onDokumentStrukturert={onDokumentStrukturert}
+                                            onDokumentStrukturert={sjekkStatus}
                                         />
                                     );
                                 }
@@ -186,19 +152,15 @@ const StruktureringAvDokumentasjon = ({
                     <Box marginTop={Margin.xxLarge}>
                         <DokumentasjonFooter
                             firstSectionRenderer={() => <Innleggelsesperiodeoversikt />}
-                            secondSectionRenderer={() => (
-                                <Diagnosekodeoversikt
-                                    onDiagnosekoderUpdated={(diagnosekoder) => {
-                                        setHarRegistrertDiagnosekode(diagnosekoder && diagnosekoder.length > 0);
-                                    }}
-                                />
+                            secondSectionRenderer={() => <Diagnosekodeoversikt onDiagnosekoderUpdated={sjekkStatus} />}
+                            thirdSectionRenderer={() => (
+                                <SignertSeksjon harGyldigSignatur={dokumentoversikt.harGyldigSignatur()} />
                             )}
-                            thirdSectionRenderer={() => <SignertSeksjon harGyldigSignatur={harGyldigSignatur} />}
                         />
                     </Box>
                 </>
             )}
-        </>
+        </PageContainer>
     );
 };
 

@@ -1,8 +1,9 @@
 import dayjs from 'dayjs';
-import { Dokumentoversikt, Dokumenttype } from '../../src/types/Dokument';
+import { Dokumenttype } from '../../src/types/Dokument';
 import createMockedDokumentelementLinks from './createMockedDokumentelementLinks';
+import { DokumentoversiktResponse } from '../../src/types/DokumentoversiktResponse';
 
-const mockedDokumentoversikt: Dokumentoversikt = {
+const mockedDokumentoversikt: DokumentoversiktResponse = {
     dokumenter: [
         {
             id: '2',

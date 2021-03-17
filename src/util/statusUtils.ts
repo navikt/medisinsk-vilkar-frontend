@@ -1,5 +1,5 @@
 import StatusResponse from '../types/SykdomsstegStatusResponse';
-import { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../types/Steg';
+import { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../types/Step';
 
 export const finnNesteSteg = ({
     harUklassifiserteDokumenter,

@@ -21,8 +21,4 @@ export interface Dokument {
     mottattTidspunkt: string;
 }
 
-export interface Dokumentoversikt {
-    dokumenter: Dokument[];
-}
-
 export default Dokument;

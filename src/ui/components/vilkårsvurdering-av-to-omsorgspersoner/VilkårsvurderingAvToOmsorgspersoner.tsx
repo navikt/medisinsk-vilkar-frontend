@@ -20,14 +20,14 @@ import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
-import Steg, { toOmsorgspersonerSteg } from '../../../types/Steg';
+import Step, { StepId, toOmsorgspersonerSteg } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import { finnNesteSteg } from '../../../util/statusUtils';
 import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
 import PageContainer from '../page-container/PageContainer';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
-    navigerTilNesteSteg: (steg: Steg) => void;
+    navigerTilNesteSteg: (steg: Step) => void;
     hentSykdomsstegStatus: () => Promise<SykdomsstegStatusResponse>;
     harGyldigSignatur: boolean;
 }
@@ -142,7 +142,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
             : [new Period('', '')];
 
     return (
-        <PageContainer hasError={vurderingsoversiktFeilet} isLoading={isLoading}>
+        <PageContainer hasError={vurderingsoversiktFeilet} isLoading={isLoading} key={StepId.ToOmsorgspersoner}>
             {vurderingsoversikt?.harIngenPerioderÅVise() && (
                 <Box marginTop={Margin.large}>
                     <AlertStripeInfo>

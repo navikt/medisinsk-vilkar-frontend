@@ -19,14 +19,14 @@ import NyVurderingAvTilsynsbehovForm, {
 } from '../ny-vurdering-av-tilsynsbehov-form/NyVurderingAvTilsynsbehovForm';
 import Vurderingstype from '../../../types/Vurderingstype';
 import PageContainer from '../page-container/PageContainer';
-import Steg, { tilsynOgPleieSteg } from '../../../types/Steg';
+import Step, { StepId, tilsynOgPleieSteg } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import { finnNesteSteg } from '../../../util/statusUtils';
 import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
 import Box, { Margin } from '../box/Box';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
-    navigerTilNesteSteg: (steg: Steg) => void;
+    navigerTilNesteSteg: (steg: Step) => void;
     hentSykdomsstegStatus: () => Promise<SykdomsstegStatusResponse>;
     harGyldigSignatur: boolean;
 }
@@ -151,7 +151,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
         !vurderingsoversikt?.harPerioderSomSkalVurderes() && !visRadForNyVurdering && harGyldigSignatur;
 
     return (
-        <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet}>
+        <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet} key={StepId.TilsynOgPleie}>
             <VurderingsoversiktMessages
                 vurderingsoversikt={vurderingsoversikt}
                 harGyldigSignatur={harGyldigSignatur}

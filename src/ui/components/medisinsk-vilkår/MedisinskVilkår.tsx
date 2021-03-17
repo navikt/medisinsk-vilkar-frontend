@@ -7,15 +7,17 @@ import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/Stru
 import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-pleie/VilkårsvurderingAvTilsynOgPleie';
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
 import styles from './medisinskVilkår.less';
-import Steg, { dokumentSteg, StegId, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Steg';
+import Step, { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
 import { get } from '../../../util/httpUtils';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import ContainerContext from '../../context/ContainerContext';
 import { finnNesteSteg } from '../../../util/statusUtils';
 import PageContainer from '../page-container/PageContainer';
 import WarningIcon from '../icons/WarningIcon';
+import medisinskVilkårReducer from './reducer';
+import ActionType from './actionTypes';
 
-const alleSteg: Steg[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
+const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
 interface TabItemProps {
     label: string;
@@ -39,36 +41,51 @@ const TabItem = ({ label, showWarningIcon }: TabItemProps) => {
 };
 
 const MedisinskVilkår = () => {
-    const [isLoading, setIsLoading] = React.useState(true);
-    const [aktivtSteg, setAktivtSteg] = React.useState<Steg>(null);
-    const [markertSteg, setMarkertSteg] = React.useState(null);
-    const [harGyldigSignatur, setHarGyldigSignatur] = React.useState(undefined);
+    const [state, dispatch] = React.useReducer(medisinskVilkårReducer, {
+        isLoading: true,
+        activeStep: null,
+        markedStep: null,
+        harGyldigSignatur: null,
+        harRegistrertDiagnosekode: null,
+    });
+
+    const { isLoading, activeStep, markedStep, harGyldigSignatur, harRegistrertDiagnosekode } = state;
+
     const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const hentSykdomsstegStatus = () => {
-        return get<SykdomsstegStatusResponse>(endpoints.status, httpErrorHandler, { cancelToken: httpCanceler.token });
+        return get<SykdomsstegStatusResponse>(endpoints.status, httpErrorHandler, {
+            cancelToken: httpCanceler.token,
+        }).then((status) => {
+            dispatch({
+                type: ActionType.UPDATE_STATUS,
+                harGyldigSignatur: status.manglerGodkjentLegeerklæring === false,
+                harRegistrertDiagnosekode: status.manglerDiagnosekode === false,
+            });
+            return status;
+        });
     };
 
     React.useEffect(() => {
         hentSykdomsstegStatus().then(
             (status) => {
                 const steg = finnNesteSteg(status);
-                setAktivtSteg(steg || dokumentSteg);
-                setMarkertSteg(steg);
-                setHarGyldigSignatur(!status.manglerGodkjentLegeerklæring);
-                setIsLoading(false);
+                dispatch({
+                    type: ActionType.MARK_AND_ACTIVATE_STEP,
+                    step: steg,
+                    harGyldigSignatur: status.manglerGodkjentLegeerklæring === false,
+                    harRegistrertDiagnosekode: status.manglerDiagnosekode === false,
+                });
             },
             () => {
-                setAktivtSteg(dokumentSteg);
-                setIsLoading(false);
+                dispatch({ type: ActionType.ACTIVATE_DEFAULT_STEP });
             }
         );
     }, []);
 
-    const navigerTilSteg = (steg: Steg) => {
-        setAktivtSteg(steg);
-        setMarkertSteg(steg);
+    const navigerTilSteg = (steg: Step) => {
+        dispatch({ type: ActionType.NAVIGATE_TO_STEP, step: steg });
     };
 
     return (
@@ -78,30 +95,33 @@ const MedisinskVilkår = () => {
                 <h1 style={{ fontSize: 22 }}>Sykdom</h1>
                 <TabsPure
                     kompakt
-                    tabs={alleSteg.map((steg) => {
+                    tabs={steps.map((step) => {
                         return {
-                            label: <TabItem label={steg.tittel} showWarningIcon={steg === markertSteg} />,
-                            aktiv: steg === aktivtSteg,
+                            label: <TabItem label={step.title} showWarningIcon={step === markedStep} />,
+                            aktiv: step === activeStep,
                         };
                     })}
-                    onChange={(event, clickedIndex) => setAktivtSteg(alleSteg[clickedIndex])}
+                    onChange={(event, clickedIndex) => {
+                        dispatch({ type: ActionType.ACTIVATE_STEP, step: steps[clickedIndex] });
+                    }}
                 />
                 <div style={{ marginTop: '1rem', maxWidth: '1204px' }}>
                     <div className={styles.medisinskVilkår__vilkårContentContainer}>
-                        {aktivtSteg === dokumentSteg && (
+                        {activeStep === dokumentSteg && (
                             <StruktureringAvDokumentasjon
                                 navigerTilNesteSteg={navigerTilSteg}
                                 hentSykdomsstegStatus={hentSykdomsstegStatus}
+                                harRegistrertDiagnosekode={harRegistrertDiagnosekode}
                             />
                         )}
-                        {aktivtSteg === tilsynOgPleieSteg && (
+                        {activeStep === tilsynOgPleieSteg && (
                             <VilkårsvurderingAvTilsynOgPleie
                                 navigerTilNesteSteg={navigerTilSteg}
                                 hentSykdomsstegStatus={hentSykdomsstegStatus}
                                 harGyldigSignatur={harGyldigSignatur}
                             />
                         )}
-                        {aktivtSteg === toOmsorgspersonerSteg && (
+                        {activeStep === toOmsorgspersonerSteg && (
                             <VilkårsvurderingAvToOmsorgspersoner
                                 navigerTilNesteSteg={navigerTilSteg}
                                 hentSykdomsstegStatus={hentSykdomsstegStatus}

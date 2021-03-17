@@ -1,5 +1,6 @@
-import Dokument, { Dokumentoversikt } from '../../../types/Dokument';
+import Dokument from '../../../types/Dokument';
 import ActionType from './actionTypes';
+import { Dokumentoversikt } from '../../../types/Dokumentoversikt';
 
 interface State {
     visDokumentDetails: boolean;
@@ -23,7 +24,7 @@ const finnValgtDokument = (dokumenter, dokumentId) => {
 const vilkårsdokumentReducer = (state: State, action: Action): State => {
     switch (action.type) {
         case ActionType.VIS_DOKUMENTOVERSIKT: {
-            const alleDokumenter = action.dokumentoversikt.dokumenter;
+            const { alleDokumenter } = action.dokumentoversikt;
             const valgtDokument = finnValgtDokument(alleDokumenter || [], state.dokument) || null;
             return {
                 ...state,
