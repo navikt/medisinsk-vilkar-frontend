@@ -54,17 +54,21 @@ const MedisinskVilkår = () => {
     const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
-    const hentSykdomsstegStatus = () => {
-        return get<SykdomsstegStatusResponse>(endpoints.status, httpErrorHandler, {
-            cancelToken: httpCanceler.token,
-        }).then((status) => {
+    const hentSykdomsstegStatus = async () => {
+        try {
+            const status = await get<SykdomsstegStatusResponse>(endpoints.status, httpErrorHandler, {
+                cancelToken: httpCanceler.token,
+            });
             dispatch({
                 type: ActionType.UPDATE_STATUS,
                 harGyldigSignatur: status.manglerGodkjentLegeerklæring === false,
                 harRegistrertDiagnosekode: status.manglerDiagnosekode === false,
             });
             return status;
-        });
+        } catch (error) {
+            console.error(error);
+            return error;
+        }
     };
 
     React.useEffect(() => {

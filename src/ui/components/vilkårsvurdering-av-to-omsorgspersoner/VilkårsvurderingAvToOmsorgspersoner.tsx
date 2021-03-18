@@ -122,6 +122,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
     const onVurderingLagret = () => {
         dispatch({ type: ActionType.PENDING });
         hentSykdomsstegStatus().then((status) => {
+            console.log('STATUS HER!!!', status);
             if (status.kanLøseAksjonspunkt) {
                 onFinished();
                 return;
