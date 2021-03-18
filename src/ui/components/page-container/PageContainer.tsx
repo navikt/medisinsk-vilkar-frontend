@@ -12,7 +12,7 @@ interface PageContainerProps {
 const PageContainer = ({ isLoading, hasError, preventUnmount, children }: PageContainerProps): JSX.Element => {
     const shouldHideChildren = isLoading || hasError;
 
-    const handleChildren = () => {
+    const renderChildrenContent = () => {
         if (preventUnmount) {
             return <div style={{ display: shouldHideChildren ? 'none' : '' }}>{children}</div>;
         }
@@ -26,7 +26,7 @@ const PageContainer = ({ isLoading, hasError, preventUnmount, children }: PageCo
         <>
             {isLoading && <Spinner />}
             {hasError && <PageError message="Noe gikk galt, vennligst prøv igjen senere" />}
-            {handleChildren()}
+            {renderChildrenContent()}
         </>
     );
 };

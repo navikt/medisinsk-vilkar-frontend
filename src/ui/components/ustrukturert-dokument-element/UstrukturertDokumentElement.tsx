@@ -16,7 +16,7 @@ interface UstrukturertDokumentElementProps {
 }
 
 const UstrukturertDokumentElement = ({
-    dokument: { datert, annenPartErKilde, links },
+    dokument: { datert, mottattDato, annenPartErKilde, links },
 }: UstrukturertDokumentElementProps) => {
     const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
 
@@ -48,7 +48,7 @@ const UstrukturertDokumentElement = ({
                 <span className={styles.ustrukturertDokumentElement__texts__date}>
                     <span className={styles.visuallyHidden}>Datert</span>
                     <ContentWithTooltip inline tooltipText="Dato dokumentet ble mottatt">
-                        {`${prettifyDate(datert)}*`}
+                        {`${prettifyDate(datert || mottattDato)}*`}
                     </ContentWithTooltip>
                 </span>
                 <span className={styles.ustrukturertDokumentElement__texts__part}>

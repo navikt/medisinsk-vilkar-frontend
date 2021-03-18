@@ -24,6 +24,36 @@ app.use(
     })
 );
 
+app.use('/mock/status', (req, res) => {
+    const harUklassifiserteDokumenter = mockedDokumentoversikt.dokumenter.some(
+        ({ type }) => type === Dokumenttype.UKLASSIFISERT
+    );
+    const manglerDiagnosekode =
+        !mockedDiagnosekoderesponse ||
+        !mockedDiagnosekoderesponse.diagnosekoder ||
+        mockedDiagnosekoderesponse.diagnosekoder.length === 0;
+    const manglerGodkjentLegeerklæring =
+        mockedDokumentoversikt.dokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING) === false;
+    const manglerVurderingAvKontinuerligTilsynOgPleie =
+        mockedTilsynsbehovVurderingsoversikt.resterendeVurderingsperioder.length > 0;
+    const manglerVurderingAvToOmsorgspersoner =
+        mockedToOmsorgspersonerVurderingsoversikt.resterendeVurderingsperioder.length > 0;
+
+    res.send({
+        kanLøseAksjonspunkt:
+            !harUklassifiserteDokumenter &&
+            !manglerDiagnosekode &&
+            !manglerGodkjentLegeerklæring &&
+            !manglerVurderingAvKontinuerligTilsynOgPleie &&
+            !manglerVurderingAvToOmsorgspersoner,
+        harUklassifiserteDokumenter,
+        manglerDiagnosekode,
+        manglerGodkjentLegeerklæring,
+        manglerVurderingAvKontinuerligTilsynOgPleie,
+        manglerVurderingAvToOmsorgspersoner,
+    });
+});
+
 app.use('/mock/vurdering', (req, res) => {
     const vurderingId = req.query.sykdomVurderingId;
     const alleVurderinger = [...mockedTilsynsbehovVurderinger, ...mockedToOmsorgspersonerVurderinger];
