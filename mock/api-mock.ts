@@ -86,16 +86,24 @@ app.use('/mock/opprett-vurdering', (req, res) => {
 });
 
 app.use('/mock/kontinuerlig-tilsyn-og-pleie/vurderingsoversikt', (req, res) => {
+    const harGyldigSignatur = mockedDokumentoversikt.dokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING);
     res.send({
         ...mockedTilsynsbehovVurderingsoversikt,
-        harGyldigSignatur: mockedDokumentoversikt.dokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING),
+        harGyldigSignatur,
+        resterendeVurderingsperioder: !harGyldigSignatur
+            ? []
+            : mockedTilsynsbehovVurderingsoversikt.resterendeVurderingsperioder,
     });
 });
 
 app.use('/mock/to-omsorgspersoner/vurderingsoversikt', (req, res) => {
+    const harGyldigSignatur = mockedDokumentoversikt.dokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING);
     res.send({
         ...mockedToOmsorgspersonerVurderingsoversikt,
-        harGyldigSignatur: mockedDokumentoversikt.dokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING),
+        harGyldigSignatur,
+        resterendeVurderingsperioder: !harGyldigSignatur
+            ? []
+            : mockedToOmsorgspersonerVurderingsoversikt.resterendeVurderingsperioder,
     });
 });
 
