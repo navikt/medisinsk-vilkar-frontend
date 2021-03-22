@@ -3,12 +3,12 @@ import { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../types
 
 export const finnNesteSteg = ({
     harUklassifiserteDokumenter,
-    manglerGodkjentLegeerklæring,
     manglerDiagnosekode,
     manglerVurderingAvKontinuerligTilsynOgPleie,
     manglerVurderingAvToOmsorgspersoner,
+    manglerGodkjentLegeerklæring,
 }: StatusResponse) => {
-    if (harUklassifiserteDokumenter || manglerGodkjentLegeerklæring || manglerDiagnosekode) {
+    if (harUklassifiserteDokumenter || manglerDiagnosekode || manglerGodkjentLegeerklæring) {
         return dokumentSteg;
     }
 

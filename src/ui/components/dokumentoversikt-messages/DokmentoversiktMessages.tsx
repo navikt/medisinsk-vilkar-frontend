@@ -11,6 +11,15 @@ interface DokumentoversiktMessagesProps {
 
 const DokumentoversiktMessages = ({ dokumentoversikt, harRegistrertDiagnosekode }: DokumentoversiktMessagesProps) => {
     const { ustrukturerteDokumenter } = dokumentoversikt;
+
+    const visFristForDokumentasjonUtløptMelding =
+        ustrukturerteDokumenter.length === 0 && !dokumentoversikt.harGyldigSignatur();
+
+    const visHåndterNyeDokumenterMelding =
+        !dokumentoversikt.harGyldigSignatur() &&
+        dokumentoversikt.harDokumenter() &&
+        !visFristForDokumentasjonUtløptMelding;
+
     return (
         <>
             {harRegistrertDiagnosekode === false && (
@@ -20,7 +29,12 @@ const DokumentoversiktMessages = ({ dokumentoversikt, harRegistrertDiagnosekode 
                     </Alertstripe>
                 </Box>
             )}
-            {!dokumentoversikt.harGyldigSignatur() && dokumentoversikt.harDokumenter() && (
+            {visFristForDokumentasjonUtløptMelding && (
+                <Box marginBottom={Margin.large}>
+                    <FristForDokumentasjonUtløptPanel onProceedClick={() => console.log('1')} />
+                </Box>
+            )}
+            {visHåndterNyeDokumenterMelding && (
                 <>
                     <Box marginBottom={Margin.medium}>
                         <Alertstripe type="advarsel">
@@ -28,11 +42,6 @@ const DokumentoversiktMessages = ({ dokumentoversikt, harRegistrertDiagnosekode 
                             nye dokumenter, eller sett saken på vent mens du innhenter mer dokumentasjon.
                         </Alertstripe>
                     </Box>
-                    {ustrukturerteDokumenter.length === 0 && (
-                        <Box marginBottom={Margin.large}>
-                            <FristForDokumentasjonUtløptPanel onProceedClick={() => console.log('1')} />
-                        </Box>
-                    )}
                 </>
             )}
             {dokumentoversikt.harDokumenter() === false && (
