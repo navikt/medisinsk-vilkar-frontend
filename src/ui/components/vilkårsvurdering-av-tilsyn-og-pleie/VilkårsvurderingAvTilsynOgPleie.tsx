@@ -35,7 +35,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
     hentSykdomsstegStatus,
     harGyldigSignatur,
 }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
-    const { vurdering, onVurderingValgt, endpoints, httpErrorHandler, onFinished } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler, onFinished } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
@@ -44,7 +44,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({
         vurderingsoversikt: null,
         valgtVurderingselement: null,
         resterendeVurderingsperioderDefaultValue: [],
-        vurdering,
         visRadForNyVurdering: false,
         vurderingsoversiktFeilet: false,
     });
@@ -74,7 +73,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({
     };
 
     const visNyVurderingForm = (resterendeVurderingsperioder?: Period[]) => {
-        onVurderingValgt(null);
         dispatch({
             type: ActionType.VIS_NY_VURDERING_FORM,
             resterendeVurderingsperioder,

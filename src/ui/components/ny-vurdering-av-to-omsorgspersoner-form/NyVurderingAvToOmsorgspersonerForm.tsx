@@ -57,7 +57,6 @@ const NyVurderingAvToOmsorgspersonerForm = ({
 }: NyVurderingAvToOmsorgspersonerFormProps): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
-        shouldUnregister: false,
     });
 
     const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);

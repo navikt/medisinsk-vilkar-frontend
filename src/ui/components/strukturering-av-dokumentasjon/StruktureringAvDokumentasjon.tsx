@@ -35,7 +35,7 @@ const StruktureringAvDokumentasjon = ({
     hentSykdomsstegStatus,
     harRegistrertDiagnosekode,
 }: StruktureringAvDokumentasjonProps) => {
-    const { dokument, endpoints, onDokumentValgt, httpErrorHandler, onFinished } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler, onFinished } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(dokumentReducer, {
@@ -43,7 +43,6 @@ const StruktureringAvDokumentasjon = ({
         isLoading: true,
         dokumentoversikt: null,
         valgtDokument: null,
-        dokument,
         dokumentoversiktFeilet: false,
     });
 
@@ -64,7 +63,6 @@ const StruktureringAvDokumentasjon = ({
     };
 
     const velgDokument = (nyttValgtDokument: Dokument) => {
-        onDokumentValgt(nyttValgtDokument.id);
         dispatch({ type: ActionType.VELG_DOKUMENT, valgtDokument: nyttValgtDokument });
     };
 

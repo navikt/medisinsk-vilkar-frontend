@@ -7,7 +7,6 @@ interface State {
     isLoading: boolean;
     dokumentoversikt: Dokumentoversikt;
     valgtDokument: Dokument;
-    dokument: string;
     dokumentoversiktFeilet: boolean;
 }
 
@@ -17,19 +16,12 @@ interface Action {
     valgtDokument?: Dokument;
 }
 
-const finnValgtDokument = (dokumenter, dokumentId) => {
-    return dokumenter.find(({ id }) => dokumentId === id);
-};
-
 const vilkårsdokumentReducer = (state: State, action: Action): State => {
     switch (action.type) {
         case ActionType.VIS_DOKUMENTOVERSIKT: {
-            const { alleDokumenter } = action.dokumentoversikt;
-            const valgtDokument = finnValgtDokument(alleDokumenter || [], state.dokument) || null;
             return {
                 ...state,
                 dokumentoversikt: action.dokumentoversikt,
-                valgtDokument,
                 isLoading: false,
                 visDokumentDetails: false,
                 dokumentoversiktFeilet: false,

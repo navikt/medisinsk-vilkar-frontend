@@ -16,21 +16,6 @@
         <script type="text/javascript">
             setTimeout(() => {
                 window.renderMedisinskVilkarApp('app', {
-                    onVurderingValgt: (vurdering) => {
-                        if (vurdering !== null) {
-                            history.pushState('', '', `#vurdering=${vurdering}`);
-                        } else {
-                            window.location.hash = '';
-                        }
-                    },
-                    onDokumentValgt: (dokument) => {
-                        if (dokument !== null) {
-                            history.pushState('', '', `#dokument=${dokument}`);
-                        } else {
-                            window.location.hash = '';
-                        }
-                    },
-                    vurdering: new URLSearchParams(`?${window.location.hash.substr(1)}`).get('vurdering'),
                     endpoints: {
                         vurderingsoversiktKontinuerligTilsynOgPleie: 'http://localhost:8082/mock/kontinuerlig-tilsyn-og-pleie/vurderingsoversikt',
                         vurderingsoversiktBehovForToOmsorgspersoner: 'http://localhost:8082/mock/to-omsorgspersoner/vurderingsoversikt',
