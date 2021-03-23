@@ -18,6 +18,7 @@ export const createKontinuerligTilsynVurdering = (requestBody: NyVurderingsversj
         gjelderForAnnenPart: false,
         links: createMockedVurderingselementLinks(nyVurderingId),
         endretIDenneBehandlingen: true,
+        erInnleggelsesperiode: false,
     });
     tilsynsbehovVurderingsoversiktMock.resterendeVurderingsperioder = [];
     tilsynsbehovVurderingerMock.push({
@@ -35,6 +36,7 @@ export const createKontinuerligTilsynVurdering = (requestBody: NyVurderingsversj
             resterendeVurderingsperioder: [],
             perioderSomKanVurderes: [],
         },
+        erInnleggelsesperiode: false,
     });
 };
 
@@ -50,6 +52,7 @@ export const createToOmsorgspersonerVurdering = (requestBody: NyVurderingsversjo
         gjelderForAnnenPart: false,
         links: createMockedVurderingselementLinks(nyVurderingId),
         endretIDenneBehandlingen: true,
+        erInnleggelsesperiode: false,
     });
     mockedToOmsorgspersonerVurderingsoversikt.resterendeVurderingsperioder = [];
     toOmsorgspersonerVurderingerMock.push({
@@ -67,5 +70,6 @@ export const createToOmsorgspersonerVurdering = (requestBody: NyVurderingsversjo
             resterendeVurderingsperioder: [],
             perioderSomKanVurderes: [],
         },
+        erInnleggelsesperiode: false,
     });
 };

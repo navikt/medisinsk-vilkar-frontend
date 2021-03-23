@@ -1,7 +1,7 @@
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { Period } from '../../../types/Period';
 import ActionType from './actionTypes';
-import Vurderingselement from '../../../types/Vurderingselement';
+import { Vurderingselement } from '../../../types/Vurderingselement';
 
 interface State {
     visVurderingDetails: boolean;

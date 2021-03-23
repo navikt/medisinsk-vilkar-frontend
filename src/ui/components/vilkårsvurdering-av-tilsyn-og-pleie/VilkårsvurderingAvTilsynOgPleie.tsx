@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import axios from 'axios';
 import { Period } from '../../../types/Period';
-import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
@@ -10,10 +9,8 @@ import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 import { get } from '../../../util/httpUtils';
 import LinkRel from '../../../constants/LinkRel';
-import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
+import { findLinkByRel } from '../../../util/linkUtils';
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
-import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
-import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
 import NyVurderingAvTilsynsbehovForm, {
     FieldName,
 } from '../ny-vurdering-av-tilsynsbehov-form/NyVurderingAvTilsynsbehovForm';
@@ -24,6 +21,8 @@ import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse'
 import { finnNesteSteg } from '../../../util/statusUtils';
 import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
 import Box, { Margin } from '../box/Box';
+import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
+import { Vurderingselement } from '../../../types/Vurderingselement';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     navigerTilNesteSteg: (steg: Step) => void;
@@ -113,7 +112,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({
     }, []);
 
     const velgVurderingselement = (nyValgtVurderingselement: Vurderingselement) => {
-        onVurderingValgt(nyValgtVurderingselement.id);
         dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, valgtVurderingselement: nyValgtVurderingselement });
     };
 
@@ -142,6 +140,13 @@ const VilkårsvurderingAvTilsynOgPleie = ({
         });
     };
 
+    const setMargin = () => {
+        if (vurderingsoversikt.harPerioderSomSkalVurderes() || !harGyldigSignatur) {
+            return Margin.medium;
+        }
+        return null;
+    };
+
     const defaultPerioder =
         resterendeVurderingsperioderDefaultValue.length > 0
             ? resterendeVurderingsperioderDefaultValue
@@ -158,11 +163,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                 vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
             />
             {vurderingsoversikt?.harPerioderÅVise() && (
-                <Box
-                    marginTop={
-                        vurderingsoversikt.harPerioderSomSkalVurderes() || !harGyldigSignatur ? Margin.medium : null
-                    }
-                >
+                <Box marginTop={setMargin()}>
                     <NavigationWithDetailView
                         navigationSection={() => (
                             <Vurderingsnavigasjon
@@ -175,56 +176,46 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                                 visOpprettVurderingKnapp={skalViseOpprettVurderingKnapp}
                             />
                         )}
+                        showDetailSection={visVurderingDetails}
                         detailSection={() => {
-                            const harValgtVurderingselement = !!valgtVurderingselement?.id;
-                            if (visVurderingDetails) {
-                                const url = harValgtVurderingselement
-                                    ? findHrefByRel(LinkRel.HENT_VURDERING, valgtVurderingselement.links)
-                                    : '';
-                                const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
-                                return (
-                                    <>
-                                        {harValgtVurderingselement && (
-                                            <VurderingsdetaljerController
-                                                hentVurderingUrl={url}
-                                                contentRenderer={(valgtVurdering) => (
-                                                    <VurderingsoppsummeringForKontinuerligTilsynOgPleie
-                                                        vurdering={valgtVurdering}
-                                                    />
-                                                )}
-                                            />
-                                        )}
-                                        <div style={{ display: harValgtVurderingselement ? 'none' : '' }}>
-                                            <NyVurderingController
-                                                vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
-                                                opprettVurderingLink={opprettLink}
-                                                dataTilVurderingUrl={endpoints.dataTilVurdering}
-                                                onVurderingLagret={onVurderingLagret}
-                                                formRenderer={(dokumenter, onSubmit) => (
-                                                    <NyVurderingAvTilsynsbehovForm
-                                                        defaultValues={{
-                                                            [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
-                                                            [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
-                                                            [FieldName.PERIODER]: defaultPerioder,
-                                                            [FieldName.DOKUMENTER]: [],
-                                                        }}
-                                                        resterendeVurderingsperioder={
-                                                            resterendeVurderingsperioderDefaultValue
-                                                        }
-                                                        perioderSomKanVurderes={
-                                                            vurderingsoversikt.perioderSomKanVurderes
-                                                        }
-                                                        dokumenter={dokumenter}
-                                                        onSubmit={onSubmit}
-                                                        onAvbryt={visRadForNyVurdering ? onAvbryt : undefined}
-                                                    />
-                                                )}
-                                            />
-                                        </div>
-                                    </>
-                                );
-                            }
-                            return null;
+                            const harValgtVurderingselement = !!valgtVurderingselement;
+                            const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
+
+                            return (
+                                <>
+                                    {harValgtVurderingselement && (
+                                        <VurderingsdetaljerController
+                                            vurderingselement={valgtVurderingselement}
+                                            vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
+                                        />
+                                    )}
+                                    <div style={{ display: harValgtVurderingselement ? 'none' : '' }}>
+                                        <NyVurderingController
+                                            vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
+                                            opprettVurderingLink={opprettLink}
+                                            dataTilVurderingUrl={endpoints.dataTilVurdering}
+                                            onVurderingLagret={onVurderingLagret}
+                                            formRenderer={(dokumenter, onSubmit) => (
+                                                <NyVurderingAvTilsynsbehovForm
+                                                    defaultValues={{
+                                                        [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
+                                                        [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
+                                                        [FieldName.PERIODER]: defaultPerioder,
+                                                        [FieldName.DOKUMENTER]: [],
+                                                    }}
+                                                    resterendeVurderingsperioder={
+                                                        resterendeVurderingsperioderDefaultValue
+                                                    }
+                                                    perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
+                                                    dokumenter={dokumenter}
+                                                    onSubmit={onSubmit}
+                                                    onAvbryt={visRadForNyVurdering ? onAvbryt : undefined}
+                                                />
+                                            )}
+                                        />
+                                    </div>
+                                </>
+                            );
                         }}
                     />
                 </Box>

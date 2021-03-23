@@ -1,15 +1,4 @@
-import { Period } from './Period';
-import Vurderingsresultat from './Vurderingsresultat';
-import Link from './Link';
+import ManuellVurdering from './ManuellVurdering';
+import { InnleggelsesperiodeVurdering } from './InnleggelsesperiodeVurdering';
 
-interface Vurderingselement {
-    id: string;
-    resultat: Vurderingsresultat;
-    periode: Period;
-    gjelderForSøker: boolean;
-    gjelderForAnnenPart: boolean;
-    links: Link[];
-    endretIDenneBehandlingen: boolean;
-}
-
-export default Vurderingselement;
+export type Vurderingselement = ManuellVurdering | InnleggelsesperiodeVurdering;

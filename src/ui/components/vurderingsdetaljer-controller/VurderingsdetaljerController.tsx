@@ -1,64 +1,52 @@
-import React, { useMemo } from 'react';
-import axios from 'axios';
-import Spinner from 'nav-frontend-spinner';
+import React from 'react';
+import { Vurderingselement } from '../../../types/Vurderingselement';
+import ManuellVurdering from '../../../types/ManuellVurdering';
+import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
+import VurderingsdetaljerFetcher from '../vurderingsdetaljer-fetcher/VurderingsdetaljerFetcher';
+import { findHrefByRel } from '../../../util/linkUtils';
+import LinkRel from '../../../constants/LinkRel';
+import { InnleggelsesperiodeVurdering } from '../../../types/InnleggelsesperiodeVurdering';
+import VurderingsoppsummeringForInnleggelsesperiode from '../vurderingsoppsummering-for-innleggelsesperiode/VurderingsoppsummeringForInnleggelsesperiode';
+import Vurderingstype from '../../../types/Vurderingstype';
 import Vurdering from '../../../types/Vurdering';
-import { get } from '../../../util/httpUtils';
-import PageError from '../page-error/PageError';
-import ContainerContext from '../../context/ContainerContext';
+import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
 
 interface VurderingsdetaljerControllerProps {
-    hentVurderingUrl: string;
-    contentRenderer: (vurdering: Vurdering) => JSX.Element;
+    vurderingselement: Vurderingselement;
+    vurderingstype: Vurderingstype;
 }
 
-const VurderingsdetaljerController = ({
-    hentVurderingUrl,
-    contentRenderer,
-}: VurderingsdetaljerControllerProps): JSX.Element => {
-    const { httpErrorHandler } = React.useContext(ContainerContext);
+const Vurderingsoppsummering = ({ vurdering }: { vurdering: Vurdering }) => {
+    if (vurdering.type === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
+        return <VurderingsoppsummeringForKontinuerligTilsynOgPleie vurdering={vurdering} />;
+    }
+    if (vurdering.type === Vurderingstype.TO_OMSORGSPERSONER) {
+        return <VurderingsoppsummeringForToOmsorgspersoner vurdering={vurdering} />;
+    }
+    return null;
+};
 
-    const [isLoading, setIsLoading] = React.useState<boolean>(true);
-    const [vurdering, setVurdering] = React.useState<Vurdering>(null);
-    const [hentVurderingHarFeilet, setHentVurderingHarFeilet] = React.useState<boolean>(false);
+const VurderingsdetaljerController = ({ vurderingselement, vurderingstype }: VurderingsdetaljerControllerProps) => {
+    const manuellVurdering = vurderingselement as ManuellVurdering;
+    const innleggelsesperiodeVurdering = vurderingselement as InnleggelsesperiodeVurdering;
 
-    const httpCanceler = useMemo(() => axios.CancelToken.source(), [hentVurderingUrl]);
-
-    function hentVurdering(): Promise<Vurdering> {
-        return get(hentVurderingUrl, httpErrorHandler, { cancelToken: httpCanceler.token });
+    const needsToFetchMoreDetails = manuellVurdering.resultat !== undefined;
+    if (needsToFetchMoreDetails) {
+        const url = findHrefByRel(LinkRel.HENT_VURDERING, manuellVurdering.links);
+        return (
+            <VurderingsdetaljerFetcher
+                url={url}
+                contentRenderer={(valgtVurdering) => <Vurderingsoppsummering vurdering={valgtVurdering} />}
+            />
+        );
     }
 
-    const handleError = () => {
-        setIsLoading(false);
-        setHentVurderingHarFeilet(true);
-    };
-
-    React.useEffect(() => {
-        let isMounted = true;
-        setIsLoading(true);
-        setHentVurderingHarFeilet(false);
-        hentVurdering()
-            .then((vurderingResponse: Vurdering) => {
-                if (isMounted) {
-                    setVurdering(vurderingResponse);
-                    setIsLoading(false);
-                }
-            })
-            .catch(handleError);
-
-        return () => {
-            isMounted = false;
-            httpCanceler.cancel();
-        };
-    }, [hentVurderingUrl]);
-
-    if (isLoading) {
-        return <Spinner />;
-    }
-    if (hentVurderingHarFeilet) {
-        return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;
-    }
-
-    return contentRenderer(vurdering);
+    return (
+        <VurderingsoppsummeringForInnleggelsesperiode
+            vurdering={innleggelsesperiodeVurdering}
+            vurderingstype={vurderingstype}
+        />
+    );
 };
 
 export default VurderingsdetaljerController;
