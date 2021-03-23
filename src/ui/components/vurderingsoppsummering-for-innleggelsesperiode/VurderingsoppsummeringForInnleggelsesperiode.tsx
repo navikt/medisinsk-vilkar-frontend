@@ -1,6 +1,6 @@
 import React from 'react';
 import Alertstripe from 'nav-frontend-alertstriper';
-import { InnleggelsesperiodeVurdering } from '../../../types/InnleggelsesperiodeVurdering';
+import InnleggelsesperiodeVurdering from '../../../types/InnleggelsesperiodeVurdering';
 import DetailView from '../detail-view/DetailView';
 import { prettifyPeriod } from '../../../util/formats';
 import Box, { Margin } from '../box/Box';

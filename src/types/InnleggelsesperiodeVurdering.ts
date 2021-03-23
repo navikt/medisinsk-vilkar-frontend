@@ -1,6 +1,8 @@
 import { Period } from './Period';
 
-export interface InnleggelsesperiodeVurdering {
+interface InnleggelsesperiodeVurdering {
     periode: Period;
     erInnleggelsesperiode: true;
 }
+
+export default InnleggelsesperiodeVurdering;

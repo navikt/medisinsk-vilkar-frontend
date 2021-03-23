@@ -1,6 +1,6 @@
 import { Period } from './Period';
 import Link from './Link';
-import { Vurderingselement } from './Vurderingselement';
+import Vurderingselement from './Vurderingselement';
 
 export class Vurderingsoversikt {
     vurderingselementer: Vurderingselement[];

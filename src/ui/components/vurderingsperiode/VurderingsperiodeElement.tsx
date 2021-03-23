@@ -11,7 +11,7 @@ import InstitutionIcon from '../icons/InstitutionIcon';
 import ManuellVurdering from '../../../types/ManuellVurdering';
 import InnleggelsesperiodeIkonOverOppfylt from '../innleggelsesperiode-ikon-over-oppfylt/InnleggelsesperiodeIkonOverOppfylt';
 import InnleggelsesperiodeIkonOverIkkeOppfylt from '../innleggelsesperiode-ikon-over-ikkeoppfylt/InnleggelsesperiodeIkonOverOppfylt';
-import { Vurderingselement } from '../../../types/Vurderingselement';
+import Vurderingselement from '../../../types/Vurderingselement';
 import styles from './vurderingsperiodeElement.less';
 
 interface VurderingsperiodeElementProps {

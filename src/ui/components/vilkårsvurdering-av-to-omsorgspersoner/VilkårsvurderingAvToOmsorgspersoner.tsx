@@ -23,7 +23,7 @@ import { finnNesteSteg } from '../../../util/statusUtils';
 import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
 import PageContainer from '../page-container/PageContainer';
 import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
-import { Vurderingselement } from '../../../types/Vurderingselement';
+import Vurderingselement from '../../../types/Vurderingselement';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     navigerTilNesteSteg: (steg: Step) => void;

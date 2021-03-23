@@ -12,7 +12,7 @@ import InteractiveList from '../interactive-list/InteractiveList';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
 import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
-import { Vurderingselement } from '../../../types/Vurderingselement';
+import Vurderingselement from '../../../types/Vurderingselement';
 import styles from './vurderingsnavigasjon.less';
 
 interface VurderingsnavigasjonProps {

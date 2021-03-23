@@ -1,11 +1,11 @@
 import React from 'react';
-import { Vurderingselement } from '../../../types/Vurderingselement';
+import Vurderingselement from '../../../types/Vurderingselement';
 import ManuellVurdering from '../../../types/ManuellVurdering';
 import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
 import VurderingsdetaljerFetcher from '../vurderingsdetaljer-fetcher/VurderingsdetaljerFetcher';
 import { findHrefByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
-import { InnleggelsesperiodeVurdering } from '../../../types/InnleggelsesperiodeVurdering';
+import InnleggelsesperiodeVurdering from '../../../types/InnleggelsesperiodeVurdering';
 import VurderingsoppsummeringForInnleggelsesperiode from '../vurderingsoppsummering-for-innleggelsesperiode/VurderingsoppsummeringForInnleggelsesperiode';
 import Vurderingstype from '../../../types/Vurderingstype';
 import Vurdering from '../../../types/Vurdering';
