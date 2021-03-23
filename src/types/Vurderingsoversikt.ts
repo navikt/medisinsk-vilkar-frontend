@@ -1,6 +1,6 @@
 import { Period } from './Period';
-import Vurderingselement from './Vurderingselement';
 import Link from './Link';
+import Vurderingselement from './Vurderingselement';
 
 export class Vurderingsoversikt {
     vurderingselementer: Vurderingselement[];
@@ -13,7 +13,7 @@ export class Vurderingsoversikt {
 
     links: Link[];
 
-    constructor(data: Vurderingsoversikt) {
+    constructor(data: Partial<Vurderingsoversikt>) {
         try {
             this.perioderSomKanVurderes = data.perioderSomKanVurderes.map(({ fom, tom }) => new Period(fom, tom));
             this.resterendeVurderingsperioder = data.resterendeVurderingsperioder.map(

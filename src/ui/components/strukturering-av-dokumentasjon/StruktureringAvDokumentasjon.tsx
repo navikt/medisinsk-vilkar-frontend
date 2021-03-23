@@ -128,24 +128,22 @@ const StruktureringAvDokumentasjon = ({
                                 onDokumentValgt={velgDokument}
                             />
                         )}
+                        showDetailSection={visDokumentDetails}
                         detailSection={() => {
-                            if (visDokumentDetails) {
-                                if (valgtDokument.type === Dokumenttype.UKLASSIFISERT) {
-                                    const strukturerDokumentLink = findLinkByRel(
-                                        LinkRel.ENDRE_DOKUMENT,
-                                        valgtDokument.links
-                                    );
-                                    return (
-                                        <StrukturerDokumentController
-                                            ustrukturertDokument={valgtDokument}
-                                            strukturerDokumentLink={strukturerDokumentLink}
-                                            onDokumentStrukturert={sjekkStatus}
-                                        />
-                                    );
-                                }
-                                return <StrukturertDokumentDetaljer dokument={valgtDokument} />;
+                            if (valgtDokument.type === Dokumenttype.UKLASSIFISERT) {
+                                const strukturerDokumentLink = findLinkByRel(
+                                    LinkRel.ENDRE_DOKUMENT,
+                                    valgtDokument.links
+                                );
+                                return (
+                                    <StrukturerDokumentController
+                                        ustrukturertDokument={valgtDokument}
+                                        strukturerDokumentLink={strukturerDokumentLink}
+                                        onDokumentStrukturert={sjekkStatus}
+                                    />
+                                );
                             }
-                            return null;
+                            return <StrukturertDokumentDetaljer dokument={valgtDokument} />;
                         }}
                     />
 

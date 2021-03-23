@@ -2,7 +2,7 @@ import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Element, Undertittel } from 'nav-frontend-typografi';
 import React, { useEffect } from 'react';
 import { Period } from '../../../types/Period';
-import Vurderingselement from '../../../types/Vurderingselement';
+import ManuellVurdering from '../../../types/ManuellVurdering';
 import { usePrevious } from '../../../util/hooks';
 import { sortPeriodsByFomDate } from '../../../util/periodUtils';
 import AddButton from '../add-button/AddButton';
@@ -12,6 +12,7 @@ import InteractiveList from '../interactive-list/InteractiveList';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
 import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
+import Vurderingselement from '../../../types/Vurderingselement';
 import styles from './vurderingsnavigasjon.less';
 
 interface VurderingsnavigasjonProps {
@@ -47,34 +48,31 @@ const Vurderingsnavigasjon = ({
         return vurderingselementer.sort((p1, p2) => sortPeriodsByFomDate(p1.periode, p2.periode)).reverse();
     }, [vurderingselementer]);
 
-    const vurderingsperiodeElements = sorterteVurderingselementer.map(
-        ({ periode, resultat, gjelderForAnnenPart, gjelderForSøker, endretIDenneBehandlingen }) => {
-            const visOverlappetikett =
-                harPerioderSomSkalVurderes &&
-                resterendeVurderingsperioder.some((søknadsperiode: Period) => søknadsperiode.overlapsWith(periode));
-
-            return (
-                <VurderingsperiodeElement
-                    periode={periode}
-                    resultat={resultat}
-                    renderAfterElement={() => (
-                        <div className={styles.vurderingsperiode__postElementContainer}>
-                            {endretIDenneBehandlingen && (
-                                <ContentWithTooltip tooltipText="Vurderingen er opprettet i denne behandlingen">
-                                    <EditedBySaksbehandlerIcon />
-                                </ContentWithTooltip>
-                            )}
-
-                            {visOverlappetikett && <EtikettInfo mini>Overlapp</EtikettInfo>}
-                        </div>
-                    )}
-                    gjelderForAnnenPart={gjelderForAnnenPart}
-                    gjelderForSøker={gjelderForSøker}
-                    visParterLabel={visParterLabel}
-                />
+    const vurderingsperiodeElements = sorterteVurderingselementer.map((vurderingsperiode) => {
+        const visOverlappetikett =
+            harPerioderSomSkalVurderes &&
+            resterendeVurderingsperioder.some((søknadsperiode: Period) =>
+                søknadsperiode.overlapsWith(vurderingsperiode.periode)
             );
-        }
-    );
+
+        return (
+            <VurderingsperiodeElement
+                vurderingselement={vurderingsperiode}
+                visParterLabel={visParterLabel}
+                renderAfterElement={() => (
+                    <div className={styles.vurderingsperiode__postElementContainer}>
+                        {(vurderingsperiode as ManuellVurdering).endretIDenneBehandlingen && (
+                            <ContentWithTooltip tooltipText="Vurderingen er opprettet i denne behandlingen">
+                                <EditedBySaksbehandlerIcon />
+                            </ContentWithTooltip>
+                        )}
+
+                        {visOverlappetikett && <EtikettInfo mini>Overlapp</EtikettInfo>}
+                    </div>
+                )}
+            />
+        );
+    });
 
     const allElements = [...vurderingsperiodeElements];
     if (harPerioderSomSkalVurderes) {

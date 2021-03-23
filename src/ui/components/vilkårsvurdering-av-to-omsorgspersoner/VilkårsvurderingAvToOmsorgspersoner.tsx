@@ -3,11 +3,10 @@ import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import React, { useMemo } from 'react';
 import LinkRel from '../../../constants/LinkRel';
 import { Period } from '../../../types/Period';
-import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import Vurderingstype from '../../../types/Vurderingstype';
 import { get } from '../../../util/httpUtils';
-import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
+import { findLinkByRel } from '../../../util/linkUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Box, { Margin } from '../box/Box';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
@@ -15,9 +14,7 @@ import NyVurderingAvToOmsorgspersonerForm, {
     FieldName,
 } from '../ny-vurdering-av-to-omsorgspersoner-form/NyVurderingAvToOmsorgspersonerForm';
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
-import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
-import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 import Step, { StepId, toOmsorgspersonerSteg } from '../../../types/Step';
@@ -25,6 +22,8 @@ import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse'
 import { finnNesteSteg } from '../../../util/statusUtils';
 import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
 import PageContainer from '../page-container/PageContainer';
+import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
+import Vurderingselement from '../../../types/Vurderingselement';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     navigerTilNesteSteg: (steg: Step) => void;
@@ -107,7 +106,6 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
     }, []);
 
     const velgVurderingselement = (nyvalgtVurderingselement: Vurderingselement) => {
-        onVurderingValgt(nyvalgtVurderingselement.id);
         dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, valgtVurderingselement: nyvalgtVurderingselement });
     };
 
@@ -136,6 +134,13 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
         });
     };
 
+    const setMargin = () => {
+        if (vurderingsoversikt.harPerioderSomSkalVurderes() || !harGyldigSignatur) {
+            return Margin.medium;
+        }
+        return null;
+    };
+
     const defaultPerioder =
         resterendeVurderingsperioderDefaultValue?.length > 0
             ? resterendeVurderingsperioderDefaultValue
@@ -157,11 +162,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                 vurderingstype={Vurderingstype.TO_OMSORGSPERSONER}
             />
             {vurderingsoversikt?.harPerioderÅVise() && (
-                <Box
-                    marginTop={
-                        vurderingsoversikt.harPerioderSomSkalVurderes() || !harGyldigSignatur ? Margin.medium : null
-                    }
-                >
+                <Box marginTop={setMargin()}>
                     <NavigationWithDetailView
                         navigationSection={() => {
                             if (vurderingsoversikt.harPerioderÅVise()) {
@@ -176,50 +177,44 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                             }
                             return null;
                         }}
+                        showDetailSection={visVurderingDetails}
                         detailSection={() => {
-                            if (visVurderingDetails) {
-                                if (valgtVurderingselement?.id) {
-                                    const vurderingUrl = findHrefByRel(
-                                        LinkRel.HENT_VURDERING,
-                                        valgtVurderingselement.links
-                                    );
-                                    return (
+                            const harValgtVurderingselement = !!valgtVurderingselement;
+                            const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
+                            return (
+                                <>
+                                    {harValgtVurderingselement && (
                                         <VurderingsdetaljerController
-                                            hentVurderingUrl={vurderingUrl}
-                                            contentRenderer={(valgtVurdering) => (
-                                                <VurderingsoppsummeringForToOmsorgspersoner
-                                                    vurdering={valgtVurdering}
+                                            vurderingselement={valgtVurderingselement}
+                                            vurderingstype={Vurderingstype.TO_OMSORGSPERSONER}
+                                        />
+                                    )}
+                                    <div style={{ display: harValgtVurderingselement ? 'none' : '' }}>
+                                        <NyVurderingController
+                                            vurderingstype={Vurderingstype.TO_OMSORGSPERSONER}
+                                            opprettVurderingLink={opprettLink}
+                                            dataTilVurderingUrl={endpoints.dataTilVurdering}
+                                            onVurderingLagret={onVurderingLagret}
+                                            formRenderer={(dokumenter, onSubmit) => (
+                                                <NyVurderingAvToOmsorgspersonerForm
+                                                    defaultValues={{
+                                                        [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]: '',
+                                                        [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: undefined,
+                                                        [FieldName.PERIODER]: defaultPerioder,
+                                                        [FieldName.DOKUMENTER]: [],
+                                                    }}
+                                                    resterendeVurderingsperioder={
+                                                        resterendeVurderingsperioderDefaultValue
+                                                    }
+                                                    perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
+                                                    dokumenter={dokumenter}
+                                                    onSubmit={onSubmit}
                                                 />
                                             )}
                                         />
-                                    );
-                                }
-
-                                const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
-                                return (
-                                    <NyVurderingController
-                                        vurderingstype={Vurderingstype.TO_OMSORGSPERSONER}
-                                        opprettVurderingLink={opprettLink}
-                                        dataTilVurderingUrl={endpoints.dataTilVurdering}
-                                        onVurderingLagret={onVurderingLagret}
-                                        formRenderer={(dokumenter, onSubmit) => (
-                                            <NyVurderingAvToOmsorgspersonerForm
-                                                defaultValues={{
-                                                    [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]: '',
-                                                    [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: undefined,
-                                                    [FieldName.PERIODER]: defaultPerioder,
-                                                    [FieldName.DOKUMENTER]: [],
-                                                }}
-                                                resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
-                                                perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
-                                                dokumenter={dokumenter}
-                                                onSubmit={onSubmit}
-                                            />
-                                        )}
-                                    />
-                                );
-                            }
-                            return null;
+                                    </div>
+                                </>
+                            );
                         }}
                     />
                 </Box>
