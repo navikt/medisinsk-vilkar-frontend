@@ -6,7 +6,7 @@ import GreenCheckIconFilled from '../icons/GreenCheckIconFilled';
 import OnePersonIconGray from '../icons/OnePersonIconGray';
 import OnePersonOutlineGray from '../icons/OnePersonOutlineGray';
 import RedCrossIconFilled from '../icons/RedCrossIconFilled';
-import TwoPersonsWithOneHighlightedIconBlue from '../icons/TwoPersonsWithOneHighlightedIconBlue';
+import TwoPersonsWithOneHighlightedIconGray from '../icons/TwoPersonsWithOneHighlightedIconGray';
 import InstitutionIcon from '../icons/InstitutionIcon';
 import ManuellVurdering from '../../../types/ManuellVurdering';
 import InnleggelsesperiodeIkonOverOppfylt from '../innleggelsesperiode-ikon-over-oppfylt/InnleggelsesperiodeIkonOverOppfylt';
@@ -72,7 +72,9 @@ const renderPersonIcon = ({ gjelderForAnnenPart, gjelderForSøker }: ManuellVurd
     if (gjelderForAnnenPart && gjelderForSøker) {
         return (
             <ContentWithTooltip tooltipText="Søker og annen part">
-                <TwoPersonsWithOneHighlightedIconBlue />
+                <div className={styles['vurderingsperiodeElement__texts__parterIcon--wide']}>
+                    <TwoPersonsWithOneHighlightedIconGray />
+                </div>
             </ContentWithTooltip>
         );
     }
