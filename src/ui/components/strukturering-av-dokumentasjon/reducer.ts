@@ -1,12 +1,12 @@
-import Dokument, { Dokumentoversikt } from '../../../types/Dokument';
+import Dokument from '../../../types/Dokument';
 import ActionType from './actionTypes';
+import { Dokumentoversikt } from '../../../types/Dokumentoversikt';
 
 interface State {
     visDokumentDetails: boolean;
     isLoading: boolean;
     dokumentoversikt: Dokumentoversikt;
     valgtDokument: Dokument;
-    dokument: string;
     dokumentoversiktFeilet: boolean;
     visRedigeringAvDokument: boolean;
 }
@@ -17,19 +17,12 @@ interface Action {
     valgtDokument?: Dokument;
 }
 
-const finnValgtDokument = (dokumenter, dokumentId) => {
-    return dokumenter.find(({ id }) => dokumentId === id);
-};
-
 const vilkårsdokumentReducer = (state: State, action: Action): State => {
     switch (action.type) {
         case ActionType.VIS_DOKUMENTOVERSIKT: {
-            const alleDokumenter = action.dokumentoversikt.dokumenter;
-            const valgtDokument = finnValgtDokument(alleDokumenter, state.dokument) || null;
             return {
                 ...state,
                 dokumentoversikt: action.dokumentoversikt,
-                valgtDokument,
                 isLoading: false,
                 visDokumentDetails: false,
                 dokumentoversiktFeilet: false,

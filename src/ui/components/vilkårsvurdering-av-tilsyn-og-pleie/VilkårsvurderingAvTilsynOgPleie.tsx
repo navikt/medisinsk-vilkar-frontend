@@ -1,39 +1,41 @@
 import React, { useMemo } from 'react';
 import axios from 'axios';
-import Alertstripe from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
 import { Period } from '../../../types/Period';
-import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import ContainerContext from '../../context/ContainerContext';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
-import processVurderingsoversikt, {
-    finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder,
-} from '../../../util/vurderingsoversiktUtils';
 import { get } from '../../../util/httpUtils';
 import LinkRel from '../../../constants/LinkRel';
-import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
+import { findLinkByRel } from '../../../util/linkUtils';
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
-import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
-import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
-import Box, { Margin } from '../box/Box';
-import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import NyVurderingAvTilsynsbehovForm, {
     FieldName,
 } from '../ny-vurdering-av-tilsynsbehov-form/NyVurderingAvTilsynsbehovForm';
 import Vurderingstype from '../../../types/Vurderingstype';
-import { getStringMedPerioder } from '../../../util/periodUtils';
 import PageContainer from '../page-container/PageContainer';
+import Step, { StepId, tilsynOgPleieSteg } from '../../../types/Step';
+import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
+import { finnNesteSteg } from '../../../util/statusUtils';
+import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
+import Box, { Margin } from '../box/Box';
+import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
+import Vurderingselement from '../../../types/Vurderingselement';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
-    onVilkårVurdert: () => void;
+    navigerTilNesteSteg: (steg: Step) => void;
+    hentSykdomsstegStatus: () => Promise<SykdomsstegStatusResponse>;
+    harGyldigSignatur: boolean;
 }
 
-const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
-    const { vurdering, onVurderingValgt, endpoints, httpErrorHandler } = React.useContext(ContainerContext);
+const VilkårsvurderingAvTilsynOgPleie = ({
+    navigerTilNesteSteg,
+    hentSykdomsstegStatus,
+    harGyldigSignatur,
+}: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
+    const { endpoints, httpErrorHandler, onFinished } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
@@ -42,7 +44,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         vurderingsoversikt: null,
         valgtVurderingselement: null,
         resterendeVurderingsperioderDefaultValue: [],
-        vurdering,
         visRadForNyVurdering: false,
         vurderingsoversiktFeilet: false,
     });
@@ -56,19 +57,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         visRadForNyVurdering,
         vurderingsoversiktFeilet,
     } = state;
-
-    const harPerioderSomSkalVurderes =
-        vurderingsoversikt &&
-        vurderingsoversikt.resterendeVurderingsperioder &&
-        vurderingsoversikt.resterendeVurderingsperioder.length > 0;
-
-    const harVurdertePerioder =
-        vurderingsoversikt &&
-        vurderingsoversikt.vurderingselementer &&
-        vurderingsoversikt.vurderingselementer.length > 0;
-
-    const harGyldigSignatur = vurderingsoversikt && vurderingsoversikt.harGyldigSignatur === true;
-    const overlappendeVurderingsperioder = finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder(vurderingsoversikt);
 
     const getVurderingsoversikt = () => {
         return get<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, httpErrorHandler, {
@@ -84,13 +72,34 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         dispatch({ type: ActionType.VURDERINGSOVERSIKT_FEILET });
     };
 
+    const visNyVurderingForm = (resterendeVurderingsperioder?: Period[]) => {
+        dispatch({
+            type: ActionType.VIS_NY_VURDERING_FORM,
+            resterendeVurderingsperioder,
+        });
+    };
+
+    const onAvbryt = () => {
+        dispatch({
+            type: ActionType.AVBRYT_FORM,
+        });
+    };
+
+    const åpneFørstePeriodeSomMåBehandles = (nyVurderingsoversikt: Vurderingsoversikt) => {
+        const harEnPeriodeSomMåBehandles = nyVurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
+        if (harEnPeriodeSomMåBehandles) {
+            visNyVurderingForm(nyVurderingsoversikt.resterendeVurderingsperioder);
+        }
+    };
+
     React.useEffect(() => {
         let isMounted = true;
         getVurderingsoversikt()
-            .then(processVurderingsoversikt)
-            .then((nyVurderingsoversikt) => {
+            .then((vurderingsoversiktData) => {
                 if (isMounted) {
+                    const nyVurderingsoversikt = new Vurderingsoversikt(vurderingsoversiktData);
                     visVurderingsoversikt(nyVurderingsoversikt);
+                    åpneFørstePeriodeSomMåBehandles(nyVurderingsoversikt);
                 }
             })
             .catch(handleError);
@@ -100,140 +109,115 @@ const VilkårsvurderingAvTilsynOgPleie = ({ onVilkårVurdert }: Vilkårsvurderin
         };
     }, []);
 
-    const visNyVurderingForm = (resterendeVurderingsperioder?: Period[]) => {
-        onVurderingValgt(null);
-        dispatch({
-            type: ActionType.VIS_NY_VURDERING_FORM,
-            resterendeVurderingsperioder,
-        });
-    };
-
     const velgVurderingselement = (nyValgtVurderingselement: Vurderingselement) => {
-        onVurderingValgt(nyValgtVurderingselement.id);
         dispatch({ type: ActionType.VELG_VURDERINGSELEMENT, valgtVurderingselement: nyValgtVurderingselement });
     };
 
     const oppdaterVurderingsoversikt = () => {
         dispatch({ type: ActionType.PENDING });
-        getVurderingsoversikt().then(processVurderingsoversikt).then(visVurderingsoversikt);
+        getVurderingsoversikt().then((vurderingsoversiktData) => {
+            const nyVurderingsoversikt = new Vurderingsoversikt(vurderingsoversiktData);
+            visVurderingsoversikt(nyVurderingsoversikt);
+        });
     };
 
-    if (!harGyldigSignatur) {
-        return (
-            <Alertstripe type="info">
-                Du kan ikke vurdere tilsyn og pleie før søker har sendt inn legeerklæring fra
-                sykehus/spesialisthelsetjenesten.
-            </Alertstripe>
-        );
-    }
+    const onVurderingLagret = () => {
+        dispatch({ type: ActionType.PENDING });
+        hentSykdomsstegStatus().then((status) => {
+            if (status.kanLøseAksjonspunkt) {
+                onFinished();
+                return;
+            }
+
+            const nesteSteg = finnNesteSteg(status);
+            if (nesteSteg === tilsynOgPleieSteg) {
+                oppdaterVurderingsoversikt();
+            } else {
+                navigerTilNesteSteg(nesteSteg);
+            }
+        });
+    };
+
+    const setMargin = () => {
+        if (vurderingsoversikt.harPerioderSomSkalVurderes() || !harGyldigSignatur) {
+            return Margin.medium;
+        }
+        return null;
+    };
+
+    const defaultPerioder =
+        resterendeVurderingsperioderDefaultValue.length > 0
+            ? resterendeVurderingsperioderDefaultValue
+            : [new Period('', '')];
+
+    const skalViseOpprettVurderingKnapp =
+        !vurderingsoversikt?.harPerioderSomSkalVurderes() && !visRadForNyVurdering && harGyldigSignatur;
+
     return (
-        <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet}>
-            {!harPerioderSomSkalVurderes && (
-                <Box marginBottom={Margin.large}>
-                    {!harVurdertePerioder && (
-                        <Box marginBottom={Margin.medium}>
-                            <Alertstripe type="info">Ingen perioder å vurdere</Alertstripe>
-                        </Box>
-                    )}
-                    <Alertstripe type="suksess">
-                        Behov for kontinuerlig tilsyn og pleie er ferdig vurdert
-                        <WriteAccessBoundContent
-                            contentRenderer={() => (
-                                <Knapp
-                                    type="hoved"
-                                    htmlType="button"
-                                    style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
-                                    onClick={onVilkårVurdert}
-                                    mini
-                                    id="fortsettKnapp"
-                                >
-                                    Fortsett
-                                </Knapp>
-                            )}
-                        />
-                    </Alertstripe>
+        <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet} key={StepId.TilsynOgPleie}>
+            <VurderingsoversiktMessages
+                vurderingsoversikt={vurderingsoversikt}
+                harGyldigSignatur={harGyldigSignatur}
+                vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
+            />
+            {vurderingsoversikt?.harPerioderÅVise() && (
+                <Box marginTop={setMargin()}>
+                    <NavigationWithDetailView
+                        navigationSection={() => (
+                            <Vurderingsnavigasjon
+                                vurderingselementer={vurderingsoversikt?.vurderingselementer}
+                                resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
+                                onVurderingValgt={velgVurderingselement}
+                                onNyVurderingClick={visNyVurderingForm}
+                                visRadForNyVurdering={visRadForNyVurdering}
+                                visParterLabel
+                                visOpprettVurderingKnapp={skalViseOpprettVurderingKnapp}
+                            />
+                        )}
+                        showDetailSection={visVurderingDetails}
+                        detailSection={() => {
+                            const harValgtVurderingselement = !!valgtVurderingselement;
+                            const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
+
+                            return (
+                                <>
+                                    {harValgtVurderingselement && (
+                                        <VurderingsdetaljerController
+                                            vurderingselement={valgtVurderingselement}
+                                            vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
+                                        />
+                                    )}
+                                    <div style={{ display: harValgtVurderingselement ? 'none' : '' }}>
+                                        <NyVurderingController
+                                            vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
+                                            opprettVurderingLink={opprettLink}
+                                            dataTilVurderingUrl={endpoints.dataTilVurdering}
+                                            onVurderingLagret={onVurderingLagret}
+                                            formRenderer={(dokumenter, onSubmit) => (
+                                                <NyVurderingAvTilsynsbehovForm
+                                                    defaultValues={{
+                                                        [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
+                                                        [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
+                                                        [FieldName.PERIODER]: defaultPerioder,
+                                                        [FieldName.DOKUMENTER]: [],
+                                                    }}
+                                                    resterendeVurderingsperioder={
+                                                        resterendeVurderingsperioderDefaultValue
+                                                    }
+                                                    perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
+                                                    dokumenter={dokumenter}
+                                                    onSubmit={onSubmit}
+                                                    onAvbryt={visRadForNyVurdering ? onAvbryt : undefined}
+                                                />
+                                            )}
+                                        />
+                                    </div>
+                                </>
+                            );
+                        }}
+                    />
                 </Box>
             )}
-            {harPerioderSomSkalVurderes && (
-                <div>
-                    <Alertstripe type="advarsel">
-                        {`Vurder behov for tilsyn og pleie for ${getStringMedPerioder(
-                            vurderingsoversikt.resterendeVurderingsperioder
-                        )}.`}
-                    </Alertstripe>
-                    {/*
-                        Please note:
-                        So long as this doesnt actually do anything upon the click-event, it should be commented out.
-
-                        overlappendeVurderingsperioder && overlappendeVurderingsperioder.length > 0 && (
-                        <Box marginTop={Margin.medium}>
-                            <OverlappendeSøknadsperiodePanel
-                                onProgressButtonClick={() => console.log('does something')}
-                                overlappendeVurderingsperioder={overlappendeVurderingsperioder}
-                            />
-                        </Box>)
-                    */}
-                    <div style={{ marginTop: '1rem' }} />
-                </div>
-            )}
-            <NavigationWithDetailView
-                navigationSection={() => (
-                    <Vurderingsnavigasjon
-                        vurderingselementer={vurderingsoversikt?.vurderingselementer}
-                        resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
-                        onVurderingValgt={velgVurderingselement}
-                        onNyVurderingClick={visNyVurderingForm}
-                        visRadForNyVurdering={visRadForNyVurdering}
-                        visParterLabel
-                    />
-                )}
-                detailSection={() => {
-                    const harValgtVurderingselement = !!valgtVurderingselement?.id;
-                    if (visVurderingDetails) {
-                        const url = harValgtVurderingselement
-                            ? findHrefByRel(LinkRel.HENT_VURDERING, valgtVurderingselement.links)
-                            : '';
-                        const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
-                        return (
-                            <>
-                                {harValgtVurderingselement && (
-                                    <VurderingsdetaljerController
-                                        hentVurderingUrl={url}
-                                        contentRenderer={(valgtVurdering) => (
-                                            <VurderingsoppsummeringForKontinuerligTilsynOgPleie
-                                                vurdering={valgtVurdering}
-                                            />
-                                        )}
-                                    />
-                                )}
-                                <div style={{ display: harValgtVurderingselement ? 'none' : '' }}>
-                                    <NyVurderingController
-                                        vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
-                                        opprettVurderingLink={opprettLink}
-                                        dataTilVurderingUrl={endpoints.dataTilVurdering}
-                                        onVurderingLagret={oppdaterVurderingsoversikt}
-                                        formRenderer={(dokumenter, onSubmit) => (
-                                            <NyVurderingAvTilsynsbehovForm
-                                                defaultValues={{
-                                                    [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
-                                                    [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
-                                                    [FieldName.PERIODER]: resterendeVurderingsperioderDefaultValue,
-                                                    [FieldName.DOKUMENTER]: [],
-                                                }}
-                                                resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
-                                                perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
-                                                dokumenter={dokumenter}
-                                                onSubmit={onSubmit}
-                                            />
-                                        )}
-                                    />
-                                </div>
-                            </>
-                        );
-                    }
-                    return null;
-                }}
-            />
         </PageContainer>
     );
 };

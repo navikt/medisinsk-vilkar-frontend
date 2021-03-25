@@ -1,11 +1,12 @@
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Lenke from 'nav-frontend-lenker';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
 import { Vurderingsversjon } from '../../../types/Vurdering';
 import { getPeriodAsListOfDays } from '../../../util/dateUtils';
-import { convertToInternationalPeriod } from '../../../util/formats';
+import { convertToInternationalPeriod, prettifyPeriodList } from '../../../util/formats';
 import {
     finnHullIPerioder,
     finnMaksavgrensningerForPerioder,
@@ -20,10 +21,10 @@ import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
 import DeleteButton from '../delete-button/DeleteButton';
-import DetailView from '../detail-view/DetailView';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Form from '../form/Form';
 import styles from './nyVurderingAvToOmsorgspersonerForm.less';
+import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 
 export enum FieldName {
     VURDERING_AV_TO_OMSORGSPERSONER = 'vurderingAvToOmsorgspersoner',
@@ -56,7 +57,6 @@ const NyVurderingAvToOmsorgspersonerForm = ({
 }: NyVurderingAvToOmsorgspersonerFormProps): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
-        shouldUnregister: false,
     });
 
     const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
@@ -93,7 +93,10 @@ const NyVurderingAvToOmsorgspersonerForm = ({
     }, [perioderSomKanVurderes]);
 
     return (
-        <DetailView title="Vurdering av to omsorgspersoner">
+        <DetailViewVurdering
+            title="Vurdering av to omsorgspersoner"
+            contentAfterTitleRenderer={() => prettifyPeriodList(defaultValues[FieldName.PERIODER])}
+        >
             <FormProvider {...formMethods}>
                 <Form buttonLabel="Bekreft" onSubmit={formMethods.handleSubmit(lagNyVurdering)}>
                     {dokumenter?.length > 0 && (
@@ -116,10 +119,33 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                             textareaClass={styles.begrunnelsesfelt}
                             name={FieldName.VURDERING_AV_TO_OMSORGSPERSONER}
                             label={
-                                <b>
-                                    Gjør en vurdering av om det er behov for to omsorgspersoner etter § 9-10, andre
-                                    ledd.
-                                </b>
+                                <>
+                                    <b>
+                                        Gjør en vurdering av om det er behov for to omsorgspersoner etter § 9-10, andre
+                                        ledd.
+                                    </b>
+                                    <p className={styles.begrunnelsesfelt__labeltekst}>
+                                        Du skal ta utgangspunkt i{' '}
+                                        <Lenke href="https://lovdata.no/nav/folketrygdloven/kap9" target="_blank">
+                                            lovteksten
+                                        </Lenke>{' '}
+                                        og{' '}
+                                        <Lenke
+                                            href="https://lovdata.no/nav/rundskriv/r09-00#ref/lov/1997-02-28-19/%C2%A79-10"
+                                            target="_blank"
+                                        >
+                                            rundskrivet
+                                        </Lenke>{' '}
+                                        når du skriver vurderingen.
+                                    </p>
+                                    <p className={styles.begrunnelsesfelt__labeltekst}>Vurderingen skal beskrive:</p>
+                                    <ul className={styles.begrunnelsesfelt__liste}>
+                                        <li>
+                                            Om tilsyn og pleie kan ivaretas av én person alene i hele eller deler av
+                                            perioden.
+                                        </li>
+                                    </ul>
+                                </>
                             }
                             validators={{ required }}
                             id="begrunnelsesfelt"
@@ -196,15 +222,15 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (
                         <Box marginTop={Margin.xLarge}>
-                            <AlertStripeAdvarsel>
+                            <AlertStripeInfo>
                                 Du har ikke vurdert alle periodene som må vurderes. Resterende perioder vurderer du
                                 etter at du har lagret denne.
-                            </AlertStripeAdvarsel>
+                            </AlertStripeInfo>
                         </Box>
                     )}
                 </Form>
             </FormProvider>
-        </DetailView>
+        </DetailViewVurdering>
     );
 };
 

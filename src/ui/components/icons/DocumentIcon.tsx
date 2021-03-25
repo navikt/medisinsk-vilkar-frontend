@@ -1,7 +1,18 @@
 import React from 'react';
 
-const DocumentIcon = (): JSX.Element => (
-    <svg width="19" height="22" viewBox="0 0 19 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+interface DocumentIconProps {
+    className?: string;
+}
+
+const DocumentIcon = ({ className }: DocumentIconProps): JSX.Element => (
+    <svg
+        className={className}
+        width="19"
+        height="22"
+        viewBox="0 0 19 22"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
         <path
             fillRule="evenodd"
             clipRule="evenodd"

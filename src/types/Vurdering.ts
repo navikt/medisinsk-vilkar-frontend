@@ -20,6 +20,7 @@ interface Vurdering {
     type: string;
     versjoner: Vurderingsversjon[];
     annenInformasjon: AnnenInformasjon;
+    erInnleggelsesperiode: boolean;
 }
 
 export default Vurdering;

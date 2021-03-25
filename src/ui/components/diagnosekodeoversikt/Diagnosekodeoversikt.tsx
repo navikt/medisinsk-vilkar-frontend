@@ -20,7 +20,7 @@ import LinkRel from '../../../constants/LinkRel';
 Modal.setAppElement('#app');
 
 interface DiagnosekodeoversiktProps {
-    onDiagnosekoderUpdated: (diagnosekoder: Diagnosekode[]) => void;
+    onDiagnosekoderUpdated: () => void;
 }
 
 const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktProps) => {
@@ -44,7 +44,6 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             cancelToken: httpCanceler.token,
         }).then((response: DiagnosekodeResponse) => {
             setDiagnosekodeResponse(response);
-            onDiagnosekoderUpdated(response.diagnosekoder);
             setIsLoading(false);
         });
     };
@@ -58,7 +57,9 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                 diagnosekoder: diagnosekoder.filter((kode) => kode !== diagnosekode),
             },
             httpErrorHandler
-        ).then(hentDiagnosekoder);
+        )
+            .then(hentDiagnosekoder)
+            .then(onDiagnosekoderUpdated);
     };
 
     React.useEffect(() => {
@@ -108,6 +109,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                         { cancelToken: httpCanceler.token }
                     )
                         .then(hentDiagnosekoder)
+                        .then(onDiagnosekoderUpdated)
                         .then(() => setModalIsOpen(false))
                 }
                 onRequestClose={() => setModalIsOpen(false)}

@@ -1,4 +1,3 @@
-import { EtikettFokus } from 'nav-frontend-etiketter';
 import React from 'react';
 import { Period } from '../../../types/Period';
 import { prettifyPeriod } from '../../../util/formats';
@@ -14,11 +13,13 @@ interface PerioderSomSkalVurderesProps {
 
 const PerioderSomSkalVurderes = ({ perioder, visParterLabel }: PerioderSomSkalVurderesProps) => {
     return (
-        <div className={styles.perioderSomSkalVurderes}>
+        <div className={styles.perioderSomSkalVurderes} id="perioderSomSkalVurderes">
             <span className={styles.visuallyHidden}>Type</span>
-            <ContentWithTooltip tooltipText="Perioden må vurderes">
-                <WarningIcon />
-            </ContentWithTooltip>
+            <div className={styles.perioderSomSkalVurderes__indicator}>
+                <ContentWithTooltip tooltipText="Perioden må vurderes">
+                    <WarningIcon />
+                </ContentWithTooltip>
+            </div>
             <div className={styles.perioderSomSkalVurderes__texts}>
                 <div>
                     {perioder.map((periode, index) => (
@@ -39,11 +40,6 @@ const PerioderSomSkalVurderes = ({ perioder, visParterLabel }: PerioderSomSkalVu
                         </ContentWithTooltip>
                     </div>
                 )}
-            </div>
-            <div className={styles.perioderSomSkalVurderes__etikett}>
-                <EtikettFokus mini id="måVurderesEtikett">
-                    Må vurderes
-                </EtikettFokus>
             </div>
         </div>
     );

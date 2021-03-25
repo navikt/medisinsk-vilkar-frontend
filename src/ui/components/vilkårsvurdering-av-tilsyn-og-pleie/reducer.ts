@@ -9,7 +9,6 @@ interface State {
     vurderingsoversikt: Vurderingsoversikt;
     valgtVurderingselement: Vurderingselement;
     resterendeVurderingsperioderDefaultValue: Period[];
-    vurdering: string;
     visRadForNyVurdering: boolean;
     vurderingsoversiktFeilet: boolean;
 }
@@ -21,20 +20,13 @@ interface Action {
     resterendeVurderingsperioder?: Period[];
 }
 
-const finnvalgtVurderingselement = (vurderingselementer, vurderingId) => {
-    return vurderingselementer.find(({ id }) => vurderingId === id);
-};
-
 const vilkårsvurderingReducer = (state: State, action: Action): State => {
     switch (action.type) {
         case ActionType.VIS_VURDERINGSOVERSIKT: {
-            const valgtVurderingselement =
-                finnvalgtVurderingselement(action.vurderingsoversikt.vurderingselementer, state.vurdering) || null;
             const resterendeVurderingsperioder = action.vurderingsoversikt?.resterendeVurderingsperioder || [];
             return {
                 ...state,
                 vurderingsoversikt: action.vurderingsoversikt,
-                valgtVurderingselement,
                 isLoading: false,
                 resterendeVurderingsperioderDefaultValue: resterendeVurderingsperioder,
                 visVurderingDetails: false,
@@ -68,6 +60,13 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 ...state,
                 isLoading: true,
                 vurderingsoversiktFeilet: false,
+            };
+        case ActionType.AVBRYT_FORM:
+            return {
+                ...state,
+                visVurderingDetails: false,
+                valgtVurderingselement: null,
+                visRadForNyVurdering: false,
             };
         default:
             return state;

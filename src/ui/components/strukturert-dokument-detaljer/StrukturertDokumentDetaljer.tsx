@@ -38,7 +38,7 @@ const StrukturertDokumentDetaljer = ({ dokument, onEditDokumentClick }: Struktur
             title="Om dokumentet"
             contentAfterTitleRenderer={() => (
                 <LinkButton className={styles.endreLink} onClick={onEditDokumentClick}>
-                    Endre informasjon
+                    Endre dokument
                 </LinkButton>
             )}
         >

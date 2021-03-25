@@ -12,25 +12,10 @@
         </style>
     </head>
     <body>
-        <div id="app" style="padding:2.5rem"}}></div>
+        <div id="app" style="padding:2.5rem"></div>
         <script type="text/javascript">
             setTimeout(() => {
                 window.renderMedisinskVilkarApp('app', {
-                    onVurderingValgt: (vurdering) => {
-                        if (vurdering !== null) {
-                            history.pushState('', '', `#vurdering=${vurdering}`);
-                        } else {
-                            window.location.hash = '';
-                        }
-                    },
-                    onDokumentValgt: (dokument) => {
-                        if (dokument !== null) {
-                            history.pushState('', '', `#dokument=${dokument}`);
-                        } else {
-                            window.location.hash = '';
-                        }
-                    },
-                    vurdering: new URLSearchParams(`?${window.location.hash.substr(1)}`).get('vurdering'),
                     endpoints: {
                         vurderingsoversiktKontinuerligTilsynOgPleie: 'http://localhost:8082/mock/kontinuerlig-tilsyn-og-pleie/vurderingsoversikt',
                         vurderingsoversiktBehovForToOmsorgspersoner: 'http://localhost:8082/mock/to-omsorgspersoner/vurderingsoversikt',
@@ -38,7 +23,8 @@
                         dataTilVurdering: 'http://localhost:8082/mock/data-til-vurdering',
                         innleggelsesperioder: 'http://localhost:8082/mock/innleggelsesperioder',
                         diagnosekoder: 'http://localhost:8082/mock/diagnosekoder',
-                        diagnosekodeSearch: 'http://localhost:8082/mock/diagnosekode-search'
+                        diagnosekodeSearch: 'http://localhost:8082/mock/diagnosekode-search',
+                        status: 'http://localhost:8082/mock/status'
                     },
                     behandlingUuid: '123',
                     readOnly: false,

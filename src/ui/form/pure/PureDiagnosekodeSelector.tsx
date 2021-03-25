@@ -1,9 +1,10 @@
-import * as React from 'react';
-import { Label } from 'nav-frontend-skjema';
 import Autocomplete from '@navikt/nap-autocomplete';
+import { Label } from 'nav-frontend-skjema';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import * as React from 'react';
+import Diagnosekode from '../../../types/Diagnosekode';
 import FieldError from '../../components/field-error/FieldError';
 import styles from './diagnosekodeSelector.less';
-import Diagnosekode from '../../../types/Diagnosekode';
 
 interface DiagnosekodeSelectorProps {
     label: string;
@@ -12,21 +13,11 @@ interface DiagnosekodeSelectorProps {
     errorMessage?: string;
     initialDiagnosekodeValue: string;
     hideLabel?: boolean;
+    showSpinner?: boolean;
 }
 
 const fetchDiagnosekoderByQuery = (queryString: string) => {
     return fetch(`/k9/diagnosekoder/?query=${queryString}&max=8`).then((response) => response.json());
-};
-
-const getUpdatedSuggestions = async (queryString: string) => {
-    if (queryString.length >= 3) {
-        const diagnosekoder: Diagnosekode[] = await fetchDiagnosekoderByQuery(queryString);
-        return diagnosekoder.map(({ kode, beskrivelse }) => ({
-            key: kode,
-            value: `${kode} - ${beskrivelse}`,
-        }));
-    }
-    return [];
 };
 
 const PureDiagnosekodeSelector = ({
@@ -36,9 +27,25 @@ const PureDiagnosekodeSelector = ({
     errorMessage,
     initialDiagnosekodeValue,
     hideLabel,
+    showSpinner,
 }: DiagnosekodeSelectorProps): JSX.Element => {
     const [suggestions, setSuggestions] = React.useState([]);
     const [inputValue, setInputValue] = React.useState('');
+    const [isLoading, setIsLoading] = React.useState(false);
+
+    const getUpdatedSuggestions = async (queryString: string) => {
+        if (queryString.length >= 3) {
+            setIsLoading(true);
+            const diagnosekoder: Diagnosekode[] = await fetchDiagnosekoderByQuery(queryString);
+            setIsLoading(false);
+            return diagnosekoder.map(({ kode, beskrivelse }) => ({
+                key: kode,
+                value: `${kode} - ${beskrivelse}`,
+            }));
+        }
+        return [];
+    };
+
     React.useEffect(() => {
         const getInitialDiagnosekode = async () => {
             const diagnosekode = await getUpdatedSuggestions(initialDiagnosekodeValue);
@@ -59,18 +66,25 @@ const PureDiagnosekodeSelector = ({
             <div className={hideLabel ? styles.diagnosekodeContainer__hideLabel : ''}>
                 <Label htmlFor={name}>{label}</Label>
             </div>
-            <Autocomplete
-                id={name}
-                suggestions={suggestions}
-                value={inputValue}
-                onChange={onInputValueChange}
-                onSelect={(e) => {
-                    onInputValueChange(e.value);
-                    onChange(e);
-                }}
-                ariaLabel="Søk etter diagnose"
-                placeholder="Søk etter diagnose"
-            />
+            <div className={styles.diagnosekodeContainer__autocompleteContainer}>
+                <Autocomplete
+                    id={name}
+                    suggestions={suggestions}
+                    value={inputValue}
+                    onChange={onInputValueChange}
+                    onSelect={(e) => {
+                        onInputValueChange(e.value);
+                        onChange(e);
+                    }}
+                    ariaLabel="Søk etter diagnose"
+                    placeholder="Søk etter diagnose"
+                />
+                {showSpinner && (
+                    <div className={styles.diagnosekodeContainer__spinnerContainer}>
+                        {isLoading && <NavFrontendSpinner />}
+                    </div>
+                )}
+            </div>
             {errorMessage && <FieldError message={errorMessage} />}
         </div>
     );

@@ -1,8 +1,9 @@
 import dayjs from 'dayjs';
-import { Dokumentoversikt, Dokumenttype } from '../../src/types/Dokument';
+import { Dokumenttype } from '../../src/types/Dokument';
 import createMockedDokumentelementLinks from './createMockedDokumentelementLinks';
+import { DokumentoversiktResponse } from '../../src/types/DokumentoversiktResponse';
 
-const mockedDokumentoversikt: Dokumentoversikt = {
+const mockedDokumentoversikt: DokumentoversiktResponse = {
     dokumenter: [
         {
             id: '2',
@@ -14,6 +15,8 @@ const mockedDokumentoversikt: Dokumentoversikt = {
             annenPartErKilde: false,
             fremhevet: false,
             behandlet: true,
+            mottattDato: '2021-03-05',
+            mottattTidspunkt: '2021-03-05T10:23:13.309267',
         },
         {
             id: '3',
@@ -25,6 +28,8 @@ const mockedDokumentoversikt: Dokumentoversikt = {
             annenPartErKilde: false,
             fremhevet: false,
             behandlet: true,
+            mottattDato: '2021-03-05',
+            mottattTidspunkt: '2021-03-05T10:23:13.309267',
         },
         {
             id: '4',
@@ -36,6 +41,8 @@ const mockedDokumentoversikt: Dokumentoversikt = {
             annenPartErKilde: false,
             fremhevet: false,
             behandlet: true,
+            mottattDato: '2021-03-05',
+            mottattTidspunkt: '2021-03-05T10:23:13.309267',
         },
         {
             id: '1',
@@ -47,6 +54,8 @@ const mockedDokumentoversikt: Dokumentoversikt = {
             annenPartErKilde: false,
             fremhevet: false,
             behandlet: false,
+            mottattDato: '2021-03-05',
+            mottattTidspunkt: '2021-03-05T10:23:13.309267',
         },
     ],
 };

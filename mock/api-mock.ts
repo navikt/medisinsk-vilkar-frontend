@@ -24,6 +24,36 @@ app.use(
     })
 );
 
+app.use('/mock/status', (req, res) => {
+    const harUklassifiserteDokumenter = mockedDokumentoversikt.dokumenter.some(
+        ({ type }) => type === Dokumenttype.UKLASSIFISERT
+    );
+    const manglerDiagnosekode =
+        !mockedDiagnosekoderesponse ||
+        !mockedDiagnosekoderesponse.diagnosekoder ||
+        mockedDiagnosekoderesponse.diagnosekoder.length === 0;
+    const manglerGodkjentLegeerklæring =
+        mockedDokumentoversikt.dokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING) === false;
+    const manglerVurderingAvKontinuerligTilsynOgPleie =
+        mockedTilsynsbehovVurderingsoversikt.resterendeVurderingsperioder.length > 0;
+    const manglerVurderingAvToOmsorgspersoner =
+        mockedToOmsorgspersonerVurderingsoversikt.resterendeVurderingsperioder.length > 0;
+
+    res.send({
+        kanLøseAksjonspunkt:
+            !harUklassifiserteDokumenter &&
+            !manglerDiagnosekode &&
+            !manglerGodkjentLegeerklæring &&
+            !manglerVurderingAvKontinuerligTilsynOgPleie &&
+            !manglerVurderingAvToOmsorgspersoner,
+        harUklassifiserteDokumenter,
+        manglerDiagnosekode,
+        manglerGodkjentLegeerklæring,
+        manglerVurderingAvKontinuerligTilsynOgPleie,
+        manglerVurderingAvToOmsorgspersoner,
+    });
+});
+
 app.use('/mock/vurdering', (req, res) => {
     const vurderingId = req.query.sykdomVurderingId;
     const alleVurderinger = [...mockedTilsynsbehovVurderinger, ...mockedToOmsorgspersonerVurderinger];
@@ -56,16 +86,24 @@ app.use('/mock/opprett-vurdering', (req, res) => {
 });
 
 app.use('/mock/kontinuerlig-tilsyn-og-pleie/vurderingsoversikt', (req, res) => {
+    const harGyldigSignatur = mockedDokumentoversikt.dokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING);
     res.send({
         ...mockedTilsynsbehovVurderingsoversikt,
-        harGyldigSignatur: mockedDokumentoversikt.dokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING),
+        harGyldigSignatur,
+        resterendeVurderingsperioder: !harGyldigSignatur
+            ? []
+            : mockedTilsynsbehovVurderingsoversikt.resterendeVurderingsperioder,
     });
 });
 
 app.use('/mock/to-omsorgspersoner/vurderingsoversikt', (req, res) => {
+    const harGyldigSignatur = mockedDokumentoversikt.dokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING);
     res.send({
         ...mockedToOmsorgspersonerVurderingsoversikt,
-        harGyldigSignatur: mockedDokumentoversikt.dokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING),
+        harGyldigSignatur,
+        resterendeVurderingsperioder: !harGyldigSignatur
+            ? []
+            : mockedToOmsorgspersonerVurderingsoversikt.resterendeVurderingsperioder,
     });
 });
 

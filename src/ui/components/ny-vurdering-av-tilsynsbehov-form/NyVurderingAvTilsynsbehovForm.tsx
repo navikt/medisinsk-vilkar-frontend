@@ -1,11 +1,12 @@
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Lenke from 'nav-frontend-lenker';
 import React from 'react';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-import { getPeriodAsListOfDays } from '../../../util/dateUtils';
-import { convertToInternationalPeriod } from '../../../util/formats';
+import { getPeriodAsListOfDays, isValidPeriod } from '../../../util/dateUtils';
+import { convertToInternationalPeriod, prettifyPeriodList } from '../../../util/formats';
 import {
     finnHullIPerioder,
     finnMaksavgrensningerForPerioder,
@@ -17,14 +18,13 @@ import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
+import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
-import DetailView from '../detail-view/DetailView';
+import DeleteButton from '../delete-button/DeleteButton';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Form from '../form/Form';
 import styles from './nyVurderingAvTilsynsbehovForm.less';
-import DeleteButton from '../delete-button/DeleteButton';
-import AddButton from '../add-button/AddButton';
-import OverlappendePeriodeModal from '../overlappende-periode-modal/OverlappendePeriodeModal';
+import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 
 export enum FieldName {
     VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
@@ -46,6 +46,7 @@ interface NyVurderingAvTilsynsbehovFormProps {
     resterendeVurderingsperioder?: Period[];
     perioderSomKanVurderes?: Period[];
     dokumenter: Dokument[];
+    onAvbryt: () => void;
 }
 
 const NyVurderingAvTilsynsbehovForm = ({
@@ -54,6 +55,7 @@ const NyVurderingAvTilsynsbehovForm = ({
     resterendeVurderingsperioder,
     perioderSomKanVurderes,
     dokumenter,
+    onAvbryt,
 }: NyVurderingAvTilsynsbehovFormProps): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
@@ -92,11 +94,24 @@ const NyVurderingAvTilsynsbehovForm = ({
         return slåSammenSammenhengendePerioder(perioderSomKanVurderes);
     }, [perioderSomKanVurderes]);
 
+    const førsteDefaultPeriode = defaultValues[FieldName.PERIODER][0];
+
     return (
-        <DetailView title="Vurdering av tilsyn og pleie">
+        <DetailViewVurdering
+            title="Vurdering av tilsyn og pleie"
+            contentAfterTitleRenderer={() =>
+                isValidPeriod(førsteDefaultPeriode)
+                    ? prettifyPeriodList(defaultValues[FieldName.PERIODER])
+                    : 'Ny vurdering'
+            }
+        >
             <div id="modal" />
             <FormProvider {...formMethods}>
-                <Form buttonLabel="Bekreft" onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}>
+                <Form
+                    buttonLabel="Bekreft"
+                    onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}
+                    onAvbryt={onAvbryt}
+                >
                     {dokumenter?.length > 0 && (
                         <Box marginTop={Margin.xLarge}>
                             <CheckboxGroup
@@ -123,23 +138,33 @@ const NyVurderingAvTilsynsbehovForm = ({
                             textareaClass={styles.begrunnelsesfelt}
                             name={FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE}
                             label={
-                                <div style={{ fontWeight: 400 }}>
+                                <>
                                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                                    <label style={{ fontWeight: 600 }} htmlFor="begrunnelsesfelt">
+                                    <b>
                                         Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge
                                         av sykdommen etter § 9-10, første ledd.
-                                    </label>
-                                    <p>
-                                        Du skal ta utgangspunkt i § 9-10, første ledd og rundskrivet når du skriver
-                                        vurderingen.
+                                    </b>
+                                    <p className={styles.begrunnelsesfelt__labeltekst}>
+                                        Du skal ta utgangspunkt i{' '}
+                                        <Lenke href="https://lovdata.no/nav/folketrygdloven/kap9" target="_blank">
+                                            lovteksten
+                                        </Lenke>{' '}
+                                        og{' '}
+                                        <Lenke
+                                            href="https://lovdata.no/nav/rundskriv/r09-00#ref/lov/1997-02-28-19/%C2%A79-10"
+                                            target="_blank"
+                                        >
+                                            rundskrivet
+                                        </Lenke>{' '}
+                                        når du skriver vurderingen.
                                     </p>
 
-                                    <p>Vurderingen skal beskrive:</p>
-                                    <ul>
+                                    <p className={styles.begrunnelsesfelt__labeltekst}>Vurderingen skal beskrive:</p>
+                                    <ul className={styles.begrunnelsesfelt__liste}>
                                         <li>Om det er årsakssammenheng mellom sykdom og pleiebehov</li>
                                         <li>Om behovet er kontinuerlig og ikke situasjonsbestemt</li>
                                     </ul>
-                                </div>
+                                </>
                             }
                             validators={{ required }}
                         />
@@ -215,15 +240,15 @@ const NyVurderingAvTilsynsbehovForm = ({
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (
                         <Box marginTop={Margin.xLarge}>
-                            <AlertStripeAdvarsel>
+                            <AlertStripeInfo>
                                 Du har ikke vurdert alle periodene som må vurderes. Resterende perioder vurderer du
                                 etter at du har lagret denne.
-                            </AlertStripeAdvarsel>
+                            </AlertStripeInfo>
                         </Box>
                     )}
                 </Form>
             </FormProvider>
-        </DetailView>
+        </DetailViewVurdering>
     );
 };
 

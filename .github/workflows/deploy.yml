@@ -1,12 +1,10 @@
 name: Deploy Docker image
 on:
     push:
-        paths-ignore:
-            - '**.md'
-            - '.gitignore'
-            - '.prettierrc'
         branches:
             - main
+        paths:
+            - 'build/**'
 env:
     IMAGE_BASE: docker.pkg.github.com/${{ github.repository }}/medisinsk-vilkar-frontend
     CLUSTER: dev-fss
