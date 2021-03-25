@@ -21,10 +21,10 @@ import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
 import DeleteButton from '../delete-button/DeleteButton';
-import DetailView from '../detail-view/DetailView';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Form from '../form/Form';
 import styles from './nyVurderingAvTilsynsbehovForm.less';
+import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 
 export enum FieldName {
     VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
@@ -97,9 +97,9 @@ const NyVurderingAvTilsynsbehovForm = ({
     const førsteDefaultPeriode = defaultValues[FieldName.PERIODER][0];
 
     return (
-        <DetailView
+        <DetailViewVurdering
             title="Vurdering av tilsyn og pleie"
-            renderNextToTitle={() =>
+            contentAfterTitleRenderer={() =>
                 isValidPeriod(førsteDefaultPeriode)
                     ? prettifyPeriodList(defaultValues[FieldName.PERIODER])
                     : 'Ny vurdering'
@@ -248,7 +248,7 @@ const NyVurderingAvTilsynsbehovForm = ({
                     )}
                 </Form>
             </FormProvider>
-        </DetailView>
+        </DetailViewVurdering>
     );
 };
 

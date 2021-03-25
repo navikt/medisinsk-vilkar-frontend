@@ -21,10 +21,10 @@ import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
 import DeleteButton from '../delete-button/DeleteButton';
-import DetailView from '../detail-view/DetailView';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Form from '../form/Form';
 import styles from './nyVurderingAvToOmsorgspersonerForm.less';
+import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 
 export enum FieldName {
     VURDERING_AV_TO_OMSORGSPERSONER = 'vurderingAvToOmsorgspersoner',
@@ -93,9 +93,9 @@ const NyVurderingAvToOmsorgspersonerForm = ({
     }, [perioderSomKanVurderes]);
 
     return (
-        <DetailView
+        <DetailViewVurdering
             title="Vurdering av to omsorgspersoner"
-            renderNextToTitle={() => prettifyPeriodList(defaultValues[FieldName.PERIODER])}
+            contentAfterTitleRenderer={() => prettifyPeriodList(defaultValues[FieldName.PERIODER])}
         >
             <FormProvider {...formMethods}>
                 <Form buttonLabel="Bekreft" onSubmit={formMethods.handleSubmit(lagNyVurdering)}>
@@ -230,7 +230,7 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                     )}
                 </Form>
             </FormProvider>
-        </DetailView>
+        </DetailViewVurdering>
     );
 };
 

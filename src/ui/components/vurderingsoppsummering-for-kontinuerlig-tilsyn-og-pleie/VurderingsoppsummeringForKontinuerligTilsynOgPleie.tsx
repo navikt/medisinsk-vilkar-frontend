@@ -1,6 +1,5 @@
 import React from 'react';
 import { prettifyPeriod, prettifyPeriodList } from '../../../util/formats';
-import DetailView from '../detail-view/DetailView';
 import Box, { Margin } from '../box/Box';
 import Vurdering from '../../../types/Vurdering';
 import LabelledContent from '../labelled-content/LabelledContent';
@@ -8,6 +7,7 @@ import BasicList from '../basic-list/BasicList';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import DekketAvInnleggelsesperiodeMelding from '../dekket-av-innleggelsesperiode-melding/DekketAvInnleggelsesperiodeMelding';
+import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 
 interface VurderingsoppsummeringForKontinuerligTilsynOgPleieProps {
     vurdering: Vurdering;
@@ -20,9 +20,9 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
     const { dokumenter, perioder, tekst, resultat } = gjeldendeVurdering;
     const erInnleggelse = vurdering.erInnleggelsesperiode;
     return (
-        <DetailView
+        <DetailViewVurdering
             title="Vurdering av behov for kontinuerlig tilsyn og pleie"
-            renderNextToTitle={() => prettifyPeriodList(gjeldendeVurdering.perioder)}
+            contentAfterTitleRenderer={() => prettifyPeriodList(gjeldendeVurdering.perioder)}
         >
             <Box marginTop={Margin.medium}>
                 {erInnleggelse && <DekketAvInnleggelsesperiodeMelding />}
@@ -66,7 +66,7 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
                     />
                 </Box>
             </Box>
-        </DetailView>
+        </DetailViewVurdering>
     );
 };
 

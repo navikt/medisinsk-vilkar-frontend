@@ -2,12 +2,12 @@ import React from 'react';
 import Vurdering from '../../../types/Vurdering';
 import { prettifyPeriod, prettifyPeriodList } from '../../../util/formats';
 import Box, { Margin } from '../box/Box';
-import DetailView from '../detail-view/DetailView';
 import LabelledContent from '../labelled-content/LabelledContent';
 import BasicList from '../basic-list/BasicList';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import DekketAvInnleggelsesperiodeMelding from '../dekket-av-innleggelsesperiode-melding/DekketAvInnleggelsesperiodeMelding';
+import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 
 interface VurderingsoppsummeringForToOmsorgspersonerProps {
     vurdering: Vurdering;
@@ -18,9 +18,9 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({ vurdering }: Vurderingsopp
     const { resultat, tekst, dokumenter, perioder } = gjeldendeVurdering;
     const erInnleggelse = vurdering.erInnleggelsesperiode;
     return (
-        <DetailView
+        <DetailViewVurdering
             title="Vurdering av behov for to omsorgspersoner"
-            renderNextToTitle={() => prettifyPeriodList(gjeldendeVurdering.perioder)}
+            contentAfterTitleRenderer={() => prettifyPeriodList(gjeldendeVurdering.perioder)}
         >
             <Box marginTop={Margin.medium}>
                 {erInnleggelse && <DekketAvInnleggelsesperiodeMelding />}
@@ -61,7 +61,7 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({ vurdering }: Vurderingsopp
                     />
                 </Box>
             </Box>
-        </DetailView>
+        </DetailViewVurdering>
     );
 };
 

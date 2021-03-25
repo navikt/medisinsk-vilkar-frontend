@@ -1,22 +1,19 @@
-import { Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
+import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
 import styles from './detailView.less';
 
-interface DetailViewProps {
+export interface DetailViewProps {
     title: string;
     children: React.ReactNode;
-    renderNextToTitle?: () => React.ReactNode;
+    contentAfterTitleRenderer?: () => React.ReactNode;
 }
 
-const DetailView = ({ title, children, renderNextToTitle }: DetailViewProps) => (
+const DetailView = ({ title, children, contentAfterTitleRenderer }: DetailViewProps) => (
     <div className={styles.detailView}>
         <div className={styles.detailView__titleContainer}>
-            <Undertittel>{title}</Undertittel>
-            {renderNextToTitle && (
-                <div className={styles.detailView__nextToTitle}>
-                    <div className={styles.detailView__separator}>-</div>
-                    {renderNextToTitle()}
-                </div>
+            <TitleWithUnderline>{title}</TitleWithUnderline>
+            {contentAfterTitleRenderer && (
+                <div className={styles.detailView__nextToTitle}>{contentAfterTitleRenderer()}</div>
             )}
         </div>
         {children}
