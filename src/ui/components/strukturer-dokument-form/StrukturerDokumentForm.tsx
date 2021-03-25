@@ -34,7 +34,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit, editMode }: StrukturerDoku
     const formMethods = useForm<StrukturerDokumentFormState>({
         defaultValues: editMode && {
             [FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER]: dokument.type,
-            [FieldName.DATERT]: prettifyDate(dokument.datert),
+            [FieldName.DATERT]: dokument.datert,
         },
     });
     const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, dokument.links);
