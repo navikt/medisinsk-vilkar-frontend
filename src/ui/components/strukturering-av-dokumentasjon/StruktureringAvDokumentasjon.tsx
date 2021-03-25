@@ -45,6 +45,9 @@ const StruktureringAvDokumentasjon = ({
         valgtDokument: null,
         dokumentoversiktFeilet: false,
         visRedigeringAvDokument: false,
+        kanLøseAksjonspunkt: false,
+        kanNavigereVidere: false,
+        nesteSteg: null,
     });
 
     const {
@@ -54,6 +57,8 @@ const StruktureringAvDokumentasjon = ({
         valgtDokument,
         dokumentoversiktFeilet,
         visRedigeringAvDokument,
+        kanLøseAksjonspunkt,
+        kanNavigereVidere,
     } = state;
 
     const getDokumentoversikt = () => {
@@ -102,7 +107,7 @@ const StruktureringAvDokumentasjon = ({
         dispatch({ type: ActionType.PENDING });
         hentSykdomsstegStatus().then((status) => {
             if (status.kanLøseAksjonspunkt) {
-                onFinished();
+                dispatch({ type: ActionType.KAN_LØSE_AKSJONSPUNKT });
                 return;
             }
 
@@ -113,7 +118,7 @@ const StruktureringAvDokumentasjon = ({
                     visDokumentoversikt(nyDokumentoversikt);
                 });
             } else {
-                navigerTilNesteSteg(nesteSteg);
+                dispatch({ type: ActionType.KAN_NAVIGERE_VIDERE, nesteSteg });
             }
         });
     };
@@ -123,6 +128,9 @@ const StruktureringAvDokumentasjon = ({
             <DokumentoversiktMessages
                 dokumentoversikt={dokumentoversikt}
                 harRegistrertDiagnosekode={harRegistrertDiagnosekode}
+                kanLøseAksjonspunkt={kanLøseAksjonspunkt}
+                kanNavigereVidere={kanNavigereVidere}
+                navigerTilNesteSteg={() => navigerTilNesteSteg(state.nesteSteg)}
             />
             {dokumentoversikt?.harDokumenter() === true && (
                 <>

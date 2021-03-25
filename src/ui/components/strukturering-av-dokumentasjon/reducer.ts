@@ -1,6 +1,7 @@
 import Dokument from '../../../types/Dokument';
 import ActionType from './actionTypes';
 import { Dokumentoversikt } from '../../../types/Dokumentoversikt';
+import Step from '../../../types/Step';
 
 interface State {
     visDokumentDetails: boolean;
@@ -9,12 +10,16 @@ interface State {
     valgtDokument: Dokument;
     dokumentoversiktFeilet: boolean;
     visRedigeringAvDokument: boolean;
+    kanLøseAksjonspunkt: boolean;
+    kanNavigereVidere: boolean;
+    nesteSteg: Step;
 }
 
 interface Action {
     type: ActionType;
     dokumentoversikt?: Dokumentoversikt;
     valgtDokument?: Dokument;
+    nesteSteg?: Step;
 }
 
 const vilkårsdokumentReducer = (state: State, action: Action): State => {
@@ -52,6 +57,19 @@ const vilkårsdokumentReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 visRedigeringAvDokument: true,
+            };
+        case ActionType.KAN_LØSE_AKSJONSPUNKT:
+            return {
+                ...state,
+                isLoading: false,
+                kanLøseAksjonspunkt: true,
+            };
+        case ActionType.KAN_NAVIGERE_VIDERE:
+            return {
+                ...state,
+                isLoading: false,
+                kanNavigereVidere: true,
+                nesteSteg: action.nesteSteg,
             };
         default:
             return state;
