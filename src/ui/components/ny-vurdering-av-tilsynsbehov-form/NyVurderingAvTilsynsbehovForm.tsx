@@ -94,17 +94,8 @@ const NyVurderingAvTilsynsbehovForm = ({
         return slåSammenSammenhengendePerioder(perioderSomKanVurderes);
     }, [perioderSomKanVurderes]);
 
-    const førsteDefaultPeriode = defaultValues[FieldName.PERIODER][0];
-
     return (
-        <DetailViewVurdering
-            title="Vurdering av tilsyn og pleie"
-            contentAfterTitleRenderer={() =>
-                isValidPeriod(førsteDefaultPeriode)
-                    ? prettifyPeriodList(defaultValues[FieldName.PERIODER])
-                    : 'Ny vurdering'
-            }
-        >
+        <DetailViewVurdering title="Vurdering av tilsyn og pleie" perioder={defaultValues[FieldName.PERIODER]}>
             <div id="modal" />
             <FormProvider {...formMethods}>
                 <Form
@@ -113,7 +104,7 @@ const NyVurderingAvTilsynsbehovForm = ({
                     onAvbryt={onAvbryt}
                 >
                     {dokumenter?.length > 0 && (
-                        <Box marginTop={Margin.xLarge}>
+                        <Box marginTop={Margin.large}>
                             <CheckboxGroup
                                 question="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
                                 name={FieldName.DOKUMENTER}

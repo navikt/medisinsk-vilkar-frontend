@@ -93,14 +93,11 @@ const NyVurderingAvToOmsorgspersonerForm = ({
     }, [perioderSomKanVurderes]);
 
     return (
-        <DetailViewVurdering
-            title="Vurdering av to omsorgspersoner"
-            contentAfterTitleRenderer={() => prettifyPeriodList(defaultValues[FieldName.PERIODER])}
-        >
+        <DetailViewVurdering title="Vurdering av to omsorgspersoner" perioder={defaultValues[FieldName.PERIODER]}>
             <FormProvider {...formMethods}>
                 <Form buttonLabel="Bekreft" onSubmit={formMethods.handleSubmit(lagNyVurdering)}>
                     {dokumenter?.length > 0 && (
-                        <Box marginTop={Margin.xLarge}>
+                        <Box marginTop={Margin.large}>
                             <CheckboxGroup
                                 question="Hvilke dokumenter er brukt i vurderingen av to omsorgspersoner?"
                                 name={FieldName.DOKUMENTER}

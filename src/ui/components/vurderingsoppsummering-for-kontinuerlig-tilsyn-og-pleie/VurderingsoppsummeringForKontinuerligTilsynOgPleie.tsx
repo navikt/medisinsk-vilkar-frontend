@@ -20,11 +20,8 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
     const { dokumenter, perioder, tekst, resultat } = gjeldendeVurdering;
     const erInnleggelse = vurdering.erInnleggelsesperiode;
     return (
-        <DetailViewVurdering
-            title="Vurdering av behov for kontinuerlig tilsyn og pleie"
-            contentAfterTitleRenderer={() => prettifyPeriodList(gjeldendeVurdering.perioder)}
-        >
-            <Box marginTop={Margin.medium}>
+        <DetailViewVurdering title="Vurdering av tilsyn og pleie" perioder={perioder}>
+            <Box marginTop={Margin.large}>
                 {erInnleggelse && <DekketAvInnleggelsesperiodeMelding />}
                 <Box marginTop={Margin.medium}>
                     <LabelledContent
