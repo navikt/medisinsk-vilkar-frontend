@@ -79,12 +79,12 @@ const DokumentoversiktMessages = ({
             {kanNavigereVidere && (
                 <Box marginBottom={Margin.medium}>
                     <Alertstripe type="info">
-                        Dokumentsteget er ferdig vurdert og du kan gå videre i vurderingen.
+                        Dokumentasjon av sykdom er ferdig vurdert og du kan gå videre i vurderingen.
                         <Knapp
                             type="hoved"
                             htmlType="button"
                             style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
-                            onClick={navigerTilNesteSteg}
+                            onClick={() => navigerTilNesteSteg()}
                             mini
                         >
                             Fortsett

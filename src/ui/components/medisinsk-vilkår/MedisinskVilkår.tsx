@@ -45,11 +45,10 @@ const MedisinskVilkår = () => {
         isLoading: true,
         activeStep: null,
         markedStep: null,
-        harGyldigSignatur: null,
-        harRegistrertDiagnosekode: null,
+        sykdomsstegStatus: null,
     });
 
-    const { isLoading, activeStep, markedStep, harGyldigSignatur, harRegistrertDiagnosekode } = state;
+    const { isLoading, activeStep, markedStep, sykdomsstegStatus } = state;
 
     const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
@@ -61,8 +60,7 @@ const MedisinskVilkår = () => {
             });
             dispatch({
                 type: ActionType.UPDATE_STATUS,
-                harGyldigSignatur: status.manglerGodkjentLegeerklæring === false,
-                harRegistrertDiagnosekode: status.manglerDiagnosekode === false,
+                sykdomsstegStatus: status,
             });
             return status;
         } catch (error) {
@@ -78,8 +76,6 @@ const MedisinskVilkår = () => {
                 dispatch({
                     type: ActionType.MARK_AND_ACTIVATE_STEP,
                     step: steg,
-                    harGyldigSignatur: status.manglerGodkjentLegeerklæring === false,
-                    harRegistrertDiagnosekode: status.manglerDiagnosekode === false,
                 });
             },
             () => {
@@ -88,8 +84,9 @@ const MedisinskVilkår = () => {
         );
     }, []);
 
-    const navigerTilSteg = (steg: Step) => {
-        dispatch({ type: ActionType.NAVIGATE_TO_STEP, step: steg });
+    const navigerTilSteg = (steg?: Step) => {
+        const nesteSteg = steg || finnNesteSteg(sykdomsstegStatus);
+        dispatch({ type: ActionType.NAVIGATE_TO_STEP, step: nesteSteg });
     };
 
     return (
@@ -99,12 +96,10 @@ const MedisinskVilkår = () => {
                 <h1 style={{ fontSize: 22 }}>Sykdom</h1>
                 <TabsPure
                     kompakt
-                    tabs={steps.map((step) => {
-                        return {
-                            label: <TabItem label={step.title} showWarningIcon={step === markedStep} />,
-                            aktiv: step === activeStep,
-                        };
-                    })}
+                    tabs={steps.map((step) => ({
+                        label: <TabItem label={step.title} showWarningIcon={step === markedStep} />,
+                        aktiv: step === activeStep,
+                    }))}
                     onChange={(event, clickedIndex) => {
                         dispatch({ type: ActionType.ACTIVATE_STEP, step: steps[clickedIndex] });
                     }}
@@ -115,21 +110,21 @@ const MedisinskVilkår = () => {
                             <StruktureringAvDokumentasjon
                                 navigerTilNesteSteg={navigerTilSteg}
                                 hentSykdomsstegStatus={hentSykdomsstegStatus}
-                                harRegistrertDiagnosekode={harRegistrertDiagnosekode}
+                                sykdomsstegStatus={sykdomsstegStatus}
                             />
                         )}
                         {activeStep === tilsynOgPleieSteg && (
                             <VilkårsvurderingAvTilsynOgPleie
                                 navigerTilNesteSteg={navigerTilSteg}
                                 hentSykdomsstegStatus={hentSykdomsstegStatus}
-                                harGyldigSignatur={harGyldigSignatur}
+                                sykdomsstegStatus={sykdomsstegStatus}
                             />
                         )}
                         {activeStep === toOmsorgspersonerSteg && (
                             <VilkårsvurderingAvToOmsorgspersoner
                                 navigerTilNesteSteg={navigerTilSteg}
                                 hentSykdomsstegStatus={hentSykdomsstegStatus}
-                                harGyldigSignatur={harGyldigSignatur}
+                                sykdomsstegStatus={sykdomsstegStatus}
                             />
                         )}
                     </div>

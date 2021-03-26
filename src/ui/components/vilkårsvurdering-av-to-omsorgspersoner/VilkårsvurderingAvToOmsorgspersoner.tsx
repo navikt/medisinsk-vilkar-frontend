@@ -3,10 +3,14 @@ import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import React, { useMemo } from 'react';
 import LinkRel from '../../../constants/LinkRel';
 import { Period } from '../../../types/Period';
+import Step, { StepId, toOmsorgspersonerSteg } from '../../../types/Step';
+import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
+import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import Vurderingstype from '../../../types/Vurderingstype';
 import { get } from '../../../util/httpUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
+import { finnNesteSteg } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Box, { Margin } from '../box/Box';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
@@ -14,27 +18,23 @@ import NyVurderingAvToOmsorgspersonerForm, {
     FieldName,
 } from '../ny-vurdering-av-to-omsorgspersoner-form/NyVurderingAvToOmsorgspersonerForm';
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
-import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
-import ActionType from './actionTypes';
-import vilkårsvurderingReducer from './reducer';
-import Step, { StepId, toOmsorgspersonerSteg } from '../../../types/Step';
-import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
-import { finnNesteSteg } from '../../../util/statusUtils';
-import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
 import PageContainer from '../page-container/PageContainer';
 import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
-import Vurderingselement from '../../../types/Vurderingselement';
+import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
+import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
+import ActionType from './actionTypes';
+import vilkårsvurderingReducer from './reducer';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     navigerTilNesteSteg: (steg: Step) => void;
     hentSykdomsstegStatus: () => Promise<SykdomsstegStatusResponse>;
-    harGyldigSignatur: boolean;
+    sykdomsstegStatus: SykdomsstegStatusResponse;
 }
 
 const VilkårsvurderingAvToOmsorgspersoner = ({
     navigerTilNesteSteg,
     hentSykdomsstegStatus,
-    harGyldigSignatur,
+    sykdomsstegStatus,
 }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
     const { endpoints, onFinished, httpErrorHandler } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
@@ -57,14 +57,13 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
         vurderingsoversiktFeilet,
     } = state;
 
-    const overlappendeVurderingsperioder =
-        vurderingsoversikt?.finnVurderingsperioderSomOverlapperMedNyeSøknadsperioder() || [];
+    const { manglerGodkjentLegeerklæring } = sykdomsstegStatus;
+    const harGyldigSignatur = !manglerGodkjentLegeerklæring;
 
-    const getVurderingsoversikt = () => {
-        return get<Vurderingsoversikt>(endpoints.vurderingsoversiktBehovForToOmsorgspersoner, httpErrorHandler, {
+    const getVurderingsoversikt = () =>
+        get<Vurderingsoversikt>(endpoints.vurderingsoversiktBehovForToOmsorgspersoner, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         });
-    };
 
     const visVurderingsoversikt = (nyVurderingsoversikt: Vurderingsoversikt) => {
         dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });

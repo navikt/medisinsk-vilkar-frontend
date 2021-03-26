@@ -1,41 +1,41 @@
-import React, { useMemo } from 'react';
 import axios from 'axios';
-import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
-import Dokumentnavigasjon from '../dokumentnavigasjon/Dokumentnavigasjon';
-import StrukturertDokumentDetaljer from '../strukturert-dokument-detaljer/StrukturertDokumentDetaljer';
-import Dokument, { Dokumenttype } from '../../../types/Dokument';
-import ContainerContext from '../../context/ContainerContext';
-import { get } from '../../../util/httpUtils';
-import dokumentReducer from './reducer';
-import ActionType from './actionTypes';
-import { findLinkByRel } from '../../../util/linkUtils';
+import React, { useMemo } from 'react';
 import LinkRel from '../../../constants/LinkRel';
-import StrukturerDokumentController from '../strukturer-dokument-controller/StrukturerDokumentController';
-import DokumentasjonFooter from '../dokumentasjon-footer/DokumentasjonFooter';
-import Box, { Margin } from '../box/Box';
-import Innleggelsesperiodeoversikt from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
-import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
-import SignertSeksjon from '../signert-seksjon/SignertSeksjon';
-import { finnNesteSteg } from '../../../util/statusUtils';
-import Step, { dokumentSteg, StepId } from '../../../types/Step';
-import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
-import PageContainer from '../page-container/PageContainer';
+import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import { Dokumentoversikt } from '../../../types/Dokumentoversikt';
 import { DokumentoversiktResponse } from '../../../types/DokumentoversiktResponse';
+import { StepId, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
+import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
+import { get } from '../../../util/httpUtils';
+import { findLinkByRel } from '../../../util/linkUtils';
+import { finnNesteSteg } from '../../../util/statusUtils';
+import ContainerContext from '../../context/ContainerContext';
+import Box, { Margin } from '../box/Box';
+import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
+import DokumentasjonFooter from '../dokumentasjon-footer/DokumentasjonFooter';
+import Dokumentnavigasjon from '../dokumentnavigasjon/Dokumentnavigasjon';
 import DokumentoversiktMessages from '../dokumentoversikt-messages/DokmentoversiktMessages';
+import Innleggelsesperiodeoversikt from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
+import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
+import PageContainer from '../page-container/PageContainer';
+import SignertSeksjon from '../signert-seksjon/SignertSeksjon';
+import StrukturerDokumentController from '../strukturer-dokument-controller/StrukturerDokumentController';
+import StrukturertDokumentDetaljer from '../strukturert-dokument-detaljer/StrukturertDokumentDetaljer';
+import ActionType from './actionTypes';
+import dokumentReducer from './reducer';
 
 interface StruktureringAvDokumentasjonProps {
-    navigerTilNesteSteg: (steg: Step) => void;
+    navigerTilNesteSteg: () => void;
     hentSykdomsstegStatus: () => Promise<SykdomsstegStatusResponse>;
-    harRegistrertDiagnosekode: boolean;
+    sykdomsstegStatus: SykdomsstegStatusResponse;
 }
 
 const StruktureringAvDokumentasjon = ({
     navigerTilNesteSteg,
     hentSykdomsstegStatus,
-    harRegistrertDiagnosekode,
+    sykdomsstegStatus,
 }: StruktureringAvDokumentasjonProps) => {
-    const { endpoints, httpErrorHandler, onFinished } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(dokumentReducer, {
@@ -45,9 +45,6 @@ const StruktureringAvDokumentasjon = ({
         valgtDokument: null,
         dokumentoversiktFeilet: false,
         visRedigeringAvDokument: false,
-        kanLøseAksjonspunkt: false,
-        kanNavigereVidere: false,
-        nesteSteg: null,
     });
 
     const {
@@ -57,15 +54,14 @@ const StruktureringAvDokumentasjon = ({
         valgtDokument,
         dokumentoversiktFeilet,
         visRedigeringAvDokument,
-        kanLøseAksjonspunkt,
-        kanNavigereVidere,
     } = state;
 
-    const getDokumentoversikt = () => {
-        return get<DokumentoversiktResponse>(endpoints.dokumentoversikt, httpErrorHandler, {
+    const { manglerDiagnosekode, kanLøseAksjonspunkt } = sykdomsstegStatus;
+
+    const getDokumentoversikt = () =>
+        get<DokumentoversiktResponse>(endpoints.dokumentoversikt, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         });
-    };
 
     const visDokumentoversikt = (nyDokumentoversikt: Dokumentoversikt) => {
         dispatch({ type: ActionType.VIS_DOKUMENTOVERSIKT, dokumentoversikt: nyDokumentoversikt });
@@ -105,32 +101,27 @@ const StruktureringAvDokumentasjon = ({
 
     const sjekkStatus = () => {
         dispatch({ type: ActionType.PENDING });
-        hentSykdomsstegStatus().then((status) => {
-            if (status.kanLøseAksjonspunkt) {
-                dispatch({ type: ActionType.KAN_LØSE_AKSJONSPUNKT });
-                return;
-            }
-
-            const nesteSteg = finnNesteSteg(status);
-            if (nesteSteg === dokumentSteg) {
-                getDokumentoversikt().then(({ dokumenter }: DokumentoversiktResponse) => {
-                    const nyDokumentoversikt = new Dokumentoversikt(dokumenter);
-                    visDokumentoversikt(nyDokumentoversikt);
-                });
-            } else {
-                dispatch({ type: ActionType.KAN_NAVIGERE_VIDERE, nesteSteg });
-            }
+        hentSykdomsstegStatus().then(() => {
+            getDokumentoversikt().then(({ dokumenter }: DokumentoversiktResponse) => {
+                const nyDokumentoversikt = new Dokumentoversikt(dokumenter);
+                visDokumentoversikt(nyDokumentoversikt);
+            });
         });
+    };
+
+    const nesteStegErVurdering = () => {
+        const nesteSteg = finnNesteSteg(sykdomsstegStatus);
+        return nesteSteg === tilsynOgPleieSteg || nesteSteg === toOmsorgspersonerSteg;
     };
 
     return (
         <PageContainer isLoading={isLoading} hasError={dokumentoversiktFeilet} key={StepId.Dokument}>
             <DokumentoversiktMessages
                 dokumentoversikt={dokumentoversikt}
-                harRegistrertDiagnosekode={harRegistrertDiagnosekode}
+                harRegistrertDiagnosekode={!manglerDiagnosekode}
                 kanLøseAksjonspunkt={kanLøseAksjonspunkt}
-                kanNavigereVidere={kanNavigereVidere}
-                navigerTilNesteSteg={() => navigerTilNesteSteg(state.nesteSteg)}
+                kanNavigereVidere={nesteStegErVurdering()}
+                navigerTilNesteSteg={navigerTilNesteSteg}
             />
             {dokumentoversikt?.harDokumenter() === true && (
                 <>
