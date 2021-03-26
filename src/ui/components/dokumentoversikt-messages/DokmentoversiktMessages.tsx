@@ -2,7 +2,7 @@ import Alertstripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import React from 'react';
 import { Dokumentoversikt } from '../../../types/Dokumentoversikt';
-import ContainerContext from '../../context/ContainerContext';
+import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
 import Box, { Margin } from '../box/Box';
 import FristForDokumentasjonUtløptPanel from '../frist-for-dokumentasjon-utløpt-panel/FristForDokumentasjonUtløptPanel';
 
@@ -21,8 +21,6 @@ const DokumentoversiktMessages = ({
     kanNavigereVidere,
     navigerTilNesteSteg,
 }: DokumentoversiktMessagesProps) => {
-    const { onFinished } = React.useContext(ContainerContext);
-
     const { ustrukturerteDokumenter } = dokumentoversikt;
 
     const visFristForDokumentasjonUtløptMelding =
@@ -60,22 +58,7 @@ const DokumentoversiktMessages = ({
             {dokumentoversikt.harDokumenter() === false && (
                 <Alertstripe type="info">Ingen dokumenter å vise</Alertstripe>
             )}
-            {kanLøseAksjonspunkt && (
-                <Box marginBottom={Margin.medium}>
-                    <Alertstripe type="info">
-                        Sykdom er ferdig vurdert og du kan gå videre i behandlingen.
-                        <Knapp
-                            type="hoved"
-                            htmlType="button"
-                            style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
-                            onClick={onFinished}
-                            mini
-                        >
-                            Fortsett
-                        </Knapp>
-                    </Alertstripe>
-                </Box>
-            )}
+            {kanLøseAksjonspunkt && <AksjonspunktFerdigStripe />}
             {kanNavigereVidere && (
                 <Box marginBottom={Margin.medium}>
                     <Alertstripe type="info">
