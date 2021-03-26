@@ -1,39 +1,39 @@
-import React, { useMemo } from 'react';
 import axios from 'axios';
-import { Period } from '../../../types/Period';
-import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import ContainerContext from '../../context/ContainerContext';
-import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
-import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
-import ActionType from './actionTypes';
-import vilkårsvurderingReducer from './reducer';
-import { get } from '../../../util/httpUtils';
+import React, { useMemo } from 'react';
 import LinkRel from '../../../constants/LinkRel';
+import { Period } from '../../../types/Period';
+import Step, { StepId, tilsynOgPleieSteg } from '../../../types/Step';
+import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
+import Vurderingselement from '../../../types/Vurderingselement';
+import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
+import Vurderingstype from '../../../types/Vurderingstype';
+import { get } from '../../../util/httpUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
-import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
+import { finnNesteSteg } from '../../../util/statusUtils';
+import ContainerContext from '../../context/ContainerContext';
+import Box, { Margin } from '../box/Box';
+import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import NyVurderingAvTilsynsbehovForm, {
     FieldName,
 } from '../ny-vurdering-av-tilsynsbehov-form/NyVurderingAvTilsynsbehovForm';
-import Vurderingstype from '../../../types/Vurderingstype';
+import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
 import PageContainer from '../page-container/PageContainer';
-import Step, { StepId, tilsynOgPleieSteg } from '../../../types/Step';
-import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
-import { finnNesteSteg } from '../../../util/statusUtils';
-import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
-import Box, { Margin } from '../box/Box';
 import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
-import Vurderingselement from '../../../types/Vurderingselement';
+import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
+import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
+import ActionType from './actionTypes';
+import vilkårsvurderingReducer from './reducer';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     navigerTilNesteSteg: (steg: Step) => void;
     hentSykdomsstegStatus: () => Promise<SykdomsstegStatusResponse>;
-    harGyldigSignatur: boolean;
+    sykdomsstegStatus: SykdomsstegStatusResponse;
 }
 
 const VilkårsvurderingAvTilsynOgPleie = ({
     navigerTilNesteSteg,
     hentSykdomsstegStatus,
-    harGyldigSignatur,
+    sykdomsstegStatus,
 }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
     const { endpoints, httpErrorHandler, onFinished } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
@@ -58,11 +58,13 @@ const VilkårsvurderingAvTilsynOgPleie = ({
         vurderingsoversiktFeilet,
     } = state;
 
-    const getVurderingsoversikt = () => {
-        return get<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, httpErrorHandler, {
+    const { manglerGodkjentLegeerklæring } = sykdomsstegStatus;
+    const harGyldigSignatur = !manglerGodkjentLegeerklæring;
+
+    const getVurderingsoversikt = () =>
+        get<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         });
-    };
 
     const visVurderingsoversikt = (nyVurderingsoversikt: Vurderingsoversikt) => {
         dispatch({ type: ActionType.VIS_VURDERINGSOVERSIKT, vurderingsoversikt: nyVurderingsoversikt });

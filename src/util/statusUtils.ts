@@ -22,3 +22,8 @@ export const finnNesteSteg = ({
 
     return null;
 };
+
+export const nesteStegErVurdering = (sykdomsstegStatus: StatusResponse) => {
+    const nesteSteg = finnNesteSteg(sykdomsstegStatus);
+    return nesteSteg === tilsynOgPleieSteg || nesteSteg === toOmsorgspersonerSteg;
+};

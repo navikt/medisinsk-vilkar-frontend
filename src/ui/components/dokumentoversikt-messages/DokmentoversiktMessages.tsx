@@ -1,15 +1,26 @@
-import React from 'react';
 import Alertstripe from 'nav-frontend-alertstriper';
+import { Knapp } from 'nav-frontend-knapper';
+import React from 'react';
 import { Dokumentoversikt } from '../../../types/Dokumentoversikt';
+import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
 import Box, { Margin } from '../box/Box';
 import FristForDokumentasjonUtløptPanel from '../frist-for-dokumentasjon-utløpt-panel/FristForDokumentasjonUtløptPanel';
 
 interface DokumentoversiktMessagesProps {
     dokumentoversikt: Dokumentoversikt;
     harRegistrertDiagnosekode: boolean;
+    kanLøseAksjonspunkt: boolean;
+    kanNavigereVidere: boolean;
+    navigerTilNesteSteg: () => void;
 }
 
-const DokumentoversiktMessages = ({ dokumentoversikt, harRegistrertDiagnosekode }: DokumentoversiktMessagesProps) => {
+const DokumentoversiktMessages = ({
+    dokumentoversikt,
+    harRegistrertDiagnosekode,
+    kanLøseAksjonspunkt,
+    kanNavigereVidere,
+    navigerTilNesteSteg,
+}: DokumentoversiktMessagesProps) => {
     const { ustrukturerteDokumenter } = dokumentoversikt;
 
     const visFristForDokumentasjonUtløptMelding =
@@ -46,6 +57,23 @@ const DokumentoversiktMessages = ({ dokumentoversikt, harRegistrertDiagnosekode 
             )}
             {dokumentoversikt.harDokumenter() === false && (
                 <Alertstripe type="info">Ingen dokumenter å vise</Alertstripe>
+            )}
+            {kanLøseAksjonspunkt && <AksjonspunktFerdigStripe />}
+            {kanNavigereVidere && (
+                <Box marginBottom={Margin.medium}>
+                    <Alertstripe type="info">
+                        Dokumentasjon av sykdom er ferdig vurdert og du kan gå videre i vurderingen.
+                        <Knapp
+                            type="hoved"
+                            htmlType="button"
+                            style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
+                            onClick={navigerTilNesteSteg}
+                            mini
+                        >
+                            Fortsett
+                        </Knapp>
+                    </Alertstripe>
+                </Box>
             )}
         </>
     );

@@ -1,19 +1,18 @@
 import ActionType from './actionTypes';
 import Step, { dokumentSteg } from '../../../types/Step';
+import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 
 interface State {
     isLoading: boolean;
     activeStep: Step;
     markedStep: Step;
-    harGyldigSignatur: boolean;
-    harRegistrertDiagnosekode: boolean;
+    sykdomsstegStatus: SykdomsstegStatusResponse;
 }
 
 interface Action {
     type: ActionType;
-    harGyldigSignatur?: boolean;
-    harRegistrertDiagnosekode?: boolean;
     step?: Step;
+    sykdomsstegStatus?: SykdomsstegStatusResponse;
 }
 
 const medisinskVilkårReducer = (state: State, action: Action): State => {
@@ -23,8 +22,6 @@ const medisinskVilkårReducer = (state: State, action: Action): State => {
                 ...state,
                 activeStep: action.step || dokumentSteg,
                 markedStep: action.step,
-                harGyldigSignatur: action.harGyldigSignatur,
-                harRegistrertDiagnosekode: action.harRegistrertDiagnosekode,
                 isLoading: false,
             };
         }
@@ -51,8 +48,7 @@ const medisinskVilkårReducer = (state: State, action: Action): State => {
         case ActionType.UPDATE_STATUS: {
             return {
                 ...state,
-                harRegistrertDiagnosekode: action.harRegistrertDiagnosekode,
-                harGyldigSignatur: action.harGyldigSignatur,
+                sykdomsstegStatus: action.sykdomsstegStatus,
             };
         }
         default:
