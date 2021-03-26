@@ -1,6 +1,6 @@
 import React from 'react';
 import Vurdering from '../../../types/Vurdering';
-import { prettifyPeriod, prettifyPeriodList } from '../../../util/formats';
+import { prettifyPeriod } from '../../../util/formats';
 import Box, { Margin } from '../box/Box';
 import LabelledContent from '../labelled-content/LabelledContent';
 import BasicList from '../basic-list/BasicList';
@@ -18,11 +18,8 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({ vurdering }: Vurderingsopp
     const { resultat, tekst, dokumenter, perioder } = gjeldendeVurdering;
     const erInnleggelse = vurdering.erInnleggelsesperiode;
     return (
-        <DetailViewVurdering
-            title="Vurdering av behov for to omsorgspersoner"
-            contentAfterTitleRenderer={() => prettifyPeriodList(gjeldendeVurdering.perioder)}
-        >
-            <Box marginTop={Margin.medium}>
+        <DetailViewVurdering title="Vurdering av to omsorgspersoner" perioder={perioder}>
+            <Box marginTop={Margin.large}>
                 {erInnleggelse && <DekketAvInnleggelsesperiodeMelding />}
                 <Box marginTop={Margin.medium}>
                     <LabelledContent

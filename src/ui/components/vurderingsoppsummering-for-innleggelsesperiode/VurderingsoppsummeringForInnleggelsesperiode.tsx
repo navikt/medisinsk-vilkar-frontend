@@ -1,7 +1,6 @@
 import React from 'react';
 import Alertstripe from 'nav-frontend-alertstriper';
 import InnleggelsesperiodeVurdering from '../../../types/InnleggelsesperiodeVurdering';
-import { prettifyPeriod } from '../../../util/formats';
 import Box, { Margin } from '../box/Box';
 import Vurderingstype from '../../../types/Vurderingstype';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
@@ -16,13 +15,10 @@ const VurderingsoppsummeringForInnleggelsesperiode = ({
     vurderingstype,
 }: VurderingsoppsummeringForInnleggelsesperiodeProps) => {
     const vurderingstekst =
-        vurderingstype === Vurderingstype.TO_OMSORGSPERSONER ? 'to omsorgspersoner' : 'kontinuerlig tilsyn og pleie';
+        vurderingstype === Vurderingstype.TO_OMSORGSPERSONER ? 'to omsorgspersoner' : 'tilsyn og pleie';
     return (
-        <DetailViewVurdering
-            title={`Vurdering av behov for ${vurderingstekst}`}
-            contentAfterTitleRenderer={() => prettifyPeriod(vurdering.periode)}
-        >
-            <Box marginTop={Margin.medium}>
+        <DetailViewVurdering title={`Vurdering av ${vurderingstekst}`} perioder={[vurdering.periode]}>
+            <Box marginTop={Margin.large}>
                 <Alertstripe type="info">Innvilget som følge av innleggelse</Alertstripe>
             </Box>
         </DetailViewVurdering>
