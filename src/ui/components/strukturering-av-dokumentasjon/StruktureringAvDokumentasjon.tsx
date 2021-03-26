@@ -8,7 +8,7 @@ import { StepId, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import { get } from '../../../util/httpUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
-import { finnNesteSteg } from '../../../util/statusUtils';
+import { finnNesteSteg, nesteStegErVurdering } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Box, { Margin } from '../box/Box';
 import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
@@ -109,18 +109,13 @@ const StruktureringAvDokumentasjon = ({
         });
     };
 
-    const nesteStegErVurdering = () => {
-        const nesteSteg = finnNesteSteg(sykdomsstegStatus);
-        return nesteSteg === tilsynOgPleieSteg || nesteSteg === toOmsorgspersonerSteg;
-    };
-
     return (
         <PageContainer isLoading={isLoading} hasError={dokumentoversiktFeilet} key={StepId.Dokument}>
             <DokumentoversiktMessages
                 dokumentoversikt={dokumentoversikt}
                 harRegistrertDiagnosekode={!manglerDiagnosekode}
                 kanLøseAksjonspunkt={kanLøseAksjonspunkt}
-                kanNavigereVidere={nesteStegErVurdering()}
+                kanNavigereVidere={nesteStegErVurdering(sykdomsstegStatus)}
                 navigerTilNesteSteg={navigerTilNesteSteg}
             />
             {dokumentoversikt?.harDokumenter() === true && (

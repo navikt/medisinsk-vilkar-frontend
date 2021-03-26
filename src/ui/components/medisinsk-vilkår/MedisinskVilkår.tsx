@@ -84,8 +84,12 @@ const MedisinskVilkår = () => {
         );
     }, []);
 
-    const navigerTilSteg = (steg?: Step) => {
-        const nesteSteg = steg || finnNesteSteg(sykdomsstegStatus);
+    const navigerTilNesteSteg = () => {
+        const nesteSteg = finnNesteSteg(sykdomsstegStatus);
+        dispatch({ type: ActionType.NAVIGATE_TO_STEP, step: nesteSteg });
+    };
+
+    const navigerTilSteg = (nesteSteg: Step) => {
         dispatch({ type: ActionType.NAVIGATE_TO_STEP, step: nesteSteg });
     };
 
@@ -108,7 +112,7 @@ const MedisinskVilkår = () => {
                     <div className={styles.medisinskVilkår__vilkårContentContainer}>
                         {activeStep === dokumentSteg && (
                             <StruktureringAvDokumentasjon
-                                navigerTilNesteSteg={navigerTilSteg}
+                                navigerTilNesteSteg={navigerTilNesteSteg}
                                 hentSykdomsstegStatus={hentSykdomsstegStatus}
                                 sykdomsstegStatus={sykdomsstegStatus}
                             />

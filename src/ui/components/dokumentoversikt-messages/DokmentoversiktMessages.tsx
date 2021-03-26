@@ -67,7 +67,7 @@ const DokumentoversiktMessages = ({
                             type="hoved"
                             htmlType="button"
                             style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
-                            onClick={() => navigerTilNesteSteg()}
+                            onClick={navigerTilNesteSteg}
                             mini
                         >
                             Fortsett
