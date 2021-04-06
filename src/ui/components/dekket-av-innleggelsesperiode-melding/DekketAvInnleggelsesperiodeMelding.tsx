@@ -4,8 +4,8 @@ import Alertstripe from 'nav-frontend-alertstriper';
 const DekketAvInnleggelsesperiodeMelding = () => {
     return (
         <Alertstripe type="info">
-            Hele eller deler av den vurderte perioden er dekket av innleggelsesperioder. Vurderingen blir dermed ikke
-            brukt for de dagene det gjelder.
+            Hele eller deler av perioden er oppfylt som følge av innleggelse. Vurderingen som ligger til grunn blir
+            dermed ikke brukt for disse dagene.
         </Alertstripe>
     );
 };
