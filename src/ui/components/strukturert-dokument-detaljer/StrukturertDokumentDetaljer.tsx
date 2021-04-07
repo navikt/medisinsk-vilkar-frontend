@@ -9,6 +9,7 @@ import LinkRel from '../../../constants/LinkRel';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
 import LinkButton from '../link-button/LinkButton';
 import styles from './strukturertDokumentDetaljer.less';
+import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 
 interface StrukturertDokumentDetaljerProps {
     dokument: Dokument;
@@ -37,9 +38,13 @@ const StrukturertDokumentDetaljer = ({ dokument, onEditDokumentClick }: Struktur
         <DetailView
             title="Om dokumentet"
             contentAfterTitleRenderer={() => (
-                <LinkButton className={styles.endreLink} onClick={onEditDokumentClick}>
-                    Endre dokument
-                </LinkButton>
+                <WriteAccessBoundContent
+                    contentRenderer={() => (
+                        <LinkButton className={styles.endreLink} onClick={onEditDokumentClick}>
+                            Endre dokument
+                        </LinkButton>
+                    )}
+                />
             )}
         >
             <Box marginTop={Margin.xLarge}>

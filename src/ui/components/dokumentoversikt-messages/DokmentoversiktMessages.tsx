@@ -5,6 +5,7 @@ import { Dokumentoversikt } from '../../../types/Dokumentoversikt';
 import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
 import Box, { Margin } from '../box/Box';
 import FristForDokumentasjonUtløptPanel from '../frist-for-dokumentasjon-utløpt-panel/FristForDokumentasjonUtløptPanel';
+import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 
 interface DokumentoversiktMessagesProps {
     dokumentoversikt: Dokumentoversikt;
@@ -58,7 +59,10 @@ const DokumentoversiktMessages = ({
             {dokumentoversikt.harDokumenter() === false && (
                 <Alertstripe type="info">Ingen dokumenter å vise</Alertstripe>
             )}
-            {kanLøseAksjonspunkt && <AksjonspunktFerdigStripe />}
+            <WriteAccessBoundContent
+                contentRenderer={() => <AksjonspunktFerdigStripe />}
+                otherRequirementsAreMet={kanLøseAksjonspunkt}
+            />
             {kanNavigereVidere && (
                 <Box marginBottom={Margin.medium}>
                     <Alertstripe type="info">
