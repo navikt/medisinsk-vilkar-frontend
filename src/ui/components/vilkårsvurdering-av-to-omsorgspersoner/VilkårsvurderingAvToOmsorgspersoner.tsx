@@ -24,6 +24,7 @@ import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
+import NyVurderingAvTilsynsbehovForm from '../ny-vurdering-av-tilsynsbehov-form/NyVurderingAvTilsynsbehovForm';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     navigerTilNesteSteg: (steg: Step) => void;
@@ -46,6 +47,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
         valgtVurderingselement: null,
         resterendeVurderingsperioderDefaultValue: [],
         vurderingsoversiktFeilet: false,
+        visRadForNyVurdering: false,
     });
 
     const {
@@ -55,6 +57,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
         valgtVurderingselement,
         resterendeVurderingsperioderDefaultValue,
         vurderingsoversiktFeilet,
+        visRadForNyVurdering,
     } = state;
 
     const { manglerGodkjentLegeerklæring } = sykdomsstegStatus;
@@ -75,6 +78,12 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
 
     const visNyVurderingForm = (resterendeVurderingsperioder?: Period[]) => {
         dispatch({ type: ActionType.VIS_NY_VURDERING_FORM, resterendeVurderingsperioder });
+    };
+
+    const onAvbryt = () => {
+        dispatch({
+            type: ActionType.AVBRYT_FORM,
+        });
     };
 
     const åpneFørstePeriodeSomMåBehandles = (nyVurderingsoversikt: Vurderingsoversikt) => {
@@ -143,6 +152,9 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
             ? resterendeVurderingsperioderDefaultValue
             : [new Period('', '')];
 
+    const skalViseOpprettVurderingKnapp =
+        !vurderingsoversikt?.harPerioderSomSkalVurderes() && !visRadForNyVurdering && harGyldigSignatur;
+
     return (
         <PageContainer hasError={vurderingsoversiktFeilet} isLoading={isLoading} key={StepId.ToOmsorgspersoner}>
             {vurderingsoversikt?.harIngenPerioderÅVise() && (
@@ -169,6 +181,8 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                                         resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
                                         onVurderingValgt={velgVurderingselement}
                                         onNyVurderingClick={visNyVurderingForm}
+                                        visRadForNyVurdering={visRadForNyVurdering}
+                                        visOpprettVurderingKnapp={skalViseOpprettVurderingKnapp}
                                     />
                                 );
                             }
@@ -206,6 +220,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                                                     perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
                                                     dokumenter={dokumenter}
                                                     onSubmit={onSubmit}
+                                                    onAvbryt={visRadForNyVurdering ? onAvbryt : undefined}
                                                 />
                                             )}
                                         />

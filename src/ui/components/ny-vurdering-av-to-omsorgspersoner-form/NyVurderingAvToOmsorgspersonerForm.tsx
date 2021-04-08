@@ -46,6 +46,7 @@ interface NyVurderingAvToOmsorgspersonerFormProps {
     resterendeVurderingsperioder?: Period[];
     perioderSomKanVurderes?: Period[];
     dokumenter: Dokument[];
+    onAvbryt: () => void;
 }
 
 const NyVurderingAvToOmsorgspersonerForm = ({
@@ -54,6 +55,7 @@ const NyVurderingAvToOmsorgspersonerForm = ({
     resterendeVurderingsperioder,
     perioderSomKanVurderes,
     dokumenter,
+    onAvbryt,
 }: NyVurderingAvToOmsorgspersonerFormProps): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
@@ -95,7 +97,7 @@ const NyVurderingAvToOmsorgspersonerForm = ({
     return (
         <DetailViewVurdering title="Vurdering av to omsorgspersoner" perioder={defaultValues[FieldName.PERIODER]}>
             <FormProvider {...formMethods}>
-                <Form buttonLabel="Bekreft" onSubmit={formMethods.handleSubmit(lagNyVurdering)}>
+                <Form buttonLabel="Bekreft" onSubmit={formMethods.handleSubmit(lagNyVurdering)} onAvbryt={onAvbryt}>
                     {dokumenter?.length > 0 && (
                         <Box marginTop={Margin.large}>
                             <CheckboxGroup

@@ -9,6 +9,7 @@ interface State {
     vurderingsoversikt: Vurderingsoversikt;
     valgtVurderingselement: Vurderingselement;
     resterendeVurderingsperioderDefaultValue: Period[];
+    visRadForNyVurdering: boolean;
     vurderingsoversiktFeilet: boolean;
 }
 
@@ -29,6 +30,7 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 isLoading: false,
                 resterendeVurderingsperioderDefaultValue: resterendeVurderingsperioder,
                 visVurderingDetails: false,
+                visRadForNyVurdering: false,
                 vurderingsoversiktFeilet: false,
             };
         }
@@ -45,6 +47,7 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 valgtVurderingselement: null,
                 resterendeVurderingsperioderDefaultValue: action.resterendeVurderingsperioder || [],
                 visVurderingDetails: true,
+                visRadForNyVurdering: !action.resterendeVurderingsperioder,
             };
         case ActionType.VELG_VURDERINGSELEMENT:
             return {
@@ -57,6 +60,13 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 ...state,
                 isLoading: true,
                 vurderingsoversiktFeilet: false,
+            };
+        case ActionType.AVBRYT_FORM:
+            return {
+                ...state,
+                visVurderingDetails: false,
+                valgtVurderingselement: null,
+                visRadForNyVurdering: false,
             };
         default:
             return state;
