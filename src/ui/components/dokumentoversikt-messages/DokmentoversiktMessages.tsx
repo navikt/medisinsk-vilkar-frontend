@@ -73,6 +73,7 @@ const DokumentoversiktMessages = ({
                             style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
                             onClick={navigerTilNesteSteg}
                             mini
+                            id="gåVidereFraDokumentasjonKnapp"
                         >
                             Fortsett
                         </Knapp>
