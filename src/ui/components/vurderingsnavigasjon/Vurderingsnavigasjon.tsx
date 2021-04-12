@@ -1,8 +1,9 @@
 import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Element, Undertittel } from 'nav-frontend-typografi';
 import React, { useEffect } from 'react';
-import { Period } from '../../../types/Period';
 import ManuellVurdering from '../../../types/ManuellVurdering';
+import { Period } from '../../../types/Period';
+import Vurderingselement from '../../../types/Vurderingselement';
 import { usePrevious } from '../../../util/hooks';
 import { sortPeriodsByFomDate } from '../../../util/periodUtils';
 import AddButton from '../add-button/AddButton';
@@ -12,7 +13,6 @@ import InteractiveList from '../interactive-list/InteractiveList';
 import PerioderSomSkalVurderes from '../perioder-som-skal-vurderes/PerioderSomSkalVurderes';
 import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
-import Vurderingselement from '../../../types/Vurderingselement';
 import styles from './vurderingsnavigasjon.less';
 
 interface VurderingsnavigasjonProps {
@@ -87,22 +87,23 @@ const Vurderingsnavigasjon = ({
 
     return (
         <div className={styles.vurderingsnavigasjon}>
-            <Undertittel>Alle perioder</Undertittel>
-            {visOpprettVurderingKnapp && (
-                <WriteAccessBoundContent
-                    contentRenderer={() => (
-                        <AddButton
-                            label="Opprett vurdering"
-                            className={styles.vurderingsnavigasjon__opprettVurderingKnapp}
-                            onClick={() => {
-                                setActiveIndex(0);
-                                onNyVurderingClick();
-                            }}
-                            noIcon
-                        />
-                    )}
-                />
-            )}
+            <div className={styles.vurderingsnavigasjon__headingContainer}>
+                <Undertittel className={styles.vurderingsnavigasjon__heading}>Alle perioder</Undertittel>
+                {visOpprettVurderingKnapp && (
+                    <WriteAccessBoundContent
+                        contentRenderer={() => (
+                            <AddButton
+                                label="Ny vurdering"
+                                className={styles.vurderingsnavigasjon__opprettVurderingKnapp}
+                                onClick={() => {
+                                    setActiveIndex(0);
+                                    onNyVurderingClick();
+                                }}
+                            />
+                        )}
+                    />
+                )}
+            </div>
             {allElements.length === 0 && <p>Ingen vurderinger å vise</p>}
             {allElements.length > 0 && (
                 <div className={styles.vurderingsvelgerContainer}>

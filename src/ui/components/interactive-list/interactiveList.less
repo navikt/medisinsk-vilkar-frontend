@@ -5,23 +5,52 @@
 }
 
 .interactiveListElement {
-    padding: 0.5rem 0.5rem 0.4375rem 0.8125rem;
-    border: 1px solid #c6c2bf;
-    border-top: none;
+    padding: 0.9375rem 0 0.875rem 1.5rem;
+    border-bottom: 1px solid #c6c2bf;
     position: relative;
 
     &:hover {
         background: #f2f7fc;
     }
+
+    &:last-of-type {
+        border-bottom: 0;
+    }
+
+    &__chevron {
+        transform: rotate(-90deg);
+        align-self: center;
+        margin-left: 1.125rem;
+        margin-right: 1.875rem;
+    }
 }
 
 .interactiveListElement--active {
-    padding-left: 0.5625rem;
+    // padding-left: 1.1875rem;
     background: #f2f7fc;
-    border-left: 5px solid rgba(0, 103, 197, 1);
+    // border-left: 5px solid rgba(0, 103, 197, 1);
     border-right: 1px solid #0067c5;
     border-bottom: 1px solid #0067c5;
     border-top: 1px solid #0067c5;
+
+    &:before {
+        display: block;
+        content: '';
+        width: 0.3125rem;
+        height: 3.3125rem;
+        border-top-right-radius: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
+        background-color: #0067c5;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    p {
+        color: black;
+        font-weight: bold;
+        text-decoration: none;
+    }
 }
 
 .interactiveListElement:first-child {
@@ -39,6 +68,7 @@
 .interactiveListElement--active:not(:first-child) {
     border-top: 1px solid #0067c5;
     margin-top: -1px;
+    border-bottom: 1px solid #0067c5;
 }
 
 .interactiveListElement__button {
@@ -50,6 +80,8 @@
     width: 100%;
     outline: none;
     cursor: pointer;
+    display: flex;
+    justify-content: space-between;
 
     &:focus-visible {
         outline: #0067c5 auto 1px;
