@@ -59,10 +59,6 @@ const DokumentoversiktMessages = ({
             {dokumentoversikt.harDokumenter() === false && (
                 <Alertstripe type="info">Ingen dokumenter å vise</Alertstripe>
             )}
-            <WriteAccessBoundContent
-                contentRenderer={() => <AksjonspunktFerdigStripe />}
-                otherRequirementsAreMet={kanLøseAksjonspunkt}
-            />
             {kanNavigereVidere && (
                 <Box marginBottom={Margin.medium}>
                     <Alertstripe type="info">

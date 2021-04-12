@@ -1,5 +1,6 @@
 interface SykdomsstegStatusResponse {
     kanLøseAksjonspunkt: boolean;
+    harDataSomIkkeHarBlittTattMedIBehandling: boolean;
     harUklassifiserteDokumenter: boolean;
     manglerDiagnosekode: boolean;
     manglerGodkjentLegeerklæring: boolean;
