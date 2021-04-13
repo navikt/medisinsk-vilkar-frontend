@@ -23,9 +23,11 @@ const InteractiveListElement = (props: InteractiveListElement) => {
     return (
         <li className={cls}>
             <button className={styles.interactiveListElement__button} type="button" onClick={onClick}>
-                {content}
-                <span className={styles.interactiveListElement__chevron}>
-                    {active ? <ChevronIconBlack /> : <ChevronIconGray />}
+                <span className={styles.interactiveListElement__button__contentContainer}>
+                    {content}
+                    <span className={styles.interactiveListElement__chevron}>
+                        {active ? <ChevronIconBlack /> : <ChevronIconGray />}
+                    </span>
                 </span>
             </button>
         </li>
