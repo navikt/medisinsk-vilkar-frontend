@@ -16,6 +16,7 @@ import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBo
 import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
+import styles from './diagnosekodeoversikt.less';
 
 Modal.setAppElement('#app');
 
@@ -75,7 +76,18 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
 
     return (
         <div>
-            <TitleWithUnderline>Diagnosekoder</TitleWithUnderline>
+            <div className={styles.diagnosekodeoversikt__titleContainer}>
+                <TitleWithUnderline>Diagnosekoder</TitleWithUnderline>
+                <WriteAccessBoundContent
+                    contentRenderer={() => (
+                        <AddButton
+                            id="leggTilDiagnosekodeKnapp"
+                            label="Ny diagnosekode"
+                            onClick={() => setModalIsOpen(true)}
+                        />
+                    )}
+                />
+            </div>
             <Box marginTop={Margin.large}>
                 {diagnosekoder.length === 0 && (
                     <IconWithText iconRenderer={() => <WarningIcon />} text="Ingen diagnosekode registrert." />
@@ -84,17 +96,6 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                     <Diagnosekodeliste diagnosekoder={diagnosekoder} onDeleteClick={slettDiagnosekode} />
                 )}
             </Box>
-            <WriteAccessBoundContent
-                contentRenderer={() => (
-                    <Box marginTop={Margin.large}>
-                        <AddButton
-                            id="leggTilDiagnosekodeKnapp"
-                            label="Legg til diagnosekode"
-                            onClick={() => setModalIsOpen(true)}
-                        />
-                    </Box>
-                )}
-            />
             <DiagnosekodeModal
                 isOpen={modalIsOpen}
                 onSaveClick={(nyDiagnosekode: Diagnosekode) =>

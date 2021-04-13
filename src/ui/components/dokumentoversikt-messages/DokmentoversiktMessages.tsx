@@ -35,7 +35,7 @@ const DokumentoversiktMessages = ({
     return (
         <>
             {harRegistrertDiagnosekode === false && (
-                <Box marginBottom={Margin.medium}>
+                <Box marginBottom={Margin.large}>
                     <Alertstripe type="advarsel">
                         Diagnosekode mangler. Du må legge til en diagnosekode for å vurdere tilsyn og pleie.
                     </Alertstripe>
@@ -48,7 +48,7 @@ const DokumentoversiktMessages = ({
             )}
             {visHåndterNyeDokumenterMelding && (
                 <>
-                    <Box marginBottom={Margin.medium}>
+                    <Box marginBottom={Margin.large}>
                         <Alertstripe type="advarsel">
                             Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler. Håndter eventuelle
                             nye dokumenter, eller sett saken på vent mens du innhenter mer dokumentasjon.
@@ -64,7 +64,7 @@ const DokumentoversiktMessages = ({
                 otherRequirementsAreMet={kanLøseAksjonspunkt}
             />
             {kanNavigereVidere && (
-                <Box marginBottom={Margin.medium}>
+                <Box marginBottom={Margin.large}>
                     <Alertstripe type="info">
                         Dokumentasjon av sykdom er ferdig vurdert og du kan gå videre i vurderingen.
                         <Knapp
