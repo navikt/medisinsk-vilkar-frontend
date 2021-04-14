@@ -23,7 +23,7 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({ vurdering }: Vurderingsopp
                 {erInnleggelse && <DekketAvInnleggelsesperiodeMelding />}
                 <Box marginTop={Margin.medium}>
                     <LabelledContent
-                        label="Hvilke dokumenter er brukt i vurderingen av behov for to omsorgspersoner?"
+                        label="Hvilke dokumenter er brukt i vurderingen av behov for to omsorgspersoner samtidig?"
                         content={
                             <BasicList
                                 elements={dokumenter.map((dokument) => (
@@ -35,13 +35,13 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({ vurdering }: Vurderingsopp
                 </Box>
                 <Box marginTop={Margin.xLarge}>
                     <LabelledContent
-                        label="Gjør en vurdering av om det er behov for to omsorgspersoner etter § 9-10, andre ledd."
+                        label="Gjør en vurdering av om det er behov for to omsorgspersoner samtidig etter § 9-10, andre ledd."
                         content={<span>{tekst}</span>}
                     />
                 </Box>
                 <Box marginTop={Margin.xLarge}>
                     <LabelledContent
-                        label="Er det behov for to omsorgspersoner?"
+                        label="Er det behov for to omsorgspersoner samtidig?"
                         content={<span>{resultat === Vurderingsresultat.OPPFYLT ? 'Ja' : 'Nei'}</span>}
                     />
                 </Box>
