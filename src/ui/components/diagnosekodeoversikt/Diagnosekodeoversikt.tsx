@@ -84,6 +84,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                             id="leggTilDiagnosekodeKnapp"
                             label="Ny diagnosekode"
                             onClick={() => setModalIsOpen(true)}
+                            ariaLabel="Legg til diagnosekode"
                         />
                     )}
                 />

@@ -99,6 +99,7 @@ const Vurderingsnavigasjon = ({
                                     setActiveIndex(0);
                                     onNyVurderingClick();
                                 }}
+                                ariaLabel="Opprett vurdering"
                             />
                         )}
                     />
