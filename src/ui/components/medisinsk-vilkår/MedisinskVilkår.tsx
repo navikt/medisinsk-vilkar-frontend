@@ -16,6 +16,8 @@ import PageContainer from '../page-container/PageContainer';
 import WarningIcon from '../icons/WarningIcon';
 import medisinskVilkårReducer from './reducer';
 import ActionType from './actionTypes';
+import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
+import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
 
 const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
@@ -98,6 +100,13 @@ const MedisinskVilkår = () => {
             <Infostripe />
             <div className={styles.medisinskVilkår}>
                 <h1 style={{ fontSize: 22 }}>Sykdom</h1>
+                <WriteAccessBoundContent
+                    contentRenderer={() => <AksjonspunktFerdigStripe />}
+                    otherRequirementsAreMet={
+                        sykdomsstegStatus?.kanLøseAksjonspunkt &&
+                        sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling
+                    }
+                />
                 <TabsPure
                     kompakt
                     tabs={steps.map((step) => ({

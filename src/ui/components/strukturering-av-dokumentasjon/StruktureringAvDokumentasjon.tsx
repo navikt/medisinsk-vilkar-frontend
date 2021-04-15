@@ -4,11 +4,11 @@ import LinkRel from '../../../constants/LinkRel';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import { Dokumentoversikt } from '../../../types/Dokumentoversikt';
 import { DokumentoversiktResponse } from '../../../types/DokumentoversiktResponse';
-import { StepId, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
+import { StepId } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import { get } from '../../../util/httpUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
-import { finnNesteSteg, nesteStegErVurdering } from '../../../util/statusUtils';
+import { nesteStegErVurdering } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Box, { Margin } from '../box/Box';
 import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
@@ -155,7 +155,9 @@ const StruktureringAvDokumentasjon = ({
 
                     <Box marginTop={Margin.xxLarge}>
                         <DokumentasjonFooter
-                            firstSectionRenderer={() => <Innleggelsesperiodeoversikt />}
+                            firstSectionRenderer={() => (
+                                <Innleggelsesperiodeoversikt onInnleggelsesperioderUpdated={sjekkStatus} />
+                            )}
                             secondSectionRenderer={() => <Diagnosekodeoversikt onDiagnosekoderUpdated={sjekkStatus} />}
                             thirdSectionRenderer={() => (
                                 <SignertSeksjon harGyldigSignatur={dokumentoversikt.harGyldigSignatur()} />

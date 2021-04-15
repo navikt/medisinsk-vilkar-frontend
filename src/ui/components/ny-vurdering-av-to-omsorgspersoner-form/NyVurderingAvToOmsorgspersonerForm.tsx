@@ -120,8 +120,8 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                             label={
                                 <>
                                     <b>
-                                        Gjør en vurdering av om det er behov for to omsorgspersoner etter § 9-10, andre
-                                        ledd.
+                                        Gjør en vurdering av om det er behov for to omsorgspersoner samtidig etter §
+                                        9-10, andre ledd.
                                     </b>
                                     <p className={styles.begrunnelsesfelt__labeltekst}>
                                         Du skal ta utgangspunkt i{' '}
@@ -152,7 +152,7 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                     </Box>
                     <Box marginTop={Margin.xLarge}>
                         <YesOrNoQuestion
-                            question="Er det behov for to omsorgspersoner?"
+                            question="Er det behov for to omsorgspersoner samtidig?"
                             name={FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER}
                             validators={{ required }}
                         />

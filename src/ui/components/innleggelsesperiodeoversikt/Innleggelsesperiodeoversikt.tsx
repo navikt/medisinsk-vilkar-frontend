@@ -24,8 +24,14 @@ export enum FieldName {
     INNLEGGELSESPERIODER = 'innleggelsesperioder',
 }
 
+interface InnleggelsesperiodeoversiktProps {
+    onInnleggelsesperioderUpdated: () => void;
+}
+
 Modal.setAppElement('#app');
-const Innleggelsesperiodeoversikt = (): JSX.Element => {
+const Innleggelsesperiodeoversikt = ({
+    onInnleggelsesperioderUpdated,
+}: InnleggelsesperiodeoversiktProps): JSX.Element => {
     const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
 
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
@@ -63,12 +69,7 @@ const Innleggelsesperiodeoversikt = (): JSX.Element => {
             httpErrorHandler,
             httpCanceler.token
         )
-            .then(hentInnleggelsesperioder)
-            .then((response: InnleggelsesperiodeResponse) => {
-                setInnleggelsesperioderResponse(response);
-                setIsLoading(false);
-                setModalIsOpen(false);
-            })
+            .then(onInnleggelsesperioderUpdated)
             .catch((error) => {
                 console.error(error);
                 setLagreInnleggelsesperioderFeilet(true);
