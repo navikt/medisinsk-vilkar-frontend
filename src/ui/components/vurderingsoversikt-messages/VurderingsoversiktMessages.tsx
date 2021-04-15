@@ -23,11 +23,13 @@ const VurderingsoversiktMessages = ({
 
     if (!harGyldigSignatur) {
         return (
-            <ManglerGyldigSignaturMelding>
-                Du kan ikke vurdere behov for
-                {` ${vurderingsnavn} `}
-                før søker har sendt inn legeerklæring fra sykehus/spesialisthelsetjenesten.
-            </ManglerGyldigSignaturMelding>
+            <Box marginBottom={Margin.large}>
+                <ManglerGyldigSignaturMelding>
+                    Du kan ikke vurdere behov for
+                    {` ${vurderingsnavn} `}
+                    før søker har sendt inn legeerklæring fra sykehus/spesialisthelsetjenesten.
+                </ManglerGyldigSignaturMelding>
+            </Box>
         );
     }
 
@@ -41,11 +43,13 @@ const VurderingsoversiktMessages = ({
 
     if (vurderingsoversikt.harPerioderSomSkalVurderes() === true) {
         return (
-            <Alertstripe type="advarsel">
-                {`Vurder behov for ${vurderingsnavn} for ${getStringMedPerioder(
-                    vurderingsoversikt.resterendeVurderingsperioder
-                )}.`}
-            </Alertstripe>
+            <Box marginBottom={Margin.large}>
+                <Alertstripe type="advarsel">
+                    {`Vurder behov for ${vurderingsnavn} for ${getStringMedPerioder(
+                        vurderingsoversikt.resterendeVurderingsperioder
+                    )}.`}
+                </Alertstripe>
+            </Box>
         );
         /*
             Please note:

@@ -41,10 +41,10 @@ const UstrukturertDokumentElement = ({
                 <WarningIcon />
             </ContentWithTooltip>
             <div className={styles.ustrukturertDokumentElement__texts}>
-                <span className={styles.ustrukturertDokumentElement__texts__type} id="ikkeKlassifisertText">
+                <p className={styles.ustrukturertDokumentElement__texts__type} id="ikkeKlassifisertText">
                     <span className={styles.visuallyHidden}>Type</span>
                     Ikke klassifisert
-                </span>
+                </p>
                 <span className={styles.ustrukturertDokumentElement__texts__date}>
                     <span className={styles.visuallyHidden}>Datert</span>
                     <ContentWithTooltip inline tooltipText="Dato dokumentet ble mottatt">

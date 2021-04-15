@@ -32,14 +32,14 @@ const Dokumentnavigasjon = ({ dokumenter, onDokumentValgt, dokumenterSomMåGjenn
     }
 
     return (
-        <>
-            <Undertittel>Alle dokumenter</Undertittel>
-            <div className={styles.dokumentnavigasjonContainer}>
-                <div className={styles.dokumentnavigasjonContainer__columnHeadings}>
-                    <Element className={styles['dokumentnavigasjonContainer__columnHeading--first']}>Status</Element>
-                    <Element className={styles['dokumentnavigasjonContainer__columnHeading--second']}>Type</Element>
-                    <Element className={styles['dokumentnavigasjonContainer__columnHeading--third']}>Datert</Element>
-                    <Element className={styles['dokumentnavigasjonContainer__columnHeading--fourth']}>Part</Element>
+        <div className={styles.dokumentnavigasjon}>
+            <Undertittel className={styles.dokumentnavigasjon__heading}>Alle dokumenter</Undertittel>
+            <div className={styles.dokumentnavigasjon__container}>
+                <div className={styles.dokumentnavigasjon__columnHeadings}>
+                    <Element className={styles['dokumentnavigasjon__columnHeading--first']}>Status</Element>
+                    <Element className={styles['dokumentnavigasjon__columnHeading--second']}>Type</Element>
+                    <Element className={styles['dokumentnavigasjon__columnHeading--third']}>Datert</Element>
+                    <Element className={styles['dokumentnavigasjon__columnHeading--fourth']}>Part</Element>
                 </div>
                 <InteractiveList
                     elements={allElements.map((element, currentIndex) => ({
@@ -53,7 +53,7 @@ const Dokumentnavigasjon = ({ dokumenter, onDokumentValgt, dokumenterSomMåGjenn
                     }))}
                 />
             </div>
-        </>
+        </div>
     );
 };
 

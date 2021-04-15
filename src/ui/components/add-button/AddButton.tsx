@@ -8,10 +8,17 @@ interface AddButtonProps {
     id?: string;
     className?: string;
     noIcon?: boolean;
+    ariaLabel?: string;
 }
 
-const AddButton = ({ className, label, onClick, id, noIcon }: AddButtonProps) => (
-    <button className={`${styles.addButton} ${className || ''}`} type="button" onClick={onClick} id={id || ''}>
+const AddButton = ({ className, label, onClick, id, noIcon, ariaLabel }: AddButtonProps) => (
+    <button
+        className={`${styles.addButton} ${className || ''}`}
+        type="button"
+        onClick={onClick}
+        id={id || ''}
+        aria-label={ariaLabel}
+    >
         {!noIcon && <PlusIcon />}
         <span className={styles.addButton__text}>{label}</span>
     </button>

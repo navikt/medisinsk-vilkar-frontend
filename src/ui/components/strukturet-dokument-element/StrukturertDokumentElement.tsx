@@ -55,10 +55,10 @@ const StrukturertDokumentElement = ({
                 <GreenCheckIconFilled />
             </ContentWithTooltip>
             <div className={styles.strukturertDokumentElement__texts}>
-                <span className={styles.strukturertDokumentElement__texts__type}>
+                <p className={styles.strukturertDokumentElement__texts__type}>
                     <span className={styles.visuallyHidden}>Type</span>
                     {getDokumenttype()}
-                </span>
+                </p>
                 <span className={styles.strukturertDokumentElement__texts__date}>
                     <span className={styles.visuallyHidden}>Datert</span>
                     {prettifyDate(datert)}
