@@ -102,19 +102,22 @@ const Innleggelsesperiodeoversikt = ({
 
     return (
         <div className={styles.innleggelsesperiodeoversikt}>
-            <TitleWithUnderline titleClass={styles.innleggelsesperiodeoversikt__title}>
+            <TitleWithUnderline
+                contentAfterTitleRenderer={() => (
+                    <WriteAccessBoundContent
+                        otherRequirementsAreMet={innleggelsesperioder.length > 0}
+                        contentRenderer={() => (
+                            <LinkButton
+                                className={styles.innleggelsesperiodeoversikt__redigerListeKnapp}
+                                onClick={() => setModalIsOpen(true)}
+                            >
+                                Rediger liste
+                            </LinkButton>
+                        )}
+                    />
+                )}
+            >
                 Innleggelsesperioder
-                <WriteAccessBoundContent
-                    otherRequirementsAreMet={innleggelsesperioder.length > 0}
-                    contentRenderer={() => (
-                        <LinkButton
-                            className={styles.innleggelsesperiodeoversikt__redigerListeKnapp}
-                            onClick={() => setModalIsOpen(true)}
-                        >
-                            Rediger liste
-                        </LinkButton>
-                    )}
-                />
             </TitleWithUnderline>
             {isLoading ? (
                 <Spinner />

@@ -1,14 +1,19 @@
 import React from 'react';
 import { Undertittel as TitleComponent } from 'nav-frontend-typografi';
+import styles from './titleWithUnderline.less';
 
 interface TitleWithUnderlineProps {
     children: React.ReactNode;
     titleClass?: string;
+    contentAfterTitleRenderer?: () => React.ReactNode;
 }
 
-const TitleWithUnderline = ({ children, titleClass }: TitleWithUnderlineProps) => (
+const TitleWithUnderline = ({ children, titleClass, contentAfterTitleRenderer }: TitleWithUnderlineProps) => (
     <>
-        <TitleComponent className={titleClass}>{children}</TitleComponent>
+        <div className={styles.titleWithUnderline}>
+            <TitleComponent className={titleClass}>{children}</TitleComponent>
+            {contentAfterTitleRenderer && contentAfterTitleRenderer()}
+        </div>
         <hr style={{ color: '#B7B1A9' }} />
     </>
 );

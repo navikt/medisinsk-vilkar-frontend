@@ -76,19 +76,22 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
 
     return (
         <div>
-            <div className={styles.diagnosekodeoversikt__titleContainer}>
-                <TitleWithUnderline>Diagnosekoder</TitleWithUnderline>
-                <WriteAccessBoundContent
-                    contentRenderer={() => (
-                        <AddButton
-                            id="leggTilDiagnosekodeKnapp"
-                            label="Ny diagnosekode"
-                            onClick={() => setModalIsOpen(true)}
-                            ariaLabel="Legg til diagnosekode"
-                        />
-                    )}
-                />
-            </div>
+            <TitleWithUnderline
+                contentAfterTitleRenderer={() => (
+                    <WriteAccessBoundContent
+                        contentRenderer={() => (
+                            <AddButton
+                                id="leggTilDiagnosekodeKnapp"
+                                label="Ny diagnosekode"
+                                onClick={() => setModalIsOpen(true)}
+                                ariaLabel="Legg til diagnosekode"
+                            />
+                        )}
+                    />
+                )}
+            >
+                Diagnosekoder
+            </TitleWithUnderline>
             <Box marginTop={Margin.large}>
                 {diagnosekoder.length === 0 && (
                     <IconWithText iconRenderer={() => <WarningIcon />} text="Ingen diagnosekode registrert." />
