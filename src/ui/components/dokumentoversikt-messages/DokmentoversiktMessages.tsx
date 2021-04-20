@@ -42,9 +42,17 @@ const DokumentoversiktMessages = ({
                 </Box>
             )}
             {visFristForDokumentasjonUtløptMelding && (
-                <Box marginBottom={Margin.large}>
-                    <FristForDokumentasjonUtløptPanel onProceedClick={() => console.log('1')} />
-                </Box>
+                <>
+                    <Box marginBottom={Margin.large}>
+                        <Alertstripe type="advarsel">
+                            Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler. Sett saken på vent
+                            mens du innhenter mer dokumentasjon.
+                        </Alertstripe>
+                    </Box>
+                    <Box marginBottom={Margin.large}>
+                        <FristForDokumentasjonUtløptPanel onProceedClick={() => console.log('1')} />
+                    </Box>
+                </>
             )}
             {visHåndterNyeDokumenterMelding && (
                 <>
