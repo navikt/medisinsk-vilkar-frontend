@@ -76,7 +76,9 @@ const StruktureringAvDokumentasjon = ({
     };
 
     const åpneDokumentSomMåBehandles = ({ ustrukturerteDokumenter }: Dokumentoversikt) => {
-        const førsteDokumentSomMåBehandles = ustrukturerteDokumenter?.length > 0 ? ustrukturerteDokumenter[0] : null;
+        const sisteDokumentIndex = ustrukturerteDokumenter?.length > 0 ? ustrukturerteDokumenter.length - 1 : null;
+        const førsteDokumentSomMåBehandles =
+            sisteDokumentIndex !== null ? ustrukturerteDokumenter[sisteDokumentIndex] : null;
         if (førsteDokumentSomMåBehandles) {
             velgDokument(førsteDokumentSomMåBehandles);
         }
