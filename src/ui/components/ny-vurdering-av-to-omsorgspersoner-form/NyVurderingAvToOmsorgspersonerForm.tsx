@@ -105,7 +105,12 @@ const NyVurderingAvToOmsorgspersonerForm = ({
                                 name={FieldName.DOKUMENTER}
                                 checkboxes={dokumenter.map((dokument) => ({
                                     value: dokument.id,
-                                    label: <DokumentLink dokument={dokument} />,
+                                    label: (
+                                        <DokumentLink
+                                            dokument={dokument}
+                                            etikett={dokument.annenPartErKilde ? 'Dokument fra annen part' : ''}
+                                        />
+                                    ),
                                 }))}
                                 validators={{
                                     harBruktDokumentasjon,
