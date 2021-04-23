@@ -104,17 +104,29 @@ const Innleggelsesperiodeoversikt = ({
         <div className={styles.innleggelsesperiodeoversikt}>
             <TitleWithUnderline
                 contentAfterTitleRenderer={() => (
-                    <WriteAccessBoundContent
-                        otherRequirementsAreMet={innleggelsesperioder.length > 0}
-                        contentRenderer={() => (
-                            <LinkButton
-                                className={styles.innleggelsesperiodeoversikt__redigerListeKnapp}
-                                onClick={() => setModalIsOpen(true)}
-                            >
-                                Rediger liste
-                            </LinkButton>
-                        )}
-                    />
+                    <>
+                        <WriteAccessBoundContent
+                            otherRequirementsAreMet={innleggelsesperioder.length > 0}
+                            contentRenderer={() => (
+                                <LinkButton
+                                    className={styles.innleggelsesperiodeoversikt__redigerListeKnapp}
+                                    onClick={() => setModalIsOpen(true)}
+                                >
+                                    Rediger liste
+                                </LinkButton>
+                            )}
+                        />
+                        <WriteAccessBoundContent
+                            otherRequirementsAreMet={innleggelsesperioder.length === 0}
+                            contentRenderer={() => (
+                                <AddButton
+                                    label="Legg til periode"
+                                    onClick={() => setModalIsOpen(true)}
+                                    id="leggTilPeriodeKnapp"
+                                />
+                            )}
+                        />
+                    </>
                 )}
             >
                 Innleggelsesperioder
@@ -133,18 +145,6 @@ const Innleggelsesperiodeoversikt = ({
                             </>
                         )}
                     </Box>
-                    <WriteAccessBoundContent
-                        otherRequirementsAreMet={innleggelsesperioder.length === 0}
-                        contentRenderer={() => (
-                            <Box marginTop={Margin.large}>
-                                <AddButton
-                                    label="Legg til periode"
-                                    onClick={() => setModalIsOpen(true)}
-                                    id="leggTilPeriodeKnapp"
-                                />
-                            </Box>
-                        )}
-                    />
                 </>
             )}
             {modalIsOpen && (
