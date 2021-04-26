@@ -52,7 +52,7 @@ const MedisinskVilkår = () => {
 
     const { isLoading, activeStep, markedStep, sykdomsstegStatus } = state;
 
-    const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler, visFortsettknapp } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const hentSykdomsstegStatus = async () => {
@@ -103,8 +103,9 @@ const MedisinskVilkår = () => {
                 <WriteAccessBoundContent
                     contentRenderer={() => <AksjonspunktFerdigStripe />}
                     otherRequirementsAreMet={
-                        sykdomsstegStatus?.kanLøseAksjonspunkt &&
-                        sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling
+                        (sykdomsstegStatus?.kanLøseAksjonspunkt &&
+                            sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling) ||
+                        visFortsettknapp === true
                     }
                 />
                 <TabsPure

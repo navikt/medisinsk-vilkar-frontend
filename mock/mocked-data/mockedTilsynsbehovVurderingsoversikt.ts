@@ -43,6 +43,7 @@ const tilsynsbehovVurderingsoversiktMock: Vurderingsoversikt = new Vurderingsove
     ],
     resterendeVurderingsperioder: [new Period('2022-02-16', '2022-03-01')],
     perioderSomKanVurderes: [new Period('2022-01-15', '2022-03-01')],
+    resterendeValgfrieVurderingsperioder: [],
     søknadsperioderTilBehandling: [],
     links: mockedVurderingsoversiktLinks,
 });

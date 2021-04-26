@@ -157,7 +157,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
     return (
         <PageContainer hasError={vurderingsoversiktFeilet} isLoading={isLoading} key={StepId.ToOmsorgspersoner}>
             {vurderingsoversikt?.harIngenPerioderÅVise() && (
-                <Box marginTop={Margin.large}>
+                <Box marginTop={Margin.large} marginBottom={Margin.large}>
                     <AlertStripeInfo>
                         To omsorgspersoner skal kun vurderes dersom det er flere parter som har søkt i samme periode,
                         eller det er opplyst i søknaden om at det kommer en søker til.
@@ -182,6 +182,9 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                                         onNyVurderingClick={visNyVurderingForm}
                                         visRadForNyVurdering={visRadForNyVurdering}
                                         visOpprettVurderingKnapp={skalViseOpprettVurderingKnapp}
+                                        resterendeValgfrieVurderingsperioder={
+                                            vurderingsoversikt?.resterendeValgfrieVurderingsperioder
+                                        }
                                     />
                                 );
                             }

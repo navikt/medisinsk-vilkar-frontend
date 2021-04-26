@@ -18,6 +18,7 @@ interface ContainerContract {
     readOnly: boolean;
     onFinished: () => void;
     httpErrorHandler: HttpErrorHandler;
+    visFortsettknapp: boolean;
 }
 
 export default ContainerContract;
