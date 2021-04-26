@@ -103,9 +103,8 @@ const MedisinskVilkår = () => {
                 <WriteAccessBoundContent
                     contentRenderer={() => <AksjonspunktFerdigStripe />}
                     otherRequirementsAreMet={
-                        (sykdomsstegStatus?.kanLøseAksjonspunkt &&
-                            sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling) ||
-                        visFortsettknapp === true
+                        sykdomsstegStatus?.kanLøseAksjonspunkt &&
+                        (sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling || visFortsettknapp === true)
                     }
                 />
                 <TabsPure

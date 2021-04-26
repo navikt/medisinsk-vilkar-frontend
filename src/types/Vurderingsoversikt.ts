@@ -38,11 +38,19 @@ export class Vurderingsoversikt {
     }
 
     harPerioderÅVise() {
-        return this.harPerioderSomSkalVurderes() === true || this.harVurdertePerioder() === true;
+        return (
+            this.harPerioderSomSkalVurderes() === true ||
+            this.harVurdertePerioder() === true ||
+            this.harValgfriePerioderSomKanVurderes() === true
+        );
     }
 
     harIngenPerioderÅVise() {
-        return this.harPerioderSomSkalVurderes() === false && this.harVurdertePerioder() === false;
+        return (
+            this.harPerioderSomSkalVurderes() === false &&
+            this.harVurdertePerioder() === false &&
+            this.harValgfriePerioderSomKanVurderes() === false
+        );
     }
 
     harPerioderSomSkalVurderes() {

@@ -146,10 +146,15 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
         return null;
     };
 
-    const defaultPerioder =
-        resterendeVurderingsperioderDefaultValue?.length > 0
-            ? resterendeVurderingsperioderDefaultValue
-            : [new Period('', '')];
+    const defaultPerioder = () => {
+        if (resterendeVurderingsperioderDefaultValue?.length > 0) {
+            return resterendeVurderingsperioderDefaultValue;
+        }
+        if (vurderingsoversikt?.resterendeValgfrieVurderingsperioder.length > 0) {
+            return vurderingsoversikt.resterendeValgfrieVurderingsperioder;
+        }
+        return [new Period('', '')];
+    };
 
     const skalViseOpprettVurderingKnapp =
         !vurderingsoversikt?.harPerioderSomSkalVurderes() && !visRadForNyVurdering && harGyldigSignatur;
@@ -213,7 +218,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                                                     defaultValues={{
                                                         [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]: '',
                                                         [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: undefined,
-                                                        [FieldName.PERIODER]: defaultPerioder,
+                                                        [FieldName.PERIODER]: defaultPerioder(),
                                                         [FieldName.DOKUMENTER]: [],
                                                     }}
                                                     resterendeVurderingsperioder={
