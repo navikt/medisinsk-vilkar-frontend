@@ -126,7 +126,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
         dispatch({ type: ActionType.PENDING });
         hentSykdomsstegStatus().then((status) => {
             if (status.kanLøseAksjonspunkt) {
-                onFinished();
+                onFinished(); // TODO: Skal vi prøve å gå videre her eller skal vi sjekke om vi har valgrfrie perioder som kan vurderes og gjøre oppdaterVurderingsoversikt() istedet?
                 return;
             }
 
