@@ -43,6 +43,7 @@ const mockedToOmsorgspersonerVurderingsoversikt: Vurderingsoversikt = new Vurder
     ],
     resterendeVurderingsperioder: [new Period('2022-02-16', '2022-03-01')],
     perioderSomKanVurderes: [new Period('2022-01-15', '2022-03-01')],
+    resterendeValgfrieVurderingsperioder: [new Period('2022-01-15', '2022-03-01')],
     søknadsperioderTilBehandling: [],
     links: mockedVurderingsoversiktLinks,
     pleietrengendesFødselsdato: '2021-04-27',

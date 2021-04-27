@@ -52,7 +52,7 @@ const MedisinskVilkår = () => {
 
     const { isLoading, activeStep, markedStep, sykdomsstegStatus } = state;
 
-    const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler, visFortsettknapp } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const hentSykdomsstegStatus = async () => {
@@ -92,7 +92,11 @@ const MedisinskVilkår = () => {
     };
 
     const navigerTilSteg = (nesteSteg: Step) => {
-        dispatch({ type: ActionType.NAVIGATE_TO_STEP, step: nesteSteg });
+        if (sykdomsstegStatus.kanLøseAksjonspunkt) {
+            dispatch({ type: ActionType.ACTIVATE_STEP_AND_CLEAR_MARKING, step: nesteSteg });
+        } else {
+            dispatch({ type: ActionType.NAVIGATE_TO_STEP, step: nesteSteg });
+        }
     };
 
     return (
@@ -104,7 +108,7 @@ const MedisinskVilkår = () => {
                     contentRenderer={() => <AksjonspunktFerdigStripe />}
                     otherRequirementsAreMet={
                         sykdomsstegStatus?.kanLøseAksjonspunkt &&
-                        sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling
+                        (sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling || visFortsettknapp === true)
                     }
                 />
                 <TabsPure

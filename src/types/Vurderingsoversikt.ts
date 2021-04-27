@@ -7,6 +7,8 @@ export class Vurderingsoversikt {
 
     resterendeVurderingsperioder: Period[];
 
+    resterendeValgfrieVurderingsperioder: Period[];
+
     søknadsperioderTilBehandling: Period[];
 
     perioderSomKanVurderes: Period[];
@@ -21,6 +23,9 @@ export class Vurderingsoversikt {
         try {
             this.perioderSomKanVurderes = data.perioderSomKanVurderes.map(({ fom, tom }) => new Period(fom, tom));
             this.resterendeVurderingsperioder = data.resterendeVurderingsperioder.map(
+                ({ fom, tom }) => new Period(fom, tom)
+            );
+            this.resterendeValgfrieVurderingsperioder = data.resterendeValgfrieVurderingsperioder?.map(
                 ({ fom, tom }) => new Period(fom, tom)
             );
             this.søknadsperioderTilBehandling = data.søknadsperioderTilBehandling.map(
@@ -39,15 +44,27 @@ export class Vurderingsoversikt {
     }
 
     harPerioderÅVise() {
-        return this.harPerioderSomSkalVurderes() === true || this.harVurdertePerioder() === true;
+        return (
+            this.harPerioderSomSkalVurderes() === true ||
+            this.harVurdertePerioder() === true ||
+            this.harValgfriePerioderSomKanVurderes() === true
+        );
     }
 
     harIngenPerioderÅVise() {
-        return this.harPerioderSomSkalVurderes() === false && this.harVurdertePerioder() === false;
+        return (
+            this.harPerioderSomSkalVurderes() === false &&
+            this.harVurdertePerioder() === false &&
+            this.harValgfriePerioderSomKanVurderes() === false
+        );
     }
 
     harPerioderSomSkalVurderes() {
         return this.resterendeVurderingsperioder && this.resterendeVurderingsperioder.length > 0;
+    }
+
+    harValgfriePerioderSomKanVurderes() {
+        return this.resterendeValgfrieVurderingsperioder && this.resterendeValgfrieVurderingsperioder.length > 0;
     }
 
     harVurdertePerioder() {

@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useMemo } from 'react';
 import LinkRel from '../../../constants/LinkRel';
 import { Period } from '../../../types/Period';
-import Step, { StepId, tilsynOgPleieSteg } from '../../../types/Step';
+import Step, { StepId, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
@@ -35,7 +35,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
     hentSykdomsstegStatus,
     sykdomsstegStatus,
 }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
-    const { endpoints, httpErrorHandler, onFinished } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
@@ -127,7 +127,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
         dispatch({ type: ActionType.PENDING });
         hentSykdomsstegStatus().then((status) => {
             if (status.kanLøseAksjonspunkt) {
-                onFinished();
+                navigerTilNesteSteg(toOmsorgspersonerSteg);
                 return;
             }
 
