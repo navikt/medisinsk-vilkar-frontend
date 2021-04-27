@@ -13,6 +13,10 @@ export class Vurderingsoversikt {
 
     links: Link[];
 
+    pleietrengendesFødselsdato: string;
+
+    harPerioderDerPleietrengendeErOver18år: boolean;
+
     constructor(data: Partial<Vurderingsoversikt>) {
         try {
             this.perioderSomKanVurderes = data.perioderSomKanVurderes.map(({ fom, tom }) => new Period(fom, tom));
@@ -27,6 +31,8 @@ export class Vurderingsoversikt {
                 periode: new Period(vurderingselement.periode.fom, vurderingselement.periode.tom),
             }));
             this.links = data.links;
+            this.pleietrengendesFødselsdato = data.pleietrengendesFødselsdato;
+            this.harPerioderDerPleietrengendeErOver18år = data.harPerioderDerPleietrengendeErOver18år;
         } catch (error) {
             throw new Error(`Processing Vurderingsoversikt\n${error}`);
         }

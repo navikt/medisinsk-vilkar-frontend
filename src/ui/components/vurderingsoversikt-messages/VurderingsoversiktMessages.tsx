@@ -43,25 +43,35 @@ const VurderingsoversiktMessages = ({
 
     if (vurderingsoversikt.harPerioderSomSkalVurderes() === true) {
         return (
-            <Box marginBottom={Margin.large}>
-                <Alertstripe type="advarsel">
-                    {`Vurder behov for ${vurderingsnavn} for ${getStringMedPerioder(
-                        vurderingsoversikt.resterendeVurderingsperioder
-                    )}.`}
-                </Alertstripe>
-            </Box>
+            <>
+                <Box marginBottom={Margin.large}>
+                    <Alertstripe type="advarsel">
+                        {`Vurder behov for ${vurderingsnavn} for ${getStringMedPerioder(
+                            vurderingsoversikt.resterendeVurderingsperioder
+                        )}.`}
+                    </Alertstripe>
+                </Box>
+                {vurderingsoversikt.harPerioderDerPleietrengendeErOver18år && (
+                    <Box marginBottom={Margin.large}>
+                        <Alertstripe type="advarsel">
+                            Barnet fyller 18 år i søknadsperioden. Følgende perioder må vurderes med utgansgpunkt i
+                            §10-9, tredje ledd. Du må splitte opp perioden..
+                        </Alertstripe>
+                    </Box>
+                )}
+            </>
         );
         /*
-            Please note:
-            So long as this doesnt actually do anything upon the click-event, it should be commented out.
-            overlappendeVurderingsperioder && overlappendeVurderingsperioder.length > 0 && (
+        Please note:
+        So long as this doesnt actually do anything upon the click-event, it should be commented out.
+        overlappendeVurderingsperioder && overlappendeVurderingsperioder.length > 0 && (
             <Box marginTop={Margin.medium}>
-                <OverlappendeSøknadsperiodePanel
-                    onProgressButtonClick={() => console.log('does something')}
-                    overlappendeVurderingsperioder={overlappendeVurderingsperioder}
-                />
+            <OverlappendeSøknadsperiodePanel
+            onProgressButtonClick={() => console.log('does something')}
+            overlappendeVurderingsperioder={overlappendeVurderingsperioder}
+            />
             </Box>)
-        */
+            */
     }
     return null;
 };
