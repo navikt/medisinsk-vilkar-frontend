@@ -91,9 +91,9 @@ const MedisinskVilkår = () => {
         dispatch({ type: ActionType.NAVIGATE_TO_STEP, step: nesteSteg });
     };
 
-    const navigerTilSteg = (nesteSteg: Step, ikkeMarkerSteg?: boolean) => {
-        if (ikkeMarkerSteg) {
-            dispatch({ type: ActionType.ACTIVATE_STEP_CLEAR_MARKING, step: nesteSteg });
+    const navigerTilSteg = (nesteSteg: Step) => {
+        if (sykdomsstegStatus.kanLøseAksjonspunkt) {
+            dispatch({ type: ActionType.ACTIVATE_STEP_AND_CLEAR_MARKING, step: nesteSteg });
         } else {
             dispatch({ type: ActionType.NAVIGATE_TO_STEP, step: nesteSteg });
         }

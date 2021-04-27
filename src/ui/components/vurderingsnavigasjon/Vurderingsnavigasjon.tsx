@@ -84,14 +84,9 @@ const Vurderingsnavigasjon = ({
         allElements.unshift(
             <Vurderingsperioder
                 indicatorContentRenderer={() => (
-                    <>
-                        <span className={styles.visuallyHidden}>Type</span>
-                        <div className={styles.indicator}>
-                            <ContentWithTooltip tooltipText="Perioden må vurderes">
-                                <WarningIcon />
-                            </ContentWithTooltip>
-                        </div>
-                    </>
+                    <ContentWithTooltip tooltipText="Perioden må vurderes">
+                        <WarningIcon />
+                    </ContentWithTooltip>
                 )}
                 visParterLabel={visParterLabel}
                 perioder={resterendeVurderingsperioder || []}
@@ -101,14 +96,9 @@ const Vurderingsnavigasjon = ({
         allElements.unshift(
             <Vurderingsperioder
                 indicatorContentRenderer={() => (
-                    <>
-                        <span className={styles.visuallyHidden}>Type</span>
-                        <div className={styles.indicator}>
-                            <ContentWithTooltip tooltipText="Perioder som kan vurderes">
-                                <InfoIcon />
-                            </ContentWithTooltip>
-                        </div>
-                    </>
+                    <ContentWithTooltip tooltipText="Perioder som kan vurderes">
+                        <InfoIcon />
+                    </ContentWithTooltip>
                 )}
                 visParterLabel={visParterLabel}
                 perioder={resterendeValgfrieVurderingsperioder || []}

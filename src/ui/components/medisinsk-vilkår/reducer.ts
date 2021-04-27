@@ -31,7 +31,7 @@ const medisinskVilkårReducer = (state: State, action: Action): State => {
                 activeStep: action.step,
             };
         }
-        case ActionType.ACTIVATE_STEP_CLEAR_MARKING: {
+        case ActionType.ACTIVATE_STEP_AND_CLEAR_MARKING: {
             return {
                 ...state,
                 activeStep: action.step,

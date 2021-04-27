@@ -13,7 +13,12 @@ interface VurderingsperioderProps {
 
 const Vurderingsperioder = ({ perioder, visParterLabel, indicatorContentRenderer }: VurderingsperioderProps) => (
     <div className={styles.vurderingsperioder} id="vurderingsperioder">
-        {indicatorContentRenderer && indicatorContentRenderer()}
+        {indicatorContentRenderer && (
+            <>
+                <span className={styles.visuallyHidden}>Type</span>
+                <div className={styles.vurderingsperioder__indicator}>{indicatorContentRenderer()}</div>
+            </>
+        )}
 
         <div className={styles.vurderingsperioder__texts}>
             <div>
