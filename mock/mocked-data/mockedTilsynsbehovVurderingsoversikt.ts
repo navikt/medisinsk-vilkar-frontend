@@ -45,6 +45,8 @@ const tilsynsbehovVurderingsoversiktMock: Vurderingsoversikt = new Vurderingsove
     perioderSomKanVurderes: [new Period('2022-01-15', '2022-03-01')],
     søknadsperioderTilBehandling: [],
     links: mockedVurderingsoversiktLinks,
+    pleietrengendesFødselsdato: '2021-04-27',
+    harPerioderDerPleietrengendeErOver18år: true,
 });
 
 export default tilsynsbehovVurderingsoversiktMock;
