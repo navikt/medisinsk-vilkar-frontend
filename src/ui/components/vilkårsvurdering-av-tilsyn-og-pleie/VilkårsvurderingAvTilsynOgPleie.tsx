@@ -25,7 +25,7 @@ import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
-    navigerTilNesteSteg: (steg: Step) => void;
+    navigerTilNesteSteg: (steg: Step, ikkeMarkerSteg?: boolean) => void;
     hentSykdomsstegStatus: () => Promise<SykdomsstegStatusResponse>;
     sykdomsstegStatus: SykdomsstegStatusResponse;
 }
@@ -127,7 +127,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
         dispatch({ type: ActionType.PENDING });
         hentSykdomsstegStatus().then((status) => {
             if (status.kanLøseAksjonspunkt) {
-                navigerTilNesteSteg(toOmsorgspersonerSteg);
+                navigerTilNesteSteg(toOmsorgspersonerSteg, true);
                 return;
             }
 
