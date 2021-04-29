@@ -130,7 +130,9 @@ const Vurderingsnavigasjon = ({
                     />
                 )}
             </div>
-            {allElements.length === 0 && <p>Ingen vurderinger å vise</p>}
+            {allElements.length === 0 && (
+                <p className={styles.vurderingsnavigasjon__ingenVurderinger}>Ingen vurderinger å vise</p>
+            )}
             {allElements.length > 0 && (
                 <div className={styles.vurderingsvelgerContainer}>
                     <div className={styles.vurderingsvelgerContainer__columnHeadings}>

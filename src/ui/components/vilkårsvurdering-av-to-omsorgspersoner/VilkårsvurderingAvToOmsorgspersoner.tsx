@@ -36,7 +36,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
     hentSykdomsstegStatus,
     sykdomsstegStatus,
 }: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
-    const { endpoints, onFinished, httpErrorHandler } = React.useContext(ContainerContext);
+    const { endpoints, onFinished, httpErrorHandler, readOnly } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
@@ -146,11 +146,13 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
         return null;
     };
 
+    const skalViseValgfriePerioder = !readOnly && vurderingsoversikt?.resterendeValgfrieVurderingsperioder.length > 0;
+
     const defaultPerioder = () => {
         if (resterendeVurderingsperioderDefaultValue?.length > 0) {
             return resterendeVurderingsperioderDefaultValue;
         }
-        if (vurderingsoversikt?.resterendeValgfrieVurderingsperioder.length > 0) {
+        if (skalViseValgfriePerioder) {
             return vurderingsoversikt.resterendeValgfrieVurderingsperioder;
         }
         return [new Period('', '')];
@@ -188,7 +190,9 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                                         visRadForNyVurdering={visRadForNyVurdering}
                                         visOpprettVurderingKnapp={skalViseOpprettVurderingKnapp}
                                         resterendeValgfrieVurderingsperioder={
-                                            vurderingsoversikt?.resterendeValgfrieVurderingsperioder
+                                            skalViseValgfriePerioder
+                                                ? vurderingsoversikt?.resterendeValgfrieVurderingsperioder
+                                                : []
                                         }
                                     />
                                 );
