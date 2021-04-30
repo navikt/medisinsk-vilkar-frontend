@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { Period } from '../types/Period';
+import { prettifyDate } from './formats';
 
 const dateFormats = ['YYYY-MM-DD', 'DD.MM.YYYY'];
 
@@ -70,4 +71,10 @@ export function isValidDate(date: any) {
 
 export function isValidPeriod({ fom, tom }: Period) {
     return isValidDate(fom) && isValidDate(tom);
+}
+
+export function addYearsToDate(date: string, yearsToAdd: number) {
+    const dateAsDayjs = dateFromString(date);
+    const dateWithAddedYears = dateAsDayjs.add(yearsToAdd, 'years');
+    return prettifyDate(dateWithAddedYears);
 }

@@ -1,11 +1,12 @@
-import React from 'react';
 import Alertstripe from 'nav-frontend-alertstriper';
+import React from 'react';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import Box, { Margin } from '../box/Box';
-import { getStringMedPerioder } from '../../../util/periodUtils';
-import ManglerGyldigSignaturMelding from '../mangler-gyldig-signatur-melding/ManglerGyldigSignaturMelding';
 import Vurderingstype from '../../../types/Vurderingstype';
+import { addYearsToDate } from '../../../util/dateUtils';
+import { getStringMedPerioder } from '../../../util/periodUtils';
+import Box, { Margin } from '../box/Box';
 import IngenPerioderÅVurdereMelding from '../ingen-perioder-å-vurdere-melding/IngenPerioderÅVurdereMelding';
+import ManglerGyldigSignaturMelding from '../mangler-gyldig-signatur-melding/ManglerGyldigSignaturMelding';
 
 interface VurderingsoversiktMessagesProps {
     vurderingsoversikt: Vurderingsoversikt;
@@ -42,6 +43,10 @@ const VurderingsoversiktMessages = ({
     }
 
     if (vurderingsoversikt.harPerioderSomSkalVurderes() === true) {
+        const barnetsAttenårsdag = vurderingsoversikt.harPerioderDerPleietrengendeErOver18år
+            ? addYearsToDate(vurderingsoversikt.pleietrengendesFødselsdato, 18)
+            : null;
+
         return (
             <>
                 <Box marginBottom={Margin.large}>
@@ -54,8 +59,8 @@ const VurderingsoversiktMessages = ({
                 {vurderingsoversikt.harPerioderDerPleietrengendeErOver18år && (
                     <Box marginBottom={Margin.large}>
                         <Alertstripe type="advarsel">
-                            Barnet fyller 18 år i søknadsperioden. Følgende perioder må vurderes med utgansgpunkt i
-                            §10-9, tredje ledd. Du må splitte opp perioden..
+                            Barnet er 18 år {barnetsAttenårsdag}. Du må gjøre en egen vurdering etter § 9-10, tredje
+                            ledd fra datoen barnet fyller 18 år.
                         </Alertstripe>
                     </Box>
                 )}

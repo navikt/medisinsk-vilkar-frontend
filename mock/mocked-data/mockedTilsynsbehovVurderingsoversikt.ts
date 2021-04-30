@@ -46,7 +46,7 @@ const tilsynsbehovVurderingsoversiktMock: Vurderingsoversikt = new Vurderingsove
     resterendeValgfrieVurderingsperioder: [],
     søknadsperioderTilBehandling: [],
     links: mockedVurderingsoversiktLinks,
-    pleietrengendesFødselsdato: '2021-04-27',
+    pleietrengendesFødselsdato: '2004-02-28',
     harPerioderDerPleietrengendeErOver18år: true,
 });
 
