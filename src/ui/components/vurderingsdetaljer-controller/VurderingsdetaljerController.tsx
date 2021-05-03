@@ -1,24 +1,37 @@
 import React from 'react';
-import Vurderingselement from '../../../types/Vurderingselement';
-import ManuellVurdering from '../../../types/ManuellVurdering';
-import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
-import VurderingsdetaljerFetcher from '../vurderingsdetaljer-fetcher/VurderingsdetaljerFetcher';
-import { findHrefByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
 import InnleggelsesperiodeVurdering from '../../../types/InnleggelsesperiodeVurdering';
-import VurderingsoppsummeringForInnleggelsesperiode from '../vurderingsoppsummering-for-innleggelsesperiode/VurderingsoppsummeringForInnleggelsesperiode';
-import Vurderingstype from '../../../types/Vurderingstype';
+import ManuellVurdering from '../../../types/ManuellVurdering';
 import Vurdering from '../../../types/Vurdering';
+import Vurderingselement from '../../../types/Vurderingselement';
+import Vurderingstype from '../../../types/Vurderingstype';
+import { findHrefByRel } from '../../../util/linkUtils';
+import VurderingsdetaljerFetcher from '../vurderingsdetaljer-fetcher/VurderingsdetaljerFetcher';
+import VurderingsoppsummeringForInnleggelsesperiode from '../vurderingsoppsummering-for-innleggelsesperiode/VurderingsoppsummeringForInnleggelsesperiode';
+import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
 import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
 
 interface VurderingsdetaljerControllerProps {
     vurderingselement: Vurderingselement;
     vurderingstype: Vurderingstype;
+    redigerVurdering?: () => void;
+    vurderingsdetaljerRenderer?: (valgtVurdering: Vurdering) => JSX.Element;
 }
 
-const Vurderingsoppsummering = ({ vurdering }: { vurdering: Vurdering }) => {
+const Vurderingsoppsummering = ({
+    vurdering,
+    redigerVurdering,
+}: {
+    vurdering: Vurdering;
+    redigerVurdering: () => void;
+}) => {
     if (vurdering.type === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
-        return <VurderingsoppsummeringForKontinuerligTilsynOgPleie vurdering={vurdering} />;
+        return (
+            <VurderingsoppsummeringForKontinuerligTilsynOgPleie
+                vurdering={vurdering}
+                redigerVurdering={redigerVurdering}
+            />
+        );
     }
     if (vurdering.type === Vurderingstype.TO_OMSORGSPERSONER) {
         return <VurderingsoppsummeringForToOmsorgspersoner vurdering={vurdering} />;
@@ -26,7 +39,12 @@ const Vurderingsoppsummering = ({ vurdering }: { vurdering: Vurdering }) => {
     return null;
 };
 
-const VurderingsdetaljerController = ({ vurderingselement, vurderingstype }: VurderingsdetaljerControllerProps) => {
+const VurderingsdetaljerController = ({
+    vurderingselement,
+    vurderingstype,
+    redigerVurdering,
+    vurderingsdetaljerRenderer,
+}: VurderingsdetaljerControllerProps) => {
     const manuellVurdering = vurderingselement as ManuellVurdering;
     const innleggelsesperiodeVurdering = vurderingselement as InnleggelsesperiodeVurdering;
 
@@ -36,7 +54,8 @@ const VurderingsdetaljerController = ({ vurderingselement, vurderingstype }: Vur
         return (
             <VurderingsdetaljerFetcher
                 url={url}
-                contentRenderer={(valgtVurdering) => <Vurderingsoppsummering vurdering={valgtVurdering} />}
+                contentRenderer={(valgtVurdering) => vurderingsdetaljerRenderer(valgtVurdering)}
+                // return <Vurderingsoppsummering vurdering={valgtVurdering} redigerVurdering={redigerVurdering} />;
             />
         );
     }
@@ -45,6 +64,7 @@ const VurderingsdetaljerController = ({ vurderingselement, vurderingstype }: Vur
         <VurderingsoppsummeringForInnleggelsesperiode
             vurdering={innleggelsesperiodeVurdering}
             vurderingstype={vurderingstype}
+            redigerVurdering={redigerVurdering}
         />
     );
 };

@@ -13,9 +13,7 @@ import { finnNesteSteg } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Box, { Margin } from '../box/Box';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
-import NyVurderingAvTilsynsbehovForm, {
-    FieldName,
-} from '../ny-vurdering-av-tilsynsbehov-form/NyVurderingAvTilsynsbehovForm';
+import VurderingAvTilsynsbehovForm, { FieldName } from '../vurdering-av-tilsynsbehov-form/VurderingAvTilsynsbehovForm';
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
 import PageContainer from '../page-container/PageContainer';
 import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
@@ -23,6 +21,8 @@ import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
+import Vurderingsresultat from '../../../types/Vurderingsresultat';
+import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     navigerTilNesteSteg: (steg: Step, ikkeMarkerSteg?: boolean) => void;
@@ -46,6 +46,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
         resterendeVurderingsperioderDefaultValue: [],
         visRadForNyVurdering: false,
         vurderingsoversiktFeilet: false,
+        erRedigeringsmodus: false,
     });
 
     const {
@@ -56,6 +57,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
         resterendeVurderingsperioderDefaultValue,
         visRadForNyVurdering,
         vurderingsoversiktFeilet,
+        erRedigeringsmodus,
     } = state;
 
     const { manglerGodkjentLegeerklæring } = sykdomsstegStatus;
@@ -123,6 +125,10 @@ const VilkårsvurderingAvTilsynOgPleie = ({
         });
     };
 
+    const redigerVurdering = () => {
+        dispatch({ type: ActionType.SET_REDIGERINGSMODUS });
+    };
+
     const onVurderingLagret = () => {
         dispatch({ type: ActionType.PENDING });
         hentSykdomsstegStatus().then((status) => {
@@ -187,6 +193,53 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                                         <VurderingsdetaljerController
                                             vurderingselement={valgtVurderingselement}
                                             vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
+                                            redigerVurdering={redigerVurdering}
+                                            vurderingsdetaljerRenderer={(vurdering) => {
+                                                if (erRedigeringsmodus) {
+                                                    return (
+                                                        <NyVurderingController
+                                                            vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
+                                                            opprettVurderingLink={opprettLink}
+                                                            dataTilVurderingUrl={endpoints.dataTilVurdering}
+                                                            onVurderingLagret={onVurderingLagret}
+                                                            formRenderer={(dokumenter, onSubmit) => (
+                                                                <VurderingAvTilsynsbehovForm
+                                                                    defaultValues={{
+                                                                        [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]:
+                                                                            vurdering.versjoner[0].tekst,
+                                                                        [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]:
+                                                                            vurdering.versjoner[0].resultat ===
+                                                                            Vurderingsresultat.OPPFYLT,
+                                                                        [FieldName.PERIODER]:
+                                                                            vurdering.versjoner[0].perioder,
+                                                                        [FieldName.DOKUMENTER]: vurdering.versjoner[0].dokumenter.map(
+                                                                            (dokument) => dokument.id
+                                                                        ),
+                                                                    }}
+                                                                    resterendeVurderingsperioder={
+                                                                        resterendeVurderingsperioderDefaultValue
+                                                                    }
+                                                                    perioderSomKanVurderes={
+                                                                        vurderingsoversikt.perioderSomKanVurderes
+                                                                    }
+                                                                    dokumenter={dokumenter}
+                                                                    onSubmit={onSubmit}
+                                                                    onAvbryt={
+                                                                        visRadForNyVurdering ? onAvbryt : undefined
+                                                                    }
+                                                                />
+                                                            )}
+                                                        />
+                                                    );
+                                                }
+
+                                                return (
+                                                    <VurderingsoppsummeringForKontinuerligTilsynOgPleie
+                                                        vurdering={vurdering}
+                                                        redigerVurdering={redigerVurdering}
+                                                    />
+                                                );
+                                            }}
                                         />
                                     )}
                                     <div style={{ display: harValgtVurderingselement ? 'none' : '' }}>
@@ -196,7 +249,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                                             dataTilVurderingUrl={endpoints.dataTilVurdering}
                                             onVurderingLagret={onVurderingLagret}
                                             formRenderer={(dokumenter, onSubmit) => (
-                                                <NyVurderingAvTilsynsbehovForm
+                                                <VurderingAvTilsynsbehovForm
                                                     defaultValues={{
                                                         [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
                                                         [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,

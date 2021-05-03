@@ -5,8 +5,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-import { getPeriodAsListOfDays, isValidPeriod } from '../../../util/dateUtils';
-import { convertToInternationalPeriod, prettifyPeriodList } from '../../../util/formats';
+import { getPeriodAsListOfDays } from '../../../util/dateUtils';
+import { convertToInternationalPeriod } from '../../../util/formats';
 import {
     finnHullIPerioder,
     finnMaksavgrensningerForPerioder,
@@ -21,10 +21,10 @@ import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import AddButton from '../add-button/AddButton';
 import Box, { Margin } from '../box/Box';
 import DeleteButton from '../delete-button/DeleteButton';
+import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Form from '../form/Form';
-import styles from './nyVurderingAvTilsynsbehovForm.less';
-import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
+import styles from './vurderingAvTilsynsbehovForm.less';
 
 export enum FieldName {
     VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
@@ -33,15 +33,15 @@ export enum FieldName {
     DOKUMENTER = 'dokumenter',
 }
 
-export interface NyVurderingAvTilsynsbehovFormState {
+export interface VurderingAvTilsynsbehovFormState {
     [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]?: string;
     [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]?: boolean;
     [FieldName.PERIODER]?: Period[];
     [FieldName.DOKUMENTER]: string[];
 }
 
-interface NyVurderingAvTilsynsbehovFormProps {
-    defaultValues: NyVurderingAvTilsynsbehovFormState;
+interface VurderingAvTilsynsbehovFormProps {
+    defaultValues: VurderingAvTilsynsbehovFormState;
     onSubmit: (nyVurdering: Partial<Vurderingsversjon>) => void;
     resterendeVurderingsperioder?: Period[];
     perioderSomKanVurderes?: Period[];
@@ -49,14 +49,14 @@ interface NyVurderingAvTilsynsbehovFormProps {
     onAvbryt: () => void;
 }
 
-const NyVurderingAvTilsynsbehovForm = ({
+const VurderingAvTilsynsbehovForm = ({
     defaultValues,
     onSubmit,
     resterendeVurderingsperioder,
     perioderSomKanVurderes,
     dokumenter,
     onAvbryt,
-}: NyVurderingAvTilsynsbehovFormProps): JSX.Element => {
+}: VurderingAvTilsynsbehovFormProps): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
         mode: 'onChange',
@@ -86,7 +86,7 @@ const NyVurderingAvTilsynsbehovForm = ({
         [perioderSomKanVurderes]
     );
 
-    const lagNyTilsynsvurdering = (formState: NyVurderingAvTilsynsbehovFormState) => {
+    const lagNyTilsynsvurdering = (formState: VurderingAvTilsynsbehovFormState) => {
         onSubmit(lagTilsynsbehovVurdering(formState, dokumenter));
     };
 
@@ -243,4 +243,4 @@ const NyVurderingAvTilsynsbehovForm = ({
     );
 };
 
-export default NyVurderingAvTilsynsbehovForm;
+export default VurderingAvTilsynsbehovForm;

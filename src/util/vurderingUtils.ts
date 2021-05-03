@@ -1,7 +1,7 @@
 import {
     FieldName as TilsynFieldName,
-    NyVurderingAvTilsynsbehovFormState,
-} from '../ui/components/ny-vurdering-av-tilsynsbehov-form/NyVurderingAvTilsynsbehovForm';
+    VurderingAvTilsynsbehovFormState,
+} from '../ui/components/vurdering-av-tilsynsbehov-form/VurderingAvTilsynsbehovForm';
 import {
     FieldName as ToOmsorgspersonerFieldName,
     NyVurderingAvToOmsorgspersonerFormState,
@@ -13,7 +13,7 @@ import { Vurderingsversjon } from '../types/Vurdering';
 import { finnBenyttedeDokumenter } from './dokumentUtils';
 
 export const lagTilsynsbehovVurdering = (
-    formState: NyVurderingAvTilsynsbehovFormState,
+    formState: VurderingAvTilsynsbehovFormState,
     alleDokumenter: Dokument[]
 ): Partial<Vurderingsversjon> => {
     const resultat = formState[TilsynFieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]
