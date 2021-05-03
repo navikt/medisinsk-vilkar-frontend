@@ -89,7 +89,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
         const harEnPeriodeSomMåBehandles = nyVurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
 
         if (harEnPeriodeSomMåBehandles) {
-            visNyVurderingForm(nyVurderingsoversikt.resterendeVurderingsperioder);
+            visNyVurderingForm(nyVurderingsoversikt.finnResterendeVurderingsperioder());
         }
     };
 
@@ -153,7 +153,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
             return resterendeVurderingsperioderDefaultValue;
         }
         if (skalViseValgfriePerioder) {
-            return vurderingsoversikt.resterendeValgfrieVurderingsperioder;
+            return vurderingsoversikt.finnResterendeValgfrieVurderingsperioder();
         }
         return [new Period('', '')];
     };
@@ -184,14 +184,14 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                                 return (
                                     <Vurderingsnavigasjon
                                         vurderingselementer={vurderingsoversikt?.vurderingselementer}
-                                        resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
+                                        resterendeVurderingsperioder={vurderingsoversikt?.finnResterendeVurderingsperioder()}
                                         onVurderingValgt={velgVurderingselement}
                                         onNyVurderingClick={visNyVurderingForm}
                                         visRadForNyVurdering={visRadForNyVurdering}
                                         visOpprettVurderingKnapp={skalViseOpprettVurderingKnapp}
                                         resterendeValgfrieVurderingsperioder={
                                             skalViseValgfriePerioder
-                                                ? vurderingsoversikt?.resterendeValgfrieVurderingsperioder
+                                                ? vurderingsoversikt?.finnResterendeValgfrieVurderingsperioder()
                                                 : []
                                         }
                                     />

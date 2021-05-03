@@ -23,7 +23,7 @@ interface Action {
 const vilkårsvurderingReducer = (state: State, action: Action): State => {
     switch (action.type) {
         case ActionType.VIS_VURDERINGSOVERSIKT: {
-            const resterendeVurderingsperioder = action.vurderingsoversikt?.resterendeVurderingsperioder || [];
+            const resterendeVurderingsperioder = action.vurderingsoversikt?.finnResterendeVurderingsperioder() || [];
             return {
                 ...state,
                 vurderingsoversikt: action.vurderingsoversikt,

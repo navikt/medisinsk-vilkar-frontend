@@ -52,7 +52,7 @@ const VurderingsoversiktMessages = ({
                 <Box marginBottom={Margin.large}>
                     <Alertstripe type="advarsel">
                         {`Vurder behov for ${vurderingsnavn} for ${getStringMedPerioder(
-                            vurderingsoversikt.resterendeVurderingsperioder
+                            vurderingsoversikt.finnResterendeVurderingsperioder()
                         )}.`}
                     </Alertstripe>
                 </Box>

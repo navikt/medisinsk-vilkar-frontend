@@ -1,9 +1,10 @@
 import Dokument from './Dokument';
 import { Period } from './Period';
+import PeriodeMedAldersflagg from './PeriodeMedAldersflagg';
 import Vurderingsresultat from './Vurderingsresultat';
 
 export interface AnnenInformasjon {
-    resterendeVurderingsperioder: Period[];
+    resterendeVurderingsperioder: PeriodeMedAldersflagg[];
     perioderSomKanVurderes: Period[];
 }
 

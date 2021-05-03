@@ -41,7 +41,9 @@ const tilsynsbehovVurderingsoversiktMock: Vurderingsoversikt = new Vurderingsove
             erInnleggelsesperiode: true,
         },
     ],
-    resterendeVurderingsperioder: [new Period('2022-02-16', '2022-03-01')],
+    resterendeVurderingsperioder: [
+        { periode: new Period('2022-02-16', '2022-03-01'), pleietrengendeErOver18år: false },
+    ],
     perioderSomKanVurderes: [new Period('2022-01-15', '2022-03-01')],
     resterendeValgfrieVurderingsperioder: [],
     søknadsperioderTilBehandling: [],

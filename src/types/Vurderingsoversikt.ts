@@ -1,13 +1,14 @@
 import { Period } from './Period';
 import Link from './Link';
 import Vurderingselement from './Vurderingselement';
+import PeriodeMedAldersflagg from './PeriodeMedAldersflagg';
 
 export class Vurderingsoversikt {
     vurderingselementer: Vurderingselement[];
 
-    resterendeVurderingsperioder: Period[];
+    resterendeVurderingsperioder: PeriodeMedAldersflagg[];
 
-    resterendeValgfrieVurderingsperioder: Period[];
+    resterendeValgfrieVurderingsperioder: PeriodeMedAldersflagg[];
 
     søknadsperioderTilBehandling: Period[];
 
@@ -23,10 +24,16 @@ export class Vurderingsoversikt {
         try {
             this.perioderSomKanVurderes = data.perioderSomKanVurderes.map(({ fom, tom }) => new Period(fom, tom));
             this.resterendeVurderingsperioder = data.resterendeVurderingsperioder.map(
-                ({ fom, tom }) => new Period(fom, tom)
+                ({ periode, pleietrengendeErOver18år }) => ({
+                    periode: new Period(periode.fom, periode.tom),
+                    pleietrengendeErOver18år,
+                })
             );
             this.resterendeValgfrieVurderingsperioder = data.resterendeValgfrieVurderingsperioder?.map(
-                ({ fom, tom }) => new Period(fom, tom)
+                ({ periode, pleietrengendeErOver18år }) => ({
+                    periode: new Period(periode.fom, periode.tom),
+                    pleietrengendeErOver18år,
+                })
             );
             this.søknadsperioderTilBehandling = data.søknadsperioderTilBehandling.map(
                 ({ fom, tom }) => new Period(fom, tom)
@@ -76,12 +83,22 @@ export class Vurderingsoversikt {
             this.vurderingselementer
                 .filter(({ periode }) => {
                     const vurdertPeriode = new Period(periode.fom, periode.tom);
-                    const overlapperMedEnSøknadsperiode = this.resterendeVurderingsperioder.some(({ fom, tom }) => {
-                        return vurdertPeriode.overlapsWith(new Period(fom, tom));
-                    });
+                    const overlapperMedEnSøknadsperiode = this.resterendeVurderingsperioder.some(
+                        ({ periode: { fom, tom } }) => vurdertPeriode.overlapsWith(new Period(fom, tom))
+                    );
                     return overlapperMedEnSøknadsperiode;
                 })
                 .map(({ periode }) => periode) || []
+        );
+    }
+
+    finnResterendeVurderingsperioder() {
+        return this.resterendeVurderingsperioder.map((resterendePeriode) => resterendePeriode.periode);
+    }
+
+    finnResterendeValgfrieVurderingsperioder() {
+        return this.resterendeValgfrieVurderingsperioder.map(
+            (resterendeValgfriPeriode) => resterendeValgfriPeriode.periode
         );
     }
 }

@@ -41,9 +41,13 @@ const mockedToOmsorgspersonerVurderingsoversikt: Vurderingsoversikt = new Vurder
             erInnleggelsesperiode: true,
         },
     ],
-    resterendeVurderingsperioder: [new Period('2022-02-16', '2022-03-01')],
+    resterendeVurderingsperioder: [
+        { periode: new Period('2022-02-16', '2022-03-01'), pleietrengendeErOver18år: false },
+    ],
     perioderSomKanVurderes: [new Period('2022-01-15', '2022-03-01')],
-    resterendeValgfrieVurderingsperioder: [new Period('2022-01-15', '2022-03-01')],
+    resterendeValgfrieVurderingsperioder: [
+        { periode: new Period('2022-01-15', '2022-03-01'), pleietrengendeErOver18år: false },
+    ],
     søknadsperioderTilBehandling: [],
     links: mockedVurderingsoversiktLinks,
     pleietrengendesFødselsdato: '2021-04-27',

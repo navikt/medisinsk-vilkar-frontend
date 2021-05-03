@@ -90,7 +90,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
     const åpneFørstePeriodeSomMåBehandles = (nyVurderingsoversikt: Vurderingsoversikt) => {
         const harEnPeriodeSomMåBehandles = nyVurderingsoversikt?.resterendeVurderingsperioder?.length > 0;
         if (harEnPeriodeSomMåBehandles) {
-            visNyVurderingForm(nyVurderingsoversikt.resterendeVurderingsperioder);
+            visNyVurderingForm(nyVurderingsoversikt.finnResterendeVurderingsperioder());
         }
     };
 
@@ -168,7 +168,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                         navigationSection={() => (
                             <Vurderingsnavigasjon
                                 vurderingselementer={vurderingsoversikt?.vurderingselementer}
-                                resterendeVurderingsperioder={vurderingsoversikt?.resterendeVurderingsperioder}
+                                resterendeVurderingsperioder={vurderingsoversikt?.finnResterendeVurderingsperioder()}
                                 onVurderingValgt={velgVurderingselement}
                                 onNyVurderingClick={visNyVurderingForm}
                                 visRadForNyVurdering={visRadForNyVurdering}
