@@ -9,12 +9,12 @@ import PageContainer from '../page-container/PageContainer';
 import { PeriodeMedEndring, PerioderMedEndringResponse } from '../../../types/PeriodeMedEndring';
 import OverlappendePeriodeModal from '../overlappende-periode-modal/OverlappendePeriodeModal';
 import ActionType from './actionTypes';
-import nyVurderingControllerReducer from './reducer';
+import vurderingControllerReducer from './reducer';
 import { postNyVurdering, postNyVurderingDryRun } from '../../../api/api';
 import ContainerContext from '../../context/ContainerContext';
 import { scrollUp } from '../../../util/viewUtils';
 
-interface NyVurderingController {
+interface VurderingController {
     opprettVurderingLink: Link;
     dataTilVurderingUrl: string;
     onVurderingLagret: () => void;
@@ -22,16 +22,16 @@ interface NyVurderingController {
     vurderingstype: Vurderingstype;
 }
 
-const NyVurderingController = ({
+const VurderingController = ({
     opprettVurderingLink,
     dataTilVurderingUrl,
     onVurderingLagret,
     formRenderer,
     vurderingstype,
-}: NyVurderingController) => {
+}: VurderingController) => {
     const { httpErrorHandler } = React.useContext(ContainerContext);
 
-    const [state, dispatch] = React.useReducer(nyVurderingControllerReducer, {
+    const [state, dispatch] = React.useReducer(vurderingControllerReducer, {
         isLoading: true,
         dokumenter: [],
         hentDataTilVurderingHarFeilet: false,
@@ -152,4 +152,4 @@ const NyVurderingController = ({
     );
 };
 
-export default NyVurderingController;
+export default VurderingController;

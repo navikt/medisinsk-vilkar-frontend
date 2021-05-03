@@ -14,7 +14,7 @@ import ContainerContext from '../../context/ContainerContext';
 import Box, { Margin } from '../box/Box';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import VurderingAvTilsynsbehovForm, { FieldName } from '../vurdering-av-tilsynsbehov-form/VurderingAvTilsynsbehovForm';
-import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
+import VurderingController from '../vurdering-controller/VurderingController';
 import PageContainer from '../page-container/PageContainer';
 import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
@@ -196,8 +196,14 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                                             redigerVurdering={redigerVurdering}
                                             vurderingsdetaljerRenderer={(vurdering) => {
                                                 if (erRedigeringsmodus) {
+                                                    const {
+                                                        tekst,
+                                                        resultat,
+                                                        perioder,
+                                                        dokumenter: dokumenterFraVurdering,
+                                                    } = vurdering.versjoner[0];
                                                     return (
-                                                        <NyVurderingController
+                                                        <VurderingController
                                                             vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
                                                             opprettVurderingLink={opprettLink}
                                                             dataTilVurderingUrl={endpoints.dataTilVurdering}
@@ -205,14 +211,11 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                                                             formRenderer={(dokumenter, onSubmit) => (
                                                                 <VurderingAvTilsynsbehovForm
                                                                     defaultValues={{
-                                                                        [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]:
-                                                                            vurdering.versjoner[0].tekst,
+                                                                        [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: tekst,
                                                                         [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]:
-                                                                            vurdering.versjoner[0].resultat ===
-                                                                            Vurderingsresultat.OPPFYLT,
-                                                                        [FieldName.PERIODER]:
-                                                                            vurdering.versjoner[0].perioder,
-                                                                        [FieldName.DOKUMENTER]: vurdering.versjoner[0].dokumenter.map(
+                                                                            resultat === Vurderingsresultat.OPPFYLT,
+                                                                        [FieldName.PERIODER]: perioder,
+                                                                        [FieldName.DOKUMENTER]: dokumenterFraVurdering.map(
                                                                             (dokument) => dokument.id
                                                                         ),
                                                                     }}
@@ -243,7 +246,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                                         />
                                     )}
                                     <div style={{ display: harValgtVurderingselement ? 'none' : '' }}>
-                                        <NyVurderingController
+                                        <VurderingController
                                             vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
                                             opprettVurderingLink={opprettLink}
                                             dataTilVurderingUrl={endpoints.dataTilVurdering}

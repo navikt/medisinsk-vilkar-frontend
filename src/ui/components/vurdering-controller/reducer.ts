@@ -20,7 +20,7 @@ interface Action {
     dokumenter?: Dokument[];
 }
 
-const nyVurderingControllerReducer = (state: State, action: Action): State => {
+const vurderingControllerReducer = (state: State, action: Action): State => {
     switch (action.type) {
         case ActionType.PENDING:
             return {
@@ -74,4 +74,4 @@ const nyVurderingControllerReducer = (state: State, action: Action): State => {
     }
 };
 
-export default nyVurderingControllerReducer;
+export default vurderingControllerReducer;

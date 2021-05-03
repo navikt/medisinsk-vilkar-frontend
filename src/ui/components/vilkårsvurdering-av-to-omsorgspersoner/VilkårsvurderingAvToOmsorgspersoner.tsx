@@ -17,7 +17,7 @@ import NavigationWithDetailView from '../navigation-with-detail-view/NavigationW
 import NyVurderingAvToOmsorgspersonerForm, {
     FieldName,
 } from '../ny-vurdering-av-to-omsorgspersoner-form/NyVurderingAvToOmsorgspersonerForm';
-import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
+import VurderingController from '../vurdering-controller/VurderingController';
 import PageContainer from '../page-container/PageContainer';
 import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
@@ -212,7 +212,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                                         />
                                     )}
                                     <div style={{ display: harValgtVurderingselement ? 'none' : '' }}>
-                                        <NyVurderingController
+                                        <VurderingController
                                             vurderingstype={Vurderingstype.TO_OMSORGSPERSONER}
                                             opprettVurderingLink={opprettLink}
                                             dataTilVurderingUrl={endpoints.dataTilVurdering}
