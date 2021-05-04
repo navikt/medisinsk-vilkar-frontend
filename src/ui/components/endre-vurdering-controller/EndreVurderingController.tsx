@@ -21,6 +21,7 @@ interface EndreVurderingControllerProps {
     formRenderer: (dokumenter: Dokument[], onSubmit: (vurderingsversjon: Vurderingsversjon) => void) => React.ReactNode;
     vurderingstype: Vurderingstype;
     vurderingsid: string;
+    vurderingsversjonId: string;
 }
 
 const EndreVurderingController = ({
@@ -30,6 +31,7 @@ const EndreVurderingController = ({
     formRenderer,
     vurderingstype,
     vurderingsid,
+    vurderingsversjonId,
 }: EndreVurderingControllerProps) => {
     const { httpErrorHandler } = React.useContext(ContainerContext);
 
@@ -76,8 +78,8 @@ const EndreVurderingController = ({
 
     const sjekkForEksisterendeVurderinger = (
         nyVurderingsversjon: Vurderingsversjon
-    ): Promise<PerioderMedEndringResponse> => {
-        return postEndreVurderingDryRun(
+    ): Promise<PerioderMedEndringResponse> =>
+        postEndreVurderingDryRun(
             endreVurderingLink.href,
             endreVurderingLink.requestPayload.behandlingUuid,
             vurderingsid,
@@ -85,7 +87,6 @@ const EndreVurderingController = ({
             httpErrorHandler,
             httpCanceler.token
         );
-    };
 
     const advarOmEksisterendeVurderinger = (
         nyVurderingsversjon: Vurderingsversjon,
@@ -99,12 +100,16 @@ const EndreVurderingController = ({
     };
 
     const beOmBekreftelseFørLagringHvisNødvendig = (nyVurderingsversjon: Vurderingsversjon) => {
-        sjekkForEksisterendeVurderinger(nyVurderingsversjon).then((perioderMedEndringerResponse) => {
+        const nyVurderingsversjonMedVersjonId = { ...nyVurderingsversjon, versjon: vurderingsversjonId };
+        sjekkForEksisterendeVurderinger(nyVurderingsversjonMedVersjonId).then((perioderMedEndringerResponse) => {
             const harOverlappendePerioder = perioderMedEndringerResponse.perioderMedEndringer.length > 0;
             if (harOverlappendePerioder) {
-                advarOmEksisterendeVurderinger(nyVurderingsversjon, perioderMedEndringerResponse.perioderMedEndringer);
+                advarOmEksisterendeVurderinger(
+                    nyVurderingsversjonMedVersjonId,
+                    perioderMedEndringerResponse.perioderMedEndringer
+                );
             } else {
-                endreVurdering(nyVurderingsversjon);
+                endreVurdering(nyVurderingsversjonMedVersjonId);
             }
         });
     };

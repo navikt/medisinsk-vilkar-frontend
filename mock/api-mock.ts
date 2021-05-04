@@ -128,7 +128,7 @@ app.use('/mock/endre-vurdering', (req, res) => {
         tilsynsbehovVurderingerMock[index].versjoner.unshift({
             perioder,
             resultat: req.body.resultat,
-            dokumenter: req.body.tilknyttedeDokumenter,
+            dokumenter: mockedDokumentliste,
             tekst: req.body.tekst,
         });
         res.send();

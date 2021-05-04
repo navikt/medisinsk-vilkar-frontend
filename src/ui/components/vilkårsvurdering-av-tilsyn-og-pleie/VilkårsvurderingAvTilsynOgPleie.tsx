@@ -210,6 +210,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                                                             )}
                                                             dataTilVurderingUrl={endpoints.dataTilVurdering}
                                                             onVurderingLagret={onVurderingLagret}
+                                                            vurderingsversjonId={vurderingsversjon.versjon}
                                                             formRenderer={(dokumenter, onSubmit) => (
                                                                 <VurderingAvTilsynsbehovForm
                                                                     defaultValues={initialState}

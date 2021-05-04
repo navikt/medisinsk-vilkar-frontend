@@ -17,7 +17,7 @@ interface OverlappendePeriodeModalProps {
 }
 
 const renderInfoMsg = ({ periode }: PeriodeMedEndring) => (
-    <Box marginBottom={Margin.medium}>
+    <Box key={periode.fom} marginBottom={Margin.medium}>
         <Alertstripe type="info">
             {`${prettifyPeriod(
                 periode
@@ -28,7 +28,7 @@ const renderInfoMsg = ({ periode }: PeriodeMedEndring) => (
 );
 
 const renderWarningMsg = ({ periode }: PeriodeMedEndring) => (
-    <Box marginBottom={Margin.medium}>
+    <Box key={periode.fom} marginBottom={Margin.medium}>
         <Alertstripe type="advarsel">
             {`${prettifyPeriod(
                 periode

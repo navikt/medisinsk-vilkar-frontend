@@ -91,7 +91,15 @@ export async function postEndreVurderingDryRun(
     httpErrorHandler: HttpErrorHandler,
     cancelToken?: CancelToken
 ): Promise<PerioderMedEndringResponse> {
-    return postNyVurdering(href, behandlingUuid, vurderingsversjonMedType, httpErrorHandler, cancelToken, true);
+    return postEndreVurdering(
+        href,
+        behandlingUuid,
+        vurderingsid,
+        vurderingsversjonMedType,
+        httpErrorHandler,
+        cancelToken,
+        true
+    );
 }
 
 interface InnleggelsesperioderRequestBody extends RequestPayload {
