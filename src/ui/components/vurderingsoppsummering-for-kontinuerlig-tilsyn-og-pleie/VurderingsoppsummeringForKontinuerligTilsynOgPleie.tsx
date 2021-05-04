@@ -25,7 +25,7 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
         <DetailViewVurdering
             title="Vurdering av tilsyn og pleie"
             perioder={perioder}
-            redigerVurdering={redigerVurdering}
+            redigerVurdering={!erInnleggelse ? redigerVurdering : null}
         >
             <Box marginTop={Margin.large}>
                 {erInnleggelse && <DekketAvInnleggelsesperiodeMelding />}
