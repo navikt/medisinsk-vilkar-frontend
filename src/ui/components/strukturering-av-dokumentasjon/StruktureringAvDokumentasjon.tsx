@@ -56,8 +56,6 @@ const StruktureringAvDokumentasjon = ({
         visRedigeringAvDokument,
     } = state;
 
-    const { manglerDiagnosekode, kanLøseAksjonspunkt } = sykdomsstegStatus;
-
     const getDokumentoversikt = () =>
         get<DokumentoversiktResponse>(endpoints.dokumentoversikt, httpErrorHandler, {
             cancelToken: httpCanceler.token,
@@ -103,20 +101,22 @@ const StruktureringAvDokumentasjon = ({
 
     const sjekkStatus = () => {
         dispatch({ type: ActionType.PENDING });
-        hentSykdomsstegStatus().then(() => {
-            getDokumentoversikt().then(({ dokumenter }: DokumentoversiktResponse) => {
-                const nyDokumentoversikt = new Dokumentoversikt(dokumenter);
-                visDokumentoversikt(nyDokumentoversikt);
-            });
-        });
+        hentSykdomsstegStatus()
+            .then(() => {
+                getDokumentoversikt().then(({ dokumenter }: DokumentoversiktResponse) => {
+                    const nyDokumentoversikt = new Dokumentoversikt(dokumenter);
+                    visDokumentoversikt(nyDokumentoversikt);
+                });
+            })
+            .catch(handleError);
     };
 
     return (
         <PageContainer isLoading={isLoading} hasError={dokumentoversiktFeilet} key={StepId.Dokument}>
             <DokumentoversiktMessages
                 dokumentoversikt={dokumentoversikt}
-                harRegistrertDiagnosekode={!manglerDiagnosekode}
-                kanLøseAksjonspunkt={kanLøseAksjonspunkt}
+                harRegistrertDiagnosekode={!sykdomsstegStatus.manglerDiagnosekode}
+                kanLøseAksjonspunkt={sykdomsstegStatus.kanLøseAksjonspunkt}
                 kanNavigereVidere={nesteStegErVurdering(sykdomsstegStatus)}
                 navigerTilNesteSteg={navigerTilNesteSteg}
             />

@@ -14,15 +14,17 @@ import ContainerContext from '../../context/ContainerContext';
 import Box, { Margin } from '../box/Box';
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import VurderingAvTilsynsbehovForm, { FieldName } from '../vurdering-av-tilsynsbehov-form/VurderingAvTilsynsbehovForm';
-import VurderingController from '../vurdering-controller/VurderingController';
+import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
 import PageContainer from '../page-container/PageContainer';
 import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
-import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
+import EndreVurderingController from '../endre-vurdering-controller/EndreVurderingController';
+import { buildInitialFormStateForEdit } from './initialFormStateUtil';
+import ManuellVurdering from '../../../types/ManuellVurdering';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     navigerTilNesteSteg: (steg: Step, ikkeMarkerSteg?: boolean) => void;
@@ -186,39 +188,31 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                         detailSection={() => {
                             const harValgtVurderingselement = !!valgtVurderingselement;
                             const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
-
                             return (
                                 <>
                                     {harValgtVurderingselement && (
                                         <VurderingsdetaljerController
                                             vurderingselement={valgtVurderingselement}
                                             vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
-                                            redigerVurdering={redigerVurdering}
-                                            vurderingsdetaljerRenderer={(vurdering) => {
+                                            contentRenderer={(vurdering) => {
                                                 if (erRedigeringsmodus) {
-                                                    const {
-                                                        tekst,
-                                                        resultat,
-                                                        perioder,
-                                                        dokumenter: dokumenterFraVurdering,
-                                                    } = vurdering.versjoner[0];
+                                                    const vurderingsversjon = vurdering.versjoner[0];
+                                                    const initialState = buildInitialFormStateForEdit(
+                                                        vurderingsversjon
+                                                    );
                                                     return (
-                                                        <VurderingController
+                                                        <EndreVurderingController
+                                                            vurderingsid={vurdering.id}
                                                             vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
-                                                            opprettVurderingLink={opprettLink}
+                                                            endreVurderingLink={findLinkByRel(
+                                                                LinkRel.ENDRE_VURDERING,
+                                                                (valgtVurderingselement as ManuellVurdering)?.links
+                                                            )}
                                                             dataTilVurderingUrl={endpoints.dataTilVurdering}
                                                             onVurderingLagret={onVurderingLagret}
                                                             formRenderer={(dokumenter, onSubmit) => (
                                                                 <VurderingAvTilsynsbehovForm
-                                                                    defaultValues={{
-                                                                        [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: tekst,
-                                                                        [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]:
-                                                                            resultat === Vurderingsresultat.OPPFYLT,
-                                                                        [FieldName.PERIODER]: perioder,
-                                                                        [FieldName.DOKUMENTER]: dokumenterFraVurdering.map(
-                                                                            (dokument) => dokument.id
-                                                                        ),
-                                                                    }}
+                                                                    defaultValues={initialState}
                                                                     resterendeVurderingsperioder={
                                                                         resterendeVurderingsperioderDefaultValue
                                                                     }
@@ -246,7 +240,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                                         />
                                     )}
                                     <div style={{ display: harValgtVurderingselement ? 'none' : '' }}>
-                                        <VurderingController
+                                        <NyVurderingController
                                             vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
                                             opprettVurderingLink={opprettLink}
                                             dataTilVurderingUrl={endpoints.dataTilVurdering}

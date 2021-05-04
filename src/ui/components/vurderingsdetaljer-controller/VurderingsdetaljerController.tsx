@@ -8,42 +8,17 @@ import Vurderingstype from '../../../types/Vurderingstype';
 import { findHrefByRel } from '../../../util/linkUtils';
 import VurderingsdetaljerFetcher from '../vurderingsdetaljer-fetcher/VurderingsdetaljerFetcher';
 import VurderingsoppsummeringForInnleggelsesperiode from '../vurderingsoppsummering-for-innleggelsesperiode/VurderingsoppsummeringForInnleggelsesperiode';
-import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
-import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
 
 interface VurderingsdetaljerControllerProps {
     vurderingselement: Vurderingselement;
     vurderingstype: Vurderingstype;
-    redigerVurdering?: () => void;
-    vurderingsdetaljerRenderer?: (valgtVurdering: Vurdering) => JSX.Element;
+    contentRenderer?: (valgtVurdering: Vurdering) => JSX.Element;
 }
-
-const Vurderingsoppsummering = ({
-    vurdering,
-    redigerVurdering,
-}: {
-    vurdering: Vurdering;
-    redigerVurdering: () => void;
-}) => {
-    if (vurdering.type === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
-        return (
-            <VurderingsoppsummeringForKontinuerligTilsynOgPleie
-                vurdering={vurdering}
-                redigerVurdering={redigerVurdering}
-            />
-        );
-    }
-    if (vurdering.type === Vurderingstype.TO_OMSORGSPERSONER) {
-        return <VurderingsoppsummeringForToOmsorgspersoner vurdering={vurdering} />;
-    }
-    return null;
-};
 
 const VurderingsdetaljerController = ({
     vurderingselement,
     vurderingstype,
-    redigerVurdering,
-    vurderingsdetaljerRenderer,
+    contentRenderer,
 }: VurderingsdetaljerControllerProps) => {
     const manuellVurdering = vurderingselement as ManuellVurdering;
     const innleggelsesperiodeVurdering = vurderingselement as InnleggelsesperiodeVurdering;
@@ -54,8 +29,7 @@ const VurderingsdetaljerController = ({
         return (
             <VurderingsdetaljerFetcher
                 url={url}
-                contentRenderer={(valgtVurdering) => vurderingsdetaljerRenderer(valgtVurdering)}
-                // return <Vurderingsoppsummering vurdering={valgtVurdering} redigerVurdering={redigerVurdering} />;
+                contentRenderer={(valgtVurdering) => contentRenderer(valgtVurdering)}
             />
         );
     }
@@ -64,7 +38,6 @@ const VurderingsdetaljerController = ({
         <VurderingsoppsummeringForInnleggelsesperiode
             vurdering={innleggelsesperiodeVurdering}
             vurderingstype={vurderingstype}
-            redigerVurdering={redigerVurdering}
         />
     );
 };

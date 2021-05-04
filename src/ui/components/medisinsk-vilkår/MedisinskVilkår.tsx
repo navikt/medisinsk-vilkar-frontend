@@ -67,7 +67,7 @@ const MedisinskVilkår = () => {
             return status;
         } catch (error) {
             console.error(error);
-            return error;
+            throw new Error(error);
         }
     };
 

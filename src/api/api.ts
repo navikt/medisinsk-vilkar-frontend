@@ -51,6 +51,49 @@ export async function postNyVurderingDryRun(
     return postNyVurdering(href, behandlingUuid, vurderingsversjonMedType, httpErrorHandler, cancelToken, true);
 }
 
+export async function postEndreVurdering(
+    href: string,
+    behandlingUuid: string,
+    vurderingsid: string,
+    vurderingsversjon: Partial<Vurderingsversjon>,
+    httpErrorHandler: HttpErrorHandler,
+    cancelToken?: CancelToken,
+    dryRun?: boolean
+): Promise<any> {
+    try {
+        const { perioder, resultat, tekst, dokumenter, versjon } = vurderingsversjon;
+        return post(
+            href,
+            {
+                behandlingUuid,
+                id: vurderingsid,
+                versjon,
+                tekst,
+                resultat,
+                perioder,
+                tilknyttedeDokumenter: dokumenter.map((dokument) => dokument.id),
+                dryRun: dryRun || false,
+            },
+            httpErrorHandler,
+            { cancelToken }
+        );
+    } catch (error) {
+        console.error(error);
+        throw new Error(error);
+    }
+}
+
+export async function postEndreVurderingDryRun(
+    href: string,
+    behandlingUuid: string,
+    vurderingsid: string,
+    vurderingsversjonMedType: VurderingsversjonMedType,
+    httpErrorHandler: HttpErrorHandler,
+    cancelToken?: CancelToken
+): Promise<PerioderMedEndringResponse> {
+    return postNyVurdering(href, behandlingUuid, vurderingsversjonMedType, httpErrorHandler, cancelToken, true);
+}
+
 interface InnleggelsesperioderRequestBody extends RequestPayload {
     perioder: Period[];
 }

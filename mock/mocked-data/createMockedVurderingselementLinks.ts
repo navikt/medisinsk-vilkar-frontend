@@ -12,8 +12,11 @@ function createMockedVurderingselementLinks(id): Link[] {
         {
             rel: LinkRel.ENDRE_VURDERING,
             type: 'POST',
-            href: `http://localhost:8082/mock/vurdering?sykdomVurderingId=${id}`,
+            href: `http://localhost:8082/mock/endre-vurdering?sykdomVurderingId=${id}`,
             versjon: null,
+            requestPayload: {
+                behandlingUuid: '123',
+            },
         },
     ];
 }

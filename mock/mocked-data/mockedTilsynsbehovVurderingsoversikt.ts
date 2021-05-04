@@ -37,6 +37,7 @@ const tilsynsbehovVurderingsoversiktMock: Vurderingsoversikt = new Vurderingsove
             erInnleggelsesperiode: true,
         },
         {
+            id: '4',
             periode: new Period('2022-01-01', '2020-01-14'),
             erInnleggelsesperiode: true,
         },

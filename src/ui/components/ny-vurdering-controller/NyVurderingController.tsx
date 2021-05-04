@@ -14,7 +14,7 @@ import { postNyVurdering, postNyVurderingDryRun } from '../../../api/api';
 import ContainerContext from '../../context/ContainerContext';
 import { scrollUp } from '../../../util/viewUtils';
 
-interface VurderingController {
+interface NyVurderingControllerProps {
     opprettVurderingLink: Link;
     dataTilVurderingUrl: string;
     onVurderingLagret: () => void;
@@ -22,13 +22,13 @@ interface VurderingController {
     vurderingstype: Vurderingstype;
 }
 
-const VurderingController = ({
+const NyVurderingController = ({
     opprettVurderingLink,
     dataTilVurderingUrl,
     onVurderingLagret,
     formRenderer,
     vurderingstype,
-}: VurderingController) => {
+}: NyVurderingControllerProps) => {
     const { httpErrorHandler } = React.useContext(ContainerContext);
 
     const [state, dispatch] = React.useReducer(vurderingControllerReducer, {
@@ -152,4 +152,4 @@ const VurderingController = ({
     );
 };
 
-export default VurderingController;
+export default NyVurderingController;

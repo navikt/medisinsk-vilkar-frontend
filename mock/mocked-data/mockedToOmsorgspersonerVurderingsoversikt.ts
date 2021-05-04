@@ -37,6 +37,7 @@ const mockedToOmsorgspersonerVurderingsoversikt: Vurderingsoversikt = new Vurder
             erInnleggelsesperiode: true,
         },
         {
+            id: '55',
             periode: new Period('2022-01-01', '2022-01-14'),
             erInnleggelsesperiode: true,
         },
