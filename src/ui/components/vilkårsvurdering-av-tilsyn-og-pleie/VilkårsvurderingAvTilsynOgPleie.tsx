@@ -23,7 +23,7 @@ import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
 import EndreVurderingController from '../endre-vurdering-controller/EndreVurderingController';
-import { buildInitialFormStateForEdit } from './initialFormStateUtil';
+import { buildInitialFormStateForKontinuerligTilsynForEdit } from './initialFormStateUtil';
 import ManuellVurdering from '../../../types/ManuellVurdering';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
@@ -197,7 +197,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                                             contentRenderer={(vurdering) => {
                                                 if (erRedigeringsmodus) {
                                                     const vurderingsversjon = vurdering.versjoner[0];
-                                                    const initialState = buildInitialFormStateForEdit(
+                                                    const initialState = buildInitialFormStateForKontinuerligTilsynForEdit(
                                                         vurderingsversjon
                                                     );
                                                     return (

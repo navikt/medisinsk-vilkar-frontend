@@ -5,6 +5,7 @@ enum ActionType {
     PENDING = 'pending',
     VURDERINGSOVERSIKT_FEILET = 'vurderingsoversiktFeilet',
     AVBRYT_FORM = 'avbrytForm',
+    SET_REDIGERINGSMODUS = 'setRedigeringsmodus',
 }
 
 export default ActionType;

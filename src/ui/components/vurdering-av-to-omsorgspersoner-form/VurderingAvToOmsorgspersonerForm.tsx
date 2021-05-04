@@ -23,7 +23,7 @@ import Box, { Margin } from '../box/Box';
 import DeleteButton from '../delete-button/DeleteButton';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Form from '../form/Form';
-import styles from './nyVurderingAvToOmsorgspersonerForm.less';
+import styles from './vurderingAvToOmsorgspersonerForm.less';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 
 export enum FieldName {
@@ -33,15 +33,15 @@ export enum FieldName {
     DOKUMENTER = 'dokumenter',
 }
 
-export interface NyVurderingAvToOmsorgspersonerFormState {
+export interface VurderingAvToOmsorgspersonerFormState {
     [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]?: string;
     [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]?: boolean;
     [FieldName.PERIODER]?: Period[];
     [FieldName.DOKUMENTER]: string[];
 }
 
-interface NyVurderingAvToOmsorgspersonerFormProps {
-    defaultValues: NyVurderingAvToOmsorgspersonerFormState;
+interface VurderingAvToOmsorgspersonerFormProps {
+    defaultValues: VurderingAvToOmsorgspersonerFormState;
     onSubmit: (nyVurdering: Partial<Vurderingsversjon>) => void;
     resterendeVurderingsperioder?: Period[];
     perioderSomKanVurderes?: Period[];
@@ -49,14 +49,14 @@ interface NyVurderingAvToOmsorgspersonerFormProps {
     onAvbryt: () => void;
 }
 
-const NyVurderingAvToOmsorgspersonerForm = ({
+const VurderingAvToOmsorgspersonerForm = ({
     defaultValues,
     onSubmit,
     resterendeVurderingsperioder,
     perioderSomKanVurderes,
     dokumenter,
     onAvbryt,
-}: NyVurderingAvToOmsorgspersonerFormProps): JSX.Element => {
+}: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
     });
@@ -86,7 +86,7 @@ const NyVurderingAvToOmsorgspersonerForm = ({
         [perioderSomKanVurderes]
     );
 
-    const lagNyVurdering = (formState: NyVurderingAvToOmsorgspersonerFormState) => {
+    const lagNyVurdering = (formState: VurderingAvToOmsorgspersonerFormState) => {
         onSubmit(lagToOmsorgspersonerVurdering(formState, dokumenter));
     };
 
@@ -238,4 +238,4 @@ const NyVurderingAvToOmsorgspersonerForm = ({
     );
 };
 
-export default NyVurderingAvToOmsorgspersonerForm;
+export default VurderingAvToOmsorgspersonerForm;
