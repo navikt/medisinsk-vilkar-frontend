@@ -18,7 +18,6 @@ import EndreVurderingController from '../endre-vurdering-controller/EndreVurderi
 import NavigationWithDetailView from '../navigation-with-detail-view/NavigationWithDetailView';
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
 import PageContainer from '../page-container/PageContainer';
-import { buildInitialFormStateForToOmsorgspersonerForEdit } from '../vilkårsvurdering-av-tilsyn-og-pleie/initialFormStateUtil';
 import VurderingAvToOmsorgspersonerForm, {
     FieldName,
 } from '../vurdering-av-to-omsorgspersoner-form/VurderingAvToOmsorgspersonerForm';
@@ -27,6 +26,7 @@ import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
 import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
 import ActionType from './actionTypes';
+import { buildInitialFormStateForEdit } from './initialFormStateUtil';
 import vilkårsvurderingReducer from './reducer';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
@@ -222,7 +222,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                                             contentRenderer={(vurdering) => {
                                                 if (erRedigeringsmodus) {
                                                     const vurderingsversjon = vurdering.versjoner[0];
-                                                    const initialState = buildInitialFormStateForToOmsorgspersonerForEdit(
+                                                    const initialState = buildInitialFormStateForEdit(
                                                         vurderingsversjon
                                                     );
                                                     return (
