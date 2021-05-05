@@ -5,7 +5,6 @@ import Step, { StepId, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../..
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import Vurderingstype from '../../../types/Vurderingstype';
 import { get } from '../../../util/httpUtils';
 import { finnNesteSteg } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
@@ -147,11 +146,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
 
     return (
         <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet} key={StepId.TilsynOgPleie}>
-            <VurderingsoversiktMessages
-                vurderingsoversikt={vurderingsoversikt}
-                harGyldigSignatur={harGyldigSignatur}
-                vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
-            />
+            <VurderingsoversiktMessages vurderingsoversikt={vurderingsoversikt} harGyldigSignatur={harGyldigSignatur} />
             {vurderingsoversikt?.harPerioderÅVise() && (
                 <Box marginTop={setMargin()}>
                     <NavigationWithDetailView

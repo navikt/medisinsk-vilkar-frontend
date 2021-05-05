@@ -18,6 +18,8 @@ import medisinskVilkårReducer from './reducer';
 import ActionType from './actionTypes';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
+import VurderingContext from '../../context/VurderingContext';
+import Vurderingstype from '../../../types/Vurderingstype';
 
 const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
@@ -131,18 +133,24 @@ const MedisinskVilkår = () => {
                             />
                         )}
                         {activeStep === tilsynOgPleieSteg && (
-                            <VilkårsvurderingAvTilsynOgPleie
-                                navigerTilNesteSteg={navigerTilSteg}
-                                hentSykdomsstegStatus={hentSykdomsstegStatus}
-                                sykdomsstegStatus={sykdomsstegStatus}
-                            />
+                            <VurderingContext.Provider
+                                value={{ vurderingstype: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE }}
+                            >
+                                <VilkårsvurderingAvTilsynOgPleie
+                                    navigerTilNesteSteg={navigerTilSteg}
+                                    hentSykdomsstegStatus={hentSykdomsstegStatus}
+                                    sykdomsstegStatus={sykdomsstegStatus}
+                                />
+                            </VurderingContext.Provider>
                         )}
                         {activeStep === toOmsorgspersonerSteg && (
-                            <VilkårsvurderingAvToOmsorgspersoner
-                                navigerTilNesteSteg={navigerTilSteg}
-                                hentSykdomsstegStatus={hentSykdomsstegStatus}
-                                sykdomsstegStatus={sykdomsstegStatus}
-                            />
+                            <VurderingContext.Provider value={{ vurderingstype: Vurderingstype.TO_OMSORGSPERSONER }}>
+                                <VilkårsvurderingAvToOmsorgspersoner
+                                    navigerTilNesteSteg={navigerTilSteg}
+                                    hentSykdomsstegStatus={hentSykdomsstegStatus}
+                                    sykdomsstegStatus={sykdomsstegStatus}
+                                />
+                            </VurderingContext.Provider>
                         )}
                     </div>
                 </div>

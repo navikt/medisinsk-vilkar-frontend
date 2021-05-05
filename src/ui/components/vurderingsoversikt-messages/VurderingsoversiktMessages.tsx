@@ -7,18 +7,15 @@ import { getStringMedPerioder } from '../../../util/periodUtils';
 import Box, { Margin } from '../box/Box';
 import IngenPerioderÅVurdereMelding from '../ingen-perioder-å-vurdere-melding/IngenPerioderÅVurdereMelding';
 import ManglerGyldigSignaturMelding from '../mangler-gyldig-signatur-melding/ManglerGyldigSignaturMelding';
+import VurderingContext from '../../context/VurderingContext';
 
 interface VurderingsoversiktMessagesProps {
     vurderingsoversikt: Vurderingsoversikt;
     harGyldigSignatur: boolean;
-    vurderingstype: Vurderingstype;
 }
 
-const VurderingsoversiktMessages = ({
-    vurderingsoversikt,
-    harGyldigSignatur,
-    vurderingstype,
-}: VurderingsoversiktMessagesProps) => {
+const VurderingsoversiktMessages = ({ vurderingsoversikt, harGyldigSignatur }: VurderingsoversiktMessagesProps) => {
+    const { vurderingstype } = React.useContext(VurderingContext);
     const vurderingsnavn =
         vurderingstype === Vurderingstype.TO_OMSORGSPERSONER ? 'to omsorgspersoner' : 'tilsyn og pleie';
 

@@ -10,6 +10,12 @@ import VurderingAvTilsynsbehovForm from '../vurdering-av-tilsynsbehov-form/Vurde
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import EndreVurderingController from '../endre-vurdering-controller/EndreVurderingController';
 import ContainerContext from '../../context/ContainerContext';
+import VurderingContext from '../../context/VurderingContext';
+import Vurderingstype from '../../../types/Vurderingstype';
+import VurderingAvToOmsorgspersonerForm from '../vurdering-av-to-omsorgspersoner-form/VurderingAvToOmsorgspersonerForm';
+import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
+import VurderingsoppsummeringForInnleggelsesperiode from '../vurderingsoppsummering-for-innleggelsesperiode/VurderingsoppsummeringForInnleggelsesperiode';
+import InnleggelsesperiodeVurdering from '../../../types/InnleggelsesperiodeVurdering';
 
 interface VurderingsdetaljvisningForEksisterendeProps {
     vurderingsoversikt: Vurderingsoversikt;
@@ -20,6 +26,30 @@ interface VurderingsdetaljvisningForEksisterendeProps {
     onVurderingLagret: () => void;
 }
 
+const getFormComponent = (vurderingstype: Vurderingstype) => {
+    if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
+        return VurderingAvTilsynsbehovForm;
+    }
+    if (vurderingstype === Vurderingstype.TO_OMSORGSPERSONER) {
+        return VurderingAvToOmsorgspersonerForm;
+    }
+    return null;
+};
+
+const getSummaryComponent = (vurderingstype: Vurderingstype) => {
+    if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
+        return VurderingsoppsummeringForKontinuerligTilsynOgPleie;
+    }
+    if (vurderingstype === Vurderingstype.TO_OMSORGSPERSONER) {
+        return VurderingsoppsummeringForToOmsorgspersoner;
+    }
+    return null;
+};
+
+const erAutomatiskVurdertInnleggelsesperiode = (vurderingselement: Vurderingselement) => {
+    return !(vurderingselement as ManuellVurdering).resultat;
+};
+
 const VurderingsdetaljvisningForEksisterendeVurdering = ({
     vurderingsoversikt,
     vurderingselement,
@@ -29,6 +59,17 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
     onVurderingLagret,
 }: VurderingsdetaljvisningForEksisterendeProps) => {
     const { endpoints } = React.useContext(ContainerContext);
+    const { vurderingstype } = React.useContext(VurderingContext);
+
+    if (erAutomatiskVurdertInnleggelsesperiode(vurderingselement)) {
+        return (
+            <VurderingsoppsummeringForInnleggelsesperiode
+                vurdering={vurderingselement as InnleggelsesperiodeVurdering}
+                vurderingstype={vurderingstype}
+            />
+        );
+    }
+
     const manuellVurdering = vurderingselement as ManuellVurdering;
     const url = findHrefByRel(LinkRel.HENT_VURDERING, manuellVurdering.links);
 
@@ -39,12 +80,14 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                 if (editMode) {
                     const endreLink = findLinkByRel(LinkRel.ENDRE_VURDERING, manuellVurdering.links);
                     const vurderingsversjon = vurdering.versjoner[0];
+
+                    const FormComponent = getFormComponent(vurderingstype);
                     return (
                         <EndreVurderingController
                             endreVurderingLink={endreLink}
                             dataTilVurderingUrl={endpoints.dataTilVurdering}
                             formRenderer={(dokumenter, onSubmit) => (
-                                <VurderingAvTilsynsbehovForm
+                                <FormComponent
                                     defaultValues={buildInitialFormStateForEdit(vurderingsversjon)}
                                     resterendeVurderingsperioder={vurderingsoversikt.resterendeVurderingsperioder}
                                     perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
@@ -59,12 +102,9 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                         />
                     );
                 }
-                return (
-                    <VurderingsoppsummeringForKontinuerligTilsynOgPleie
-                        vurdering={vurdering}
-                        redigerVurdering={onEditClick}
-                    />
-                );
+
+                const SummaryComponent = getSummaryComponent(vurderingstype);
+                return <SummaryComponent vurdering={vurdering} redigerVurdering={onEditClick} />;
             }}
         />
     );
