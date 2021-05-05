@@ -9,9 +9,8 @@ interface State {
     vurderingsoversikt: Vurderingsoversikt;
     valgtVurderingselement: Vurderingselement;
     resterendeVurderingsperioderDefaultValue: Period[];
-    visRadForNyVurdering: boolean;
+    skalViseRadForNyVurdering: boolean;
     vurderingsoversiktFeilet: boolean;
-    editMode: boolean;
 }
 
 interface Action {
@@ -31,9 +30,8 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 isLoading: false,
                 resterendeVurderingsperioderDefaultValue: resterendeVurderingsperioder,
                 visVurderingDetails: false,
-                visRadForNyVurdering: false,
+                skalViseRadForNyVurdering: false,
                 vurderingsoversiktFeilet: false,
-                editMode: false,
             };
         }
         case ActionType.VURDERINGSOVERSIKT_FEILET: {
@@ -49,14 +47,13 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 valgtVurderingselement: null,
                 resterendeVurderingsperioderDefaultValue: action.resterendeVurderingsperioder || [],
                 visVurderingDetails: true,
-                visRadForNyVurdering: !action.resterendeVurderingsperioder,
+                skalViseRadForNyVurdering: !action.resterendeVurderingsperioder,
             };
         case ActionType.VELG_VURDERINGSELEMENT:
             return {
                 ...state,
                 valgtVurderingselement: action.valgtVurderingselement,
                 visVurderingDetails: true,
-                editMode: false,
             };
         case ActionType.PENDING:
             return {
@@ -69,14 +66,7 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 ...state,
                 visVurderingDetails: false,
                 valgtVurderingselement: null,
-                visRadForNyVurdering: false,
-                editMode: false,
-            };
-        case ActionType.ACTIVATE_EDIT_MODE:
-            return {
-                ...state,
-                visVurderingDetails: true,
-                editMode: true,
+                skalViseRadForNyVurdering: false,
             };
         default:
             return state;
