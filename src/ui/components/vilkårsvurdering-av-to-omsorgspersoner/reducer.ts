@@ -33,7 +33,7 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 visVurderingDetails: false,
                 visRadForNyVurdering: false,
                 vurderingsoversiktFeilet: false,
-                erRedigeringsmodus: false,
+                editMode: false,
             };
         }
         case ActionType.VURDERINGSOVERSIKT_FEILET: {
@@ -56,7 +56,7 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 ...state,
                 valgtVurderingselement: action.valgtVurderingselement,
                 visVurderingDetails: true,
-                erRedigeringsmodus: false,
+                editMode: false,
             };
         case ActionType.PENDING:
             return {
@@ -70,13 +70,13 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
                 visVurderingDetails: false,
                 valgtVurderingselement: null,
                 visRadForNyVurdering: false,
-                erRedigeringsmodus: false,
+                editMode: false,
             };
         case ActionType.SET_REDIGERINGSMODUS:
             return {
                 ...state,
                 visVurderingDetails: true,
-                erRedigeringsmodus: true,
+                editMode: true,
             };
         default:
             return state;

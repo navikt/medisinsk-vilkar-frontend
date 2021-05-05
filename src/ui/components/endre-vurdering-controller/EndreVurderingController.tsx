@@ -3,7 +3,6 @@ import axios from 'axios';
 import Dokument from '../../../types/Dokument';
 import Link from '../../../types/Link';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-import Vurderingstype from '../../../types/Vurderingstype';
 import { get } from '../../../util/httpUtils';
 import PageContainer from '../page-container/PageContainer';
 import { PeriodeMedEndring, PerioderMedEndringResponse } from '../../../types/PeriodeMedEndring';
@@ -19,7 +18,6 @@ interface EndreVurderingControllerProps {
     dataTilVurderingUrl: string;
     onVurderingLagret: () => void;
     formRenderer: (dokumenter: Dokument[], onSubmit: (vurderingsversjon: Vurderingsversjon) => void) => React.ReactNode;
-    vurderingstype: Vurderingstype;
     vurderingsid: string;
     vurderingsversjonId: string;
 }
@@ -29,7 +27,6 @@ const EndreVurderingController = ({
     dataTilVurderingUrl,
     onVurderingLagret,
     formRenderer,
-    vurderingstype,
     vurderingsid,
     vurderingsversjonId,
 }: EndreVurderingControllerProps) => {
@@ -83,7 +80,7 @@ const EndreVurderingController = ({
             endreVurderingLink.href,
             endreVurderingLink.requestPayload.behandlingUuid,
             vurderingsid,
-            { ...nyVurderingsversjon, type: vurderingstype },
+            nyVurderingsversjon,
             httpErrorHandler,
             httpCanceler.token
         );

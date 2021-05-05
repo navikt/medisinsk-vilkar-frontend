@@ -51,7 +51,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
         resterendeVurderingsperioderDefaultValue: [],
         vurderingsoversiktFeilet: false,
         visRadForNyVurdering: false,
-        erRedigeringsmodus: false,
+        editMode: false,
     });
 
     const {
@@ -62,7 +62,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
         resterendeVurderingsperioderDefaultValue,
         vurderingsoversiktFeilet,
         visRadForNyVurdering,
-        erRedigeringsmodus,
+        editMode,
     } = state;
 
     const { manglerGodkjentLegeerklæring } = sykdomsstegStatus;
@@ -220,7 +220,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                                             vurderingselement={valgtVurderingselement}
                                             vurderingstype={Vurderingstype.TO_OMSORGSPERSONER}
                                             contentRenderer={(vurdering) => {
-                                                if (erRedigeringsmodus) {
+                                                if (editMode) {
                                                     const vurderingsversjon = vurdering.versjoner[0];
                                                     const initialState = buildInitialFormStateForEdit(
                                                         vurderingsversjon

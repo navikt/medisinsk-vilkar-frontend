@@ -8,7 +8,7 @@ import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import Vurderingstype from '../../../types/Vurderingstype';
 import { get } from '../../../util/httpUtils';
-import { findLinkByRel } from '../../../util/linkUtils';
+import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
 import { finnNesteSteg } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Box, { Margin } from '../box/Box';
@@ -16,15 +16,15 @@ import NavigationWithDetailView from '../navigation-with-detail-view/NavigationW
 import VurderingAvTilsynsbehovForm, { FieldName } from '../vurdering-av-tilsynsbehov-form/VurderingAvTilsynsbehovForm';
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
 import PageContainer from '../page-container/PageContainer';
-import VurderingsdetaljerController from '../vurderingsdetaljer-controller/VurderingsdetaljerController';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
-import EndreVurderingController from '../endre-vurdering-controller/EndreVurderingController';
 import ManuellVurdering from '../../../types/ManuellVurdering';
 import { buildInitialFormStateForEdit } from './initialFormStateUtil';
+import EndreVurdering from '../endre-vurdering/EndreVurdering';
+import VurderingsdetaljerFetcher from '../vurderingsdetaljer-fetcher/VurderingsdetaljerFetcher';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     navigerTilNesteSteg: (steg: Step, ikkeMarkerSteg?: boolean) => void;
@@ -48,7 +48,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
         resterendeVurderingsperioderDefaultValue: [],
         visRadForNyVurdering: false,
         vurderingsoversiktFeilet: false,
-        erRedigeringsmodus: false,
+        editMode: false,
     });
 
     const {
@@ -59,7 +59,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
         resterendeVurderingsperioderDefaultValue,
         visRadForNyVurdering,
         vurderingsoversiktFeilet,
-        erRedigeringsmodus,
+        editMode,
     } = state;
 
     const { manglerGodkjentLegeerklæring } = sykdomsstegStatus;
@@ -128,7 +128,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
     };
 
     const redigerVurdering = () => {
-        dispatch({ type: ActionType.SET_REDIGERINGSMODUS });
+        dispatch({ type: ActionType.ACTIVATE_EDIT_MODE });
     };
 
     const onVurderingLagret = () => {
@@ -163,6 +163,17 @@ const VilkårsvurderingAvTilsynOgPleie = ({
     const skalViseOpprettVurderingKnapp =
         !vurderingsoversikt?.harPerioderSomSkalVurderes() && !visRadForNyVurdering && harGyldigSignatur;
 
+    const endreVurderingFormRenderer = (dokumenter, onSubmit, vurderingsversjon) => (
+        <VurderingAvTilsynsbehovForm
+            defaultValues={buildInitialFormStateForEdit(vurderingsversjon)}
+            resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+            perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
+            dokumenter={dokumenter}
+            onSubmit={onSubmit}
+            onAvbryt={visRadForNyVurdering ? onAvbryt : undefined}
+        />
+    );
+
     return (
         <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet} key={StepId.TilsynOgPleie}>
             <VurderingsoversiktMessages
@@ -188,58 +199,44 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                         detailSection={() => {
                             const harValgtVurderingselement = !!valgtVurderingselement;
                             const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
-                            return (
-                                <>
-                                    {harValgtVurderingselement && (
-                                        <VurderingsdetaljerController
-                                            vurderingselement={valgtVurderingselement}
-                                            vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
-                                            contentRenderer={(vurdering) => {
-                                                if (erRedigeringsmodus) {
-                                                    const vurderingsversjon = vurdering.versjoner[0];
-                                                    const initialState = buildInitialFormStateForEdit(
-                                                        vurderingsversjon
-                                                    );
-                                                    return (
-                                                        <EndreVurderingController
-                                                            vurderingsid={vurdering.id}
-                                                            vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}
-                                                            endreVurderingLink={findLinkByRel(
-                                                                LinkRel.ENDRE_VURDERING,
-                                                                (valgtVurderingselement as ManuellVurdering)?.links
-                                                            )}
-                                                            dataTilVurderingUrl={endpoints.dataTilVurdering}
-                                                            onVurderingLagret={onVurderingLagret}
-                                                            vurderingsversjonId={vurderingsversjon.versjon}
-                                                            formRenderer={(dokumenter, onSubmit) => (
-                                                                <VurderingAvTilsynsbehovForm
-                                                                    defaultValues={initialState}
-                                                                    resterendeVurderingsperioder={
-                                                                        resterendeVurderingsperioderDefaultValue
-                                                                    }
-                                                                    perioderSomKanVurderes={
-                                                                        vurderingsoversikt.perioderSomKanVurderes
-                                                                    }
-                                                                    dokumenter={dokumenter}
-                                                                    onSubmit={onSubmit}
-                                                                    onAvbryt={
-                                                                        visRadForNyVurdering ? onAvbryt : undefined
-                                                                    }
-                                                                />
-                                                            )}
-                                                        />
-                                                    );
-                                                }
 
+                            if (harValgtVurderingselement) {
+                                const manuellVurdering = valgtVurderingselement as ManuellVurdering;
+                                const url = findHrefByRel(LinkRel.HENT_VURDERING, manuellVurdering.links);
+                                return (
+                                    <VurderingsdetaljerFetcher
+                                        url={url}
+                                        contentRenderer={(vurdering) => {
+                                            if (editMode) {
+                                                const vurderingsversjon = vurdering.versjoner[0];
                                                 return (
-                                                    <VurderingsoppsummeringForKontinuerligTilsynOgPleie
-                                                        vurdering={vurdering}
-                                                        redigerVurdering={redigerVurdering}
+                                                    <EndreVurdering
+                                                        vurderingselement={manuellVurdering}
+                                                        vurderingsversjon={vurderingsversjon}
+                                                        onVurderingLagret={onVurderingLagret}
+                                                        formRenderer={(dokumenter, onSubmit) =>
+                                                            endreVurderingFormRenderer(
+                                                                dokumenter,
+                                                                onSubmit,
+                                                                vurderingsversjon
+                                                            )
+                                                        }
                                                     />
                                                 );
-                                            }}
-                                        />
-                                    )}
+                                            }
+                                            return (
+                                                <VurderingsoppsummeringForKontinuerligTilsynOgPleie
+                                                    vurdering={vurdering}
+                                                    redigerVurdering={redigerVurdering}
+                                                />
+                                            );
+                                        }}
+                                    />
+                                );
+                            }
+
+                            return (
+                                <>
                                     <div style={{ display: harValgtVurderingselement ? 'none' : '' }}>
                                         <NyVurderingController
                                             vurderingstype={Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE}

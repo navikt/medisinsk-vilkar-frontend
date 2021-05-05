@@ -21,8 +21,6 @@ const VurderingsdetaljerController = ({
     contentRenderer,
 }: VurderingsdetaljerControllerProps) => {
     const manuellVurdering = vurderingselement as ManuellVurdering;
-    const innleggelsesperiodeVurdering = vurderingselement as InnleggelsesperiodeVurdering;
-
     const needsToFetchMoreDetails = manuellVurdering.resultat !== undefined;
     if (needsToFetchMoreDetails) {
         const url = findHrefByRel(LinkRel.HENT_VURDERING, manuellVurdering.links);
@@ -34,6 +32,7 @@ const VurderingsdetaljerController = ({
         );
     }
 
+    const innleggelsesperiodeVurdering = vurderingselement as InnleggelsesperiodeVurdering;
     return (
         <VurderingsoppsummeringForInnleggelsesperiode
             vurdering={innleggelsesperiodeVurdering}
