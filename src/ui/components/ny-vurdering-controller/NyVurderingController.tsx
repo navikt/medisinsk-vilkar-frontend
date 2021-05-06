@@ -3,7 +3,6 @@ import axios from 'axios';
 import Dokument from '../../../types/Dokument';
 import Link from '../../../types/Link';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-import Vurderingstype from '../../../types/Vurderingstype';
 import { get } from '../../../util/httpUtils';
 import PageContainer from '../page-container/PageContainer';
 import { PeriodeMedEndring, PerioderMedEndringResponse } from '../../../types/PeriodeMedEndring';
@@ -13,13 +12,15 @@ import vurderingControllerReducer from './reducer';
 import { postNyVurdering, postNyVurderingDryRun } from '../../../api/api';
 import ContainerContext from '../../context/ContainerContext';
 import { scrollUp } from '../../../util/viewUtils';
+import VurderingContext from '../../context/VurderingContext';
+import Box, { Margin } from '../box/Box';
+import LagreVurderingFeiletMelding from '../lagre-vurdering-feilet-melding/LagreVurderingFeiletMelding';
 
 interface NyVurderingControllerProps {
     opprettVurderingLink: Link;
     dataTilVurderingUrl: string;
     onVurderingLagret: () => void;
     formRenderer: (dokumenter: Dokument[], onSubmit: (vurderingsversjon: Vurderingsversjon) => void) => React.ReactNode;
-    vurderingstype: Vurderingstype;
 }
 
 const NyVurderingController = ({
@@ -27,14 +28,15 @@ const NyVurderingController = ({
     dataTilVurderingUrl,
     onVurderingLagret,
     formRenderer,
-    vurderingstype,
 }: NyVurderingControllerProps) => {
     const { httpErrorHandler } = React.useContext(ContainerContext);
+    const { vurderingstype } = React.useContext(VurderingContext);
 
     const [state, dispatch] = React.useReducer(vurderingControllerReducer, {
         isLoading: true,
         dokumenter: [],
         hentDataTilVurderingHarFeilet: false,
+        lagreVurderingHarFeilet: false,
         perioderMedEndring: [],
         lagreVurderingFn: null,
         overlappendePeriodeModalOpen: false,
@@ -44,6 +46,7 @@ const NyVurderingController = ({
         isLoading,
         dokumenter,
         hentDataTilVurderingHarFeilet,
+        lagreVurderingHarFeilet,
         perioderMedEndring,
         lagreVurderingFn,
         overlappendePeriodeModalOpen,
@@ -73,15 +76,14 @@ const NyVurderingController = ({
 
     const sjekkForEksisterendeVurderinger = (
         nyVurderingsversjon: Vurderingsversjon
-    ): Promise<PerioderMedEndringResponse> => {
-        return postNyVurderingDryRun(
+    ): Promise<PerioderMedEndringResponse> =>
+        postNyVurderingDryRun(
             opprettVurderingLink.href,
             opprettVurderingLink.requestPayload.behandlingUuid,
             { ...nyVurderingsversjon, type: vurderingstype },
             httpErrorHandler,
             httpCanceler.token
         );
-    };
 
     const advarOmEksisterendeVurderinger = (
         nyVurderingsversjon: Vurderingsversjon,
@@ -95,14 +97,22 @@ const NyVurderingController = ({
     };
 
     const beOmBekreftelseFørLagringHvisNødvendig = (nyVurderingsversjon: Vurderingsversjon) => {
-        sjekkForEksisterendeVurderinger(nyVurderingsversjon).then((perioderMedEndringerResponse) => {
-            const harOverlappendePerioder = perioderMedEndringerResponse.perioderMedEndringer.length > 0;
-            if (harOverlappendePerioder) {
-                advarOmEksisterendeVurderinger(nyVurderingsversjon, perioderMedEndringerResponse.perioderMedEndringer);
-            } else {
-                lagreVurdering(nyVurderingsversjon);
+        sjekkForEksisterendeVurderinger(nyVurderingsversjon).then(
+            (perioderMedEndringerResponse) => {
+                const harOverlappendePerioder = perioderMedEndringerResponse.perioderMedEndringer.length > 0;
+                if (harOverlappendePerioder) {
+                    advarOmEksisterendeVurderinger(
+                        nyVurderingsversjon,
+                        perioderMedEndringerResponse.perioderMedEndringer
+                    );
+                } else {
+                    lagreVurdering(nyVurderingsversjon);
+                }
+            },
+            () => {
+                dispatch({ type: ActionType.LAGRE_VURDERING_FEILET });
             }
-        });
+        );
     };
 
     function hentDataTilVurdering(): Promise<Dokument[]> {
@@ -135,10 +145,15 @@ const NyVurderingController = ({
 
     return (
         <PageContainer isLoading={isLoading} hasError={hentDataTilVurderingHarFeilet} preventUnmount>
+            {lagreVurderingHarFeilet && (
+                <Box marginBottom={Margin.medium}>
+                    <LagreVurderingFeiletMelding />
+                </Box>
+            )}
             {formRenderer(dokumenter, beOmBekreftelseFørLagringHvisNødvendig)}
             <OverlappendePeriodeModal
                 appElementId="app"
-                perioderMedEndring={perioderMedEndring}
+                perioderMedEndring={perioderMedEndring || []}
                 onCancel={() => dispatch({ type: ActionType.LAGRING_AV_VURDERING_AVBRUTT })}
                 onConfirm={() => {
                     lagreVurderingFn().then(() => {

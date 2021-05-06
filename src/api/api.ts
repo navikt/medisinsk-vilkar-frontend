@@ -87,7 +87,7 @@ export async function postEndreVurderingDryRun(
     href: string,
     behandlingUuid: string,
     vurderingsid: string,
-    vurderingsversjonMedType: VurderingsversjonMedType,
+    vurderingsversjon: Vurderingsversjon,
     httpErrorHandler: HttpErrorHandler,
     cancelToken?: CancelToken
 ): Promise<PerioderMedEndringResponse> {
@@ -95,7 +95,7 @@ export async function postEndreVurderingDryRun(
         href,
         behandlingUuid,
         vurderingsid,
-        vurderingsversjonMedType,
+        vurderingsversjon,
         httpErrorHandler,
         cancelToken,
         true
