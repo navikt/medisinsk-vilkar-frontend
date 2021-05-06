@@ -12,6 +12,8 @@ import vurderingControllerReducer from './reducer';
 import { postEndreVurdering, postEndreVurderingDryRun } from '../../../api/api';
 import ContainerContext from '../../context/ContainerContext';
 import { scrollUp } from '../../../util/viewUtils';
+import Box, { Margin } from '../box/Box';
+import LagreVurderingFeiletMelding from '../lagre-vurdering-feilet-melding/LagreVurderingFeiletMelding';
 
 interface EndreVurderingControllerProps {
     endreVurderingLink: Link;
@@ -39,6 +41,7 @@ const EndreVurderingController = ({
         perioderMedEndring: [],
         lagreVurderingFn: null,
         overlappendePeriodeModalOpen: false,
+        lagreVurderingHarFeilet: false,
     });
 
     const {
@@ -48,6 +51,7 @@ const EndreVurderingController = ({
         perioderMedEndring,
         lagreVurderingFn,
         overlappendePeriodeModalOpen,
+        lagreVurderingHarFeilet,
     } = state;
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
@@ -98,17 +102,22 @@ const EndreVurderingController = ({
 
     const beOmBekreftelseFørLagringHvisNødvendig = (nyVurderingsversjon: Vurderingsversjon) => {
         const nyVurderingsversjonMedVersjonId = { ...nyVurderingsversjon, versjon: vurderingsversjonId };
-        sjekkForEksisterendeVurderinger(nyVurderingsversjonMedVersjonId).then((perioderMedEndringerResponse) => {
-            const harOverlappendePerioder = perioderMedEndringerResponse.perioderMedEndringer.length > 0;
-            if (harOverlappendePerioder) {
-                advarOmEksisterendeVurderinger(
-                    nyVurderingsversjonMedVersjonId,
-                    perioderMedEndringerResponse.perioderMedEndringer
-                );
-            } else {
-                endreVurdering(nyVurderingsversjonMedVersjonId);
+        sjekkForEksisterendeVurderinger(nyVurderingsversjonMedVersjonId).then(
+            (perioderMedEndringerResponse) => {
+                const harOverlappendePerioder = perioderMedEndringerResponse.perioderMedEndringer.length > 0;
+                if (harOverlappendePerioder) {
+                    advarOmEksisterendeVurderinger(
+                        nyVurderingsversjonMedVersjonId,
+                        perioderMedEndringerResponse.perioderMedEndringer
+                    );
+                } else {
+                    endreVurdering(nyVurderingsversjonMedVersjonId);
+                }
+            },
+            () => {
+                dispatch({ type: ActionType.LAGRE_VURDERING_FEILET });
             }
-        });
+        );
     };
 
     function hentDataTilVurdering(): Promise<Dokument[]> {
@@ -141,10 +150,20 @@ const EndreVurderingController = ({
 
     return (
         <PageContainer isLoading={isLoading} hasError={hentDataTilVurderingHarFeilet} preventUnmount>
+            {lagreVurderingHarFeilet && (
+                <Box marginBottom={Margin.medium}>
+                    <LagreVurderingFeiletMelding />
+                </Box>
+            )}
             {formRenderer(dokumenter, beOmBekreftelseFørLagringHvisNødvendig)}
+            {lagreVurderingHarFeilet && (
+                <Box marginTop={Margin.medium}>
+                    <LagreVurderingFeiletMelding />
+                </Box>
+            )}
             <OverlappendePeriodeModal
                 appElementId="app"
-                perioderMedEndring={perioderMedEndring}
+                perioderMedEndring={perioderMedEndring || []}
                 onCancel={() => dispatch({ type: ActionType.LAGRING_AV_VURDERING_AVBRUTT })}
                 onConfirm={() => {
                     lagreVurderingFn().then(() => {

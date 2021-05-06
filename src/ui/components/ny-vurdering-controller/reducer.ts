@@ -8,6 +8,7 @@ interface State {
     isLoading: boolean;
     dokumenter: Dokument[];
     hentDataTilVurderingHarFeilet: boolean;
+    lagreVurderingHarFeilet: boolean;
     perioderMedEndring: PeriodeMedEndring[];
     lagreVurderingFn: LagreVurderingFunction;
     overlappendePeriodeModalOpen: boolean;
@@ -26,6 +27,7 @@ const vurderingControllerReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 isLoading: true,
+                lagreVurderingHarFeilet: false,
             };
         case ActionType.VURDERING_LAGRET:
             return {
@@ -38,6 +40,7 @@ const vurderingControllerReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 isLoading: false,
+                lagreVurderingHarFeilet: true,
             };
         case ActionType.LAGRING_AV_VURDERING_AVBRUTT:
             return {
