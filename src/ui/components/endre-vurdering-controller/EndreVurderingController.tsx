@@ -148,7 +148,7 @@ const EndreVurderingController = ({
                 onCancel={() => dispatch({ type: ActionType.LAGRING_AV_VURDERING_AVBRUTT })}
                 onConfirm={() => {
                     lagreVurderingFn().then(() => {
-                        dispatch({ type: ActionType.VURDERING_LAGRET, perioderMedEndring });
+                        dispatch({ type: ActionType.VURDERING_LAGRET });
                     });
                 }}
                 isOpen={overlappendePeriodeModalOpen}

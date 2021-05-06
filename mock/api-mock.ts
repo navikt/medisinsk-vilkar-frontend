@@ -125,12 +125,14 @@ app.use('/mock/endre-vurdering', (req, res) => {
         });
 
         const index = tilsynsbehovVurderingerMock.findIndex((element) => element.id === id);
-        tilsynsbehovVurderingerMock[index].versjoner.unshift({
-            perioder,
-            resultat: req.body.resultat,
-            dokumenter: mockedDokumentliste,
-            tekst: req.body.tekst,
-        });
+        if (tilsynsbehovVurderingerMock[index]) {
+            tilsynsbehovVurderingerMock[index].versjoner.unshift({
+                perioder,
+                resultat: req.body.resultat,
+                dokumenter: mockedDokumentliste,
+                tekst: req.body.tekst,
+            });
+        }
         res.send();
     }
 });

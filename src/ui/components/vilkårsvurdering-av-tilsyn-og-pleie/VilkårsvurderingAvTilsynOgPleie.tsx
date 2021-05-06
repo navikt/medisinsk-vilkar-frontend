@@ -1,5 +1,5 @@
-import axios from 'axios';
 import React, { useMemo } from 'react';
+import axios from 'axios';
 import { Period } from '../../../types/Period';
 import Step, { StepId, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
@@ -36,7 +36,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({
         isLoading: true,
         vurderingsoversikt: null,
         valgtVurderingselement: null,
-        resterendeVurderingsperioderDefaultValue: [],
         skalViseRadForNyVurdering: false,
         vurderingsoversiktFeilet: false,
     });
@@ -166,8 +165,8 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                             <Vurderingsdetaljer
                                 vurderingsoversikt={vurderingsoversikt}
                                 valgtVurderingselement={valgtVurderingselement}
-                                visRadForNyVurdering={skalViseRadForNyVurdering}
-                                visNyVurderingForm={skalViseNyVurderingForm}
+                                radForNyVurderingVises={skalViseRadForNyVurdering}
+                                nyVurderingFormVises={skalViseNyVurderingForm}
                                 onVurderingLagret={onVurderingLagret}
                                 onAvbryt={onAvbryt}
                             />

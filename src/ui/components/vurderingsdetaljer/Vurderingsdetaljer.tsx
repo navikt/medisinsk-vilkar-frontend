@@ -9,8 +9,8 @@ interface VurderingsdetaljerProps {
     vurderingsoversikt: Vurderingsoversikt;
     onVurderingLagret: () => void;
     onAvbryt: () => void;
-    visRadForNyVurdering: boolean;
-    visNyVurderingForm: boolean;
+    radForNyVurderingVises: boolean;
+    nyVurderingFormVises: boolean;
 }
 
 const Vurderingsdetaljer = ({
@@ -18,14 +18,19 @@ const Vurderingsdetaljer = ({
     vurderingsoversikt,
     onVurderingLagret,
     onAvbryt,
-    visRadForNyVurdering,
-    visNyVurderingForm,
+    radForNyVurderingVises,
+    nyVurderingFormVises,
 }: VurderingsdetaljerProps) => {
     const [editMode, setEditMode] = React.useState(false);
 
     React.useEffect(() => {
         setEditMode(false);
     }, [valgtVurderingselement]);
+
+    const onVurderingLagretCallback = () => {
+        setEditMode(false);
+        onVurderingLagret();
+    };
 
     let valgtVurderingContent = null;
     if (valgtVurderingselement) {
@@ -36,7 +41,7 @@ const Vurderingsdetaljer = ({
                 editMode={editMode}
                 onEditClick={() => setEditMode(true)}
                 onAvbrytClick={() => setEditMode(false)}
-                onVurderingLagret={onVurderingLagret}
+                onVurderingLagret={onVurderingLagretCallback}
             />
         );
     }
@@ -45,10 +50,10 @@ const Vurderingsdetaljer = ({
     return (
         <>
             {harValgtVurderingselement && valgtVurderingContent}
-            <div style={{ display: harValgtVurderingselement || !visNyVurderingForm ? 'none' : '' }}>
+            <div style={{ display: harValgtVurderingselement || !nyVurderingFormVises ? 'none' : '' }}>
                 <VurderingsdetaljvisningForNyVurdering
                     vurderingsoversikt={vurderingsoversikt}
-                    radForNyVurderingErSynlig={visRadForNyVurdering}
+                    radForNyVurderingVises={radForNyVurderingVises}
                     onAvbryt={onAvbryt}
                     onVurderingLagret={onVurderingLagret}
                 />

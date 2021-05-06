@@ -16,7 +16,7 @@ import VurderingContext from '../../context/VurderingContext';
 
 interface VurderingsdetaljvisningForNyVurderingProps {
     vurderingsoversikt: Vurderingsoversikt;
-    radForNyVurderingErSynlig: boolean;
+    radForNyVurderingVises: boolean;
     onVurderingLagret: () => void;
     onAvbryt: () => void;
 }
@@ -55,14 +55,27 @@ const VurderingsdetaljvisningForNyVurdering = ({
     vurderingsoversikt,
     onVurderingLagret,
     onAvbryt,
-    radForNyVurderingErSynlig,
+    radForNyVurderingVises,
 }: VurderingsdetaljvisningForNyVurderingProps) => {
+    const { readOnly } = React.useContext(ContainerContext);
+
     const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
     const resterendeVurderingsperioderDefaultValue = vurderingsoversikt.resterendeVurderingsperioder;
-    const defaultPerioder =
-        resterendeVurderingsperioderDefaultValue.length > 0
-            ? resterendeVurderingsperioderDefaultValue
-            : [new Period('', '')];
+
+    const defaultPerioder = () => {
+        if (resterendeVurderingsperioderDefaultValue?.length > 0) {
+            return resterendeVurderingsperioderDefaultValue;
+        }
+
+        const skalViseValgfriePerioder =
+            !readOnly && vurderingsoversikt?.resterendeValgfrieVurderingsperioder.length > 0;
+        if (skalViseValgfriePerioder) {
+            return vurderingsoversikt.resterendeValgfrieVurderingsperioder || [new Period('', '')];
+        }
+
+        return [new Period('', '')];
+    };
+
     const { endpoints } = React.useContext(ContainerContext);
     const { vurderingstype } = React.useContext(VurderingContext);
     const FormComponent = getFormComponent(vurderingstype);
@@ -74,12 +87,12 @@ const VurderingsdetaljvisningForNyVurdering = ({
             onVurderingLagret={onVurderingLagret}
             formRenderer={(dokumenter, onSubmit) => (
                 <FormComponent
-                    defaultValues={makeDefaultValues(vurderingstype, defaultPerioder) as any}
+                    defaultValues={makeDefaultValues(vurderingstype, defaultPerioder()) as any}
                     resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
                     perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
                     dokumenter={dokumenter}
                     onSubmit={onSubmit}
-                    onAvbryt={radForNyVurderingErSynlig ? () => onAvbryt() : undefined}
+                    onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
                 />
             )}
         />

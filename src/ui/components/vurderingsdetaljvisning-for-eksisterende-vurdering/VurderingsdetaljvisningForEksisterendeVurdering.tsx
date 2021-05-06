@@ -88,7 +88,7 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                             dataTilVurderingUrl={endpoints.dataTilVurdering}
                             formRenderer={(dokumenter, onSubmit) => (
                                 <FormComponent
-                                    defaultValues={buildInitialFormStateForEdit(vurderingsversjon)}
+                                    defaultValues={buildInitialFormStateForEdit(vurderingsversjon, vurderingstype)}
                                     resterendeVurderingsperioder={vurderingsoversikt.resterendeVurderingsperioder}
                                     perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
                                     dokumenter={dokumenter}

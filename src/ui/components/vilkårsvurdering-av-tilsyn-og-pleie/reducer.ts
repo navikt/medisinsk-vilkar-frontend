@@ -8,7 +8,6 @@ interface State {
     isLoading: boolean;
     vurderingsoversikt: Vurderingsoversikt;
     valgtVurderingselement: Vurderingselement;
-    resterendeVurderingsperioderDefaultValue: Period[];
     skalViseRadForNyVurdering: boolean;
     vurderingsoversiktFeilet: boolean;
 }
@@ -23,12 +22,10 @@ interface Action {
 const vilkårsvurderingReducer = (state: State, action: Action): State => {
     switch (action.type) {
         case ActionType.VIS_VURDERINGSOVERSIKT: {
-            const resterendeVurderingsperioder = action.vurderingsoversikt?.resterendeVurderingsperioder || [];
             return {
                 ...state,
                 vurderingsoversikt: action.vurderingsoversikt,
                 isLoading: false,
-                resterendeVurderingsperioderDefaultValue: resterendeVurderingsperioder,
                 visVurderingDetails: false,
                 skalViseRadForNyVurdering: false,
                 vurderingsoversiktFeilet: false,
@@ -45,7 +42,6 @@ const vilkårsvurderingReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 valgtVurderingselement: null,
-                resterendeVurderingsperioderDefaultValue: action.resterendeVurderingsperioder || [],
                 visVurderingDetails: true,
                 skalViseRadForNyVurdering: !action.resterendeVurderingsperioder,
             };
