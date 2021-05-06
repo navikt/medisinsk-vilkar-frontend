@@ -11,14 +11,22 @@ import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 
 interface VurderingsoppsummeringForToOmsorgspersonerProps {
     vurdering: Vurdering;
+    redigerVurdering: () => void;
 }
 
-const VurderingsoppsummeringForToOmsorgspersoner = ({ vurdering }: VurderingsoppsummeringForToOmsorgspersonerProps) => {
+const VurderingsoppsummeringForToOmsorgspersoner = ({
+    vurdering,
+    redigerVurdering,
+}: VurderingsoppsummeringForToOmsorgspersonerProps) => {
     const gjeldendeVurdering = vurdering.versjoner[0];
     const { resultat, tekst, dokumenter, perioder } = gjeldendeVurdering;
     const erInnleggelse = vurdering.erInnleggelsesperiode;
     return (
-        <DetailViewVurdering title="Vurdering av to omsorgspersoner" perioder={perioder}>
+        <DetailViewVurdering
+            title="Vurdering av to omsorgspersoner"
+            perioder={perioder}
+            redigerVurdering={!erInnleggelse ? redigerVurdering : null}
+        >
             <Box marginTop={Margin.large}>
                 {erInnleggelse && <DekketAvInnleggelsesperiodeMelding />}
                 <Box marginTop={Margin.medium}>

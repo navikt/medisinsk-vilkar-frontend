@@ -5,14 +5,14 @@ import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
 import { Period } from '../../../types/Period';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-import { getPeriodAsListOfDays, isValidPeriod } from '../../../util/dateUtils';
+import { getPeriodAsListOfDays } from '../../../util/dateUtils';
 import { convertToInternationalPeriod, prettifyPeriodList } from '../../../util/formats';
 import {
     finnHullIPerioder,
     finnMaksavgrensningerForPerioder,
     slåSammenSammenhengendePerioder,
 } from '../../../util/periodUtils';
-import { lagTilsynsbehovVurdering } from '../../../util/vurderingUtils';
+import { lagToOmsorgspersonerVurdering } from '../../../util/vurderingUtils';
 import { fomDatoErFørTomDato, harBruktDokumentasjon, required } from '../../form/validators';
 import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
@@ -23,25 +23,25 @@ import Box, { Margin } from '../box/Box';
 import DeleteButton from '../delete-button/DeleteButton';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Form from '../form/Form';
-import styles from './nyVurderingAvTilsynsbehovForm.less';
+import styles from './vurderingAvToOmsorgspersonerForm.less';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 
 export enum FieldName {
-    VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
-    HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE = 'harBehovForKontinuerligTilsynOgPleie',
+    VURDERING_AV_TO_OMSORGSPERSONER = 'vurderingAvToOmsorgspersoner',
+    HAR_BEHOV_FOR_TO_OMSORGSPERSONER = 'harBehovForToOmsorgspersoner',
     PERIODER = 'perioder',
     DOKUMENTER = 'dokumenter',
 }
 
-export interface NyVurderingAvTilsynsbehovFormState {
-    [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]?: string;
-    [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]?: boolean;
+export interface VurderingAvToOmsorgspersonerFormState {
+    [FieldName.VURDERING_AV_TO_OMSORGSPERSONER]?: string;
+    [FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]?: boolean;
     [FieldName.PERIODER]?: Period[];
     [FieldName.DOKUMENTER]: string[];
 }
 
-interface NyVurderingAvTilsynsbehovFormProps {
-    defaultValues: NyVurderingAvTilsynsbehovFormState;
+interface VurderingAvToOmsorgspersonerFormProps {
+    defaultValues: VurderingAvToOmsorgspersonerFormState;
     onSubmit: (nyVurdering: Partial<Vurderingsversjon>) => void;
     resterendeVurderingsperioder?: Period[];
     perioderSomKanVurderes?: Period[];
@@ -49,20 +49,20 @@ interface NyVurderingAvTilsynsbehovFormProps {
     onAvbryt: () => void;
 }
 
-const NyVurderingAvTilsynsbehovForm = ({
+const VurderingAvToOmsorgspersonerForm = ({
     defaultValues,
     onSubmit,
     resterendeVurderingsperioder,
     perioderSomKanVurderes,
     dokumenter,
     onAvbryt,
-}: NyVurderingAvTilsynsbehovFormProps): JSX.Element => {
+}: VurderingAvToOmsorgspersonerFormProps): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
-        mode: 'onChange',
     });
 
     const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
+
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
         const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap(getPeriodAsListOfDays);
         const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])
@@ -86,27 +86,22 @@ const NyVurderingAvTilsynsbehovForm = ({
         [perioderSomKanVurderes]
     );
 
-    const lagNyTilsynsvurdering = (formState: NyVurderingAvTilsynsbehovFormState) => {
-        onSubmit(lagTilsynsbehovVurdering(formState, dokumenter));
+    const lagNyVurdering = (formState: VurderingAvToOmsorgspersonerFormState) => {
+        onSubmit(lagToOmsorgspersonerVurdering(formState, dokumenter));
     };
 
-    const sammenhengendeSøknadsperioder = React.useMemo(() => {
+    const sammenhengendePerioderMedTilsynsbehov = React.useMemo(() => {
         return slåSammenSammenhengendePerioder(perioderSomKanVurderes);
     }, [perioderSomKanVurderes]);
 
     return (
-        <DetailViewVurdering title="Vurdering av tilsyn og pleie" perioder={defaultValues[FieldName.PERIODER]}>
-            <div id="modal" />
+        <DetailViewVurdering title="Vurdering av to omsorgspersoner" perioder={defaultValues[FieldName.PERIODER]}>
             <FormProvider {...formMethods}>
-                <Form
-                    buttonLabel="Bekreft"
-                    onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}
-                    onAvbryt={onAvbryt}
-                >
+                <Form buttonLabel="Bekreft" onSubmit={formMethods.handleSubmit(lagNyVurdering)} onAvbryt={onAvbryt}>
                     {dokumenter?.length > 0 && (
                         <Box marginTop={Margin.large}>
                             <CheckboxGroup
-                                question="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
+                                question="Hvilke dokumenter er brukt i vurderingen av to omsorgspersoner?"
                                 name={FieldName.DOKUMENTER}
                                 checkboxes={dokumenter.map((dokument) => ({
                                     value: dokument.id,
@@ -125,15 +120,13 @@ const NyVurderingAvTilsynsbehovForm = ({
                     )}
                     <Box marginTop={Margin.xLarge}>
                         <TextArea
-                            id="begrunnelsesfelt"
                             textareaClass={styles.begrunnelsesfelt}
-                            name={FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE}
+                            name={FieldName.VURDERING_AV_TO_OMSORGSPERSONER}
                             label={
                                 <>
-                                    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                                     <b>
-                                        Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge
-                                        av sykdommen etter § 9-10, første ledd.
+                                        Gjør en vurdering av om det er behov for to omsorgspersoner samtidig etter §
+                                        9-10, andre ledd.
                                     </b>
                                     <p className={styles.begrunnelsesfelt__labeltekst}>
                                         Du skal ta utgangspunkt i{' '}
@@ -149,21 +142,23 @@ const NyVurderingAvTilsynsbehovForm = ({
                                         </Lenke>{' '}
                                         når du skriver vurderingen.
                                     </p>
-
                                     <p className={styles.begrunnelsesfelt__labeltekst}>Vurderingen skal beskrive:</p>
                                     <ul className={styles.begrunnelsesfelt__liste}>
-                                        <li>Om det er årsakssammenheng mellom sykdom og pleiebehov</li>
-                                        <li>Om behovet er kontinuerlig og ikke situasjonsbestemt</li>
+                                        <li>
+                                            Om tilsyn og pleie kan ivaretas av én person alene i hele eller deler av
+                                            perioden.
+                                        </li>
                                     </ul>
                                 </>
                             }
                             validators={{ required }}
+                            id="begrunnelsesfelt"
                         />
                     </Box>
                     <Box marginTop={Margin.xLarge}>
                         <YesOrNoQuestion
-                            question="Er det behov for tilsyn og pleie?"
-                            name={FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE}
+                            question="Er det behov for to omsorgspersoner samtidig?"
+                            name={FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER}
                             validators={{ required }}
                         />
                     </Box>
@@ -174,13 +169,13 @@ const NyVurderingAvTilsynsbehovForm = ({
                             defaultValues={defaultValues[FieldName.PERIODER] || []}
                             validators={{
                                 required,
-                                inngårISammenhengendeSøknadsperiode: (value: Period) => {
-                                    const isOk = sammenhengendeSøknadsperioder.some((sammenhengendeSøknadsperiode) =>
-                                        sammenhengendeSøknadsperiode.covers(value)
+                                inngårISammenhengendePeriodeMedTilsynsbehov: (value: Period) => {
+                                    const isOk = sammenhengendePerioderMedTilsynsbehov.some(
+                                        (sammenhengendeSøknadsperiode) => sammenhengendeSøknadsperiode.covers(value)
                                     );
 
                                     if (!isOk) {
-                                        return 'Perioden som vurderes må være innenfor en eller flere sammenhengede søknadsperioder';
+                                        return 'Perioden som vurderes må være innenfor en eller flere sammenhengede perioder med behov for kontinuerlig tilsyn og pleie';
                                     }
 
                                     return true;
@@ -191,8 +186,8 @@ const NyVurderingAvTilsynsbehovForm = ({
                                 label: 'Fra',
                                 ariaLabel: 'fra',
                                 limitations: {
-                                    minDate: avgrensningerForSøknadsperiode?.fom,
-                                    maxDate: avgrensningerForSøknadsperiode?.tom,
+                                    minDate: avgrensningerForSøknadsperiode?.fom || '',
+                                    maxDate: avgrensningerForSøknadsperiode?.tom || '',
                                     invalidDateRanges: hullISøknadsperiodene,
                                 },
                             }}
@@ -200,8 +195,8 @@ const NyVurderingAvTilsynsbehovForm = ({
                                 label: 'Til',
                                 ariaLabel: 'til',
                                 limitations: {
-                                    minDate: avgrensningerForSøknadsperiode?.fom,
-                                    maxDate: avgrensningerForSøknadsperiode?.tom,
+                                    minDate: avgrensningerForSøknadsperiode?.fom || '',
+                                    maxDate: avgrensningerForSøknadsperiode?.tom || '',
                                     invalidDateRanges: hullISøknadsperiodene,
                                 },
                             }}
@@ -243,4 +238,4 @@ const NyVurderingAvTilsynsbehovForm = ({
     );
 };
 
-export default NyVurderingAvTilsynsbehovForm;
+export default VurderingAvToOmsorgspersonerForm;

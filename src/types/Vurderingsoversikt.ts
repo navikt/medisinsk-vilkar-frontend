@@ -25,7 +25,7 @@ export class Vurderingsoversikt {
             this.resterendeVurderingsperioder = data.resterendeVurderingsperioder.map(
                 ({ fom, tom }) => new Period(fom, tom)
             );
-            this.resterendeValgfrieVurderingsperioder = data.resterendeValgfrieVurderingsperioder?.map(
+            this.resterendeValgfrieVurderingsperioder = data.resterendeValgfrieVurderingsperioder.map(
                 ({ fom, tom }) => new Period(fom, tom)
             );
             this.søknadsperioderTilBehandling = data.søknadsperioderTilBehandling.map(

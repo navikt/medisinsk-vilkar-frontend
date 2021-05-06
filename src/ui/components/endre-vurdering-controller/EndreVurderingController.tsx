@@ -9,56 +9,59 @@ import { PeriodeMedEndring, PerioderMedEndringResponse } from '../../../types/Pe
 import OverlappendePeriodeModal from '../overlappende-periode-modal/OverlappendePeriodeModal';
 import ActionType from './actionTypes';
 import vurderingControllerReducer from './reducer';
-import { postNyVurdering, postNyVurderingDryRun } from '../../../api/api';
+import { postEndreVurdering, postEndreVurderingDryRun } from '../../../api/api';
 import ContainerContext from '../../context/ContainerContext';
 import { scrollUp } from '../../../util/viewUtils';
-import VurderingContext from '../../context/VurderingContext';
 import Box, { Margin } from '../box/Box';
 import LagreVurderingFeiletMelding from '../lagre-vurdering-feilet-melding/LagreVurderingFeiletMelding';
 
-interface NyVurderingControllerProps {
-    opprettVurderingLink: Link;
+interface EndreVurderingControllerProps {
+    endreVurderingLink: Link;
     dataTilVurderingUrl: string;
     onVurderingLagret: () => void;
     formRenderer: (dokumenter: Dokument[], onSubmit: (vurderingsversjon: Vurderingsversjon) => void) => React.ReactNode;
+    vurderingsid: string;
+    vurderingsversjonId: string;
 }
 
-const NyVurderingController = ({
-    opprettVurderingLink,
+const EndreVurderingController = ({
+    endreVurderingLink,
     dataTilVurderingUrl,
     onVurderingLagret,
     formRenderer,
-}: NyVurderingControllerProps) => {
+    vurderingsid,
+    vurderingsversjonId,
+}: EndreVurderingControllerProps) => {
     const { httpErrorHandler } = React.useContext(ContainerContext);
-    const { vurderingstype } = React.useContext(VurderingContext);
 
     const [state, dispatch] = React.useReducer(vurderingControllerReducer, {
         isLoading: true,
         dokumenter: [],
         hentDataTilVurderingHarFeilet: false,
-        lagreVurderingHarFeilet: false,
         perioderMedEndring: [],
         lagreVurderingFn: null,
         overlappendePeriodeModalOpen: false,
+        lagreVurderingHarFeilet: false,
     });
 
     const {
         isLoading,
         dokumenter,
         hentDataTilVurderingHarFeilet,
-        lagreVurderingHarFeilet,
         perioderMedEndring,
         lagreVurderingFn,
         overlappendePeriodeModalOpen,
+        lagreVurderingHarFeilet,
     } = state;
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
-    function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
+    function endreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
         dispatch({ type: ActionType.PENDING });
-        return postNyVurdering(
-            opprettVurderingLink.href,
-            opprettVurderingLink.requestPayload.behandlingUuid,
-            { ...nyVurderingsversjon, type: vurderingstype },
+        return postEndreVurdering(
+            endreVurderingLink.href,
+            endreVurderingLink.requestPayload.behandlingUuid,
+            vurderingsid,
+            nyVurderingsversjon,
             httpErrorHandler,
             httpCanceler.token
         ).then(
@@ -77,10 +80,11 @@ const NyVurderingController = ({
     const sjekkForEksisterendeVurderinger = (
         nyVurderingsversjon: Vurderingsversjon
     ): Promise<PerioderMedEndringResponse> =>
-        postNyVurderingDryRun(
-            opprettVurderingLink.href,
-            opprettVurderingLink.requestPayload.behandlingUuid,
-            { ...nyVurderingsversjon, type: vurderingstype },
+        postEndreVurderingDryRun(
+            endreVurderingLink.href,
+            endreVurderingLink.requestPayload.behandlingUuid,
+            vurderingsid,
+            nyVurderingsversjon,
             httpErrorHandler,
             httpCanceler.token
         );
@@ -92,21 +96,22 @@ const NyVurderingController = ({
         dispatch({
             type: ActionType.ADVAR_OM_EKSISTERENDE_VURDERINGER,
             perioderMedEndring: perioderMedEndringValue,
-            lagreVurderingFn: () => lagreVurdering(nyVurderingsversjon),
+            lagreVurderingFn: () => endreVurdering(nyVurderingsversjon),
         });
     };
 
     const beOmBekreftelseFørLagringHvisNødvendig = (nyVurderingsversjon: Vurderingsversjon) => {
-        sjekkForEksisterendeVurderinger(nyVurderingsversjon).then(
+        const nyVurderingsversjonMedVersjonId = { ...nyVurderingsversjon, versjon: vurderingsversjonId };
+        sjekkForEksisterendeVurderinger(nyVurderingsversjonMedVersjonId).then(
             (perioderMedEndringerResponse) => {
                 const harOverlappendePerioder = perioderMedEndringerResponse.perioderMedEndringer.length > 0;
                 if (harOverlappendePerioder) {
                     advarOmEksisterendeVurderinger(
-                        nyVurderingsversjon,
+                        nyVurderingsversjonMedVersjonId,
                         perioderMedEndringerResponse.perioderMedEndringer
                     );
                 } else {
-                    lagreVurdering(nyVurderingsversjon);
+                    endreVurdering(nyVurderingsversjonMedVersjonId);
                 }
             },
             () => {
@@ -151,13 +156,18 @@ const NyVurderingController = ({
                 </Box>
             )}
             {formRenderer(dokumenter, beOmBekreftelseFørLagringHvisNødvendig)}
+            {lagreVurderingHarFeilet && (
+                <Box marginTop={Margin.medium}>
+                    <LagreVurderingFeiletMelding />
+                </Box>
+            )}
             <OverlappendePeriodeModal
                 appElementId="app"
                 perioderMedEndring={perioderMedEndring || []}
                 onCancel={() => dispatch({ type: ActionType.LAGRING_AV_VURDERING_AVBRUTT })}
                 onConfirm={() => {
                     lagreVurderingFn().then(() => {
-                        dispatch({ type: ActionType.VURDERING_LAGRET, perioderMedEndring });
+                        dispatch({ type: ActionType.VURDERING_LAGRET });
                     });
                 }}
                 isOpen={overlappendePeriodeModalOpen}
@@ -167,4 +177,4 @@ const NyVurderingController = ({
     );
 };
 
-export default NyVurderingController;
+export default EndreVurderingController;

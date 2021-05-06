@@ -11,16 +11,22 @@ import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 
 interface VurderingsoppsummeringForKontinuerligTilsynOgPleieProps {
     vurdering: Vurdering;
+    redigerVurdering: () => void;
 }
 
 const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
     vurdering,
+    redigerVurdering,
 }: VurderingsoppsummeringForKontinuerligTilsynOgPleieProps) => {
     const gjeldendeVurdering = vurdering.versjoner[0];
     const { dokumenter, perioder, tekst, resultat } = gjeldendeVurdering;
     const erInnleggelse = vurdering.erInnleggelsesperiode;
     return (
-        <DetailViewVurdering title="Vurdering av tilsyn og pleie" perioder={perioder}>
+        <DetailViewVurdering
+            title="Vurdering av tilsyn og pleie"
+            perioder={perioder}
+            redigerVurdering={!erInnleggelse ? redigerVurdering : null}
+        >
             <Box marginTop={Margin.large}>
                 {erInnleggelse && <DekketAvInnleggelsesperiodeMelding />}
                 <Box marginTop={Margin.medium}>

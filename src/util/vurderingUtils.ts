@@ -1,11 +1,11 @@
 import {
     FieldName as TilsynFieldName,
-    NyVurderingAvTilsynsbehovFormState,
-} from '../ui/components/ny-vurdering-av-tilsynsbehov-form/NyVurderingAvTilsynsbehovForm';
+    VurderingAvTilsynsbehovFormState,
+} from '../ui/components/vurdering-av-tilsynsbehov-form/VurderingAvTilsynsbehovForm';
 import {
     FieldName as ToOmsorgspersonerFieldName,
-    NyVurderingAvToOmsorgspersonerFormState,
-} from '../ui/components/ny-vurdering-av-to-omsorgspersoner-form/NyVurderingAvToOmsorgspersonerForm';
+    VurderingAvToOmsorgspersonerFormState,
+} from '../ui/components/vurdering-av-to-omsorgspersoner-form/VurderingAvToOmsorgspersonerForm';
 import Vurderingsresultat from '../types/Vurderingsresultat';
 import { Period } from '../types/Period';
 import Dokument from '../types/Dokument';
@@ -13,7 +13,7 @@ import { Vurderingsversjon } from '../types/Vurdering';
 import { finnBenyttedeDokumenter } from './dokumentUtils';
 
 export const lagTilsynsbehovVurdering = (
-    formState: NyVurderingAvTilsynsbehovFormState,
+    formState: VurderingAvTilsynsbehovFormState,
     alleDokumenter: Dokument[]
 ): Partial<Vurderingsversjon> => {
     const resultat = formState[TilsynFieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]
@@ -33,7 +33,7 @@ export const lagTilsynsbehovVurdering = (
 };
 
 export const lagToOmsorgspersonerVurdering = (
-    formState: NyVurderingAvToOmsorgspersonerFormState,
+    formState: VurderingAvToOmsorgspersonerFormState,
     alleDokumenter: Dokument[]
 ): Partial<Vurderingsversjon> => {
     const resultat = formState[ToOmsorgspersonerFieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]

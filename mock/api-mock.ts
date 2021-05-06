@@ -13,6 +13,10 @@ import mockedDiagnosekodeSearchResponse from './mocked-data/mockedDiagnosekodeSe
 import createStrukturertDokument from './mocked-data/createStrukturertDokument';
 import mockedInnleggelsesperioder from './mocked-data/mockedInnleggelsesperioder';
 import { Dokumenttype } from '../src/types/Dokument';
+import createMockedVurderingselementLinks from './mocked-data/createMockedVurderingselementLinks';
+import tilsynsbehovVurderingerMock from './mocked-data/mockedTilsynsbehovVurderinger';
+import { Period } from '../src/types/Period';
+import Vurderingsresultat from '../src/types/Vurderingsresultat';
 
 const app = express();
 
@@ -82,6 +86,52 @@ app.use('/mock/opprett-vurdering', (req, res) => {
             createKontinuerligTilsynVurdering(req.body);
         } else {
             createToOmsorgspersonerVurdering(req.body);
+        }
+        res.send();
+    }
+});
+
+app.use('/mock/endre-vurdering', (req, res) => {
+    if (req.body.dryRun === true) {
+        res.send({
+            perioderMedEndringer: [
+                {
+                    periode: {
+                        fom: '2024-01-01',
+                        tom: '2024-01-10',
+                    },
+                    endrerVurderingSammeBehandling: true,
+                    endrerAnnenVurdering: false,
+                },
+            ],
+        });
+    } else {
+        const id = req.body.id;
+        const perioder = req.body.perioder;
+        mockedTilsynsbehovVurderingsoversikt.vurderingselementer = mockedTilsynsbehovVurderingsoversikt.vurderingselementer.filter(
+            (element) => id !== element.id
+        );
+        perioder.forEach((periode) => {
+            mockedTilsynsbehovVurderingsoversikt.vurderingselementer.unshift({
+                id,
+                periode: periode,
+                resultat: req.body.resultat,
+                gjelderForSøker: true,
+                gjelderForAnnenPart: false,
+                links: createMockedVurderingselementLinks(id),
+                endretIDenneBehandlingen: true,
+                erInnleggelsesperiode: false,
+            });
+        });
+
+        const index = tilsynsbehovVurderingerMock.findIndex((element) => element.id === id);
+        if (tilsynsbehovVurderingerMock[index]) {
+            tilsynsbehovVurderingerMock[index].versjoner.unshift({
+                perioder,
+                resultat: req.body.resultat,
+                dokumenter: mockedDokumentliste,
+                tekst: req.body.tekst,
+            });
         }
         res.send();
     }
