@@ -3,7 +3,6 @@ import axios from 'axios';
 import Dokument from '../../../types/Dokument';
 import Link from '../../../types/Link';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-import Vurderingstype from '../../../types/Vurderingstype';
 import { get } from '../../../util/httpUtils';
 import PageContainer from '../page-container/PageContainer';
 import { PeriodeMedEndring, PerioderMedEndringResponse } from '../../../types/PeriodeMedEndring';
@@ -13,13 +12,13 @@ import vurderingControllerReducer from './reducer';
 import { postNyVurdering, postNyVurderingDryRun } from '../../../api/api';
 import ContainerContext from '../../context/ContainerContext';
 import { scrollUp } from '../../../util/viewUtils';
+import VurderingContext from '../../context/VurderingContext';
 
 interface NyVurderingControllerProps {
     opprettVurderingLink: Link;
     dataTilVurderingUrl: string;
     onVurderingLagret: () => void;
     formRenderer: (dokumenter: Dokument[], onSubmit: (vurderingsversjon: Vurderingsversjon) => void) => React.ReactNode;
-    vurderingstype: Vurderingstype;
 }
 
 const NyVurderingController = ({
@@ -27,9 +26,9 @@ const NyVurderingController = ({
     dataTilVurderingUrl,
     onVurderingLagret,
     formRenderer,
-    vurderingstype,
 }: NyVurderingControllerProps) => {
     const { httpErrorHandler } = React.useContext(ContainerContext);
+    const { vurderingstype } = React.useContext(VurderingContext);
 
     const [state, dispatch] = React.useReducer(vurderingControllerReducer, {
         isLoading: true,
