@@ -11,9 +11,10 @@ interface DiagnosekodeModalProps {
     isOpen: boolean;
     onRequestClose: () => void;
     onSaveClick: (nyDiagnosekode: Diagnosekode) => void;
+    isSubmitting: boolean;
 }
 
-const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick }: DiagnosekodeModalProps) => {
+const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick, isSubmitting }: DiagnosekodeModalProps) => {
     const [selectedDiagnosekode, setSelectedDiagnosekode] = React.useState<Diagnosekode>(null);
     return (
         <Modal
@@ -45,8 +46,16 @@ const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick }: Diagnosekode
                     </Box>
                     <Box marginTop={Margin.xLarge}>
                         <div style={{ display: 'flex' }}>
-                            <Hovedknapp mini>Bekreft</Hovedknapp>
-                            <Knapp mini style={{ marginLeft: '1rem' }} htmlType="button" onClick={onRequestClose}>
+                            <Hovedknapp mini disabled={isSubmitting} spinner={isSubmitting}>
+                                Bekreft
+                            </Hovedknapp>
+                            <Knapp
+                                mini
+                                style={{ marginLeft: '1rem' }}
+                                htmlType="button"
+                                onClick={onRequestClose}
+                                disabled={isSubmitting}
+                            >
                                 Avbryt
                             </Knapp>
                         </div>
