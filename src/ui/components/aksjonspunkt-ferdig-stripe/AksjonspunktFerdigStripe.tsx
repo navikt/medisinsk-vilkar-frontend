@@ -15,7 +15,7 @@ const AksjonspunktFerdigStripe = () => {
                     type="hoved"
                     htmlType="button"
                     style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
-                    onClick={onFinished}
+                    onClick={() => onFinished()}
                     mini
                 >
                     Fortsett

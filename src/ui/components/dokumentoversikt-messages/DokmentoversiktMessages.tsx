@@ -2,6 +2,7 @@ import Alertstripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import React from 'react';
 import { Dokumentoversikt } from '../../../types/Dokumentoversikt';
+import ContainerContext from '../../context/ContainerContext';
 import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
 import Box, { Margin } from '../box/Box';
 import FristForDokumentasjonUtløptPanel from '../frist-for-dokumentasjon-utløpt-panel/FristForDokumentasjonUtløptPanel';
@@ -22,6 +23,8 @@ const DokumentoversiktMessages = ({
     kanNavigereVidere,
     navigerTilNesteSteg,
 }: DokumentoversiktMessagesProps) => {
+    const { onFinished } = React.useContext(ContainerContext);
+
     const { ustrukturerteDokumenter } = dokumentoversikt;
 
     const visFristForDokumentasjonUtløptMelding =
@@ -50,7 +53,9 @@ const DokumentoversiktMessages = ({
                         </Alertstripe>
                     </Box>
                     <Box marginBottom={Margin.large}>
-                        <FristForDokumentasjonUtløptPanel onProceedClick={() => console.log('1')} />
+                        <FristForDokumentasjonUtløptPanel
+                            onProceedClick={() => onFinished({ ikkeVentPåGodkjentLegeerklæring: true })}
+                        />
                     </Box>
                 </>
             )}
