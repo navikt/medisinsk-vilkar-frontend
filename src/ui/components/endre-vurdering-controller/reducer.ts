@@ -1,75 +1,84 @@
 import ActionType from './actionTypes';
 import Dokument from '../../../types/Dokument';
 import { PeriodeMedEndring } from '../../../types/PeriodeMedEndring';
-
-type LagreVurderingFunction = () => Promise<void>;
+import { Vurderingsversjon } from '../../../types/Vurdering';
 
 interface State {
-    isLoading: boolean;
-    dokumenter: Dokument[];
-    hentDataTilVurderingHarFeilet: boolean;
+    sjekkForEksisterendeVurderingerPågår: boolean;
+    lagringAvVurderingPågår: boolean;
     lagreVurderingHarFeilet: boolean;
+    hentDataTilVurderingPågår: boolean;
+    hentDataTilVurderingHarFeilet: boolean;
+    dokumenter: Dokument[];
     perioderMedEndring: PeriodeMedEndring[];
-    lagreVurderingFn: LagreVurderingFunction;
     overlappendePeriodeModalOpen: boolean;
+    vurderingsversjonTilLagringFraModal: Vurderingsversjon | null;
 }
 
 interface Action {
     type: ActionType;
     perioderMedEndring?: PeriodeMedEndring[];
-    lagreVurderingFn?: LagreVurderingFunction;
     dokumenter?: Dokument[];
+    vurderingsversjonTilLagringFraModal?: Vurderingsversjon;
 }
 
 const vurderingControllerReducer = (state: State, action: Action): State => {
     switch (action.type) {
-        case ActionType.PENDING:
+        case ActionType.SJEKK_FOR_EKSISTERENDE_VURDERINGER_PÅBEGYNT:
             return {
                 ...state,
-                isLoading: true,
+                sjekkForEksisterendeVurderingerPågår: true,
+            };
+        case ActionType.LAGRING_AV_VURDERING_PÅBEGYNT:
+            return {
+                ...state,
+                lagringAvVurderingPågår: true,
                 lagreVurderingHarFeilet: false,
             };
         case ActionType.VURDERING_LAGRET:
             return {
                 ...state,
-                isLoading: false,
+                lagringAvVurderingPågår: false,
                 perioderMedEndring: null,
                 overlappendePeriodeModalOpen: false,
             };
         case ActionType.LAGRE_VURDERING_FEILET:
             return {
                 ...state,
-                isLoading: false,
+                lagringAvVurderingPågår: false,
                 lagreVurderingHarFeilet: true,
+                sjekkForEksisterendeVurderingerPågår: false,
             };
         case ActionType.LAGRING_AV_VURDERING_AVBRUTT:
             return {
                 ...state,
                 overlappendePeriodeModalOpen: false,
+                vurderingsversjonTilLagringFraModal: null,
             };
         case ActionType.ADVAR_OM_EKSISTERENDE_VURDERINGER:
             return {
                 ...state,
                 overlappendePeriodeModalOpen: true,
+                sjekkForEksisterendeVurderingerPågår: false,
                 perioderMedEndring: action.perioderMedEndring,
-                lagreVurderingFn: action.lagreVurderingFn,
+                vurderingsversjonTilLagringFraModal: action.vurderingsversjonTilLagringFraModal,
             };
         case ActionType.HENT_DATA_TIL_VURDERING:
             return {
                 ...state,
-                isLoading: true,
+                hentDataTilVurderingPågår: true,
                 hentDataTilVurderingHarFeilet: false,
             };
         case ActionType.HENTET_DATA_TIL_VURDERING:
             return {
                 ...state,
                 dokumenter: action.dokumenter,
-                isLoading: false,
+                hentDataTilVurderingPågår: false,
             };
         case ActionType.HENT_DATA_TIL_VURDERING_HAR_FEILET:
             return {
                 ...state,
-                isLoading: false,
+                hentDataTilVurderingPågår: false,
                 hentDataTilVurderingHarFeilet: true,
             };
         default:

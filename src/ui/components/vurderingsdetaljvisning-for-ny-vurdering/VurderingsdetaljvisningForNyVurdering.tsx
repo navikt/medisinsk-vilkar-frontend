@@ -41,16 +41,6 @@ function makeDefaultValues(vurderingstype: Vurderingstype, perioder: Period[]) {
     return {};
 }
 
-function getFormComponent(vurderingstype: Vurderingstype) {
-    if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
-        return VurderingAvTilsynsbehovForm;
-    }
-    if (vurderingstype === Vurderingstype.TO_OMSORGSPERSONER) {
-        return VurderingAvToOmsorgspersonerForm;
-    }
-    return null;
-}
-
 const VurderingsdetaljvisningForNyVurdering = ({
     vurderingsoversikt,
     onVurderingLagret,
@@ -78,23 +68,41 @@ const VurderingsdetaljvisningForNyVurdering = ({
 
     const { endpoints } = React.useContext(ContainerContext);
     const { vurderingstype } = React.useContext(VurderingContext);
-    const FormComponent = getFormComponent(vurderingstype);
 
     return (
         <NyVurderingController
             opprettVurderingLink={opprettLink}
             dataTilVurderingUrl={endpoints.dataTilVurdering}
             onVurderingLagret={onVurderingLagret}
-            formRenderer={(dokumenter, onSubmit) => (
-                <FormComponent
-                    defaultValues={makeDefaultValues(vurderingstype, defaultPerioder()) as any}
-                    resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
-                    perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
-                    dokumenter={dokumenter}
-                    onSubmit={onSubmit}
-                    onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
-                />
-            )}
+            formRenderer={(dokumenter, onSubmit, isSubmitting) => {
+                if (Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE === vurderingstype) {
+                    return (
+                        <VurderingAvTilsynsbehovForm
+                            defaultValues={makeDefaultValues(vurderingstype, defaultPerioder()) as any}
+                            resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                            perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
+                            dokumenter={dokumenter}
+                            onSubmit={onSubmit}
+                            onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
+                            isSubmitting={isSubmitting}
+                        />
+                    );
+                }
+                if (Vurderingstype.TO_OMSORGSPERSONER === vurderingstype) {
+                    return (
+                        <VurderingAvToOmsorgspersonerForm
+                            defaultValues={makeDefaultValues(vurderingstype, defaultPerioder()) as any}
+                            resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                            perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
+                            dokumenter={dokumenter}
+                            onSubmit={onSubmit}
+                            onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
+                            isSubmitting={isSubmitting}
+                        />
+                    );
+                }
+                return null;
+            }}
         />
     );
 };

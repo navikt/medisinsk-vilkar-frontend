@@ -86,7 +86,7 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                         <EndreVurderingController
                             endreVurderingLink={endreLink}
                             dataTilVurderingUrl={endpoints.dataTilVurdering}
-                            formRenderer={(dokumenter, onSubmit) => (
+                            formRenderer={(dokumenter, onSubmit, isSubmitting) => (
                                 <FormComponent
                                     defaultValues={buildInitialFormStateForEdit(vurderingsversjon, vurderingstype)}
                                     resterendeVurderingsperioder={vurderingsoversikt.resterendeVurderingsperioder}
@@ -94,6 +94,7 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                                     dokumenter={dokumenter}
                                     onSubmit={onSubmit}
                                     onAvbryt={onAvbrytClick}
+                                    isSubmitting={isSubmitting}
                                 />
                             )}
                             vurderingsid={vurderingselement.id}

@@ -8,18 +8,31 @@ interface ConfirmationModalProps {
     onConfirm: () => void;
     onCancel: () => void;
     isOpen: boolean;
-    isLoading: boolean;
+    isSubmitting: boolean;
 }
 
-const ConfirmationModal = ({ children, onConfirm, onCancel, isOpen, isLoading }: ConfirmationModalProps) => {
+const ConfirmationModal = ({ children, onConfirm, onCancel, isOpen, isSubmitting }: ConfirmationModalProps) => {
     return (
         <Modal isOpen={isOpen} onRequestClose={onCancel} contentLabel="" className={styles.confirmationModal}>
             {children}
             <div className={styles.confirmationModal__buttonSection}>
-                <Knapp onClick={onConfirm} spinner={isLoading} type="hoved" htmlType="button" mini>
+                <Knapp
+                    onClick={onConfirm}
+                    spinner={isSubmitting}
+                    disabled={isSubmitting}
+                    type="hoved"
+                    htmlType="button"
+                    mini
+                >
                     Bekreft
                 </Knapp>
-                <Flatknapp onClick={onCancel} htmlType="button" mini style={{ marginLeft: '0.5rem' }}>
+                <Flatknapp
+                    onClick={onCancel}
+                    htmlType="button"
+                    mini
+                    style={{ marginLeft: '0.5rem' }}
+                    disabled={isSubmitting}
+                >
                     Avbryt
                 </Flatknapp>
             </div>
