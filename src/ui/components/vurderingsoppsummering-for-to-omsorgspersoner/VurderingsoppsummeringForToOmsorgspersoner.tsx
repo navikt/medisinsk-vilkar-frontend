@@ -34,9 +34,11 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
                         label="Hvilke dokumenter er brukt i vurderingen av behov for to omsorgspersoner samtidig?"
                         content={
                             <BasicList
-                                elements={dokumenter.map((dokument) => (
-                                    <DokumentLink dokument={dokument} />
-                                ))}
+                                elements={dokumenter
+                                    .filter(({ benyttet }) => benyttet)
+                                    .map((dokument) => (
+                                        <DokumentLink dokument={dokument} />
+                                    ))}
                             />
                         }
                     />

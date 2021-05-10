@@ -35,9 +35,11 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
                         content={
                             <Box marginTop={Margin.medium}>
                                 <BasicList
-                                    elements={dokumenter.map((dokument) => (
-                                        <DokumentLink dokument={dokument} visDokumentIkon />
-                                    ))}
+                                    elements={dokumenter
+                                        .filter(({ benyttet }) => benyttet)
+                                        .map((dokument) => (
+                                            <DokumentLink dokument={dokument} visDokumentIkon />
+                                        ))}
                                 />
                             </Box>
                         }
