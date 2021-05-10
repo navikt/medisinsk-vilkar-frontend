@@ -22,7 +22,7 @@ const StrukturerDokumentController = ({
     editMode,
 }: StrukturerDokumentControllerProps) => {
     const { httpErrorHandler } = React.useContext(ContainerContext);
-    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     React.useEffect(() => {
@@ -32,27 +32,31 @@ const StrukturerDokumentController = ({
     }, []);
 
     const strukturerDokument = (strukturertDokument) => {
-        setIsLoading(true);
+        setIsSubmitting(true);
         post(href, { ...requestPayload, ...strukturertDokument }, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         }).then(
             () => {
-                setIsLoading(false);
+                setIsSubmitting(false);
                 onDokumentStrukturert();
                 scrollUp();
             },
             (error) => {
-                setIsLoading(false);
+                setIsSubmitting(false);
                 console.error(error);
                 scrollUp();
             }
         );
     };
 
-    if (isLoading) {
-        return <Spinner />;
-    }
-    return <StrukturerDokumentForm dokument={dokument} onSubmit={strukturerDokument} editMode={editMode} />;
+    return (
+        <StrukturerDokumentForm
+            dokument={dokument}
+            onSubmit={strukturerDokument}
+            editMode={editMode}
+            isSubmitting={isSubmitting}
+        />
+    );
 };
 
 export default StrukturerDokumentController;
