@@ -10,12 +10,13 @@ import Diagnosekode from '../../../types/Diagnosekode';
 interface DiagnosekodeModalProps {
     isOpen: boolean;
     onRequestClose: () => void;
-    onSaveClick: (nyDiagnosekode: Diagnosekode) => void;
-    isSubmitting: boolean;
+    onSaveClick: (nyDiagnosekode: Diagnosekode) => Promise<any>;
 }
 
-const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick, isSubmitting }: DiagnosekodeModalProps) => {
+const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick }: DiagnosekodeModalProps) => {
     const [selectedDiagnosekode, setSelectedDiagnosekode] = React.useState<Diagnosekode>(null);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
+
     return (
         <Modal
             isOpen={isOpen}
@@ -28,7 +29,11 @@ const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick, isSubmitting }
                 onSubmit={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    onSaveClick(selectedDiagnosekode);
+                    setIsSubmitting(true);
+                    onSaveClick(selectedDiagnosekode).then(
+                        () => setIsSubmitting(false),
+                        () => setIsSubmitting(false)
+                    );
                 }}
             >
                 <ModalFormWrapper title="Legg til diagnosekode">

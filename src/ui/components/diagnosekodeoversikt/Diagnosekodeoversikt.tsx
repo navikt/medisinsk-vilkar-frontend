@@ -26,7 +26,7 @@ interface DiagnosekodeoversiktProps {
 
 const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktProps) => {
     const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
-    const [isSubmitting, setIsSubmitting] = React.useState(true);
+    const [isLoading, setIsLoading] = React.useState(true);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [diagnosekodeResponse, setDiagnosekodeResponse] = React.useState<DiagnosekodeResponse>({
         diagnosekoder: [],
@@ -40,12 +40,12 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
     const endreDiagnosekoderLink = findLinkByRel(LinkRel.ENDRE_DIAGNOSEKODER, links);
 
     const hentDiagnosekoder = () => {
-        setIsSubmitting(true);
+        setIsLoading(true);
         return get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         }).then((response: DiagnosekodeResponse) => {
             setDiagnosekodeResponse(response);
-            setIsSubmitting(false);
+            setIsLoading(false);
         });
     };
 
@@ -70,7 +70,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
         };
     }, []);
 
-    if (isSubmitting) {
+    if (isLoading) {
         return <Spinner />;
     }
 
@@ -102,7 +102,6 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             </Box>
             <DiagnosekodeModal
                 isOpen={modalIsOpen}
-                isSubmitting={isSubmitting}
                 onSaveClick={(nyDiagnosekode: Diagnosekode) =>
                     post(
                         endreDiagnosekoderLink.href,
