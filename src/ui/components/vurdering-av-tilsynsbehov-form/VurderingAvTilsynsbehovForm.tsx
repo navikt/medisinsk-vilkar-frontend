@@ -47,6 +47,7 @@ interface VurderingAvTilsynsbehovFormProps {
     perioderSomKanVurderes?: Period[];
     dokumenter: Dokument[];
     onAvbryt: () => void;
+    isSubmitting: boolean;
 }
 
 const VurderingAvTilsynsbehovForm = ({
@@ -56,6 +57,7 @@ const VurderingAvTilsynsbehovForm = ({
     perioderSomKanVurderes,
     dokumenter,
     onAvbryt,
+    isSubmitting,
 }: VurderingAvTilsynsbehovFormProps): JSX.Element => {
     const formMethods = useForm({
         defaultValues,
@@ -102,6 +104,8 @@ const VurderingAvTilsynsbehovForm = ({
                     buttonLabel="Bekreft"
                     onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}
                     onAvbryt={onAvbryt}
+                    submitButtonDisabled={isSubmitting}
+                    cancelButtonDisabled={isSubmitting}
                 >
                     {dokumenter?.length > 0 && (
                         <Box marginTop={Margin.large}>

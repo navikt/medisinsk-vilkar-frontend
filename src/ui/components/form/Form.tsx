@@ -9,27 +9,42 @@ interface FormProps {
     onSubmit: (e?: any) => void;
     shouldShowSubmitButton?: boolean;
     onAvbryt?: () => void;
+    submitButtonDisabled?: boolean;
+    cancelButtonDisabled?: boolean;
 }
 
-const Form = ({ children, onSubmit, buttonLabel, shouldShowSubmitButton, onAvbryt }: FormProps): JSX.Element => {
-    return (
-        <form onSubmit={onSubmit}>
-            {children}
-            {shouldShowSubmitButton !== false && (
-                <Box marginTop={Margin.xxLarge}>
-                    <div className={styles.buttonContainer}>
-                        <Hovedknapp id="submitButton">{buttonLabel}</Hovedknapp>
-                        {onAvbryt && (
-                            <div className={styles.buttonContainer__avbryt}>
-                                <Knapp htmlType="button" onClick={onAvbryt}>
-                                    Avbryt
-                                </Knapp>
-                            </div>
-                        )}
-                    </div>
-                </Box>
-            )}
-        </form>
-    );
-};
+const Form = ({
+    children,
+    onSubmit,
+    buttonLabel,
+    shouldShowSubmitButton,
+    onAvbryt,
+    submitButtonDisabled,
+    cancelButtonDisabled,
+}: FormProps): JSX.Element => (
+    <form onSubmit={onSubmit}>
+        {children}
+        {shouldShowSubmitButton !== false && (
+            <Box marginTop={Margin.xxLarge}>
+                <div className={styles.buttonContainer}>
+                    <Hovedknapp
+                        id="submitButton"
+                        disabled={submitButtonDisabled === true}
+                        spinner={submitButtonDisabled === true}
+                    >
+                        {buttonLabel}
+                    </Hovedknapp>
+                    {onAvbryt && (
+                        <div className={styles.buttonContainer__avbryt}>
+                            <Knapp htmlType="button" onClick={onAvbryt} disabled={cancelButtonDisabled === true}>
+                                Avbryt
+                            </Knapp>
+                        </div>
+                    )}
+                </div>
+            </Box>
+        )}
+    </form>
+);
+
 export default Form;

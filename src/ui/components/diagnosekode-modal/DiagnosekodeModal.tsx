@@ -10,11 +10,13 @@ import Diagnosekode from '../../../types/Diagnosekode';
 interface DiagnosekodeModalProps {
     isOpen: boolean;
     onRequestClose: () => void;
-    onSaveClick: (nyDiagnosekode: Diagnosekode) => void;
+    onSaveClick: (nyDiagnosekode: Diagnosekode) => Promise<any>;
 }
 
 const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick }: DiagnosekodeModalProps) => {
     const [selectedDiagnosekode, setSelectedDiagnosekode] = React.useState<Diagnosekode>(null);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
+
     return (
         <Modal
             isOpen={isOpen}
@@ -27,7 +29,11 @@ const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick }: Diagnosekode
                 onSubmit={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    onSaveClick(selectedDiagnosekode);
+                    setIsSubmitting(true);
+                    onSaveClick(selectedDiagnosekode).then(
+                        () => setIsSubmitting(false),
+                        () => setIsSubmitting(false)
+                    );
                 }}
             >
                 <ModalFormWrapper title="Legg til diagnosekode">
@@ -45,8 +51,16 @@ const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick }: Diagnosekode
                     </Box>
                     <Box marginTop={Margin.xLarge}>
                         <div style={{ display: 'flex' }}>
-                            <Hovedknapp mini>Bekreft</Hovedknapp>
-                            <Knapp mini style={{ marginLeft: '1rem' }} htmlType="button" onClick={onRequestClose}>
+                            <Hovedknapp mini disabled={isSubmitting} spinner={isSubmitting}>
+                                Bekreft
+                            </Hovedknapp>
+                            <Knapp
+                                mini
+                                style={{ marginLeft: '1rem' }}
+                                htmlType="button"
+                                onClick={onRequestClose}
+                                disabled={isSubmitting}
+                            >
                                 Avbryt
                             </Knapp>
                         </div>

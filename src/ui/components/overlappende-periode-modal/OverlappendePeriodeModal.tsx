@@ -13,7 +13,7 @@ interface OverlappendePeriodeModalProps {
     onConfirm: () => void;
     onCancel: () => void;
     isOpen: boolean;
-    isLoading: boolean;
+    isSubmitting: boolean;
 }
 
 const renderInfoMsg = ({ periode }: PeriodeMedEndring) => (
@@ -44,7 +44,7 @@ const OverlappendePeriodeModal = ({
     onConfirm,
     onCancel,
     isOpen,
-    isLoading,
+    isSubmitting,
 }: OverlappendePeriodeModalProps) => {
     Modal.setAppElement(`#${appElementId}`);
 
@@ -57,7 +57,7 @@ const OverlappendePeriodeModal = ({
     const harFlerePerioderMedOverlapp = perioderMedEndring.length > 1;
 
     return (
-        <ConfirmationModal onConfirm={onConfirm} onCancel={onCancel} isOpen={isOpen} isLoading={isLoading}>
+        <ConfirmationModal onConfirm={onConfirm} onCancel={onCancel} isOpen={isOpen} isSubmitting={isSubmitting}>
             <Systemtittel>Overlappende periode</Systemtittel>
             <Box marginTop={Margin.large}>
                 {overlappendePerioderISammeBehandling.map(renderInfoMsg)}

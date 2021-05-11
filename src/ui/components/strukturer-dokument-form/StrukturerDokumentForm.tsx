@@ -12,7 +12,6 @@ import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
 import { today } from '../../../constants/dateConstants';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
-import { prettifyDate } from '../../../util/formats';
 
 export enum FieldName {
     INNEHOLDER_MEDISINSKE_OPPLYSNINGER = 'inneholderMedisinskeOpplysninger',
@@ -28,9 +27,10 @@ interface StrukturerDokumentFormProps {
     dokument: Dokument;
     onSubmit: (nyttDokument: Dokument) => void;
     editMode?: boolean;
+    isSubmitting: boolean;
 }
 
-const StrukturerDokumentForm = ({ dokument, onSubmit, editMode }: StrukturerDokumentFormProps) => {
+const StrukturerDokumentForm = ({ dokument, onSubmit, editMode, isSubmitting }: StrukturerDokumentFormProps) => {
     const formMethods = useForm<StrukturerDokumentFormState>({
         defaultValues: editMode && {
             [FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER]: dokument.type,
@@ -48,7 +48,11 @@ const StrukturerDokumentForm = ({ dokument, onSubmit, editMode }: StrukturerDoku
     return (
         <DetailView title="Om dokumentet">
             <FormProvider {...formMethods}>
-                <Form buttonLabel={buttonLabel} onSubmit={formMethods.handleSubmit(lagNyttStrukturertDokument)}>
+                <Form
+                    buttonLabel={buttonLabel}
+                    onSubmit={formMethods.handleSubmit(lagNyttStrukturertDokument)}
+                    submitButtonDisabled={isSubmitting}
+                >
                     <Box marginTop={Margin.xLarge}>
                         <DokumentKnapp href={dokumentLink.href} />
                     </Box>

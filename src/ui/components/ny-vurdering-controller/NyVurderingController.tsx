@@ -20,7 +20,11 @@ interface NyVurderingControllerProps {
     opprettVurderingLink: Link;
     dataTilVurderingUrl: string;
     onVurderingLagret: () => void;
-    formRenderer: (dokumenter: Dokument[], onSubmit: (vurderingsversjon: Vurderingsversjon) => void) => React.ReactNode;
+    formRenderer: (
+        dokumenter: Dokument[],
+        onSubmit: (vurderingsversjon: Vurderingsversjon) => void,
+        isSubmitting: boolean
+    ) => React.ReactNode;
 }
 
 const NyVurderingController = ({
@@ -33,28 +37,32 @@ const NyVurderingController = ({
     const { vurderingstype } = React.useContext(VurderingContext);
 
     const [state, dispatch] = React.useReducer(vurderingControllerReducer, {
-        isLoading: true,
-        dokumenter: [],
-        hentDataTilVurderingHarFeilet: false,
+        sjekkForEksisterendeVurderingerPågår: false,
+        lagringAvVurderingPågår: false,
         lagreVurderingHarFeilet: false,
+        hentDataTilVurderingPågår: true,
+        hentDataTilVurderingHarFeilet: false,
+        dokumenter: [],
         perioderMedEndring: [],
-        lagreVurderingFn: null,
         overlappendePeriodeModalOpen: false,
+        vurderingsversjonTilLagringFraModal: null,
     });
 
     const {
-        isLoading,
-        dokumenter,
-        hentDataTilVurderingHarFeilet,
+        sjekkForEksisterendeVurderingerPågår,
+        lagringAvVurderingPågår,
         lagreVurderingHarFeilet,
+        hentDataTilVurderingPågår,
+        hentDataTilVurderingHarFeilet,
+        dokumenter,
         perioderMedEndring,
-        lagreVurderingFn,
         overlappendePeriodeModalOpen,
+        vurderingsversjonTilLagringFraModal,
     } = state;
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     function lagreVurdering(nyVurderingsversjon: Partial<Vurderingsversjon>) {
-        dispatch({ type: ActionType.PENDING });
+        dispatch({ type: ActionType.LAGRING_AV_VURDERING_PÅBEGYNT });
         return postNyVurdering(
             opprettVurderingLink.href,
             opprettVurderingLink.requestPayload.behandlingUuid,
@@ -92,14 +100,15 @@ const NyVurderingController = ({
         dispatch({
             type: ActionType.ADVAR_OM_EKSISTERENDE_VURDERINGER,
             perioderMedEndring: perioderMedEndringValue,
-            lagreVurderingFn: () => lagreVurdering(nyVurderingsversjon),
+            vurderingsversjonTilLagringFraModal: nyVurderingsversjon,
         });
     };
 
     const beOmBekreftelseFørLagringHvisNødvendig = (nyVurderingsversjon: Vurderingsversjon) => {
+        dispatch({ type: ActionType.SJEKK_FOR_EKSISTERENDE_VURDERINGER_PÅBEGYNT });
         sjekkForEksisterendeVurderinger(nyVurderingsversjon).then(
             (perioderMedEndringerResponse) => {
-                const harOverlappendePerioder = perioderMedEndringerResponse.perioderMedEndringer.length > 0;
+                const harOverlappendePerioder = perioderMedEndringerResponse.perioderMedEndringer?.length > 0;
                 if (harOverlappendePerioder) {
                     advarOmEksisterendeVurderinger(
                         nyVurderingsversjon,
@@ -143,25 +152,26 @@ const NyVurderingController = ({
         };
     }, []);
 
+    const isSubmitting = lagringAvVurderingPågår || sjekkForEksisterendeVurderingerPågår;
     return (
-        <PageContainer isLoading={isLoading} hasError={hentDataTilVurderingHarFeilet} preventUnmount>
+        <PageContainer isLoading={hentDataTilVurderingPågår} hasError={hentDataTilVurderingHarFeilet} preventUnmount>
             {lagreVurderingHarFeilet && (
                 <Box marginBottom={Margin.medium}>
                     <LagreVurderingFeiletMelding />
                 </Box>
             )}
-            {formRenderer(dokumenter, beOmBekreftelseFørLagringHvisNødvendig)}
+            {formRenderer(dokumenter, beOmBekreftelseFørLagringHvisNødvendig, isSubmitting)}
             <OverlappendePeriodeModal
                 appElementId="app"
                 perioderMedEndring={perioderMedEndring || []}
                 onCancel={() => dispatch({ type: ActionType.LAGRING_AV_VURDERING_AVBRUTT })}
                 onConfirm={() => {
-                    lagreVurderingFn().then(() => {
+                    lagreVurdering(vurderingsversjonTilLagringFraModal).then(() => {
                         dispatch({ type: ActionType.VURDERING_LAGRET, perioderMedEndring });
                     });
                 }}
                 isOpen={overlappendePeriodeModalOpen}
-                isLoading={isLoading}
+                isSubmitting={lagringAvVurderingPågår}
             />
         </PageContainer>
     );

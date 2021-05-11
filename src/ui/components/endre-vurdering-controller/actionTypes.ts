@@ -1,5 +1,6 @@
 enum ActionType {
-    PENDING = 'pending',
+    SJEKK_FOR_EKSISTERENDE_VURDERINGER_PÅBEGYNT = 'sjekkForEksisterendeVurderingerPåbegynt',
+    LAGRING_AV_VURDERING_PÅBEGYNT = 'lagringAvVurderingPåbegynt',
     VURDERING_LAGRET = 'vurderingLagret',
     LAGRE_VURDERING_FEILET = 'lagreVurderingFeilet',
     LAGRING_AV_VURDERING_AVBRUTT = 'lagringAvVurderingAvbrutt',
