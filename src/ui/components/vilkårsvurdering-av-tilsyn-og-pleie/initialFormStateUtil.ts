@@ -14,7 +14,7 @@ export function buildInitialFormStateForEdit(
     { tekst, resultat, perioder, dokumenter }: Vurderingsversjon,
     vurderingstype: Vurderingstype
 ): VurderingAvTilsynsbehovFormState | VurderingAvToOmsorgspersonerFormState {
-    const dokumenterFraVurdering = dokumenter.map((dokument) => dokument.id);
+    const dokumenterFraVurdering = dokumenter.filter((dokument) => dokument.benyttet).map((dokument) => dokument.id);
     if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
         return {
             [KTPFieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: tekst,
