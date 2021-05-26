@@ -96,7 +96,7 @@ const Vurderingsnavigasjon = ({
         allElements.unshift(
             <Vurderingsperioder
                 indicatorContentRenderer={() => (
-                    <ContentWithTooltip tooltipText="Perioder som kan vurderes">
+                    <ContentWithTooltip tooltipText="Perioden kan vurderes">
                         <InfoIcon />
                     </ContentWithTooltip>
                 )}
