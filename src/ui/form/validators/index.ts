@@ -1,7 +1,7 @@
 import { Period } from '@navikt/k9-period-utils';
+import { initializeDate, dateConstants } from '@navikt/k9-date-utils';
 import { Dayjs } from 'dayjs';
 import { finnHullIPerioder } from '../../../util/periodUtils';
-import { initializeDate, dateConstants } from '@navikt/k9-date-utils';
 
 export function required(v: any) {
     if (v === null || v === undefined || v === '') {

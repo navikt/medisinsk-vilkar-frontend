@@ -63,7 +63,7 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
                         content={
                             <ul style={{ margin: 0, listStyleType: 'none', padding: 0 }}>
                                 {perioder.map((periode, i) => (
-                                    <li key={`${i}`}>{periode.prettifyPeriod}</li>
+                                    <li key={`${i}`}>{periode.prettifyPeriod()}</li>
                                 ))}
                             </ul>
                         }
