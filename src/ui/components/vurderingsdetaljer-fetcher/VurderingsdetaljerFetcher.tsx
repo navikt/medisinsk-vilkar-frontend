@@ -35,8 +35,9 @@ const VurderingsdetaljerFetcher = ({ url, contentRenderer }: VurderingsdetaljerF
         setHentVurderingHarFeilet(false);
         hentVurderingsdetaljer()
             .then((vurderingResponse: Vurdering) => {
+                const vurdering = new Vurdering(vurderingResponse);
                 if (isMounted) {
-                    setVurdering(vurderingResponse);
+                    setVurdering(vurdering);
                     setIsLoading(false);
                 }
             })
