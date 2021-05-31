@@ -1,5 +1,4 @@
 import React from 'react';
-import { prettifyPeriod, prettifyPeriodList } from '../../../util/formats';
 import Box, { Margin } from '../box/Box';
 import Vurdering from '../../../types/Vurdering';
 import LabelledContent from '../labelled-content/LabelledContent';
@@ -64,7 +63,7 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
                         content={
                             <ul style={{ margin: 0, listStyleType: 'none', padding: 0 }}>
                                 {perioder.map((periode, i) => (
-                                    <li key={`${i}`}>{prettifyPeriod(periode)}</li>
+                                    <li key={`${i}`}>{periode.prettifyPeriod}</li>
                                 ))}
                             </ul>
                         }

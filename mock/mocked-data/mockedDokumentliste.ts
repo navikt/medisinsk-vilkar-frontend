@@ -1,6 +1,9 @@
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { Dokumenttype } from '../../src/types/Dokument';
 import createMockedDokumentelementLinks from './createMockedDokumentelementLinks';
+
+dayjs.extend(utc);
 
 export default [
     {

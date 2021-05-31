@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import axios from 'axios';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import { Period } from '../../../types/Period';
+import { Period } from '@navikt/k9-period-utils';
 import Step, { StepId, toOmsorgspersonerSteg } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingselement from '../../../types/Vurderingselement';

@@ -1,9 +1,9 @@
 import Alertstripe from 'nav-frontend-alertstriper';
 import React from 'react';
+import { getHumanReadablePeriodString } from '@navikt/k9-period-utils';
+import { addYearsToDate } from '@navikt/k9-date-utils';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import Vurderingstype from '../../../types/Vurderingstype';
-import { addYearsToDate } from '../../../util/dateUtils';
-import { getStringMedPerioder } from '../../../util/periodUtils';
 import Box, { Margin } from '../box/Box';
 import IngenPerioderÅVurdereMelding from '../ingen-perioder-å-vurdere-melding/IngenPerioderÅVurdereMelding';
 import ManglerGyldigSignaturMelding from '../mangler-gyldig-signatur-melding/ManglerGyldigSignaturMelding';
@@ -48,7 +48,7 @@ const VurderingsoversiktMessages = ({ vurderingsoversikt, harGyldigSignatur }: V
             <>
                 <Box marginBottom={Margin.large}>
                     <Alertstripe type="advarsel">
-                        {`Vurder behov for ${vurderingsnavn} for ${getStringMedPerioder(
+                        {`Vurder behov for ${vurderingsnavn} for ${getHumanReadablePeriodString(
                             vurderingsoversikt.resterendeVurderingsperioder
                         )}.`}
                     </Alertstripe>

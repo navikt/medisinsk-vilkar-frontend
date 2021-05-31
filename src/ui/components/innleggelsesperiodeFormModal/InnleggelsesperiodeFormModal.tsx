@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import { Period } from '@navikt/k9-period-utils';
+import React from 'react';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import Modal from 'nav-frontend-modal';
@@ -12,7 +13,6 @@ import Form from '../form/Form';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import { FieldName } from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
 import styles from './innleggelsesperiodeFormModal.less';
-import { Period } from '../../../types/Period';
 import { InnleggelsesperiodeDryRunResponse } from '../../../api/api';
 
 interface InnleggelsesperiodeFormModal {

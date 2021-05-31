@@ -1,3 +1,4 @@
+import { dateConstants } from '@navikt/k9-date-utils';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import DetailView from '../detail-view/DetailView';
@@ -10,7 +11,6 @@ import { Dokument, Dokumenttype } from '../../../types/Dokument';
 import { lagStrukturertDokument } from '../../../util/dokumentUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
-import { today } from '../../../constants/dateConstants';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
 
 export enum FieldName {
@@ -84,7 +84,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit, editMode, isSubmitting }: 
                             label="Hvilken dato er dokumentet datert?"
                             defaultValue=""
                             validators={{ required, dateIsNotInTheFuture }}
-                            limitations={{ maxDate: today.toISOString() }}
+                            limitations={{ maxDate: dateConstants.today.toISOString() }}
                             inputId="datertField"
                         />
                     </Box>

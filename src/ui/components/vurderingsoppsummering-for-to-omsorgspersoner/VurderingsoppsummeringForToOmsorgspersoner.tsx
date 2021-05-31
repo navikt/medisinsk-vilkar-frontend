@@ -1,6 +1,5 @@
 import React from 'react';
 import Vurdering from '../../../types/Vurdering';
-import { prettifyPeriod } from '../../../util/formats';
 import Box, { Margin } from '../box/Box';
 import LabelledContent from '../labelled-content/LabelledContent';
 import BasicList from '../basic-list/BasicList';
@@ -60,8 +59,8 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
                         label="Perioder vurdert"
                         content={
                             <ul style={{ margin: 0, listStyleType: 'none', padding: 0 }}>
-                                {perioder.map((periode, i) => (
-                                    <li key={`${i}`}>{prettifyPeriod(periode)}</li>
+                                {perioder.map((period, i) => (
+                                    <li key={`${i}`}>{period.prettifyPeriod()}</li>
                                 ))}
                             </ul>
                         }

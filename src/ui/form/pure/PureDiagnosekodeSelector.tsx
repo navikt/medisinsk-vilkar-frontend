@@ -1,4 +1,4 @@
-import Autocomplete from '@navikt/nap-autocomplete';
+import { Autocomplete } from '@navikt/k9-react-components';
 import { Label } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';

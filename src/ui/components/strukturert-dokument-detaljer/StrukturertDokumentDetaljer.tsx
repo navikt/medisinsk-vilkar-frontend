@@ -1,9 +1,9 @@
 import React from 'react';
+import { prettifyDateString } from '@navikt/k9-date-utils';
 import DetailView from '../detail-view/DetailView';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import Box, { Margin } from '../box/Box';
 import LabelledContent from '../labelled-content/LabelledContent';
-import { prettifyDate } from '../../../util/formats';
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
@@ -57,7 +57,7 @@ const StrukturertDokumentDetaljer = ({ dokument, onEditDokumentClick }: Struktur
                 />
             </Box>
             <Box marginTop={Margin.xLarge}>
-                <LabelledContent label="Når er dokumentet datert?" content={prettifyDate(datert)} />
+                <LabelledContent label="Når er dokumentet datert?" content={prettifyDateString(datert)} />
             </Box>
         </DetailView>
     );

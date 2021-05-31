@@ -1,4 +1,4 @@
-import { Period } from '../../src/types/Period';
+import { Period } from '@navikt/k9-period-utils';
 import LinkRel from '../../src/constants/LinkRel';
 
 export default {

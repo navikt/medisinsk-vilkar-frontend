@@ -1,3 +1,4 @@
+import { Period } from '@navikt/k9-period-utils';
 import {
     FieldName as TilsynFieldName,
     VurderingAvTilsynsbehovFormState,
@@ -7,7 +8,6 @@ import {
     VurderingAvToOmsorgspersonerFormState,
 } from '../ui/components/vurdering-av-to-omsorgspersoner-form/VurderingAvToOmsorgspersonerForm';
 import Vurderingsresultat from '../types/Vurderingsresultat';
-import { Period } from '../types/Period';
 import Dokument from '../types/Dokument';
 import { Vurderingsversjon } from '../types/Vurdering';
 import { finnBenyttedeDokumenter } from './dokumentUtils';

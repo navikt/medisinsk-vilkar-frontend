@@ -1,9 +1,8 @@
-import dayjs from 'dayjs';
+import { prettifyDateString } from '@navikt/k9-date-utils';
 import Lenke from 'nav-frontend-lenker';
 import React from 'react';
 import LinkRel from '../../../constants/LinkRel';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
-import { prettifyDate } from '../../../util/formats';
 import { findLinkByRel } from '../../../util/linkUtils';
 import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import DocumentIcon from '../icons/DocumentIcon';
@@ -23,6 +22,7 @@ const renderDokumenttypeText = (dokumenttype: Dokumenttype) => {
     if (dokumenttype === Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER) {
         return 'Andre med. oppl.';
     }
+    return null;
 };
 
 const DokumentLink = ({ dokument, etikett, visDokumentIkon }: DokumentLinkProps) => {
@@ -31,7 +31,7 @@ const DokumentLink = ({ dokument, etikett, visDokumentIkon }: DokumentLinkProps)
     return (
         <Lenke className={styles.dokumentLink} href={dokumentLink.href} target="_blank">
             {visDokumentIkon && <DocumentIcon className={styles.dokumentLink__dokumentikon} />}
-            {renderDokumenttypeText(type)} {prettifyDate(dayjs(datert).utc(true).toISOString())}
+            {renderDokumenttypeText(type)} {prettifyDateString(datert)}
             <div className={styles.dokumentLink__etikett}>
                 {etikett && (
                     <ContentWithTooltip tooltipText={etikett} tooltipDirectionRight>

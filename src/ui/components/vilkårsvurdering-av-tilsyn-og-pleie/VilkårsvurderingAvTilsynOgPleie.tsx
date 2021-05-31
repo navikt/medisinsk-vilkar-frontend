@@ -1,6 +1,6 @@
+import { Period } from '@navikt/k9-period-utils';
 import React, { useMemo } from 'react';
 import axios from 'axios';
-import { Period } from '../../../types/Period';
 import Step, { StepId, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingselement from '../../../types/Vurderingselement';

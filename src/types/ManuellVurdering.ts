@@ -1,4 +1,4 @@
-import { Period } from './Period';
+import { Period } from '@navikt/k9-period-utils';
 import Vurderingsresultat from './Vurderingsresultat';
 import Link from './Link';
 

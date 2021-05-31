@@ -1,7 +1,6 @@
 import React from 'react';
+import { Period, getHumanReadablePeriodString } from '@navikt/k9-period-utils';
 import Alertstripe from 'nav-frontend-alertstriper';
-import { Period } from '../../../types/Period';
-import { getStringMedPerioder } from '../../../util/periodUtils';
 
 interface VurderBehovForPerioderMeldingProps {
     vurderingsnavn: string;
@@ -13,7 +12,7 @@ const VurderBehovForPerioderMelding = ({ vurderingsnavn, perioder }: VurderBehov
         <Alertstripe type="advarsel">
             Vurder behov for
             {vurderingsnavn}
-            for ${getStringMedPerioder(perioder)}
+            for ${getHumanReadablePeriodString(perioder)}
         </Alertstripe>
     );
 };

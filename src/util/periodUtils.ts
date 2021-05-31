@@ -1,20 +1,9 @@
-import { Period } from '../types/Period';
-import { dateFromString, isSameOrBefore } from './dateUtils';
-import { prettifyPeriod } from './formats';
-
-export const sortPeriodsByFomDate = (period1: Period, period2: Period): number => {
-    if (period1.startsBefore(period2)) {
-        return -1;
-    }
-    if (period2.startsBefore(period1)) {
-        return 1;
-    }
-    return 0;
-};
+import { Period, sortPeriodsByFomDate } from '@navikt/k9-period-utils';
+import { initializeDate, isSameOrBefore } from '@navikt/k9-date-utils';
 
 const checkIfPeriodsAreEdgeToEdge = (period, otherPeriod) => {
-    const dayAfterPeriod = dateFromString(period.tom).add(1, 'day');
-    const startOfNextPeriod = dateFromString(otherPeriod.fom);
+    const dayAfterPeriod = initializeDate(period.tom).add(1, 'day');
+    const startOfNextPeriod = initializeDate(otherPeriod.fom);
     return dayAfterPeriod.isSame(startOfNextPeriod);
 };
 
@@ -104,8 +93,8 @@ export const finnHullIPerioder = (periode: Period[]) => {
         const nextPeriod = array[index + 1];
         if (nextPeriod) {
             if (!checkIfPeriodsAreEdgeToEdge(period, nextPeriod) && !nextPeriod.includesDate(period.tom)) {
-                const dayAfterPeriod = dateFromString(period.tom).add(1, 'day').format('YYYY-MM-DD');
-                const dayBeforeStartOfNextPeriod = dateFromString(nextPeriod.fom)
+                const dayAfterPeriod = initializeDate(period.tom).add(1, 'day').format('YYYY-MM-DD');
+                const dayBeforeStartOfNextPeriod = initializeDate(nextPeriod.fom)
                     .subtract(1, 'day')
                     .format('YYYY-MM-DD');
                 const nyttHull = new Period(dayAfterPeriod, dayBeforeStartOfNextPeriod);
@@ -117,7 +106,7 @@ export const finnHullIPerioder = (periode: Period[]) => {
 };
 
 export const finnMaksavgrensningerForPerioder = (perioder: Period[]): Period => {
-    let maksimalSøknadsperiode: Period;
+    let maksimalSøknadsperiode: Period = null;
 
     perioder.forEach((periode) => {
         let nyFom;
@@ -143,24 +132,4 @@ export const finnMaksavgrensningerForPerioder = (perioder: Period[]): Period => 
     });
 
     return maksimalSøknadsperiode;
-};
-
-export const getStringMedPerioder = (perioder: Period[]): string => {
-    if (perioder.length === 1) {
-        return `perioden ${prettifyPeriod(perioder[0])}`;
-    }
-
-    let perioderString = '';
-    perioder.forEach((periode, index) => {
-        const prettyPeriod = prettifyPeriod(periode);
-        if (index === 0) {
-            perioderString = prettyPeriod;
-        } else if (index === perioder.length - 1) {
-            perioderString = `${perioderString} og ${prettyPeriod}`;
-        } else {
-            perioderString = `${perioderString}, ${prettyPeriod}`;
-        }
-    });
-
-    return `periodene ${perioderString}`;
 };

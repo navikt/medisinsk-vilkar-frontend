@@ -1,11 +1,10 @@
+import React, { useEffect } from 'react';
+import { Period, sortPeriodsByFomDate } from '@navikt/k9-period-utils';
 import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Element, Undertittel } from 'nav-frontend-typografi';
-import React, { useEffect } from 'react';
 import ManuellVurdering from '../../../types/ManuellVurdering';
-import { Period } from '../../../types/Period';
 import Vurderingselement from '../../../types/Vurderingselement';
 import { usePrevious } from '../../../util/hooks';
-import { sortPeriodsByFomDate } from '../../../util/periodUtils';
 import AddButton from '../add-button/AddButton';
 import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import EditedBySaksbehandlerIcon from '../icons/EditedBySaksbehandlerIcon';

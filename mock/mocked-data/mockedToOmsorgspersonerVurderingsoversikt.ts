@@ -1,8 +1,8 @@
+import { Period } from '@navikt/k9-period-utils';
 import Vurderingsresultat from '../../src/types/Vurderingsresultat';
 import mockedVurderingsoversiktLinks from './mockedVurderingsoversiktLinks';
 import createMockedVurderingselementLinks from './createMockedVurderingselementLinks';
 import Vurderingsoversikt from '../../src/types/Vurderingsoversikt';
-import { Period } from '../../src/types/Period';
 
 const mockedToOmsorgspersonerVurderingsoversikt: Vurderingsoversikt = new Vurderingsoversikt({
     vurderingselementer: [

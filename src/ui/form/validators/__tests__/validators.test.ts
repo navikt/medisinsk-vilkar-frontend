@@ -1,3 +1,5 @@
+import { dateConstants } from '@navikt/k9-date-utils';
+import { Period } from '@navikt/k9-period-utils';
 import {
     dateIsNotInTheFuture,
     datoenInngårISøknadsperioden,
@@ -6,8 +8,6 @@ import {
     detErTilsynsbehovPåDatoen,
     required,
 } from '..';
-import { Period } from '../../../../types/Period';
-import { today, tomorrow } from '../../../../constants/dateConstants';
 
 test('required', () => {
     const feilmelding = 'Du må oppgi en verdi';
@@ -19,8 +19,10 @@ test('required', () => {
 });
 
 test('dateIsNotInTheFuture-validator', () => {
-    expect(dateIsNotInTheFuture(today.toISOString())).toBe(true);
-    expect(dateIsNotInTheFuture(tomorrow.toISOString())).toBe('Datoen kan ikke settes senere enn dagens dato');
+    expect(dateIsNotInTheFuture(dateConstants.today.toISOString())).toBe(true);
+    expect(dateIsNotInTheFuture(dateConstants.tomorrow.toISOString())).toBe(
+        'Datoen kan ikke settes senere enn dagens dato'
+    );
 });
 
 test('detErTilsynsbehovPåDatoen', () => {

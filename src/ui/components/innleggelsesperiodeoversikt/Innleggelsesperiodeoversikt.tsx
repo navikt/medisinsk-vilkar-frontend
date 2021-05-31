@@ -1,9 +1,8 @@
 import Modal from 'nav-frontend-modal';
 import Spinner from 'nav-frontend-spinner';
-import { Element } from 'nav-frontend-typografi';
+import { Period } from '@navikt/k9-period-utils';
 import axios from 'axios';
 import React, { useEffect, useMemo } from 'react';
-import { Period } from '../../../types/Period';
 import { get } from '../../../util/httpUtils';
 import ContainerContext from '../../context/ContainerContext';
 import AddButton from '../add-button/AddButton';
@@ -46,11 +45,10 @@ const Innleggelsesperiodeoversikt = ({
     const innleggelsesperioder = innleggelsesperioderResponse.perioder;
     const innleggelsesperioderDefault = innleggelsesperioder?.length > 0 ? innleggelsesperioder : [new Period('', '')];
 
-    const hentInnleggelsesperioder = () => {
-        return get(`${endpoints.innleggelsesperioder}`, httpErrorHandler, {
+    const hentInnleggelsesperioder = () =>
+        get(`${endpoints.innleggelsesperioder}`, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         });
-    };
 
     const lagreInnleggelsesperioder = (formState) => {
         setIsLoading(true);

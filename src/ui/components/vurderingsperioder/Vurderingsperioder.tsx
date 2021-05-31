@@ -1,6 +1,5 @@
 import React from 'react';
-import { Period } from '../../../types/Period';
-import { prettifyPeriod } from '../../../util/formats';
+import { Period } from '@navikt/k9-period-utils';
 import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import OnePersonIconGray from '../icons/OnePersonIconGray';
 import styles from './vurderingsperioder.less';
@@ -25,7 +24,7 @@ const Vurderingsperioder = ({ perioder, visParterLabel, indicatorContentRenderer
                 {perioder.map((periode, index) => (
                     <p key={`${periode.fom}_${periode.tom}`} className={styles.vurderingsperioder__texts__period}>
                         {index === 0 && <span className={styles.visuallyHidden}>Perioder</span>}
-                        {prettifyPeriod(periode)}
+                        {periode.prettifyPeriod()}
                     </p>
                 ))}
             </div>

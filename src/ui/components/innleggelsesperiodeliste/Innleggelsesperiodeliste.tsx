@@ -1,6 +1,5 @@
 import React from 'react';
-import { Period } from '../../../types/Period';
-import { prettifyPeriod } from '../../../util/formats';
+import { Period } from '@navikt/k9-period-utils';
 import styles from './innleggelsesperiodeliste.less';
 
 interface InnleggelsesperiodelisteProps {
@@ -14,7 +13,7 @@ const Innleggelsesperiodeliste = ({ innleggelsesperioder }: Innleggelsesperiodel
                 const { fom, tom } = innleggelsesperiode;
                 return (
                     <li key={`${fom}${tom}`} className={styles.innleggelsesperiodeliste__element}>
-                        {prettifyPeriod(innleggelsesperiode)}
+                        {innleggelsesperiode.prettifyPeriod()}
                     </li>
                 );
             })}

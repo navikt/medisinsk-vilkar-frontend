@@ -1,5 +1,5 @@
+import { Period } from '@navikt/k9-period-utils';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import { Period } from '../../../types/Period';
 import ActionType from './actionTypes';
 import Vurderingselement from '../../../types/Vurderingselement';
 

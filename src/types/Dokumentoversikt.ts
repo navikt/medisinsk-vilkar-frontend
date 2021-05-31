@@ -1,9 +1,9 @@
-import { dateFromString } from '../util/dateUtils';
+import { initializeDate } from '@navikt/k9-date-utils';
 import Dokument, { Dokumenttype } from './Dokument';
 
 const dokumentSorter = (dok1: Dokument, dok2: Dokument): number => {
-    const dok1Date = dateFromString(dok1.datert || dok1.mottattTidspunkt);
-    const dok2Date = dateFromString(dok2.datert || dok2.mottattTidspunkt);
+    const dok1Date = initializeDate(dok1.datert || dok1.mottattTidspunkt);
+    const dok2Date = initializeDate(dok2.datert || dok2.mottattTidspunkt);
     if (dok1Date.isBefore(dok2Date)) {
         return 1;
     }
