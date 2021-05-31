@@ -1,11 +1,10 @@
-import { Period } from '@navikt/k9-period-utils';
 import LinkRel from '../../src/constants/LinkRel';
 
 export default {
     perioder: [
-        new Period('2021-01-01', '2021-01-15'),
-        new Period('2021-01-16', '2021-01-20'),
-        new Period('2021-01-21', '2021-01-30'),
+        {fom: '2021-01-01', tom: '2021-01-15'},
+        {fom: '2021-01-16', tom: '2021-01-20'},
+        {fom: '2021-01-21', tom: '2021-01-30'}
     ],
     links: [
         {

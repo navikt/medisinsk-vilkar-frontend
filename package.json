@@ -8,7 +8,7 @@
         "start": "node ./server.js",
         "build": "webpack --config webpack/webpack-config.production.js",
         "dev": "node webpack/webpack-config.development.js",
-        "api-mock": "ts-node --project ./tsconfig.json mock/api-mock.ts --show-config",
+        "api-mock": "ts-node --project ./tsconfig.json mock/api-mock.ts",
         "version": "node ./version.js",
         "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'"
     },
@@ -58,10 +58,10 @@
     },
     "dependencies": {
         "@navikt/fnrvalidator": "^1.1.4",
-        "@navikt/k9-array-utils": "file:../../private/multipackage-repository/packages/util/array-utils",
-        "@navikt/k9-date-utils": "file:../../private/multipackage-repository/packages/util/date-utils",
-        "@navikt/k9-period-utils": "file:../../private/multipackage-repository/packages/util/period-utils",
-        "@navikt/k9-react-components": "file:../../private/multipackage-repository/packages/ui/react-components",
+        "@navikt/k9-array-utils": "file:../k9-frontend-modules/packages/util/array-utils",
+        "@navikt/k9-date-utils": "file:../k9-frontend-modules/packages/util/date-utils",
+        "@navikt/k9-period-utils": "file:../k9-frontend-modules/packages/util/period-utils",
+        "@navikt/k9-react-components": "file:../k9-frontend-modules/packages/ui/react-components",
         "@types/react": "^17.0.3",
         "@types/react-dom": "^17.0.3",
         "@types/react-modal": "^3.12.0",

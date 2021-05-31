@@ -75,12 +75,19 @@ const Innleggelsesperiodeoversikt = ({
             });
     };
 
+    const initializeInnleggelsesperiodeData = (response: InnleggelsesperiodeResponse) => {
+        return {
+            ...response,
+            perioder: response.perioder.map(({ fom, tom }) => new Period(fom, tom)),
+        };
+    };
+
     useEffect(() => {
         let isMounted = true;
         hentInnleggelsesperioder()
             .then((response: InnleggelsesperiodeResponse) => {
                 if (isMounted) {
-                    setInnleggelsesperioderResponse(response);
+                    setInnleggelsesperioderResponse(initializeInnleggelsesperiodeData(response));
                     setIsLoading(false);
                 }
             })
