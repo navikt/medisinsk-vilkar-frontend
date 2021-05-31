@@ -36,7 +36,7 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
                                 elements={dokumenter
                                     .filter(({ benyttet }) => benyttet)
                                     .map((dokument) => (
-                                        <DokumentLink dokument={dokument} />
+                                        <DokumentLink dokument={dokument} visDokumentIkon />
                                     ))}
                             />
                         }
