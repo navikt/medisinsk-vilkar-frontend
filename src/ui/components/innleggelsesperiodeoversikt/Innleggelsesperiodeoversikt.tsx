@@ -1,23 +1,20 @@
+import { PageError, Box, Margin, LinkButton, TitleWithUnderline } from '@navikt/k9-react-components';
+import { Period } from '@navikt/k9-period-utils';
 import Modal from 'nav-frontend-modal';
 import Spinner from 'nav-frontend-spinner';
-import { Period } from '@navikt/k9-period-utils';
 import axios from 'axios';
 import React, { useEffect, useMemo } from 'react';
 import { get } from '../../../util/httpUtils';
 import ContainerContext from '../../context/ContainerContext';
 import AddButton from '../add-button/AddButton';
-import Box, { Margin } from '../box/Box';
 import Innleggelsesperiodeliste from '../innleggelsesperiodeliste/Innleggelsesperiodeliste';
-import PageError from '../page-error/PageError';
-import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
-import styles from './innleggelsesperiodeoversikt.less';
 import InnleggelsesperiodeFormModal from '../innleggelsesperiodeFormModal/InnleggelsesperiodeFormModal';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import { InnleggelsesperiodeResponse } from '../../../types/InnleggelsesperiodeResponse';
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
 import { postInnleggelsesperioder, postInnleggelsesperioderDryRun } from '../../../api/api';
-import LinkButton from '../link-button/LinkButton';
+import styles from './innleggelsesperiodeoversikt.less';
 
 export enum FieldName {
     INNLEGGELSESPERIODER = 'innleggelsesperioder',

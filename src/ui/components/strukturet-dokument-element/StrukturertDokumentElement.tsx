@@ -1,10 +1,10 @@
+import { ContentWithTooltip } from '@navikt/k9-react-components';
+import { prettifyDateString } from '@navikt/k9-date-utils';
 import Lenke from 'nav-frontend-lenker';
 import React from 'react';
-import { prettifyDateString } from '@navikt/k9-date-utils';
 import LinkRel from '../../../constants/LinkRel';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import { findLinkByRel } from '../../../util/linkUtils';
-import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import DocumentIcon from '../icons/DocumentIcon';
 import GreenCheckIconFilled from '../icons/GreenCheckIconFilled';
 import OnePersonIconGray from '../icons/OnePersonIconGray';

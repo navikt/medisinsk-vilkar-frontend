@@ -1,3 +1,4 @@
+import { Box, Margin, PageContainer } from '@navikt/k9-react-components';
 import { Period } from '@navikt/k9-period-utils';
 import React, { useMemo } from 'react';
 import axios from 'axios';
@@ -5,7 +6,6 @@ import Dokument from '../../../types/Dokument';
 import Link from '../../../types/Link';
 import { Vurderingsversjon } from '../../../types/Vurdering';
 import { get } from '../../../util/httpUtils';
-import PageContainer from '../page-container/PageContainer';
 import { PeriodeMedEndring, PerioderMedEndringResponse } from '../../../types/PeriodeMedEndring';
 import OverlappendePeriodeModal from '../overlappende-periode-modal/OverlappendePeriodeModal';
 import ActionType from './actionTypes';
@@ -13,7 +13,6 @@ import vurderingControllerReducer from './reducer';
 import { postEndreVurdering, postEndreVurderingDryRun } from '../../../api/api';
 import ContainerContext from '../../context/ContainerContext';
 import { scrollUp } from '../../../util/viewUtils';
-import Box, { Margin } from '../box/Box';
 import LagreVurderingFeiletMelding from '../lagre-vurdering-feilet-melding/LagreVurderingFeiletMelding';
 
 interface EndreVurderingControllerProps {

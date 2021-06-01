@@ -1,10 +1,10 @@
+import { Box, Margin } from '@navikt/k9-react-components';
 import React from 'react';
 import Modal from 'nav-frontend-modal';
 import Alertstripe from 'nav-frontend-alertstriper';
 import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
 import { PeriodeMedEndring } from '../../../types/PeriodeMedEndring';
 import ConfirmationModal from '../confirmation-modal/ConfirmationModal';
-import Box, { Margin } from '../box/Box';
 
 interface OverlappendePeriodeModalProps {
     appElementId: string;

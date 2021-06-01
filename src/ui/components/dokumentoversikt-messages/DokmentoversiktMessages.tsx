@@ -4,7 +4,7 @@ import React from 'react';
 import { Dokumentoversikt } from '../../../types/Dokumentoversikt';
 import ContainerContext from '../../context/ContainerContext';
 import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
-import Box, { Margin } from '../box/Box';
+import { Box,  Margin } from '@navikt/k9-react-components';
 import FristForDokumentasjonUtløptPanel from '../frist-for-dokumentasjon-utløpt-panel/FristForDokumentasjonUtløptPanel';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 

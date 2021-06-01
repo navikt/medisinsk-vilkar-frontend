@@ -1,11 +1,9 @@
+import { Form, DetailView, Box, Margin } from '@navikt/k9-react-components';
 import { dateConstants } from '@navikt/k9-date-utils';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import DetailView from '../detail-view/DetailView';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
-import Form from '../form/Form';
 import Datepicker from '../../form/wrappers/Datepicker';
-import Box, { Margin } from '../box/Box';
 import { dateIsNotInTheFuture, required } from '../../form/validators';
 import { Dokument, Dokumenttype } from '../../../types/Dokument';
 import { lagStrukturertDokument } from '../../../util/dokumentUtils';
@@ -66,8 +64,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit, editMode, isSubmitting }: 
                                     value: Dokumenttype.LEGEERKLÆRING,
                                 },
                                 {
-                                    label:
-                                        'Ja, andre medisinske opplysninger (f.eks. legeerklæring fra fastlege, uttalelse fra psykolog)',
+                                    label: 'Ja, andre medisinske opplysninger (f.eks. legeerklæring fra fastlege, uttalelse fra psykolog)',
                                     value: Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER,
                                 },
                                 {

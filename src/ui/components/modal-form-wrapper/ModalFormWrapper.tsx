@@ -1,6 +1,6 @@
 import React from 'react';
 import { Undertittel } from 'nav-frontend-typografi';
-import Box, { Margin } from '../box/Box';
+import { Box,  Margin } from '@navikt/k9-react-components';
 
 interface ModalFormWrapperProps {
     title: string;

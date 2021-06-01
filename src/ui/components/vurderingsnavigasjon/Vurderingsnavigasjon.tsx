@@ -1,16 +1,15 @@
-import React, { useEffect } from 'react';
+import { ContentWithTooltip, InteractiveList } from '@navikt/k9-react-components';
 import { Period, sortPeriodsByFomDate } from '@navikt/k9-period-utils';
+import React, { useEffect } from 'react';
 import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Element, Undertittel } from 'nav-frontend-typografi';
 import ManuellVurdering from '../../../types/ManuellVurdering';
 import Vurderingselement from '../../../types/Vurderingselement';
 import { usePrevious } from '../../../util/hooks';
 import AddButton from '../add-button/AddButton';
-import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import EditedBySaksbehandlerIcon from '../icons/EditedBySaksbehandlerIcon';
 import InfoIcon from '../icons/InfoIcon';
 import WarningIcon from '../icons/WarningIcon';
-import InteractiveList from '../interactive-list/InteractiveList';
 import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
 import Vurderingsperioder from '../vurderingsperioder/Vurderingsperioder';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';

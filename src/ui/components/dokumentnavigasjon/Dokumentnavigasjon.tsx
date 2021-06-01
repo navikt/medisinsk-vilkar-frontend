@@ -1,7 +1,7 @@
+import { InteractiveList } from '@navikt/k9-react-components';
 import { Element, Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
 import { Dokument } from '../../../types/Dokument';
-import InteractiveList from '../interactive-list/InteractiveList';
 import StrukturertDokumentElement from '../strukturet-dokument-element/StrukturertDokumentElement';
 import UstrukturertDokumentElement from '../ustrukturert-dokument-element/UstrukturertDokumentElement';
 import styles from './dokumentnavigasjon.less';

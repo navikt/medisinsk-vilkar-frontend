@@ -1,8 +1,6 @@
 import React from 'react';
-import Box, { Margin } from '../box/Box';
+import { Box, Margin, BasicList, LabelledContent } from '@navikt/k9-react-components';
 import Vurdering from '../../../types/Vurdering';
-import LabelledContent from '../labelled-content/LabelledContent';
-import BasicList from '../basic-list/BasicList';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import DekketAvInnleggelsesperiodeMelding from '../dekket-av-innleggelsesperiode-melding/DekketAvInnleggelsesperiodeMelding';

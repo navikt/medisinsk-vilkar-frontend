@@ -1,10 +1,9 @@
+import { DetailView, DetailViewProps, LinkButton } from '@navikt/k9-react-components';
 import React from 'react';
 import { Period } from '@navikt/k9-period-utils';
-import DetailView, { DetailViewProps } from '../detail-view/DetailView';
 import PeriodList from '../period-list/PeriodList';
 import styles from './detailViewVurdering.less';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
-import LinkButton from '../link-button/LinkButton';
 
 interface DetailViewVurderingProps extends DetailViewProps {
     perioder: Period[];

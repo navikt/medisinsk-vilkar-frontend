@@ -3,7 +3,7 @@ import { CalendarPlacement, DatepickerLimitations } from 'nav-datovelger';
 import { SkjemaelementFeilmelding, SkjemaGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
-import Box, { Margin } from '../../components/box/Box';
+import { Box,  Margin } from '@navikt/k9-react-components';
 import PureDatepicker from '../pure/PureDatepicker';
 import styles from './periodpickerList.less';
 

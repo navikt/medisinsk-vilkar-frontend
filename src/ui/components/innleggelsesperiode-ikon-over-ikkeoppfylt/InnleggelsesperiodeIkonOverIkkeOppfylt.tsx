@@ -1,5 +1,5 @@
+import { IndicatorWithOverlay } from '@navikt/k9-react-components';
 import React from 'react';
-import IndicatorWithOverlay from '../indicator-with-overlay/IndicatorWithOverlay';
 import InstitutionIcon from '../icons/InstitutionIcon';
 import RedCrossIconFilled from '../icons/RedCrossIconFilled';
 

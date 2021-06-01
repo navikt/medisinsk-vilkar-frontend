@@ -1,9 +1,8 @@
+import { Box, Margin, TitleWithUnderline } from '@navikt/k9-react-components';
 import React from 'react';
-import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
 import GreenCheckIcon from '../icons/GreenCheckIcon';
 import IconWithText from '../icon-with-text/IconWithText';
 import WarningIcon from '../icons/WarningIcon';
-import Box, { Margin } from '../box/Box';
 
 interface SignertSeksjonProps {
     harGyldigSignatur: boolean;

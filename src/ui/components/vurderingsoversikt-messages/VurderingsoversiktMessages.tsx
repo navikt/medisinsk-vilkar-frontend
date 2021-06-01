@@ -4,7 +4,7 @@ import { getHumanReadablePeriodString } from '@navikt/k9-period-utils';
 import { addYearsToDate } from '@navikt/k9-date-utils';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import Vurderingstype from '../../../types/Vurderingstype';
-import Box, { Margin } from '../box/Box';
+import { Box,  Margin } from '@navikt/k9-react-components';
 import IngenPerioderÅVurdereMelding from '../ingen-perioder-å-vurdere-melding/IngenPerioderÅVurdereMelding';
 import ManglerGyldigSignaturMelding from '../mangler-gyldig-signatur-melding/ManglerGyldigSignaturMelding';
 import VurderingContext from '../../context/VurderingContext';

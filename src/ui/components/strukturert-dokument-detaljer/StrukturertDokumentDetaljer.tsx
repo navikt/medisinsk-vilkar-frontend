@@ -1,13 +1,10 @@
-import React from 'react';
+import { Box, Margin, DetailView, LabelledContent, LinkButton } from '@navikt/k9-react-components';
 import { prettifyDateString } from '@navikt/k9-date-utils';
-import DetailView from '../detail-view/DetailView';
+import React from 'react';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
-import Box, { Margin } from '../box/Box';
-import LabelledContent from '../labelled-content/LabelledContent';
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
-import LinkButton from '../link-button/LinkButton';
 import styles from './strukturertDokumentDetaljer.less';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 

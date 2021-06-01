@@ -1,5 +1,5 @@
+import { ContentWithTooltip } from '@navikt/k9-react-components';
 import * as React from 'react';
-import ContentWithTooltip from '../../content-with-tooltip/ContentWithTooltip';
 import styles from './nyLabel.less';
 
 const NyLabel = () => (
