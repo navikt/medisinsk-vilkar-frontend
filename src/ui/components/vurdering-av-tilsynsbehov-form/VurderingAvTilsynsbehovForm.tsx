@@ -1,4 +1,4 @@
-import { Form } from '@navikt/k9-react-components';
+import { Form, Box, Margin } from '@navikt/k9-react-components';
 import { Period } from '@navikt/k9-period-utils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
@@ -18,7 +18,6 @@ import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import AddButton from '../add-button/AddButton';
-import { Box, Margin } from '@navikt/k9-react-components';
 import DeleteButton from '../delete-button/DeleteButton';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
