@@ -1,8 +1,8 @@
+import { Box, Margin } from '@navikt/k9-react-components';
 import AlertStripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import * as React from 'react';
 import ContainerContext from '../../context/ContainerContext';
-import Box, { Margin } from '../box/Box';
 
 const AksjonspunktFerdigStripe = () => {
     const { onFinished } = React.useContext(ContainerContext);

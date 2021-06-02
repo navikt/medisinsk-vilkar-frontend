@@ -1,5 +1,5 @@
+import { Period } from '@navikt/k9-period-utils';
 import Dokument from './Dokument';
-import { Period } from './Period';
 import Vurderingsresultat from './Vurderingsresultat';
 
 export default interface NyVurderingsversjon {

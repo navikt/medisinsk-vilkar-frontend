@@ -1,7 +1,6 @@
+import { ContentWithTooltip } from '@navikt/k9-react-components';
 import React from 'react';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
-import { prettifyPeriod } from '../../../util/formats';
-import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import GreenCheckIconFilled from '../icons/GreenCheckIconFilled';
 import OnePersonIconGray from '../icons/OnePersonIconGray';
 import OnePersonOutlineGray from '../icons/OnePersonOutlineGray';
@@ -105,7 +104,7 @@ const VurderingsperiodeElement = ({
             <div className={styles.vurderingsperiodeElement__texts}>
                 <p className={styles.vurderingsperiodeElement__texts__period}>
                     <span className={styles.visuallyHidden}>Periode</span>
-                    {prettifyPeriod(periode)}
+                    {periode.prettifyPeriod()}
                 </p>
                 {visParterLabel && (
                     <div className={styles.vurderingsperiodeElement__texts__parterIcon}>

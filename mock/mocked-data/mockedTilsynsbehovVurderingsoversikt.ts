@@ -1,14 +1,12 @@
 import Vurderingsresultat from '../../src/types/Vurderingsresultat';
 import mockedVurderingsoversiktLinks from './mockedVurderingsoversiktLinks';
 import createMockedVurderingselementLinks from './createMockedVurderingselementLinks';
-import Vurderingsoversikt from '../../src/types/Vurderingsoversikt';
-import { Period } from '../../src/types/Period';
 
-const tilsynsbehovVurderingsoversiktMock: Vurderingsoversikt = new Vurderingsoversikt({
+const tilsynsbehovVurderingsoversiktMock = {
     vurderingselementer: [
         {
             id: '1',
-            periode: new Period('2022-02-01', '2022-02-15'),
+            periode: { fom: '2022-02-01', tom: '2022-02-15'} as any,
             resultat: Vurderingsresultat.OPPFYLT,
             gjelderForSøker: false,
             gjelderForAnnenPart: true,
@@ -18,7 +16,7 @@ const tilsynsbehovVurderingsoversiktMock: Vurderingsoversikt = new Vurderingsove
         },
         {
             id: '2',
-            periode: new Period('2022-01-20', '2022-01-31'),
+            periode: { fom: '2022-01-20', tom: '2022-01-31'} as any,
             resultat: Vurderingsresultat.OPPFYLT,
             gjelderForSøker: false,
             gjelderForAnnenPart: true,
@@ -28,7 +26,7 @@ const tilsynsbehovVurderingsoversiktMock: Vurderingsoversikt = new Vurderingsove
         },
         {
             id: '3',
-            periode: new Period('2022-01-15', '2020-01-19'),
+            periode: { fom: '2022-01-15', tom: '2020-01-19'} as any,
             resultat: Vurderingsresultat.IKKE_OPPFYLT,
             gjelderForSøker: false,
             gjelderForAnnenPart: true,
@@ -38,17 +36,17 @@ const tilsynsbehovVurderingsoversiktMock: Vurderingsoversikt = new Vurderingsove
         },
         {
             id: '4',
-            periode: new Period('2022-01-01', '2020-01-14'),
+            periode: { fom: '2022-01-01', tom: '2020-01-14'} as any,
             erInnleggelsesperiode: true,
         },
     ],
-    resterendeVurderingsperioder: [new Period('2022-02-16', '2022-03-01')],
-    perioderSomKanVurderes: [new Period('2022-01-15', '2022-03-01')],
+    resterendeVurderingsperioder: [{ fom: '2022-02-16', tom: '2022-03-01'} as any],
+    perioderSomKanVurderes: [{ fom: '2022-01-15', tom: '2022-03-01'} as any],
     resterendeValgfrieVurderingsperioder: [],
     søknadsperioderTilBehandling: [],
     links: mockedVurderingsoversiktLinks,
     pleietrengendesFødselsdato: '2004-02-28',
     harPerioderDerPleietrengendeErOver18år: true,
-});
+};
 
 export default tilsynsbehovVurderingsoversiktMock;

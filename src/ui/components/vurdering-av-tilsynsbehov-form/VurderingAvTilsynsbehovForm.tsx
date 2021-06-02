@@ -1,12 +1,11 @@
+import { Form, Box, Margin } from '@navikt/k9-react-components';
+import { Period } from '@navikt/k9-period-utils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
-import { Period } from '../../../types/Period';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-import { getPeriodAsListOfDays } from '../../../util/dateUtils';
-import { convertToInternationalPeriod } from '../../../util/formats';
 import {
     finnHullIPerioder,
     finnMaksavgrensningerForPerioder,
@@ -19,11 +18,9 @@ import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import AddButton from '../add-button/AddButton';
-import Box, { Margin } from '../box/Box';
 import DeleteButton from '../delete-button/DeleteButton';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
-import Form from '../form/Form';
 import styles from './vurderingAvTilsynsbehovForm.less';
 
 export enum FieldName {
@@ -66,7 +63,7 @@ const VurderingAvTilsynsbehovForm = ({
 
     const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
-        const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap(getPeriodAsListOfDays);
+        const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap((p) => p.asListOfDays());
         const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])
             .map((period) => {
                 if ((period as any).period) {
@@ -74,12 +71,12 @@ const VurderingAvTilsynsbehovForm = ({
                 }
                 return period;
             })
-            .flatMap(getPeriodAsListOfDays);
+            .flatMap((p) => p.asListOfDays());
         return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
     }, [resterendeVurderingsperioder, perioderSomBlirVurdert]);
 
     const hullISøknadsperiodene = React.useMemo(
-        () => finnHullIPerioder(perioderSomKanVurderes).map((periode) => convertToInternationalPeriod(periode)),
+        () => finnHullIPerioder(perioderSomKanVurderes).map((period) => period.asInternationalPeriod()),
         [perioderSomKanVurderes]
     );
 

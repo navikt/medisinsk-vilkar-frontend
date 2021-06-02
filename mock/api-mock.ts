@@ -15,8 +15,6 @@ import mockedInnleggelsesperioder from './mocked-data/mockedInnleggelsesperioder
 import { Dokumenttype } from '../src/types/Dokument';
 import createMockedVurderingselementLinks from './mocked-data/createMockedVurderingselementLinks';
 import tilsynsbehovVurderingerMock from './mocked-data/mockedTilsynsbehovVurderinger';
-import { Period } from '../src/types/Period';
-import Vurderingsresultat from '../src/types/Vurderingsresultat';
 
 const app = express();
 

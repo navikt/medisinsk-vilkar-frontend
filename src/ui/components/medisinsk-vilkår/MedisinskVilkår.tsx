@@ -1,3 +1,4 @@
+import { PageContainer } from '@navikt/k9-react-components';
 import React, { useMemo } from 'react';
 import { TabsPure } from 'nav-frontend-tabs';
 import classnames from 'classnames';
@@ -12,7 +13,6 @@ import { get } from '../../../util/httpUtils';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import ContainerContext from '../../context/ContainerContext';
 import { finnNesteSteg } from '../../../util/statusUtils';
-import PageContainer from '../page-container/PageContainer';
 import WarningIcon from '../icons/WarningIcon';
 import medisinskVilkårReducer from './reducer';
 import ActionType from './actionTypes';

@@ -1,12 +1,11 @@
+import { Form, DetailView, Box, Margin } from '@navikt/k9-react-components';
+import { Period } from '@navikt/k9-period-utils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
-import { Period } from '../../../types/Period';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-import { getPeriodAsListOfDays } from '../../../util/dateUtils';
-import { convertToInternationalPeriod, prettifyPeriodList } from '../../../util/formats';
 import {
     finnHullIPerioder,
     finnMaksavgrensningerForPerioder,
@@ -19,12 +18,10 @@ import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import TextArea from '../../form/wrappers/TextArea';
 import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import AddButton from '../add-button/AddButton';
-import Box, { Margin } from '../box/Box';
 import DeleteButton from '../delete-button/DeleteButton';
 import DokumentLink from '../dokument-link/DokumentLink';
-import Form from '../form/Form';
-import styles from './vurderingAvToOmsorgspersonerForm.less';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
+import styles from './vurderingAvToOmsorgspersonerForm.less';
 
 export enum FieldName {
     VURDERING_AV_TO_OMSORGSPERSONER = 'vurderingAvToOmsorgspersoner',
@@ -66,7 +63,7 @@ const VurderingAvToOmsorgspersonerForm = ({
     const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
 
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
-        const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap(getPeriodAsListOfDays);
+        const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap((period) => period.asListOfDays());
         const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])
             .map((period) => {
                 if ((period as any).period) {
@@ -74,12 +71,12 @@ const VurderingAvToOmsorgspersonerForm = ({
                 }
                 return period;
             })
-            .flatMap(getPeriodAsListOfDays);
+            .flatMap((p) => p.asListOfDays());
         return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
     }, [resterendeVurderingsperioder, perioderSomBlirVurdert]);
 
     const hullISøknadsperiodene = React.useMemo(
-        () => finnHullIPerioder(perioderSomKanVurderes).map((periode) => convertToInternationalPeriod(periode)),
+        () => finnHullIPerioder(perioderSomKanVurderes).map((period) => period.asInternationalPeriod()),
         [perioderSomKanVurderes]
     );
 
@@ -208,19 +205,17 @@ const VurderingAvToOmsorgspersonerForm = ({
                                     invalidDateRanges: hullISøknadsperiodene,
                                 },
                             }}
-                            renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => {
-                                return (
-                                    <>
-                                        {numberOfItems > 1 && (
-                                            <DeleteButton
-                                                onClick={() => {
-                                                    fieldArrayMethods.remove(index);
-                                                }}
-                                            />
-                                        )}
-                                    </>
-                                );
-                            }}
+                            renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => (
+                                <>
+                                    {numberOfItems > 1 && (
+                                        <DeleteButton
+                                            onClick={() => {
+                                                fieldArrayMethods.remove(index);
+                                            }}
+                                        />
+                                    )}
+                                </>
+                            )}
                             renderAfterFieldArray={(fieldArrayMethods) => (
                                 <Box marginTop={Margin.large}>
                                     <AddButton

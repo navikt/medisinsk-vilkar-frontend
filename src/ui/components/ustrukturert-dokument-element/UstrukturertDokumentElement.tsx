@@ -1,10 +1,10 @@
+import { ContentWithTooltip } from '@navikt/k9-react-components';
+import { prettifyDateString } from '@navikt/k9-date-utils';
 import Lenke from 'nav-frontend-lenker';
 import React from 'react';
 import LinkRel from '../../../constants/LinkRel';
 import { Dokument } from '../../../types/Dokument';
-import { prettifyDate } from '../../../util/formats';
 import { findLinkByRel } from '../../../util/linkUtils';
-import ContentWithTooltip from '../content-with-tooltip/ContentWithTooltip';
 import DocumentIcon from '../icons/DocumentIcon';
 import OnePersonIconGray from '../icons/OnePersonIconGray';
 import OnePersonOutlineGray from '../icons/OnePersonOutlineGray';
@@ -48,7 +48,7 @@ const UstrukturertDokumentElement = ({
                 <span className={styles.ustrukturertDokumentElement__texts__date}>
                     <span className={styles.visuallyHidden}>Datert</span>
                     <ContentWithTooltip inline tooltipText="Dato dokumentet ble mottatt">
-                        {`${prettifyDate(datert || mottattDato)}*`}
+                        {`${prettifyDateString(datert || mottattDato)}*`}
                     </ContentWithTooltip>
                 </span>
                 <span className={styles.ustrukturertDokumentElement__texts__part}>

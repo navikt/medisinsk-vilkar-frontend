@@ -1,10 +1,11 @@
+import { Box, Margin, PageContainer } from '@navikt/k9-react-components';
+import { Period } from '@navikt/k9-period-utils';
 import React, { useMemo } from 'react';
 import axios from 'axios';
 import Dokument from '../../../types/Dokument';
 import Link from '../../../types/Link';
 import { Vurderingsversjon } from '../../../types/Vurdering';
 import { get } from '../../../util/httpUtils';
-import PageContainer from '../page-container/PageContainer';
 import { PeriodeMedEndring, PerioderMedEndringResponse } from '../../../types/PeriodeMedEndring';
 import OverlappendePeriodeModal from '../overlappende-periode-modal/OverlappendePeriodeModal';
 import ActionType from './actionTypes';
@@ -12,7 +13,6 @@ import vurderingControllerReducer from './reducer';
 import { postEndreVurdering, postEndreVurderingDryRun } from '../../../api/api';
 import ContainerContext from '../../context/ContainerContext';
 import { scrollUp } from '../../../util/viewUtils';
-import Box, { Margin } from '../box/Box';
 import LagreVurderingFeiletMelding from '../lagre-vurdering-feilet-melding/LagreVurderingFeiletMelding';
 
 interface EndreVurderingControllerProps {
@@ -109,17 +109,22 @@ const EndreVurderingController = ({
         });
     };
 
+    const initializePerioderMedEndringer = (perioderMedEndringResponse: PerioderMedEndringResponse) => {
+        return perioderMedEndringResponse.perioderMedEndringer.map(({ periode: { fom, tom }, ...otherFields }) => ({
+            periode: new Period(fom, tom),
+            ...otherFields,
+        }));
+    };
+
     const beOmBekreftelseFørLagringHvisNødvendig = (nyVurderingsversjon: Vurderingsversjon) => {
         dispatch({ type: ActionType.SJEKK_FOR_EKSISTERENDE_VURDERINGER_PÅBEGYNT });
         const nyVurderingsversjonMedVersjonId = { ...nyVurderingsversjon, versjon: vurderingsversjonId };
         sjekkForEksisterendeVurderinger(nyVurderingsversjonMedVersjonId).then(
             (perioderMedEndringerResponse) => {
-                const harOverlappendePerioder = perioderMedEndringerResponse.perioderMedEndringer?.length > 0;
+                const perioderMedEndringer = initializePerioderMedEndringer(perioderMedEndringerResponse);
+                const harOverlappendePerioder = perioderMedEndringer?.length > 0;
                 if (harOverlappendePerioder) {
-                    advarOmEksisterendeVurderinger(
-                        nyVurderingsversjonMedVersjonId,
-                        perioderMedEndringerResponse.perioderMedEndringer
-                    );
+                    advarOmEksisterendeVurderinger(nyVurderingsversjonMedVersjonId, perioderMedEndringer);
                 } else {
                     endreVurdering(nyVurderingsversjonMedVersjonId);
                 }

@@ -1,9 +1,8 @@
+import { Box, Margin, InfoPanel } from '@navikt/k9-react-components';
 import React from 'react';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { Checkbox } from 'nav-frontend-skjema';
 import { Hovedknapp } from 'nav-frontend-knapper';
-import InfoPanel from '../info-panel/InfoPanel';
-import Box, { Margin } from '../box/Box';
 import styles from './fristForDokumentasjonUtløptPanel.less';
 
 interface FristForDokumentasjonUtløptPanelProps {

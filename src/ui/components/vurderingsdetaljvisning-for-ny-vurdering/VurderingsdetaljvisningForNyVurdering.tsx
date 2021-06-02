@@ -1,8 +1,8 @@
 import React from 'react';
+import { Period } from '@navikt/k9-period-utils';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
-import { Period } from '../../../types/Period';
 import ContainerContext from '../../context/ContainerContext';
 import Vurderingstype from '../../../types/Vurderingstype';
 import VurderingAvTilsynsbehovForm, {

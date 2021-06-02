@@ -1,24 +1,20 @@
+import { PageError, Box, Margin, LinkButton, TitleWithUnderline } from '@navikt/k9-react-components';
+import { Period } from '@navikt/k9-period-utils';
 import Modal from 'nav-frontend-modal';
 import Spinner from 'nav-frontend-spinner';
-import { Element } from 'nav-frontend-typografi';
 import axios from 'axios';
 import React, { useEffect, useMemo } from 'react';
-import { Period } from '../../../types/Period';
 import { get } from '../../../util/httpUtils';
 import ContainerContext from '../../context/ContainerContext';
 import AddButton from '../add-button/AddButton';
-import Box, { Margin } from '../box/Box';
 import Innleggelsesperiodeliste from '../innleggelsesperiodeliste/Innleggelsesperiodeliste';
-import PageError from '../page-error/PageError';
-import TitleWithUnderline from '../title-with-underline/TitleWithUnderline';
-import styles from './innleggelsesperiodeoversikt.less';
 import InnleggelsesperiodeFormModal from '../innleggelsesperiodeFormModal/InnleggelsesperiodeFormModal';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import { InnleggelsesperiodeResponse } from '../../../types/InnleggelsesperiodeResponse';
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
 import { postInnleggelsesperioder, postInnleggelsesperioderDryRun } from '../../../api/api';
-import LinkButton from '../link-button/LinkButton';
+import styles from './innleggelsesperiodeoversikt.less';
 
 export enum FieldName {
     INNLEGGELSESPERIODER = 'innleggelsesperioder',
@@ -46,11 +42,10 @@ const Innleggelsesperiodeoversikt = ({
     const innleggelsesperioder = innleggelsesperioderResponse.perioder;
     const innleggelsesperioderDefault = innleggelsesperioder?.length > 0 ? innleggelsesperioder : [new Period('', '')];
 
-    const hentInnleggelsesperioder = () => {
-        return get(`${endpoints.innleggelsesperioder}`, httpErrorHandler, {
+    const hentInnleggelsesperioder = () =>
+        get(`${endpoints.innleggelsesperioder}`, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         });
-    };
 
     const lagreInnleggelsesperioder = (formState) => {
         setIsLoading(true);
@@ -77,12 +72,19 @@ const Innleggelsesperiodeoversikt = ({
             });
     };
 
+    const initializeInnleggelsesperiodeData = (response: InnleggelsesperiodeResponse) => {
+        return {
+            ...response,
+            perioder: response.perioder.map(({ fom, tom }) => new Period(fom, tom)),
+        };
+    };
+
     useEffect(() => {
         let isMounted = true;
         hentInnleggelsesperioder()
             .then((response: InnleggelsesperiodeResponse) => {
                 if (isMounted) {
-                    setInnleggelsesperioderResponse(response);
+                    setInnleggelsesperioderResponse(initializeInnleggelsesperiodeData(response));
                     setIsLoading(false);
                 }
             })

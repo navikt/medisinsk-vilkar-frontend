@@ -1,27 +1,19 @@
+import { Form, DetailView, Box, Margin } from '@navikt/k9-react-components';
+import { dateConstants } from '@navikt/k9-date-utils';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import DetailView from '../detail-view/DetailView';
 import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
-import Form from '../form/Form';
 import Datepicker from '../../form/wrappers/Datepicker';
-import Box, { Margin } from '../box/Box';
 import { dateIsNotInTheFuture, required } from '../../form/validators';
 import { Dokument, Dokumenttype } from '../../../types/Dokument';
 import { lagStrukturertDokument } from '../../../util/dokumentUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
-import { today } from '../../../constants/dateConstants';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
-
-export enum FieldName {
-    INNEHOLDER_MEDISINSKE_OPPLYSNINGER = 'inneholderMedisinskeOpplysninger',
-    DATERT = 'datert',
-}
-
-export interface StrukturerDokumentFormState {
-    [FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER]?: Dokumenttype;
-    [FieldName.DATERT]: string;
-}
+import {
+    StrukturerDokumentFormState,
+    StrukturerDokumentFormFieldName as FieldName,
+} from '../../../types/StrukturerDokumentFormState';
 
 interface StrukturerDokumentFormProps {
     dokument: Dokument;
@@ -66,8 +58,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit, editMode, isSubmitting }: 
                                     value: Dokumenttype.LEGEERKLÆRING,
                                 },
                                 {
-                                    label:
-                                        'Ja, andre medisinske opplysninger (f.eks. legeerklæring fra fastlege, uttalelse fra psykolog)',
+                                    label: 'Ja, andre medisinske opplysninger (f.eks. legeerklæring fra fastlege, uttalelse fra psykolog)',
                                     value: Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER,
                                 },
                                 {
@@ -84,7 +75,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit, editMode, isSubmitting }: 
                             label="Hvilken dato er dokumentet datert?"
                             defaultValue=""
                             validators={{ required, dateIsNotInTheFuture }}
-                            limitations={{ maxDate: today.toISOString() }}
+                            limitations={{ maxDate: dateConstants.today.toISOString() }}
                             inputId="datertField"
                         />
                     </Box>

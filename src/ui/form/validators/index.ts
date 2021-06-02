@@ -1,8 +1,7 @@
+import { Period } from '@navikt/k9-period-utils';
+import { initializeDate, dateConstants } from '@navikt/k9-date-utils';
 import { Dayjs } from 'dayjs';
-import { Period } from '../../../types/Period';
-import { dateFromString } from '../../../util/dateUtils';
 import { finnHullIPerioder } from '../../../util/periodUtils';
-import { tomorrow } from '../../../constants/dateConstants';
 
 export function required(v: any) {
     if (v === null || v === undefined || v === '') {
@@ -12,8 +11,8 @@ export function required(v: any) {
 }
 
 export function dateIsNotInTheFuture(dateString: string): string | boolean {
-    const date: Dayjs = dateFromString(dateString);
-    if (date.isSame(tomorrow) || date.isAfter(tomorrow)) {
+    const date: Dayjs = initializeDate(dateString);
+    if (date.isSame(dateConstants.tomorrow) || date.isAfter(dateConstants.tomorrow)) {
         return 'Datoen kan ikke settes senere enn dagens dato';
     }
     return true;
@@ -82,8 +81,8 @@ export const harBruktDokumentasjon = (dokumenter: []) => {
 };
 
 export const fomDatoErFørTomDato = (periode: Period): string | true => {
-    const fom = dateFromString(periode.fom);
-    const tom = dateFromString(periode.tom);
+    const fom = initializeDate(periode.fom);
+    const tom = initializeDate(periode.tom);
 
     if (fom.isAfter(tom)) {
         return 'Fra-dato må være før til-dato';

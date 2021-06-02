@@ -1,4 +1,6 @@
-import React, { useEffect } from 'react';
+import { Form, Box, Margin } from '@navikt/k9-react-components';
+import { Period } from '@navikt/k9-period-utils';
+import React from 'react';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import Modal from 'nav-frontend-modal';
@@ -6,13 +8,10 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Element } from 'nav-frontend-typografi';
 import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
 import AddButton from '../add-button/AddButton';
-import Box, { Margin } from '../box/Box';
 import DeleteButton from '../delete-button/DeleteButton';
-import Form from '../form/Form';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import { FieldName } from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
 import styles from './innleggelsesperiodeFormModal.less';
-import { Period } from '../../../types/Period';
 import { InnleggelsesperiodeDryRunResponse } from '../../../api/api';
 
 interface InnleggelsesperiodeFormModal {
@@ -80,9 +79,9 @@ const InnleggelsesperiodeFormModal = ({
                                     calendarSettings: { position: 'fullscreen' },
                                 }}
                                 afterOnChange={() => {
-                                    endringerPåvirkerAndreBehandlinger(
-                                        innleggelsesperioder
-                                    ).then(({ førerTilRevurdering }) => setShowWarningMessage(førerTilRevurdering));
+                                    endringerPåvirkerAndreBehandlinger(innleggelsesperioder).then(
+                                        ({ førerTilRevurdering }) => setShowWarningMessage(førerTilRevurdering)
+                                    );
                                 }}
                                 defaultValues={defaultValues[FieldName.INNLEGGELSESPERIODER] || []}
                                 validators={{

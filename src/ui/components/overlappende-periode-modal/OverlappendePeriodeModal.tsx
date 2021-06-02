@@ -1,11 +1,10 @@
+import { Box, Margin } from '@navikt/k9-react-components';
 import React from 'react';
 import Modal from 'nav-frontend-modal';
 import Alertstripe from 'nav-frontend-alertstriper';
 import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
 import { PeriodeMedEndring } from '../../../types/PeriodeMedEndring';
 import ConfirmationModal from '../confirmation-modal/ConfirmationModal';
-import { prettifyPeriod } from '../../../util/formats';
-import Box, { Margin } from '../box/Box';
 
 interface OverlappendePeriodeModalProps {
     appElementId: string;
@@ -19,9 +18,7 @@ interface OverlappendePeriodeModalProps {
 const renderInfoMsg = ({ periode }: PeriodeMedEndring) => (
     <Box key={periode.fom} marginBottom={Margin.medium}>
         <Alertstripe type="info">
-            {`${prettifyPeriod(
-                periode
-            )} overlapper med en tidligere vurdert periode lagt til i denne behandlingen. Den nye
+            {`${periode.prettifyPeriod()} overlapper med en tidligere vurdert periode lagt til i denne behandlingen. Den nye
         vurderingen vil erstatte den gamle.`}
         </Alertstripe>
     </Box>
@@ -30,9 +27,7 @@ const renderInfoMsg = ({ periode }: PeriodeMedEndring) => (
 const renderWarningMsg = ({ periode }: PeriodeMedEndring) => (
     <Box key={periode.fom} marginBottom={Margin.medium}>
         <Alertstripe type="advarsel">
-            {`${prettifyPeriod(
-                periode
-            )} overlapper med en tidligere vurdert periode. Dersom ny vurdering medfører endring i
+            {`${periode.prettifyPeriod()} overlapper med en tidligere vurdert periode. Dersom ny vurdering medfører endring i
         resultat vil det bli sendt melding om nytt vedtak til bruker. Dette vil også gjelde eventuelle andre parter.`}
         </Alertstripe>
     </Box>

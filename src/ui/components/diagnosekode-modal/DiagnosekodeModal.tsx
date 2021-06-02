@@ -3,7 +3,7 @@ import Modal from 'nav-frontend-modal';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import styles from '../diagnosekodeoversikt/diagnosekodeoversikt.less';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
-import Box, { Margin } from '../box/Box';
+import { Box,  Margin } from '@navikt/k9-react-components';
 import DiagnosekodeSelector from '../../form/pure/PureDiagnosekodeSelector';
 import Diagnosekode from '../../../types/Diagnosekode';
 

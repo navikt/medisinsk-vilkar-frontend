@@ -1,4 +1,6 @@
-import { Period } from '../../types/Period';
+import * as periodUtils from '@navikt/k9-period-utils';
+const { Period } = periodUtils;
+
 import { finnMaksavgrensningerForPerioder, finnHullIPerioder, slåSammenSammenhengendePerioder } from '../periodUtils';
 
 describe('slåSammenSammenhengendePerioder', () => {

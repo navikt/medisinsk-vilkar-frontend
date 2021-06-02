@@ -1,16 +1,14 @@
-import Vurdering from '../../src/types/Vurdering';
-import { Period } from '../../src/types/Period';
 import Vurderingsresultat from '../../src/types/Vurderingsresultat';
 import mockedDokumentliste from './mockedDokumentliste';
 import Vurderingstype from '../../src/types/Vurderingstype';
 
-const toOmsorgspersonerVurderingerMock: Vurdering[] = [
+const toOmsorgspersonerVurderingerMock = [
     {
         id: '11',
-        type: Vurderingstype.TO_OMSORGSPERSONER,
+        type: 'TO_OMSORGSPERSONER',
         versjoner: [
             {
-                perioder: [new Period('2022-02-01', '2020-02-15')],
+                perioder: [{ fom: '2022-02-01', tom: '2020-02-15'} as any],
                 resultat: Vurderingsresultat.OPPFYLT,
                 dokumenter: mockedDokumentliste,
                 tekst: 'Fordi her er det behov',
@@ -24,10 +22,10 @@ const toOmsorgspersonerVurderingerMock: Vurdering[] = [
     },
     {
         id: '22',
-        type: Vurderingstype.TO_OMSORGSPERSONER,
+        type: 'TO_OMSORGSPERSONER',
         versjoner: [
             {
-                perioder: [new Period('2022-01-20', '2022-01-31')],
+                perioder: [{ fom: '2022-01-20', tom: '2022-01-31'} as any],
                 resultat: Vurderingsresultat.OPPFYLT,
                 dokumenter: mockedDokumentliste,
                 tekst: 'Fordi her er det ikke behov',
@@ -41,10 +39,10 @@ const toOmsorgspersonerVurderingerMock: Vurdering[] = [
     },
     {
         id: '33',
-        type: Vurderingstype.TO_OMSORGSPERSONER,
+        type: 'TO_OMSORGSPERSONER',
         versjoner: [
             {
-                perioder: [new Period('2022-01-15', '2022-01-19')],
+                perioder: [{ fom: '2022-01-15', tom: '2022-01-19'} as any],
                 resultat: Vurderingsresultat.IKKE_OPPFYLT,
                 dokumenter: mockedDokumentliste,
                 tekst: 'Fordi her er det ikke behov',
