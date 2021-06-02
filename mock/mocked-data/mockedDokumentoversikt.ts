@@ -1,4 +1,6 @@
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import { Dokumenttype } from '../../src/types/Dokument';
 import createMockedDokumentelementLinks from './createMockedDokumentelementLinks';
 
@@ -8,7 +10,7 @@ const mockedDokumentoversikt = {
             id: '2',
             navn: 'Dokument 2',
             type: Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER,
-            datert: dayjs().format('YYYY-MM-DD'),
+            datert: dayjs().utc(true).format('YYYY-MM-DD'),
             links: createMockedDokumentelementLinks('2'),
             benyttet: true,
             annenPartErKilde: false,
@@ -21,7 +23,7 @@ const mockedDokumentoversikt = {
             id: '3',
             navn: 'Dokument 3',
             type: Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER,
-            datert: dayjs().format('YYYY-MM-DD'),
+            datert: dayjs().utc(true).format('YYYY-MM-DD'),
             links: createMockedDokumentelementLinks('3'),
             benyttet: true,
             annenPartErKilde: false,
@@ -34,7 +36,7 @@ const mockedDokumentoversikt = {
             id: '4',
             navn: 'Dokument 4',
             type: Dokumenttype.MANGLER_MEDISINSKE_OPPLYSNINGER,
-            datert: dayjs().format('YYYY-MM-DD'),
+            datert: dayjs().utc(true).format('YYYY-MM-DD'),
             links: createMockedDokumentelementLinks('4'),
             benyttet: true,
             annenPartErKilde: false,
@@ -47,7 +49,7 @@ const mockedDokumentoversikt = {
             id: '1',
             navn: 'Dokument 1',
             type: Dokumenttype.UKLASSIFISERT,
-            datert: dayjs().format('YYYY-MM-DD'),
+            datert: dayjs().utc(true).format('YYYY-MM-DD'),
             links: createMockedDokumentelementLinks('4'),
             benyttet: true,
             annenPartErKilde: false,
