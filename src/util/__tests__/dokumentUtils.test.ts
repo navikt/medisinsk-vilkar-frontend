@@ -7,51 +7,21 @@ const datert = dayjs().toDate().toISOString();
 describe('dokumentUtils', () => {
     let result: Dokument[] = [];
 
-    const dokumenter: Dokument[] = [
+    const dokumenter: Partial<Dokument>[] = [
         {
             id: '1',
-            type: Dokumenttype.LEGEERKLÆRING,
-            datert,
-            navn: 'foo',
-            fremhevet: false,
-            annenPartErKilde: false,
-            benyttet: false,
-            behandlet: false,
-            links: [],
-            mottattDato: '2021-03-05',
-            mottattTidspunkt: '2021-03-05T10:23:13.309267',
         },
         {
             id: '2',
-            type: Dokumenttype.LEGEERKLÆRING,
-            datert,
-            navn: 'foo',
-            fremhevet: false,
-            annenPartErKilde: false,
-            benyttet: false,
-            behandlet: false,
-            links: [],
-            mottattDato: '2021-03-06',
-            mottattTidspunkt: '2021-03-06T10:23:13.309267',
         },
         {
             id: '3',
-            type: Dokumenttype.LEGEERKLÆRING,
-            datert,
-            navn: 'foo',
-            fremhevet: false,
-            annenPartErKilde: false,
-            benyttet: false,
-            behandlet: false,
-            links: [],
-            mottattDato: '2021-03-07',
-            mottattTidspunkt: '2021-03-07T10:23:13.309267',
         },
     ];
 
     beforeAll(() => {
         const valgteDokumentIder: string[] = ['1', '2', '4'];
-        result = finnBenyttedeDokumenter(valgteDokumentIder, dokumenter);
+        result = finnBenyttedeDokumenter(valgteDokumentIder, dokumenter as Dokument[]);
     });
 
     it('should return all documents that are benyttet', () => {

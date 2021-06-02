@@ -10,16 +10,10 @@ import { lagStrukturertDokument } from '../../../util/dokumentUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
-
-export enum FieldName {
-    INNEHOLDER_MEDISINSKE_OPPLYSNINGER = 'inneholderMedisinskeOpplysninger',
-    DATERT = 'datert',
-}
-
-export interface StrukturerDokumentFormState {
-    [FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER]?: Dokumenttype;
-    [FieldName.DATERT]: string;
-}
+import {
+    StrukturerDokumentFormState,
+    StrukturerDokumentFormFieldName as FieldName,
+} from '../../../types/StrukturerDokumentFormState';
 
 interface StrukturerDokumentFormProps {
     dokument: Dokument;

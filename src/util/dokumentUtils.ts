@@ -1,8 +1,8 @@
 import { Dokument } from '../types/Dokument';
 import {
-    FieldName,
+    StrukturerDokumentFormFieldName as FieldName,
     StrukturerDokumentFormState,
-} from '../ui/components/strukturer-dokument-form/StrukturerDokumentForm';
+} from '../types/StrukturerDokumentFormState';
 
 export const finnBenyttedeDokumenter = (benyttedeDokumentIder: string[], alleDokumenter: Dokument[]): Dokument[] => {
     return alleDokumenter.filter((dokument) => {

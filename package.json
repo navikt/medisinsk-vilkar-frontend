@@ -67,7 +67,7 @@
         "axios": "^0.21.1",
         "classnames": "^2.2.6",
         "cors": "^2.8.5",
-        "dayjs": "^1.10.4",
+        "dayjs": "^1.10.5",
         "express": "^4.17.1",
         "lodash.throttle": "^4.1.1",
         "nav-datovelger": "^11.0.0",

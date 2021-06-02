@@ -5,6 +5,9 @@ module.exports = {
         '\\.(css|jpg|png|svg|less)$': '<rootDir>/styleMock.js',
         'nav-(.*)-style': '<rootDir>/styleMock.js',
     },
+    transform: {
+        '^.+\\.(ts|js)x?$': 'ts-jest',
+    },
     globals: {
         'ts-jest': {
             babelConfig: true,
