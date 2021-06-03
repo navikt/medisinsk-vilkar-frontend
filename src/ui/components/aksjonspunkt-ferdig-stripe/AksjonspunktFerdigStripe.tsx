@@ -6,6 +6,7 @@ import ContainerContext from '../../context/ContainerContext';
 
 const AksjonspunktFerdigStripe = () => {
     const { onFinished } = React.useContext(ContainerContext);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
 
     return (
         <Box marginBottom={Margin.medium}>
@@ -15,7 +16,13 @@ const AksjonspunktFerdigStripe = () => {
                     type="hoved"
                     htmlType="button"
                     style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
-                    onClick={() => onFinished()}
+                    disabled={isSubmitting}
+                    spinner={isSubmitting}
+                    onClick={() => {
+                        setIsSubmitting(true);
+                        setTimeout(() => setIsSubmitting(false), 1500);
+                        onFinished();
+                    }}
                     mini
                 >
                     Fortsett
