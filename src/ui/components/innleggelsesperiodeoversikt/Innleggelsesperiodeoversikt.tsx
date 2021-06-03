@@ -1,10 +1,10 @@
+import { get } from '@navikt/k9-http-utils';
 import { PageError, Box, Margin, LinkButton, TitleWithUnderline } from '@navikt/k9-react-components';
 import { Period } from '@navikt/k9-period-utils';
 import Modal from 'nav-frontend-modal';
 import Spinner from 'nav-frontend-spinner';
 import axios from 'axios';
 import React, { useEffect, useMemo } from 'react';
-import { get } from '../../../util/httpUtils';
 import ContainerContext from '../../context/ContainerContext';
 import AddButton from '../add-button/AddButton';
 import Innleggelsesperiodeliste from '../innleggelsesperiodeliste/Innleggelsesperiodeliste';

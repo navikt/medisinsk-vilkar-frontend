@@ -1,3 +1,4 @@
+import { get } from '@navikt/k9-http-utils';
 import { Box, Margin, PageContainer } from '@navikt/k9-react-components';
 import { Period } from '@navikt/k9-period-utils';
 import React, { useMemo } from 'react';
@@ -5,7 +6,6 @@ import axios from 'axios';
 import Dokument from '../../../types/Dokument';
 import Link from '../../../types/Link';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-import { get } from '../../../util/httpUtils';
 import { PeriodeMedEndring, PerioderMedEndringResponse } from '../../../types/PeriodeMedEndring';
 import OverlappendePeriodeModal from '../overlappende-periode-modal/OverlappendePeriodeModal';
 import ActionType from './actionTypes';

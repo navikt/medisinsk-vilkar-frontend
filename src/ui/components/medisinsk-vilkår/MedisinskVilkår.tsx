@@ -1,3 +1,4 @@
+import { get } from '@navikt/k9-http-utils';
 import { PageContainer } from '@navikt/k9-react-components';
 import React, { useMemo } from 'react';
 import { TabsPure } from 'nav-frontend-tabs';
@@ -9,7 +10,6 @@ import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
 import styles from './medisinskVilkår.less';
 import Step, { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
-import { get } from '../../../util/httpUtils';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import ContainerContext from '../../context/ContainerContext';
 import { finnNesteSteg } from '../../../util/statusUtils';
