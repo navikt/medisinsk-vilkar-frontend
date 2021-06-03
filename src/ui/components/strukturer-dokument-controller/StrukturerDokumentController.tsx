@@ -1,9 +1,9 @@
+import { post } from '@navikt/k9-http-utils';
 import React, { useMemo } from 'react';
 import axios from 'axios';
 import Spinner from 'nav-frontend-spinner';
 import Dokument from '../../../types/Dokument';
 import StrukturerDokumentForm from '../strukturer-dokument-form/StrukturerDokumentForm';
-import { post } from '../../../util/httpUtils';
 import Link from '../../../types/Link';
 import ContainerContext from '../../context/ContainerContext';
 import { scrollUp } from '../../../util/viewUtils';

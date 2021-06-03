@@ -1,3 +1,4 @@
+import { get } from '@navikt/k9-http-utils';
 import { Box, Margin, PageContainer, NavigationWithDetailView } from '@navikt/k9-react-components';
 import axios from 'axios';
 import React, { useMemo } from 'react';
@@ -7,7 +8,6 @@ import { Dokumentoversikt } from '../../../types/Dokumentoversikt';
 import { DokumentoversiktResponse } from '../../../types/DokumentoversiktResponse';
 import { StepId } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
-import { get } from '../../../util/httpUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
 import { nesteStegErVurdering } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';

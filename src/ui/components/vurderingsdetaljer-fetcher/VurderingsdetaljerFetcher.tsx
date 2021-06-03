@@ -1,9 +1,9 @@
+import { get } from '@navikt/k9-http-utils';
 import { PageError } from '@navikt/k9-react-components';
 import React, { useMemo } from 'react';
 import axios from 'axios';
 import Spinner from 'nav-frontend-spinner';
 import Vurdering from '../../../types/Vurdering';
-import { get } from '../../../util/httpUtils';
 import ContainerContext from '../../context/ContainerContext';
 
 interface VurderingsdetaljerFetcherProps {

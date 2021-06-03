@@ -1,3 +1,4 @@
+import { get, post } from '@navikt/k9-http-utils';
 import React, { useMemo } from 'react';
 import axios from 'axios';
 import Modal from 'nav-frontend-modal';
@@ -8,7 +9,6 @@ import Diagnosekodeliste from '../diagnosekodeliste/Diagnosekodeliste';
 import IconWithText from '../icon-with-text/IconWithText';
 import WarningIcon from '../icons/WarningIcon';
 import ContainerContext from '../../context/ContainerContext';
-import { get, post } from '../../../util/httpUtils';
 import Diagnosekode from '../../../types/Diagnosekode';
 import DiagnosekodeModal from '../diagnosekode-modal/DiagnosekodeModal';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
