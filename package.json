@@ -69,6 +69,7 @@
         "cors": "^2.8.5",
         "dayjs": "^1.10.5",
         "express": "^4.17.1",
+        "helmet": "^4.6.0",
         "lodash.throttle": "^4.1.1",
         "nav-datovelger": "^11.0.0",
         "nav-frontend-alertstriper": "^4.0.1",
