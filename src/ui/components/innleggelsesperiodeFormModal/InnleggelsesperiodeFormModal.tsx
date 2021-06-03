@@ -1,18 +1,17 @@
-import { Form, Box, Margin } from '@navikt/k9-react-components';
 import { Period } from '@navikt/k9-period-utils';
-import React from 'react';
+import { PeriodpickerList, Box, Form, Margin } from '@navikt/k9-react-components';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import Modal from 'nav-frontend-modal';
-import { FormProvider, useForm } from 'react-hook-form';
 import { Element } from 'nav-frontend-typografi';
-import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
+import React from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { InnleggelsesperiodeDryRunResponse } from '../../../api/api';
 import AddButton from '../add-button/AddButton';
 import DeleteButton from '../delete-button/DeleteButton';
-import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import { FieldName } from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
+import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import styles from './innleggelsesperiodeFormModal.less';
-import { InnleggelsesperiodeDryRunResponse } from '../../../api/api';
 
 interface InnleggelsesperiodeFormModal {
     defaultValues: {
@@ -79,9 +78,9 @@ const InnleggelsesperiodeFormModal = ({
                                     calendarSettings: { position: 'fullscreen' },
                                 }}
                                 afterOnChange={() => {
-                                    endringerPåvirkerAndreBehandlinger(innleggelsesperioder).then(
-                                        ({ førerTilRevurdering }) => setShowWarningMessage(førerTilRevurdering)
-                                    );
+                                    endringerPåvirkerAndreBehandlinger(
+                                        innleggelsesperioder
+                                    ).then(({ førerTilRevurdering }) => setShowWarningMessage(førerTilRevurdering));
                                 }}
                                 defaultValues={defaultValues[FieldName.INNLEGGELSESPERIODER] || []}
                                 validators={{

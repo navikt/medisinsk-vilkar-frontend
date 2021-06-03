@@ -1,19 +1,17 @@
-import { Form, DetailView, Box, Margin } from '@navikt/k9-react-components';
 import { dateConstants } from '@navikt/k9-date-utils';
+import { Box, Datepicker, DetailView, Form, Margin, RadioGroupPanel } from '@navikt/k9-react-components';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import RadioGroupPanel from '../../form/wrappers/RadioGroupPanel';
-import Datepicker from '../../form/wrappers/Datepicker';
-import { dateIsNotInTheFuture, required } from '../../form/validators';
+import LinkRel from '../../../constants/LinkRel';
 import { Dokument, Dokumenttype } from '../../../types/Dokument';
+import {
+    StrukturerDokumentFormFieldName as FieldName,
+    StrukturerDokumentFormState,
+} from '../../../types/StrukturerDokumentFormState';
 import { lagStrukturertDokument } from '../../../util/dokumentUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
-import LinkRel from '../../../constants/LinkRel';
+import { dateIsNotInTheFuture, required } from '../../form/validators';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
-import {
-    StrukturerDokumentFormState,
-    StrukturerDokumentFormFieldName as FieldName,
-} from '../../../types/StrukturerDokumentFormState';
 
 interface StrukturerDokumentFormProps {
     dokument: Dokument;
@@ -58,7 +56,8 @@ const StrukturerDokumentForm = ({ dokument, onSubmit, editMode, isSubmitting }: 
                                     value: Dokumenttype.LEGEERKLÆRING,
                                 },
                                 {
-                                    label: 'Ja, andre medisinske opplysninger (f.eks. legeerklæring fra fastlege, uttalelse fra psykolog)',
+                                    label:
+                                        'Ja, andre medisinske opplysninger (f.eks. legeerklæring fra fastlege, uttalelse fra psykolog)',
                                     value: Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER,
                                 },
                                 {

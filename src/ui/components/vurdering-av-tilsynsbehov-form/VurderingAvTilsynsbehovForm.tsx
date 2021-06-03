@@ -1,5 +1,13 @@
-import { Form, Box, Margin } from '@navikt/k9-react-components';
 import { Period } from '@navikt/k9-period-utils';
+import {
+    Box,
+    CheckboxGroup,
+    Form,
+    Margin,
+    PeriodpickerList,
+    TextArea,
+    YesOrNoQuestion,
+} from '@navikt/k9-react-components';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
 import React from 'react';
@@ -13,10 +21,6 @@ import {
 } from '../../../util/periodUtils';
 import { lagTilsynsbehovVurdering } from '../../../util/vurderingUtils';
 import { fomDatoErFørTomDato, harBruktDokumentasjon, required } from '../../form/validators';
-import CheckboxGroup from '../../form/wrappers/CheckboxGroup';
-import PeriodpickerList from '../../form/wrappers/PeriodpickerList';
-import TextArea from '../../form/wrappers/TextArea';
-import YesOrNoQuestion from '../../form/wrappers/YesOrNoQuestion';
 import AddButton from '../add-button/AddButton';
 import DeleteButton from '../delete-button/DeleteButton';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
