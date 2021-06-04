@@ -1,7 +1,5 @@
-import { IndicatorWithOverlay } from '@navikt/k9-react-components';
+import { IndicatorWithOverlay, InstitutionIcon, GreenCheckIconFilled } from '@navikt/k9-react-components';
 import React from 'react';
-import InstitutionIcon from '../icons/InstitutionIcon';
-import GreenCheckIconFilled from '../icons/GreenCheckIconFilled';
 
 const InnleggelsesperiodeIkonOverOppfylt = () => {
     return (

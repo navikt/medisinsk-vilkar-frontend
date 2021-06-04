@@ -1,6 +1,5 @@
-import { ContentWithTooltip } from '@navikt/k9-react-components';
+import { ContentWithTooltip, ExclamationMarkIcon } from '@navikt/k9-react-components';
 import * as React from 'react';
-import ExclamationMarkIcon from '../../icons/ExclamationMarkIcon';
 import styles from './slettetLabel.less';
 
 const SlettetLabel = () => (

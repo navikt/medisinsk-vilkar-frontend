@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ChildIcon from '../icons/ChildIcon';
+import { ChildIcon } from '@navikt/k9-react-components';
 import styles from './infostripe.less';
 
 const Infostripe = () => (

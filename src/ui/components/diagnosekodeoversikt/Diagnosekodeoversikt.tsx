@@ -1,21 +1,19 @@
 import { get, post } from '@navikt/k9-http-utils';
-import React, { useMemo } from 'react';
+import { Box, Margin, TitleWithUnderline, WarningIcon } from '@navikt/k9-react-components';
 import axios from 'axios';
 import Modal from 'nav-frontend-modal';
 import Spinner from 'nav-frontend-spinner';
-import AddButton from '../add-button/AddButton';
-import { Box, Margin, TitleWithUnderline } from '@navikt/k9-react-components';
-import Diagnosekodeliste from '../diagnosekodeliste/Diagnosekodeliste';
-import IconWithText from '../icon-with-text/IconWithText';
-import WarningIcon from '../icons/WarningIcon';
-import ContainerContext from '../../context/ContainerContext';
+import React, { useMemo } from 'react';
+import LinkRel from '../../../constants/LinkRel';
 import Diagnosekode from '../../../types/Diagnosekode';
-import DiagnosekodeModal from '../diagnosekode-modal/DiagnosekodeModal';
-import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
 import { findLinkByRel } from '../../../util/linkUtils';
-import LinkRel from '../../../constants/LinkRel';
-import styles from './diagnosekodeoversikt.less';
+import ContainerContext from '../../context/ContainerContext';
+import AddButton from '../add-button/AddButton';
+import DiagnosekodeModal from '../diagnosekode-modal/DiagnosekodeModal';
+import Diagnosekodeliste from '../diagnosekodeliste/Diagnosekodeliste';
+import IconWithText from '../icon-with-text/IconWithText';
+import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 
 Modal.setAppElement('#app');
 

@@ -1,12 +1,10 @@
-import { ContentWithTooltip } from '@navikt/k9-react-components';
+import { ContentWithTooltip, DocumentIcon, OnePersonOutlineGray } from '@navikt/k9-react-components';
 import { prettifyDateString } from '@navikt/k9-date-utils';
 import Lenke from 'nav-frontend-lenker';
 import React from 'react';
 import LinkRel from '../../../constants/LinkRel';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import { findLinkByRel } from '../../../util/linkUtils';
-import DocumentIcon from '../icons/DocumentIcon';
-import OnePersonOutlineGray from '../icons/OnePersonOutlineGray';
 import styles from './dokumentLink.less';
 
 interface DokumentLinkProps {

@@ -1,7 +1,7 @@
 import { Period } from '@navikt/k9-period-utils';
+import { CalendarIcon } from '@navikt/k9-react-components';
 import * as React from 'react';
 import classnames from 'classnames';
-import CalendarIcon from '../icons/CalendarIcon';
 import styles from './periodList.less';
 
 interface PeriodListProps {

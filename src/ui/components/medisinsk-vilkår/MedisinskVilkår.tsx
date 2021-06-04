@@ -1,5 +1,5 @@
 import { get } from '@navikt/k9-http-utils';
-import { PageContainer } from '@navikt/k9-react-components';
+import { PageContainer, WarningIcon } from '@navikt/k9-react-components';
 import React, { useMemo } from 'react';
 import { TabsPure } from 'nav-frontend-tabs';
 import classnames from 'classnames';
@@ -13,7 +13,6 @@ import Step, { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '..
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import ContainerContext from '../../context/ContainerContext';
 import { finnNesteSteg } from '../../../util/statusUtils';
-import WarningIcon from '../icons/WarningIcon';
 import medisinskVilkårReducer from './reducer';
 import ActionType from './actionTypes';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';

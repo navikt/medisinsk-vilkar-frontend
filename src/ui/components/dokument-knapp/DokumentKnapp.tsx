@@ -1,6 +1,6 @@
 import Lenke from 'nav-frontend-lenker';
 import * as React from 'react';
-import DocumentIcon from '../icons/DocumentIcon';
+import { DocumentIcon } from '@navikt/k9-react-components';
 import styles from './dokumentKnapp.less';
 
 interface DokumentKnappProps {

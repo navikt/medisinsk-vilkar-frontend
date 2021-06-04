@@ -1,12 +1,14 @@
-import { ContentWithTooltip } from '@navikt/k9-react-components';
+import {
+    ContentWithTooltip,
+    GreenCheckIconFilled,
+    OnePersonIconGray,
+    OnePersonOutlineGray,
+    RedCrossIconFilled,
+    TwoPersonsWithOneHighlightedIconGray,
+    InstitutionIcon,
+} from '@navikt/k9-react-components';
 import React from 'react';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
-import GreenCheckIconFilled from '../icons/GreenCheckIconFilled';
-import OnePersonIconGray from '../icons/OnePersonIconGray';
-import OnePersonOutlineGray from '../icons/OnePersonOutlineGray';
-import RedCrossIconFilled from '../icons/RedCrossIconFilled';
-import TwoPersonsWithOneHighlightedIconGray from '../icons/TwoPersonsWithOneHighlightedIconGray';
-import InstitutionIcon from '../icons/InstitutionIcon';
 import ManuellVurdering from '../../../types/ManuellVurdering';
 import InnleggelsesperiodeIkonOverOppfylt from '../innleggelsesperiode-ikon-over-oppfylt/InnleggelsesperiodeIkonOverOppfylt';
 import InnleggelsesperiodeIkonOverIkkeOppfylt from '../innleggelsesperiode-ikon-over-ikkeoppfylt/InnleggelsesperiodeIkonOverIkkeOppfylt';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Collapse } from 'react-collapse';
-import ChevronIconBlue from '../icons/ChevronIconBlue';
+import { ChevronIconBlue } from '@navikt/k9-react-components';
 import styles from './expandableLabel.less';
 
 interface HelptextProps {

@@ -1,7 +1,6 @@
-import { ContentWithTooltip } from '@navikt/k9-react-components';
+import { ContentWithTooltip, OnePersonIconGray } from '@navikt/k9-react-components';
 import { Period } from '@navikt/k9-period-utils';
 import React from 'react';
-import OnePersonIconGray from '../icons/OnePersonIconGray';
 import styles from './vurderingsperioder.less';
 
 interface VurderingsperioderProps {

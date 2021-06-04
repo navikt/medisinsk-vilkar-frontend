@@ -1,7 +1,5 @@
-import { IndicatorWithOverlay } from '@navikt/k9-react-components';
+import { IndicatorWithOverlay, InstitutionIcon, RedCrossIconFilled } from '@navikt/k9-react-components';
 import React from 'react';
-import InstitutionIcon from '../icons/InstitutionIcon';
-import RedCrossIconFilled from '../icons/RedCrossIconFilled';
 
 const InnleggelsesperiodeIkonOverIkkeOppfylt = () => {
     return (
