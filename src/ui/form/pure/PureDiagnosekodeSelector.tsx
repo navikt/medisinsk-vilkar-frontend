@@ -1,9 +1,8 @@
-import { Autocomplete } from '@navikt/k9-react-components';
+import { Autocomplete, FieldError } from '@navikt/k9-react-components';
 import { Label } from 'nav-frontend-skjema';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import Diagnosekode from '../../../types/Diagnosekode';
-import FieldError from '../../components/field-error/FieldError';
 import styles from './diagnosekodeSelector.less';
 
 interface DiagnosekodeSelectorProps {
