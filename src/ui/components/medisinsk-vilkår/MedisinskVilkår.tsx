@@ -1,10 +1,9 @@
 import { get } from '@navikt/k9-http-utils';
-import { PageContainer, WarningIcon } from '@navikt/k9-react-components';
+import { PageContainer, WarningIcon, Infostripe, ChildIcon } from '@navikt/k9-react-components';
 import React, { useMemo } from 'react';
 import { TabsPure } from 'nav-frontend-tabs';
 import classnames from 'classnames';
 import axios from 'axios';
-import Infostripe from '../infostripe/Infostripe';
 import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
 import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-pleie/VilkårsvurderingAvTilsynOgPleie';
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
@@ -102,7 +101,10 @@ const MedisinskVilkår = () => {
 
     return (
         <PageContainer isLoading={isLoading}>
-            <Infostripe />
+            <Infostripe
+                text="Sykdomsvurderingen gjelder barnet og er felles for alle parter."
+                iconRenderer={() => <ChildIcon />}
+            />
             <div className={styles.medisinskVilkår}>
                 <h1 style={{ fontSize: 22 }}>Sykdom</h1>
                 <WriteAccessBoundContent
