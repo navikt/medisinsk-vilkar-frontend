@@ -9,7 +9,6 @@
         "build": "webpack --config webpack/webpack-config.production.js",
         "dev": "node webpack/webpack-config.development.js",
         "api-mock": "ts-node --project ./tsconfig.json mock/api-mock.ts",
-        "version": "node ./version.js",
         "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'"
     },
     "keywords": [],

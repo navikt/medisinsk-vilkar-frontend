@@ -4,7 +4,7 @@ const app = express();
 
 app.use(
     cors({
-        origin: 'https://app-q1.adeo.no',
+        origin: 'http://app-q1.adeo.no',
     })
 );
 
@@ -18,7 +18,7 @@ app.use((req, res, next) => {
     next();
 });
 
-const port = 8080;
+const port = 8081;
 app.listen(port, (error) => {
     if (error) {
         console.error(error);
