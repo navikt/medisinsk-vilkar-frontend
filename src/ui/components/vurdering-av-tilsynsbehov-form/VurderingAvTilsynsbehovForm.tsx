@@ -1,13 +1,6 @@
 import { Period } from '@navikt/k9-period-utils';
-import {
-    Box,
-    CheckboxGroup,
-    Form,
-    Margin,
-    PeriodpickerList,
-    TextArea,
-    YesOrNoQuestion,
-} from '@navikt/k9-react-components';
+import { Box, Form, Margin } from '@navikt/k9-react-components';
+import { CheckboxGroup, PeriodpickerList, TextArea, YesOrNoQuestion } from '@navikt/k9-form-utils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
 import React from 'react';

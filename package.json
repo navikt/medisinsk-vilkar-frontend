@@ -59,9 +59,11 @@
         "@navikt/fnrvalidator": "^1.1.4",
         "@navikt/k9-array-utils": "^0.0.1",
         "@navikt/k9-date-utils": "^0.0.5",
+        "@navikt/k9-form-utils": "^0.0.4",
         "@navikt/k9-http-utils": "^0.0.1",
         "@navikt/k9-period-utils": "^0.0.6",
-        "@navikt/k9-react-components": "^0.0.12",
+        "@navikt/k9-react-components": "^0.0.17",
+        "@popperjs/core": "^2.9.2",
         "@types/react": "^17.0.3",
         "@types/react-dom": "^17.0.3",
         "@types/react-modal": "^3.12.0",
@@ -80,6 +82,7 @@
         "nav-frontend-etiketter": "^3.0.1",
         "nav-frontend-etiketter-style": "^2.0.1",
         "nav-frontend-ikoner-assets": "^3.0.1",
+        "nav-frontend-ikonknapper": "^1.0.32",
         "nav-frontend-js-utils": "^1.0.17",
         "nav-frontend-knapper": "^3.0.1",
         "nav-frontend-knapper-style": "^2.0.1",
@@ -105,6 +108,7 @@
         "react-day-picker": "^7.4.10",
         "react-dom": "^17.0.2",
         "react-hook-form": "^6.15.5",
-        "react-modal": "^3.12.1"
+        "react-modal": "^3.12.1",
+        "react-popper": "^2.2.5"
     }
 }

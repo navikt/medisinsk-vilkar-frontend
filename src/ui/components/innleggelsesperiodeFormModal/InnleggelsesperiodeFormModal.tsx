@@ -1,5 +1,6 @@
 import { Period } from '@navikt/k9-period-utils';
-import { PeriodpickerList, Box, Form, Margin } from '@navikt/k9-react-components';
+import { Box, Form, Margin } from '@navikt/k9-react-components';
+import { PeriodpickerList } from '@navikt/k9-form-utils';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import Modal from 'nav-frontend-modal';
@@ -78,9 +79,9 @@ const InnleggelsesperiodeFormModal = ({
                                     calendarSettings: { position: 'fullscreen' },
                                 }}
                                 afterOnChange={() => {
-                                    endringerPåvirkerAndreBehandlinger(
-                                        innleggelsesperioder
-                                    ).then(({ førerTilRevurdering }) => setShowWarningMessage(førerTilRevurdering));
+                                    endringerPåvirkerAndreBehandlinger(innleggelsesperioder).then(
+                                        ({ førerTilRevurdering }) => setShowWarningMessage(førerTilRevurdering)
+                                    );
                                 }}
                                 defaultValues={defaultValues[FieldName.INNLEGGELSESPERIODER] || []}
                                 validators={{
