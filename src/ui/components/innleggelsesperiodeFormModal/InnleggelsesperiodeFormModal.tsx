@@ -79,9 +79,17 @@ const InnleggelsesperiodeFormModal = ({
                                     calendarSettings: { position: 'fullscreen' },
                                 }}
                                 afterOnChange={() => {
-                                    endringerPåvirkerAndreBehandlinger(innleggelsesperioder).then(
-                                        ({ førerTilRevurdering }) => setShowWarningMessage(førerTilRevurdering)
+                                    const initialiserteInnleggelsesperioder = getValues().innleggelsesperioder.map(
+                                        ({ period }: any) => new Period(period.fom, period.tom)
                                     );
+                                    const erAllePerioderGyldige = initialiserteInnleggelsesperioder.every((periode) =>
+                                        periode.isValid()
+                                    );
+                                    if (erAllePerioderGyldige) {
+                                        endringerPåvirkerAndreBehandlinger(innleggelsesperioder).then(
+                                            ({ førerTilRevurdering }) => setShowWarningMessage(førerTilRevurdering)
+                                        );
+                                    }
                                 }}
                                 defaultValues={defaultValues[FieldName.INNLEGGELSESPERIODER] || []}
                                 validators={{
