@@ -18,6 +18,7 @@ import AddButton from '../add-button/AddButton';
 import DeleteButton from '../delete-button/DeleteButton';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
+import ContainerContext from '../../context/ContainerContext';
 import styles from './vurderingAvTilsynsbehovForm.less';
 
 export enum FieldName {
@@ -53,6 +54,7 @@ const VurderingAvTilsynsbehovForm = ({
     onAvbryt,
     isSubmitting,
 }: VurderingAvTilsynsbehovFormProps): JSX.Element => {
+    const { readOnly } = React.useContext(ContainerContext);
     const formMethods = useForm({
         defaultValues,
         mode: 'onChange',
@@ -100,6 +102,7 @@ const VurderingAvTilsynsbehovForm = ({
                     onAvbryt={onAvbryt}
                     submitButtonDisabled={isSubmitting}
                     cancelButtonDisabled={isSubmitting}
+                    shouldShowSubmitButton={!readOnly}
                 >
                     {dokumenter?.length > 0 && (
                         <Box marginTop={Margin.large}>
