@@ -54,6 +54,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit, editMode, isSubmitting }: 
                     <Box marginTop={Margin.xLarge}>
                         <RadioGroupPanel
                             name={FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER}
+                            disabled={readOnly}
                             question="Inneholder dokumentet medisinske opplysninger?"
                             radios={[
                                 {
@@ -75,6 +76,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit, editMode, isSubmitting }: 
                     <Box marginTop={Margin.xLarge}>
                         <Datepicker
                             name={FieldName.DATERT}
+                            disabled={readOnly}
                             label="Hvilken dato er dokumentet datert?"
                             defaultValue=""
                             validators={{ required, dateIsNotInTheFuture }}

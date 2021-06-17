@@ -121,6 +121,7 @@ const VurderingAvToOmsorgspersonerForm = ({
                                 validators={{
                                     harBruktDokumentasjon,
                                 }}
+                                disabled={readOnly}
                             />
                         </Box>
                     )}
@@ -158,6 +159,7 @@ const VurderingAvToOmsorgspersonerForm = ({
                                 </>
                             }
                             validators={{ required }}
+                            disabled={readOnly}
                             id="begrunnelsesfelt"
                         />
                     </Box>
@@ -166,12 +168,14 @@ const VurderingAvToOmsorgspersonerForm = ({
                             question="Er det behov for to omsorgspersoner samtidig?"
                             name={FieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER}
                             validators={{ required }}
+                            disabled={readOnly}
                         />
                     </Box>
                     <Box marginTop={Margin.xLarge}>
                         <PeriodpickerList
                             legend="Oppgi perioder"
                             name={FieldName.PERIODER}
+                            disabled={readOnly}
                             defaultValues={defaultValues[FieldName.PERIODER] || []}
                             validators={{
                                 required,
