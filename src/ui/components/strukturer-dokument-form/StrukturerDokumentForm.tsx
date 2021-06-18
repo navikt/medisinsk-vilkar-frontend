@@ -13,6 +13,7 @@ import { lagStrukturertDokument } from '../../../util/dokumentUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
 import { dateIsNotInTheFuture, required } from '../../form/validators';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
+import ContainerContext from '../../context/ContainerContext';
 
 interface StrukturerDokumentFormProps {
     dokument: Dokument;
@@ -22,6 +23,8 @@ interface StrukturerDokumentFormProps {
 }
 
 const StrukturerDokumentForm = ({ dokument, onSubmit, editMode, isSubmitting }: StrukturerDokumentFormProps) => {
+    const { readOnly } = React.useContext(ContainerContext);
+
     const formMethods = useForm<StrukturerDokumentFormState>({
         defaultValues: editMode && {
             [FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER]: dokument.type,
@@ -43,6 +46,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit, editMode, isSubmitting }: 
                     buttonLabel={buttonLabel}
                     onSubmit={formMethods.handleSubmit(lagNyttStrukturertDokument)}
                     submitButtonDisabled={isSubmitting}
+                    shouldShowSubmitButton={!readOnly}
                 >
                     <Box marginTop={Margin.xLarge}>
                         <DokumentKnapp href={dokumentLink.href} />
@@ -50,6 +54,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit, editMode, isSubmitting }: 
                     <Box marginTop={Margin.xLarge}>
                         <RadioGroupPanel
                             name={FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER}
+                            disabled={readOnly}
                             question="Inneholder dokumentet medisinske opplysninger?"
                             radios={[
                                 {
@@ -71,6 +76,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit, editMode, isSubmitting }: 
                     <Box marginTop={Margin.xLarge}>
                         <Datepicker
                             name={FieldName.DATERT}
+                            disabled={readOnly}
                             label="Hvilken dato er dokumentet datert?"
                             defaultValue=""
                             validators={{ required, dateIsNotInTheFuture }}

@@ -18,6 +18,7 @@ import AddButton from '../add-button/AddButton';
 import DeleteButton from '../delete-button/DeleteButton';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
+import ContainerContext from '../../context/ContainerContext';
 import styles from './vurderingAvTilsynsbehovForm.less';
 
 export enum FieldName {
@@ -53,6 +54,7 @@ const VurderingAvTilsynsbehovForm = ({
     onAvbryt,
     isSubmitting,
 }: VurderingAvTilsynsbehovFormProps): JSX.Element => {
+    const { readOnly } = React.useContext(ContainerContext);
     const formMethods = useForm({
         defaultValues,
         mode: 'onChange',
@@ -100,6 +102,7 @@ const VurderingAvTilsynsbehovForm = ({
                     onAvbryt={onAvbryt}
                     submitButtonDisabled={isSubmitting}
                     cancelButtonDisabled={isSubmitting}
+                    shouldShowSubmitButton={!readOnly}
                 >
                     {dokumenter?.length > 0 && (
                         <Box marginTop={Margin.large}>
@@ -118,12 +121,14 @@ const VurderingAvTilsynsbehovForm = ({
                                 validators={{
                                     harBruktDokumentasjon,
                                 }}
+                                disabled={readOnly}
                             />
                         </Box>
                     )}
                     <Box marginTop={Margin.xLarge}>
                         <TextArea
                             id="begrunnelsesfelt"
+                            disabled={readOnly}
                             textareaClass={styles.begrunnelsesfelt}
                             name={FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE}
                             label={
@@ -163,12 +168,14 @@ const VurderingAvTilsynsbehovForm = ({
                             question="Er det behov for tilsyn og pleie?"
                             name={FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE}
                             validators={{ required }}
+                            disabled={readOnly}
                         />
                     </Box>
                     <Box marginTop={Margin.xLarge}>
                         <PeriodpickerList
                             legend="Oppgi perioder"
                             name={FieldName.PERIODER}
+                            disabled={readOnly}
                             defaultValues={defaultValues[FieldName.PERIODER] || []}
                             validators={{
                                 required,
