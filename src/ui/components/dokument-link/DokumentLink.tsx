@@ -33,7 +33,7 @@ const DokumentLink = ({ dokument, etikett, visDokumentIkon }: DokumentLinkProps)
             <div className={styles.dokumentLink__etikett}>
                 {etikett && (
                     <ContentWithTooltip tooltipText={etikett} tooltipDirectionRight>
-                        <OnePersonOutlineGray classname="something" />
+                        <OnePersonOutlineGray />
                     </ContentWithTooltip>
                 )}
             </div>
