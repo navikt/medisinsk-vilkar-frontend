@@ -82,7 +82,7 @@ const renderPersonIcon = ({ gjelderForAnnenPart, gjelderForSøker }: ManuellVurd
     if (gjelderForAnnenPart) {
         return (
             <ContentWithTooltip tooltipText="Annen part">
-                <OnePersonOutlineGray classname="something" />
+                <OnePersonOutlineGray />
             </ContentWithTooltip>
         );
     }
