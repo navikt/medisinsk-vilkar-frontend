@@ -15,7 +15,7 @@ import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 import Vurderingsdetaljer from '../vurderingsdetaljer/Vurderingsdetaljer';
 
-interface VilkårsvurderingAvTilsynOgPleieProps {
+interface VilkårsvurderingAvToOmsorgspersonerProps {
     navigerTilNesteSteg: (steg: Step) => void;
     hentSykdomsstegStatus: () => Promise<SykdomsstegStatusResponse>;
     sykdomsstegStatus: SykdomsstegStatusResponse;
@@ -25,7 +25,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
     navigerTilNesteSteg,
     hentSykdomsstegStatus,
     sykdomsstegStatus,
-}: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
+}: VilkårsvurderingAvToOmsorgspersonerProps): JSX.Element => {
     const { endpoints, onFinished, httpErrorHandler, readOnly } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
@@ -113,7 +113,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
         dispatch({ type: ActionType.PENDING });
         hentSykdomsstegStatus().then((status) => {
             if (status.kanLøseAksjonspunkt) {
-                onFinished(); // TODO: Skal vi prøve å gå videre her eller skal vi sjekke om vi har valgrfrie perioder som kan vurderes og gjøre oppdaterVurderingsoversikt() istedet?
+                onFinished();
                 return;
             }
 
