@@ -11,14 +11,12 @@ const DokumentasjonFooter = ({
     firstSectionRenderer,
     secondSectionRenderer,
     thirdSectionRenderer,
-}: DokumentasjonFooterProps) => {
-    return (
-        <div className={styles.dokumentasjonFooter}>
-            <div className={styles.dokumentasjonFooter__firstSection}>{firstSectionRenderer()}</div>
-            <div className={styles.dokumentasjonFooter__secondSection}>{secondSectionRenderer()}</div>
-            <div className={styles.dokumentasjonFooter__thirdSection}>{thirdSectionRenderer()}</div>
-        </div>
-    );
-};
+}: DokumentasjonFooterProps): JSX.Element => (
+    <div className={styles.dokumentasjonFooter}>
+        <div className={styles.dokumentasjonFooter__firstSection}>{firstSectionRenderer()}</div>
+        <div className={styles.dokumentasjonFooter__secondSection}>{secondSectionRenderer()}</div>
+        <div className={styles.dokumentasjonFooter__thirdSection}>{thirdSectionRenderer()}</div>
+    </div>
+);
 
 export default DokumentasjonFooter;

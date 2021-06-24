@@ -13,7 +13,7 @@ const dokumentSorter = (dok1: Dokument, dok2: Dokument): number => {
     return 0;
 };
 
-export class Dokumentoversikt {
+class Dokumentoversikt {
     alleDokumenter: Dokument[];
 
     strukturerteDokumenter: Dokument[];
@@ -30,11 +30,13 @@ export class Dokumentoversikt {
             .sort(dokumentSorter);
     }
 
-    harGyldigSignatur() {
+    harGyldigSignatur(): boolean {
         return this.strukturerteDokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING);
     }
 
-    harDokumenter() {
+    harDokumenter(): boolean {
         return this.strukturerteDokumenter.length > 0 || this.ustrukturerteDokumenter.length > 0;
     }
 }
+
+export default Dokumentoversikt;

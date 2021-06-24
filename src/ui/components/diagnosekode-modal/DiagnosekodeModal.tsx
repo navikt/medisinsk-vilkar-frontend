@@ -1,19 +1,19 @@
-import React, { useMemo } from 'react';
+import { Box, Margin } from '@navikt/k9-react-components';
+import React from 'react';
 import Modal from 'nav-frontend-modal';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import styles from '../diagnosekodeoversikt/diagnosekodeoversikt.less';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
-import { Box,  Margin } from '@navikt/k9-react-components';
 import DiagnosekodeSelector from '../../form/pure/PureDiagnosekodeSelector';
 import Diagnosekode from '../../../types/Diagnosekode';
 
 interface DiagnosekodeModalProps {
     isOpen: boolean;
     onRequestClose: () => void;
-    onSaveClick: (nyDiagnosekode: Diagnosekode) => Promise<any>;
+    onSaveClick: (nyDiagnosekode: Diagnosekode) => Promise<unknown>;
 }
 
-const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick }: DiagnosekodeModalProps) => {
+const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick }: DiagnosekodeModalProps): JSX.Element => {
     const [selectedDiagnosekode, setSelectedDiagnosekode] = React.useState<Diagnosekode>(null);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 

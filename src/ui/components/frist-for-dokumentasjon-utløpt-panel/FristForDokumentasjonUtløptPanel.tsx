@@ -9,7 +9,7 @@ interface FristForDokumentasjonUtløptPanelProps {
     onProceedClick: () => void;
 }
 
-const FristForDokumentasjonUtløptPanel = ({ onProceedClick }: FristForDokumentasjonUtløptPanelProps) => {
+const FristForDokumentasjonUtløptPanel = ({ onProceedClick }: FristForDokumentasjonUtløptPanelProps): JSX.Element => {
     const [fristenErUtløpt, setFristenErUtløpt] = React.useState(false);
     return (
         <InfoPanel type="warning">

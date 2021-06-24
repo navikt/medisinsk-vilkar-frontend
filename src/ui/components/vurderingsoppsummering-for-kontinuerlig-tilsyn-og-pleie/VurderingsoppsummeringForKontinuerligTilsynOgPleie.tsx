@@ -14,7 +14,7 @@ interface VurderingsoppsummeringForKontinuerligTilsynOgPleieProps {
 const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
     vurdering,
     redigerVurdering,
-}: VurderingsoppsummeringForKontinuerligTilsynOgPleieProps) => {
+}: VurderingsoppsummeringForKontinuerligTilsynOgPleieProps): JSX.Element => {
     const gjeldendeVurdering = vurdering.versjoner[0];
     const { dokumenter, perioder, tekst, resultat } = gjeldendeVurdering;
     const erInnleggelse = vurdering.erInnleggelsesperiode;
@@ -60,9 +60,10 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
                         label={resultat === Vurderingsresultat.OPPFYLT ? 'Perioder innvilget' : 'Perioder avslått'}
                         content={
                             <ul style={{ margin: 0, listStyleType: 'none', padding: 0 }}>
-                                {perioder.map((periode, i) => (
-                                    <li key={`${i}`}>{periode.prettifyPeriod()}</li>
-                                ))}
+                                {perioder.map((period) => {
+                                    const prettyPeriod = period.prettifyPeriod();
+                                    return <li key={prettyPeriod}>{prettyPeriod}</li>;
+                                })}
                             </ul>
                         }
                     />

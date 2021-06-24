@@ -7,9 +7,11 @@ import ContainerContext from '../../context/ContainerContext';
 import Vurderingstype from '../../../types/Vurderingstype';
 import VurderingAvTilsynsbehovForm, {
     FieldName as KTPFieldName,
+    VurderingAvTilsynsbehovFormState,
 } from '../vurdering-av-tilsynsbehov-form/VurderingAvTilsynsbehovForm';
 import VurderingAvToOmsorgspersonerForm, {
     FieldName as TOFieldName,
+    VurderingAvToOmsorgspersonerFormState,
 } from '../vurdering-av-to-omsorgspersoner-form/VurderingAvToOmsorgspersonerForm';
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
 import VurderingContext from '../../context/VurderingContext';
@@ -21,7 +23,10 @@ interface VurderingsdetaljvisningForNyVurderingProps {
     onAvbryt: () => void;
 }
 
-function makeDefaultValues(vurderingstype: Vurderingstype, perioder: Period[]) {
+function makeDefaultValues(
+    vurderingstype: Vurderingstype,
+    perioder: Period[]
+): VurderingAvToOmsorgspersonerFormState | VurderingAvTilsynsbehovFormState {
     if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
         return {
             [KTPFieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
@@ -38,7 +43,7 @@ function makeDefaultValues(vurderingstype: Vurderingstype, perioder: Period[]) {
             [TOFieldName.DOKUMENTER]: [],
         };
     }
-    return {};
+    return null;
 }
 
 const VurderingsdetaljvisningForNyVurdering = ({
@@ -46,7 +51,7 @@ const VurderingsdetaljvisningForNyVurdering = ({
     onVurderingLagret,
     onAvbryt,
     radForNyVurderingVises,
-}: VurderingsdetaljvisningForNyVurderingProps) => {
+}: VurderingsdetaljvisningForNyVurderingProps): JSX.Element => {
     const { readOnly } = React.useContext(ContainerContext);
 
     const opprettLink = findLinkByRel(LinkRel.OPPRETT_VURDERING, vurderingsoversikt.links);
@@ -78,7 +83,7 @@ const VurderingsdetaljvisningForNyVurdering = ({
                 if (Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE === vurderingstype) {
                     return (
                         <VurderingAvTilsynsbehovForm
-                            defaultValues={makeDefaultValues(vurderingstype, defaultPerioder()) as any}
+                            defaultValues={makeDefaultValues(vurderingstype, defaultPerioder())}
                             resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
                             perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
                             dokumenter={dokumenter}
@@ -91,7 +96,7 @@ const VurderingsdetaljvisningForNyVurdering = ({
                 if (Vurderingstype.TO_OMSORGSPERSONER === vurderingstype) {
                     return (
                         <VurderingAvToOmsorgspersonerForm
-                            defaultValues={makeDefaultValues(vurderingstype, defaultPerioder()) as any}
+                            defaultValues={makeDefaultValues(vurderingstype, defaultPerioder())}
                             resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
                             perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
                             dokumenter={dokumenter}

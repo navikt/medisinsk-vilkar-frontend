@@ -1,10 +1,10 @@
+import { Box, Margin } from '@navikt/k9-react-components';
+import { getHumanReadablePeriodString } from '@navikt/k9-period-utils';
 import Alertstripe from 'nav-frontend-alertstriper';
 import React from 'react';
-import { getHumanReadablePeriodString } from '@navikt/k9-period-utils';
 import { addYearsToDate } from '@navikt/k9-date-utils';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import Vurderingstype from '../../../types/Vurderingstype';
-import { Box,  Margin } from '@navikt/k9-react-components';
 import IngenPerioderÅVurdereMelding from '../ingen-perioder-å-vurdere-melding/IngenPerioderÅVurdereMelding';
 import ManglerGyldigSignaturMelding from '../mangler-gyldig-signatur-melding/ManglerGyldigSignaturMelding';
 import VurderingContext from '../../context/VurderingContext';
@@ -14,7 +14,10 @@ interface VurderingsoversiktMessagesProps {
     harGyldigSignatur: boolean;
 }
 
-const VurderingsoversiktMessages = ({ vurderingsoversikt, harGyldigSignatur }: VurderingsoversiktMessagesProps) => {
+const VurderingsoversiktMessages = ({
+    vurderingsoversikt,
+    harGyldigSignatur,
+}: VurderingsoversiktMessagesProps): JSX.Element => {
     const { vurderingstype } = React.useContext(VurderingContext);
     const vurderingsnavn =
         vurderingstype === Vurderingstype.TO_OMSORGSPERSONER ? 'to omsorgspersoner' : 'tilsyn og pleie';

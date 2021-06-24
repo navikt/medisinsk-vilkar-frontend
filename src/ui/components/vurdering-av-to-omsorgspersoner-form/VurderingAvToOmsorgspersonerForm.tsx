@@ -21,6 +21,9 @@ import DokumentLink from '../dokument-link/DokumentLink';
 import ContainerContext from '../../context/ContainerContext';
 import styles from './vurderingAvToOmsorgspersonerForm.less';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyType = any;
+
 export enum FieldName {
     VURDERING_AV_TO_OMSORGSPERSONER = 'vurderingAvToOmsorgspersoner',
     HAR_BEHOV_FOR_TO_OMSORGSPERSONER = 'harBehovForToOmsorgspersoner',
@@ -66,8 +69,8 @@ const VurderingAvToOmsorgspersonerForm = ({
         const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap((period) => period.asListOfDays());
         const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])
             .map((period) => {
-                if ((period as any).period) {
-                    return (period as any).period;
+                if ((period as AnyType).period) {
+                    return (period as AnyType).period;
                 }
                 return period;
             })
@@ -89,12 +92,14 @@ const VurderingAvToOmsorgspersonerForm = ({
         onSubmit(lagToOmsorgspersonerVurdering(formState, dokumenter));
     };
 
-    const sammenhengendePerioderMedTilsynsbehov = React.useMemo(() => {
-        return slåSammenSammenhengendePerioder(perioderSomKanVurderes);
-    }, [perioderSomKanVurderes]);
+    const sammenhengendePerioderMedTilsynsbehov = React.useMemo(
+        () => slåSammenSammenhengendePerioder(perioderSomKanVurderes),
+        [perioderSomKanVurderes]
+    );
 
     return (
         <DetailViewVurdering title="Vurdering av to omsorgspersoner" perioder={defaultValues[FieldName.PERIODER]}>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <FormProvider {...formMethods}>
                 <Form
                     buttonLabel="Bekreft"

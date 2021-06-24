@@ -2,7 +2,7 @@ import { ContentWithTooltip, ExclamationMarkIcon } from '@navikt/k9-react-compon
 import * as React from 'react';
 import styles from './slettetLabel.less';
 
-const SlettetLabel = () => (
+const SlettetLabel = (): JSX.Element => (
     <div className={styles.slettetLabel__container}>
         <ContentWithTooltip tooltipText="Slettet">
             <ExclamationMarkIcon />

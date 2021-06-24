@@ -5,7 +5,7 @@ import VurderingsdetaljerFetcher from '../vurderingsdetaljer-fetcher/Vurderingsd
 import LinkRel from '../../../constants/LinkRel';
 import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
 import ManuellVurdering from '../../../types/ManuellVurdering';
-import { buildInitialFormStateForEdit } from '../vilkårsvurdering-av-tilsyn-og-pleie/initialFormStateUtil';
+import buildInitialFormStateForEdit from '../vilkårsvurdering-av-tilsyn-og-pleie/initialFormStateUtil';
 import VurderingAvTilsynsbehovForm from '../vurdering-av-tilsynsbehov-form/VurderingAvTilsynsbehovForm';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import EndreVurderingController from '../endre-vurdering-controller/EndreVurderingController';
@@ -46,9 +46,8 @@ const getSummaryComponent = (vurderingstype: Vurderingstype) => {
     return null;
 };
 
-const erAutomatiskVurdertInnleggelsesperiode = (vurderingselement: Vurderingselement) => {
-    return !(vurderingselement as ManuellVurdering).resultat;
-};
+const erAutomatiskVurdertInnleggelsesperiode = (vurderingselement: Vurderingselement) =>
+    !(vurderingselement as ManuellVurdering).resultat;
 
 const VurderingsdetaljvisningForEksisterendeVurdering = ({
     vurderingsoversikt,
@@ -57,7 +56,7 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
     onEditClick,
     onAvbrytClick,
     onVurderingLagret,
-}: VurderingsdetaljvisningForEksisterendeProps) => {
+}: VurderingsdetaljvisningForEksisterendeProps): JSX.Element => {
     const { endpoints } = React.useContext(ContainerContext);
     const { vurderingstype } = React.useContext(VurderingContext);
 

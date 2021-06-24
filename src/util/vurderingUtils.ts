@@ -12,6 +12,9 @@ import Dokument from '../types/Dokument';
 import { Vurderingsversjon } from '../types/Vurdering';
 import { finnBenyttedeDokumenter } from './dokumentUtils';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyType = any;
+
 export const lagTilsynsbehovVurdering = (
     formState: VurderingAvTilsynsbehovFormState,
     alleDokumenter: Dokument[]
@@ -19,9 +22,10 @@ export const lagTilsynsbehovVurdering = (
     const resultat = formState[TilsynFieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]
         ? Vurderingsresultat.OPPFYLT
         : Vurderingsresultat.IKKE_OPPFYLT;
-    const perioder = formState[TilsynFieldName.PERIODER].map((periodeWrapper) => {
-        return new Period((periodeWrapper as any).period.fom, (periodeWrapper as any).period.tom);
-    });
+
+    const perioder = formState[TilsynFieldName.PERIODER].map(
+        (periodeWrapper) => new Period((periodeWrapper as AnyType).period.fom, (periodeWrapper as AnyType).period.tom)
+    );
     const begrunnelse = formState[TilsynFieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE];
 
     return {
@@ -40,7 +44,7 @@ export const lagToOmsorgspersonerVurdering = (
         ? Vurderingsresultat.OPPFYLT
         : Vurderingsresultat.IKKE_OPPFYLT;
     const perioder = formState[TilsynFieldName.PERIODER].map(
-        (periodeWrapper) => new Period((periodeWrapper as any).period.fom, (periodeWrapper as any).period.tom)
+        (periodeWrapper) => new Period((periodeWrapper as AnyType).period.fom, (periodeWrapper as AnyType).period.tom)
     );
     const begrunnelse = formState[ToOmsorgspersonerFieldName.VURDERING_AV_TO_OMSORGSPERSONER];
 

@@ -19,7 +19,7 @@ interface UstrukturertDokumentElementProps {
 
 const UstrukturertDokumentElement = ({
     dokument: { datert, mottattDato, annenPartErKilde, links },
-}: UstrukturertDokumentElementProps) => {
+}: UstrukturertDokumentElementProps): JSX.Element => {
     const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
 
     const parterLabel = () => {

@@ -6,13 +6,11 @@ interface IconWithTextProps {
     text: string;
 }
 
-const IconWithText = ({ text, iconRenderer }: IconWithTextProps) => {
-    return (
-        <div className={styles.iconWithText}>
-            {iconRenderer()}
-            <span className={styles.iconWithText__text}>{text}</span>
-        </div>
-    );
-};
+const IconWithText = ({ text, iconRenderer }: IconWithTextProps): JSX.Element => (
+    <div className={styles.iconWithText}>
+        {iconRenderer()}
+        <span className={styles.iconWithText__text}>{text}</span>
+    </div>
+);
 
 export default IconWithText;

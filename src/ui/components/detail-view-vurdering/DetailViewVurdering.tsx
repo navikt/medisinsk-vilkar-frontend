@@ -10,12 +10,12 @@ interface DetailViewVurderingProps extends DetailViewProps {
     redigerVurdering?: () => void;
 }
 
-const DetailViewVurdering = (props: DetailViewVurderingProps) => {
-    const { children, perioder, redigerVurdering, ...detailViewProps } = props;
+const DetailViewVurdering = (props: DetailViewVurderingProps): JSX.Element => {
+    const { children, perioder, redigerVurdering, title } = props;
     const harPerioder = perioder.length > 0 && perioder[0].isValid();
     return (
         <DetailView
-            {...detailViewProps}
+            title={title}
             className={styles.detailViewVurdering}
             contentAfterTitleRenderer={() =>
                 redigerVurdering && (

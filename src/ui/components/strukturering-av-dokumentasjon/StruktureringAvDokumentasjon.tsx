@@ -4,7 +4,7 @@ import axios from 'axios';
 import React, { useMemo } from 'react';
 import LinkRel from '../../../constants/LinkRel';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
-import { Dokumentoversikt } from '../../../types/Dokumentoversikt';
+import Dokumentoversikt from '../../../types/Dokumentoversikt';
 import { DokumentoversiktResponse } from '../../../types/DokumentoversiktResponse';
 import { StepId } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
@@ -32,7 +32,7 @@ const StruktureringAvDokumentasjon = ({
     navigerTilNesteSteg,
     hentSykdomsstegStatus,
     sykdomsstegStatus,
-}: StruktureringAvDokumentasjonProps) => {
+}: StruktureringAvDokumentasjonProps): JSX.Element => {
     const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 

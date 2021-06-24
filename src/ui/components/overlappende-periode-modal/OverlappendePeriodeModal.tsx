@@ -40,7 +40,7 @@ const OverlappendePeriodeModal = ({
     onCancel,
     isOpen,
     isSubmitting,
-}: OverlappendePeriodeModalProps) => {
+}: OverlappendePeriodeModalProps): JSX.Element => {
     Modal.setAppElement(`#${appElementId}`);
 
     const overlappendePerioderISammeBehandling =

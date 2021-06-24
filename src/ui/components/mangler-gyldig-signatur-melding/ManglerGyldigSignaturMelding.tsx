@@ -5,8 +5,8 @@ interface ManglerGyldigSignaturMeldingProps {
     children: React.ReactNode;
 }
 
-const ManglerGyldigSignaturMelding = ({ children }: ManglerGyldigSignaturMeldingProps) => {
-    return <Alertstripe type="info">{children}</Alertstripe>;
-};
+const ManglerGyldigSignaturMelding = ({ children }: ManglerGyldigSignaturMeldingProps): JSX.Element => (
+    <Alertstripe type="info">{children}</Alertstripe>
+);
 
 export default ManglerGyldigSignaturMelding;

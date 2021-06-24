@@ -12,7 +12,7 @@ interface OverlappendeSøknadsperiodePanelProps {
 const OverlappendeSøknadsperiodePanel = ({
     onProgressButtonClick,
     overlappendeVurderingsperioder,
-}: OverlappendeSøknadsperiodePanelProps) => (
+}: OverlappendeSøknadsperiodePanelProps): JSX.Element => (
     <InfoPanel type="warning">
         <Normaltekst>
             {`Søknadsperioden overlapper med en eller flere tidligere vurderte perioder

@@ -11,6 +11,9 @@ type VurderingsversjonMedType = Partial<Vurderingsversjon> & {
     type: Vurderingstype;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyType = any;
+
 export async function postNyVurdering(
     href: string,
     behandlingUuid: string,
@@ -18,7 +21,7 @@ export async function postNyVurdering(
     httpErrorHandler: HttpErrorHandler,
     cancelToken?: CancelToken,
     dryRun?: boolean
-): Promise<any> {
+): Promise<AnyType> {
     try {
         const { perioder, resultat, tekst, dokumenter, type } = vurderingsversjonMedType;
         return post(
@@ -36,7 +39,6 @@ export async function postNyVurdering(
             { cancelToken }
         );
     } catch (error) {
-        console.error(error);
         throw new Error(error);
     }
 }
@@ -59,7 +61,7 @@ export async function postEndreVurdering(
     httpErrorHandler: HttpErrorHandler,
     cancelToken?: CancelToken,
     dryRun?: boolean
-): Promise<any> {
+): Promise<AnyType> {
     try {
         const { perioder, resultat, tekst, dokumenter, versjon } = vurderingsversjon;
         return post(
@@ -78,7 +80,6 @@ export async function postEndreVurdering(
             { cancelToken }
         );
     } catch (error) {
-        console.error(error);
         throw new Error(error);
     }
 }
@@ -116,7 +117,7 @@ export async function postInnleggelsesperioder(
     httpErrorHandler: HttpErrorHandler,
     cancelToken?: CancelToken,
     dryRun?: boolean
-) {
+): Promise<AnyType> {
     return post(href, { ...body, dryRun: dryRun || false }, httpErrorHandler, { cancelToken });
 }
 

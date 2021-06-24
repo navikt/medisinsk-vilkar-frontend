@@ -1,6 +1,6 @@
 import { get } from '@navikt/k9-http-utils';
 import { Period } from '@navikt/k9-period-utils';
-import { NavigationWithDetailView, PageContainer } from '@navikt/k9-react-components';
+import { NavigationWithDetailView, PageContainer, Box, Margin } from '@navikt/k9-react-components';
 import React, { useMemo } from 'react';
 import axios from 'axios';
 import Step, { StepId, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
@@ -9,7 +9,6 @@ import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { finnNesteSteg } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
-import { Box, Margin } from '@navikt/k9-react-components';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
 import ActionType from './actionTypes';

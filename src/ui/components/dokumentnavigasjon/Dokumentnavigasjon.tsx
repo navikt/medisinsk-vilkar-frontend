@@ -12,7 +12,11 @@ interface DokumentnavigasjonProps {
     dokumenterSomMåGjennomgås?: Dokument[];
 }
 
-const Dokumentnavigasjon = ({ dokumenter, onDokumentValgt, dokumenterSomMåGjennomgås }: DokumentnavigasjonProps) => {
+const Dokumentnavigasjon = ({
+    dokumenter,
+    onDokumentValgt,
+    dokumenterSomMåGjennomgås,
+}: DokumentnavigasjonProps): JSX.Element => {
     const harDokumentasjonSomMåGjennomgås = dokumenterSomMåGjennomgås && dokumenterSomMåGjennomgås.length > 0;
     const [activeIndex, setActiveIndex] = React.useState(harDokumentasjonSomMåGjennomgås ? 0 : -1);
 

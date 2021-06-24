@@ -28,7 +28,10 @@ const renderDokumenttypeContent = (dokumenttype: Dokumenttype) => {
     return null;
 };
 
-const StrukturertDokumentDetaljer = ({ dokument, onEditDokumentClick }: StrukturertDokumentDetaljerProps) => {
+const StrukturertDokumentDetaljer = ({
+    dokument,
+    onEditDokumentClick,
+}: StrukturertDokumentDetaljerProps): JSX.Element => {
     const { type, datert, links } = dokument;
     const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
     return (

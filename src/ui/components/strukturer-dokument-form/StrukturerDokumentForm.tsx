@@ -22,7 +22,12 @@ interface StrukturerDokumentFormProps {
     isSubmitting: boolean;
 }
 
-const StrukturerDokumentForm = ({ dokument, onSubmit, editMode, isSubmitting }: StrukturerDokumentFormProps) => {
+const StrukturerDokumentForm = ({
+    dokument,
+    onSubmit,
+    editMode,
+    isSubmitting,
+}: StrukturerDokumentFormProps): JSX.Element => {
     const { readOnly } = React.useContext(ContainerContext);
 
     const formMethods = useForm<StrukturerDokumentFormState>({
@@ -41,6 +46,7 @@ const StrukturerDokumentForm = ({ dokument, onSubmit, editMode, isSubmitting }: 
 
     return (
         <DetailView title="Om dokumentet">
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <FormProvider {...formMethods}>
                 <Form
                     buttonLabel={buttonLabel}

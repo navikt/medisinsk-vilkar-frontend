@@ -7,14 +7,15 @@ interface VurderBehovForPerioderMeldingProps {
     perioder: Period[];
 }
 
-const VurderBehovForPerioderMelding = ({ vurderingsnavn, perioder }: VurderBehovForPerioderMeldingProps) => {
-    return (
-        <Alertstripe type="advarsel">
-            Vurder behov for
-            {vurderingsnavn}
-            for ${getHumanReadablePeriodString(perioder)}
-        </Alertstripe>
-    );
-};
+const VurderBehovForPerioderMelding = ({
+    vurderingsnavn,
+    perioder,
+}: VurderBehovForPerioderMeldingProps): JSX.Element => (
+    <Alertstripe type="advarsel">
+        Vurder behov for
+        {vurderingsnavn}
+        for ${getHumanReadablePeriodString(perioder)}
+    </Alertstripe>
+);
 
 export default VurderBehovForPerioderMelding;

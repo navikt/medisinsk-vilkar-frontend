@@ -14,6 +14,9 @@ import { FieldName } from '../innleggelsesperiodeoversikt/Innleggelsesperiodeove
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import styles from './innleggelsesperiodeFormModal.less';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyType = any;
+
 interface InnleggelsesperiodeFormModal {
     defaultValues: {
         [FieldName.INNLEGGELSESPERIODER]: Period[];
@@ -49,6 +52,7 @@ const InnleggelsesperiodeFormModal = ({
     };
 
     const handleCloseModal = () => {
+        // eslint-disable-next-line no-alert
         if ((isDirty && window.confirm('Du vil miste alle endringer du har gjort')) || !isDirty) {
             setModalIsOpen(false);
             setShowWarningMessage(false);
@@ -63,6 +67,7 @@ const InnleggelsesperiodeFormModal = ({
             contentLabel="Legg til innleggelsesperiode"
             className={styles.innleggelsesperiodeFormModal}
         >
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <FormProvider {...formMethods}>
                 <Form onSubmit={formMethods.handleSubmit(handleSubmit)} shouldShowSubmitButton={false}>
                     <ModalFormWrapper title="Innleggelsesperioder">
@@ -80,7 +85,7 @@ const InnleggelsesperiodeFormModal = ({
                                 }}
                                 afterOnChange={() => {
                                     const initialiserteInnleggelsesperioder = getValues().innleggelsesperioder.map(
-                                        ({ period }: any) => new Period(period.fom, period.tom)
+                                        ({ period }: AnyType) => new Period(period.fom, period.tom)
                                     );
                                     const erAllePerioderGyldige = initialiserteInnleggelsesperioder.every((periode) =>
                                         periode.isValid()
@@ -96,27 +101,29 @@ const InnleggelsesperiodeFormModal = ({
                                     overlaps: (periodValue: Period) => {
                                         const innleggelsesperioderFormValue = getValues()
                                             .innleggelsesperioder.filter(
-                                                (periodWrapper: any) => periodWrapper.period !== periodValue
+                                                (periodWrapper: AnyType) => periodWrapper.period !== periodValue
                                             )
-                                            .map(({ period }: any) => new Period(period.fom, period.tom));
-
-                                        const period = new Period(periodValue.fom, periodValue.tom);
+                                            .map(({ period }: AnyType) => new Period(period.fom, period.tom));
+                                        const { fom, tom } = periodValue;
+                                        const period = new Period(fom, tom);
                                         if (period.overlapsWithSomePeriodInList(innleggelsesperioderFormValue)) {
                                             return 'Innleggelsesperiodene kan ikke overlappe';
                                         }
                                         return null;
                                     },
                                     hasEmptyPeriodInputs: (periodValue: Period) => {
-                                        if (!periodValue.fom) {
+                                        const { fom, tom } = periodValue;
+                                        if (!fom) {
                                             return 'Fra-dato er påkrevd';
                                         }
-                                        if (!periodValue.tom) {
+                                        if (!tom) {
                                             return 'Til-dato er påkrevd';
                                         }
                                         return null;
                                     },
                                     fomIsBeforeOrSameAsTom: (periodValue: Period) => {
-                                        const period = new Period(periodValue.fom, periodValue.tom);
+                                        const { fom, tom } = periodValue;
+                                        const period = new Period(fom, tom);
 
                                         if (period.fomIsBeforeOrSameAsTom() === false) {
                                             return 'Fra-dato må være tidligere eller samme som til-dato';
@@ -146,9 +153,9 @@ const InnleggelsesperiodeFormModal = ({
                                         </Box>
                                     </>
                                 )}
-                                renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => {
-                                    return <DeleteButton onClick={() => fieldArrayMethods.remove(index)} />;
-                                }}
+                                renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => (
+                                    <DeleteButton onClick={() => fieldArrayMethods.remove(index)} />
+                                )}
                             />
                             {showWarningMessage && (
                                 <Box marginTop={Margin.large}>
