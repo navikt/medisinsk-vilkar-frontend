@@ -16,7 +16,7 @@ interface ContainerContract {
     };
     behandlingUuid: string;
     readOnly: boolean;
-    onFinished: () => void;
+    onFinished: (...args: unknown[]) => void;
     httpErrorHandler: HttpErrorHandler;
     visFortsettknapp: boolean;
 }

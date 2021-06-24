@@ -114,7 +114,6 @@ const StruktureringAvDokumentasjon = ({
             <DokumentoversiktMessages
                 dokumentoversikt={dokumentoversikt}
                 harRegistrertDiagnosekode={!sykdomsstegStatus.manglerDiagnosekode}
-                kanLøseAksjonspunkt={sykdomsstegStatus.kanLøseAksjonspunkt}
                 kanNavigereVidere={nesteStegErVurdering(sykdomsstegStatus)}
                 navigerTilNesteSteg={navigerTilNesteSteg}
             />
