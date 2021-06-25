@@ -11,7 +11,10 @@
         "majorVersion": "node ./majorVersion.js",
         "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'"
     },
-    "pre-commit": "lint, test",
+    "pre-commit": [
+        "lint",
+        "test"
+    ],
     "keywords": [],
     "author": "NAV IT",
     "license": "MIT",
