@@ -7,7 +7,6 @@ import axios from 'axios';
 import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
 import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-pleie/VilkårsvurderingAvTilsynOgPleie';
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
-import styles from './medisinskVilkår.less';
 import Step, { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import ContainerContext from '../../context/ContainerContext';
@@ -18,6 +17,7 @@ import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBo
 import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
 import VurderingContext from '../../context/VurderingContext';
 import Vurderingstype from '../../../types/Vurderingstype';
+import styles from './medisinskVilkår.less';
 
 const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
