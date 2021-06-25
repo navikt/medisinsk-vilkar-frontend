@@ -23,7 +23,7 @@ const renderDokumenttypeText = (dokumenttype: Dokumenttype) => {
     return null;
 };
 
-const DokumentLink = ({ dokument, etikett, visDokumentIkon }: DokumentLinkProps) => {
+const DokumentLink = ({ dokument, etikett, visDokumentIkon }: DokumentLinkProps): JSX.Element => {
     const { type, datert, links } = dokument;
     const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
     return (

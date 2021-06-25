@@ -6,19 +6,17 @@ interface InnleggelsesperiodelisteProps {
     innleggelsesperioder: Period[];
 }
 
-const Innleggelsesperiodeliste = ({ innleggelsesperioder }: InnleggelsesperiodelisteProps) => {
-    return (
-        <ul className={styles.innleggelsesperiodeliste}>
-            {innleggelsesperioder.map((innleggelsesperiode) => {
-                const { fom, tom } = innleggelsesperiode;
-                return (
-                    <li key={`${fom}${tom}`} className={styles.innleggelsesperiodeliste__element}>
-                        {innleggelsesperiode.prettifyPeriod()}
-                    </li>
-                );
-            })}
-        </ul>
-    );
-};
+const Innleggelsesperiodeliste = ({ innleggelsesperioder }: InnleggelsesperiodelisteProps): JSX.Element => (
+    <ul className={styles.innleggelsesperiodeliste}>
+        {innleggelsesperioder.map((innleggelsesperiode) => {
+            const { fom, tom } = innleggelsesperiode;
+            return (
+                <li key={`${fom}${tom}`} className={styles.innleggelsesperiodeliste__element}>
+                    {innleggelsesperiode.prettifyPeriod()}
+                </li>
+            );
+        })}
+    </ul>
+);
 
 export default Innleggelsesperiodeliste;

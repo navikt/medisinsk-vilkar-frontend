@@ -21,6 +21,9 @@ import DokumentLink from '../dokument-link/DokumentLink';
 import ContainerContext from '../../context/ContainerContext';
 import styles from './vurderingAvTilsynsbehovForm.less';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyType = any;
+
 export enum FieldName {
     VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
     HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE = 'harBehovForKontinuerligTilsynOgPleie',
@@ -65,8 +68,8 @@ const VurderingAvTilsynsbehovForm = ({
         const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap((p) => p.asListOfDays());
         const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])
             .map((period) => {
-                if ((period as any).period) {
-                    return (period as any).period;
+                if ((period as AnyType).period) {
+                    return (period as AnyType).period;
                 }
                 return period;
             })
@@ -88,13 +91,15 @@ const VurderingAvTilsynsbehovForm = ({
         onSubmit(lagTilsynsbehovVurdering(formState, dokumenter));
     };
 
-    const sammenhengendeSøknadsperioder = React.useMemo(() => {
-        return slåSammenSammenhengendePerioder(perioderSomKanVurderes);
-    }, [perioderSomKanVurderes]);
+    const sammenhengendeSøknadsperioder = React.useMemo(
+        () => slåSammenSammenhengendePerioder(perioderSomKanVurderes),
+        [perioderSomKanVurderes]
+    );
 
     return (
         <DetailViewVurdering title="Vurdering av tilsyn og pleie" perioder={defaultValues[FieldName.PERIODER]}>
             <div id="modal" />
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <FormProvider {...formMethods}>
                 <Form
                     buttonLabel="Bekreft"
@@ -210,19 +215,17 @@ const VurderingAvTilsynsbehovForm = ({
                                     invalidDateRanges: hullISøknadsperiodene,
                                 },
                             }}
-                            renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => {
-                                return (
-                                    <>
-                                        {numberOfItems > 1 && (
-                                            <DeleteButton
-                                                onClick={() => {
-                                                    fieldArrayMethods.remove(index);
-                                                }}
-                                            />
-                                        )}
-                                    </>
-                                );
-                            }}
+                            renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => (
+                                <>
+                                    {numberOfItems > 1 && (
+                                        <DeleteButton
+                                            onClick={() => {
+                                                fieldArrayMethods.remove(index);
+                                            }}
+                                        />
+                                    )}
+                                </>
+                            )}
                             renderAfterFieldArray={(fieldArrayMethods) => (
                                 <Box marginTop={Margin.large}>
                                     <AddButton

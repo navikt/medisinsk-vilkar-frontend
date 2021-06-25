@@ -6,7 +6,7 @@ import VilkårsvurderingAvToOmsorgspersoner from '../VilkårsvurderingAvToOmsorg
 import ContainerContext from '../../../context/ContainerContext';
 import VurderingContext from '../../../context/VurderingContext';
 import Vurderingstype from '../../../../types/Vurderingstype';
-import { dokumentSteg, toOmsorgspersonerSteg } from '../../../../types/Step';
+import { dokumentSteg } from '../../../../types/Step';
 
 const vurderingsoversiktEndpoint = 'vurderingsoversikt-mock';
 const vurderingsopprettelseEndpoint = 'vurderingsopprettelse-mock';
@@ -39,8 +39,8 @@ const onFinishedMock = {
     fn: () => null,
 };
 
-const contextWrapper = (ui) => {
-    return render(
+const contextWrapper = (ui) =>
+    render(
         <ContainerContext.Provider
             value={
                 {
@@ -56,15 +56,12 @@ const contextWrapper = (ui) => {
             </VurderingContext.Provider>
         </ContainerContext.Provider>
     );
-};
 
 const navigerTilNesteStegMock = {
     fn: () => null,
 };
 
-const getFunctionThatReturnsAResolvedPromise = (data) => {
-    return () => new Promise((resolve) => resolve(data));
-};
+const getFunctionThatReturnsAResolvedPromise = (data) => () => new Promise((resolve) => resolve(data));
 
 const sykdomsstegFerdigStatusMock = {
     fn: getFunctionThatReturnsAResolvedPromise({ kanLøseAksjonspunkt: true }),
@@ -123,12 +120,13 @@ describe('VilkårsvurderingAvToOmsorgspersoner', () => {
         httpPostSpy = jest.spyOn(httpUtils, 'post');
 
         const mock = jest.spyOn(axios.CancelToken, 'source');
-        mock.mockImplementation(() => {
-            return {
-                token: cancelTokenMock.cancelToken,
-                cancel: () => null,
-            } as any;
-        });
+        mock.mockImplementation(
+            () =>
+                ({
+                    token: cancelTokenMock.cancelToken,
+                    cancel: () => null,
+                } as any)
+        );
 
         sykdomsstegFerdigStatusSpy = jest.spyOn(sykdomsstegFerdigStatusMock, 'fn');
         sykdomsstegDokumentUferdigStatusSpy = jest.spyOn(sykdomsstegDokumentUferdigStatusMock, 'fn');

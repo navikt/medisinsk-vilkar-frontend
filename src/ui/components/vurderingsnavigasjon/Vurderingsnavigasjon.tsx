@@ -11,7 +11,7 @@ import { EtikettInfo } from 'nav-frontend-etiketter';
 import { Element, Undertittel } from 'nav-frontend-typografi';
 import ManuellVurdering from '../../../types/ManuellVurdering';
 import Vurderingselement from '../../../types/Vurderingselement';
-import { usePrevious } from '../../../util/hooks';
+import usePrevious from '../../../util/hooks';
 import AddButton from '../add-button/AddButton';
 import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
 import Vurderingsperioder from '../vurderingsperioder/Vurderingsperioder';
@@ -50,9 +50,10 @@ const Vurderingsnavigasjon = ({
         }
     }, [visRadForNyVurdering]);
 
-    const sorterteVurderingselementer: Vurderingselement[] = React.useMemo(() => {
-        return vurderingselementer.sort((p1, p2) => sortPeriodsByFomDate(p1.periode, p2.periode)).reverse();
-    }, [vurderingselementer]);
+    const sorterteVurderingselementer: Vurderingselement[] = React.useMemo(
+        () => vurderingselementer.sort((p1, p2) => sortPeriodsByFomDate(p1.periode, p2.periode)).reverse(),
+        [vurderingselementer]
+    );
 
     const vurderingsperiodeElements = sorterteVurderingselementer.map((vurderingsperiode) => {
         const visOverlappetikett =

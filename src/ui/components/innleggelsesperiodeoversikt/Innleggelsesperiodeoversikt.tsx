@@ -65,19 +65,16 @@ const Innleggelsesperiodeoversikt = ({
             httpCanceler.token
         )
             .then(onInnleggelsesperioderUpdated)
-            .catch((error) => {
-                console.error(error);
+            .catch(() => {
                 setLagreInnleggelsesperioderFeilet(true);
                 setIsLoading(false);
             });
     };
 
-    const initializeInnleggelsesperiodeData = (response: InnleggelsesperiodeResponse) => {
-        return {
-            ...response,
-            perioder: response.perioder.map(({ fom, tom }) => new Period(fom, tom)),
-        };
-    };
+    const initializeInnleggelsesperiodeData = (response: InnleggelsesperiodeResponse) => ({
+        ...response,
+        perioder: response.perioder.map(({ fom, tom }) => new Period(fom, tom)),
+    });
 
     useEffect(() => {
         let isMounted = true;
@@ -88,8 +85,7 @@ const Innleggelsesperiodeoversikt = ({
                     setIsLoading(false);
                 }
             })
-            .catch((error) => {
-                console.error(error);
+            .catch(() => {
                 setHentInnleggelsesperioderFeilet(true);
             });
         return () => {

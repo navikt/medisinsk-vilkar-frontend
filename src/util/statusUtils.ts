@@ -1,13 +1,15 @@
 import StatusResponse from '../types/SykdomsstegStatusResponse';
 import { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../types/Step';
 
+type Steg = typeof dokumentSteg | typeof tilsynOgPleieSteg | typeof toOmsorgspersonerSteg;
+
 export const finnNesteSteg = ({
     harUklassifiserteDokumenter,
     manglerDiagnosekode,
     manglerVurderingAvKontinuerligTilsynOgPleie,
     manglerVurderingAvToOmsorgspersoner,
     manglerGodkjentLegeerklæring,
-}: StatusResponse) => {
+}: StatusResponse): Steg => {
     if (harUklassifiserteDokumenter || manglerDiagnosekode || manglerGodkjentLegeerklæring) {
         return dokumentSteg;
     }
@@ -23,7 +25,7 @@ export const finnNesteSteg = ({
     return null;
 };
 
-export const nesteStegErVurdering = (sykdomsstegStatus: StatusResponse) => {
+export const nesteStegErVurdering = (sykdomsstegStatus: StatusResponse): boolean => {
     const nesteSteg = finnNesteSteg(sykdomsstegStatus);
     return nesteSteg === tilsynOgPleieSteg || nesteSteg === toOmsorgspersonerSteg;
 };

@@ -42,7 +42,7 @@ const TabItem = ({ label, showWarningIcon }: TabItemProps) => {
     );
 };
 
-const MedisinskVilkår = () => {
+const MedisinskVilkår = (): JSX.Element => {
     const [state, dispatch] = React.useReducer(medisinskVilkårReducer, {
         isLoading: true,
         activeStep: null,
@@ -66,7 +66,6 @@ const MedisinskVilkår = () => {
             });
             return status;
         } catch (error) {
-            console.error(error);
             throw new Error(error);
         }
     };

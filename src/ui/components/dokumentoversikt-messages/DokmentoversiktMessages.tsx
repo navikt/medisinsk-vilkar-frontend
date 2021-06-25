@@ -1,17 +1,14 @@
+import { Box, Margin } from '@navikt/k9-react-components';
 import Alertstripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import React from 'react';
-import { Dokumentoversikt } from '../../../types/Dokumentoversikt';
+import Dokumentoversikt from '../../../types/Dokumentoversikt';
 import ContainerContext from '../../context/ContainerContext';
-import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
-import { Box, Margin } from '@navikt/k9-react-components';
 import FristForDokumentasjonUtløptPanel from '../frist-for-dokumentasjon-utløpt-panel/FristForDokumentasjonUtløptPanel';
-import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 
 interface DokumentoversiktMessagesProps {
     dokumentoversikt: Dokumentoversikt;
     harRegistrertDiagnosekode: boolean;
-    kanLøseAksjonspunkt: boolean;
     kanNavigereVidere: boolean;
     navigerTilNesteSteg: () => void;
 }
@@ -19,10 +16,9 @@ interface DokumentoversiktMessagesProps {
 const DokumentoversiktMessages = ({
     dokumentoversikt,
     harRegistrertDiagnosekode,
-    kanLøseAksjonspunkt,
     kanNavigereVidere,
     navigerTilNesteSteg,
-}: DokumentoversiktMessagesProps) => {
+}: DokumentoversiktMessagesProps): JSX.Element => {
     const { onFinished, readOnly } = React.useContext(ContainerContext);
 
     const { ustrukturerteDokumenter } = dokumentoversikt;

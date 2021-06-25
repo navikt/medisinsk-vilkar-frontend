@@ -15,9 +15,8 @@ interface DiagnosekodeSelectorProps {
     showSpinner?: boolean;
 }
 
-const fetchDiagnosekoderByQuery = (queryString: string) => {
-    return fetch(`/k9/diagnosekoder/?query=${queryString}&max=8`).then((response) => response.json());
-};
+const fetchDiagnosekoderByQuery = (queryString: string) =>
+    fetch(`/k9/diagnosekoder/?query=${queryString}&max=8`).then((response) => response.json());
 
 const PureDiagnosekodeSelector = ({
     label,

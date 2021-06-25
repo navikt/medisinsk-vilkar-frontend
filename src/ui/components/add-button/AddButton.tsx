@@ -11,7 +11,7 @@ interface AddButtonProps {
     ariaLabel?: string;
 }
 
-const AddButton = ({ className, label, onClick, id, noIcon, ariaLabel }: AddButtonProps) => (
+const AddButton = ({ className, label, onClick, id, noIcon, ariaLabel }: AddButtonProps): JSX.Element => (
     <button
         className={`${styles.addButton} ${className || ''}`}
         type="button"

@@ -1,7 +1,7 @@
 import * as periodUtils from '@navikt/k9-period-utils';
-const { Period } = periodUtils;
-
 import { finnMaksavgrensningerForPerioder, finnHullIPerioder, slåSammenSammenhengendePerioder } from '../periodUtils';
+
+const { Period } = periodUtils;
 
 describe('slåSammenSammenhengendePerioder', () => {
     it('should handle two consecutive periods with one separate', () => {

@@ -3,7 +3,9 @@ import { initializeDate, dateConstants } from '@navikt/k9-date-utils';
 import { Dayjs } from 'dayjs';
 import { finnHullIPerioder } from '../../../util/periodUtils';
 
-export function required(v: any) {
+type InputValue = string | number;
+
+export function required(v: InputValue): string | boolean {
     if (v === null || v === undefined || v === '') {
         return 'Du må oppgi en verdi';
     }
@@ -18,7 +20,7 @@ export function dateIsNotInTheFuture(dateString: string): string | boolean {
     return true;
 }
 
-export const detErTilsynsbehovPåDatoen = (dato: any, perioderMedTilsynsbehov: Period[]): string | boolean => {
+export const detErTilsynsbehovPåDatoen = (dato: string, perioderMedTilsynsbehov: Period[]): string | boolean => {
     const detErTilsynsbehovPåDato = perioderMedTilsynsbehov.some((periode) =>
         new Period(periode.fom, periode.tom).includesDate(dato)
     );
@@ -28,7 +30,7 @@ export const detErTilsynsbehovPåDatoen = (dato: any, perioderMedTilsynsbehov: P
     return 'Dato må være innenfor en periode med tilsynsbehov';
 };
 
-export const datoenInngårISøknadsperioden = (dato: any, søknadsperiode: Period): string | boolean => {
+export const datoenInngårISøknadsperioden = (dato: string, søknadsperiode: Period): string | boolean => {
     if (søknadsperiode.includesDate(dato)) {
         return true;
     }
@@ -36,7 +38,7 @@ export const datoenInngårISøknadsperioden = (dato: any, søknadsperiode: Perio
     return 'Dato må være innenfor søknadsperioden';
 };
 
-export const detErIngenInnleggelsePåDato = (dato: any, innleggelsesperioder: Period[]): string | boolean => {
+export const detErIngenInnleggelsePåDato = (dato: string, innleggelsesperioder: Period[]): string | boolean => {
     const detErInnleggelsePåDato = innleggelsesperioder.some((periode) =>
         new Period(periode.fom, periode.tom).includesDate(dato)
     );
@@ -47,7 +49,7 @@ export const detErIngenInnleggelsePåDato = (dato: any, innleggelsesperioder: Pe
 };
 
 export const datoErInnenforResterendeVurderingsperioder = (
-    dato: any,
+    dato: string,
     resterendeVurderingsperioder: Period[]
 ): string | true => {
     const datoErInnenfor = resterendeVurderingsperioder.some((period) =>
@@ -61,7 +63,7 @@ export const datoErInnenforResterendeVurderingsperioder = (
     return 'Dato må være innenfor periodene som vurderes';
 };
 
-export const datoErIkkeIEtHull = (dato: any, perioder: Period[]) => {
+export const datoErIkkeIEtHull = (dato: string, perioder: Period[]): string | true => {
     if (perioder.length === 1) {
         return true;
     }
@@ -74,10 +76,11 @@ export const datoErIkkeIEtHull = (dato: any, perioder: Period[]) => {
     return true;
 };
 
-export const harBruktDokumentasjon = (dokumenter: []) => {
+export const harBruktDokumentasjon = (dokumenter: []): string | true => {
     if (dokumenter.length === 0) {
         return 'Du må ha brukt ett eller flere dokumenter i vurderingen';
     }
+    return true;
 };
 
 export const fomDatoErFørTomDato = (periode: Period): string | true => {

@@ -7,14 +7,12 @@ interface MainComponentProps {
     containerData: ContainerContract;
 }
 
-const MainComponent = ({ containerData }: MainComponentProps): JSX.Element => {
-    return (
-        <div id="medisinskVilkår">
-            <ContainerContext.Provider value={containerData}>
-                <MedisinskVilkår />
-            </ContainerContext.Provider>
-        </div>
-    );
-};
+const MainComponent = ({ containerData }: MainComponentProps): JSX.Element => (
+    <div id="medisinskVilkår">
+        <ContainerContext.Provider value={containerData}>
+            <MedisinskVilkår />
+        </ContainerContext.Provider>
+    </div>
+);
 
 export default MainComponent;

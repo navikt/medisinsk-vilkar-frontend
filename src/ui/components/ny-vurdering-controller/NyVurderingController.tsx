@@ -12,7 +12,7 @@ import ActionType from './actionTypes';
 import vurderingControllerReducer from './reducer';
 import { postNyVurdering, postNyVurderingDryRun } from '../../../api/api';
 import ContainerContext from '../../context/ContainerContext';
-import { scrollUp } from '../../../util/viewUtils';
+import scrollUp from '../../../util/viewUtils';
 import VurderingContext from '../../context/VurderingContext';
 import LagreVurderingFeiletMelding from '../lagre-vurdering-feilet-melding/LagreVurderingFeiletMelding';
 
@@ -32,7 +32,7 @@ const NyVurderingController = ({
     dataTilVurderingUrl,
     onVurderingLagret,
     formRenderer,
-}: NyVurderingControllerProps) => {
+}: NyVurderingControllerProps): JSX.Element => {
     const { httpErrorHandler } = React.useContext(ContainerContext);
     const { vurderingstype } = React.useContext(VurderingContext);
 
@@ -104,12 +104,11 @@ const NyVurderingController = ({
         });
     };
 
-    const initializePerioderMedEndringer = (perioderMedEndringResponse: PerioderMedEndringResponse) => {
-        return perioderMedEndringResponse.perioderMedEndringer.map(({ periode: { fom, tom }, ...otherFields }) => ({
+    const initializePerioderMedEndringer = (perioderMedEndringResponse: PerioderMedEndringResponse) =>
+        perioderMedEndringResponse.perioderMedEndringer.map(({ periode: { fom, tom }, ...otherFields }) => ({
             periode: new Period(fom, tom),
             ...otherFields,
         }));
-    };
 
     const beOmBekreftelseFørLagringHvisNødvendig = (nyVurderingsversjon: Vurderingsversjon) => {
         dispatch({ type: ActionType.SJEKK_FOR_EKSISTERENDE_VURDERINGER_PÅBEGYNT });

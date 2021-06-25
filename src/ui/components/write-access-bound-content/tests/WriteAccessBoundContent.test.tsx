@@ -1,16 +1,17 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import ContainerContext from '../../../context/ContainerContext';
 import WriteAccessBoundContent from '../WriteAccessBoundContent';
+import ContainerContract from '../../../../types/ContainerContract';
 
 const testContent = 'Dette er en test';
 
-const writeAccessBoundContentRenderer = (readOnly: boolean, otherRequirementsAreMet: boolean = true) =>
+const writeAccessBoundContentRenderer = (readOnly: boolean, otherRequirementsAreMet = true) =>
     render(
-        <ContainerContext.Provider value={{ readOnly } as any}>
+        <ContainerContext.Provider value={{ readOnly } as ContainerContract}>
             <WriteAccessBoundContent
                 contentRenderer={() => <span>{testContent}</span>}
-                otherRequirementsAreMet={true}
+                otherRequirementsAreMet={otherRequirementsAreMet}
             />
         </ContainerContext.Provider>
     );

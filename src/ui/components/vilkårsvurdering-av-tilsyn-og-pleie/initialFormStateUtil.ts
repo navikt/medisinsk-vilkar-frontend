@@ -10,7 +10,7 @@ import {
     VurderingAvToOmsorgspersonerFormState,
 } from '../vurdering-av-to-omsorgspersoner-form/VurderingAvToOmsorgspersonerForm';
 
-export function buildInitialFormStateForEdit(
+function buildInitialFormStateForEdit(
     { tekst, resultat, perioder, dokumenter }: Vurderingsversjon,
     vurderingstype: Vurderingstype
 ): VurderingAvTilsynsbehovFormState | VurderingAvToOmsorgspersonerFormState {
@@ -33,3 +33,5 @@ export function buildInitialFormStateForEdit(
     }
     return undefined;
 }
+
+export default buildInitialFormStateForEdit;

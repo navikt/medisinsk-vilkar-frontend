@@ -35,8 +35,8 @@ const vurderingsoversiktMock = {
 
 window.scroll = () => null;
 
-const contextWrapper = (ui) => {
-    return render(
+const contextWrapper = (ui) =>
+    render(
         <ContainerContext.Provider
             value={
                 {
@@ -51,15 +51,12 @@ const contextWrapper = (ui) => {
             </VurderingContext.Provider>
         </ContainerContext.Provider>
     );
-};
 
 const navigerTilNesteStegMock = {
     fn: () => null,
 };
 
-const getFunctionThatReturnsAResolvedPromise = (data) => {
-    return () => new Promise((resolve) => resolve(data));
-};
+const getFunctionThatReturnsAResolvedPromise = (data) => () => new Promise((resolve) => resolve(data));
 
 const sykdomsstegFerdigStatusMock = {
     fn: getFunctionThatReturnsAResolvedPromise({ kanLøseAksjonspunkt: true }),
@@ -117,12 +114,13 @@ describe('VilkårsvurderingAvTilsynOgPleie', () => {
         httpPostSpy = jest.spyOn(httpUtils, 'post');
 
         const mock = jest.spyOn(axios.CancelToken, 'source');
-        mock.mockImplementation(() => {
-            return {
-                token: cancelTokenMock.cancelToken,
-                cancel: () => null,
-            } as any;
-        });
+        mock.mockImplementation(
+            () =>
+                ({
+                    token: cancelTokenMock.cancelToken,
+                    cancel: () => null,
+                } as any)
+        );
 
         sykdomsstegFerdigStatusSpy = jest.spyOn(sykdomsstegFerdigStatusMock, 'fn');
         sykdomsstegDokumentUferdigStatusSpy = jest.spyOn(sykdomsstegDokumentUferdigStatusMock, 'fn');

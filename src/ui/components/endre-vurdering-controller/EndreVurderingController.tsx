@@ -12,7 +12,7 @@ import ActionType from './actionTypes';
 import vurderingControllerReducer from './reducer';
 import { postEndreVurdering, postEndreVurderingDryRun } from '../../../api/api';
 import ContainerContext from '../../context/ContainerContext';
-import { scrollUp } from '../../../util/viewUtils';
+import scrollUp from '../../../util/viewUtils';
 import LagreVurderingFeiletMelding from '../lagre-vurdering-feilet-melding/LagreVurderingFeiletMelding';
 
 interface EndreVurderingControllerProps {
@@ -35,7 +35,7 @@ const EndreVurderingController = ({
     formRenderer,
     vurderingsid,
     vurderingsversjonId,
-}: EndreVurderingControllerProps) => {
+}: EndreVurderingControllerProps): JSX.Element => {
     const { httpErrorHandler } = React.useContext(ContainerContext);
 
     const [state, dispatch] = React.useReducer(vurderingControllerReducer, {
@@ -109,12 +109,11 @@ const EndreVurderingController = ({
         });
     };
 
-    const initializePerioderMedEndringer = (perioderMedEndringResponse: PerioderMedEndringResponse) => {
-        return perioderMedEndringResponse.perioderMedEndringer.map(({ periode: { fom, tom }, ...otherFields }) => ({
+    const initializePerioderMedEndringer = (perioderMedEndringResponse: PerioderMedEndringResponse) =>
+        perioderMedEndringResponse.perioderMedEndringer.map(({ periode: { fom, tom }, ...otherFields }) => ({
             periode: new Period(fom, tom),
             ...otherFields,
         }));
-    };
 
     const beOmBekreftelseFørLagringHvisNødvendig = (nyVurderingsversjon: Vurderingsversjon) => {
         dispatch({ type: ActionType.SJEKK_FOR_EKSISTERENDE_VURDERINGER_PÅBEGYNT });

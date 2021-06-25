@@ -14,7 +14,7 @@ interface VurderingsoppsummeringForToOmsorgspersonerProps {
 const VurderingsoppsummeringForToOmsorgspersoner = ({
     vurdering,
     redigerVurdering,
-}: VurderingsoppsummeringForToOmsorgspersonerProps) => {
+}: VurderingsoppsummeringForToOmsorgspersonerProps): JSX.Element => {
     const gjeldendeVurdering = vurdering.versjoner[0];
     const { resultat, tekst, dokumenter, perioder } = gjeldendeVurdering;
     const erInnleggelse = vurdering.erInnleggelsesperiode;
@@ -57,9 +57,10 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
                         label="Perioder vurdert"
                         content={
                             <ul style={{ margin: 0, listStyleType: 'none', padding: 0 }}>
-                                {perioder.map((period, i) => (
-                                    <li key={`${i}`}>{period.prettifyPeriod()}</li>
-                                ))}
+                                {perioder.map((period) => {
+                                    const prettyPeriod = period.prettifyPeriod();
+                                    return <li key={prettyPeriod}>{prettyPeriod}</li>;
+                                })}
                             </ul>
                         }
                     />

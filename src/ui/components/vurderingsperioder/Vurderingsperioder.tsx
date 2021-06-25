@@ -9,7 +9,11 @@ interface VurderingsperioderProps {
     indicatorContentRenderer?: () => React.ReactNode;
 }
 
-const Vurderingsperioder = ({ perioder, visParterLabel, indicatorContentRenderer }: VurderingsperioderProps) => (
+const Vurderingsperioder = ({
+    perioder,
+    visParterLabel,
+    indicatorContentRenderer,
+}: VurderingsperioderProps): JSX.Element => (
     <div className={styles.vurderingsperioder} id="vurderingsperioder">
         {indicatorContentRenderer && (
             <>

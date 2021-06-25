@@ -1,12 +1,11 @@
 import { post } from '@navikt/k9-http-utils';
 import React, { useMemo } from 'react';
 import axios from 'axios';
-import Spinner from 'nav-frontend-spinner';
 import Dokument from '../../../types/Dokument';
 import StrukturerDokumentForm from '../strukturer-dokument-form/StrukturerDokumentForm';
 import Link from '../../../types/Link';
 import ContainerContext from '../../context/ContainerContext';
-import { scrollUp } from '../../../util/viewUtils';
+import scrollUp from '../../../util/viewUtils';
 
 interface StrukturerDokumentControllerProps {
     strukturerDokumentLink: Link;
@@ -20,18 +19,19 @@ const StrukturerDokumentController = ({
     strukturerDokumentLink: { requestPayload, href },
     onDokumentStrukturert,
     editMode,
-}: StrukturerDokumentControllerProps) => {
+}: StrukturerDokumentControllerProps): JSX.Element => {
     const { httpErrorHandler } = React.useContext(ContainerContext);
     const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
-    React.useEffect(() => {
-        return () => {
+    React.useEffect(
+        () => () => {
             httpCanceler.cancel();
-        };
-    }, []);
+        },
+        []
+    );
 
-    const strukturerDokument = (strukturertDokument) => {
+    const strukturerDokument = (strukturertDokument: Dokument) => {
         setIsSubmitting(true);
         post(href, { ...requestPayload, ...strukturertDokument }, httpErrorHandler, {
             cancelToken: httpCanceler.token,
@@ -41,9 +41,8 @@ const StrukturerDokumentController = ({
                 onDokumentStrukturert();
                 scrollUp();
             },
-            (error) => {
+            () => {
                 setIsSubmitting(false);
-                console.error(error);
                 scrollUp();
             }
         );

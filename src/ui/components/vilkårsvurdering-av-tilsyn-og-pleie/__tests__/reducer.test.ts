@@ -1,4 +1,3 @@
-import Vurderingsoversikt from '../../../../types/Vurderingsoversikt';
 import ActionType from '../actionTypes';
 import vilkårsvurderingReducer from '../reducer';
 

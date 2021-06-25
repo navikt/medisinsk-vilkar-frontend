@@ -7,7 +7,7 @@ interface DokumentKnappProps {
     href: string;
 }
 
-const DokumentKnapp = ({ href }: DokumentKnappProps) => (
+const DokumentKnapp = ({ href }: DokumentKnappProps): JSX.Element => (
     <Lenke href={href} target="_blank" className={styles.dokumentKnapp}>
         <DocumentIcon />
         Åpne dokument

@@ -21,7 +21,7 @@ interface DiagnosekodeoversiktProps {
     onDiagnosekoderUpdated: () => void;
 }
 
-const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktProps) => {
+const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktProps): JSX.Element => {
     const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
     const [isLoading, setIsLoading] = React.useState(true);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
@@ -46,8 +46,8 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
         });
     };
 
-    const slettDiagnosekode = (diagnosekode: Diagnosekode) => {
-        return post(
+    const slettDiagnosekode = (diagnosekode: Diagnosekode) =>
+        post(
             endreDiagnosekoderLink.href,
             {
                 behandlingUuid: diagnosekodeResponse.behandlingUuid,
@@ -58,7 +58,6 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
         )
             .then(hentDiagnosekoder)
             .then(onDiagnosekoderUpdated);
-    };
 
     React.useEffect(() => {
         hentDiagnosekoder();

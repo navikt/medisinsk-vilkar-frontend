@@ -85,7 +85,7 @@ export const slåSammenSammenhengendePerioder = (periods: Period[]): Period[] =>
     return combinedPeriods;
 };
 
-export const finnHullIPerioder = (periode: Period[]) => {
+export const finnHullIPerioder = (periode: Period[]): Period[] => {
     const hull: Period[] = [];
     const sortedPeriods = periode.sort((p1, p2) => sortPeriodsByFomDate(p1, p2));
 

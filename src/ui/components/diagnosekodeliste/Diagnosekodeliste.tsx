@@ -9,35 +9,31 @@ interface DiagnosekodelisteProps {
     onDeleteClick: (diagnosekode: Diagnosekode) => void;
 }
 
-const Diagnosekodeliste = ({ diagnosekoder, onDeleteClick }: DiagnosekodelisteProps) => {
-    return (
-        <ul className={styles.diagnosekodeliste}>
-            {diagnosekoder.map((diagnosekode, index) => {
-                return (
-                    <li key={`${diagnosekode}${index}`} className={styles.diagnosekodeliste__element}>
-                        <p className={styles.beskrivelse}>{diagnosekode}</p>
-                        <WriteAccessBoundContent
-                            contentRenderer={() => (
-                                <div className={styles.lenkeContainer}>
-                                    <Lenke
-                                        className={styles.lenkeContainer__slettLenke}
-                                        href="#"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            onDeleteClick(diagnosekode);
-                                        }}
-                                    >
-                                        Slett
-                                    </Lenke>
-                                </div>
-                            )}
-                        />
-                    </li>
-                );
-            })}
-        </ul>
-    );
-};
+const Diagnosekodeliste = ({ diagnosekoder, onDeleteClick }: DiagnosekodelisteProps): JSX.Element => (
+    <ul className={styles.diagnosekodeliste}>
+        {diagnosekoder.map((diagnosekode) => (
+            <li key={`${diagnosekode}`} className={styles.diagnosekodeliste__element}>
+                <p className={styles.beskrivelse}>{diagnosekode}</p>
+                <WriteAccessBoundContent
+                    contentRenderer={() => (
+                        <div className={styles.lenkeContainer}>
+                            <Lenke
+                                className={styles.lenkeContainer__slettLenke}
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    onDeleteClick(diagnosekode);
+                                }}
+                            >
+                                Slett
+                            </Lenke>
+                        </div>
+                    )}
+                />
+            </li>
+        ))}
+    </ul>
+);
 
 export default Diagnosekodeliste;

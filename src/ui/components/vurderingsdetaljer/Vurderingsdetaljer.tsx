@@ -20,7 +20,7 @@ const Vurderingsdetaljer = ({
     onAvbryt,
     radForNyVurderingVises,
     nyVurderingFormVises,
-}: VurderingsdetaljerProps) => {
+}: VurderingsdetaljerProps): JSX.Element => {
     const [editMode, setEditMode] = React.useState(false);
 
     React.useEffect(() => {

@@ -43,7 +43,7 @@ export class Vurderingsoversikt {
         }
     }
 
-    harPerioderÅVise() {
+    harPerioderÅVise(): boolean {
         return (
             this.harPerioderSomSkalVurderes() === true ||
             this.harVurdertePerioder() === true ||
@@ -51,7 +51,7 @@ export class Vurderingsoversikt {
         );
     }
 
-    harIngenPerioderÅVise() {
+    harIngenPerioderÅVise(): boolean {
         return (
             this.harPerioderSomSkalVurderes() === false &&
             this.harVurdertePerioder() === false &&
@@ -59,15 +59,15 @@ export class Vurderingsoversikt {
         );
     }
 
-    harPerioderSomSkalVurderes() {
+    harPerioderSomSkalVurderes(): boolean {
         return this.resterendeVurderingsperioder && this.resterendeVurderingsperioder.length > 0;
     }
 
-    harValgfriePerioderSomKanVurderes() {
+    harValgfriePerioderSomKanVurderes(): boolean {
         return this.resterendeValgfrieVurderingsperioder && this.resterendeValgfrieVurderingsperioder.length > 0;
     }
 
-    harVurdertePerioder() {
+    harVurdertePerioder(): boolean {
         return this.vurderingselementer && this.vurderingselementer.length > 0;
     }
 
@@ -76,9 +76,9 @@ export class Vurderingsoversikt {
             this.vurderingselementer
                 .filter(({ periode }) => {
                     const vurdertPeriode = new Period(periode.fom, periode.tom);
-                    const overlapperMedEnSøknadsperiode = this.resterendeVurderingsperioder.some(({ fom, tom }) => {
-                        return vurdertPeriode.overlapsWith(new Period(fom, tom));
-                    });
+                    const overlapperMedEnSøknadsperiode = this.resterendeVurderingsperioder.some(({ fom, tom }) =>
+                        vurdertPeriode.overlapsWith(new Period(fom, tom))
+                    );
                     return overlapperMedEnSøknadsperiode;
                 })
                 .map(({ periode }) => periode) || []

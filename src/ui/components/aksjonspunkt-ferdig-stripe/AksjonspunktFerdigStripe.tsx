@@ -4,7 +4,7 @@ import { Knapp } from 'nav-frontend-knapper';
 import * as React from 'react';
 import ContainerContext from '../../context/ContainerContext';
 
-const AksjonspunktFerdigStripe = () => {
+const AksjonspunktFerdigStripe = (): JSX.Element => {
     const { onFinished } = React.useContext(ContainerContext);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
