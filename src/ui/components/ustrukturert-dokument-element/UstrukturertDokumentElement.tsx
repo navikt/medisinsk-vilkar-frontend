@@ -1,16 +1,7 @@
-import {
-    ContentWithTooltip,
-    DocumentIcon,
-    OnePersonIconGray,
-    OnePersonOutlineGray,
-    WarningIcon,
-} from '@navikt/k9-react-components';
 import { prettifyDateString } from '@navikt/k9-date-utils';
-import Lenke from 'nav-frontend-lenker';
+import { ContentWithTooltip, OnePersonIconGray, OnePersonOutlineGray, WarningIcon } from '@navikt/k9-react-components';
 import React from 'react';
-import LinkRel from '../../../constants/LinkRel';
 import { Dokument } from '../../../types/Dokument';
-import { findLinkByRel } from '../../../util/linkUtils';
 import styles from './ustrukturertDokumentElement.less';
 
 interface UstrukturertDokumentElementProps {
@@ -18,10 +9,8 @@ interface UstrukturertDokumentElementProps {
 }
 
 const UstrukturertDokumentElement = ({
-    dokument: { datert, mottattDato, annenPartErKilde, links },
+    dokument: { datert, mottattDato, annenPartErKilde },
 }: UstrukturertDokumentElementProps): JSX.Element => {
-    const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
-
     const parterLabel = () => {
         if (annenPartErKilde) {
             return (
@@ -56,18 +45,6 @@ const UstrukturertDokumentElement = ({
                 <span className={styles.ustrukturertDokumentElement__texts__part}>
                     <span className={styles.visuallyHidden}>Part</span>
                     {parterLabel()}
-                </span>
-                <span className={styles.ustrukturertDokumentElement__texts__document}>
-                    <ContentWithTooltip tooltipText="Åpne dokument i ny fane">
-                        <Lenke
-                            href={dokumentLink.href}
-                            target="_blank"
-                            onClick={(event) => event.stopPropagation()}
-                            ariaLabel="Åpne dokument"
-                        >
-                            <DocumentIcon />
-                        </Lenke>
-                    </ContentWithTooltip>
                 </span>
             </div>
         </div>

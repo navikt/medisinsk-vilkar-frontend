@@ -1,16 +1,12 @@
+import { prettifyDateString } from '@navikt/k9-date-utils';
 import {
     ContentWithTooltip,
-    DocumentIcon,
     GreenCheckIconFilled,
     OnePersonIconGray,
     OnePersonOutlineGray,
 } from '@navikt/k9-react-components';
-import { prettifyDateString } from '@navikt/k9-date-utils';
-import Lenke from 'nav-frontend-lenker';
 import React from 'react';
-import LinkRel from '../../../constants/LinkRel';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
-import { findLinkByRel } from '../../../util/linkUtils';
 import styles from './strukturertDokumentElement.less';
 
 interface StrukturertDokumentElementProps {
@@ -18,10 +14,8 @@ interface StrukturertDokumentElementProps {
 }
 
 const StrukturertDokumentElement = ({
-    dokument: { navn, datert, type, links, annenPartErKilde },
+    dokument: { navn, datert, type, annenPartErKilde },
 }: StrukturertDokumentElementProps): JSX.Element => {
-    const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
-
     const getDokumenttype = () => {
         if (type === Dokumenttype.LEGEERKLÆRING) {
             return 'Sykehus/spesialist.';
@@ -68,18 +62,6 @@ const StrukturertDokumentElement = ({
                 <span className={styles.strukturertDokumentElement__texts__part}>
                     <span className={styles.visuallyHidden}>Part</span>
                     {parterLabel()}
-                </span>
-                <span className={styles.strukturertDokumentElement__texts__document}>
-                    <ContentWithTooltip tooltipText="Åpne dokument i ny fane">
-                        <Lenke
-                            href={dokumentLink.href}
-                            target="_blank"
-                            onClick={(event) => event.stopPropagation()}
-                            ariaLabel="Åpne dokument"
-                        >
-                            <DocumentIcon />
-                        </Lenke>
-                    </ContentWithTooltip>
                 </span>
             </div>
         </div>
