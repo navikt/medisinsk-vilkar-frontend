@@ -1,6 +1,7 @@
-import { dateConstants } from '@navikt/k9-date-utils';
-import { Box, DetailView, Form, Margin } from '@navikt/k9-react-components';
+import { dateConstants, prettifyDateString } from '@navikt/k9-date-utils';
 import { Datepicker, RadioGroupPanel } from '@navikt/k9-form-utils';
+import { Box, DetailView, Form, Margin } from '@navikt/k9-react-components';
+import Lenke from 'nav-frontend-lenker';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import LinkRel from '../../../constants/LinkRel';
@@ -11,15 +12,16 @@ import {
 } from '../../../types/StrukturerDokumentFormState';
 import { lagStrukturertDokument } from '../../../util/dokumentUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
+import ContainerContext from '../../context/ContainerContext';
 import { dateIsNotInTheFuture, required } from '../../form/validators';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
-import ContainerContext from '../../context/ContainerContext';
 
 interface StrukturerDokumentFormProps {
     dokument: Dokument;
     onSubmit: (nyttDokument: Dokument) => void;
     editMode?: boolean;
     isSubmitting: boolean;
+    alleStrukturerteDokumenter: Dokument[];
 }
 
 const StrukturerDokumentForm = ({
@@ -27,6 +29,7 @@ const StrukturerDokumentForm = ({
     onSubmit,
     editMode,
     isSubmitting,
+    alleStrukturerteDokumenter,
 }: StrukturerDokumentFormProps): JSX.Element => {
     const { readOnly } = React.useContext(ContainerContext);
 
@@ -36,6 +39,32 @@ const StrukturerDokumentForm = ({
             [FieldName.DATERT]: dokument.datert,
         },
     });
+
+    const { watch } = formMethods;
+    const dokumenttype = watch(FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER);
+    const dokumentDatert = watch(FieldName.DATERT);
+
+    const potensielleDuplikater = alleStrukturerteDokumenter.filter(
+        ({ datert, type }) => datert === dokumentDatert && type === dokumenttype
+    );
+
+    const harPotensielleDuplikater = potensielleDuplikater.length > 0;
+    const duplikatRadios = () => {
+        const radios = potensielleDuplikater.map((potensiellDuplikat) => {
+            const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, potensiellDuplikat.links);
+            return {
+                label: (
+                    <Lenke href={dokumentLink.href} target="_blank">
+                        {`${potensiellDuplikat.navn} - ${prettifyDateString(potensiellDuplikat.datert)}`}
+                    </Lenke>
+                ),
+                value: potensiellDuplikat.id,
+            };
+        });
+        radios.push({ label: <span>Dokumentet er ikke et duplikat</span>, value: 'ikkeDuplikat' });
+        return radios;
+    };
+
     const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, dokument.links);
 
     const lagNyttStrukturertDokument = (formState: StrukturerDokumentFormState) => {
@@ -90,6 +119,22 @@ const StrukturerDokumentForm = ({
                             inputId="datertField"
                         />
                     </Box>
+                    {harPotensielleDuplikater && (
+                        <Box marginTop={Margin.xLarge}>
+                            <RadioGroupPanel
+                                name={FieldName.DUPLIKAT_DOKUMENT}
+                                disabled={readOnly}
+                                question={
+                                    <>
+                                        Det finnes et eller flere dokumenter datert til samme dato.
+                                        <br />
+                                        Velg om dette dokumentet er et duplikat av et av følgende dokumenter:
+                                    </>
+                                }
+                                radios={duplikatRadios()}
+                            />
+                        </Box>
+                    )}
                 </Form>
             </FormProvider>
         </DetailView>

@@ -19,6 +19,7 @@ export interface Dokument {
     links: Link[];
     mottattDato: string;
     mottattTidspunkt: string;
+    duplikater: Dokument[];
 }
 
 export default Dokument;

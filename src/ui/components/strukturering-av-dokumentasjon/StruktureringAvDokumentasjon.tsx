@@ -140,6 +140,7 @@ const StruktureringAvDokumentasjon = ({
                                         strukturerDokumentLink={strukturerDokumentLink}
                                         onDokumentStrukturert={sjekkStatus}
                                         editMode={visRedigeringAvDokument}
+                                        alleStrukturerteDokumenter={dokumentoversikt?.strukturerteDokumenter}
                                     />
                                 );
                             }
