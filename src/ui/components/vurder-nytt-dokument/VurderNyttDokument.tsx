@@ -1,3 +1,4 @@
+import { prettifyDateString } from '@navikt/k9-date-utils';
 import { Box, DocumentIcon, Margin } from '@navikt/k9-react-components';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Hovedknapp } from 'nav-frontend-knapper';
@@ -30,7 +31,7 @@ const VurderNyttDokument = ({ dokumenter }: VurderNyttDokumentProps): JSX.Elemen
                                     <span className={styles.vurderDokument__ikonContainer}>
                                         <DocumentIcon />
                                     </span>
-                                    {`${dokument.navn} - ${dokument.datert}`}
+                                    {`${dokument.navn} - ${prettifyDateString(dokument.datert)}`}
                                 </a>
                             </p>
                         );
