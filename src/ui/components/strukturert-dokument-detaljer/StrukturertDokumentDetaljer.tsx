@@ -51,7 +51,7 @@ const StrukturertDokumentDetaljer = ({
             )}
         >
             {harDuplikater && (
-                <Box marginTop={Margin.xLarge}>
+                <Box marginTop={Margin.large}>
                     <Alertstripe type="info">Det finnes ett eller flere duplikater av dette dokumentet.</Alertstripe>
                 </Box>
             )}

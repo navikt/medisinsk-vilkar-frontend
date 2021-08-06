@@ -24,8 +24,12 @@ const Duplikatliste = ({ dokumenter, onDeleteClick }: DuplikatlisteProps): JSX.E
                 {dokumenter.map((dokument) => {
                     const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, dokument.links);
                     return (
-                        <li key={`${dokument.id}`} className={styles.dokumentliste__element}>
-                            <Lenke href={dokumentLink.href} className={styles.dokumentliste__beskrivelse}>
+                        <li key={dokument.id} className={styles.dokumentliste__element}>
+                            <Lenke
+                                href={dokumentLink.href}
+                                className={styles.dokumentliste__beskrivelse}
+                                target="_blank"
+                            >
                                 {`${dokument.navn} - ${prettifyDateString(dokument.datert)}`}
                             </Lenke>
                             <WriteAccessBoundContent
