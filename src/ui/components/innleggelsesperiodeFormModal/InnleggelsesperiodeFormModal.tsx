@@ -91,7 +91,7 @@ const InnleggelsesperiodeFormModal = ({
                                         periode.isValid()
                                     );
                                     if (erAllePerioderGyldige) {
-                                        endringerPåvirkerAndreBehandlinger(innleggelsesperioder).then(
+                                        endringerPåvirkerAndreBehandlinger(initialiserteInnleggelsesperioder).then(
                                             ({ førerTilRevurdering }) => setShowWarningMessage(førerTilRevurdering)
                                         );
                                     }
