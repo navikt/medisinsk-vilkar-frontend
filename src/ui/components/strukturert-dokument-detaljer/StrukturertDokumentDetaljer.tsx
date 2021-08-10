@@ -14,7 +14,7 @@ interface StrukturertDokumentDetaljerProps {
     dokument: Dokument;
     onEditDokumentClick: () => void;
     alleStrukturerteDokumenter: Dokument[];
-    onSubmit: (nyttDokument: Dokument) => void;
+    onRemoveDuplikat: (nyttDokument: Dokument) => void;
 }
 
 const renderDokumenttypeContent = (dokumenttype: Dokumenttype) => {
@@ -36,14 +36,14 @@ const StrukturertDokumentDetaljer = ({
     dokument,
     onEditDokumentClick,
     alleStrukturerteDokumenter,
-    onSubmit,
+    onRemoveDuplikat,
 }: StrukturertDokumentDetaljerProps): JSX.Element => {
     const { type, datert, links, duplikater } = dokument;
     const harDuplikater = duplikater?.length > 0;
     const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
     const getDokumentDuplikater = () =>
         alleStrukturerteDokumenter.filter((strukturertDokument) => strukturertDokument.duplikatAvId === dokument.id);
-    const removeDuplikat = (duplikatDokument: Dokument) => ({
+    const removeDuplikatreferanse = (duplikatDokument: Dokument) => ({
         ...duplikatDokument,
         duplikatAvId: null,
     });
@@ -84,7 +84,9 @@ const StrukturertDokumentDetaljer = ({
                         content={
                             <Duplikatliste
                                 dokumenter={getDokumentDuplikater()}
-                                onDeleteClick={(duplikatDokument) => onSubmit(removeDuplikat(duplikatDokument))}
+                                onDeleteClick={(duplikatDokument) =>
+                                    onRemoveDuplikat(removeDuplikatreferanse(duplikatDokument))
+                                }
                             />
                         }
                     />

@@ -167,7 +167,7 @@ const StruktureringAvDokumentasjon = ({
                                     dokument={valgtDokument}
                                     onEditDokumentClick={() => dispatch({ type: ActionType.REDIGER_DOKUMENT })}
                                     alleStrukturerteDokumenter={dokumentoversikt?.strukturerteDokumenter}
-                                    onSubmit={strukturerDokument}
+                                    onRemoveDuplikat={strukturerDokument}
                                 />
                             );
                         }}
