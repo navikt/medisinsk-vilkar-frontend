@@ -55,7 +55,7 @@ const StrukturerDokumentForm = ({
             return {
                 label: (
                     <Lenke href={dokumentLink.href} target="_blank">
-                        {`${potensiellDuplikat.navn} - ${prettifyDateString(potensiellDuplikat.datert)}`}
+                        {`${potensiellDuplikat.type} - ${prettifyDateString(potensiellDuplikat.datert)}`}
                     </Lenke>
                 ),
                 value: potensiellDuplikat.id,
@@ -122,7 +122,7 @@ const StrukturerDokumentForm = ({
                     {harPotensielleDuplikater && (
                         <Box marginTop={Margin.xLarge}>
                             <RadioGroupPanel
-                                name={FieldName.DUPLIKAT_DOKUMENT}
+                                name={FieldName.DUPLIKAT_DOKUMENT_ID}
                                 disabled={readOnly}
                                 question={
                                     <>
@@ -132,6 +132,7 @@ const StrukturerDokumentForm = ({
                                     </>
                                 }
                                 radios={duplikatRadios()}
+                                validators={{ required }}
                             />
                         </Box>
                     )}

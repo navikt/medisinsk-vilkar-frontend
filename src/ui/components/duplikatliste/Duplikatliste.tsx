@@ -30,7 +30,7 @@ const Duplikatliste = ({ dokumenter, onDeleteClick }: DuplikatlisteProps): JSX.E
                                 className={styles.dokumentliste__beskrivelse}
                                 target="_blank"
                             >
-                                {`${dokument.navn} - ${prettifyDateString(dokument.datert)}`}
+                                {`${dokument.type} - ${prettifyDateString(dokument.datert)}`}
                             </Lenke>
                             <WriteAccessBoundContent
                                 contentRenderer={() => (

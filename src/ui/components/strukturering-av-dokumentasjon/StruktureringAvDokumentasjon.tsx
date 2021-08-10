@@ -1,5 +1,5 @@
-import { get } from '@navikt/k9-http-utils';
-import { Box, Margin, PageContainer, NavigationWithDetailView } from '@navikt/k9-react-components';
+import { get, post } from '@navikt/k9-http-utils';
+import { Box, Margin, NavigationWithDetailView, PageContainer } from '@navikt/k9-react-components';
 import axios from 'axios';
 import React, { useMemo } from 'react';
 import LinkRel from '../../../constants/LinkRel';
@@ -10,6 +10,7 @@ import { StepId } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import { findLinkByRel } from '../../../util/linkUtils';
 import { nesteStegErVurdering } from '../../../util/statusUtils';
+import scrollUp from '../../../util/viewUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
 import DokumentasjonFooter from '../dokumentasjon-footer/DokumentasjonFooter';
@@ -17,7 +18,7 @@ import Dokumentnavigasjon from '../dokumentnavigasjon/Dokumentnavigasjon';
 import DokumentoversiktMessages from '../dokumentoversikt-messages/DokmentoversiktMessages';
 import Innleggelsesperiodeoversikt from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
 import SignertSeksjon from '../signert-seksjon/SignertSeksjon';
-import StrukturerDokumentController from '../strukturer-dokument-controller/StrukturerDokumentController';
+import StrukturerDokumentForm from '../strukturer-dokument-form/StrukturerDokumentForm';
 import StrukturertDokumentDetaljer from '../strukturert-dokument-detaljer/StrukturertDokumentDetaljer';
 import ActionType from './actionTypes';
 import dokumentReducer from './reducer';
@@ -43,6 +44,7 @@ const StruktureringAvDokumentasjon = ({
         valgtDokument: null,
         dokumentoversiktFeilet: false,
         visRedigeringAvDokument: false,
+        isSubmitting: false,
     });
 
     const {
@@ -52,6 +54,7 @@ const StruktureringAvDokumentasjon = ({
         valgtDokument,
         dokumentoversiktFeilet,
         visRedigeringAvDokument,
+        isSubmitting,
     } = state;
 
     const getDokumentoversikt = () =>
@@ -109,6 +112,25 @@ const StruktureringAvDokumentasjon = ({
             .catch(handleError);
     };
 
+    const strukturerDokument = (strukturertDokument: Dokument) => {
+        const strukturerDokumentLink = findLinkByRel(LinkRel.ENDRE_DOKUMENT, valgtDokument.links);
+        const { href, requestPayload } = strukturerDokumentLink;
+        dispatch({ type: ActionType.IS_SUBMITTING });
+        post(href, { ...requestPayload, ...strukturertDokument }, httpErrorHandler, {
+            cancelToken: httpCanceler.token,
+        }).then(
+            () => {
+                dispatch({ type: ActionType.FINISHED_SUBMITTING });
+                sjekkStatus();
+                scrollUp();
+            },
+            () => {
+                dispatch({ type: ActionType.FINISHED_SUBMITTING });
+                scrollUp();
+            }
+        );
+    };
+
     return (
         <PageContainer isLoading={isLoading} hasError={dokumentoversiktFeilet} key={StepId.Dokument}>
             <DokumentoversiktMessages
@@ -130,16 +152,12 @@ const StruktureringAvDokumentasjon = ({
                         showDetailSection={visDokumentDetails}
                         detailSection={() => {
                             if (valgtDokument.type === Dokumenttype.UKLASSIFISERT || visRedigeringAvDokument) {
-                                const strukturerDokumentLink = findLinkByRel(
-                                    LinkRel.ENDRE_DOKUMENT,
-                                    valgtDokument.links
-                                );
                                 return (
-                                    <StrukturerDokumentController
+                                    <StrukturerDokumentForm
                                         dokument={valgtDokument}
-                                        strukturerDokumentLink={strukturerDokumentLink}
-                                        onDokumentStrukturert={sjekkStatus}
+                                        onSubmit={strukturerDokument}
                                         editMode={visRedigeringAvDokument}
+                                        isSubmitting={isSubmitting}
                                         alleStrukturerteDokumenter={dokumentoversikt?.strukturerteDokumenter}
                                     />
                                 );
@@ -148,6 +166,8 @@ const StruktureringAvDokumentasjon = ({
                                 <StrukturertDokumentDetaljer
                                     dokument={valgtDokument}
                                     onEditDokumentClick={() => dispatch({ type: ActionType.REDIGER_DOKUMENT })}
+                                    alleStrukturerteDokumenter={dokumentoversikt?.strukturerteDokumenter}
+                                    onSubmit={strukturerDokument}
                                 />
                             );
                         }}

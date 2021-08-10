@@ -19,7 +19,8 @@ export interface Dokument {
     links: Link[];
     mottattDato: string;
     mottattTidspunkt: string;
-    duplikater: Dokument[];
+    duplikater: string[];
+    duplikatAvId: string;
 }
 
 export default Dokument;

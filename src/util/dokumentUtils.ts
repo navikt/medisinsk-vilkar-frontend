@@ -11,4 +11,6 @@ export const lagStrukturertDokument = (formState: StrukturerDokumentFormState, d
     ...dokument,
     type: formState[FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER],
     datert: formState[FieldName.DATERT],
+    duplikatAvId:
+        formState[FieldName.DUPLIKAT_DOKUMENT_ID] === 'ikkeDuplikat' ? null : formState[FieldName.DUPLIKAT_DOKUMENT_ID],
 });

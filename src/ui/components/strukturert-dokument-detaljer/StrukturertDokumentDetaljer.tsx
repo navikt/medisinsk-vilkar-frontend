@@ -13,6 +13,8 @@ import styles from './strukturertDokumentDetaljer.less';
 interface StrukturertDokumentDetaljerProps {
     dokument: Dokument;
     onEditDokumentClick: () => void;
+    alleStrukturerteDokumenter: Dokument[];
+    onSubmit: (nyttDokument: Dokument) => void;
 }
 
 const renderDokumenttypeContent = (dokumenttype: Dokumenttype) => {
@@ -33,10 +35,18 @@ const renderDokumenttypeContent = (dokumenttype: Dokumenttype) => {
 const StrukturertDokumentDetaljer = ({
     dokument,
     onEditDokumentClick,
+    alleStrukturerteDokumenter,
+    onSubmit,
 }: StrukturertDokumentDetaljerProps): JSX.Element => {
     const { type, datert, links, duplikater } = dokument;
     const harDuplikater = duplikater?.length > 0;
     const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
+    const getDokumentDuplikater = () =>
+        alleStrukturerteDokumenter.filter((strukturertDokument) => strukturertDokument.duplikatAvId === dokument.id);
+    const removeDuplikat = (duplikatDokument: Dokument) => ({
+        ...duplikatDokument,
+        duplikatAvId: null,
+    });
     return (
         <DetailView
             title="Om dokumentet"
@@ -71,7 +81,12 @@ const StrukturertDokumentDetaljer = ({
                 <Box marginTop={Margin.xLarge}>
                     <LabelledContent
                         label="Duplikater av dette dokumentet:"
-                        content={<Duplikatliste dokumenter={duplikater} onDeleteClick={() => null} />}
+                        content={
+                            <Duplikatliste
+                                dokumenter={getDokumentDuplikater()}
+                                onDeleteClick={(duplikatDokument) => onSubmit(removeDuplikat(duplikatDokument))}
+                            />
+                        }
                     />
                 </Box>
             )}
