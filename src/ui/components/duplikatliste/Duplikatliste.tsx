@@ -8,6 +8,7 @@ import styles from './duplikatliste.less';
 import SlettDuplikatModal from '../slett-duplikat-modal/SlettDuplikatModal';
 import LinkRel from '../../../constants/LinkRel';
 import { findLinkByRel } from '../../../util/linkUtils';
+import { renderDokumenttypeText } from '../../../util/dokumentUtils';
 
 interface DuplikatlisteProps {
     dokumenter: Dokument[];
@@ -30,7 +31,7 @@ const Duplikatliste = ({ dokumenter, onRemoveDuplikat }: DuplikatlisteProps): JS
                                 className={styles.dokumentliste__beskrivelse}
                                 target="_blank"
                             >
-                                {`${dokument.type} - ${prettifyDateString(dokument.datert)}`}
+                                {`${renderDokumenttypeText(dokument.type)} - ${prettifyDateString(dokument.datert)}`}
                             </Lenke>
                             <WriteAccessBoundContent
                                 contentRenderer={() => (

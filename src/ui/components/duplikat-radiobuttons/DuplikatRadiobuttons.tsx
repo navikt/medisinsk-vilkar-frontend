@@ -7,6 +7,7 @@ import { useFormContext } from 'react-hook-form';
 import LinkRel from '../../../constants/LinkRel';
 import Dokument from '../../../types/Dokument';
 import { StrukturerDokumentFormFieldName as FieldName } from '../../../types/StrukturerDokumentFormState';
+import { renderDokumenttypeText } from '../../../util/dokumentUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
 import ContainerContext from '../../context/ContainerContext';
 import { required } from '../../form/validators';
@@ -35,7 +36,9 @@ const DuplikatRadiobuttons = ({ dokument, strukturerteDokumenter }: DuplikatRadi
             return {
                 label: (
                     <Lenke href={dokumentLink.href} target="_blank">
-                        {`${potensiellDuplikat.type} - ${prettifyDateString(potensiellDuplikat.datert)}`}
+                        {`${renderDokumenttypeText(potensiellDuplikat.type)} - ${prettifyDateString(
+                            potensiellDuplikat.datert
+                        )}`}
                     </Lenke>
                 ),
                 value: potensiellDuplikat.id,
