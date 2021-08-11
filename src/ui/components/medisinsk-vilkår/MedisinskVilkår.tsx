@@ -17,6 +17,8 @@ import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBo
 import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
 import VurderingContext from '../../context/VurderingContext';
 import Vurderingstype from '../../../types/Vurderingstype';
+import { NyeDokumenterResponse } from '../../../types/NyeDokumenterResponse';
+import VurderNyttDokument from '../vurder-nytt-dokument/VurderNyttDokument';
 import styles from './medisinskVilkår.less';
 
 const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
@@ -48,9 +50,10 @@ const MedisinskVilkår = (): JSX.Element => {
         activeStep: null,
         markedStep: null,
         sykdomsstegStatus: null,
+        nyeDokumenterSomIkkeErVurdert: [],
     });
 
-    const { isLoading, activeStep, markedStep, sykdomsstegStatus } = state;
+    const { isLoading, activeStep, markedStep, sykdomsstegStatus, nyeDokumenterSomIkkeErVurdert } = state;
 
     const { endpoints, httpErrorHandler, visFortsettknapp } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
@@ -70,19 +73,41 @@ const MedisinskVilkår = (): JSX.Element => {
         }
     };
 
-    React.useEffect(() => {
-        hentSykdomsstegStatus().then(
-            (status) => {
-                const steg = finnNesteSteg(status);
-                dispatch({
-                    type: ActionType.MARK_AND_ACTIVATE_STEP,
-                    step: steg,
-                });
-            },
-            () => {
-                dispatch({ type: ActionType.ACTIVATE_DEFAULT_STEP });
+    const hentNyeDokumenterSomIkkeErVurdertHvisNødvendig = (status) =>
+        new Promise((resolve, reject) => {
+            if (status.manglerVurderingAvNyeDokumenter) {
+                get<NyeDokumenterResponse>(endpoints.nyeDokumenter, httpErrorHandler, {
+                    cancelToken: httpCanceler.token,
+                }).then(
+                    (nyeDokumenterResponse) => resolve([status, nyeDokumenterResponse]),
+                    (error) => reject(error)
+                );
+            } else {
+                resolve([status, []]);
             }
-        );
+        });
+
+    const afterEndringerUtifraNyeDokumenterRegistrert = () => {
+        dispatch({ type: ActionType.ENDRINGER_UTIFRA_NYE_DOKUMENTER_REGISTRERT });
+        hentSykdomsstegStatus();
+    };
+
+    React.useEffect(() => {
+        hentSykdomsstegStatus()
+            .then(hentNyeDokumenterSomIkkeErVurdertHvisNødvendig)
+            .then(
+                ([status, nyeDokumenterSomIkkeErVurdertResponse]) => {
+                    const steg = finnNesteSteg(status);
+                    dispatch({
+                        type: ActionType.MARK_AND_ACTIVATE_STEP,
+                        step: steg,
+                        nyeDokumenterSomIkkeErVurdert: nyeDokumenterSomIkkeErVurdertResponse,
+                    });
+                },
+                () => {
+                    dispatch({ type: ActionType.ACTIVATE_DEFAULT_STEP });
+                }
+            );
     }, []);
 
     const navigerTilNesteSteg = () => {
@@ -98,6 +123,10 @@ const MedisinskVilkår = (): JSX.Element => {
         }
     };
 
+    const kanLøseAksjonspunkt = sykdomsstegStatus?.kanLøseAksjonspunkt;
+    const harDataSomIkkeHarBlittTattMedIBehandling = sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling;
+    const manglerVurderingAvNyeDokumenter = sykdomsstegStatus?.manglerVurderingAvNyeDokumenter;
+
     return (
         <PageContainer isLoading={isLoading}>
             <Infostripe
@@ -107,10 +136,18 @@ const MedisinskVilkår = (): JSX.Element => {
             <div className={styles.medisinskVilkår}>
                 <h1 style={{ fontSize: 22 }}>Sykdom</h1>
                 <WriteAccessBoundContent
+                    contentRenderer={() => (
+                        <VurderNyttDokument
+                            dokumenter={nyeDokumenterSomIkkeErVurdert}
+                            afterEndringerRegistrert={afterEndringerUtifraNyeDokumenterRegistrert}
+                        />
+                    )}
+                    otherRequirementsAreMet={manglerVurderingAvNyeDokumenter && markedStep !== dokumentSteg}
+                />
+                <WriteAccessBoundContent
                     contentRenderer={() => <AksjonspunktFerdigStripe />}
                     otherRequirementsAreMet={
-                        sykdomsstegStatus?.kanLøseAksjonspunkt &&
-                        (sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling || visFortsettknapp === true)
+                        kanLøseAksjonspunkt && (harDataSomIkkeHarBlittTattMedIBehandling || visFortsettknapp === true)
                     }
                 />
                 <TabsPure

@@ -15,6 +15,7 @@ import mockedInnleggelsesperioder from './mocked-data/mockedInnleggelsesperioder
 import { Dokumenttype } from '../src/types/Dokument';
 import createMockedVurderingselementLinks from './mocked-data/createMockedVurderingselementLinks';
 import tilsynsbehovVurderingerMock from './mocked-data/mockedTilsynsbehovVurderinger';
+import mockedNyeDokumenterList from './mocked-data/mockedNyeDokumenter';
 
 const app = express();
 
@@ -25,6 +26,8 @@ app.use(
         origin: 'http://localhost:8081',
     })
 );
+
+let mockedNyeDokumenter =[ ...mockedNyeDokumenterList];
 
 app.use('/mock/status', (req, res) => {
     const harUklassifiserteDokumenter = mockedDokumentoversikt.dokumenter.some(
@@ -40,6 +43,7 @@ app.use('/mock/status', (req, res) => {
         mockedTilsynsbehovVurderingsoversikt.resterendeVurderingsperioder.length > 0;
     const manglerVurderingAvToOmsorgspersoner =
         mockedToOmsorgspersonerVurderingsoversikt.resterendeVurderingsperioder.length > 0;
+    const manglerVurderingAvNyeDokumenter = mockedNyeDokumenter.length > 0
     const harDataSomIkkeHarBlittTattMedIBehandling = true;
 
     res.send({
@@ -48,13 +52,15 @@ app.use('/mock/status', (req, res) => {
             !manglerDiagnosekode &&
             !manglerGodkjentLegeerklæring &&
             !manglerVurderingAvKontinuerligTilsynOgPleie &&
-            !manglerVurderingAvToOmsorgspersoner,
+            !manglerVurderingAvToOmsorgspersoner &&
+            !manglerVurderingAvNyeDokumenter,
         harUklassifiserteDokumenter,
         manglerDiagnosekode,
         manglerGodkjentLegeerklæring,
         manglerVurderingAvKontinuerligTilsynOgPleie,
         manglerVurderingAvToOmsorgspersoner,
         harDataSomIkkeHarBlittTattMedIBehandling,
+        manglerVurderingAvNyeDokumenter
     });
 });
 
@@ -195,6 +201,15 @@ app.use('/mock/endre-innleggelsesperioder', (req, res) => {
         res.send({});
     }
 });
+
+app.get('/mock/nye-dokumenter', (req, res) => {
+  res.send(mockedNyeDokumenter);
+})
+
+app.post('/mock/nye-dokumenter', (req, res) => {
+  mockedNyeDokumenter = [];
+  res.send({})
+})
 
 const port = 8082;
 app.listen(port, (error) => {

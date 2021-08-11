@@ -14,8 +14,6 @@ import VurderingsoversiktMessages from '../vurderingsoversikt-messages/Vurdering
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 import Vurderingsdetaljer from '../vurderingsdetaljer/Vurderingsdetaljer';
-import VurderNyttDokument from '../vurder-nytt-dokument/VurderNyttDokument';
-import mockedDokumentliste from '../../../../mock/mocked-data/mockedDokumentliste';
 
 interface VilkårsvurderingAvTilsynOgPleieProps {
     navigerTilNesteSteg: (steg: Step, ikkeMarkerSteg?: boolean) => void;
@@ -145,7 +143,6 @@ const VilkårsvurderingAvTilsynOgPleie = ({
 
     return (
         <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet} key={StepId.TilsynOgPleie}>
-            <VurderNyttDokument dokumenter={mockedDokumentliste} /> {/* legg inn riktig props */}
             <VurderingsoversiktMessages vurderingsoversikt={vurderingsoversikt} harGyldigSignatur={harGyldigSignatur} />
             {vurderingsoversikt?.harPerioderÅVise() && (
                 <Box marginTop={setMargin()}>
