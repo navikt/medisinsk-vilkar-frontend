@@ -39,7 +39,7 @@ const SlettDuplikatModal = ({ handleCloseModal, selectedDocument, onRemove }: Sl
             ...selectedDocument,
             duplikatAvId: null,
         };
-
+        setRemoveDuplikatFeilet(false);
         setIsSubmitting(true);
         post(href, { ...requestPayload, ...dokumentUtenDuplikat }, httpErrorHandler, {
             cancelToken: httpCanceler.token,
@@ -75,7 +75,7 @@ const SlettDuplikatModal = ({ handleCloseModal, selectedDocument, onRemove }: Sl
                             removeDuplikatreferanse();
                         }}
                         spinner={isSubmitting}
-                        disabled={isSubmitting || removeDuplikatFeilet}
+                        disabled={isSubmitting}
                         autoDisableVedSpinner
                     >
                         Fjern som duplikat
