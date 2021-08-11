@@ -15,21 +15,24 @@ import { findLinkByRel } from '../../../util/linkUtils';
 import ContainerContext from '../../context/ContainerContext';
 import { dateIsNotInTheFuture, required } from '../../form/validators';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
+import DuplikatRadiobuttons from '../duplikat-radiobuttons/DuplikatRadiobuttons';
 
 interface StrukturerDokumentFormProps {
     dokument: Dokument;
     onSubmit: (nyttDokument: Dokument) => void;
     editMode?: boolean;
     isSubmitting: boolean;
-    alleStrukturerteDokumenter: Dokument[];
+    strukturerteDokumenter: Dokument[];
 }
+
+export const ikkeDuplikatValue = 'ikkeDuplikat';
 
 const StrukturerDokumentForm = ({
     dokument,
     onSubmit,
     editMode,
     isSubmitting,
-    alleStrukturerteDokumenter,
+    strukturerteDokumenter,
 }: StrukturerDokumentFormProps): JSX.Element => {
     const { readOnly } = React.useContext(ContainerContext);
 
@@ -39,31 +42,6 @@ const StrukturerDokumentForm = ({
             [FieldName.DATERT]: dokument.datert,
         },
     });
-
-    const { watch } = formMethods;
-    const dokumenttype = watch(FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER);
-    const dokumentDatert = watch(FieldName.DATERT);
-
-    const potensielleDuplikater = alleStrukturerteDokumenter.filter(
-        ({ datert, type }) => datert === dokumentDatert && type === dokumenttype
-    );
-
-    const harPotensielleDuplikater = potensielleDuplikater.length > 0;
-    const duplikatRadios = () => {
-        const radios = potensielleDuplikater.map((potensiellDuplikat) => {
-            const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, potensiellDuplikat.links);
-            return {
-                label: (
-                    <Lenke href={dokumentLink.href} target="_blank">
-                        {`${potensiellDuplikat.type} - ${prettifyDateString(potensiellDuplikat.datert)}`}
-                    </Lenke>
-                ),
-                value: potensiellDuplikat.id,
-            };
-        });
-        radios.push({ label: <span>Dokumentet er ikke et duplikat</span>, value: 'ikkeDuplikat' });
-        return radios;
-    };
 
     const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, dokument.links);
 
@@ -119,23 +97,7 @@ const StrukturerDokumentForm = ({
                             inputId="datertField"
                         />
                     </Box>
-                    {harPotensielleDuplikater && (
-                        <Box marginTop={Margin.xLarge}>
-                            <RadioGroupPanel
-                                name={FieldName.DUPLIKAT_DOKUMENT_ID}
-                                disabled={readOnly}
-                                question={
-                                    <>
-                                        Det finnes et eller flere dokumenter datert til samme dato.
-                                        <br />
-                                        Velg om dette dokumentet er et duplikat av et av følgende dokumenter:
-                                    </>
-                                }
-                                radios={duplikatRadios()}
-                                validators={{ required }}
-                            />
-                        </Box>
-                    )}
+                    <DuplikatRadiobuttons dokument={dokument} strukturerteDokumenter={strukturerteDokumenter} />
                 </Form>
             </FormProvider>
         </DetailView>

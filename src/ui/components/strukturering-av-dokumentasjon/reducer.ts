@@ -9,7 +9,6 @@ interface State {
     valgtDokument: Dokument;
     dokumentoversiktFeilet: boolean;
     visRedigeringAvDokument: boolean;
-    isSubmitting: boolean;
 }
 
 interface Action {
@@ -53,16 +52,6 @@ const vilkårsdokumentReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 visRedigeringAvDokument: true,
-            };
-        case ActionType.IS_SUBMITTING:
-            return {
-                ...state,
-                isSubmitting: true,
-            };
-        case ActionType.FINISHED_SUBMITTING:
-            return {
-                ...state,
-                isSubmitting: false,
             };
         default:
             return state;

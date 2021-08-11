@@ -11,10 +11,10 @@ import { findLinkByRel } from '../../../util/linkUtils';
 
 interface DuplikatlisteProps {
     dokumenter: Dokument[];
-    onDeleteClick: (dokument: Dokument) => void;
+    onRemoveDuplikat: () => void;
 }
 
-const Duplikatliste = ({ dokumenter, onDeleteClick }: DuplikatlisteProps): JSX.Element => {
+const Duplikatliste = ({ dokumenter, onRemoveDuplikat }: DuplikatlisteProps): JSX.Element => {
     const [isModalOpen, setModalIsOpen] = useState(false);
     const [selectedDocument, setSelectedDocument] = useState(null);
 
@@ -55,11 +55,12 @@ const Duplikatliste = ({ dokumenter, onDeleteClick }: DuplikatlisteProps): JSX.E
             </ul>
             {isModalOpen && (
                 <SlettDuplikatModal
-                    onDelete={() => {
-                        onDeleteClick(selectedDocument);
+                    onRemove={() => {
                         setModalIsOpen(false);
+                        onRemoveDuplikat();
                     }}
                     handleCloseModal={() => setModalIsOpen(false)}
+                    selectedDocument={selectedDocument}
                 />
             )}
         </>

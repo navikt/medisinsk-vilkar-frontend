@@ -13,8 +13,8 @@ import styles from './strukturertDokumentDetaljer.less';
 interface StrukturertDokumentDetaljerProps {
     dokument: Dokument;
     onEditDokumentClick: () => void;
-    alleStrukturerteDokumenter: Dokument[];
-    onRemoveDuplikat: (nyttDokument: Dokument) => void;
+    strukturerteDokumenter: Dokument[];
+    onRemoveDuplikat: () => void;
 }
 
 const renderDokumenttypeContent = (dokumenttype: Dokumenttype) => {
@@ -35,18 +35,15 @@ const renderDokumenttypeContent = (dokumenttype: Dokumenttype) => {
 const StrukturertDokumentDetaljer = ({
     dokument,
     onEditDokumentClick,
-    alleStrukturerteDokumenter,
+    strukturerteDokumenter,
     onRemoveDuplikat,
 }: StrukturertDokumentDetaljerProps): JSX.Element => {
     const { type, datert, links, duplikater } = dokument;
     const harDuplikater = duplikater?.length > 0;
-    const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
+    const dokumentinnholdLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
     const getDokumentDuplikater = () =>
-        alleStrukturerteDokumenter.filter((strukturertDokument) => strukturertDokument.duplikatAvId === dokument.id);
-    const removeDuplikatreferanse = (duplikatDokument: Dokument) => ({
-        ...duplikatDokument,
-        duplikatAvId: null,
-    });
+        strukturerteDokumenter.filter((strukturertDokument) => strukturertDokument.duplikatAvId === dokument.id);
+
     return (
         <DetailView
             title="Om dokumentet"
@@ -66,7 +63,7 @@ const StrukturertDokumentDetaljer = ({
                 </Box>
             )}
             <Box marginTop={Margin.xLarge}>
-                <DokumentKnapp href={dokumentLink.href} />
+                <DokumentKnapp href={dokumentinnholdLink.href} />
             </Box>
             <Box marginTop={Margin.xLarge}>
                 <LabelledContent
@@ -82,12 +79,7 @@ const StrukturertDokumentDetaljer = ({
                     <LabelledContent
                         label="Duplikater av dette dokumentet:"
                         content={
-                            <Duplikatliste
-                                dokumenter={getDokumentDuplikater()}
-                                onDeleteClick={(duplikatDokument) =>
-                                    onRemoveDuplikat(removeDuplikatreferanse(duplikatDokument))
-                                }
-                            />
+                            <Duplikatliste dokumenter={getDokumentDuplikater()} onRemoveDuplikat={onRemoveDuplikat} />
                         }
                     />
                 </Box>

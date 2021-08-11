@@ -3,11 +3,11 @@ import { Dokumenttype } from './Dokument';
 export enum StrukturerDokumentFormFieldName {
     INNEHOLDER_MEDISINSKE_OPPLYSNINGER = 'inneholderMedisinskeOpplysninger',
     DATERT = 'datert',
-    DUPLIKAT_DOKUMENT_ID = 'duplikatDokumentId',
+    DUPLIKAT_AV_ID = 'duplikatAvId',
 }
 
 export interface StrukturerDokumentFormState {
     [StrukturerDokumentFormFieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER]?: Dokumenttype;
     [StrukturerDokumentFormFieldName.DATERT]: string;
-    [StrukturerDokumentFormFieldName.DUPLIKAT_DOKUMENT_ID]: string;
+    [StrukturerDokumentFormFieldName.DUPLIKAT_AV_ID]: string;
 }
