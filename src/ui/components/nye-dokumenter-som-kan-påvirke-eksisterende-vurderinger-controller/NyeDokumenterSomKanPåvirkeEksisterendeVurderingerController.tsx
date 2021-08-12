@@ -1,13 +1,8 @@
 import React, { useMemo } from 'react';
 import axios from 'axios';
-import { prettifyDateString } from '@navikt/k9-date-utils';
-import { Box, DocumentIcon, Margin, PageContainer } from '@navikt/k9-react-components';
+import { Box, Margin, PageContainer } from '@navikt/k9-react-components';
 import { post } from '@navikt/k9-http-utils';
-import { Hovedknapp } from 'nav-frontend-knapper';
-import { Element } from 'nav-frontend-typografi';
-import LinkRel from '../../../constants/LinkRel';
 import Dokument from '../../../types/Dokument';
-import { findLinkByRel } from '../../../util/linkUtils';
 import ContainerContext from '../../context/ContainerContext';
 import NyeDokumenterSomKanPåvirkeEksisterendeVurderinger from '../nye-dokumenter-som-kan-påvirke-eksisterende-vurderinger/NyeDokumenterSomKanPåvirkeEksisterendeVurderinger';
 
