@@ -123,7 +123,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
             const nesteSteg = finnNesteSteg(status);
             if (nesteSteg === tilsynOgPleieSteg) {
                 oppdaterVurderingsoversikt();
-            } else {
+            } else if (nesteSteg !== null) {
                 navigerTilNesteSteg(nesteSteg);
             }
         });

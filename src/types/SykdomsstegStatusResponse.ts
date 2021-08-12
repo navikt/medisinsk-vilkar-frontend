@@ -6,7 +6,7 @@ interface SykdomsstegStatusResponse {
     manglerGodkjentLegeerklæring: boolean;
     manglerVurderingAvKontinuerligTilsynOgPleie: boolean;
     manglerVurderingAvToOmsorgspersoner: boolean;
-    manglerVurderingAvNyeDokumenter: boolean;
+    nyttDokumentHarIkkekontrollertEksisterendeVurderinger: boolean;
 }
 
 export default SykdomsstegStatusResponse;

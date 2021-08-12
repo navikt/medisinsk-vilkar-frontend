@@ -118,9 +118,9 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
             }
 
             const nesteSteg = finnNesteSteg(status);
-            if (nesteSteg === toOmsorgspersonerSteg || nesteSteg === null) {
+            if (nesteSteg === toOmsorgspersonerSteg) {
                 oppdaterVurderingsoversikt();
-            } else {
+            } else if (nesteSteg !== null) {
                 navigerTilNesteSteg(nesteSteg);
             }
         });
