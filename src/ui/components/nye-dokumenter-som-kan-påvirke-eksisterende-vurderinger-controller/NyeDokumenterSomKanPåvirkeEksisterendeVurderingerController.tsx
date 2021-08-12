@@ -27,7 +27,7 @@ const NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController = ({
 
     const createRegistrerNyeDokumenterRequestPayload = () => ({
         behandlingUuid,
-        dokmenterSomSkalUtkvitteres: dokumenter.map(({ id }) => id),
+        dokumenterSomSkalUtkvitteres: dokumenter.map(({ id }) => id),
     });
 
     const bekreftAtEndringerErRegistrert = () =>
