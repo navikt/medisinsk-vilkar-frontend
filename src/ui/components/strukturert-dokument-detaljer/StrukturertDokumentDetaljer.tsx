@@ -77,6 +77,11 @@ const StrukturertDokumentDetaljer = ({
                     <Alertstripe type="info">Det finnes ett eller flere duplikater av dette dokumentet.</Alertstripe>
                 </Box>
             )}
+            {duplikatAvId && (
+                <Box marginTop={Margin.large}>
+                    <Alertstripe type="info">Dokumentet er et duplikat.</Alertstripe>
+                </Box>
+            )}
             <Box marginTop={Margin.xLarge}>
                 <DokumentKnapp href={dokumentinnholdLink.href} />
             </Box>
