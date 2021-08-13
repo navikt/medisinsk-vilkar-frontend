@@ -76,6 +76,7 @@ const PureDiagnosekodeSelector = ({
                     }}
                     ariaLabel="Søk etter diagnose"
                     placeholder="Søk etter diagnose"
+                    shouldFocusOnMount
                 />
                 {showSpinner && (
                     <div className={styles.diagnosekodeContainer__spinnerContainer}>
