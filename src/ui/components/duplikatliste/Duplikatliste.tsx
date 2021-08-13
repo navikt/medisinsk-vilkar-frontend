@@ -35,19 +35,19 @@ const Duplikatliste = ({ dokumenter, onRemoveDuplikat }: DuplikatlisteProps): JS
                             </Lenke>
                             <WriteAccessBoundContent
                                 contentRenderer={() => (
-                                    <ContentWithTooltip tooltipText="Fjern som duplikat">
-                                        <button
-                                            className={styles.dokumentliste__deleteButton}
-                                            type="button"
-                                            onClick={() => {
-                                                setModalIsOpen(true);
-                                                setSelectedDocument(dokument);
-                                            }}
-                                            aria-label="Fjern som duplikat"
-                                        >
-                                            <BucketIcon />
-                                        </button>
-                                    </ContentWithTooltip>
+                                    <button
+                                        className={styles.dokumentliste__deleteButton}
+                                        type="button"
+                                        onClick={() => {
+                                            setModalIsOpen(true);
+                                            setSelectedDocument(dokument);
+                                        }}
+                                    >
+                                        <BucketIcon />
+                                        <p className={styles.dokumentliste__deleteButtonText}>
+                                            Angre gjør til duplikat
+                                        </p>
+                                    </button>
                                 )}
                             />
                         </li>

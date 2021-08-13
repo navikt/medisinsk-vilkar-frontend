@@ -1,9 +1,11 @@
 import { prettifyDateString } from '@navikt/k9-date-utils';
 import { Box, DetailView, LabelledContent, LinkButton, Margin } from '@navikt/k9-react-components';
 import Alertstripe from 'nav-frontend-alertstriper';
+import Lenke from 'nav-frontend-lenker';
 import React from 'react';
 import LinkRel from '../../../constants/LinkRel';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
+import { renderDokumenttypeText } from '../../../util/dokumentUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
 import Duplikatliste from '../duplikatliste/Duplikatliste';
@@ -38,11 +40,24 @@ const StrukturertDokumentDetaljer = ({
     strukturerteDokumenter,
     onRemoveDuplikat,
 }: StrukturertDokumentDetaljerProps): JSX.Element => {
-    const { type, datert, links, duplikater } = dokument;
+    const { type, datert, links, duplikater, duplikatAvId } = dokument;
     const harDuplikater = duplikater?.length > 0;
     const dokumentinnholdLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
     const getDokumentDuplikater = () =>
         strukturerteDokumenter.filter((strukturertDokument) => strukturertDokument.duplikatAvId === dokument.id);
+
+    const getOriginaltDokument = () => {
+        const originaltDokument = strukturerteDokumenter.find(
+            (strukturertDokument) => strukturertDokument.id === duplikatAvId
+        );
+        const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, originaltDokument.links);
+
+        return (
+            <Lenke href={dokumentLink.href} target="_blank">
+                {`${renderDokumenttypeText(originaltDokument.type)} - ${prettifyDateString(originaltDokument.datert)}`}
+            </Lenke>
+        );
+    };
 
     return (
         <DetailView
@@ -81,6 +96,14 @@ const StrukturertDokumentDetaljer = ({
                         content={
                             <Duplikatliste dokumenter={getDokumentDuplikater()} onRemoveDuplikat={onRemoveDuplikat} />
                         }
+                    />
+                </Box>
+            )}
+            {duplikatAvId && (
+                <Box marginTop={Margin.xLarge}>
+                    <LabelledContent
+                        label="Dokumentet er et duplikat av følgende dokument:"
+                        content={getOriginaltDokument()}
                     />
                 </Box>
             )}
