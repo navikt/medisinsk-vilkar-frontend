@@ -43,7 +43,7 @@ app.use('/mock/status', (req, res) => {
         mockedTilsynsbehovVurderingsoversikt.resterendeVurderingsperioder.length > 0;
     const manglerVurderingAvToOmsorgspersoner =
         mockedToOmsorgspersonerVurderingsoversikt.resterendeVurderingsperioder.length > 0;
-    const manglerVurderingAvNyeDokumenter = mockedNyeDokumenter.length > 0
+    const nyttDokumentHarIkkekontrollertEksisterendeVurderinger = mockedNyeDokumenter.length > 0
     const harDataSomIkkeHarBlittTattMedIBehandling = true;
 
     res.send({
@@ -53,14 +53,14 @@ app.use('/mock/status', (req, res) => {
             !manglerGodkjentLegeerklæring &&
             !manglerVurderingAvKontinuerligTilsynOgPleie &&
             !manglerVurderingAvToOmsorgspersoner &&
-            !manglerVurderingAvNyeDokumenter,
+            !nyttDokumentHarIkkekontrollertEksisterendeVurderinger,
         harUklassifiserteDokumenter,
         manglerDiagnosekode,
         manglerGodkjentLegeerklæring,
         manglerVurderingAvKontinuerligTilsynOgPleie,
         manglerVurderingAvToOmsorgspersoner,
         harDataSomIkkeHarBlittTattMedIBehandling,
-        manglerVurderingAvNyeDokumenter
+        nyttDokumentHarIkkekontrollertEksisterendeVurderinger
     });
 });
 

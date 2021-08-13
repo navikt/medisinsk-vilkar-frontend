@@ -1,5 +1,3 @@
 import Dokument from './Dokument';
 
-export interface NyeDokumenterResponse {
-    dokumenter: Dokument[];
-}
+export type NyeDokumenterResponse = Dokument[];

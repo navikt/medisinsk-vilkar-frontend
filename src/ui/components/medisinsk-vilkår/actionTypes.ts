@@ -5,7 +5,8 @@ enum ActionType {
     ACTIVATE_STEP_AND_CLEAR_MARKING = 'activateStepAndClearMarking',
     NAVIGATE_TO_STEP = 'navigateToStep',
     UPDATE_STATUS = 'updateStatus',
-    ENDRINGER_UTIFRA_NYE_DOKUMENTER_REGISTRERT = 'afterEndringerUtifraNyeDokumenterRegistrert',
+    ENDRINGER_UTIFRA_NYE_DOKUMENTER_REGISTRERT = 'endringerUtifraNyeDokumenterRegistrert',
+    UPDATE_NYE_DOKUMENTER_SOM_IKKE_ER_VURDERT = 'updateNyeDokumenterSomIkkeErVurdert',
 }
 
 export default ActionType;

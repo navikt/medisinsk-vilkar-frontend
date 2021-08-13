@@ -114,19 +114,23 @@ const VilkårsvurderingAvTilsynOgPleie = ({
 
     const onVurderingLagret = () => {
         dispatch({ type: ActionType.PENDING });
-        hentSykdomsstegStatus().then((status) => {
-            if (status.kanLøseAksjonspunkt) {
-                navigerTilNesteSteg(toOmsorgspersonerSteg, true);
-                return;
-            }
+        hentSykdomsstegStatus()
+            .then((status) => {
+                if (status.kanLøseAksjonspunkt) {
+                    navigerTilNesteSteg(toOmsorgspersonerSteg, true);
+                    return;
+                }
 
-            const nesteSteg = finnNesteSteg(status);
-            if (nesteSteg === tilsynOgPleieSteg) {
-                oppdaterVurderingsoversikt();
-            } else if (nesteSteg !== null) {
-                navigerTilNesteSteg(nesteSteg);
-            }
-        });
+                const nesteSteg = finnNesteSteg(status);
+                if (nesteSteg === tilsynOgPleieSteg || nesteSteg === null) {
+                    oppdaterVurderingsoversikt();
+                } else {
+                    const ikkeMarkerSteg =
+                        nesteSteg === toOmsorgspersonerSteg && !status.manglerVurderingAvToOmsorgspersoner;
+                    navigerTilNesteSteg(nesteSteg, ikkeMarkerSteg);
+                }
+            })
+            .catch(handleError);
     };
 
     const setMargin = () => {

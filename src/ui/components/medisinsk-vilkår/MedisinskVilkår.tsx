@@ -20,6 +20,7 @@ import Vurderingstype from '../../../types/Vurderingstype';
 import { NyeDokumenterResponse } from '../../../types/NyeDokumenterResponse';
 import NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController from '../nye-dokumenter-som-kan-påvirke-eksisterende-vurderinger-controller/NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController';
 import styles from './medisinskVilkår.less';
+import Dokument from '../../../types/Dokument';
 
 const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
@@ -73,13 +74,13 @@ const MedisinskVilkår = (): JSX.Element => {
         }
     };
 
-    const hentNyeDokumenterSomIkkeErVurdertHvisNødvendig = (status) =>
+    const hentNyeDokumenterSomIkkeErVurdertHvisNødvendig = (status): Promise<[SykdomsstegStatusResponse, Dokument[]]> =>
         new Promise((resolve, reject) => {
             if (status.nyttDokumentHarIkkekontrollertEksisterendeVurderinger) {
                 get<NyeDokumenterResponse>(endpoints.nyeDokumenter, httpErrorHandler, {
                     cancelToken: httpCanceler.token,
                 }).then(
-                    (nyeDokumenterResponse) => resolve([status, nyeDokumenterResponse]),
+                    (dokumenter) => resolve([status, dokumenter]),
                     (error) => reject(error)
                 );
             } else {
@@ -87,31 +88,28 @@ const MedisinskVilkår = (): JSX.Element => {
             }
         });
 
-    const oppdaterSykdomsstegStatus = () =>
+    React.useEffect(() => {
         hentSykdomsstegStatus()
             .then(hentNyeDokumenterSomIkkeErVurdertHvisNødvendig)
-            .then(
-                ([status, nyeDokumenterSomIkkeErVurdertResponse]) => {
-                    const steg = activeStep === dokumentSteg ? dokumentSteg : finnNesteSteg(status);
+            .then(([sykdomsstegStatusResponse, nyeDokumenterSomIkkeErVurdertResponse]) => {
+                const step = finnNesteSteg(sykdomsstegStatusResponse);
+                if (step !== null) {
                     dispatch({
                         type: ActionType.MARK_AND_ACTIVATE_STEP,
-                        step: steg,
+                        step,
                         nyeDokumenterSomIkkeErVurdert: nyeDokumenterSomIkkeErVurdertResponse,
                     });
-                    return status;
-                },
-                () => {
-                    dispatch({ type: ActionType.ACTIVATE_DEFAULT_STEP });
+                } else {
+                    dispatch({
+                        type: ActionType.ACTIVATE_DEFAULT_STEP,
+                        nyeDokumenterSomIkkeErVurdert: nyeDokumenterSomIkkeErVurdertResponse,
+                    });
                 }
-            );
+            });
 
-    const afterEndringerUtifraNyeDokumenterRegistrert = () => {
-        dispatch({ type: ActionType.ENDRINGER_UTIFRA_NYE_DOKUMENTER_REGISTRERT });
-        hentSykdomsstegStatus();
-    };
-
-    React.useEffect(() => {
-        oppdaterSykdomsstegStatus();
+        return () => {
+            httpCanceler.cancel();
+        };
     }, []);
 
     const navigerTilNesteSteg = () => {
@@ -125,6 +123,15 @@ const MedisinskVilkår = (): JSX.Element => {
         } else {
             dispatch({ type: ActionType.NAVIGATE_TO_STEP, step: nesteSteg });
         }
+    };
+
+    const afterEndringerUtifraNyeDokumenterRegistrert = () => {
+        dispatch({ type: ActionType.ENDRINGER_UTIFRA_NYE_DOKUMENTER_REGISTRERT });
+        hentSykdomsstegStatus().then(({ kanLøseAksjonspunkt }) => {
+            if (kanLøseAksjonspunkt) {
+                navigerTilSteg(toOmsorgspersonerSteg, true);
+            }
+        });
     };
 
     const kanLøseAksjonspunkt = sykdomsstegStatus?.kanLøseAksjonspunkt;
@@ -148,7 +155,9 @@ const MedisinskVilkår = (): JSX.Element => {
                             />
                         </Box>
                     )}
-                    otherRequirementsAreMet={manglerVurderingAvNyeDokumenter && markedStep !== dokumentSteg}
+                    otherRequirementsAreMet={
+                        nyeDokumenterSomIkkeErVurdert && manglerVurderingAvNyeDokumenter && markedStep !== dokumentSteg
+                    }
                 />
                 <WriteAccessBoundContent
                     contentRenderer={() => <AksjonspunktFerdigStripe />}
@@ -171,7 +180,17 @@ const MedisinskVilkår = (): JSX.Element => {
                         {activeStep === dokumentSteg && (
                             <StruktureringAvDokumentasjon
                                 navigerTilNesteSteg={navigerTilNesteSteg}
-                                hentSykdomsstegStatus={oppdaterSykdomsstegStatus}
+                                hentSykdomsstegStatus={() =>
+                                    hentSykdomsstegStatus()
+                                        .then(hentNyeDokumenterSomIkkeErVurdertHvisNødvendig)
+                                        .then(([status, dokumenter]) => {
+                                            dispatch({
+                                                type: ActionType.UPDATE_NYE_DOKUMENTER_SOM_IKKE_ER_VURDERT,
+                                                nyeDokumenterSomIkkeErVurdert: dokumenter,
+                                            });
+                                            return [status, dokumenter];
+                                        })
+                                }
                                 sykdomsstegStatus={sykdomsstegStatus}
                             />
                         )}
@@ -181,7 +200,7 @@ const MedisinskVilkår = (): JSX.Element => {
                             >
                                 <VilkårsvurderingAvTilsynOgPleie
                                     navigerTilNesteSteg={navigerTilSteg}
-                                    hentSykdomsstegStatus={oppdaterSykdomsstegStatus}
+                                    hentSykdomsstegStatus={hentSykdomsstegStatus}
                                     sykdomsstegStatus={sykdomsstegStatus}
                                 />
                             </VurderingContext.Provider>
@@ -190,7 +209,7 @@ const MedisinskVilkår = (): JSX.Element => {
                             <VurderingContext.Provider value={{ vurderingstype: Vurderingstype.TO_OMSORGSPERSONER }}>
                                 <VilkårsvurderingAvToOmsorgspersoner
                                     navigerTilNesteSteg={navigerTilSteg}
-                                    hentSykdomsstegStatus={oppdaterSykdomsstegStatus}
+                                    hentSykdomsstegStatus={hentSykdomsstegStatus}
                                     sykdomsstegStatus={sykdomsstegStatus}
                                 />
                             </VurderingContext.Provider>
