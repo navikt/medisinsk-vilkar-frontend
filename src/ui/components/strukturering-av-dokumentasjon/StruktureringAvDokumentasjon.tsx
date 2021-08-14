@@ -104,6 +104,7 @@ const StruktureringAvDokumentasjon = ({
                 getDokumentoversikt().then(({ dokumenter }: DokumentoversiktResponse) => {
                     const nyDokumentoversikt = new Dokumentoversikt(dokumenter);
                     visDokumentoversikt(nyDokumentoversikt);
+                    åpneDokumentSomMåBehandles(nyDokumentoversikt);
                 });
             })
             .catch(handleError);
