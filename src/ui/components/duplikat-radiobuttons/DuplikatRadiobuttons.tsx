@@ -26,7 +26,8 @@ const DuplikatRadiobuttons = ({ dokument, strukturerteDokumenter }: DuplikatRadi
     const dokumentDatert = watch(FieldName.DATERT);
 
     const potensielleDuplikater = strukturerteDokumenter.filter(
-        ({ datert, type, id }) => datert === dokumentDatert && type === dokumenttype && id !== dokument.id
+        ({ datert, type, id, duplikatAvId }) =>
+            datert === dokumentDatert && type === dokumenttype && id !== dokument.id && duplikatAvId == null
     );
 
     const harPotensielleDuplikater = potensielleDuplikater.length > 0;
