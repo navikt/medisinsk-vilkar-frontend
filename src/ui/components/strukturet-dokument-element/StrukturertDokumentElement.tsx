@@ -1,6 +1,7 @@
 import { prettifyDateString } from '@navikt/k9-date-utils';
 import {
     ContentWithTooltip,
+    DuplicateDocumentsIcon,
     GreenCheckIconFilled,
     OnePersonIconGray,
     OnePersonOutlineGray,
@@ -14,8 +15,10 @@ interface StrukturertDokumentElementProps {
 }
 
 const StrukturertDokumentElement = ({
-    dokument: { navn, datert, type, annenPartErKilde },
+    dokument: { navn, datert, type, annenPartErKilde, duplikater },
 }: StrukturertDokumentElementProps): JSX.Element => {
+    const harDuplikater = duplikater?.length > 0;
+
     const getDokumenttype = () => {
         if (type === Dokumenttype.LEGEERKLÆRING) {
             return 'Sykehus/spesialist.';
@@ -63,6 +66,13 @@ const StrukturertDokumentElement = ({
                     <span className={styles.visuallyHidden}>Part</span>
                     {parterLabel()}
                 </span>
+                {harDuplikater && (
+                    <span className={styles.strukturertDokumentElement__texts__document}>
+                        <ContentWithTooltip tooltipText="Det finnes ett eller flere duplikater av dette dokumentet">
+                            <DuplicateDocumentsIcon />
+                        </ContentWithTooltip>
+                    </span>
+                )}
             </div>
         </div>
     );

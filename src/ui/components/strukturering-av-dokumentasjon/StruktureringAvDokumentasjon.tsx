@@ -140,6 +140,7 @@ const StruktureringAvDokumentasjon = ({
                                         strukturerDokumentLink={strukturerDokumentLink}
                                         onDokumentStrukturert={sjekkStatus}
                                         editMode={visRedigeringAvDokument}
+                                        strukturerteDokumenter={dokumentoversikt?.strukturerteDokumenter}
                                     />
                                 );
                             }
@@ -147,6 +148,8 @@ const StruktureringAvDokumentasjon = ({
                                 <StrukturertDokumentDetaljer
                                     dokument={valgtDokument}
                                     onEditDokumentClick={() => dispatch({ type: ActionType.REDIGER_DOKUMENT })}
+                                    strukturerteDokumenter={dokumentoversikt?.strukturerteDokumenter}
+                                    onRemoveDuplikat={sjekkStatus}
                                 />
                             );
                         }}
