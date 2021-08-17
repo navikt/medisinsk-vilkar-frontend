@@ -12,6 +12,7 @@ interface StrukturerDokumentControllerProps {
     dokument: Dokument;
     onDokumentStrukturert: () => void;
     editMode?: boolean;
+    strukturerteDokumenter: Dokument[];
 }
 
 const StrukturerDokumentController = ({
@@ -19,6 +20,7 @@ const StrukturerDokumentController = ({
     strukturerDokumentLink: { requestPayload, href },
     onDokumentStrukturert,
     editMode,
+    strukturerteDokumenter,
 }: StrukturerDokumentControllerProps): JSX.Element => {
     const { httpErrorHandler } = React.useContext(ContainerContext);
     const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
@@ -54,6 +56,7 @@ const StrukturerDokumentController = ({
             onSubmit={strukturerDokument}
             editMode={editMode}
             isSubmitting={isSubmitting}
+            strukturerteDokumenter={strukturerteDokumenter}
         />
     );
 };
