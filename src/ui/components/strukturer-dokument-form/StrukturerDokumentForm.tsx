@@ -1,7 +1,6 @@
-import { dateConstants, prettifyDateString } from '@navikt/k9-date-utils';
+import { dateConstants } from '@navikt/k9-date-utils';
 import { Datepicker, RadioGroupPanel } from '@navikt/k9-form-utils';
 import { Box, DetailView, Form, Margin } from '@navikt/k9-react-components';
-import Lenke from 'nav-frontend-lenker';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import LinkRel from '../../../constants/LinkRel';
