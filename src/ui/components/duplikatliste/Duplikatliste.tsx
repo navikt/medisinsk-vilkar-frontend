@@ -1,14 +1,14 @@
 import { prettifyDateString } from '@navikt/k9-date-utils';
-import { BucketIcon, ContentWithTooltip } from '@navikt/k9-react-components';
+import { BucketIcon } from '@navikt/k9-react-components';
 import Lenke from 'nav-frontend-lenker';
 import React, { useState } from 'react';
+import LinkRel from '../../../constants/LinkRel';
 import Dokument from '../../../types/Dokument';
+import { renderDokumenttypeText } from '../../../util/dokumentUtils';
+import { findLinkByRel } from '../../../util/linkUtils';
+import SlettDuplikatModal from '../slett-duplikat-modal/SlettDuplikatModal';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import styles from './duplikatliste.less';
-import SlettDuplikatModal from '../slett-duplikat-modal/SlettDuplikatModal';
-import LinkRel from '../../../constants/LinkRel';
-import { findLinkByRel } from '../../../util/linkUtils';
-import { renderDokumenttypeText } from '../../../util/dokumentUtils';
 
 interface DuplikatlisteProps {
     dokumenter: Dokument[];

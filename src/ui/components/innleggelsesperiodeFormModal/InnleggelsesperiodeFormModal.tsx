@@ -40,12 +40,10 @@ const InnleggelsesperiodeFormModal = ({
 
     const {
         formState: { isDirty },
-        watch,
         getValues,
     } = formMethods;
 
     const [showWarningMessage, setShowWarningMessage] = React.useState(false);
-    const innleggelsesperioder = watch(FieldName.INNLEGGELSESPERIODER);
 
     const handleSubmit = (formState) => {
         onSubmit(formState);
