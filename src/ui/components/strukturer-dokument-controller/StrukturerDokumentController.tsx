@@ -57,8 +57,20 @@ const StrukturerDokumentController = ({
 
     const hasError = !!submitDocumentError;
     const getErrorMessage = () => {
-        if (submitDocumentError?.response?.data?.feilmelding) {
-            return `${submitDocumentError.response.data.feilmelding}`;
+        if (submitDocumentError?.response?.data?.feilkode) {
+            const { feilkode } = submitDocumentError.response.data;
+            if (feilkode === 'K9-6701') {
+                return 'Kan ikke sette at et dokument er duplikat av et annet duplikat dokument.';
+            }
+            if (feilkode === 'K9-6702') {
+                return 'Kan ikke sette duplikatdokumenter på tvers av pleietrengende.';
+            }
+            if (feilkode === 'K9-6703') {
+                return 'Kan ikke sette som duplikat siden dokumentet har blitt brukt i en vurdering.';
+            }
+            if (feilkode === 'K9-6704') {
+                return 'Kan ikke sette som duplikat siden andre dokumenter er duplikat av dette dokumentet.';
+            }
         }
         return 'Noe gikk galt, vennligst prøv igjen senere';
     };
