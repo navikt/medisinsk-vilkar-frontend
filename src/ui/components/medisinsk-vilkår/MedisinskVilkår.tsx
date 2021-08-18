@@ -45,12 +45,13 @@ const TabItem = ({ label, showWarningIcon }: TabItemProps) => {
 const MedisinskVilkår = (): JSX.Element => {
     const [state, dispatch] = React.useReducer(medisinskVilkårReducer, {
         isLoading: true,
+        hasError: null,
         activeStep: null,
         markedStep: null,
         sykdomsstegStatus: null,
     });
 
-    const { isLoading, activeStep, markedStep, sykdomsstegStatus } = state;
+    const { isLoading, hasError, activeStep, markedStep, sykdomsstegStatus } = state;
 
     const { endpoints, httpErrorHandler, visFortsettknapp } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
@@ -66,6 +67,9 @@ const MedisinskVilkår = (): JSX.Element => {
             });
             return status;
         } catch (error) {
+            dispatch({
+                type: ActionType.SHOW_ERROR 
+            })
             throw new Error(error);
         }
     };
@@ -99,7 +103,7 @@ const MedisinskVilkår = (): JSX.Element => {
     };
 
     return (
-        <PageContainer isLoading={isLoading}>
+        <PageContainer isLoading={isLoading} hasError={hasError}>
             <Infostripe
                 text="Sykdomsvurderingen gjelder barnet og er felles for alle parter."
                 iconRenderer={() => <ChildIcon />}
