@@ -7,7 +7,7 @@
         "start": "node ./server.js",
         "build": "webpack --config webpack/webpack-config.production.js",
         "dev": "node webpack/webpack-config.development.js",
-        "api-mock": "ts-node --project ./tsconfig.json mock/api-mock.ts",
+        "api-mock": "nodemon mock/api-mock.ts",
         "majorVersion": "node ./majorVersion.js",
         "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'"
     },
@@ -50,6 +50,7 @@
         "less": "^4.1.1",
         "less-loader": "^8.0.0",
         "mini-css-extract-plugin": "^1.3.9",
+        "nodemon": "^2.0.12",
         "pre-commit": "^1.2.2",
         "prettier": "^2.2.1",
         "terser-webpack-plugin": "^5.1.1",
