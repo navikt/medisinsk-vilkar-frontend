@@ -60,7 +60,7 @@ const StrukturerDokumentController = ({
         if (submitDocumentError?.response?.data?.feilmelding) {
             return `${submitDocumentError.response.data.feilmelding}`;
         }
-        return null;
+        return 'Noe gikk galt, vennligst prøv igjen senere';
     };
 
     return (
