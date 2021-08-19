@@ -4,6 +4,7 @@ import React from 'react';
 import { Dokument } from '../../../types/Dokument';
 import StrukturertDokumentElement from '../strukturet-dokument-element/StrukturertDokumentElement';
 import UstrukturertDokumentElement from '../ustrukturert-dokument-element/UstrukturertDokumentElement';
+import ChevronDropdown from '../chevron-dropdown/ChevronDropdown';
 import styles from './dokumentnavigasjon.less';
 
 interface DokumentnavigasjonProps {
@@ -41,7 +42,7 @@ const Dokumentnavigasjon = ({
             <div className={styles.dokumentnavigasjon__container}>
                 <div className={styles.dokumentnavigasjon__columnHeadings}>
                     <Element className={styles['dokumentnavigasjon__columnHeading--first']}>Status</Element>
-                    <Element className={styles['dokumentnavigasjon__columnHeading--second']}>Type</Element>
+                    <ChevronDropdown className={styles['dokumentnavigasjon__columnHeading--second']} text="Type" />
                     <Element className={styles['dokumentnavigasjon__columnHeading--third']}>Datert</Element>
                     <Element className={styles['dokumentnavigasjon__columnHeading--fourth']}>Part</Element>
                 </div>
