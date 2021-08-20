@@ -20,10 +20,12 @@ const Dokumentnavigasjon = ({
     const harDokumentasjonSomMåGjennomgås = dokumenterSomMåGjennomgås && dokumenterSomMåGjennomgås.length > 0;
     const [activeIndex, setActiveIndex] = React.useState(harDokumentasjonSomMåGjennomgås ? 0 : -1);
 
-    const dokumentElementer = dokumenter.map((dokument) => ({
-        renderer: () => <StrukturertDokumentElement dokument={dokument} />,
-        dokument,
-    }));
+    const dokumentElementer = dokumenter
+        .filter((dokument) => dokument.duplikatAvId == null)
+        .map((dokument) => ({
+            renderer: () => <StrukturertDokumentElement dokument={dokument} />,
+            dokument,
+        }));
     const allElements = [...dokumentElementer];
 
     if (harDokumentasjonSomMåGjennomgås) {
