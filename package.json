@@ -64,6 +64,7 @@
         "webpack-merge": "^5.7.3"
     },
     "dependencies": {
+        "@navikt/ds-icons": "^0.5.2",
         "@navikt/fnrvalidator": "^1.1.4",
         "@navikt/k9-array-utils": "^0.0.1",
         "@navikt/k9-date-utils": "^0.0.5",
