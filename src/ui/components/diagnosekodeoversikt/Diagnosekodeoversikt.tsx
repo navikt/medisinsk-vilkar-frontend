@@ -14,6 +14,7 @@ import DiagnosekodeModal from '../diagnosekode-modal/DiagnosekodeModal';
 import Diagnosekodeliste from '../diagnosekodeliste/Diagnosekodeliste';
 import IconWithText from '../icon-with-text/IconWithText';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
+import DiagnosekodeContext from '../../context/DiagnosekodeContext';
 
 Modal.setAppElement('#app');
 
@@ -23,6 +24,7 @@ interface DiagnosekodeoversiktProps {
 
 const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktProps): JSX.Element => {
     const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
+    const setDiagnosekoder = React.useContext(DiagnosekodeContext);
     const [isLoading, setIsLoading] = React.useState(true);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [diagnosekodeResponse, setDiagnosekodeResponse] = React.useState<DiagnosekodeResponse>({
@@ -40,10 +42,15 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
         setIsLoading(true);
         return get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler, {
             cancelToken: httpCanceler.token,
-        }).then((response: DiagnosekodeResponse) => {
-            setDiagnosekodeResponse(response);
-            setIsLoading(false);
-        });
+        })
+            .then((response: DiagnosekodeResponse) => {
+                setDiagnosekodeResponse(response);
+                setDiagnosekoder({ koder: response?.diagnosekoder, hasLoaded: true });
+                setIsLoading(false);
+            })
+            .catch((e) => {
+                setDiagnosekoder({ koder: [], hasLoaded: true });
+            });
     };
 
     const slettDiagnosekode = (diagnosekode: Diagnosekode) =>
@@ -63,6 +70,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
         hentDiagnosekoder();
         return () => {
             httpCanceler.cancel();
+            setDiagnosekoder(null);
         };
     }, []);
 

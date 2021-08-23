@@ -1,6 +1,6 @@
 import { get } from '@navikt/k9-http-utils';
 import { PageContainer, WarningIcon, Infostripe, ChildIcon } from '@navikt/k9-react-components';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { TabsPure } from 'nav-frontend-tabs';
 import classnames from 'classnames';
 import axios from 'axios';
@@ -10,6 +10,7 @@ import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-oms
 import Step, { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import ContainerContext from '../../context/ContainerContext';
+import DiagnosekodeContext from '../../context/DiagnosekodeContext';
 import { finnNesteSteg } from '../../../util/statusUtils';
 import medisinskVilkårReducer from './reducer';
 import ActionType from './actionTypes';
@@ -52,8 +53,10 @@ const MedisinskVilkår = (): JSX.Element => {
     });
 
     const { isLoading, hasError, activeStep, markedStep, sykdomsstegStatus } = state;
-
+    const [diagnosekoder, setDiagnosekoder] = useState({ koder: [],  hasLoaded: false });
+    const diagnosekoderTekst = diagnosekoder.koder.length > 0 ? `${diagnosekoder?.koder.join(', ')}` : 'Kode mangler';
     const { endpoints, httpErrorHandler, visFortsettknapp } = React.useContext(ContainerContext);
+
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const hentSykdomsstegStatus = async () => {
@@ -68,8 +71,8 @@ const MedisinskVilkår = (): JSX.Element => {
             return status;
         } catch (error) {
             dispatch({
-                type: ActionType.SHOW_ERROR 
-            })
+                type: ActionType.SHOW_ERROR,
+            });
             throw new Error(error);
         }
     };
@@ -105,7 +108,15 @@ const MedisinskVilkår = (): JSX.Element => {
     return (
         <PageContainer isLoading={isLoading} hasError={hasError}>
             <Infostripe
-                text="Sykdomsvurderingen gjelder barnet og er felles for alle parter."
+                element={
+                    <>
+                        <span>Sykdomsvurderingen gjelder barnet og er felles for alle parter.</span>
+                        <span className={styles.infostripe__diagnosekode__tittel}>Diagnose:</span>
+                        <span className={styles.infostripe__diagnosekode}>
+                            { (!diagnosekoder?.hasLoaded && ' ') || diagnosekoderTekst}
+                        </span>
+                    </>
+                }
                 iconRenderer={() => <ChildIcon />}
             />
             <div className={styles.medisinskVilkår}>
@@ -130,11 +141,13 @@ const MedisinskVilkår = (): JSX.Element => {
                 <div style={{ marginTop: '1rem', maxWidth: '1204px' }}>
                     <div className={styles.medisinskVilkår__vilkårContentContainer}>
                         {activeStep === dokumentSteg && (
-                            <StruktureringAvDokumentasjon
-                                navigerTilNesteSteg={navigerTilNesteSteg}
-                                hentSykdomsstegStatus={hentSykdomsstegStatus}
-                                sykdomsstegStatus={sykdomsstegStatus}
-                            />
+                            <DiagnosekodeContext.Provider value={setDiagnosekoder}>
+                                <StruktureringAvDokumentasjon
+                                    navigerTilNesteSteg={navigerTilNesteSteg}
+                                    hentSykdomsstegStatus={hentSykdomsstegStatus}
+                                    sykdomsstegStatus={sykdomsstegStatus}
+                                />
+                            </DiagnosekodeContext.Provider>
                         )}
                         {activeStep === tilsynOgPleieSteg && (
                             <VurderingContext.Provider
