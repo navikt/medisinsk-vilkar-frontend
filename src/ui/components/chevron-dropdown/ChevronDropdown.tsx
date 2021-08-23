@@ -7,11 +7,27 @@ import { FilterFilled } from '@navikt/ds-icons';
 import { Dokumenttype, dokumentLabel } from '../../../types/Dokument';
 import styles from './chevronDropdown.less';
 
+interface ChevronWithTextProps {
+    aktiv: boolean;
+    settAktiv: (aktiv: boolean) => void;
+    text: string;
+}
 interface ChevronDropdownProps {
     text: string;
     className: string;
     dokumenttypeFilter: Array<Dokumenttype>;
     setDokumenttypeFilter: (value: Array<Dokumenttype>) => void;
+}
+
+function ChevronWithText({ aktiv, settAktiv, text }: ChevronWithTextProps): JSX.Element {
+    const chevronType = aktiv ? 'opp' : 'ned';
+
+    return (
+        <button type="button" className={styles.chevronDropdown__toggleButton} onClick={() => settAktiv(!aktiv)}>
+            <Element className={styles.chevronDropdown__toggleButton__text}>{text}</Element>
+            <Chevron type={chevronType} />
+        </button>
+    );
 }
 
 function ChevronDropdown({
@@ -21,33 +37,18 @@ function ChevronDropdown({
     setDokumenttypeFilter,
 }: ChevronDropdownProps): JSX.Element {
     const [aktiv, settAktiv] = useState(false);
-    const chevronType = aktiv ? 'opp' : 'ned';
     const dokumenttypeListe = [...Object.values(Dokumenttype)];
     const listeErFiltrert = dokumenttypeFilter.length < 4;
     return (
         <>
             <span className={classNames(styles.chevronDropdown, className, aktiv && styles.chevronDropdown__hidden)}>
-                <button
-                    type="button"
-                    className={styles.chevronDropdown__toggleButton}
-                    onClick={() => settAktiv(!aktiv)}
-                >
-                    <Element className={styles.chevronDropdown__toggleButton__text}>{text}</Element>
-                    <Chevron type={chevronType} />
-                </button>
+                <ChevronWithText aktiv={aktiv} settAktiv={settAktiv} text={text} />
                 <FilterFilled className={listeErFiltrert ? '' : styles.chevronDropdown__hidden} />
             </span>
             {aktiv && (
                 <div className={classNames(styles.chevronDropdown__dropdown, className)}>
                     <span className={classNames(styles.chevronDropdown)}>
-                        <button
-                            type="button"
-                            className={styles.chevronDropdown__toggleButton}
-                            onClick={() => settAktiv(!aktiv)}
-                        >
-                            <Element className={styles.chevronDropdown__toggleButton__text}>{text}</Element>
-                            <Chevron type={chevronType} />
-                        </button>
+                        <ChevronWithText aktiv={aktiv} settAktiv={settAktiv} text={text} />
                         <FilterFilled className={listeErFiltrert ? '' : styles.chevronDropdown__hidden} />
                         <div className={styles.chevronDropdown__dropdown__checkbox}>
                             {dokumenttypeListe.map((type) => (
