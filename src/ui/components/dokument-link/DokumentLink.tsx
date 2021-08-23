@@ -1,9 +1,10 @@
-import { ContentWithTooltip, DocumentIcon, OnePersonOutlineGray } from '@navikt/k9-react-components';
 import { prettifyDateString } from '@navikt/k9-date-utils';
+import { ContentWithTooltip, DocumentIcon, OnePersonOutlineGray } from '@navikt/k9-react-components';
 import Lenke from 'nav-frontend-lenker';
 import React from 'react';
 import LinkRel from '../../../constants/LinkRel';
-import Dokument, { Dokumenttype } from '../../../types/Dokument';
+import Dokument from '../../../types/Dokument';
+import { renderDokumenttypeText } from '../../../util/dokumentUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
 import styles from './dokumentLink.less';
 
@@ -12,16 +13,6 @@ interface DokumentLinkProps {
     etikett?: string;
     visDokumentIkon?: boolean;
 }
-
-const renderDokumenttypeText = (dokumenttype: Dokumenttype) => {
-    if (dokumenttype === Dokumenttype.LEGEERKLÆRING) {
-        return 'Sykehus/spesialist.';
-    }
-    if (dokumenttype === Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER) {
-        return 'Andre med. oppl.';
-    }
-    return null;
-};
 
 const DokumentLink = ({ dokument, etikett, visDokumentIkon }: DokumentLinkProps): JSX.Element => {
     const { type, datert, links } = dokument;

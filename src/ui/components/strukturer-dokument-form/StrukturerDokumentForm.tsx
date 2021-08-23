@@ -1,6 +1,6 @@
 import { dateConstants } from '@navikt/k9-date-utils';
-import { Box, DetailView, Form, Margin } from '@navikt/k9-react-components';
 import { Datepicker, RadioGroupPanel } from '@navikt/k9-form-utils';
+import { Box, DetailView, Form, Margin } from '@navikt/k9-react-components';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import LinkRel from '../../../constants/LinkRel';
@@ -11,22 +11,27 @@ import {
 } from '../../../types/StrukturerDokumentFormState';
 import { lagStrukturertDokument } from '../../../util/dokumentUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
+import ContainerContext from '../../context/ContainerContext';
 import { dateIsNotInTheFuture, required } from '../../form/validators';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
-import ContainerContext from '../../context/ContainerContext';
+import DuplikatRadiobuttons from '../duplikat-radiobuttons/DuplikatRadiobuttons';
 
 interface StrukturerDokumentFormProps {
     dokument: Dokument;
     onSubmit: (nyttDokument: Dokument) => void;
     editMode?: boolean;
     isSubmitting: boolean;
+    strukturerteDokumenter: Dokument[];
 }
+
+export const ikkeDuplikatValue = 'ikkeDuplikat';
 
 const StrukturerDokumentForm = ({
     dokument,
     onSubmit,
     editMode,
     isSubmitting,
+    strukturerteDokumenter,
 }: StrukturerDokumentFormProps): JSX.Element => {
     const { readOnly } = React.useContext(ContainerContext);
 
@@ -36,6 +41,7 @@ const StrukturerDokumentForm = ({
             [FieldName.DATERT]: dokument.datert,
         },
     });
+
     const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, dokument.links);
 
     const lagNyttStrukturertDokument = (formState: StrukturerDokumentFormState) => {
@@ -90,6 +96,7 @@ const StrukturerDokumentForm = ({
                             inputId="datertField"
                         />
                     </Box>
+                    <DuplikatRadiobuttons dokument={dokument} strukturerteDokumenter={strukturerteDokumenter} />
                 </Form>
             </FormProvider>
         </DetailView>

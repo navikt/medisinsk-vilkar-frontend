@@ -5,6 +5,7 @@ import Dokument from '../../../types/Dokument';
 
 interface State {
     isLoading: boolean;
+    hasError: boolean;
     activeStep: Step;
     markedStep: Step;
     sykdomsstegStatus: SykdomsstegStatusResponse;
@@ -61,6 +62,12 @@ const medisinskVilkårReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 sykdomsstegStatus: action.sykdomsstegStatus,
+            };
+        }
+        case ActionType.SHOW_ERROR: {
+            return {
+                ...state,
+                hasError: true
             };
         }
         case ActionType.ENDRINGER_UTIFRA_NYE_DOKUMENTER_REGISTRERT: {

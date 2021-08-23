@@ -19,8 +19,8 @@ import VurderingContext from '../../context/VurderingContext';
 import Vurderingstype from '../../../types/Vurderingstype';
 import { NyeDokumenterResponse } from '../../../types/NyeDokumenterResponse';
 import NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController from '../nye-dokumenter-som-kan-påvirke-eksisterende-vurderinger-controller/NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController';
-import styles from './medisinskVilkår.less';
 import Dokument from '../../../types/Dokument';
+import styles from './medisinskVilkår.less';
 
 const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
@@ -48,13 +48,14 @@ const TabItem = ({ label, showWarningIcon }: TabItemProps) => {
 const MedisinskVilkår = (): JSX.Element => {
     const [state, dispatch] = React.useReducer(medisinskVilkårReducer, {
         isLoading: true,
+        hasError: null,
         activeStep: null,
         markedStep: null,
         sykdomsstegStatus: null,
         nyeDokumenterSomIkkeErVurdert: [],
     });
 
-    const { isLoading, activeStep, markedStep, sykdomsstegStatus, nyeDokumenterSomIkkeErVurdert } = state;
+    const { isLoading, hasError, activeStep, markedStep, sykdomsstegStatus, nyeDokumenterSomIkkeErVurdert } = state;
 
     const { endpoints, httpErrorHandler, visFortsettknapp } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
@@ -70,6 +71,9 @@ const MedisinskVilkår = (): JSX.Element => {
             });
             return status;
         } catch (error) {
+            dispatch({
+                type: ActionType.SHOW_ERROR
+            })
             throw new Error(error);
         }
     };
@@ -139,7 +143,7 @@ const MedisinskVilkår = (): JSX.Element => {
     const manglerVurderingAvNyeDokumenter = sykdomsstegStatus?.nyttDokumentHarIkkekontrollertEksisterendeVurderinger;
 
     return (
-        <PageContainer isLoading={isLoading}>
+        <PageContainer isLoading={isLoading} hasError={hasError}>
             <Infostripe
                 text="Sykdomsvurderingen gjelder barnet og er felles for alle parter."
                 iconRenderer={() => <ChildIcon />}
