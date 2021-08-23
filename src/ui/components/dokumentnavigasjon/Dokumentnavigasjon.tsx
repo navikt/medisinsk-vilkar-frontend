@@ -21,6 +21,10 @@ const Dokumentnavigasjon = ({
     const harDokumentasjonSomMåGjennomgås = dokumenterSomMåGjennomgås && dokumenterSomMåGjennomgås.length > 0;
     const [activeIndex, setActiveIndex] = React.useState(harDokumentasjonSomMåGjennomgås ? 0 : -1);
     const [dokumenttypeFilter, setDokumenttypeFilter] = React.useState([...Object.values(Dokumenttype)]);
+    const filtrerDokumenttype = (type) =>
+        dokumenttypeFilter.includes(type)
+            ? setDokumenttypeFilter(dokumenttypeFilter.filter((v) => v !== type))
+            : setDokumenttypeFilter(dokumenttypeFilter.concat([type]));
 
     const dokumentElementer = dokumenter.map((dokument) => ({
         renderer: () => <StrukturertDokumentElement dokument={dokument} />,
@@ -47,7 +51,7 @@ const Dokumentnavigasjon = ({
                         className={styles['dokumentnavigasjon__columnHeading--second']}
                         text="Type"
                         dokumenttypeFilter={dokumenttypeFilter}
-                        setDokumenttypeFilter={setDokumenttypeFilter}
+                        filtrerDokumenttype={filtrerDokumenttype}
                     />
                     <Element className={styles['dokumentnavigasjon__columnHeading--third']}>Datert</Element>
                     <Element className={styles['dokumentnavigasjon__columnHeading--fourth']}>Part</Element>
