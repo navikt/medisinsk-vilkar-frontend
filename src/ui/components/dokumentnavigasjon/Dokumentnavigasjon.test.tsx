@@ -29,8 +29,7 @@ describe('Dokumenter', () => {
             />
         );
 
-        const typeButton = screen.getAllByText(/type/i)[0];
-        userEvent.click(typeButton);
+        userEvent.click(screen.getAllByText(/type/i)[0]);
         const ikkeKlassifisertCheckbox = screen.getByLabelText(/ikke klassifisert/i);
         const andreMedisinskeOpplysningerCheckbox = screen.getByLabelText(/andre med. oppl./i);
         const ikkeMedisinskeOpplysninger = screen.getByLabelText(/ikke med. oppl./i);
@@ -41,7 +40,7 @@ describe('Dokumenter', () => {
         expect(ikkeMedisinskeOpplysninger).toBeChecked();
         expect(legeerklæring).toBeChecked();
 
-        userEvent.click(typeButton);
+        userEvent.click(screen.getAllByText(/type/i)[1]);
 
         expect(screen.getByText(/ikke klassifisert/i)).toBeTruthy();
         expect(screen.getByText(/andre med. oppl./i)).toBeTruthy();
@@ -58,13 +57,30 @@ describe('Dokumenter', () => {
         );
         expect(screen.getByText(/ikke klassifisert/i)).toBeTruthy();
 
-        const typeButton = screen.getAllByText(/type/i)[0];
-        userEvent.click(typeButton);
+        userEvent.click(screen.getAllByText(/type/i)[0]);
 
         const ikkeKlassifisertCheckbox = screen.getByLabelText(/ikke klassifisert/i);
         userEvent.click(ikkeKlassifisertCheckbox);
-        userEvent.click(typeButton);
+        userEvent.click(screen.getAllByText(/type/i)[1]);
 
         expect(screen.queryByText(/ikke klassifisert/i)).toBeFalsy();
     });
+
+    test('dropdown lukker seg ved klikk utenfor container', () => {
+        render(
+            <Dokumentnavigasjon
+                dokumenter={[dokumenter[0], dokumenter[1]]}
+                dokumenterSomMåGjennomgås={[dokumenter[2]]}
+                onDokumentValgt={() => null}
+            />
+        );
+
+        userEvent.click(screen.getAllByText(/type/i)[0]);
+        let ikkeKlassifisertCheckbox = screen.queryByLabelText(/ikke klassifisert/i);
+        expect(ikkeKlassifisertCheckbox).toBeTruthy()
+
+        userEvent.click(document.body)
+        ikkeKlassifisertCheckbox = screen.queryByLabelText(/ikke klassifisert/i);
+        expect(ikkeKlassifisertCheckbox).toBeFalsy()
+    })
 });

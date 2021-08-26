@@ -4,6 +4,7 @@ import Chevron from 'nav-frontend-chevron';
 import { Checkbox } from 'nav-frontend-skjema';
 import classNames from 'classnames';
 import { FilterFilled } from '@navikt/ds-icons';
+import OutsideClickHandler from 'react-outside-click-handler';
 import { Dokumenttype, dokumentLabel } from '../../../types/Dokument';
 import styles from './chevronDropdown.less';
 
@@ -45,26 +46,28 @@ function ChevronDropdown({
                 <FilterFilled className={listeErFiltrert ? '' : styles.chevronDropdown__hidden} />
             </span>
             {open && (
-                <div className={classNames(styles.chevronDropdown__dropdown, className)}>
-                    <span className={classNames(styles.chevronDropdown)}>
-                        <ChevronWithText
-                            chevronDirection={chevronDirection}
-                            onClick={() => setOpen(!open)}
-                            text={text}
-                        />
-                        <FilterFilled className={listeErFiltrert ? '' : styles.chevronDropdown__hidden} />
-                        <div className={styles.chevronDropdown__dropdown__checkbox}>
-                            {dokumenttypeListe.map((type) => (
-                                <Checkbox
-                                    key={type}
-                                    label={dokumentLabel[type]}
-                                    checked={dokumenttypeFilter.includes(type)}
-                                    onChange={() => filtrerDokumenttype(type)}
-                                />
-                            ))}
-                        </div>
-                    </span>
-                </div>
+                <OutsideClickHandler onOutsideClick={() => setOpen(false)}>
+                    <div className={classNames(styles.chevronDropdown__dropdown, className)}>
+                        <span className={classNames(styles.chevronDropdown)}>
+                            <ChevronWithText
+                                chevronDirection={chevronDirection}
+                                onClick={() => setOpen(!open)}
+                                text={text}
+                            />
+                            <FilterFilled className={listeErFiltrert ? '' : styles.chevronDropdown__hidden} />
+                            <div className={styles.chevronDropdown__dropdown__checkbox}>
+                                {dokumenttypeListe.map((type) => (
+                                    <Checkbox
+                                        key={type}
+                                        label={dokumentLabel[type]}
+                                        checked={dokumenttypeFilter.includes(type)}
+                                        onChange={() => filtrerDokumenttype(type)}
+                                    />
+                                ))}
+                            </div>
+                        </span>
+                    </div>
+                </OutsideClickHandler>
             )}
         </>
     );
