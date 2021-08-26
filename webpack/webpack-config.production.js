@@ -18,7 +18,7 @@ module.exports = merge(commonWebpackConfig, {
     },
     optimization: {
         minimize: true,
-        minimizer: [new TerserPlugin({ extractComments: false }), new CssMinimizerPlugin()],
+        minimizer: [new TerserPlugin({ extractComments: false })],
     },
     performance: {
         maxAssetSize: 400000,
