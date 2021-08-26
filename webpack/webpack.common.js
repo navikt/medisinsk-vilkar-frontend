@@ -1,4 +1,9 @@
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const cssExtractLoaderConfig = {
+    loader: MiniCssExtractPlugin.loader
+};
 
 const nodeModules = path.resolve(__dirname, '../node_modules');
 
@@ -19,6 +24,7 @@ module.exports = {
             {
                 test: /\.less$/,
                 use: [
+                    cssExtractLoaderConfig,
                     {
                         loader: 'css-loader',
                         options: {
@@ -47,6 +53,7 @@ module.exports = {
             {
                 test: /\.(less|css)?$/,
                 use: [
+                    cssExtractLoaderConfig,
                     {
                         loader: 'css-loader',
                     },
@@ -71,5 +78,8 @@ module.exports = {
         ],
     },
     plugins: [
+        new MiniCssExtractPlugin({
+            filename: 'styles.css',
+        }),
     ],
 };
