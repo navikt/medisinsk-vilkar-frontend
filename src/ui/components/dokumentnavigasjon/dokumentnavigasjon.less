@@ -12,11 +12,11 @@
     &__columnHeadings {
         position: relative;
         display: flex;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.75rem; 
     }
-
+    /* important pga https://github.com/webpack-contrib/mini-css-extract-plugin/issues/188 */
     &__columnHeading--first {
-        margin-left: 0.875rem;
+        margin-left: 0.875rem !important;
     }
 
     &__columnHeading--second {
@@ -24,10 +24,10 @@
     }
 
     &__columnHeading--third {
-        margin-left: 4.6875rem;
+        margin-left: 4.6875rem !important;
     }
 
     &__columnHeading--fourth {
-        margin-left: 3.9375rem;
+        margin-left: 3.9375rem !important;
     }
 }
