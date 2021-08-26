@@ -26,10 +26,12 @@ const Dokumentnavigasjon = ({
             ? setDokumenttypeFilter(dokumenttypeFilter.filter((v) => v !== type))
             : setDokumenttypeFilter(dokumenttypeFilter.concat([type]));
 
-    const dokumentElementer = dokumenter.map((dokument) => ({
-        renderer: () => <StrukturertDokumentElement dokument={dokument} />,
-        dokument,
-    }));
+    const dokumentElementer = dokumenter
+        .filter((dokument) => dokument.duplikatAvId == null)
+        .map((dokument) => ({
+            renderer: () => <StrukturertDokumentElement dokument={dokument} />,
+            dokument,
+        }));
     const allElements = [...dokumentElementer];
 
     if (harDokumentasjonSomMåGjennomgås) {
