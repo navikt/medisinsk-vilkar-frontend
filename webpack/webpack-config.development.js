@@ -31,16 +31,12 @@ const devServerOptions = {
         'Access-Control-Allow-Origin': 'http://localhost:9000',
     },
 };
-WebpackDevServer.addDevServerEntrypoints(webpackConfig, devServerOptions);
 
 const compiler = webpack(webpackConfig);
-const devServer = new WebpackDevServer(compiler, devServerOptions);
+const devServer = new WebpackDevServer(devServerOptions, compiler);
 compiler.close(() => console.info('Compiler closed'));
 
 const port = 8081;
-devServer.listen(port, 'localhost', (error) => {
-    if (error) {
-        return console.error(error);
-    }
+devServer.startCallback(() => {
     console.log(`Listening at port ${port}`);
 });
