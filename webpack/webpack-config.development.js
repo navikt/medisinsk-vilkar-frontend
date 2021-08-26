@@ -37,6 +37,10 @@ const devServer = new WebpackDevServer(devServerOptions, compiler);
 compiler.close(() => console.info('Compiler closed'));
 
 const port = 8081;
-devServer.startCallback(() => {
-    console.log(`Listening at port ${port}`);
+devServer.startCallback((error) => {
+    if (error) {
+        console.error(error);
+    } else {
+        console.log(`Listening at port ${port}`);
+    }
 });
