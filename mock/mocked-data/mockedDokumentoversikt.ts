@@ -33,6 +33,8 @@ const mockedDokumentoversikt = {
             behandlet: true,
             mottattDato: '2021-03-05',
             mottattTidspunkt: '2021-03-05T10:23:13.309267',
+            duplikater: [],
+            duplikatAvId: null,
         },
         {
             id: '1',
@@ -46,7 +48,10 @@ const mockedDokumentoversikt = {
             behandlet: false,
             mottattDato: '2021-03-05',
             mottattTidspunkt: '2021-03-05T10:23:13.309267',
+            duplikater: [],
+            duplikatAvId: null,
         },
+
     ],
 };
 export default mockedDokumentoversikt;
