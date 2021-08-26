@@ -7,7 +7,7 @@ import {
     OnePersonOutlineGray,
 } from '@navikt/k9-react-components';
 import React from 'react';
-import Dokument, { Dokumenttype } from '../../../types/Dokument';
+import Dokument, { dokumentLabel } from '../../../types/Dokument';
 import styles from './strukturertDokumentElement.less';
 
 interface StrukturertDokumentElementProps {
@@ -20,14 +20,8 @@ const StrukturertDokumentElement = ({
     const harDuplikater = duplikater?.length > 0;
 
     const getDokumenttype = () => {
-        if (type === Dokumenttype.LEGEERKLÆRING) {
-            return 'Sykehus/spesialist.';
-        }
-        if (type === Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER) {
-            return 'Andre med. oppl.';
-        }
-        if (type === Dokumenttype.MANGLER_MEDISINSKE_OPPLYSNINGER) {
-            return 'Ikke med. oppl.';
+        if (dokumentLabel[type]) {
+            return dokumentLabel[type];
         }
         return navn;
     };

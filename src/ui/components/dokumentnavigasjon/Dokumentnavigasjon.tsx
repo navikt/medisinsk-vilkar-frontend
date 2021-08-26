@@ -1,9 +1,10 @@
 import { InteractiveList } from '@navikt/k9-react-components';
 import { Element, Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
-import { Dokument } from '../../../types/Dokument';
+import { Dokument, Dokumenttype } from '../../../types/Dokument';
 import StrukturertDokumentElement from '../strukturet-dokument-element/StrukturertDokumentElement';
 import UstrukturertDokumentElement from '../ustrukturert-dokument-element/UstrukturertDokumentElement';
+import ChevronDropdown from '../chevron-dropdown/ChevronDropdown';
 import styles from './dokumentnavigasjon.less';
 
 interface DokumentnavigasjonProps {
@@ -19,6 +20,11 @@ const Dokumentnavigasjon = ({
 }: DokumentnavigasjonProps): JSX.Element => {
     const harDokumentasjonSomMåGjennomgås = dokumenterSomMåGjennomgås && dokumenterSomMåGjennomgås.length > 0;
     const [activeIndex, setActiveIndex] = React.useState(harDokumentasjonSomMåGjennomgås ? 0 : -1);
+    const [dokumenttypeFilter, setDokumenttypeFilter] = React.useState([...Object.values(Dokumenttype)]);
+    const filtrerDokumenttype = (type) =>
+        dokumenttypeFilter.includes(type)
+            ? setDokumenttypeFilter(dokumenttypeFilter.filter((v) => v !== type))
+            : setDokumenttypeFilter(dokumenttypeFilter.concat([type]));
 
     const dokumentElementer = dokumenter
         .filter((dokument) => dokument.duplikatAvId == null)
@@ -43,20 +49,27 @@ const Dokumentnavigasjon = ({
             <div className={styles.dokumentnavigasjon__container}>
                 <div className={styles.dokumentnavigasjon__columnHeadings}>
                     <Element className={styles['dokumentnavigasjon__columnHeading--first']}>Status</Element>
-                    <Element className={styles['dokumentnavigasjon__columnHeading--second']}>Type</Element>
+                    <ChevronDropdown
+                        className={styles['dokumentnavigasjon__columnHeading--second']}
+                        text="Type"
+                        dokumenttypeFilter={dokumenttypeFilter}
+                        filtrerDokumenttype={filtrerDokumenttype}
+                    />
                     <Element className={styles['dokumentnavigasjon__columnHeading--third']}>Datert</Element>
                     <Element className={styles['dokumentnavigasjon__columnHeading--fourth']}>Part</Element>
                 </div>
                 <InteractiveList
-                    elements={allElements.map((element, currentIndex) => ({
-                        content: element.renderer(),
-                        active: activeIndex === currentIndex,
-                        key: `${currentIndex}`,
-                        onClick: () => {
-                            setActiveIndex(currentIndex);
-                            onDokumentValgt(element.dokument);
-                        },
-                    }))}
+                    elements={allElements
+                        .filter((element) => dokumenttypeFilter.includes(element?.dokument?.type))
+                        .map((element, currentIndex) => ({
+                            content: element.renderer(),
+                            active: activeIndex === currentIndex,
+                            key: `${currentIndex}`,
+                            onClick: () => {
+                                setActiveIndex(currentIndex);
+                                onDokumentValgt(element.dokument);
+                            },
+                        }))}
                 />
             </div>
         </div>
