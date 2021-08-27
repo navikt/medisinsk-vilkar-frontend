@@ -40,7 +40,7 @@ jobs:
                 echo "MAJOR_VERSION=$(npm run majorVersion --silent)" >> $GITHUB_ENV
             - name: Sette tag
               run: |
-                echo "TAG=$(date "+%Y.%m.%d")-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+                echo "TAG=$(date "+%Y.%m.%d-%m")-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
             - name: Sette miljøvariabler
               run: |
                   echo "IMAGE=${IMAGE_BASE}:${TAG}" >> $GITHUB_ENV
@@ -74,6 +74,7 @@ jobs:
                   VARS: nais/prod-fss.json
             - name: Create Release
               id: create_release
+              if: github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, 'ci skip')
               uses: actions/create-release@latest
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
