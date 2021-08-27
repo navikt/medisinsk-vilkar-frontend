@@ -19,6 +19,7 @@ import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/Aksjonspunkt
 import VurderingContext from '../../context/VurderingContext';
 import Vurderingstype from '../../../types/Vurderingstype';
 import styles from './medisinskVilkår.less';
+import { DiagnosekodeWrapper } from '../../../types/Diagnosekode';
 
 const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
@@ -53,7 +54,7 @@ const MedisinskVilkår = (): JSX.Element => {
     });
 
     const { isLoading, hasError, activeStep, markedStep, sykdomsstegStatus } = state;
-    const [diagnosekoder, setDiagnosekoder] = useState({ koder: [],  hasLoaded: false });
+    const [diagnosekoder, setDiagnosekoder] = useState<DiagnosekodeWrapper>({ koder: [], hasLoaded: false });
     const diagnosekoderTekst = diagnosekoder.koder.length > 0 ? `${diagnosekoder?.koder.join(', ')}` : 'Kode mangler';
     const { endpoints, httpErrorHandler, visFortsettknapp } = React.useContext(ContainerContext);
 
@@ -113,7 +114,7 @@ const MedisinskVilkår = (): JSX.Element => {
                         <span>Sykdomsvurderingen gjelder barnet og er felles for alle parter.</span>
                         <span className={styles.infostripe__diagnosekode__tittel}>Diagnose:</span>
                         <span className={styles.infostripe__diagnosekode}>
-                            { (!diagnosekoder?.hasLoaded && ' ') || diagnosekoderTekst}
+                            {(!diagnosekoder?.hasLoaded && ' ') || diagnosekoderTekst}
                         </span>
                     </>
                 }
