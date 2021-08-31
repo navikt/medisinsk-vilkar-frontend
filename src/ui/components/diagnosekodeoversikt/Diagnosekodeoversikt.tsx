@@ -74,10 +74,6 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
         };
     }, []);
 
-    if (isLoading) {
-        return <Spinner />;
-    }
-
     return (
         <div>
             <TitleWithUnderline
@@ -96,14 +92,18 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             >
                 Diagnosekoder
             </TitleWithUnderline>
-            <Box marginTop={Margin.large}>
-                {diagnosekoder.length === 0 && (
-                    <IconWithText iconRenderer={() => <WarningIcon />} text="Ingen diagnosekode registrert." />
-                )}
-                {diagnosekoder.length >= 1 && (
-                    <Diagnosekodeliste diagnosekoder={diagnosekoder} onDeleteClick={slettDiagnosekode} />
-                )}
-            </Box>
+            {isLoading ? (
+                <Spinner />
+            ) : (
+                <Box marginTop={Margin.large}>
+                    {diagnosekoder.length === 0 && (
+                        <IconWithText iconRenderer={() => <WarningIcon />} text="Ingen diagnosekode registrert." />
+                    )}
+                    {diagnosekoder.length >= 1 && (
+                        <Diagnosekodeliste diagnosekoder={diagnosekoder} onDeleteClick={slettDiagnosekode} />
+                    )}
+                </Box>
+            )}
             <DiagnosekodeModal
                 isOpen={modalIsOpen}
                 onSaveClick={(nyDiagnosekode: Diagnosekode) =>
