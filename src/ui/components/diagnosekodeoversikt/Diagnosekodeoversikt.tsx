@@ -45,7 +45,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
         })
             .then((response: DiagnosekodeResponse) => {
                 setDiagnosekodeResponse(response);
-                setDiagnosekoder({ koder: response?.diagnosekoder, hasLoaded: true });
+                setDiagnosekoder({ koder: response?.diagnosekoder || [], hasLoaded: true });
                 setIsLoading(false);
             })
             .catch(() => {

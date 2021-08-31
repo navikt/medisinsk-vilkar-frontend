@@ -55,7 +55,7 @@ const MedisinskVilkår = (): JSX.Element => {
 
     const { isLoading, hasError, activeStep, markedStep, sykdomsstegStatus } = state;
     const [diagnosekoder, setDiagnosekoder] = useState<DiagnosekodeWrapper>({ koder: [], hasLoaded: false });
-    const diagnosekoderTekst = diagnosekoder.koder.length > 0 ? `${diagnosekoder?.koder.join(', ')}` : 'Kode mangler';
+    const diagnosekoderTekst = diagnosekoder?.koder.length > 0 ? `${diagnosekoder?.koder.join(', ')}` : 'Kode mangler';
     const { endpoints, httpErrorHandler, visFortsettknapp } = React.useContext(ContainerContext);
 
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
