@@ -1,7 +1,7 @@
 import { prettifyDateString } from '@navikt/k9-date-utils';
 import { ContentWithTooltip, OnePersonIconGray, OnePersonOutlineGray, WarningIcon } from '@navikt/k9-react-components';
 import React from 'react';
-import { Dokument } from '../../../types/Dokument';
+import { Dokument, dokumentLabel } from '../../../types/Dokument';
 import styles from './ustrukturertDokumentElement.less';
 
 interface UstrukturertDokumentElementProps {
@@ -34,7 +34,7 @@ const UstrukturertDokumentElement = ({
             <div className={styles.ustrukturertDokumentElement__texts}>
                 <p className={styles.ustrukturertDokumentElement__texts__type} id="ikkeKlassifisertText">
                     <span className={styles.visuallyHidden}>Type</span>
-                    Ikke klassifisert
+                    {dokumentLabel.UKLASSIFISERT}
                 </p>
                 <span className={styles.ustrukturertDokumentElement__texts__date}>
                     <span className={styles.visuallyHidden}>Datert</span>
