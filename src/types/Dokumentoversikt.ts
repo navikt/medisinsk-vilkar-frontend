@@ -1,17 +1,5 @@
-import { initializeDate } from '@navikt/k9-date-utils';
+import { dokumentSorter } from '../util/dokumentUtils';
 import Dokument, { Dokumenttype } from './Dokument';
-
-const dokumentSorter = (dok1: Dokument, dok2: Dokument): number => {
-    const dok1Date = initializeDate(dok1.datert || dok1.mottattTidspunkt);
-    const dok2Date = initializeDate(dok2.datert || dok2.mottattTidspunkt);
-    if (dok1Date.isBefore(dok2Date)) {
-        return 1;
-    }
-    if (dok2Date.isBefore(dok1Date)) {
-        return -1;
-    }
-    return 0;
-};
 
 class Dokumentoversikt {
     alleDokumenter: Dokument[];
