@@ -66,6 +66,7 @@ const NyeDokumenterSomKanPåvirkeEksisterendeVurderinger = ({
                         onClick={() => onEndringerRegistrertClick()}
                         disabled={isSubmitting}
                         spinner={isSubmitting}
+                        id="bekreftNyeDokumenterVurdertKnapp"
                     >
                         Utført, eventuelle endringer er registrert
                     </Hovedknapp>
