@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import * as httpUtils from '@navikt/k9-http-utils';
 import ContainerContext from '../../../context/ContainerContext';
 import MedisinskVilkår from '../MedisinskVilkår';
@@ -18,8 +19,11 @@ const vurderingsoversiktMock = {
 } as any;
 
 const httpErrorHandlerMock = () => null;
-const contextWrapper = (ui) =>
-    render(
+const contextWrapper = (ui) =>{
+    const queryClient = new QueryClient();
+    return render(
+        <QueryClientProvider client={queryClient}>
+
         <ContainerContext.Provider
             value={
                 {
@@ -30,8 +34,9 @@ const contextWrapper = (ui) =>
         >
             {ui}
         </ContainerContext.Provider>
+        </QueryClientProvider>
     );
-
+}
 const renderMedisinskVilkår = () => contextWrapper(<MedisinskVilkår />);
 
 describe('MedisinskVilkår', () => {
