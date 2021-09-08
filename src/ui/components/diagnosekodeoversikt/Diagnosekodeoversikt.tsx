@@ -62,7 +62,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             },
             httpErrorHandler,
             { cancelToken: httpCanceler.token }
-        ).then(() => setModalIsOpen(false));
+        );
 
     const slettDiagnosekodeMutation = useMutation((diagnosekode: Diagnosekode) => slettDiagnosekode(diagnosekode), {
         onSuccess: () => {
