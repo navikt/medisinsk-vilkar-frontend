@@ -65,10 +65,7 @@ const MedisinskVilkår = (): JSX.Element => {
 
     const { isLoading: diagnosekoderLoading, data: diagnosekoderData } = useQuery(
         'diagnosekodeResponse',
-        hentDiagnosekoder,
-        {
-            placeholderData: { diagnosekoder: [], links: [], behandlingUuid: '', versjon: null },
-        }
+        hentDiagnosekoder
     );
     const { diagnosekoder } = diagnosekoderData;
     const diagnosekoderTekst = diagnosekoder?.length > 0 ? `${diagnosekoder?.join(', ')}` : 'Kode mangler';

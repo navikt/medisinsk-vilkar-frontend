@@ -26,17 +26,13 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
     const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
 
-    const initialData = { diagnosekoder: [], links: [], behandlingUuid: '', versjon: null };
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
     const hentDiagnosekoder = () =>
         get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         }).then((response: DiagnosekodeResponse) => response);
 
-    const { isLoading, data, refetch } = useQuery('diagnosekodeResponse', hentDiagnosekoder, {
-        placeholderData: initialData,
-        staleTime: 10000,
-    });
+    const { isLoading, data, refetch } = useQuery('diagnosekodeResponse', hentDiagnosekoder);
 
     const { diagnosekoder, links, behandlingUuid, versjon } = data;
     const endreDiagnosekoderLink = findLinkByRel(LinkRel.ENDRE_DIAGNOSEKODER, links);
