@@ -9,6 +9,7 @@ interface State {
     valgtDokument: Dokument;
     dokumentoversiktFeilet: boolean;
     visRedigeringAvDokument: boolean;
+    visAlleDokumenter: boolean;
 }
 
 interface Action {
@@ -53,6 +54,16 @@ const vilkårsdokumentReducer = (state: State, action: Action): State => {
                 ...state,
                 visRedigeringAvDokument: true,
             };
+        case ActionType.AKTIVER_VISNING_AV_ALLE_DOKUMENTER:
+            return {
+                ...state,
+                visAlleDokumenter: true
+            }
+        case ActionType.DEAKTIVER_VISNING_AV_ALLE_DOKUMENTER:
+            return {
+                ...state,
+                visAlleDokumenter: false
+            }
         default:
             return state;
     }

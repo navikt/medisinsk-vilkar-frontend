@@ -17,7 +17,7 @@ interface ChevronDropdownProps {
     text: string;
     className: string;
     dokumenttypeFilter: Array<Dokumenttype>;
-    filtrerDokumenttype: (value: string) => void;
+    oppdaterDokumentFilter: (value: string) => void;
 }
 
 function ChevronWithText({ chevronDirection, onClick, text }: ChevronWithTextProps): JSX.Element {
@@ -33,7 +33,7 @@ function ChevronDropdown({
     text,
     className,
     dokumenttypeFilter,
-    filtrerDokumenttype,
+    oppdaterDokumentFilter,
 }: ChevronDropdownProps): JSX.Element {
     const [open, setOpen] = useState(false);
     const chevronDirection = open ? 'opp' : 'ned';
@@ -61,7 +61,7 @@ function ChevronDropdown({
                                         key={type}
                                         label={dokumentLabel[type]}
                                         checked={dokumenttypeFilter.includes(type)}
-                                        onChange={() => filtrerDokumenttype(type)}
+                                        onChange={() => oppdaterDokumentFilter(type)}
                                     />
                                 ))}
                             </div>

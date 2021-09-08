@@ -1,6 +1,7 @@
 import { get } from '@navikt/k9-http-utils';
 import { Box, Margin, PageContainer, NavigationWithDetailView } from '@navikt/k9-react-components';
 import axios from 'axios';
+import { Checkbox } from 'nav-frontend-skjema';
 import React, { useMemo } from 'react';
 import LinkRel from '../../../constants/LinkRel';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
@@ -43,6 +44,7 @@ const StruktureringAvDokumentasjon = ({
         valgtDokument: null,
         dokumentoversiktFeilet: false,
         visRedigeringAvDokument: false,
+        visAlleDokumenter: false,
     });
 
     const {
@@ -52,12 +54,29 @@ const StruktureringAvDokumentasjon = ({
         valgtDokument,
         dokumentoversiktFeilet,
         visRedigeringAvDokument,
+        visAlleDokumenter,
     } = state;
 
     const getDokumentoversikt = () =>
         get<DokumentoversiktResponse>(endpoints.dokumentoversikt, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         });
+
+    const aktiverVisningAvAlleDokumenter = () => {
+        dispatch({ type: ActionType.AKTIVER_VISNING_AV_ALLE_DOKUMENTER });
+    };
+
+    const deaktiverVisningAvAlleDokumenter = () => {
+        dispatch({ type: ActionType.DEAKTIVER_VISNING_AV_ALLE_DOKUMENTER });
+    };
+
+    const toggleVisningAvAlleDokumenter = () => {
+        if (visAlleDokumenter) {
+            deaktiverVisningAvAlleDokumenter();
+        } else {
+            aktiverVisningAvAlleDokumenter();
+        }
+    };
 
     const visDokumentoversikt = (nyDokumentoversikt: Dokumentoversikt) => {
         dispatch({ type: ActionType.VIS_DOKUMENTOVERSIKT, dokumentoversikt: nyDokumentoversikt });
@@ -120,12 +139,15 @@ const StruktureringAvDokumentasjon = ({
             />
             {dokumentoversikt?.harDokumenter() === true && (
                 <>
+                    <Box marginBottom={Margin.medium}>
+                        <Checkbox label="Vis alle dokumenter" onChange={toggleVisningAvAlleDokumenter} />
+                    </Box>
                     <NavigationWithDetailView
                         navigationSection={() => (
                             <Dokumentnavigasjon
-                                dokumenter={dokumentoversikt.strukturerteDokumenter}
-                                dokumenterSomMåGjennomgås={dokumentoversikt.ustrukturerteDokumenter}
+                                dokumenter={dokumentoversikt.alleDokumenter}
                                 onDokumentValgt={velgDokument}
+                                visAlleDokumenter={visAlleDokumenter}
                             />
                         )}
                         showDetailSection={visDokumentDetails}

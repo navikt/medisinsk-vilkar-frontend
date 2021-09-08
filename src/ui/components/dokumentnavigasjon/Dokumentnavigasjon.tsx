@@ -1,47 +1,42 @@
-import { InteractiveList } from '@navikt/k9-react-components';
-import { Element, Undertittel } from 'nav-frontend-typografi';
+import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import React from 'react';
 import { Dokument, Dokumenttype } from '../../../types/Dokument';
-import StrukturertDokumentElement from '../strukturet-dokument-element/StrukturertDokumentElement';
-import UstrukturertDokumentElement from '../ustrukturert-dokument-element/UstrukturertDokumentElement';
 import ChevronDropdown from '../chevron-dropdown/ChevronDropdown';
+import Dokumentliste from '../dokumentliste/Dokumentliste';
 import styles from './dokumentnavigasjon.less';
 
 interface DokumentnavigasjonProps {
     dokumenter: Dokument[];
     onDokumentValgt: (dokument: Dokument) => void;
-    dokumenterSomMåGjennomgås?: Dokument[];
+    visAlleDokumenter: boolean;
 }
 
 const Dokumentnavigasjon = ({
     dokumenter,
     onDokumentValgt,
-    dokumenterSomMåGjennomgås,
+    visAlleDokumenter,
 }: DokumentnavigasjonProps): JSX.Element => {
-    const harDokumentasjonSomMåGjennomgås = dokumenterSomMåGjennomgås && dokumenterSomMåGjennomgås.length > 0;
+    const harDokumentasjonSomMåGjennomgås =
+        dokumenter && dokumenter.some((dokument) => dokument.type === Dokumenttype.UKLASSIFISERT);
     const [activeIndex, setActiveIndex] = React.useState(harDokumentasjonSomMåGjennomgås ? 0 : -1);
     const [dokumenttypeFilter, setDokumenttypeFilter] = React.useState([...Object.values(Dokumenttype)]);
-    const filtrerDokumenttype = (type) =>
+
+    const oppdaterDokumentfilter = (type) =>
         dokumenttypeFilter.includes(type)
             ? setDokumenttypeFilter(dokumenttypeFilter.filter((v) => v !== type))
             : setDokumenttypeFilter(dokumenttypeFilter.concat([type]));
 
-    const dokumentElementer = dokumenter
-        .filter((dokument) => dokument.duplikatAvId == null)
-        .map((dokument) => ({
-            renderer: () => <StrukturertDokumentElement dokument={dokument} />,
-            dokument,
-        }));
-    const allElements = [...dokumentElementer];
-
-    if (harDokumentasjonSomMåGjennomgås) {
-        dokumenterSomMåGjennomgås.forEach((dokument) =>
-            allElements.unshift({
-                renderer: () => <UstrukturertDokumentElement dokument={dokument} />,
-                dokument,
-            })
-        );
+    let filtrerteDokumenter = dokumenter;
+    if (!visAlleDokumenter) {
+        filtrerteDokumenter = filtrerteDokumenter
+            .filter(({ type }) => type === Dokumenttype.UKLASSIFISERT)
+            .filter((dokument) => dokument.duplikatAvId == null);
     }
+
+    const oppdaterValgtDokument = (index: number, dokument: Dokument) => {
+        setActiveIndex(index);
+        onDokumentValgt(dokument);
+    };
 
     return (
         <div className={styles.dokumentnavigasjon}>
@@ -53,24 +48,21 @@ const Dokumentnavigasjon = ({
                         className={styles['dokumentnavigasjon__columnHeading--second']}
                         text="Type"
                         dokumenttypeFilter={dokumenttypeFilter}
-                        filtrerDokumenttype={filtrerDokumenttype}
+                        oppdaterDokumentFilter={oppdaterDokumentfilter}
                     />
                     <Element className={styles['dokumentnavigasjon__columnHeading--third']}>Datert</Element>
                     <Element className={styles['dokumentnavigasjon__columnHeading--fourth']}>Part</Element>
                 </div>
-                <InteractiveList
-                    elements={allElements
-                        .filter((element) => dokumenttypeFilter.includes(element?.dokument?.type))
-                        .map((element, currentIndex) => ({
-                            content: element.renderer(),
-                            active: activeIndex === currentIndex,
-                            key: `${currentIndex}`,
-                            onClick: () => {
-                                setActiveIndex(currentIndex);
-                                onDokumentValgt(element.dokument);
-                            },
-                        }))}
-                />
+                {filtrerteDokumenter.length === 0 && (
+                    <Normaltekst style={{ padding: '0rem 1rem 1rem 1rem' }}>Ingen dokumenter å vise</Normaltekst>
+                )}
+                {filtrerteDokumenter.length >= 1 && (
+                    <Dokumentliste
+                        dokumenter={filtrerteDokumenter}
+                        onDokumentValgt={oppdaterValgtDokument}
+                        activeIndex={activeIndex}
+                    />
+                )}
             </div>
         </div>
     );
