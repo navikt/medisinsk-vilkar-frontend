@@ -28,9 +28,9 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
 
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
     const hentDiagnosekoder = () =>
-        get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler, {
-            cancelToken: httpCanceler.token,
-        }).then((response: DiagnosekodeResponse) => response);
+        get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler).then(
+            (response: DiagnosekodeResponse) => response
+        );
 
     const { isLoading, data, refetch } = useQuery('diagnosekodeResponse', hentDiagnosekoder);
 
@@ -56,8 +56,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                 versjon,
                 diagnosekoder: [...diagnosekoder, nyDiagnosekode.kode],
             },
-            httpErrorHandler,
-            { cancelToken: httpCanceler.token }
+            httpErrorHandler
         );
 
     const slettDiagnosekodeMutation = useMutation((diagnosekode: Diagnosekode) => slettDiagnosekode(diagnosekode), {

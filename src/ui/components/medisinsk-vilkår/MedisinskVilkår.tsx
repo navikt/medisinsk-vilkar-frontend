@@ -59,9 +59,9 @@ const MedisinskVilkår = (): JSX.Element => {
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const hentDiagnosekoder = () =>
-        get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler, {
-            cancelToken: httpCanceler.token,
-        }).then((response: DiagnosekodeResponse) => response);
+        get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler).then(
+            (response: DiagnosekodeResponse) => response
+        );
 
     const { isLoading: diagnosekoderLoading, data: diagnosekoderData } = useQuery(
         'diagnosekodeResponse',
