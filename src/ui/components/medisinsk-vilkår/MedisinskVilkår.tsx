@@ -75,9 +75,11 @@ const MedisinskVilkår = (): JSX.Element => {
             const status = await get<SykdomsstegStatusResponse>(endpoints.status, httpErrorHandler, {
                 cancelToken: httpCanceler.token,
             });
+            const nesteSteg = finnNesteSteg(status);
             dispatch({
                 type: ActionType.UPDATE_STATUS,
                 sykdomsstegStatus: status,
+                step: nesteSteg,
             });
             return status;
         } catch (error) {
