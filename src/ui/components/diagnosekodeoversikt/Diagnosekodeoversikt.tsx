@@ -1,9 +1,8 @@
 import { get, post } from '@navikt/k9-http-utils';
 import { Box, Margin, TitleWithUnderline, WarningIcon } from '@navikt/k9-react-components';
-import axios from 'axios';
 import Modal from 'nav-frontend-modal';
 import Spinner from 'nav-frontend-spinner';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useQuery, useMutation } from 'react-query';
 import LinkRel from '../../../constants/LinkRel';
 import Diagnosekode from '../../../types/Diagnosekode';
