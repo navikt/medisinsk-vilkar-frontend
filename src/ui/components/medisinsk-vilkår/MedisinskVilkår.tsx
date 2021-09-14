@@ -87,7 +87,6 @@ const MedisinskVilkår = (): JSX.Element => {
             throw new Error(error);
         }
     };
-
     React.useEffect(() => {
         hentSykdomsstegStatus().then(
             (status) => {
@@ -101,6 +100,8 @@ const MedisinskVilkår = (): JSX.Element => {
                 dispatch({ type: ActionType.ACTIVATE_DEFAULT_STEP });
             }
         );
+
+        return () => httpCanceler.cancel();
     }, []);
 
     const navigerTilNesteSteg = () => {
