@@ -26,7 +26,6 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
     const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
 
-    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
     const hentDiagnosekoder = () =>
         get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler).then(
             (response: DiagnosekodeResponse) => response
@@ -72,13 +71,6 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             });
         },
     });
-
-    React.useEffect(
-        () => () => {
-            httpCanceler.cancel();
-        },
-        []
-    );
 
     return (
         <div>
