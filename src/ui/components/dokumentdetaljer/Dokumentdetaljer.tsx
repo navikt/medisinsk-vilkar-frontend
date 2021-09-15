@@ -19,7 +19,7 @@ const Dokumentdetaljer = ({
     editMode,
     onEditClick,
     strukturerteDokumenter,
-}: DokumentdetaljerProps) => {
+}: DokumentdetaljerProps): JSX.Element => {
     const { type, links } = dokument;
     if (type === Dokumenttype.UKLASSIFISERT || editMode) {
         const strukturerDokumentLink = findLinkByRel(LinkRel.ENDRE_DOKUMENT, links);
