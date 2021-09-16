@@ -168,7 +168,10 @@ const MedisinskVilkår = (): JSX.Element => {
                 <WriteAccessBoundContent
                     contentRenderer={() => <AksjonspunktFerdigStripe />}
                     otherRequirementsAreMet={
-                        kanLøseAksjonspunkt && (harDataSomIkkeHarBlittTattMedIBehandling || visFortsettknapp === true)
+                        kanLøseAksjonspunkt &&
+                        (harDataSomIkkeHarBlittTattMedIBehandling || visFortsettknapp === true) &&
+                        markedStep !== dokumentSteg &&
+                        activeStep !== dokumentSteg
                     }
                 />
                 <TabsPure
