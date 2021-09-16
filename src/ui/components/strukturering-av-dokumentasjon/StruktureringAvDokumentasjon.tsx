@@ -21,7 +21,7 @@ import dokumentReducer from './reducer';
 
 interface StruktureringAvDokumentasjonProps {
     navigerTilNesteSteg: () => void;
-    hentSykdomsstegStatus: () => Promise<SykdomsstegStatusResponse>;
+    hentSykdomsstegStatus: () => Promise<[SykdomsstegStatusResponse, Dokument[]]>;
     sykdomsstegStatus: SykdomsstegStatusResponse;
 }
 

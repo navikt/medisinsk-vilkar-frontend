@@ -13,6 +13,7 @@ interface ContainerContract {
         slettDiagnosekode: string;
         dataTilVurdering: string;
         status: string;
+        nyeDokumenter: string;
     };
     behandlingUuid: string;
     readOnly: boolean;

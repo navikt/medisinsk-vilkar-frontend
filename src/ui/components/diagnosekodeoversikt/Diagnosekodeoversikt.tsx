@@ -34,7 +34,6 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
         versjon: null,
     });
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
-
     const { diagnosekoder, links } = diagnosekodeResponse;
     const endreDiagnosekoderLink = findLinkByRel(LinkRel.ENDRE_DIAGNOSEKODER, links);
 
