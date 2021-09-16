@@ -62,12 +62,13 @@ const medisinskVilkårReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 sykdomsstegStatus: action.sykdomsstegStatus,
+                markedStep: action.step,
             };
         }
         case ActionType.SHOW_ERROR: {
             return {
                 ...state,
-                hasError: true
+                hasError: true,
             };
         }
         case ActionType.ENDRINGER_UTIFRA_NYE_DOKUMENTER_REGISTRERT: {
