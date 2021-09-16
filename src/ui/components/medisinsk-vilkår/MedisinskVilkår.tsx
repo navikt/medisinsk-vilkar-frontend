@@ -155,11 +155,16 @@ const MedisinskVilkår = (): JSX.Element => {
             />
             <div className={styles.medisinskVilkår}>
                 <h1 style={{ fontSize: 22 }}>Sykdom</h1>
-                {nyeDokumenterSomIkkeErVurdert && manglerVurderingAvNyeDokumenter && markedStep !== dokumentSteg && (
-                    <Box marginBottom={Margin.medium}>
-                        <NyeDokumenterSomKanPåvirkeEksisterendeVurderinger dokumenter={nyeDokumenterSomIkkeErVurdert} />
-                    </Box>
-                )}
+                {nyeDokumenterSomIkkeErVurdert &&
+                    manglerVurderingAvNyeDokumenter &&
+                    markedStep !== dokumentSteg &&
+                    activeStep !== dokumentSteg && (
+                        <Box marginBottom={Margin.medium}>
+                            <NyeDokumenterSomKanPåvirkeEksisterendeVurderinger
+                                dokumenter={nyeDokumenterSomIkkeErVurdert}
+                            />
+                        </Box>
+                    )}
                 <WriteAccessBoundContent
                     contentRenderer={() => <AksjonspunktFerdigStripe />}
                     otherRequirementsAreMet={
