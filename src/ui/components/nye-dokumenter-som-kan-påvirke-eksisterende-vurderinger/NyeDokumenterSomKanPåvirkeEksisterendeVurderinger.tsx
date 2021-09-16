@@ -1,11 +1,10 @@
-import React from 'react';
-import { Box, DocumentIcon, Margin } from '@navikt/k9-react-components';
 import { prettifyDateString } from '@navikt/k9-date-utils';
-import { Hovedknapp } from 'nav-frontend-knapper';
+import { Box, DocumentIcon, Margin } from '@navikt/k9-react-components';
 import { Element } from 'nav-frontend-typografi';
+import React from 'react';
+import LinkRel from '../../../constants/LinkRel';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import { findLinkByRel } from '../../../util/linkUtils';
-import LinkRel from '../../../constants/LinkRel';
 import styles from './nyeDokumenterSomKanPåvirkeEksisterendeVurderinger.less';
 
 interface NyeDokumenterListeProps {
@@ -28,7 +27,6 @@ const NyeDokumenterListe = ({ dokumenter }: NyeDokumenterListeProps) => (
             const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, dokument.links);
             return (
                 <p key={dokument.id}>
-                    Nytt dokument:
                     <a
                         href={dokumentLink.href}
                         className={styles.nyeDokumenterSomKanPåvirkeEksisterendeVurderinger__dokumentLink}
@@ -46,34 +44,21 @@ const NyeDokumenterListe = ({ dokumenter }: NyeDokumenterListeProps) => (
 
 interface NyeDokumenterSomKanPåvirkeEksisterendeVurderingerProps {
     dokumenter: Dokument[];
-    onEndringerRegistrertClick: () => void;
-    isSubmitting: boolean;
 }
 
 const NyeDokumenterSomKanPåvirkeEksisterendeVurderinger = ({
     dokumenter,
-    onEndringerRegistrertClick,
-    isSubmitting,
 }: NyeDokumenterSomKanPåvirkeEksisterendeVurderingerProps): JSX.Element => (
-    <div className={styles.nyeDokumenterSomKanPåvirkeEksisterendeVurderinger}>
-        <Box marginTop={Margin.large}>
-            <div className={styles.nyeDokumenterSomKanPåvirkeEksisterendeVurderinger__content}>
-                <Element>Vurder om nytt dokument fører til endringer i eksisterende vurderinger.</Element>
-                <NyeDokumenterListe dokumenter={dokumenter} />
-                <Box marginTop={Margin.large}>
-                    <Hovedknapp
-                        mini
-                        onClick={() => onEndringerRegistrertClick()}
-                        disabled={isSubmitting}
-                        spinner={isSubmitting}
-                        id="bekreftNyeDokumenterVurdertKnapp"
-                    >
-                        Utført, eventuelle endringer er registrert
-                    </Hovedknapp>
-                </Box>
-            </div>
-        </Box>
-    </div>
+    <Box marginTop={Margin.large} marginBottom={Margin.large}>
+        <div className={styles.nyeDokumenterSomKanPåvirkeEksisterendeVurderinger}>
+            <Box marginTop={Margin.large}>
+                <div className={styles.nyeDokumenterSomKanPåvirkeEksisterendeVurderinger__content}>
+                    <Element>Nye dokumenter på barnet:</Element>
+                    <NyeDokumenterListe dokumenter={dokumenter} />
+                </div>
+            </Box>
+        </div>
+    </Box>
 );
 
 export default NyeDokumenterSomKanPåvirkeEksisterendeVurderinger;

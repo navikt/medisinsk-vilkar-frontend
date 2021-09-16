@@ -27,7 +27,7 @@ app.use(
     })
 );
 
-let mockedNyeDokumenter =[ ...mockedNyeDokumenterList];
+let mockedNyeDokumenter = [...mockedNyeDokumenterList];
 
 app.use('/mock/status', (req, res) => {
     const harUklassifiserteDokumenter = mockedDokumentoversikt.dokumenter.some(
@@ -43,7 +43,7 @@ app.use('/mock/status', (req, res) => {
         mockedTilsynsbehovVurderingsoversikt.resterendeVurderingsperioder.length > 0;
     const manglerVurderingAvToOmsorgspersoner =
         mockedToOmsorgspersonerVurderingsoversikt.resterendeVurderingsperioder.length > 0;
-    const nyttDokumentHarIkkekontrollertEksisterendeVurderinger = mockedNyeDokumenter.length > 0
+    const nyttDokumentHarIkkekontrollertEksisterendeVurderinger = mockedNyeDokumenter.length > 0;
     const harDataSomIkkeHarBlittTattMedIBehandling = true;
 
     res.send({
@@ -52,15 +52,14 @@ app.use('/mock/status', (req, res) => {
             !manglerDiagnosekode &&
             !manglerGodkjentLegeerklæring &&
             !manglerVurderingAvKontinuerligTilsynOgPleie &&
-            !manglerVurderingAvToOmsorgspersoner &&
-            !nyttDokumentHarIkkekontrollertEksisterendeVurderinger,
+            !manglerVurderingAvToOmsorgspersoner,
         harUklassifiserteDokumenter,
         manglerDiagnosekode,
         manglerGodkjentLegeerklæring,
         manglerVurderingAvKontinuerligTilsynOgPleie,
         manglerVurderingAvToOmsorgspersoner,
         harDataSomIkkeHarBlittTattMedIBehandling,
-        nyttDokumentHarIkkekontrollertEksisterendeVurderinger
+        nyttDokumentHarIkkekontrollertEksisterendeVurderinger,
     });
 });
 
@@ -112,9 +111,8 @@ app.use('/mock/endre-vurdering', (req, res) => {
     } else {
         const id = req.body.id;
         const perioder = req.body.perioder;
-        mockedTilsynsbehovVurderingsoversikt.vurderingselementer = mockedTilsynsbehovVurderingsoversikt.vurderingselementer.filter(
-            (element) => id !== element.id
-        );
+        mockedTilsynsbehovVurderingsoversikt.vurderingselementer =
+            mockedTilsynsbehovVurderingsoversikt.vurderingselementer.filter((element) => id !== element.id);
         perioder.forEach((periode) => {
             mockedTilsynsbehovVurderingsoversikt.vurderingselementer.unshift({
                 id,
@@ -203,13 +201,13 @@ app.use('/mock/endre-innleggelsesperioder', (req, res) => {
 });
 
 app.get('/mock/nye-dokumenter', (req, res) => {
-  res.send(mockedNyeDokumenter);
-})
+    res.send(mockedNyeDokumenter);
+});
 
 app.post('/mock/nye-dokumenter', (req, res) => {
-  mockedNyeDokumenter = [];
-  res.send({})
-})
+    mockedNyeDokumenter = [];
+    res.send({});
+});
 
 const port = 8082;
 app.listen(port, (error) => {

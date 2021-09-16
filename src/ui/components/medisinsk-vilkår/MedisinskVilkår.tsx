@@ -1,28 +1,28 @@
 import { get } from '@navikt/k9-http-utils';
-import { PageContainer, WarningIcon, Infostripe, ChildIcon, Margin, Box } from '@navikt/k9-react-components';
-import React, { useMemo, useState } from 'react';
-import { TabsPure } from 'nav-frontend-tabs';
-import classnames from 'classnames';
+import { Box, ChildIcon, Infostripe, Margin, PageContainer, WarningIcon } from '@navikt/k9-react-components';
 import axios from 'axios';
+import classnames from 'classnames';
+import { TabsPure } from 'nav-frontend-tabs';
+import React, { useMemo, useState } from 'react';
+import { DiagnosekodeWrapper } from '../../../types/Diagnosekode';
+import Dokument from '../../../types/Dokument';
+import { NyeDokumenterResponse } from '../../../types/NyeDokumenterResponse';
+import Step, { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
+import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
+import Vurderingstype from '../../../types/Vurderingstype';
+import { finnNesteSteg } from '../../../util/statusUtils';
+import ContainerContext from '../../context/ContainerContext';
+import DiagnosekodeContext from '../../context/DiagnosekodeContext';
+import VurderingContext from '../../context/VurderingContext';
+import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
+import NyeDokumenterSomKanPåvirkeEksisterendeVurderinger from '../nye-dokumenter-som-kan-påvirke-eksisterende-vurderinger/NyeDokumenterSomKanPåvirkeEksisterendeVurderinger';
 import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
 import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-pleie/VilkårsvurderingAvTilsynOgPleie';
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
-import Step, { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
-import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
-import ContainerContext from '../../context/ContainerContext';
-import DiagnosekodeContext from '../../context/DiagnosekodeContext';
-import { finnNesteSteg } from '../../../util/statusUtils';
-import medisinskVilkårReducer from './reducer';
-import ActionType from './actionTypes';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
-import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
-import VurderingContext from '../../context/VurderingContext';
-import Vurderingstype from '../../../types/Vurderingstype';
-import { NyeDokumenterResponse } from '../../../types/NyeDokumenterResponse';
-import NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController from '../nye-dokumenter-som-kan-påvirke-eksisterende-vurderinger-controller/NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController';
-import Dokument from '../../../types/Dokument';
+import ActionType from './actionTypes';
 import styles from './medisinskVilkår.less';
-import { DiagnosekodeWrapper } from '../../../types/Diagnosekode';
+import medisinskVilkårReducer from './reducer';
 
 const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
@@ -133,15 +133,6 @@ const MedisinskVilkår = (): JSX.Element => {
         }
     };
 
-    const afterEndringerUtifraNyeDokumenterRegistrert = () => {
-        dispatch({ type: ActionType.ENDRINGER_UTIFRA_NYE_DOKUMENTER_REGISTRERT });
-        hentSykdomsstegStatus().then(({ kanLøseAksjonspunkt }) => {
-            if (kanLøseAksjonspunkt) {
-                navigerTilSteg(toOmsorgspersonerSteg, true);
-            }
-        });
-    };
-
     const kanLøseAksjonspunkt = sykdomsstegStatus?.kanLøseAksjonspunkt;
     const harDataSomIkkeHarBlittTattMedIBehandling = sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling;
     const manglerVurderingAvNyeDokumenter = sykdomsstegStatus?.nyttDokumentHarIkkekontrollertEksisterendeVurderinger;
@@ -162,19 +153,11 @@ const MedisinskVilkår = (): JSX.Element => {
             />
             <div className={styles.medisinskVilkår}>
                 <h1 style={{ fontSize: 22 }}>Sykdom</h1>
-                <WriteAccessBoundContent
-                    contentRenderer={() => (
-                        <Box marginBottom={Margin.medium}>
-                            <NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController
-                                dokumenter={nyeDokumenterSomIkkeErVurdert}
-                                afterEndringerRegistrert={afterEndringerUtifraNyeDokumenterRegistrert}
-                            />
-                        </Box>
-                    )}
-                    otherRequirementsAreMet={
-                        nyeDokumenterSomIkkeErVurdert && manglerVurderingAvNyeDokumenter && markedStep !== dokumentSteg
-                    }
-                />
+                {nyeDokumenterSomIkkeErVurdert && manglerVurderingAvNyeDokumenter && markedStep !== dokumentSteg && (
+                    <Box marginBottom={Margin.medium}>
+                        <NyeDokumenterSomKanPåvirkeEksisterendeVurderinger dokumenter={nyeDokumenterSomIkkeErVurdert} />
+                    </Box>
+                )}
                 <WriteAccessBoundContent
                     contentRenderer={() => <AksjonspunktFerdigStripe />}
                     otherRequirementsAreMet={
