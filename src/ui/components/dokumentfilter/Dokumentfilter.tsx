@@ -6,18 +6,18 @@ import classNames from 'classnames';
 import { FilterFilled } from '@navikt/ds-icons';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { Dokumenttype, dokumentLabel } from '../../../types/Dokument';
-import styles from './chevronDropdown.less';
+import styles from './dokumentfilter.less';
 
 interface ChevronWithTextProps {
     chevronDirection: 'opp' | 'ned';
     onClick: () => void;
     text: string;
 }
-interface ChevronDropdownProps {
+interface DokumentfilterProps {
     text: string;
     className: string;
-    dokumenttypeFilter: Array<Dokumenttype>;
-    filtrerDokumenttype: (value: string) => void;
+    filters: Array<Dokumenttype>;
+    onFilterChange: (value: string) => void;
 }
 
 function ChevronWithText({ chevronDirection, onClick, text }: ChevronWithTextProps): JSX.Element {
@@ -29,16 +29,16 @@ function ChevronWithText({ chevronDirection, onClick, text }: ChevronWithTextPro
     );
 }
 
-function ChevronDropdown({
+function Dokumentfilter({
     text,
     className,
-    dokumenttypeFilter,
-    filtrerDokumenttype,
-}: ChevronDropdownProps): JSX.Element {
+    filters: filters,
+    onFilterChange: filtrerDokumenttype,
+}: DokumentfilterProps): JSX.Element {
     const [open, setOpen] = useState(false);
     const chevronDirection = open ? 'opp' : 'ned';
     const dokumenttypeListe = [...Object.values(Dokumenttype)];
-    const listeErFiltrert = dokumenttypeFilter.length < 4;
+    const listeErFiltrert = filters.length < 4;
     return (
         <>
             <span className={classNames(styles.chevronDropdown, className, open && styles.chevronDropdown__hidden)}>
@@ -60,7 +60,7 @@ function ChevronDropdown({
                                     <Checkbox
                                         key={type}
                                         label={dokumentLabel[type]}
-                                        checked={dokumenttypeFilter.includes(type)}
+                                        checked={filters.includes(type)}
                                         onChange={() => filtrerDokumenttype(type)}
                                     />
                                 ))}
@@ -73,4 +73,4 @@ function ChevronDropdown({
     );
 }
 
-export default ChevronDropdown;
+export default Dokumentfilter;
