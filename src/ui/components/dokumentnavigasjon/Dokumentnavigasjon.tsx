@@ -1,6 +1,6 @@
 import { InteractiveList } from '@navikt/k9-react-components';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { Element, Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
 import { Dokument, Dokumenttype } from '../../../types/Dokument';
 import Dokumentfilter from '../dokumentfilter/Dokumentfilter';

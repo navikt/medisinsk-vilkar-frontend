@@ -32,7 +32,7 @@ function ChevronWithText({ chevronDirection, onClick, text }: ChevronWithTextPro
 function Dokumentfilter({
     text,
     className,
-    filters: filters,
+    filters,
     onFilterChange: filtrerDokumenttype,
 }: DokumentfilterProps): JSX.Element {
     const [open, setOpen] = useState(false);
