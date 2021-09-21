@@ -1,6 +1,7 @@
 import ActionType from './actionTypes';
 import Step, { dokumentSteg } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
+import Dokument from '../../../types/Dokument';
 
 interface State {
     isLoading: boolean;
@@ -8,12 +9,14 @@ interface State {
     activeStep: Step;
     markedStep: Step;
     sykdomsstegStatus: SykdomsstegStatusResponse;
+    nyeDokumenterSomIkkeErVurdert: Dokument[];
 }
 
 interface Action {
     type: ActionType;
     step?: Step;
     sykdomsstegStatus?: SykdomsstegStatusResponse;
+    nyeDokumenterSomIkkeErVurdert?: Dokument[];
 }
 
 const medisinskVilkårReducer = (state: State, action: Action): State => {
@@ -21,6 +24,7 @@ const medisinskVilkårReducer = (state: State, action: Action): State => {
         case ActionType.MARK_AND_ACTIVATE_STEP: {
             return {
                 ...state,
+                nyeDokumenterSomIkkeErVurdert: action.nyeDokumenterSomIkkeErVurdert || [],
                 activeStep: action.step || dokumentSteg,
                 markedStep: action.step,
                 isLoading: false,
@@ -42,6 +46,7 @@ const medisinskVilkårReducer = (state: State, action: Action): State => {
         case ActionType.ACTIVATE_DEFAULT_STEP: {
             return {
                 ...state,
+                nyeDokumenterSomIkkeErVurdert: action.nyeDokumenterSomIkkeErVurdert || [],
                 activeStep: dokumentSteg,
                 isLoading: false,
             };
@@ -64,6 +69,18 @@ const medisinskVilkårReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 hasError: true,
+            };
+        }
+        case ActionType.ENDRINGER_UTIFRA_NYE_DOKUMENTER_REGISTRERT: {
+            return {
+                ...state,
+                nyeDokumenterSomIkkeErVurdert: [],
+            };
+        }
+        case ActionType.UPDATE_NYE_DOKUMENTER_SOM_IKKE_ER_VURDERT: {
+            return {
+                ...state,
+                nyeDokumenterSomIkkeErVurdert: action.nyeDokumenterSomIkkeErVurdert,
             };
         }
         default:

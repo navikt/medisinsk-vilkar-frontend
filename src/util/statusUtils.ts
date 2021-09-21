@@ -9,6 +9,7 @@ export const finnNesteSteg = ({
     manglerVurderingAvKontinuerligTilsynOgPleie,
     manglerVurderingAvToOmsorgspersoner,
     manglerGodkjentLegeerklæring,
+    nyttDokumentHarIkkekontrollertEksisterendeVurderinger,
 }: StatusResponse): Steg => {
     if (harUklassifiserteDokumenter || manglerDiagnosekode || manglerGodkjentLegeerklæring) {
         return dokumentSteg;
@@ -18,7 +19,7 @@ export const finnNesteSteg = ({
         return tilsynOgPleieSteg;
     }
 
-    if (manglerVurderingAvToOmsorgspersoner) {
+    if (manglerVurderingAvToOmsorgspersoner || nyttDokumentHarIkkekontrollertEksisterendeVurderinger) {
         return toOmsorgspersonerSteg;
     }
 
