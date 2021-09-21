@@ -37,10 +37,10 @@ jobs:
               run: npm test
             - name: Sette versjon
               run: |
-                  echo "MAJOR_VERSION=$(npm run majorVersion --silent)" >> $GITHUB_ENV
+                echo "MAJOR_VERSION=$(npm run majorVersion --silent)" >> $GITHUB_ENV
             - name: Sette tag
               run: |
-                  echo "TAG=$(date "+%Y.%m.%d-%m")-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+                echo "TAG=$(date "+%Y.%m.%d-%m")-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
             - name: Sette miljøvariabler
               run: |
                   echo "IMAGE=${IMAGE_BASE}:${TAG}" >> $GITHUB_ENV
