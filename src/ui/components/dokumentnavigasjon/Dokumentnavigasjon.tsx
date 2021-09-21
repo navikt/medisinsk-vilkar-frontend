@@ -1,77 +1,93 @@
 import { InteractiveList } from '@navikt/k9-react-components';
-import { Element, Undertittel } from 'nav-frontend-typografi';
+import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
 import { Dokument, Dokumenttype } from '../../../types/Dokument';
+import Dokumentfilter from '../dokumentfilter/Dokumentfilter';
 import StrukturertDokumentElement from '../strukturet-dokument-element/StrukturertDokumentElement';
 import UstrukturertDokumentElement from '../ustrukturert-dokument-element/UstrukturertDokumentElement';
-import ChevronDropdown from '../chevron-dropdown/ChevronDropdown';
 import styles from './dokumentnavigasjon.less';
 
 interface DokumentnavigasjonProps {
+    tittel: string;
     dokumenter: Dokument[];
     onDokumentValgt: (dokument: Dokument) => void;
-    dokumenterSomMåGjennomgås?: Dokument[];
+    valgtDokument: Dokument;
+    expandedByDefault?: boolean;
+    displayFilterOption?: boolean;
 }
 
+const erIkkeDuplikat = (dokument: Dokument) => dokument.duplikatAvId === null;
+const lagDokumentelement = (dokument: Dokument) => ({
+    dokument,
+    renderer: () =>
+        dokument.type === Dokumenttype.UKLASSIFISERT ? (
+            <UstrukturertDokumentElement dokument={dokument} />
+        ) : (
+            <StrukturertDokumentElement dokument={dokument} />
+        ),
+});
+
 const Dokumentnavigasjon = ({
+    tittel,
     dokumenter,
     onDokumentValgt,
-    dokumenterSomMåGjennomgås,
+    valgtDokument,
+    expandedByDefault,
+    displayFilterOption,
 }: DokumentnavigasjonProps): JSX.Element => {
-    const harDokumentasjonSomMåGjennomgås = dokumenterSomMåGjennomgås && dokumenterSomMåGjennomgås.length > 0;
-    const [activeIndex, setActiveIndex] = React.useState(harDokumentasjonSomMåGjennomgås ? 0 : -1);
     const [dokumenttypeFilter, setDokumenttypeFilter] = React.useState([...Object.values(Dokumenttype)]);
-    const filtrerDokumenttype = (type) =>
+    const updateDokumenttypeFilter = (type) =>
         dokumenttypeFilter.includes(type)
             ? setDokumenttypeFilter(dokumenttypeFilter.filter((v) => v !== type))
             : setDokumenttypeFilter(dokumenttypeFilter.concat([type]));
 
-    const dokumentElementer = dokumenter
-        .filter((dokument) => dokument.duplikatAvId == null)
-        .map((dokument) => ({
-            renderer: () => <StrukturertDokumentElement dokument={dokument} />,
-            dokument,
-        }));
-    const allElements = [...dokumentElementer];
+    const [listExpanded, setListExpanded] = React.useState(expandedByDefault || false);
 
-    if (harDokumentasjonSomMåGjennomgås) {
-        dokumenterSomMåGjennomgås.forEach((dokument) =>
-            allElements.unshift({
-                renderer: () => <UstrukturertDokumentElement dokument={dokument} />,
-                dokument,
-            })
-        );
-    }
+    const sorterteDokumenter = dokumenter.sort(({ type }) => (type === Dokumenttype.UKLASSIFISERT ? -1 : 0));
+    const filtrerteDokumenter = sorterteDokumenter.filter(
+        (dokument) => dokumenttypeFilter.includes(dokument.type) && erIkkeDuplikat(dokument)
+    );
+
+    const dokumentElementer = filtrerteDokumenter.map(lagDokumentelement);
 
     return (
         <div className={styles.dokumentnavigasjon}>
-            <Undertittel className={styles.dokumentnavigasjon__heading}>Alle dokumenter</Undertittel>
-            <div className={styles.dokumentnavigasjon__container}>
-                <div className={styles.dokumentnavigasjon__columnHeadings}>
-                    <Element className={styles['dokumentnavigasjon__columnHeading--first']}>Status</Element>
-                    <ChevronDropdown
-                        className={styles['dokumentnavigasjon__columnHeading--second']}
-                        text="Type"
-                        dokumenttypeFilter={dokumenttypeFilter}
-                        filtrerDokumenttype={filtrerDokumenttype}
+            <EkspanderbartpanelBase tittel={tittel} apen={listExpanded} onClick={() => setListExpanded(!listExpanded)}>
+                <div className={styles.dokumentnavigasjon__container}>
+                    <div className={styles.dokumentnavigasjon__columnHeadings}>
+                        <Element className={styles['dokumentnavigasjon__columnHeading--first']}>Status</Element>
+                        {!displayFilterOption && (
+                            <Element className={styles['dokumentnavigasjon__columnHeading--second']}>Type</Element>
+                        )}
+                        {displayFilterOption && (
+                            <Dokumentfilter
+                                className={styles['dokumentnavigasjon__columnHeading--second']}
+                                text="Type"
+                                filters={dokumenttypeFilter}
+                                onFilterChange={updateDokumenttypeFilter}
+                            />
+                        )}
+                        <Element className={styles['dokumentnavigasjon__columnHeading--third']}>Datert</Element>
+                        <Element className={styles['dokumentnavigasjon__columnHeading--fourth']}>Part</Element>
+                    </div>
+                    {dokumentElementer.length === 0 && (
+                        <div style={{ padding: '0.5rem 1rem 1rem 1rem' }}>
+                            <Normaltekst>Ingen dokumenter å vise</Normaltekst>
+                        </div>
+                    )}
+                    <InteractiveList
+                        elements={dokumentElementer
+                            .filter((element) => dokumenttypeFilter.includes(element?.dokument?.type))
+                            .map((element, currentIndex) => ({
+                                content: element.renderer(),
+                                active: element.dokument === valgtDokument,
+                                key: `${currentIndex}`,
+                                onClick: () => onDokumentValgt(element.dokument),
+                            }))}
                     />
-                    <Element className={styles['dokumentnavigasjon__columnHeading--third']}>Datert</Element>
-                    <Element className={styles['dokumentnavigasjon__columnHeading--fourth']}>Part</Element>
                 </div>
-                <InteractiveList
-                    elements={allElements
-                        .filter((element) => dokumenttypeFilter.includes(element?.dokument?.type))
-                        .map((element, currentIndex) => ({
-                            content: element.renderer(),
-                            active: activeIndex === currentIndex,
-                            key: `${currentIndex}`,
-                            onClick: () => {
-                                setActiveIndex(currentIndex);
-                                onDokumentValgt(element.dokument);
-                            },
-                        }))}
-                />
-            </div>
+            </EkspanderbartpanelBase>
         </div>
     );
 };

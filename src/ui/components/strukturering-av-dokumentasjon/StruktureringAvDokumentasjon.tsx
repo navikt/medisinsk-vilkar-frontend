@@ -18,6 +18,7 @@ import Innleggelsesperiodeoversikt from '../innleggelsesperiodeoversikt/Innlegge
 import SignertSeksjon from '../signert-seksjon/SignertSeksjon';
 import ActionType from './actionTypes';
 import dokumentReducer from './reducer';
+import styles from './struktureringAvDokumentasjon.less';
 
 interface StruktureringAvDokumentasjonProps {
     navigerTilNesteSteg: () => void;
@@ -57,7 +58,13 @@ const StruktureringAvDokumentasjon = ({
         });
 
     const visDokumentoversikt = (nyDokumentoversikt: Dokumentoversikt) => {
-        dispatch({ type: ActionType.VIS_DOKUMENTOVERSIKT, dokumentoversikt: nyDokumentoversikt });
+        dispatch({
+            type: ActionType.VIS_DOKUMENTOVERSIKT,
+            dokumentoversikt: nyDokumentoversikt,
+            valgtDokument: nyDokumentoversikt.harUstrukturerteDokumenter()
+                ? nyDokumentoversikt.ustrukturerteDokumenter[0]
+                : null,
+        });
     };
 
     const handleError = () => {
@@ -116,14 +123,27 @@ const StruktureringAvDokumentasjon = ({
                 navigerTilNesteSteg={navigerTilNesteSteg}
             />
             {dokumentoversikt?.harDokumenter() === true && (
-                <>
+                <div className={styles.dokumentoversikt}>
                     <NavigationWithDetailView
                         navigationSection={() => (
-                            <Dokumentnavigasjon
-                                dokumenter={dokumentoversikt.strukturerteDokumenter}
-                                dokumenterSomMåGjennomgås={dokumentoversikt.ustrukturerteDokumenter}
-                                onDokumentValgt={velgDokument}
-                            />
+                            <>
+                                <Dokumentnavigasjon
+                                    tittel="Dokumenter til behandling"
+                                    dokumenter={dokumentoversikt.ustrukturerteDokumenter}
+                                    onDokumentValgt={velgDokument}
+                                    valgtDokument={valgtDokument}
+                                    expandedByDefault
+                                />
+                                <Box marginTop={Margin.large}>
+                                    <Dokumentnavigasjon
+                                        tittel="Andre dokumenter"
+                                        dokumenter={dokumentoversikt.strukturerteDokumenter}
+                                        onDokumentValgt={velgDokument}
+                                        valgtDokument={valgtDokument}
+                                        displayFilterOption
+                                    />
+                                </Box>
+                            </>
                         )}
                         showDetailSection={visDokumentDetails}
                         detailSection={() => (
@@ -148,7 +168,7 @@ const StruktureringAvDokumentasjon = ({
                             )}
                         />
                     </Box>
-                </>
+                </div>
             )}
         </PageContainer>
     );

@@ -25,6 +25,10 @@ class Dokumentoversikt {
     harDokumenter(): boolean {
         return this.strukturerteDokumenter.length > 0 || this.ustrukturerteDokumenter.length > 0;
     }
+
+    harUstrukturerteDokumenter(): boolean {
+        return this.ustrukturerteDokumenter.length > 0;
+    }
 }
 
 export default Dokumentoversikt;
