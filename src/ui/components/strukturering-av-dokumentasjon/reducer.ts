@@ -23,6 +23,7 @@ const vilkårsdokumentReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 dokumentoversikt: action.dokumentoversikt,
+                valgtDokument: action.valgtDokument,
                 isLoading: false,
                 visDokumentDetails: false,
                 dokumentoversiktFeilet: false,

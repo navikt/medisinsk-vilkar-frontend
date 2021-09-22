@@ -4,55 +4,63 @@ import userEvent from '@testing-library/user-event';
 import Dokumentnavigasjon from './Dokumentnavigasjon';
 import mockedDokumentoversikt from '../../../../mock/mocked-data/mockedDokumentoversikt';
 
-describe('Dokumenter', () => {
+describe('Dokumentnavigasjon', () => {
     const { dokumenter } = mockedDokumentoversikt;
-    test('rendrer dokumenter', async () => {
+
+    it('should render "Ingen dokumenter å vise" text when there are no documents to show', () => {
         render(
             <Dokumentnavigasjon
-                dokumenter={[dokumenter[0], dokumenter[1]]}
-                dokumenterSomMåGjennomgås={[dokumenter[2]]}
+                tittel="something"
+                valgtDokument={null}
+                dokumenter={[]}
+                onDokumentValgt={() => null}
+                expandedByDefault
+            />
+        );
+
+        expect(screen.getByText(/Ingen dokumenter å vise/i)).toBeInTheDocument();
+    });
+
+    it('should render documents in list when expanded by default', async () => {
+        render(
+            <Dokumentnavigasjon
+                tittel="something"
+                valgtDokument={dokumenter[0]}
+                dokumenter={dokumenter}
+                onDokumentValgt={() => null}
+                expandedByDefault
+            />
+        );
+
+        expect(screen.getByText(/ikke klassifisert/i)).toBeInTheDocument();
+        expect(screen.getByText(/andre med. oppl./i)).toBeInTheDocument();
+        expect(screen.getByText(/ikke med. oppl./i)).toBeInTheDocument();
+    });
+
+    it('should show no documents when not expanded by default', async () => {
+        render(
+            <Dokumentnavigasjon
+                tittel="something"
+                valgtDokument={dokumenter[0]}
+                dokumenter={dokumenter}
                 onDokumentValgt={() => null}
             />
         );
 
-        expect(screen.getByText(/ikke klassifisert/i)).toBeTruthy();
-        expect(screen.getByText(/andre med. oppl./i)).toBeTruthy();
-        expect(screen.getByText(/ikke med. oppl./i)).toBeTruthy();
+        expect(screen.queryByText(/ikke klassifisert/i)).toBeNull();
+        expect(screen.queryByText(/andre med. oppl./i)).toBeNull();
+        expect(screen.queryByText(/ikke med. oppl./i)).toBeNull();
     });
 
-    test('alle dokumenter vises initielt', () => {
+    test('documents are filtered correctly', () => {
         render(
             <Dokumentnavigasjon
+                tittel="Something"
+                valgtDokument={dokumenter[0]}
                 dokumenter={[dokumenter[0], dokumenter[1]]}
-                dokumenterSomMåGjennomgås={[dokumenter[2]]}
                 onDokumentValgt={() => null}
-            />
-        );
-
-        userEvent.click(screen.getAllByText(/type/i)[0]);
-        const ikkeKlassifisertCheckbox = screen.getByLabelText(/ikke klassifisert/i);
-        const andreMedisinskeOpplysningerCheckbox = screen.getByLabelText(/andre med. oppl./i);
-        const ikkeMedisinskeOpplysninger = screen.getByLabelText(/ikke med. oppl./i);
-        const legeerklæring = screen.getByLabelText('Sykehus/spesialist.');
-
-        expect(ikkeKlassifisertCheckbox).toBeChecked();
-        expect(andreMedisinskeOpplysningerCheckbox).toBeChecked();
-        expect(ikkeMedisinskeOpplysninger).toBeChecked();
-        expect(legeerklæring).toBeChecked();
-
-        userEvent.click(screen.getAllByText(/type/i)[1]);
-
-        expect(screen.getByText(/ikke klassifisert/i)).toBeTruthy();
-        expect(screen.getByText(/andre med. oppl./i)).toBeTruthy();
-        expect(screen.getByText(/ikke med. oppl./i)).toBeTruthy();
-    });
-
-    test('dokumenttyper som ikke er avhuket vises ikke', () => {
-        render(
-            <Dokumentnavigasjon
-                dokumenter={[dokumenter[0], dokumenter[1]]}
-                dokumenterSomMåGjennomgås={[dokumenter[2]]}
-                onDokumentValgt={() => null}
+                expandedByDefault
+                displayFilterOption
             />
         );
         expect(screen.getByText(/ikke klassifisert/i)).toBeTruthy();
@@ -66,21 +74,24 @@ describe('Dokumenter', () => {
         expect(screen.queryByText(/ikke klassifisert/i)).toBeFalsy();
     });
 
-    test('dropdown lukker seg ved klikk utenfor container', () => {
+    test('dropdown filter opens and closes correctly when filter functionality is activated', () => {
         render(
             <Dokumentnavigasjon
+                tittel="something"
+                valgtDokument={dokumenter[0]}
                 dokumenter={[dokumenter[0], dokumenter[1]]}
-                dokumenterSomMåGjennomgås={[dokumenter[2]]}
+                expandedByDefault
+                displayFilterOption
                 onDokumentValgt={() => null}
             />
         );
 
         userEvent.click(screen.getAllByText(/type/i)[0]);
         let ikkeKlassifisertCheckbox = screen.queryByLabelText(/ikke klassifisert/i);
-        expect(ikkeKlassifisertCheckbox).toBeTruthy()
+        expect(ikkeKlassifisertCheckbox).toBeTruthy();
 
-        userEvent.click(document.body)
+        userEvent.click(document.body);
         ikkeKlassifisertCheckbox = screen.queryByLabelText(/ikke klassifisert/i);
-        expect(ikkeKlassifisertCheckbox).toBeFalsy()
-    })
+        expect(ikkeKlassifisertCheckbox).toBeFalsy();
+    });
 });
