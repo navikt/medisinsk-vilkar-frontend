@@ -3,8 +3,8 @@ import { Box, ChildIcon, Infostripe, Margin, PageContainer, WarningIcon } from '
 import axios from 'axios';
 import classnames from 'classnames';
 import { TabsPure } from 'nav-frontend-tabs';
-import React, { useMemo, useState } from 'react';
-import { DiagnosekodeWrapper } from '../../../types/Diagnosekode';
+import React, { useMemo } from 'react';
+import { useQuery } from 'react-query';
 import Dokument from '../../../types/Dokument';
 import { NyeDokumenterResponse } from '../../../types/NyeDokumenterResponse';
 import Step, { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
@@ -12,16 +12,16 @@ import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse'
 import Vurderingstype from '../../../types/Vurderingstype';
 import { finnNesteSteg } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
-import DiagnosekodeContext from '../../context/DiagnosekodeContext';
-import VurderingContext from '../../context/VurderingContext';
+import ActionType from './actionTypes';
+import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
+import VurderingContext from '../../context/VurderingContext';
 import NyeDokumenterSomKanPåvirkeEksisterendeVurderinger from '../nye-dokumenter-som-kan-påvirke-eksisterende-vurderinger/NyeDokumenterSomKanPåvirkeEksisterendeVurderinger';
 import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
 import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-pleie/VilkårsvurderingAvTilsynOgPleie';
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
-import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
-import ActionType from './actionTypes';
 import styles from './medisinskVilkår.less';
+import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
 import medisinskVilkårReducer from './reducer';
 
 const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
@@ -58,11 +58,21 @@ const MedisinskVilkår = (): JSX.Element => {
     });
 
     const { isLoading, hasError, activeStep, markedStep, sykdomsstegStatus, nyeDokumenterSomIkkeErVurdert } = state;
-    const [diagnosekoder, setDiagnosekoder] = useState<DiagnosekodeWrapper>({ koder: [], hasLoaded: false });
-    const diagnosekoderTekst = diagnosekoder?.koder.length > 0 ? `${diagnosekoder?.koder.join(', ')}` : 'Kode mangler';
     const { endpoints, httpErrorHandler, visFortsettknapp } = React.useContext(ContainerContext);
 
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
+
+    const hentDiagnosekoder = () =>
+        get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler).then(
+            (response: DiagnosekodeResponse) => response
+        );
+
+    const { isLoading: diagnosekoderLoading, data: diagnosekoderData } = useQuery(
+        'diagnosekodeResponse',
+        hentDiagnosekoder
+    );
+    const { diagnosekoder } = diagnosekoderData;
+    const diagnosekoderTekst = diagnosekoder?.length > 0 ? `${diagnosekoder?.join(', ')}` : 'Kode mangler';
 
     const hentSykdomsstegStatus = async () => {
         try {
@@ -147,7 +157,7 @@ const MedisinskVilkår = (): JSX.Element => {
                         <span>Sykdomsvurderingen gjelder barnet og er felles for alle parter.</span>
                         <span className={styles.infostripe__diagnosekode__tittel}>Diagnose:</span>
                         <span className={styles.infostripe__diagnosekode}>
-                            {(!diagnosekoder?.hasLoaded && ' ') || diagnosekoderTekst}
+                            {(diagnosekoderLoading && ' ') || diagnosekoderTekst}
                         </span>
                     </>
                 }
@@ -187,7 +197,6 @@ const MedisinskVilkår = (): JSX.Element => {
                 <div style={{ marginTop: '1rem', maxWidth: '1204px' }}>
                     <div className={styles.medisinskVilkår__vilkårContentContainer}>
                         {activeStep === dokumentSteg && (
-                            <DiagnosekodeContext.Provider value={setDiagnosekoder}>
                                 <StruktureringAvDokumentasjon
                                     navigerTilNesteSteg={navigerTilNesteSteg}
                                     hentSykdomsstegStatus={() =>
@@ -203,7 +212,6 @@ const MedisinskVilkår = (): JSX.Element => {
                                     }
                                     sykdomsstegStatus={sykdomsstegStatus}
                                 />
-                            </DiagnosekodeContext.Provider>
                         )}
                         {activeStep === tilsynOgPleieSteg && (
                             <VurderingContext.Provider

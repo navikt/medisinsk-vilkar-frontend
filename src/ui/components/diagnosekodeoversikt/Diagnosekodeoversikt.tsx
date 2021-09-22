@@ -1,9 +1,9 @@
 import { get, post } from '@navikt/k9-http-utils';
 import { Box, Margin, TitleWithUnderline, WarningIcon } from '@navikt/k9-react-components';
-import axios from 'axios';
 import Modal from 'nav-frontend-modal';
 import Spinner from 'nav-frontend-spinner';
-import React, { useMemo } from 'react';
+import React from 'react';
+import { useQuery, useMutation } from 'react-query';
 import LinkRel from '../../../constants/LinkRel';
 import Diagnosekode from '../../../types/Diagnosekode';
 import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
@@ -14,7 +14,6 @@ import DiagnosekodeModal from '../diagnosekode-modal/DiagnosekodeModal';
 import Diagnosekodeliste from '../diagnosekodeliste/Diagnosekodeliste';
 import IconWithText from '../icon-with-text/IconWithText';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
-import DiagnosekodeContext from '../../context/DiagnosekodeContext';
 
 Modal.setAppElement('#app');
 
@@ -24,54 +23,53 @@ interface DiagnosekodeoversiktProps {
 
 const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktProps): JSX.Element => {
     const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
-    const setDiagnosekoder = React.useContext(DiagnosekodeContext);
-    const [isLoading, setIsLoading] = React.useState(true);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
-    const [diagnosekodeResponse, setDiagnosekodeResponse] = React.useState<DiagnosekodeResponse>({
-        diagnosekoder: [],
-        links: [],
-        behandlingUuid: '',
-        versjon: null,
-    });
-    const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
-    const { diagnosekoder, links } = diagnosekodeResponse;
-    const endreDiagnosekoderLink = findLinkByRel(LinkRel.ENDRE_DIAGNOSEKODER, links);
 
-    const hentDiagnosekoder = () => {
-        setIsLoading(true);
-        return get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler, {
-            cancelToken: httpCanceler.token,
-        })
-            .then((response: DiagnosekodeResponse) => {
-                setDiagnosekodeResponse(response);
-                setDiagnosekoder({ koder: response?.diagnosekoder || [], hasLoaded: true });
-                setIsLoading(false);
-            })
-            .catch(() => {
-                setDiagnosekoder({ koder: [], hasLoaded: true });
-            });
-    };
+    const hentDiagnosekoder = () =>
+        get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler).then(
+            (response: DiagnosekodeResponse) => response
+        );
+
+    const { isLoading, data, refetch } = useQuery('diagnosekodeResponse', hentDiagnosekoder);
+
+    const { diagnosekoder, links, behandlingUuid, versjon } = data;
+    const endreDiagnosekoderLink = findLinkByRel(LinkRel.ENDRE_DIAGNOSEKODER, links);
 
     const slettDiagnosekode = (diagnosekode: Diagnosekode) =>
         post(
             endreDiagnosekoderLink.href,
             {
-                behandlingUuid: diagnosekodeResponse.behandlingUuid,
-                versjon: diagnosekodeResponse.versjon,
+                behandlingUuid,
+                versjon,
                 diagnosekoder: diagnosekoder.filter((kode) => kode !== diagnosekode),
             },
             httpErrorHandler
-        )
-            .then(hentDiagnosekoder)
-            .then(onDiagnosekoderUpdated);
+        );
 
-    React.useEffect(() => {
-        hentDiagnosekoder();
-        return () => {
-            httpCanceler.cancel();
-            setDiagnosekoder(null);
-        };
-    }, []);
+    const lagreDiagnosekode = (nyDiagnosekode: Diagnosekode) =>
+        post(
+            endreDiagnosekoderLink.href,
+            {
+                behandlingUuid,
+                versjon,
+                diagnosekoder: [...diagnosekoder, nyDiagnosekode.kode],
+            },
+            httpErrorHandler
+        );
+
+    const slettDiagnosekodeMutation = useMutation((diagnosekode: Diagnosekode) => slettDiagnosekode(diagnosekode), {
+        onSuccess: () => {
+            refetch().finally(() => onDiagnosekoderUpdated());
+        },
+    });
+    const lagreDiagnosekodeMutation = useMutation((diagnosekode: Diagnosekode) => lagreDiagnosekode(diagnosekode), {
+        onSuccess: () => {
+            refetch().finally(() => {
+                onDiagnosekoderUpdated();
+                setModalIsOpen(false);
+            });
+        },
+    });
 
     return (
         <div>
@@ -99,27 +97,16 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                         <IconWithText iconRenderer={() => <WarningIcon />} text="Ingen diagnosekode registrert." />
                     )}
                     {diagnosekoder.length >= 1 && (
-                        <Diagnosekodeliste diagnosekoder={diagnosekoder} onDeleteClick={slettDiagnosekode} />
+                        <Diagnosekodeliste
+                            diagnosekoder={diagnosekoder}
+                            onDeleteClick={slettDiagnosekodeMutation.mutate}
+                        />
                     )}
                 </Box>
             )}
             <DiagnosekodeModal
                 isOpen={modalIsOpen}
-                onSaveClick={(nyDiagnosekode: Diagnosekode) =>
-                    post(
-                        endreDiagnosekoderLink.href,
-                        {
-                            behandlingUuid: diagnosekodeResponse.behandlingUuid,
-                            versjon: diagnosekodeResponse.versjon,
-                            diagnosekoder: [...diagnosekoder, nyDiagnosekode.kode],
-                        },
-                        httpErrorHandler,
-                        { cancelToken: httpCanceler.token }
-                    )
-                        .then(hentDiagnosekoder)
-                        .then(onDiagnosekoderUpdated)
-                        .then(() => setModalIsOpen(false))
-                }
+                onSaveClick={lagreDiagnosekodeMutation.mutateAsync}
                 onRequestClose={() => setModalIsOpen(false)}
             />
         </div>
