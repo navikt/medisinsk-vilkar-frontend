@@ -181,7 +181,6 @@ const MedisinskVilkår = (): JSX.Element => {
                     otherRequirementsAreMet={
                         kanLøseAksjonspunkt &&
                         visFortsettknapp === true &&
-                        !harDataSomIkkeHarBlittTattMedIBehandling &&
                         markedStep !== dokumentSteg &&
                         activeStep !== dokumentSteg
                     }
