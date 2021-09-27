@@ -188,7 +188,7 @@ const MedisinskVilkår = (): JSX.Element => {
                 <WriteAccessBoundContent
                     contentRenderer={() => <UteståendeEndringerMelding />}
                     otherRequirementsAreMet={
-                        kanLøseAksjonspunkt && harDataSomIkkeHarBlittTattMedIBehandling && visFortsettknapp === false
+                        kanLøseAksjonspunkt && !!harDataSomIkkeHarBlittTattMedIBehandling && visFortsettknapp === false
                     }
                 />
                 <TabsPure
