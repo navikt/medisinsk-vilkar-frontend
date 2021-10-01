@@ -20,7 +20,9 @@ const DokumentoversiktMessages = ({
     navigerTilNesteSteg,
 }: DokumentoversiktMessagesProps): JSX.Element => {
     const { onFinished, readOnly } = React.useContext(ContainerContext);
-
+    if (!dokumentoversikt) {
+        return null;
+    }
     const { ustrukturerteDokumenter } = dokumentoversikt;
 
     const visFristForDokumentasjonUtløptMelding =

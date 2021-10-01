@@ -24,6 +24,7 @@ interface DiagnosekodeoversiktProps {
 const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktProps): JSX.Element => {
     const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
+    const addButtonRef = React.useRef<HTMLButtonElement>();
 
     const hentDiagnosekoder = () =>
         get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler).then(
@@ -34,6 +35,12 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
 
     const { diagnosekoder, links, behandlingUuid, versjon } = data;
     const endreDiagnosekoderLink = findLinkByRel(LinkRel.ENDRE_DIAGNOSEKODER, links);
+
+    const focusAddButton = () => {
+        if (addButtonRef.current) {
+            addButtonRef.current.focus();
+        }
+    };
 
     const slettDiagnosekode = (diagnosekode: Diagnosekode) =>
         post(
@@ -59,7 +66,10 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
 
     const slettDiagnosekodeMutation = useMutation((diagnosekode: Diagnosekode) => slettDiagnosekode(diagnosekode), {
         onSuccess: () => {
-            refetch().finally(() => onDiagnosekoderUpdated());
+            refetch().finally(() => {
+                onDiagnosekoderUpdated();
+                focusAddButton();
+            });
         },
     });
     const lagreDiagnosekodeMutation = useMutation((diagnosekode: Diagnosekode) => lagreDiagnosekode(diagnosekode), {
@@ -67,6 +77,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             refetch().finally(() => {
                 onDiagnosekoderUpdated();
                 setModalIsOpen(false);
+                focusAddButton();
             });
         },
     });
@@ -82,6 +93,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                                 label="Ny diagnosekode"
                                 onClick={() => setModalIsOpen(true)}
                                 ariaLabel="Legg til diagnosekode"
+                                ref={addButtonRef}
                             />
                         )}
                     />
