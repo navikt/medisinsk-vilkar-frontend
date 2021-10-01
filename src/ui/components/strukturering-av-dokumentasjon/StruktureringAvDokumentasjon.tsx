@@ -115,7 +115,7 @@ const StruktureringAvDokumentasjon = ({
     };
 
     return (
-        <PageContainer isLoading={isLoading} hasError={dokumentoversiktFeilet} key={StepId.Dokument}>
+        <PageContainer isLoading={isLoading} hasError={dokumentoversiktFeilet} key={StepId.Dokument} preventUnmount>
             <DokumentoversiktMessages
                 dokumentoversikt={dokumentoversikt}
                 harRegistrertDiagnosekode={!sykdomsstegStatus.manglerDiagnosekode}

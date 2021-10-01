@@ -47,6 +47,8 @@ const InnleggelsesperiodeFormModal = ({
 
     const handleSubmit = (formState) => {
         onSubmit(formState);
+        setModalIsOpen(false);
+        setShowWarningMessage(false);
     };
 
     const handleCloseModal = () => {
