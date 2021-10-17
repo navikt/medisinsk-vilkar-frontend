@@ -40,7 +40,7 @@ function Dokumentfilter({
     const dokumenttypeListe = [...Object.values(Dokumenttype)];
     const listeErFiltrert = filters.length < 4;
     return (
-        <>
+        <div className={styles.dokumentfilter}>
             <span className={classNames(styles.chevronDropdown, className, open && styles.chevronDropdown__hidden)}>
                 <ChevronWithText chevronDirection={chevronDirection} onClick={() => setOpen(!open)} text={text} />
                 <FilterFilled className={listeErFiltrert ? '' : styles.chevronDropdown__hidden} />
@@ -69,7 +69,7 @@ function Dokumentfilter({
                     </div>
                 </OutsideClickHandler>
             )}
-        </>
+        </div>
     );
 }
 
