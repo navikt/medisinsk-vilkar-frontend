@@ -2,10 +2,11 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const cssExtractLoaderConfig = {
-    loader: MiniCssExtractPlugin.loader
+    loader: MiniCssExtractPlugin.loader,
 };
 
 const nodeModules = path.resolve(__dirname, '../node_modules');
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
 module.exports = {
     entry: path.resolve(__dirname, '../', 'src') + '/app.ts',
@@ -19,6 +20,9 @@ module.exports = {
                 exclude: /(node_modules)/,
                 use: {
                     loader: 'babel-loader',
+                    options: {
+                        plugins: [isDevelopment && require.resolve('react-refresh/babel')].filter(Boolean),
+                    },
                 },
             },
             {
