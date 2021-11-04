@@ -8,6 +8,8 @@ export interface AnnenInformasjon {
 }
 
 export interface Vurderingsversjon {
+    endretAv: string;
+    endretTidspunkt: string;
     versjon?: string;
     tekst: string;
     resultat: Vurderingsresultat;

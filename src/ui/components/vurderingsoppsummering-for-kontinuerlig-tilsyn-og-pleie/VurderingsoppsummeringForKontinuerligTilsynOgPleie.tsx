@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Margin, BasicList, LabelledContent } from '@navikt/k9-react-components';
+import { Box, Margin, BasicList, LabelledContent, AssessedBy } from '@navikt/k9-react-components';
 import Vurdering from '../../../types/Vurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
@@ -47,7 +47,9 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
                         label="Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge
                                         av sykdommen etter § 9-10, første ledd."
                         content={<span>{tekst}</span>}
+                        indentContent
                     />
+                    <AssessedBy ident={gjeldendeVurdering?.endretAv} dato={gjeldendeVurdering?.endretTidspunkt} />
                 </Box>
                 <Box marginTop={Margin.xLarge}>
                     <LabelledContent
