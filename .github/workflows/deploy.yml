@@ -35,6 +35,8 @@ jobs:
               run: npm run lint
             - name: Kjøre enhetstester
               run: npm test
+            - name: Kjøre bygg
+              run: npm run build
             - name: Sette versjon
               run: |
                 echo "MAJOR_VERSION=$(npm run majorVersion --silent)" >> $GITHUB_ENV
