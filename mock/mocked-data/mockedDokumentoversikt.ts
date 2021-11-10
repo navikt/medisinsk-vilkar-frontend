@@ -20,6 +20,7 @@ const mockedDokumentoversikt = {
             mottattTidspunkt: '2021-03-05T10:23:13.309267',
             duplikater: ['3'],
             duplikatAvId: null,
+            bruktTilMinstEnVurdering: false,
         },
         {
             id: '4',
@@ -35,6 +36,7 @@ const mockedDokumentoversikt = {
             mottattTidspunkt: '2021-03-05T10:23:13.309267',
             duplikater: [],
             duplikatAvId: null,
+            bruktTilMinstEnVurdering: false,
         },
         {
             id: '1',
@@ -50,8 +52,8 @@ const mockedDokumentoversikt = {
             mottattTidspunkt: '2021-03-05T10:23:13.309267',
             duplikater: [],
             duplikatAvId: null,
+            bruktTilMinstEnVurdering: false,
         },
-
     ],
 };
 export default mockedDokumentoversikt;
