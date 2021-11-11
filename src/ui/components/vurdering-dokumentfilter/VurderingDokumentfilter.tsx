@@ -28,11 +28,7 @@ function ChevronWithText({ chevronDirection, onClick, text }: ChevronWithTextPro
     );
 }
 
-function VurderingDokumentfilter({
-    text,
-    filters,
-    onFilterChange: filtrerDokumenttype,
-}: VurderingDokumentfilterProps): JSX.Element {
+function VurderingDokumentfilter({ text, filters, onFilterChange }: VurderingDokumentfilterProps): JSX.Element {
     const [open, setOpen] = useState(false);
     const chevronDirection = open ? 'opp' : 'ned';
     const filterListe = vurderingDokumentfilterOptions;
@@ -59,7 +55,7 @@ function VurderingDokumentfilter({
                                         key={attributtNavn}
                                         label={label}
                                         checked={filters.includes(attributtNavn)}
-                                        onChange={() => filtrerDokumenttype(attributtNavn)}
+                                        onChange={() => onFilterChange(attributtNavn)}
                                     />
                                 ))}
                             </div>
