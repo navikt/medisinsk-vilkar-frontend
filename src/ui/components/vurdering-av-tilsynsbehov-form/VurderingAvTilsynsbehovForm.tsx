@@ -196,7 +196,7 @@ const VurderingAvTilsynsbehovForm = ({
                                             <DokumentLink
                                                 dokument={dokument}
                                                 etikett={
-                                                    <>
+                                                    <div className={styles.dokumentEtiketter}>
                                                         {dokument.annenPartErKilde && (
                                                             <ContentWithTooltip
                                                                 tooltipText="Dokument fra annen part"
@@ -213,7 +213,7 @@ const VurderingAvTilsynsbehovForm = ({
                                                                 <StjerneIkon />
                                                             </ContentWithTooltip>
                                                         )}
-                                                    </>
+                                                    </div>
                                                 }
                                             />
                                         ),
