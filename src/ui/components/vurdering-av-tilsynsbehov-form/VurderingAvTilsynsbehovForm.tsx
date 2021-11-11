@@ -90,17 +90,19 @@ const VurderingAvTilsynsbehovForm = ({
             return dokumentFilter.some((filter) => dokument[filter] === true);
         })
         .filter((dokument, index) => {
-            if (dokumenter.length < 6) {
-                return true;
-            }
-            if (!visAlleDokumenter && index > 4) {
-                return false;
+            if (dokumentFilter.length === 0) {
+                if (dokumenter.length < 6) {
+                    return true;
+                }
+                if (!visAlleDokumenter && index > 4) {
+                    return false;
+                }
             }
             return true;
         });
 
     const visFlereDokumenterKnapp = () => {
-        if (dokumentFilter.length > 0 && filtrerteDokumenter.length < 6) {
+        if (dokumentFilter.length > 0) {
             return false;
         }
         if (dokumenter.length < 6) {
