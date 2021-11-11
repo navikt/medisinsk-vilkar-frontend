@@ -82,14 +82,15 @@ const VurderingAvTilsynsbehovForm = ({
         }
     };
 
-    const filtrerteDokumenter = dokumenter
-        .filter((dokument) => {
+    const getDokumenterSomSkalVises = () => {
+        const filtrerteDokumenter = dokumenter.filter((dokument) => {
             if (!dokumentFilter.length) {
                 return true;
             }
             return dokumentFilter.some((filter) => dokument[filter] === true);
-        })
-        .filter((dokument, index) => {
+        });
+
+        return filtrerteDokumenter.filter((dokument, index) => {
             if (dokumentFilter.length === 0) {
                 if (dokumenter.length < 6) {
                     return true;
@@ -100,6 +101,7 @@ const VurderingAvTilsynsbehovForm = ({
             }
             return true;
         });
+    };
 
     const visFlereDokumenterKnapp = () => {
         if (dokumentFilter.length > 0) {
@@ -192,7 +194,7 @@ const VurderingAvTilsynsbehovForm = ({
                                 <CheckboxGroup
                                     question="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
                                     name={FieldName.DOKUMENTER}
-                                    checkboxes={filtrerteDokumenter.map((dokument, index) => ({
+                                    checkboxes={getDokumenterSomSkalVises().map((dokument, index) => ({
                                         value: dokument.id,
                                         label: (
                                             <DokumentLink
