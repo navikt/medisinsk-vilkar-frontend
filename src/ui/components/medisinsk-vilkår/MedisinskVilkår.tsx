@@ -113,7 +113,7 @@ const MedisinskVilkår = (): JSX.Element => {
         hentSykdomsstegStatus()
             .then(hentNyeDokumenterSomIkkeErVurdertHvisNødvendig)
             .then(([sykdomsstegStatusResponse, nyeDokumenterSomIkkeErVurdertResponse]) => {
-                const step = finnNesteSteg(sykdomsstegStatusResponse);
+                const step = finnNesteSteg(sykdomsstegStatusResponse, true);
                 if (step !== null) {
                     dispatch({
                         type: ActionType.MARK_AND_ACTIVATE_STEP,

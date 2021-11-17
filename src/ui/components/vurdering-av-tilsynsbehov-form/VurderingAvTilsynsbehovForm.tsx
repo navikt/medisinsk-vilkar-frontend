@@ -1,9 +1,11 @@
-import { Period } from '@navikt/k9-period-utils';
-import { Box, Form, Margin } from '@navikt/k9-react-components';
 import { CheckboxGroup, PeriodpickerList, TextArea, YesOrNoQuestion } from '@navikt/k9-form-utils';
+import { Period } from '@navikt/k9-period-utils';
+import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/k9-react-components';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+import Ikon from 'nav-frontend-ikoner-assets';
 import Lenke from 'nav-frontend-lenker';
-import React from 'react';
+import { Element } from 'nav-frontend-typografi';
+import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
 import { Vurderingsversjon } from '../../../types/Vurdering';
@@ -13,12 +15,15 @@ import {
     slåSammenSammenhengendePerioder,
 } from '../../../util/periodUtils';
 import { lagTilsynsbehovVurdering } from '../../../util/vurderingUtils';
+import ContainerContext from '../../context/ContainerContext';
 import { fomDatoErFørTomDato, harBruktDokumentasjon, required } from '../../form/validators';
 import AddButton from '../add-button/AddButton';
 import DeleteButton from '../delete-button/DeleteButton';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
-import ContainerContext from '../../context/ContainerContext';
+import VurderingDokumentfilter from '../vurdering-dokumentfilter/VurderingDokumentfilter';
+import vurderingDokumentfilterOptions from '../vurdering-dokumentfilter/vurderingDokumentfilterOptions';
+import StjerneIkon from './StjerneIkon';
 import styles from './vurderingAvTilsynsbehovForm.less';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -62,6 +67,51 @@ const VurderingAvTilsynsbehovForm = ({
         defaultValues,
         mode: 'onChange',
     });
+    const [visAlleDokumenter, setVisAlleDokumenter] = useState(false);
+    const [dokumentFilter, setDokumentFilter] = useState([]);
+
+    const updateDokumentFilter = (valgtFilter) => {
+        if (dokumentFilter.includes(valgtFilter)) {
+            if (dokumentFilter.length === 1) {
+                setVisAlleDokumenter(false);
+            }
+            setDokumentFilter(dokumentFilter.filter((v) => v !== valgtFilter));
+        } else {
+            setDokumentFilter(dokumentFilter.concat([valgtFilter]));
+            setVisAlleDokumenter(true);
+        }
+    };
+
+    const getDokumenterSomSkalVises = () => {
+        const filtrerteDokumenter = dokumenter.filter((dokument) => {
+            if (!dokumentFilter.length) {
+                return true;
+            }
+            return dokumentFilter.some((filter) => dokument[filter] === true);
+        });
+
+        return filtrerteDokumenter.filter((dokument, index) => {
+            if (dokumentFilter.length === 0) {
+                if (dokumenter.length < 6) {
+                    return true;
+                }
+                if (!visAlleDokumenter && index > 4) {
+                    return false;
+                }
+            }
+            return true;
+        });
+    };
+
+    const visFlereDokumenterKnapp = () => {
+        if (dokumentFilter.length > 0) {
+            return false;
+        }
+        if (dokumenter.length < 6) {
+            return false;
+        }
+        return true;
+    };
 
     const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
@@ -111,23 +161,84 @@ const VurderingAvTilsynsbehovForm = ({
                 >
                     {dokumenter?.length > 0 && (
                         <Box marginTop={Margin.large}>
-                            <CheckboxGroup
-                                question="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
-                                name={FieldName.DOKUMENTER}
-                                checkboxes={dokumenter.map((dokument) => ({
-                                    value: dokument.id,
-                                    label: (
-                                        <DokumentLink
-                                            dokument={dokument}
-                                            etikett={dokument.annenPartErKilde ? 'Dokument fra annen part' : ''}
-                                        />
-                                    ),
-                                }))}
-                                validators={{
-                                    harBruktDokumentasjon,
-                                }}
-                                disabled={readOnly}
-                            />
+                            <Element aria-hidden="true">
+                                Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?
+                            </Element>
+                            <div className={styles.filterContainer}>
+                                <VurderingDokumentfilter
+                                    text="Filter"
+                                    filters={dokumentFilter}
+                                    onFilterChange={updateDokumentFilter}
+                                />
+                            </div>
+                            {dokumentFilter.length > 0 && (
+                                <div className={styles.filterKnappContainer}>
+                                    {dokumentFilter.map((filter) => {
+                                        const { label } = vurderingDokumentfilterOptions.find(
+                                            (option) => option.attributtNavn === filter
+                                        );
+                                        return (
+                                            <button
+                                                onClick={() => updateDokumentFilter(filter)}
+                                                className={styles.fjernFilterKnapp}
+                                                type="button"
+                                            >
+                                                {label}
+                                                <Ikon kind="x" />
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                            <div className={styles.checkboxGroupWrapper}>
+                                <CheckboxGroup
+                                    question="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
+                                    name={FieldName.DOKUMENTER}
+                                    checkboxes={getDokumenterSomSkalVises().map((dokument, index) => ({
+                                        value: dokument.id,
+                                        label: (
+                                            <DokumentLink
+                                                dokument={dokument}
+                                                etikett={
+                                                    <div className={styles.dokumentEtiketter}>
+                                                        {dokument.annenPartErKilde && (
+                                                            <ContentWithTooltip
+                                                                tooltipText="Dokument fra annen part"
+                                                                tooltipDirectionRight
+                                                            >
+                                                                <OnePersonOutlineGray />
+                                                            </ContentWithTooltip>
+                                                        )}
+                                                        {dokument.bruktTilMinstEnVurdering && (
+                                                            <ContentWithTooltip
+                                                                tooltipText="Dokumentet er brukt i en annen vurdering"
+                                                                tooltipDirectionRight
+                                                            >
+                                                                <StjerneIkon />
+                                                            </ContentWithTooltip>
+                                                        )}
+                                                    </div>
+                                                }
+                                            />
+                                        ),
+                                    }))}
+                                    validators={{
+                                        harBruktDokumentasjon,
+                                    }}
+                                    disabled={readOnly}
+                                />
+                            </div>
+                            {visFlereDokumenterKnapp() && (
+                                <button
+                                    className={styles.visDokumenterKnapp}
+                                    onClick={() => setVisAlleDokumenter(!visAlleDokumenter)}
+                                    type="button"
+                                >
+                                    {visAlleDokumenter
+                                        ? `Vis færre dokumenter`
+                                        : `Vis alle dokumenter (${dokumenter.length})`}
+                                </button>
+                            )}
                         </Box>
                     )}
                     <Box marginTop={Margin.xLarge}>
