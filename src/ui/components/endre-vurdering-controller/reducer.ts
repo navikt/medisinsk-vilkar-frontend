@@ -2,6 +2,7 @@ import ActionType from './actionTypes';
 import Dokument from '../../../types/Dokument';
 import { PeriodeMedEndring } from '../../../types/PeriodeMedEndring';
 import { Vurderingsversjon } from '../../../types/Vurdering';
+import { dokumentSorter } from '../../../util/dokumentUtils';
 
 interface State {
     sjekkForEksisterendeVurderingerPågår: boolean;
@@ -69,12 +70,14 @@ const vurderingControllerReducer = (state: State, action: Action): State => {
                 hentDataTilVurderingPågår: true,
                 hentDataTilVurderingHarFeilet: false,
             };
-        case ActionType.HENTET_DATA_TIL_VURDERING:
+        case ActionType.HENTET_DATA_TIL_VURDERING: {
+            const dokumenter = action.dokumenter?.sort(dokumentSorter);
             return {
                 ...state,
-                dokumenter: action.dokumenter,
+                dokumenter,
                 hentDataTilVurderingPågår: false,
             };
+        }
         case ActionType.HENT_DATA_TIL_VURDERING_HAR_FEILET:
             return {
                 ...state,
