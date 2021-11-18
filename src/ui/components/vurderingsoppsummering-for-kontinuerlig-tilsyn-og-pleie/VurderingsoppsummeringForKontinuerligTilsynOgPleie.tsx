@@ -22,7 +22,7 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
     const { dokumenter, perioder, tekst, resultat } = gjeldendeVurdering;
     const brukerId = gjeldendeVurdering.endretAv;
     const { endpoints } = React.useContext(ContainerContext);
-    console.log(endpoints)
+
     const { isSuccess, data: saksbehandlerInfo } = useQuery('saksbehandlerNavn', () =>
         getSaksbehandlernavn({ href: endpoints.saksbehandlerInfo, brukerid: brukerId })
     );
