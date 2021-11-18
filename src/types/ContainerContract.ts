@@ -14,6 +14,7 @@ interface ContainerContract {
         dataTilVurdering: string;
         status: string;
         nyeDokumenter: string;
+        saksbehandlerInfo: string;
     };
     behandlingUuid: string;
     readOnly: boolean;

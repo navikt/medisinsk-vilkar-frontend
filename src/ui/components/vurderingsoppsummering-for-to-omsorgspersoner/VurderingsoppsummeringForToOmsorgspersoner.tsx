@@ -1,10 +1,13 @@
-import { Box, Margin, BasicList, LabelledContent, AssessedBy} from '@navikt/k9-react-components';
 import React from 'react';
+import { useQuery } from 'react-query';
+import { Box, Margin, BasicList, LabelledContent, AssessedBy } from '@navikt/k9-react-components';
+import ContainerContext from '../../context/ContainerContext';
 import Vurdering from '../../../types/Vurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import DekketAvInnleggelsesperiodeMelding from '../dekket-av-innleggelsesperiode-melding/DekketAvInnleggelsesperiodeMelding';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
+import { getSaksbehandlernavn } from '../../../api/api';
 
 interface VurderingsoppsummeringForToOmsorgspersonerProps {
     vurdering: Vurdering;
@@ -18,6 +21,13 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
     const gjeldendeVurdering = vurdering.versjoner[0];
     const { resultat, tekst, dokumenter, perioder } = gjeldendeVurdering;
     const erInnleggelse = vurdering.erInnleggelsesperiode;
+    const brukerId = gjeldendeVurdering.endretAv;
+    const { endpoints } = React.useContext(ContainerContext);
+
+    const { isSuccess, data: saksbehandlerInfo } = useQuery('saksbehandlerNavn', () =>
+        getSaksbehandlernavn({ href: endpoints.saksbehandlerInfo, brukerid: brukerId })
+    );
+
     return (
         <DetailViewVurdering
             title="Vurdering av to omsorgspersoner"
@@ -46,8 +56,10 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
                         content={<span>{tekst}</span>}
                         indentContent
                     />
-                                        <AssessedBy ident={gjeldendeVurdering?.endretAv} dato={gjeldendeVurdering?.endretTidspunkt} />
-
+                    <AssessedBy
+                        name={(isSuccess && saksbehandlerInfo.navn) || gjeldendeVurdering?.endretAv}
+                        date={gjeldendeVurdering?.endretTidspunkt}
+                    />
                 </Box>
                 <Box marginTop={Margin.xLarge}>
                     <LabelledContent
