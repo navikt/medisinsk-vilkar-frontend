@@ -21,10 +21,10 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
     const gjeldendeVurdering = vurdering.versjoner[0];
     const { dokumenter, perioder, tekst, resultat } = gjeldendeVurdering;
     const brukerId = gjeldendeVurdering.endretAv;
-    const { endpoints } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
 
     const { isSuccess, data: saksbehandlerInfo } = useQuery(['saksbehandlerNavn', brukerId], () =>
-        getSaksbehandlernavn({ href: endpoints.saksbehandlerInfo, brukerid: brukerId })
+        getSaksbehandlernavn({ href: endpoints.saksbehandlerInfo, brukerid: brukerId, httpErrorHandler })
     );
 
     const erInnleggelse = vurdering.erInnleggelsesperiode;

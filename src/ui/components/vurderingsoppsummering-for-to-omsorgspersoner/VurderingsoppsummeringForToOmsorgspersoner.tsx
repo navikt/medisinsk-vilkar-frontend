@@ -22,10 +22,10 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
     const { resultat, tekst, dokumenter, perioder } = gjeldendeVurdering;
     const erInnleggelse = vurdering.erInnleggelsesperiode;
     const brukerId = gjeldendeVurdering.endretAv;
-    const { endpoints } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
 
     const { isSuccess, data: saksbehandlerInfo } = useQuery(['saksbehandlerNavn', brukerId], () =>
-        getSaksbehandlernavn({ href: endpoints.saksbehandlerInfo, brukerid: brukerId })
+        getSaksbehandlernavn({ href: endpoints.saksbehandlerInfo, brukerid: brukerId, httpErrorHandler })
     );
 
     return (

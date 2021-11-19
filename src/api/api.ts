@@ -1,6 +1,6 @@
-import { post } from '@navikt/k9-http-utils';
+import { post, get } from '@navikt/k9-http-utils';
 import { Period } from '@navikt/k9-period-utils';
-import axios, { CancelToken } from 'axios';
+import { AxiosResponse, CancelToken } from 'axios';
 import { Vurderingsversjon } from '../types/Vurdering';
 import Vurderingstype from '../types/Vurderingstype';
 import { PerioderMedEndringResponse } from '../types/PeriodeMedEndring';
@@ -133,14 +133,14 @@ export async function postInnleggelsesperioderDryRun(
 export const getSaksbehandlernavn = ({
     href,
     brukerid,
+    httpErrorHandler,
 }: {
     href: string;
     brukerid: string;
+    httpErrorHandler: HttpErrorHandler;
 }): Promise<{ navn: string }> =>
-    axios
-        .get(href, {
-            params: {
-                brukerid,
-            },
-        })
-        .then((response) => response.data);
+    get(href, httpErrorHandler, {
+        params: {
+            brukerid,
+        },
+    }).then((response: AxiosResponse) => response.data);
