@@ -129,18 +129,3 @@ export async function postInnleggelsesperioderDryRun(
 ): Promise<InnleggelsesperiodeDryRunResponse> {
     return postInnleggelsesperioder(href, body, httpErrorHandler, cancelToken, true);
 }
-
-export const getSaksbehandlernavn = ({
-    href,
-    brukerid,
-    httpErrorHandler,
-}: {
-    href: string;
-    brukerid: string;
-    httpErrorHandler: HttpErrorHandler;
-}): Promise<{ navn: string }> =>
-    get(href, httpErrorHandler, {
-        params: {
-            brukerid,
-        },
-    }).then((response: AxiosResponse) => response.data);

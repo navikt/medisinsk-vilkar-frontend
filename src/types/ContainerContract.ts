@@ -21,6 +21,8 @@ interface ContainerContract {
     onFinished: (...args: unknown[]) => void;
     httpErrorHandler: HttpErrorHandler;
     visFortsettknapp: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    saksbehandlere: any;
 }
 
 export default ContainerContract;

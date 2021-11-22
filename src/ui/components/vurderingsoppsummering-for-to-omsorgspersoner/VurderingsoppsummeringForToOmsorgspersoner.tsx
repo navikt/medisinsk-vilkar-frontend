@@ -1,5 +1,4 @@
 import React from 'react';
-import { useQuery } from 'react-query';
 import { Box, Margin, BasicList, LabelledContent, AssessedBy } from '@navikt/k9-react-components';
 import ContainerContext from '../../context/ContainerContext';
 import Vurdering from '../../../types/Vurdering';
@@ -7,7 +6,6 @@ import DokumentLink from '../dokument-link/DokumentLink';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import DekketAvInnleggelsesperiodeMelding from '../dekket-av-innleggelsesperiode-melding/DekketAvInnleggelsesperiodeMelding';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
-import { getSaksbehandlernavn } from '../../../api/api';
 
 interface VurderingsoppsummeringForToOmsorgspersonerProps {
     vurdering: Vurdering;
@@ -22,11 +20,7 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
     const { resultat, tekst, dokumenter, perioder } = gjeldendeVurdering;
     const erInnleggelse = vurdering.erInnleggelsesperiode;
     const brukerId = gjeldendeVurdering.endretAv;
-    const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
-
-    const { isSuccess, data: saksbehandlerInfo } = useQuery(['saksbehandlerNavn', brukerId], () =>
-        getSaksbehandlernavn({ href: endpoints.saksbehandlerInfo, brukerid: brukerId, httpErrorHandler })
-    );
+    const { saksbehandlere } = React.useContext(ContainerContext);
 
     return (
         <DetailViewVurdering
@@ -57,7 +51,7 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
                         indentContent
                     />
                     <AssessedBy
-                        name={(isSuccess && saksbehandlerInfo.navn) || gjeldendeVurdering?.endretAv}
+                        name={saksbehandlere[brukerId] || brukerId}
                         date={gjeldendeVurdering?.endretTidspunkt}
                     />
                 </Box>
