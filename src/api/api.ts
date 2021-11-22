@@ -1,6 +1,6 @@
-import { post, get } from '@navikt/k9-http-utils';
+import { post } from '@navikt/k9-http-utils';
 import { Period } from '@navikt/k9-period-utils';
-import { AxiosResponse, CancelToken } from 'axios';
+import { CancelToken } from 'axios';
 import { Vurderingsversjon } from '../types/Vurdering';
 import Vurderingstype from '../types/Vurderingstype';
 import { PerioderMedEndringResponse } from '../types/PeriodeMedEndring';
