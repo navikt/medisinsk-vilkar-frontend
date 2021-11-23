@@ -194,7 +194,7 @@ const VurderingAvTilsynsbehovForm = ({
                                 <CheckboxGroup
                                     question="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
                                     name={FieldName.DOKUMENTER}
-                                    checkboxes={getDokumenterSomSkalVises().map((dokument) => ({
+                                    checkboxes={getDokumenterSomSkalVises().map((dokument, index) => ({
                                         value: dokument.id,
                                         label: (
                                             <DokumentLink
