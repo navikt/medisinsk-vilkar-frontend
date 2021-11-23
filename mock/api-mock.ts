@@ -133,8 +133,6 @@ app.use('/mock/endre-vurdering', (req, res) => {
                 resultat: req.body.resultat,
                 dokumenter: mockedDokumentliste,
                 tekst: req.body.tekst,
-                endretAv: req.body.endretAv,
-                endretTidspunkt: req.body.endretTidspunkt
             });
         }
         res.send();
