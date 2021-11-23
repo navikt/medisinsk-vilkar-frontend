@@ -12,6 +12,8 @@ const toOmsorgspersonerVurderingerMock = [
                 resultat: Vurderingsresultat.OPPFYLT,
                 dokumenter: mockedDokumentliste,
                 tekst: 'Fordi her er det behov',
+                endretAv: 'Z133337',
+                endretTidspunkt: '2021-10-20T13:23:44.995'
             },
         ],
         annenInformasjon: {
