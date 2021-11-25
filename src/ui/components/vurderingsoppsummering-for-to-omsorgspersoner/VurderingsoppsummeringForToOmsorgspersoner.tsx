@@ -1,5 +1,6 @@
-import { Box, Margin, BasicList, LabelledContent } from '@navikt/k9-react-components';
 import React from 'react';
+import { Box, Margin, BasicList, LabelledContent, AssessedBy } from '@navikt/k9-react-components';
+import ContainerContext from '../../context/ContainerContext';
 import Vurdering from '../../../types/Vurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
@@ -18,6 +19,9 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
     const gjeldendeVurdering = vurdering.versjoner[0];
     const { resultat, tekst, dokumenter, perioder } = gjeldendeVurdering;
     const erInnleggelse = vurdering.erInnleggelsesperiode;
+    const brukerId = gjeldendeVurdering.endretAv;
+    const { saksbehandlere } = React.useContext(ContainerContext);
+
     return (
         <DetailViewVurdering
             title="Vurdering av to omsorgspersoner"
@@ -44,6 +48,11 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
                     <LabelledContent
                         label="Gjør en vurdering av om det er behov for to omsorgspersoner samtidig etter § 9-10, andre ledd."
                         content={<span>{tekst}</span>}
+                        indentContent
+                    />
+                    <AssessedBy
+                        name={saksbehandlere[brukerId] || brukerId}
+                        date={gjeldendeVurdering?.endretTidspunkt}
                     />
                 </Box>
                 <Box marginTop={Margin.xLarge}>
