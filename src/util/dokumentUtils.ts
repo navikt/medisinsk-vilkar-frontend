@@ -39,5 +39,15 @@ export const dokumentSorter = (dok1: Dokument, dok2: Dokument): number => {
     if (dok2Date.isBefore(dok1Date)) {
         return -1;
     }
+
+    if (dok1Date.isSame(dok2Date)) {
+        if (dok1.id > dok2.id) {
+            return 1;
+        }
+
+        if (dok2.id > dok1.id) {
+            return -1;
+        }
+    }
     return 0;
 };

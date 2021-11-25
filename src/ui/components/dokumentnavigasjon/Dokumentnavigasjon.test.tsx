@@ -57,13 +57,13 @@ describe('Dokumentnavigasjon', () => {
             <Dokumentnavigasjon
                 tittel="Something"
                 valgtDokument={dokumenter[0]}
-                dokumenter={[dokumenter[0], dokumenter[1]]}
+                dokumenter={[...dokumenter]}
                 onDokumentValgt={() => null}
                 expandedByDefault
                 displayFilterOption
             />
         );
-        expect(screen.getByText(/ikke klassifisert/i)).toBeTruthy();
+        expect(screen.getByText(/ikke klassifisert/i)).toBeInTheDocument();
 
         userEvent.click(screen.getAllByText(/type/i)[0]);
 
