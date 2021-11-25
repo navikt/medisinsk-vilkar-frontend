@@ -1,10 +1,11 @@
 import React from 'react';
-import { Box, Margin, BasicList, LabelledContent } from '@navikt/k9-react-components';
+import { Box, Margin, BasicList, LabelledContent, AssessedBy } from '@navikt/k9-react-components';
 import Vurdering from '../../../types/Vurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import DekketAvInnleggelsesperiodeMelding from '../dekket-av-innleggelsesperiode-melding/DekketAvInnleggelsesperiodeMelding';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
+import ContainerContext from '../../context/ContainerContext';
 
 interface VurderingsoppsummeringForKontinuerligTilsynOgPleieProps {
     vurdering: Vurdering;
@@ -17,6 +18,9 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
 }: VurderingsoppsummeringForKontinuerligTilsynOgPleieProps): JSX.Element => {
     const gjeldendeVurdering = vurdering.versjoner[0];
     const { dokumenter, perioder, tekst, resultat } = gjeldendeVurdering;
+    const brukerId = gjeldendeVurdering.endretAv;
+    const { saksbehandlere } = React.useContext(ContainerContext);
+
     const erInnleggelse = vurdering.erInnleggelsesperiode;
     return (
         <DetailViewVurdering
@@ -47,6 +51,11 @@ const VurderingsoppsummeringForKontinuerligTilsynOgPleie = ({
                         label="Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge
                                         av sykdommen etter § 9-10, første ledd."
                         content={<span>{tekst}</span>}
+                        indentContent
+                    />
+                    <AssessedBy
+                        name={saksbehandlere[brukerId] || brukerId}
+                        date={gjeldendeVurdering?.endretTidspunkt}
                     />
                 </Box>
                 <Box marginTop={Margin.xLarge}>
