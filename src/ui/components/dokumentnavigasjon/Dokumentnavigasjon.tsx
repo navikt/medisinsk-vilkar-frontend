@@ -44,8 +44,7 @@ const Dokumentnavigasjon = ({
 
     const [listExpanded, setListExpanded] = React.useState(expandedByDefault || false);
 
-    const sorterteDokumenter = dokumenter.sort(({ type }) => (type === Dokumenttype.UKLASSIFISERT ? -1 : 0));
-    const filtrerteDokumenter = sorterteDokumenter.filter(
+    const filtrerteDokumenter = dokumenter.filter(
         (dokument) => dokumenttypeFilter.includes(dokument.type) && erIkkeDuplikat(dokument)
     );
 
