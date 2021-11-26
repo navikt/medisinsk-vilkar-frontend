@@ -86,6 +86,7 @@
         "dayjs": "^1.10.5",
         "express": "^4.17.1",
         "lodash.throttle": "^4.1.1",
+        "msw": "^0.35.0",
         "nav-datovelger": "^11.0.0",
         "nav-frontend-alertstriper": "^4.0.1",
         "nav-frontend-alertstriper-style": "^3.0.1",
@@ -128,5 +129,8 @@
         "react-popper": "^2.2.5",
         "react-query": "^3.21.1",
         "set-value": "^4.1.0"
+    },
+    "msw": {
+        "workerDirectory": "dist"
     }
 }

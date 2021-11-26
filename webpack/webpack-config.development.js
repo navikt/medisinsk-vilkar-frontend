@@ -24,6 +24,7 @@ const webpackConfig = merge(commonWebpackConfig, {
             },
         }),
         new ReactRefreshWebpackPlugin(),
+        new webpack.EnvironmentPlugin({ MSW_MODE: 'development' }),
     ],
 });
 
@@ -34,6 +35,9 @@ const devServerOptions = {
         'Access-Control-Allow-Origin': 'http://localhost:9000',
     },
     port,
+    static: {
+        directory: path.resolve(__dirname, '../dist'),
+    },
 };
 
 const compiler = webpack(webpackConfig);
