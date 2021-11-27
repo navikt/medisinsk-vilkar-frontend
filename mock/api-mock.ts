@@ -134,7 +134,7 @@ app.use('/mock/endre-vurdering', (req, res) => {
                 dokumenter: mockedDokumentliste,
                 tekst: req.body.tekst,
                 endretAv: req.body.endretAv,
-                endretTidspunkt: req.body.endretTidspunkt
+                endretTidspunkt: req.body.endretTidspunkt,
             });
         }
         res.send();
@@ -209,6 +209,10 @@ app.get('/mock/nye-dokumenter', (req, res) => {
 app.post('/mock/nye-dokumenter', (req, res) => {
     mockedNyeDokumenter = [];
     res.send({});
+});
+
+app.get('/', function (req, res) {
+    res.status(200).send('ok');
 });
 
 const port = 8082;

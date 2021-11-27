@@ -12,7 +12,7 @@
     <body>
         <div id="app" style="padding: 2.5rem"></div>
         <script type="text/javascript">
-            setTimeout(() => {
+            document.addEventListener('DOMContentLoaded', () => {
                 window.renderMedisinskVilkarApp('app', {
                     endpoints: {
                         vurderingsoversiktKontinuerligTilsynOgPleie:
@@ -30,9 +30,9 @@
                     behandlingUuid: '123',
                     readOnly: false,
                     onFinished: () => console.log('Aksjonspunkt løst'),
-                    visFortsettknapp: true
+                    visFortsettknapp: true,
                 });
-            }, 300);
+            });
         </script>
     </body>
 </html>
