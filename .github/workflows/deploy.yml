@@ -33,6 +33,12 @@ jobs:
         run: npm run lint
       - name: Kjøre enhetstester
         run: npm test
+      - name: Kjør E2E-tester
+        uses: cypress-io/github-action@v2
+        with:
+          start: npm run start:e2e
+          wait-on: "http://localhost:8081"
+          wait-on-timeout: 60
       - name: Kjøre bygg
         run: npm run build
       - name: Sette versjon
