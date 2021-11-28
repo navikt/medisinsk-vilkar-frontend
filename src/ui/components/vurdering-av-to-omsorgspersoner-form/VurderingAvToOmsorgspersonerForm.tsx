@@ -1,5 +1,5 @@
 import { Period } from '@navikt/k9-period-utils';
-import { Box, Form, Margin } from '@navikt/k9-react-components';
+import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/k9-react-components';
 import { CheckboxGroup, PeriodpickerList, TextArea, YesOrNoQuestion } from '@navikt/k9-form-utils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
@@ -119,7 +119,18 @@ const VurderingAvToOmsorgspersonerForm = ({
                                     label: (
                                         <DokumentLink
                                             dokument={dokument}
-                                            etikett={dokument.annenPartErKilde ? 'Dokument fra annen part' : ''}
+                                            etikett={
+                                                <>
+                                                    {dokument.annenPartErKilde && (
+                                                        <ContentWithTooltip
+                                                            tooltipText="Dokument fra annen part"
+                                                            tooltipDirectionRight
+                                                        >
+                                                            <OnePersonOutlineGray />
+                                                        </ContentWithTooltip>
+                                                    )}
+                                                </>
+                                            }
                                         />
                                     ),
                                 }))}

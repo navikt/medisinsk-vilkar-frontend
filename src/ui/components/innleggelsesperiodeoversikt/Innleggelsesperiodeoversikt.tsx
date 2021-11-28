@@ -47,6 +47,23 @@ const Innleggelsesperiodeoversikt = ({
             cancelToken: httpCanceler.token,
         });
 
+    const initializeInnleggelsesperiodeData = (response: InnleggelsesperiodeResponse) => ({
+        ...response,
+        perioder: response.perioder.map(({ fom, tom }) => new Period(fom, tom)),
+    });
+
+    const updateInnlegelsesperioder = () => {
+        setIsLoading(true);
+        hentInnleggelsesperioder()
+            .then((response: InnleggelsesperiodeResponse) => {
+                setInnleggelsesperioderResponse(initializeInnleggelsesperiodeData(response));
+                setIsLoading(false);
+            })
+            .catch(() => {
+                setHentInnleggelsesperioderFeilet(true);
+            });
+    };
+
     const lagreInnleggelsesperioder = (formState) => {
         setIsLoading(true);
         let nyeInnleggelsesperioder = [];
@@ -64,17 +81,15 @@ const Innleggelsesperiodeoversikt = ({
             httpErrorHandler,
             httpCanceler.token
         )
-            .then(onInnleggelsesperioderUpdated)
+            .then(() => {
+                onInnleggelsesperioderUpdated();
+                updateInnlegelsesperioder();
+            })
             .catch(() => {
                 setLagreInnleggelsesperioderFeilet(true);
                 setIsLoading(false);
             });
     };
-
-    const initializeInnleggelsesperiodeData = (response: InnleggelsesperiodeResponse) => ({
-        ...response,
-        perioder: response.perioder.map(({ fom, tom }) => new Period(fom, tom)),
-    });
 
     useEffect(() => {
         let isMounted = true;

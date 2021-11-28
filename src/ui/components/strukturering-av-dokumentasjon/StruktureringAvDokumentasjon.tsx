@@ -1,30 +1,28 @@
 import { get } from '@navikt/k9-http-utils';
-import { Box, Margin, PageContainer, NavigationWithDetailView } from '@navikt/k9-react-components';
+import { Box, Margin, NavigationWithDetailView, PageContainer } from '@navikt/k9-react-components';
 import axios from 'axios';
 import React, { useMemo } from 'react';
-import LinkRel from '../../../constants/LinkRel';
-import Dokument, { Dokumenttype } from '../../../types/Dokument';
+import Dokument from '../../../types/Dokument';
 import Dokumentoversikt from '../../../types/Dokumentoversikt';
 import { DokumentoversiktResponse } from '../../../types/DokumentoversiktResponse';
 import { StepId } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
-import { findLinkByRel } from '../../../util/linkUtils';
 import { nesteStegErVurdering } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
 import DokumentasjonFooter from '../dokumentasjon-footer/DokumentasjonFooter';
+import Dokumentdetaljer from '../dokumentdetaljer/Dokumentdetaljer';
 import Dokumentnavigasjon from '../dokumentnavigasjon/Dokumentnavigasjon';
 import DokumentoversiktMessages from '../dokumentoversikt-messages/DokmentoversiktMessages';
 import Innleggelsesperiodeoversikt from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
 import SignertSeksjon from '../signert-seksjon/SignertSeksjon';
-import StrukturerDokumentController from '../strukturer-dokument-controller/StrukturerDokumentController';
-import StrukturertDokumentDetaljer from '../strukturert-dokument-detaljer/StrukturertDokumentDetaljer';
 import ActionType from './actionTypes';
 import dokumentReducer from './reducer';
+import styles from './struktureringAvDokumentasjon.less';
 
 interface StruktureringAvDokumentasjonProps {
     navigerTilNesteSteg: () => void;
-    hentSykdomsstegStatus: () => Promise<SykdomsstegStatusResponse>;
+    hentSykdomsstegStatus: () => Promise<[SykdomsstegStatusResponse, Dokument[]]>;
     sykdomsstegStatus: SykdomsstegStatusResponse;
 }
 
@@ -60,7 +58,13 @@ const StruktureringAvDokumentasjon = ({
         });
 
     const visDokumentoversikt = (nyDokumentoversikt: Dokumentoversikt) => {
-        dispatch({ type: ActionType.VIS_DOKUMENTOVERSIKT, dokumentoversikt: nyDokumentoversikt });
+        dispatch({
+            type: ActionType.VIS_DOKUMENTOVERSIKT,
+            dokumentoversikt: nyDokumentoversikt,
+            valgtDokument: nyDokumentoversikt.harUstrukturerteDokumenter()
+                ? nyDokumentoversikt.ustrukturerteDokumenter[0]
+                : null,
+        });
     };
 
     const handleError = () => {
@@ -111,7 +115,7 @@ const StruktureringAvDokumentasjon = ({
     };
 
     return (
-        <PageContainer isLoading={isLoading} hasError={dokumentoversiktFeilet} key={StepId.Dokument}>
+        <PageContainer isLoading={isLoading} hasError={dokumentoversiktFeilet} key={StepId.Dokument} preventUnmount>
             <DokumentoversiktMessages
                 dokumentoversikt={dokumentoversikt}
                 harRegistrertDiagnosekode={!sykdomsstegStatus.manglerDiagnosekode}
@@ -119,41 +123,38 @@ const StruktureringAvDokumentasjon = ({
                 navigerTilNesteSteg={navigerTilNesteSteg}
             />
             {dokumentoversikt?.harDokumenter() === true && (
-                <>
+                <div className={styles.dokumentoversikt}>
                     <NavigationWithDetailView
                         navigationSection={() => (
-                            <Dokumentnavigasjon
-                                dokumenter={dokumentoversikt.strukturerteDokumenter}
-                                dokumenterSomMåGjennomgås={dokumentoversikt.ustrukturerteDokumenter}
-                                onDokumentValgt={velgDokument}
-                            />
+                            <>
+                                <Dokumentnavigasjon
+                                    tittel="Dokumenter til behandling"
+                                    dokumenter={dokumentoversikt.ustrukturerteDokumenter}
+                                    onDokumentValgt={velgDokument}
+                                    valgtDokument={valgtDokument}
+                                    expandedByDefault
+                                />
+                                <Box marginTop={Margin.large}>
+                                    <Dokumentnavigasjon
+                                        tittel="Andre dokumenter"
+                                        dokumenter={dokumentoversikt.strukturerteDokumenter}
+                                        onDokumentValgt={velgDokument}
+                                        valgtDokument={valgtDokument}
+                                        displayFilterOption
+                                    />
+                                </Box>
+                            </>
                         )}
                         showDetailSection={visDokumentDetails}
-                        detailSection={() => {
-                            if (valgtDokument.type === Dokumenttype.UKLASSIFISERT || visRedigeringAvDokument) {
-                                const strukturerDokumentLink = findLinkByRel(
-                                    LinkRel.ENDRE_DOKUMENT,
-                                    valgtDokument.links
-                                );
-                                return (
-                                    <StrukturerDokumentController
-                                        dokument={valgtDokument}
-                                        strukturerDokumentLink={strukturerDokumentLink}
-                                        onDokumentStrukturert={sjekkStatus}
-                                        editMode={visRedigeringAvDokument}
-                                        strukturerteDokumenter={dokumentoversikt?.strukturerteDokumenter}
-                                    />
-                                );
-                            }
-                            return (
-                                <StrukturertDokumentDetaljer
-                                    dokument={valgtDokument}
-                                    onEditDokumentClick={() => dispatch({ type: ActionType.REDIGER_DOKUMENT })}
-                                    strukturerteDokumenter={dokumentoversikt?.strukturerteDokumenter}
-                                    onRemoveDuplikat={sjekkStatus}
-                                />
-                            );
-                        }}
+                        detailSection={() => (
+                            <Dokumentdetaljer
+                                dokument={valgtDokument}
+                                onChange={sjekkStatus}
+                                editMode={visRedigeringAvDokument}
+                                onEditClick={() => dispatch({ type: ActionType.REDIGER_DOKUMENT })}
+                                strukturerteDokumenter={dokumentoversikt?.strukturerteDokumenter}
+                            />
+                        )}
                     />
 
                     <Box marginTop={Margin.xxLarge}>
@@ -167,7 +168,7 @@ const StruktureringAvDokumentasjon = ({
                             )}
                         />
                     </Box>
-                </>
+                </div>
             )}
         </PageContainer>
     );

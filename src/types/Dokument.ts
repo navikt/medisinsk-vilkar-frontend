@@ -11,23 +11,24 @@ export const dokumentLabel = {
     LEGEERKLÆRING_SYKEHUS: 'Sykehus/spesialist.',
     MEDISINSKE_OPPLYSNINGER: 'Andre med. oppl.',
     ANNET: 'Ikke med. oppl.',
-    UKLASSIFISERT: 'Ikke klassifisert'
-}
+    UKLASSIFISERT: 'Ikke klassifisert',
+};
 
 export interface Dokument {
-    id: string;
-    navn: string;
-    type: Dokumenttype;
-    benyttet: boolean;
-    behandlet: boolean;
     annenPartErKilde: boolean;
+    behandlet: boolean;
+    benyttet: boolean;
+    bruktTilMinstEnVurdering: boolean;
     datert: string;
+    duplikatAvId: string;
+    duplikater: string[];
     fremhevet: boolean;
+    id: string;
     links: Link[];
     mottattDato: string;
     mottattTidspunkt: string;
-    duplikater: string[];
-    duplikatAvId: string;
+    navn: string;
+    type: Dokumenttype;
 }
 
 export default Dokument;

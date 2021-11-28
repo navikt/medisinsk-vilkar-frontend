@@ -3,13 +3,18 @@ import { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../types
 
 type Steg = typeof dokumentSteg | typeof tilsynOgPleieSteg | typeof toOmsorgspersonerSteg;
 
-export const finnNesteSteg = ({
-    harUklassifiserteDokumenter,
-    manglerDiagnosekode,
-    manglerVurderingAvKontinuerligTilsynOgPleie,
-    manglerVurderingAvToOmsorgspersoner,
-    manglerGodkjentLegeerklæring,
-}: StatusResponse): Steg => {
+export const finnNesteSteg = (
+    {
+        kanLøseAksjonspunkt,
+        harUklassifiserteDokumenter,
+        manglerDiagnosekode,
+        manglerVurderingAvKontinuerligTilsynOgPleie,
+        manglerVurderingAvToOmsorgspersoner,
+        manglerGodkjentLegeerklæring,
+        nyttDokumentHarIkkekontrollertEksisterendeVurderinger,
+    }: StatusResponse,
+    isOnMount?: boolean
+): Steg => {
     if (harUklassifiserteDokumenter || manglerDiagnosekode || manglerGodkjentLegeerklæring) {
         return dokumentSteg;
     }
@@ -18,8 +23,12 @@ export const finnNesteSteg = ({
         return tilsynOgPleieSteg;
     }
 
-    if (manglerVurderingAvToOmsorgspersoner) {
+    if (manglerVurderingAvToOmsorgspersoner || nyttDokumentHarIkkekontrollertEksisterendeVurderinger) {
         return toOmsorgspersonerSteg;
+    }
+
+    if (kanLøseAksjonspunkt && !isOnMount) {
+        return tilsynOgPleieSteg;
     }
 
     return null;

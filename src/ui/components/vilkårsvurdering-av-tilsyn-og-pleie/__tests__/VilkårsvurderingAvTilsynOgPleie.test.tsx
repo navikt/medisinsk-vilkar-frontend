@@ -269,7 +269,7 @@ describe('VilkårsvurderingAvTilsynOgPleie', () => {
                 // one post with dryRun=true, another with dryRun=false
                 expect(httpPostSpy).toHaveBeenCalledTimes(2);
                 expect(sykdomsstegDokumentUferdigStatusSpy).toHaveBeenCalledTimes(1);
-                expect(navigerTilNesteStegSpy).toHaveBeenCalledWith(dokumentSteg);
+                expect(navigerTilNesteStegSpy).toHaveBeenCalledWith(dokumentSteg, false);
             });
         });
 

@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackDevServer = require('webpack-dev-server');
 const commonWebpackConfig = require('./webpack.common.js');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 const webpackConfig = merge(commonWebpackConfig, {
     mode: 'development',
@@ -22,6 +23,8 @@ const webpackConfig = merge(commonWebpackConfig, {
                 mode: 'write-references',
             },
         }),
+        new ReactRefreshWebpackPlugin(),
+        new webpack.EnvironmentPlugin({ MSW_MODE: 'development' }),
     ],
 });
 
@@ -32,6 +35,9 @@ const devServerOptions = {
         'Access-Control-Allow-Origin': 'http://localhost:9000',
     },
     port,
+    static: {
+        directory: path.resolve(__dirname, '../dist'),
+    },
 };
 
 const compiler = webpack(webpackConfig);
