@@ -194,7 +194,9 @@ const MedisinskVilkår = (): JSX.Element => {
                 <TabsPure
                     kompakt
                     tabs={steps.map((step) => ({
-                        label: <TabItem label={step.title} showWarningIcon={step === markedStep} />,
+                        label: (
+                            <TabItem label={step.title} showWarningIcon={step === markedStep && !kanLøseAksjonspunkt} />
+                        ),
                         aktiv: step === activeStep,
                     }))}
                     onChange={(event, clickedIndex) => {
