@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import { TabsPure } from 'nav-frontend-tabs';
 import React, { useMemo } from 'react';
 import { useQuery } from 'react-query';
+import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
 import Dokument from '../../../types/Dokument';
 import { NyeDokumenterResponse } from '../../../types/NyeDokumenterResponse';
 import Step, { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
@@ -12,18 +13,17 @@ import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse'
 import Vurderingstype from '../../../types/Vurderingstype';
 import { finnNesteSteg } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
-import ActionType from './actionTypes';
-import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
-import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
 import VurderingContext from '../../context/VurderingContext';
-import NyeDokumenterSomKanPåvirkeEksisterendeVurderinger from '../nye-dokumenter-som-kan-påvirke-eksisterende-vurderinger/NyeDokumenterSomKanPåvirkeEksisterendeVurderinger';
+import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
+import NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController from '../nye-dokumenter-som-kan-påvirke-eksisterende-vurderinger/NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController';
 import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
+import UteståendeEndringerMelding from '../utestående-endringer-melding/UteståendeEndringerMelding';
 import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-pleie/VilkårsvurderingAvTilsynOgPleie';
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
+import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
+import ActionType from './actionTypes';
 import styles from './medisinskVilkår.less';
-import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
 import medisinskVilkårReducer from './reducer';
-import UteståendeEndringerMelding from '../utestående-endringer-melding/UteståendeEndringerMelding';
 
 const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
@@ -146,6 +146,15 @@ const MedisinskVilkår = (): JSX.Element => {
         }
     };
 
+    const afterEndringerUtifraNyeDokumenterRegistrert = () => {
+        dispatch({ type: ActionType.ENDRINGER_UTIFRA_NYE_DOKUMENTER_REGISTRERT });
+        hentSykdomsstegStatus().then(({ kanLøseAksjonspunkt }) => {
+            if (kanLøseAksjonspunkt) {
+                navigerTilSteg(toOmsorgspersonerSteg, true);
+            }
+        });
+    };
+
     const kanLøseAksjonspunkt = sykdomsstegStatus?.kanLøseAksjonspunkt;
     const harDataSomIkkeHarBlittTattMedIBehandling = sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling;
     const manglerVurderingAvNyeDokumenter = sykdomsstegStatus?.nyttDokumentHarIkkekontrollertEksisterendeVurderinger;
@@ -166,16 +175,23 @@ const MedisinskVilkår = (): JSX.Element => {
             />
             <div className={styles.medisinskVilkår}>
                 <h1 style={{ fontSize: 22 }}>Sykdom</h1>
-                {nyeDokumenterSomIkkeErVurdert &&
-                    manglerVurderingAvNyeDokumenter &&
-                    markedStep !== dokumentSteg &&
-                    activeStep !== dokumentSteg && (
+                <WriteAccessBoundContent
+                    contentRenderer={() => (
                         <Box marginBottom={Margin.medium}>
-                            <NyeDokumenterSomKanPåvirkeEksisterendeVurderinger
+                            <NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController
                                 dokumenter={nyeDokumenterSomIkkeErVurdert}
+                                afterEndringerRegistrert={afterEndringerUtifraNyeDokumenterRegistrert}
                             />
                         </Box>
                     )}
+                    otherRequirementsAreMet={
+                        nyeDokumenterSomIkkeErVurdert &&
+                        manglerVurderingAvNyeDokumenter &&
+                        markedStep !== dokumentSteg &&
+                        activeStep !== dokumentSteg
+                    }
+                />
+
                 <WriteAccessBoundContent
                     contentRenderer={() => <AksjonspunktFerdigStripe />}
                     otherRequirementsAreMet={
