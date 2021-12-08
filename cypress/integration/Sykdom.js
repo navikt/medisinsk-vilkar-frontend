@@ -9,7 +9,6 @@ describe('Sykdom', () => {
         cy.contains('Fortsett').should('exist').click();
     });
     it('skal kunne håndtere tilsyn og pleie', () => {
-        cy.contains('Utført, eventuelle endringer er registrert').should('exist').click();
         cy.get('[type="checkbox"]').first().check({ force: true });
         cy.get('[name="vurderingAvKontinuerligTilsynOgPleie"]').type('test');
         cy.get('input[id="harBehovForKontinuerligTilsynOgPleieYES"]').check({ force: true });
@@ -33,6 +32,7 @@ describe('Sykdom', () => {
         ).should('not.exist');
         cy.contains('Bekreft').should('exist').click();
         cy.get('.ReactModalPortal').find('button').contains('Bekreft').should('exist').click();
+        cy.contains('Utført, eventuelle endringer er registrert').should('exist').click();
     });
     it('skal kunne håndtere to omsorgspersoner', () => {
         // cy.intercept('http://localhost:8082/mock/to-omsorgspersoner/vurderingsoversikt').as('vurderingsoversikt');

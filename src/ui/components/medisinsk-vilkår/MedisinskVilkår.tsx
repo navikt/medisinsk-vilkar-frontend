@@ -148,11 +148,19 @@ const MedisinskVilkår = (): JSX.Element => {
 
     const afterEndringerUtifraNyeDokumenterRegistrert = () => {
         dispatch({ type: ActionType.ENDRINGER_UTIFRA_NYE_DOKUMENTER_REGISTRERT });
-        hentSykdomsstegStatus().then(({ kanLøseAksjonspunkt }) => {
-            if (kanLøseAksjonspunkt) {
-                navigerTilSteg(toOmsorgspersonerSteg, true);
+        hentSykdomsstegStatus().then(
+            ({
+                kanLøseAksjonspunkt,
+                manglerVurderingAvKontinuerligTilsynOgPleie,
+                manglerVurderingAvToOmsorgspersoner,
+            }) => {
+                if (kanLøseAksjonspunkt) {
+                    navigerTilSteg(toOmsorgspersonerSteg, true);
+                } else if (!manglerVurderingAvKontinuerligTilsynOgPleie && manglerVurderingAvToOmsorgspersoner) {
+                    navigerTilSteg(toOmsorgspersonerSteg);
+                }
             }
-        });
+        );
     };
 
     const kanLøseAksjonspunkt = sykdomsstegStatus?.kanLøseAksjonspunkt;
