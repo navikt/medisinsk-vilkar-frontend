@@ -68,7 +68,7 @@ const NyeDokumenterSomKanPåvirkeEksisterendeVurderinger = ({
                         spinner={isSubmitting}
                         id="bekreftNyeDokumenterVurdertKnapp"
                     >
-                        Utført, eventuelle endringer er registrert
+                        Eventuelle endringer er registrert
                     </Hovedknapp>
                 </Box>
             </div>
