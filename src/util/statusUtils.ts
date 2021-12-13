@@ -19,11 +19,11 @@ export const finnNesteSteg = (
         return dokumentSteg;
     }
 
-    if (manglerVurderingAvKontinuerligTilsynOgPleie) {
+    if (manglerVurderingAvKontinuerligTilsynOgPleie || nyttDokumentHarIkkekontrollertEksisterendeVurderinger) {
         return tilsynOgPleieSteg;
     }
 
-    if (manglerVurderingAvToOmsorgspersoner || nyttDokumentHarIkkekontrollertEksisterendeVurderinger) {
+    if (manglerVurderingAvToOmsorgspersoner) {
         return toOmsorgspersonerSteg;
     }
 

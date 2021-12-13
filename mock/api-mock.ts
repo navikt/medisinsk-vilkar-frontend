@@ -52,7 +52,8 @@ app.use('/mock/status', (req, res) => {
             !manglerDiagnosekode &&
             !manglerGodkjentLegeerklæring &&
             !manglerVurderingAvKontinuerligTilsynOgPleie &&
-            !manglerVurderingAvToOmsorgspersoner,
+            !manglerVurderingAvToOmsorgspersoner &&
+            !nyttDokumentHarIkkekontrollertEksisterendeVurderinger,
         harUklassifiserteDokumenter,
         manglerDiagnosekode,
         manglerGodkjentLegeerklæring,

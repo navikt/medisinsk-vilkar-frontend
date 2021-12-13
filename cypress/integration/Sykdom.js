@@ -32,6 +32,7 @@ describe('Sykdom', () => {
         ).should('not.exist');
         cy.contains('Bekreft').should('exist').click();
         cy.get('.ReactModalPortal').find('button').contains('Bekreft').should('exist').click();
+        cy.contains('Eventuelle endringer er registrert').should('exist').click();
     });
     it('skal kunne håndtere to omsorgspersoner', () => {
         // cy.intercept('http://localhost:8082/mock/to-omsorgspersoner/vurderingsoversikt').as('vurderingsoversikt');
