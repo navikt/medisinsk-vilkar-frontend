@@ -8,6 +8,7 @@ import Vurderingstype from '../../../types/Vurderingstype';
 import IngenPerioderÅVurdereMelding from '../ingen-perioder-å-vurdere-melding/IngenPerioderÅVurdereMelding';
 import ManglerGyldigSignaturMelding from '../mangler-gyldig-signatur-melding/ManglerGyldigSignaturMelding';
 import VurderingContext from '../../context/VurderingContext';
+import ContainerContext from '../../context/ContainerContext';
 
 interface VurderingsoversiktMessagesProps {
     vurderingsoversikt: Vurderingsoversikt;
@@ -19,6 +20,7 @@ const VurderingsoversiktMessages = ({
     harGyldigSignatur,
 }: VurderingsoversiktMessagesProps): JSX.Element => {
     const { vurderingstype } = React.useContext(VurderingContext);
+    const { readOnly } = React.useContext(ContainerContext);
     const vurderingsnavn =
         vurderingstype === Vurderingstype.TO_OMSORGSPERSONER ? 'to omsorgspersoner' : 'tilsyn og pleie';
 
@@ -42,7 +44,7 @@ const VurderingsoversiktMessages = ({
         );
     }
 
-    if (vurderingsoversikt.harPerioderSomSkalVurderes() === true) {
+    if (!readOnly && vurderingsoversikt.harPerioderSomSkalVurderes() === true) {
         const barnetsAttenårsdag = vurderingsoversikt.harPerioderDerPleietrengendeErOver18år
             ? addYearsToDate(vurderingsoversikt.pleietrengendesFødselsdato, 18)
             : null;

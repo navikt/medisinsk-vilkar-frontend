@@ -17,6 +17,7 @@ import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElem
 import Vurderingsperioder from '../vurderingsperioder/Vurderingsperioder';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import styles from './vurderingsnavigasjon.less';
+import ContainerContext from '../../context/ContainerContext';
 
 interface VurderingsnavigasjonProps {
     vurderingselementer: Vurderingselement[];
@@ -43,6 +44,7 @@ const Vurderingsnavigasjon = ({
     const [activeIndex, setActiveIndex] = React.useState(harPerioderSomSkalVurderes ? 0 : -1);
     const previousVisRadForNyVurdering = usePrevious(visRadForNyVurdering);
     const harValgfrieVurderingsperioder = resterendeValgfrieVurderingsperioder?.length > 0;
+    const { readOnly } = React.useContext(ContainerContext);
 
     useEffect(() => {
         if (visRadForNyVurdering === false && previousVisRadForNyVurdering === true) {
@@ -85,11 +87,16 @@ const Vurderingsnavigasjon = ({
     if (harPerioderSomSkalVurderes) {
         allElements.unshift(
             <Vurderingsperioder
-                indicatorContentRenderer={() => (
-                    <ContentWithTooltip tooltipText="Perioden må vurderes">
-                        <WarningIcon />
-                    </ContentWithTooltip>
-                )}
+                indicatorContentRenderer={() => {
+                    if (readOnly) {
+                        return null;
+                    }
+                    return (
+                        <ContentWithTooltip tooltipText="Perioden må vurderes">
+                            <WarningIcon />
+                        </ContentWithTooltip>
+                    );
+                }}
                 visParterLabel={visParterLabel}
                 perioder={resterendeVurderingsperioder || []}
             />
