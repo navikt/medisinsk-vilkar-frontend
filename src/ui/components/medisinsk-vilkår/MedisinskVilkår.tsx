@@ -15,17 +15,19 @@ import { finnNesteSteg } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import VurderingContext from '../../context/VurderingContext';
 import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
-import NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController from '../nye-dokumenter-som-kan-påvirke-eksisterende-vurderinger/NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController';
+import NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController
+    from '../nye-dokumenter-som-kan-påvirke-eksisterende-vurderinger/NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController';
 import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
 import UteståendeEndringerMelding from '../utestående-endringer-melding/UteståendeEndringerMelding';
 import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-pleie/VilkårsvurderingAvTilsynOgPleie';
-import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
+import VilkårsvurderingAvToOmsorgspersoner
+    from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import ActionType from './actionTypes';
 import styles from './medisinskVilkår.less';
 import medisinskVilkårReducer from './reducer';
 
-const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
+let steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
 interface TabItemProps {
     label: string;
@@ -59,8 +61,11 @@ const MedisinskVilkår = (): JSX.Element => {
     });
 
     const { isLoading, hasError, activeStep, markedStep, sykdomsstegStatus, nyeDokumenterSomIkkeErVurdert } = state;
-    const { endpoints, httpErrorHandler, visFortsettknapp } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler, visFortsettknapp, erFagytelsetypePPN } = React.useContext(ContainerContext);
 
+    if(erFagytelsetypePPN){
+        steps = [dokumentSteg, toOmsorgspersonerSteg];
+    }
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const hentDiagnosekoder = () =>
@@ -217,7 +222,8 @@ const MedisinskVilkår = (): JSX.Element => {
                 />
                 <TabsPure
                     kompakt
-                    tabs={steps.map((step) => ({
+                    tabs={
+                        steps.map((step) => ({
                         label: (
                             <TabItem label={step.title} showWarningIcon={step === markedStep && !kanLøseAksjonspunkt} />
                         ),
@@ -246,7 +252,7 @@ const MedisinskVilkår = (): JSX.Element => {
                                 sykdomsstegStatus={sykdomsstegStatus}
                             />
                         )}
-                        {activeStep === tilsynOgPleieSteg && (
+                        {!erFagytelsetypePPN && activeStep === tilsynOgPleieSteg && (
                             <VurderingContext.Provider
                                 value={{ vurderingstype: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE }}
                             >
@@ -258,7 +264,7 @@ const MedisinskVilkår = (): JSX.Element => {
                             </VurderingContext.Provider>
                         )}
                         {activeStep === toOmsorgspersonerSteg && (
-                            <VurderingContext.Provider value={{ vurderingstype: Vurderingstype.TO_OMSORGSPERSONER }}>
+                            <VurderingContext.Provider value={{ vurderingstype: erFagytelsetypePPN ? Vurderingstype.LIVETS_SLUTTFASE : Vurderingstype.TO_OMSORGSPERSONER }}>
                                 <VilkårsvurderingAvToOmsorgspersoner
                                     navigerTilNesteSteg={navigerTilSteg}
                                     hentSykdomsstegStatus={hentSykdomsstegStatus}

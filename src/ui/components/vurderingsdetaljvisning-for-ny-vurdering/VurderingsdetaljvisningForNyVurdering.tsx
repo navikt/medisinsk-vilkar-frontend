@@ -35,7 +35,7 @@ function makeDefaultValues(
             [KTPFieldName.DOKUMENTER]: [],
         };
     }
-    if (vurderingstype === Vurderingstype.TO_OMSORGSPERSONER) {
+    if (vurderingstype === Vurderingstype.TO_OMSORGSPERSONER || vurderingstype === Vurderingstype.LIVETS_SLUTTFASE) {
         return {
             [TOFieldName.VURDERING_AV_TO_OMSORGSPERSONER]: '',
             [TOFieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: undefined,
@@ -93,7 +93,7 @@ const VurderingsdetaljvisningForNyVurdering = ({
                         />
                     );
                 }
-                if (Vurderingstype.TO_OMSORGSPERSONER === vurderingstype) {
+                if (Vurderingstype.TO_OMSORGSPERSONER === vurderingstype || Vurderingstype.LIVETS_SLUTTFASE === vurderingstype) {
                     return (
                         <VurderingAvToOmsorgspersonerForm
                             defaultValues={makeDefaultValues(vurderingstype, defaultPerioder())}

@@ -31,7 +31,7 @@ const StruktureringAvDokumentasjon = ({
     hentSykdomsstegStatus,
     sykdomsstegStatus,
 }: StruktureringAvDokumentasjonProps): JSX.Element => {
-    const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler, erFagytelsetypePPN } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(dokumentReducer, {
@@ -162,7 +162,7 @@ const StruktureringAvDokumentasjon = ({
                             firstSectionRenderer={() => (
                                 <Innleggelsesperiodeoversikt onInnleggelsesperioderUpdated={sjekkStatus} />
                             )}
-                            secondSectionRenderer={() => <Diagnosekodeoversikt onDiagnosekoderUpdated={sjekkStatus} />}
+                            secondSectionRenderer={() => erFagytelsetypePPN ? null : <Diagnosekodeoversikt onDiagnosekoderUpdated={sjekkStatus} />}
                             thirdSectionRenderer={() => (
                                 <SignertSeksjon harGyldigSignatur={dokumentoversikt.harGyldigSignatur()} />
                             )}
