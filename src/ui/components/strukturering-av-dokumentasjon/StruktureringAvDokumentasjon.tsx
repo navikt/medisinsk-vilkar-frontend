@@ -162,7 +162,7 @@ const StruktureringAvDokumentasjon = ({
                             firstSectionRenderer={() => (
                                 <Innleggelsesperiodeoversikt onInnleggelsesperioderUpdated={sjekkStatus} />
                             )}
-                            secondSectionRenderer={() => erFagytelsetypePPN ? null : <Diagnosekodeoversikt onDiagnosekoderUpdated={sjekkStatus} />}
+                            secondSectionRenderer={() => <Diagnosekodeoversikt onDiagnosekoderUpdated={sjekkStatus} />}
                             thirdSectionRenderer={() => (
                                 <SignertSeksjon harGyldigSignatur={dokumentoversikt.harGyldigSignatur()} />
                             )}
