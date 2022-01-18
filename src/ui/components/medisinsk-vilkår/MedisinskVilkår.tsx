@@ -62,7 +62,7 @@ const MedisinskVilkår = (): JSX.Element => {
     const { endpoints, httpErrorHandler, visFortsettknapp, erFagytelsetypePPN } = React.useContext(ContainerContext);
 
     if(erFagytelsetypePPN){
-        steps = [dokumentSteg, toOmsorgspersonerSteg];
+        steps = [dokumentSteg, tilsynOgPleieSteg];
     }
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
@@ -250,9 +250,9 @@ const MedisinskVilkår = (): JSX.Element => {
                                 sykdomsstegStatus={sykdomsstegStatus}
                             />
                         )}
-                        {!erFagytelsetypePPN && activeStep === tilsynOgPleieSteg && (
+                        {activeStep === tilsynOgPleieSteg && (
                             <VurderingContext.Provider
-                                value={{ vurderingstype: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE }}
+                                value={{ vurderingstype: erFagytelsetypePPN ? Vurderingstype.LIVETS_SLUTTFASE : Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE }}
                             >
                                 <VilkårsvurderingAvTilsynOgPleie
                                     navigerTilNesteSteg={navigerTilSteg}
@@ -261,8 +261,8 @@ const MedisinskVilkår = (): JSX.Element => {
                                 />
                             </VurderingContext.Provider>
                         )}
-                        {activeStep === toOmsorgspersonerSteg && (
-                            <VurderingContext.Provider value={{ vurderingstype: erFagytelsetypePPN ? Vurderingstype.LIVETS_SLUTTFASE : Vurderingstype.TO_OMSORGSPERSONER }}>
+                        {!erFagytelsetypePPN && activeStep === toOmsorgspersonerSteg && (
+                            <VurderingContext.Provider value={{ vurderingstype: Vurderingstype.TO_OMSORGSPERSONER }}>
                                 <VilkårsvurderingAvToOmsorgspersoner
                                     navigerTilNesteSteg={navigerTilSteg}
                                     hentSykdomsstegStatus={hentSykdomsstegStatus}

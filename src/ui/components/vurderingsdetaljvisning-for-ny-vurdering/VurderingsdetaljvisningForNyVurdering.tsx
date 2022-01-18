@@ -27,7 +27,7 @@ function makeDefaultValues(
     vurderingstype: Vurderingstype,
     perioder: Period[]
 ): VurderingAvToOmsorgspersonerFormState | VurderingAvTilsynsbehovFormState {
-    if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
+    if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE || vurderingstype === Vurderingstype.LIVETS_SLUTTFASE) {
         return {
             [KTPFieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
             [KTPFieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]: undefined,
@@ -35,7 +35,7 @@ function makeDefaultValues(
             [KTPFieldName.DOKUMENTER]: [],
         };
     }
-    if (vurderingstype === Vurderingstype.TO_OMSORGSPERSONER || vurderingstype === Vurderingstype.LIVETS_SLUTTFASE) {
+    if (vurderingstype === Vurderingstype.TO_OMSORGSPERSONER) {
         return {
             [TOFieldName.VURDERING_AV_TO_OMSORGSPERSONER]: '',
             [TOFieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: undefined,
@@ -80,7 +80,7 @@ const VurderingsdetaljvisningForNyVurdering = ({
             dataTilVurderingUrl={endpoints.dataTilVurdering}
             onVurderingLagret={onVurderingLagret}
             formRenderer={(dokumenter, onSubmit, isSubmitting) => {
-                if (Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE === vurderingstype) {
+                if (Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE === vurderingstype || Vurderingstype.LIVETS_SLUTTFASE === vurderingstype) {
                     return (
                         <VurderingAvTilsynsbehovForm
                             defaultValues={makeDefaultValues(vurderingstype, defaultPerioder())}
@@ -93,7 +93,7 @@ const VurderingsdetaljvisningForNyVurdering = ({
                         />
                     );
                 }
-                if (Vurderingstype.TO_OMSORGSPERSONER === vurderingstype || Vurderingstype.LIVETS_SLUTTFASE === vurderingstype) {
+                if (Vurderingstype.TO_OMSORGSPERSONER === vurderingstype) {
                     return (
                         <VurderingAvToOmsorgspersonerForm
                             defaultValues={makeDefaultValues(vurderingstype, defaultPerioder())}
