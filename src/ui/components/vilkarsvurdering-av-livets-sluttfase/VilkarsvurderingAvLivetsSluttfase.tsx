@@ -51,7 +51,7 @@ const VilkårsvurderingAvLivetsSluttfase = ({
     const harGyldigSignatur = !manglerGodkjentLegeerklæring;
 
     const getVurderingsoversikt = () =>
-        get<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, httpErrorHandler, {
+        get<Vurderingsoversikt>(endpoints.vurderingsoversiktLivetsSluttfase, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         });
 
