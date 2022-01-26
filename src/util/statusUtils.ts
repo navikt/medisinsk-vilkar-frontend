@@ -4,7 +4,7 @@ import SykdomsstegStatusSluttfaseResponse from '../types/SykdomsstegStatusSluttf
 
 type Steg = typeof dokumentSteg | typeof tilsynOgPleieSteg | typeof toOmsorgspersonerSteg;
 
-export const finnNesteSteg = (
+export const finnNesteStegForPleiepenger = (
     {
         kanLøseAksjonspunkt,
         harUklassifiserteDokumenter,
@@ -66,6 +66,6 @@ export const finnNesteStegForLivetsSluttfase = (
 };
 
 export const nesteStegErVurdering = (sykdomsstegStatus: StatusResponse): boolean => {
-    const nesteSteg = finnNesteSteg(sykdomsstegStatus);
+    const nesteSteg = finnNesteStegForPleiepenger(sykdomsstegStatus);
     return nesteSteg === tilsynOgPleieSteg || nesteSteg === toOmsorgspersonerSteg;
 };
