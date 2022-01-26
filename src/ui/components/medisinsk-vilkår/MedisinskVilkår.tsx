@@ -11,7 +11,7 @@ import { NyeDokumenterResponse } from '../../../types/NyeDokumenterResponse';
 import Step, { dokumentSteg, livetsSluttfaseSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingstype from '../../../types/Vurderingstype';
-import { finnNesteSteg } from '../../../util/statusUtils';
+import { finnNesteStegForPleiepenger, finnNesteStegForLivetsSluttfase } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import VurderingContext from '../../context/VurderingContext';
 import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
@@ -59,7 +59,9 @@ const MedisinskVilkår = (): JSX.Element => {
     });
 
     const { isLoading, hasError, activeStep, markedStep, sykdomsstegStatus, nyeDokumenterSomIkkeErVurdert } = state;
-    const { endpoints, httpErrorHandler, visFortsettknapp } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler, visFortsettknapp, erFagytelsetypeLivetsSluttfase } = React.useContext(ContainerContext);
+
+    const finnNesteStegFn = (nesteSteg: SykdomsstegStatusResponse, isOnMount?: boolean ) => erFagytelsetypeLivetsSluttfase ? finnNesteStegForLivetsSluttfase(nesteSteg, isOnMount) : finnNesteStegForPleiepenger(nesteSteg, isOnMount);
 
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
@@ -80,7 +82,7 @@ const MedisinskVilkår = (): JSX.Element => {
             const status = await get<SykdomsstegStatusResponse>(endpoints.status, httpErrorHandler, {
                 cancelToken: httpCanceler.token,
             });
-            const nesteSteg = finnNesteSteg(status);
+            const nesteSteg = finnNesteStegFn(status);
             dispatch({
                 type: ActionType.UPDATE_STATUS,
                 sykdomsstegStatus: status,
@@ -113,7 +115,7 @@ const MedisinskVilkår = (): JSX.Element => {
         hentSykdomsstegStatus()
             .then(hentNyeDokumenterSomIkkeErVurdertHvisNødvendig)
             .then(([sykdomsstegStatusResponse, nyeDokumenterSomIkkeErVurdertResponse]) => {
-                const step = finnNesteSteg(sykdomsstegStatusResponse, true);
+                const step = finnNesteStegFn(sykdomsstegStatusResponse, true);
                 if (step !== null) {
                     dispatch({
                         type: ActionType.MARK_AND_ACTIVATE_STEP,
@@ -134,7 +136,7 @@ const MedisinskVilkår = (): JSX.Element => {
     }, []);
 
     const navigerTilNesteSteg = () => {
-        const nesteSteg = finnNesteSteg(sykdomsstegStatus);
+        const nesteSteg = finnNesteStegFn(sykdomsstegStatus);
         dispatch({ type: ActionType.NAVIGATE_TO_STEP, step: nesteSteg });
     };
 
