@@ -33,14 +33,12 @@ type AnyType = any;
 export enum FieldName {
     VURDERING_AV_LIVETS_SLUTTFASE = 'vurderingAvLivetsSluttfase',
     ER_I_LIVETS_SLUTTFASE = 'erILivetsSluttfase',
-    PERIODER = 'perioder',
     DOKUMENTER = 'dokumenter',
 }
 
 export interface VurderingAvLivetsSluttfaseFormState {
     [FieldName.VURDERING_AV_LIVETS_SLUTTFASE]?: string;
     [FieldName.ER_I_LIVETS_SLUTTFASE]?: boolean;
-    [FieldName.PERIODER]?: Period[];
     [FieldName.DOKUMENTER]: string[];
 }
 
@@ -52,6 +50,7 @@ interface VurderingAvLivetsSluttfaseFormProps {
     dokumenter: Dokument[];
     onAvbryt: () => void;
     isSubmitting: boolean;
+    perioder: Period[]
 }
 
 const VurderingAvLivetsSluttfaseForm = ({
@@ -62,6 +61,7 @@ const VurderingAvLivetsSluttfaseForm = ({
     dokumenter,
     onAvbryt,
     isSubmitting,
+    perioder
 }: VurderingAvLivetsSluttfaseFormProps): JSX.Element => {
     const { readOnly } = React.useContext(ContainerContext);
     const formMethods = useForm({
@@ -115,10 +115,10 @@ const VurderingAvLivetsSluttfaseForm = ({
         return true;
     };
 
-    const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
         const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap((p) => p.asListOfDays());
-        const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])
+        // TODO FINNE UT AV NY LOGIKK HER?
+        const dagerSomBlirVurdert = ([])
             .map((period) => {
                 if ((period as AnyType).period) {
                     return (period as AnyType).period;
@@ -127,29 +127,16 @@ const VurderingAvLivetsSluttfaseForm = ({
             })
             .flatMap((p) => p.asListOfDays());
         return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
-    }, [resterendeVurderingsperioder, perioderSomBlirVurdert]);
 
-    const hullISøknadsperiodene = React.useMemo(
-        () => finnHullIPerioder(perioderSomKanVurderes).map((period) => period.asInternationalPeriod()),
-        [perioderSomKanVurderes]
-    );
-
-    const avgrensningerForSøknadsperiode = React.useMemo(
-        () => finnMaksavgrensningerForPerioder(perioderSomKanVurderes),
-        [perioderSomKanVurderes]
-    );
+    }, [resterendeVurderingsperioder]);
 
     const lagNyTilsynsvurdering = (formState: VurderingAvLivetsSluttfaseFormState) => {
         onSubmit(lagSluttfaseVurdering(formState, dokumenter));
     };
 
-    const sammenhengendeSøknadsperioder = React.useMemo(
-        () => slåSammenSammenhengendePerioder(perioderSomKanVurderes),
-        [perioderSomKanVurderes]
-    );
-
+    // TODO - Finne ut om det blir riktigt att köra perioder her
     return (
-        <DetailViewVurdering title="Vurdering av livets sluttfase" perioder={defaultValues[FieldName.PERIODER]}>
+        <DetailViewVurdering title="Vurdering av livets sluttfase" perioder={perioder}>
             <div id="modal" />
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <FormProvider {...formMethods}>
@@ -287,67 +274,6 @@ const VurderingAvLivetsSluttfaseForm = ({
                             name={FieldName.ER_I_LIVETS_SLUTTFASE}
                             validators={{ required }}
                             disabled={readOnly}
-                        />
-                    </Box>
-                    <Box marginTop={Margin.xLarge}>
-                        <PeriodpickerList
-                            legend="Oppgi perioder"
-                            name={FieldName.PERIODER}
-                            disabled={readOnly}
-                            defaultValues={defaultValues[FieldName.PERIODER] || []}
-                            validators={{
-                                required,
-                                inngårISammenhengendeSøknadsperiode: (value: Period) => {
-                                    const isOk = sammenhengendeSøknadsperioder.some((sammenhengendeSøknadsperiode) =>
-                                        sammenhengendeSøknadsperiode.covers(value)
-                                    );
-
-                                    if (!isOk) {
-                                        return 'Perioden som vurderes må være innenfor en eller flere sammenhengede søknadsperioder';
-                                    }
-
-                                    return true;
-                                },
-                                fomDatoErFørTomDato,
-                            }}
-                            fromDatepickerProps={{
-                                label: 'Fra',
-                                ariaLabel: 'fra',
-                                limitations: {
-                                    minDate: avgrensningerForSøknadsperiode?.fom,
-                                    maxDate: avgrensningerForSøknadsperiode?.tom,
-                                    invalidDateRanges: hullISøknadsperiodene,
-                                },
-                            }}
-                            toDatepickerProps={{
-                                label: 'Til',
-                                ariaLabel: 'til',
-                                limitations: {
-                                    minDate: avgrensningerForSøknadsperiode?.fom,
-                                    maxDate: avgrensningerForSøknadsperiode?.tom,
-                                    invalidDateRanges: hullISøknadsperiodene,
-                                },
-                            }}
-                            renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => (
-                                <>
-                                    {numberOfItems > 1 && (
-                                        <DeleteButton
-                                            onClick={() => {
-                                                fieldArrayMethods.remove(index);
-                                            }}
-                                        />
-                                    )}
-                                </>
-                            )}
-                            renderAfterFieldArray={(fieldArrayMethods) => (
-                                <Box marginTop={Margin.large}>
-                                    <AddButton
-                                        label="Legg til periode"
-                                        onClick={() => fieldArrayMethods.append({ fom: '', tom: '' })}
-                                        id="leggTilPeriodeKnapp"
-                                    />
-                                </Box>
-                            )}
                         />
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (

@@ -68,14 +68,10 @@ export const lagSluttfaseVurdering = (
         ? Vurderingsresultat.OPPFYLT
         : Vurderingsresultat.IKKE_OPPFYLT;
 
-    const perioder = formState[LivetsSluttfaseFieldName.PERIODER].map(
-        (periodeWrapper) => new Period((periodeWrapper as AnyType).period.fom, (periodeWrapper as AnyType).period.tom)
-    );
     const begrunnelse = formState[LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE];
 
     return {
         resultat,
-        perioder,
         tekst: begrunnelse,
         dokumenter: finnBenyttedeDokumenter(formState[LivetsSluttfaseFieldName.DOKUMENTER], alleDokumenter),
     };

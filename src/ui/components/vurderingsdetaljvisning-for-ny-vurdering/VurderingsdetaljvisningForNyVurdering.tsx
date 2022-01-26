@@ -52,7 +52,6 @@ function makeDefaultValues(
         return {
             [LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE]: '',
             [LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE]: undefined,
-            [LivetsSluttfaseFieldName.PERIODER]: perioder,
             [LivetsSluttfaseFieldName.DOKUMENTER]: [],
         };
     }
@@ -130,6 +129,7 @@ const VurderingsdetaljvisningForNyVurdering = ({
                             onSubmit={onSubmit}
                             onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
                             isSubmitting={isSubmitting}
+                            perioder={defaultPerioder()}
                         />
                     );
                 }
