@@ -115,8 +115,6 @@ const VurderingAvLivetsSluttfaseForm = ({
         return true;
     };
 
-    console.log("defaultvalues", defaultValues);
-
     const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
         const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap((p) => p.asListOfDays());
@@ -142,8 +140,6 @@ const VurderingAvLivetsSluttfaseForm = ({
     );
 
     const lagNyTilsynsvurdering = (formState: VurderingAvLivetsSluttfaseFormState) => {
-        console.log("lager vurdering ... test", formState);
-
         onSubmit(lagSluttfaseVurdering(formState, dokumenter));
     };
 
