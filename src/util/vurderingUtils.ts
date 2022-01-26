@@ -7,6 +7,10 @@ import {
     FieldName as ToOmsorgspersonerFieldName,
     VurderingAvToOmsorgspersonerFormState,
 } from '../ui/components/vurdering-av-to-omsorgspersoner-form/VurderingAvToOmsorgspersonerForm';
+import {
+    FieldName as LivetsSluttfaseFieldName,
+    VurderingAvLivetsSluttfaseFormState,
+} from '../ui/components/vurdering-av-livets-sluttfase-form/VurderingAvLivetsSluttfaseForm';
 import Vurderingsresultat from '../types/Vurderingsresultat';
 import Dokument from '../types/Dokument';
 import { Vurderingsversjon } from '../types/Vurdering';
@@ -53,5 +57,26 @@ export const lagToOmsorgspersonerVurdering = (
         perioder,
         tekst: begrunnelse,
         dokumenter: finnBenyttedeDokumenter(formState[TilsynFieldName.DOKUMENTER], alleDokumenter),
+    };
+};
+
+export const lagSluttfaseVurdering = (
+    formState: VurderingAvLivetsSluttfaseFormState,
+    alleDokumenter: Dokument[]
+): Partial<Vurderingsversjon> => {
+    const resultat = formState[LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE]
+        ? Vurderingsresultat.OPPFYLT
+        : Vurderingsresultat.IKKE_OPPFYLT;
+
+    const perioder = formState[LivetsSluttfaseFieldName.PERIODER].map(
+        (periodeWrapper) => new Period((periodeWrapper as AnyType).period.fom, (periodeWrapper as AnyType).period.tom)
+    );
+    const begrunnelse = formState[LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE];
+
+    return {
+        resultat,
+        perioder,
+        tekst: begrunnelse,
+        dokumenter: finnBenyttedeDokumenter(formState[LivetsSluttfaseFieldName.DOKUMENTER], alleDokumenter),
     };
 };
