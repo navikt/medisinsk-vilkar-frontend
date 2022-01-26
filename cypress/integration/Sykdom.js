@@ -1,4 +1,7 @@
 describe('Sykdom', () => {
+    beforeEach(() => {
+        cy.viewport('macbook-16');
+    });
     before(() => {
         cy.visit('/');
     });
