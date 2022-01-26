@@ -118,7 +118,7 @@ const StruktureringAvDokumentasjon = ({
         <PageContainer isLoading={isLoading} hasError={dokumentoversiktFeilet} key={StepId.Dokument} preventUnmount>
             <DokumentoversiktMessages
                 dokumentoversikt={dokumentoversikt}
-                harRegistrertDiagnosekode={erFagytelsetypeLivetsSluttfase ? true : !sykdomsstegStatus.manglerDiagnosekode}
+                harRegistrertDiagnosekode={erFagytelsetypeLivetsSluttfase || !sykdomsstegStatus.manglerDiagnosekode}
                 kanNavigereVidere={nesteStegErVurdering(sykdomsstegStatus)}
                 navigerTilNesteSteg={navigerTilNesteSteg}
             />

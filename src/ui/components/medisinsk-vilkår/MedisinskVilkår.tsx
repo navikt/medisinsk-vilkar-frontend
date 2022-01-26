@@ -170,7 +170,10 @@ const MedisinskVilkår = (): JSX.Element => {
     return (
         <PageContainer isLoading={isLoading} hasError={hasError}>
             {!erFagytelsetypeLivetsSluttfase && <Infostripe
-                element={
+                element={erFagytelsetypeLivetsSluttfase
+                    ?
+                    <span>Sykdomsvurderingen gjelder pleietrengende og er felles for alle parter.</span>
+                    :
                     <>
                         <span>Sykdomsvurderingen gjelder barnet og er felles for alle parter.</span>
                         <span className={styles.infostripe__diagnosekode__tittel}>Diagnose:</span>
@@ -179,11 +182,6 @@ const MedisinskVilkår = (): JSX.Element => {
                         </span>
                     </>
                 }
-                iconRenderer={() => <ChildIcon />}
-            />}
-
-            {erFagytelsetypeLivetsSluttfase && <Infostripe
-                element={<span>Sykdomsvurderingen gjelder pleietrengende og er felles for alle parter.</span>}
                 iconRenderer={() => <ChildIcon />}
             />}
 
