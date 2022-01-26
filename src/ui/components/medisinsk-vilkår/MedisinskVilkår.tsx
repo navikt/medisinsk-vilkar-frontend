@@ -18,6 +18,7 @@ import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/Aksjonspunkt
 import NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController from '../nye-dokumenter-som-kan-påvirke-eksisterende-vurderinger/NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController';
 import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
 import UteståendeEndringerMelding from '../utestående-endringer-melding/UteståendeEndringerMelding';
+import VilkårsvurderingAvLivetsSluttfase from '../vilkårsvurdering-av-livets-sluttfase/VilkårsvurderingAvTilsynOgPleie';
 import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-pleie/VilkårsvurderingAvTilsynOgPleie';
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
@@ -265,7 +266,7 @@ const MedisinskVilkår = (): JSX.Element => {
                         )}
                         {activeStep === livetsSluttfaseSteg && (
                             <VurderingContext.Provider value={{ vurderingstype: Vurderingstype.LIVETS_SLUTTFASE }}>
-                                <VilkårsvurderingAvToOmsorgspersoner
+                                <VilkårsvurderingAvLivetsSluttfase
                                     navigerTilNesteSteg={navigerTilSteg}
                                     hentSykdomsstegStatus={hentSykdomsstegStatus}
                                     sykdomsstegStatus={sykdomsstegStatus}
