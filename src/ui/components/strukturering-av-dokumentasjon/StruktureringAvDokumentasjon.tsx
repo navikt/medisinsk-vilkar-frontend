@@ -31,7 +31,7 @@ const StruktureringAvDokumentasjon = ({
     hentSykdomsstegStatus,
     sykdomsstegStatus,
 }: StruktureringAvDokumentasjonProps): JSX.Element => {
-    const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler, erFagytelsetypeLivetsSluttfase } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(dokumentReducer, {
@@ -118,7 +118,7 @@ const StruktureringAvDokumentasjon = ({
         <PageContainer isLoading={isLoading} hasError={dokumentoversiktFeilet} key={StepId.Dokument} preventUnmount>
             <DokumentoversiktMessages
                 dokumentoversikt={dokumentoversikt}
-                harRegistrertDiagnosekode={!sykdomsstegStatus.manglerDiagnosekode}
+                harRegistrertDiagnosekode={erFagytelsetypeLivetsSluttfase ? true : !sykdomsstegStatus.manglerDiagnosekode}
                 kanNavigereVidere={nesteStegErVurdering(sykdomsstegStatus)}
                 navigerTilNesteSteg={navigerTilNesteSteg}
             />
@@ -157,7 +157,7 @@ const StruktureringAvDokumentasjon = ({
                         )}
                     />
 
-                    <Box marginTop={Margin.xxLarge}>
+                    {!erFagytelsetypeLivetsSluttfase && <Box marginTop={Margin.xxLarge}>
                         <DokumentasjonFooter
                             firstSectionRenderer={() => (
                                 <Innleggelsesperiodeoversikt onInnleggelsesperioderUpdated={sjekkStatus} />
@@ -168,6 +168,7 @@ const StruktureringAvDokumentasjon = ({
                             )}
                         />
                     </Box>
+                    }
                 </div>
             )}
         </PageContainer>
