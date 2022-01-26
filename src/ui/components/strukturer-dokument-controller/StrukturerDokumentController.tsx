@@ -25,11 +25,10 @@ const StrukturerDokumentController = ({
     editMode,
     strukturerteDokumenter,
 }: StrukturerDokumentControllerProps): JSX.Element => {
-    const { httpErrorHandler } = React.useContext(ContainerContext);
+    const { httpErrorHandler, erFagytelsetypeLivetsSluttfase } = React.useContext(ContainerContext);
     const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
     const [submitDocumentError, setSubmitDocumentError] = React.useState(null);
-    const erFagytelsetypePPN = true;
 
     React.useEffect(
         () => () => {
@@ -84,7 +83,7 @@ const StrukturerDokumentController = ({
                     <AlertStripeFeil>{getErrorMessage()}</AlertStripeFeil>
                 </Box>
             )}
-            {!erFagytelsetypePPN && <StrukturerDokumentForm
+            {!erFagytelsetypeLivetsSluttfase && <StrukturerDokumentForm
                 dokument={dokument}
                 onSubmit={strukturerDokument}
                 editMode={editMode}
@@ -92,7 +91,7 @@ const StrukturerDokumentController = ({
                 strukturerteDokumenter={strukturerteDokumenter}
             />
             }
-            {erFagytelsetypePPN && <StrukturerDokumentSluttfaseForm
+            {erFagytelsetypeLivetsSluttfase && <StrukturerDokumentSluttfaseForm
                 dokument={dokument}
                 onSubmit={strukturerDokument}
                 editMode={editMode}
