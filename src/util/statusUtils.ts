@@ -39,7 +39,6 @@ export const finnNesteStegForLivetsSluttfase = (
     {
         kanLøseAksjonspunkt,
         harUklassifiserteDokumenter,
-        manglerDiagnosekode,
         manglerVurderingAvKontinuerligTilsynOgPleie,
         manglerVurderingAvToOmsorgspersoner,
         manglerGodkjentLegeerklæring,

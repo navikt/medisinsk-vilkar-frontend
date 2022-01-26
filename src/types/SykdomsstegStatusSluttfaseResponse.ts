@@ -2,7 +2,6 @@ interface SykdomsstegStatusSluttfaseResponse {
     kanLøseAksjonspunkt: boolean;
     harDataSomIkkeHarBlittTattMedIBehandling: boolean;
     harUklassifiserteDokumenter: boolean;
-    manglerDiagnosekode: boolean;
     manglerGodkjentLegeerklæring: boolean;
     manglerVurderingAvKontinuerligTilsynOgPleie: boolean;
     manglerVurderingAvToOmsorgspersoner: boolean;
