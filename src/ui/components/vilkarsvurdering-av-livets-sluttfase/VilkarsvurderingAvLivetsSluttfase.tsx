@@ -10,10 +10,11 @@ import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import { finnNesteStegForLivetsSluttfase } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
-import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 import Vurderingsdetaljer from '../vurderingsdetaljer/Vurderingsdetaljer';
+import VurderingsoversiktSluttfaseMessages
+    from '../vurderingsoversikt-sluttfase-messages/VurderingsoversiktSluttfaseMessages';
 
 interface VilkårsvurderingAvLivetsSluttfaseProps {
     navigerTilNesteSteg: (steg: Step, ikkeMarkerSteg?: boolean) => void;
@@ -148,7 +149,7 @@ const VilkårsvurderingAvLivetsSluttfase = ({
 
     return (
         <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet} key={StepId.LivetsSluttfase}>
-            <VurderingsoversiktMessages vurderingsoversikt={vurderingsoversikt} harGyldigSignatur={harGyldigSignatur} />
+            <VurderingsoversiktSluttfaseMessages vurderingsoversikt={vurderingsoversikt} harGyldigSignatur={harGyldigSignatur} />
             {vurderingsoversikt?.harPerioderÅVise() && (
                 <Box marginTop={setMargin()}>
                     <NavigationWithDetailView
