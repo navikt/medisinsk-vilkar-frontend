@@ -59,7 +59,7 @@ const MedisinskVilkår = (): JSX.Element => {
     });
 
     const { isLoading, hasError, activeStep, markedStep, sykdomsstegStatus, nyeDokumenterSomIkkeErVurdert } = state;
-    const { endpoints, httpErrorHandler, visFortsettknapp } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler, visFortsettknapp, erFagytelsetypeLivetsSluttfase } = React.useContext(ContainerContext);
 
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
@@ -169,8 +169,11 @@ const MedisinskVilkår = (): JSX.Element => {
 
     return (
         <PageContainer isLoading={isLoading} hasError={hasError}>
-            <Infostripe
-                element={
+            {!erFagytelsetypeLivetsSluttfase && <Infostripe
+                element={erFagytelsetypeLivetsSluttfase
+                    ?
+                    <span>Sykdomsvurderingen gjelder pleietrengende og er felles for alle parter.</span>
+                    :
                     <>
                         <span>Sykdomsvurderingen gjelder barnet og er felles for alle parter.</span>
                         <span className={styles.infostripe__diagnosekode__tittel}>Diagnose:</span>
@@ -180,7 +183,8 @@ const MedisinskVilkår = (): JSX.Element => {
                     </>
                 }
                 iconRenderer={() => <ChildIcon />}
-            />
+            />}
+
             <div className={styles.medisinskVilkår}>
                 <h1 style={{ fontSize: 22 }}>Sykdom</h1>
                 <WriteAccessBoundContent
