@@ -61,7 +61,7 @@ const MedisinskVilkår = (): JSX.Element => {
     const { isLoading, hasError, activeStep, markedStep, sykdomsstegStatus, nyeDokumenterSomIkkeErVurdert } = state;
     const { endpoints, httpErrorHandler, visFortsettknapp, erFagytelsetypeLivetsSluttfase } = React.useContext(ContainerContext);
 
-    const finnNesteStegFn = (nesteSteg: SykdomsstegStatusResponse, isOnMount?: boolean ) => erFagytelsetypeLivetsSluttfase ? finnNesteStegForLivetsSluttfase(nesteSteg, isOnMount) : finnNesteStegForPleiepenger(nesteSteg, isOnMount);
+    const finnNesteStegFn = (nesteSteg: SykdomsstegStatusResponse, isOnMount?: boolean) => erFagytelsetypeLivetsSluttfase ? finnNesteStegForLivetsSluttfase(nesteSteg, isOnMount) : finnNesteStegForPleiepenger(nesteSteg, isOnMount);
 
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
