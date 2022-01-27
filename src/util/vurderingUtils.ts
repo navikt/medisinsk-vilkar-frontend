@@ -68,15 +68,17 @@ export const lagSluttfaseVurdering = (
         ? Vurderingsresultat.OPPFYLT
         : Vurderingsresultat.IKKE_OPPFYLT;
 
-    const perioder = formState[LivetsSluttfaseFieldName.PERIODER].map(
-        (periodeWrapper) => new Period((periodeWrapper as AnyType).period.fom, (periodeWrapper as AnyType).period.tom)
-    );
     const begrunnelse = formState[LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE];
+
+    // Vurdering av livets sluttfase skal sende inn samme periode som ble hentet fra backend
+    const perioder = formState[LivetsSluttfaseFieldName.PERIODER].map(
+        (periodeWrapper) => new Period(periodeWrapper.fom, periodeWrapper.tom)
+    );
 
     return {
         resultat,
-        perioder,
         tekst: begrunnelse,
+        perioder,
         dokumenter: finnBenyttedeDokumenter(formState[LivetsSluttfaseFieldName.DOKUMENTER], alleDokumenter),
     };
 };

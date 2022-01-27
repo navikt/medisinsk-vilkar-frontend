@@ -52,8 +52,8 @@ function makeDefaultValues(
         return {
             [LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE]: '',
             [LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE]: undefined,
-            [LivetsSluttfaseFieldName.PERIODER]: perioder,
             [LivetsSluttfaseFieldName.DOKUMENTER]: [],
+            [LivetsSluttfaseFieldName.PERIODER]: perioder,
         };
     }
 
@@ -72,6 +72,7 @@ const VurderingsdetaljvisningForNyVurdering = ({
     const resterendeVurderingsperioderDefaultValue = vurderingsoversikt.resterendeVurderingsperioder;
 
     const defaultPerioder = () => {
+
         if (resterendeVurderingsperioderDefaultValue?.length > 0) {
             return resterendeVurderingsperioderDefaultValue;
         }
@@ -81,6 +82,7 @@ const VurderingsdetaljvisningForNyVurdering = ({
         if (skalViseValgfriePerioder) {
             return vurderingsoversikt.resterendeValgfrieVurderingsperioder || [new Period('', '')];
         }
+
 
         return [new Period('', '')];
     };
@@ -124,12 +126,16 @@ const VurderingsdetaljvisningForNyVurdering = ({
                     return (
                         <VurderingAvLivetsSluttfaseForm
                             defaultValues={makeDefaultValues(vurderingstype, defaultPerioder())}
-                            resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
-                            perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
+                            // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
+                            // resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                            // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
+                            // perioderSomKanVTilsynFieldNameurderes={vurderingsoversikt.perioderSomKanVurderes}
+
                             dokumenter={dokumenter}
                             onSubmit={onSubmit}
                             onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
                             isSubmitting={isSubmitting}
+                            perioder={defaultPerioder()}
                         />
                     );
                 }
