@@ -70,9 +70,15 @@ export const lagSluttfaseVurdering = (
 
     const begrunnelse = formState[LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE];
 
+    // Vurdering av livets sluttfase skal sende inn samme periode som ble hentet fra backend
+    const perioder = formState[LivetsSluttfaseFieldName.PERIODER].map(
+        (periodeWrapper) => new Period(periodeWrapper.fom, periodeWrapper.tom)
+    );
+
     return {
         resultat,
         tekst: begrunnelse,
+        perioder,
         dokumenter: finnBenyttedeDokumenter(formState[LivetsSluttfaseFieldName.DOKUMENTER], alleDokumenter),
     };
 };
