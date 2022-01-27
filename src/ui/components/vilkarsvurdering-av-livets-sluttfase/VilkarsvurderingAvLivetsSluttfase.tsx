@@ -7,7 +7,7 @@ import Step, { livetsSluttfaseSteg, StepId, toOmsorgspersonerSteg } from '../../
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import { finnNesteStegForPleiepenger } from '../../../util/statusUtils';
+import { finnNesteStegForLivetsSluttfase } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
@@ -121,7 +121,7 @@ const VilkårsvurderingAvLivetsSluttfase = ({
                     return;
                 }
 
-                const nesteSteg = finnNesteStegForPleiepenger(status);
+                const nesteSteg = finnNesteStegForLivetsSluttfase(status);
                 if (nesteSteg === livetsSluttfaseSteg || nesteSteg === null) {
                     oppdaterVurderingsoversikt();
                 }
