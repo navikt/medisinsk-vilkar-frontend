@@ -175,7 +175,7 @@ const MedisinskVilkår = (): JSX.Element => {
 
     const steps: Step[] = (erFagytelsetypeLivetsSluttfase)
         ? [dokumentSteg, livetsSluttfaseSteg]
-        : [dokumentSteg, tilsynOgPleieSteg, livetsSluttfaseSteg, toOmsorgspersonerSteg];
+        : [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
     return (
         <PageContainer isLoading={isLoading} hasError={hasError}>
