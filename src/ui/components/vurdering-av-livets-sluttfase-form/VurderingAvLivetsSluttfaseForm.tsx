@@ -127,7 +127,8 @@ const VurderingAvLivetsSluttfaseForm = ({
     };
 
     // const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
-    //     const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap((p) => p.asListOfDays());
+    //     const dagerSomSkalVurderes = (resterendeVurderings
+  || []).flatMap((p) => p.asListOfDays());
     //     // TODO FINNE UT AV NY LOGIKK HER?
     //     const dagerSomBlirVurdert = ([])
     //         .map((period) => {

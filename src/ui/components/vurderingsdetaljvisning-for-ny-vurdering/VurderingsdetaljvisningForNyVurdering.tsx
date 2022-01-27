@@ -130,6 +130,7 @@ const VurderingsdetaljvisningForNyVurdering = ({
                             // resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
                             // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
                             // perioderSomKanVTilsynFieldNameurderes={vurderingsoversikt.perioderSomKanVurderes}
+
                             dokumenter={dokumenter}
                             onSubmit={onSubmit}
                             onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
