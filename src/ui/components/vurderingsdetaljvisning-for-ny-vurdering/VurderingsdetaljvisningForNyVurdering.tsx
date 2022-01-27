@@ -13,6 +13,10 @@ import VurderingAvToOmsorgspersonerForm, {
     FieldName as TOFieldName,
     VurderingAvToOmsorgspersonerFormState,
 } from '../vurdering-av-to-omsorgspersoner-form/VurderingAvToOmsorgspersonerForm';
+import VurderingAvLivetsSluttfaseForm, {
+    FieldName as LivetsSluttfaseFieldName,
+    VurderingAvLivetsSluttfaseFormState,
+} from '../vurdering-av-livets-sluttfase-form/VurderingAvLivetsSluttfaseForm';
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
 import VurderingContext from '../../context/VurderingContext';
 
@@ -26,7 +30,7 @@ interface VurderingsdetaljvisningForNyVurderingProps {
 function makeDefaultValues(
     vurderingstype: Vurderingstype,
     perioder: Period[]
-): VurderingAvToOmsorgspersonerFormState | VurderingAvTilsynsbehovFormState {
+): VurderingAvToOmsorgspersonerFormState | VurderingAvTilsynsbehovFormState | VurderingAvLivetsSluttfaseFormState {
     if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
         return {
             [KTPFieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
@@ -43,6 +47,16 @@ function makeDefaultValues(
             [TOFieldName.DOKUMENTER]: [],
         };
     }
+
+    if (vurderingstype === Vurderingstype.LIVETS_SLUTTFASE) {
+        return {
+            [LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE]: '',
+            [LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE]: undefined,
+            [LivetsSluttfaseFieldName.PERIODER]: perioder,
+            [LivetsSluttfaseFieldName.DOKUMENTER]: [],
+        };
+    }
+
     return null;
 }
 
@@ -96,6 +110,19 @@ const VurderingsdetaljvisningForNyVurdering = ({
                 if (Vurderingstype.TO_OMSORGSPERSONER === vurderingstype) {
                     return (
                         <VurderingAvToOmsorgspersonerForm
+                            defaultValues={makeDefaultValues(vurderingstype, defaultPerioder())}
+                            resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                            perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
+                            dokumenter={dokumenter}
+                            onSubmit={onSubmit}
+                            onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
+                            isSubmitting={isSubmitting}
+                        />
+                    );
+                }
+                if (Vurderingstype.LIVETS_SLUTTFASE === vurderingstype) {
+                    return (
+                        <VurderingAvLivetsSluttfaseForm
                             defaultValues={makeDefaultValues(vurderingstype, defaultPerioder())}
                             resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
                             perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}

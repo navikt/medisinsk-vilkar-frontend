@@ -8,7 +8,7 @@ import { useQuery } from 'react-query';
 import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
 import Dokument from '../../../types/Dokument';
 import { NyeDokumenterResponse } from '../../../types/NyeDokumenterResponse';
-import Step, { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
+import Step, { dokumentSteg, livetsSluttfaseSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingstype from '../../../types/Vurderingstype';
 import { finnNesteSteg } from '../../../util/statusUtils';
@@ -25,7 +25,7 @@ import ActionType from './actionTypes';
 import styles from './medisinskVilkår.less';
 import medisinskVilkårReducer from './reducer';
 
-const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
+const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, livetsSluttfaseSteg, toOmsorgspersonerSteg];
 
 interface TabItemProps {
     label: string;
@@ -255,6 +255,15 @@ const MedisinskVilkår = (): JSX.Element => {
                                 value={{ vurderingstype: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE }}
                             >
                                 <VilkårsvurderingAvTilsynOgPleie
+                                    navigerTilNesteSteg={navigerTilSteg}
+                                    hentSykdomsstegStatus={hentSykdomsstegStatus}
+                                    sykdomsstegStatus={sykdomsstegStatus}
+                                />
+                            </VurderingContext.Provider>
+                        )}
+                        {activeStep === livetsSluttfaseSteg && (
+                            <VurderingContext.Provider value={{ vurderingstype: Vurderingstype.LIVETS_SLUTTFASE }}>
+                                <VilkårsvurderingAvToOmsorgspersoner
                                     navigerTilNesteSteg={navigerTilSteg}
                                     hentSykdomsstegStatus={hentSykdomsstegStatus}
                                     sykdomsstegStatus={sykdomsstegStatus}

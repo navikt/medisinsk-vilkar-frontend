@@ -15,6 +15,9 @@ function buildInitialFormStateForEdit(
     vurderingstype: Vurderingstype
 ): VurderingAvTilsynsbehovFormState | VurderingAvToOmsorgspersonerFormState {
     const dokumenterFraVurdering = dokumenter.filter((dokument) => dokument.benyttet).map((dokument) => dokument.id);
+
+    // TODO: denne må ta med LIVETS_SLUTTFASE også
+
     if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
         return {
             [KTPFieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: tekst,
