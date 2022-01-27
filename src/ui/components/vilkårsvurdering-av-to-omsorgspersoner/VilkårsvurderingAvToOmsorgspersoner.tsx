@@ -7,7 +7,7 @@ import Step, { StepId, toOmsorgspersonerSteg } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import { finnNesteSteg } from '../../../util/statusUtils';
+import { finnNesteStegForPleiepenger } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
@@ -117,7 +117,7 @@ const VilkårsvurderingAvToOmsorgspersoner = ({
                 return;
             }
 
-            const nesteSteg = finnNesteSteg(status);
+            const nesteSteg = finnNesteStegForPleiepenger(status);
             if (nesteSteg === toOmsorgspersonerSteg || nesteSteg === null) {
                 oppdaterVurderingsoversikt();
             } else if (nesteSteg !== null) {

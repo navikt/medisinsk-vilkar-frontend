@@ -23,6 +23,7 @@ interface ContainerContract {
     visFortsettknapp: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     saksbehandlere: any;
+    erFagytelsetypeLivetsSluttfase: boolean;
 }
 
 export default ContainerContract;
