@@ -18,14 +18,13 @@ import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/Aksjonspunkt
 import NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController from '../nye-dokumenter-som-kan-påvirke-eksisterende-vurderinger/NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController';
 import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
 import UteståendeEndringerMelding from '../utestående-endringer-melding/UteståendeEndringerMelding';
+import VilkarsvurderingAvLivetsSluttfase from '../vilkarsvurdering-av-livets-sluttfase/VilkarsvurderingAvLivetsSluttfase';
 import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-pleie/VilkårsvurderingAvTilsynOgPleie';
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import ActionType from './actionTypes';
 import styles from './medisinskVilkår.less';
 import medisinskVilkårReducer from './reducer';
-
-const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, livetsSluttfaseSteg, toOmsorgspersonerSteg];
 
 interface TabItemProps {
     label: string;
@@ -65,16 +64,21 @@ const MedisinskVilkår = (): JSX.Element => {
 
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
-    const hentDiagnosekoder = () =>
-        get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler).then(
-            (response: DiagnosekodeResponse) => response
-        );
+    const hentDiagnosekoder = () => {
+        if (!erFagytelsetypeLivetsSluttfase) {
+            return get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler).then(
+                (response: DiagnosekodeResponse) => response
+            );
+        }
+        return undefined;
+    }
 
     const { isLoading: diagnosekoderLoading, data: diagnosekoderData } = useQuery(
         'diagnosekodeResponse',
         hentDiagnosekoder
     );
-    const { diagnosekoder } = diagnosekoderData;
+
+    const diagnosekoder = (endpoints.diagnosekoder) ? diagnosekoderData?.diagnosekoder : [];
     const diagnosekoderTekst = diagnosekoder?.length > 0 ? `${diagnosekoder?.join(', ')}` : 'Kode mangler';
 
     const hentSykdomsstegStatus = async () => {
@@ -169,6 +173,10 @@ const MedisinskVilkår = (): JSX.Element => {
     const harDataSomIkkeHarBlittTattMedIBehandling = sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling;
     const manglerVurderingAvNyeDokumenter = sykdomsstegStatus?.nyttDokumentHarIkkekontrollertEksisterendeVurderinger;
 
+    const steps: Step[] = (erFagytelsetypeLivetsSluttfase)
+        ? [dokumentSteg, livetsSluttfaseSteg]
+        : [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
+
     return (
         <PageContainer isLoading={isLoading} hasError={hasError}>
             {!erFagytelsetypeLivetsSluttfase && <Infostripe
@@ -228,7 +236,8 @@ const MedisinskVilkår = (): JSX.Element => {
                             <TabItem label={step.title} showWarningIcon={step === markedStep && !kanLøseAksjonspunkt} />
                         ),
                         aktiv: step === activeStep,
-                    }))}
+                    })
+                    )}
                     onChange={(event, clickedIndex) => {
                         dispatch({ type: ActionType.ACTIVATE_STEP, step: steps[clickedIndex] });
                     }}
@@ -265,7 +274,7 @@ const MedisinskVilkår = (): JSX.Element => {
                         )}
                         {activeStep === livetsSluttfaseSteg && (
                             <VurderingContext.Provider value={{ vurderingstype: Vurderingstype.LIVETS_SLUTTFASE }}>
-                                <VilkårsvurderingAvToOmsorgspersoner
+                                <VilkarsvurderingAvLivetsSluttfase
                                     navigerTilNesteSteg={navigerTilSteg}
                                     hentSykdomsstegStatus={hentSykdomsstegStatus}
                                     sykdomsstegStatus={sykdomsstegStatus}

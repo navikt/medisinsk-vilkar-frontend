@@ -1,25 +1,37 @@
-import { CheckboxGroup, PeriodpickerList, TextArea, YesOrNoQuestion } from '@navikt/k9-form-utils';
+import {
+    CheckboxGroup,
+    // PeriodpickerList, // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
+    TextArea,
+    YesOrNoQuestion
+} from '@navikt/k9-form-utils';
 import { Period } from '@navikt/k9-period-utils';
 import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/k9-react-components';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
+// TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
+// import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Ikon from 'nav-frontend-ikoner-assets';
 import Lenke from 'nav-frontend-lenker';
 import { Element } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-// import { TilsynFieldName, VurderingAvTilsynsbehovFormState } from '../../../types/VurderingAvTilsynsbehovFormState';
 import Dokument from '../../../types/Dokument';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-import {
-    finnHullIPerioder,
-    finnMaksavgrensningerForPerioder,
-    slåSammenSammenhengendePerioder,
-} from '../../../util/periodUtils';
+// TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
+// import {
+//     finnHullIPerioder,
+//     finnMaksavgrensningerForPerioder,
+//     slåSammenSammenhengendePerioder,
+// } from '../../../util/periodUtils';
 import { lagSluttfaseVurdering } from '../../../util/vurderingUtils';
 import ContainerContext from '../../context/ContainerContext';
-import { fomDatoErFørTomDato, harBruktDokumentasjon, required } from '../../form/validators';
-import AddButton from '../add-button/AddButton';
-import DeleteButton from '../delete-button/DeleteButton';
+import {
+    // fomDatoErFørTomDato, // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
+    harBruktDokumentasjon,
+    required
+} from '../../form/validators';
+// TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
+// import AddButton from '../add-button/AddButton';
+// TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
+// import DeleteButton from '../delete-button/DeleteButton';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
 import VurderingDokumentfilter from '../vurdering-dokumentfilter/VurderingDokumentfilter';
@@ -27,41 +39,40 @@ import vurderingDokumentfilterOptions from '../vurdering-dokumentfilter/vurderin
 import StjerneIkon from './StjerneIkon';
 import styles from './VurderingAvLivetsSluttfaseForm.less';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyType = any;
-
 export enum FieldName {
     VURDERING_AV_LIVETS_SLUTTFASE = 'vurderingAvLivetsSluttfase',
     ER_I_LIVETS_SLUTTFASE = 'erILivetsSluttfase',
-    PERIODER = 'perioder',
     DOKUMENTER = 'dokumenter',
+    PERIODER = 'perioder',
 }
 
 export interface VurderingAvLivetsSluttfaseFormState {
     [FieldName.VURDERING_AV_LIVETS_SLUTTFASE]?: string;
     [FieldName.ER_I_LIVETS_SLUTTFASE]?: boolean;
-    [FieldName.PERIODER]?: Period[];
     [FieldName.DOKUMENTER]: string[];
+    [FieldName.PERIODER]?: Period[];
 }
 
 interface VurderingAvLivetsSluttfaseFormProps {
     defaultValues: VurderingAvLivetsSluttfaseFormState;
     onSubmit: (nyVurdering: Partial<Vurderingsversjon>) => void;
-    resterendeVurderingsperioder?: Period[];
-    perioderSomKanVurderes?: Period[];
+    // resterendeVurderingsperioder?: Period[]; // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
+    // perioderSomKanVurderes?: Period[]; // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
     dokumenter: Dokument[];
     onAvbryt: () => void;
     isSubmitting: boolean;
+    perioder: Period[]
 }
 
 const VurderingAvLivetsSluttfaseForm = ({
     defaultValues,
     onSubmit,
-    resterendeVurderingsperioder,
-    perioderSomKanVurderes,
+    // resterendeVurderingsperioder, // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
+    // perioderSomKanVurderes, // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
     dokumenter,
     onAvbryt,
     isSubmitting,
+    perioder
 }: VurderingAvLivetsSluttfaseFormProps): JSX.Element => {
     const { readOnly } = React.useContext(ContainerContext);
     const formMethods = useForm({
@@ -115,41 +126,30 @@ const VurderingAvLivetsSluttfaseForm = ({
         return true;
     };
 
-    const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
-    const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
-        const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap((p) => p.asListOfDays());
-        const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])
-            .map((period) => {
-                if ((period as AnyType).period) {
-                    return (period as AnyType).period;
-                }
-                return period;
-            })
-            .flatMap((p) => p.asListOfDays());
-        return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
-    }, [resterendeVurderingsperioder, perioderSomBlirVurdert]);
+    // const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
+    //     const dagerSomSkalVurderes = (resterendeVurderings
+    // || []).flatMap((p) => p.asListOfDays());
+    //     // TODO FINNE UT AV NY LOGIKK HER?
+    //     const dagerSomBlirVurdert = ([])
+    //         .map((period) => {
+    //             if ((period as AnyType).period) {
+    //                 return (period as AnyType).period;
+    //             }
+    //             return period;
+    //         })
+    //         .flatMap((p) => p.asListOfDays());
+    //     return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
 
-    const hullISøknadsperiodene = React.useMemo(
-        () => finnHullIPerioder(perioderSomKanVurderes).map((period) => period.asInternationalPeriod()),
-        [perioderSomKanVurderes]
-    );
-
-    const avgrensningerForSøknadsperiode = React.useMemo(
-        () => finnMaksavgrensningerForPerioder(perioderSomKanVurderes),
-        [perioderSomKanVurderes]
-    );
+    // }, [resterendeVurderingsperioder]);
 
     const lagNyTilsynsvurdering = (formState: VurderingAvLivetsSluttfaseFormState) => {
-        onSubmit(lagSluttfaseVurdering(formState, dokumenter));
+        // Legg til default perioder, fra backend, da samme periode må sendes inn for å godkjenne vurderingen
+        onSubmit(lagSluttfaseVurdering({ ...formState, perioder: defaultValues.perioder }, dokumenter));
     };
 
-    const sammenhengendeSøknadsperioder = React.useMemo(
-        () => slåSammenSammenhengendePerioder(perioderSomKanVurderes),
-        [perioderSomKanVurderes]
-    );
-
+    // TODO - Finne ut om det blir riktigt att köra perioder her
     return (
-        <DetailViewVurdering title="Vurdering av livets sluttfase" perioder={defaultValues[FieldName.PERIODER]}>
+        <DetailViewVurdering title="Vurdering av livets sluttfase" perioder={perioder}>
             <div id="modal" />
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <FormProvider {...formMethods}>
@@ -253,7 +253,7 @@ const VurderingAvLivetsSluttfaseForm = ({
                                 <>
                                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                                     <b>
-                                        Legg inn tekst rundt paraftafen som ommfatter livets sluttfase, og oppdater
+                                        Legg inn tekst rundt paragrafen som ommfatter livets sluttfase, og oppdater
                                         lenkene nedenfor til riktig referanse i folketrygdeloven
                                     </b>
                                     <p className={styles.begrunnelsesfelt__labeltekst}>
@@ -289,67 +289,10 @@ const VurderingAvLivetsSluttfaseForm = ({
                             disabled={readOnly}
                         />
                     </Box>
-                    <Box marginTop={Margin.xLarge}>
-                        <PeriodpickerList
-                            legend="Oppgi perioder"
-                            name={FieldName.PERIODER}
-                            disabled={readOnly}
-                            defaultValues={defaultValues[FieldName.PERIODER] || []}
-                            validators={{
-                                required,
-                                inngårISammenhengendeSøknadsperiode: (value: Period) => {
-                                    const isOk = sammenhengendeSøknadsperioder.some((sammenhengendeSøknadsperiode) =>
-                                        sammenhengendeSøknadsperiode.covers(value)
-                                    );
-
-                                    if (!isOk) {
-                                        return 'Perioden som vurderes må være innenfor en eller flere sammenhengede søknadsperioder';
-                                    }
-
-                                    return true;
-                                },
-                                fomDatoErFørTomDato,
-                            }}
-                            fromDatepickerProps={{
-                                label: 'Fra',
-                                ariaLabel: 'fra',
-                                limitations: {
-                                    minDate: avgrensningerForSøknadsperiode?.fom,
-                                    maxDate: avgrensningerForSøknadsperiode?.tom,
-                                    invalidDateRanges: hullISøknadsperiodene,
-                                },
-                            }}
-                            toDatepickerProps={{
-                                label: 'Til',
-                                ariaLabel: 'til',
-                                limitations: {
-                                    minDate: avgrensningerForSøknadsperiode?.fom,
-                                    maxDate: avgrensningerForSøknadsperiode?.tom,
-                                    invalidDateRanges: hullISøknadsperiodene,
-                                },
-                            }}
-                            renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => (
-                                <>
-                                    {numberOfItems > 1 && (
-                                        <DeleteButton
-                                            onClick={() => {
-                                                fieldArrayMethods.remove(index);
-                                            }}
-                                        />
-                                    )}
-                                </>
-                            )}
-                            renderAfterFieldArray={(fieldArrayMethods) => (
-                                <Box marginTop={Margin.large}>
-                                    <AddButton
-                                        label="Legg til periode"
-                                        onClick={() => fieldArrayMethods.append({ fom: '', tom: '' })}
-                                        id="leggTilPeriodeKnapp"
-                                    />
-                                </Box>
-                            )}
-                        />
-                    </Box>
+                    {/*
+                    Tror vi kan fjerne denne, når vi kun har "uendelig" periode.
+                    Lar stå inntill videre, så ser vi etter vurdering rundt hva
+                    vi skal gjøre med periodene
                     {!harVurdertAlleDagerSomSkalVurderes && (
                         <Box marginTop={Margin.xLarge}>
                             <AlertStripeInfo>
@@ -357,7 +300,7 @@ const VurderingAvLivetsSluttfaseForm = ({
                                 etter at du har lagret denne.
                             </AlertStripeInfo>
                         </Box>
-                    )}
+                    )} */}
                 </Form>
             </FormProvider>
         </DetailViewVurdering>
