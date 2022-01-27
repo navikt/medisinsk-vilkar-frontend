@@ -1,9 +1,10 @@
 import StatusResponse from '../types/SykdomsstegStatusResponse';
 import { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../types/Step';
+import SykdomsstegStatusSluttfaseResponse from '../types/SykdomsstegStatusSluttfaseResponse';
 
 type Steg = typeof dokumentSteg | typeof tilsynOgPleieSteg | typeof toOmsorgspersonerSteg;
 
-export const finnNesteSteg = (
+export const finnNesteStegForPleiepenger = (
     {
         kanLøseAksjonspunkt,
         harUklassifiserteDokumenter,
@@ -34,7 +35,37 @@ export const finnNesteSteg = (
     return null;
 };
 
+export const finnNesteStegForLivetsSluttfase = (
+    {
+        kanLøseAksjonspunkt,
+        harUklassifiserteDokumenter,
+        manglerVurderingAvKontinuerligTilsynOgPleie,
+        manglerVurderingAvToOmsorgspersoner,
+        manglerGodkjentLegeerklæring,
+        nyttDokumentHarIkkekontrollertEksisterendeVurderinger,
+    }: SykdomsstegStatusSluttfaseResponse,
+    isOnMount?: boolean
+): Steg => {
+    if (harUklassifiserteDokumenter || manglerGodkjentLegeerklæring) {
+        return dokumentSteg;
+    }
+
+    if (manglerVurderingAvKontinuerligTilsynOgPleie || nyttDokumentHarIkkekontrollertEksisterendeVurderinger) {
+        return tilsynOgPleieSteg;
+    }
+
+    if (manglerVurderingAvToOmsorgspersoner) {
+        return toOmsorgspersonerSteg;
+    }
+
+    if (kanLøseAksjonspunkt && !isOnMount) {
+        return tilsynOgPleieSteg;
+    }
+
+    return null;
+};
+
 export const nesteStegErVurdering = (sykdomsstegStatus: StatusResponse): boolean => {
-    const nesteSteg = finnNesteSteg(sykdomsstegStatus);
+    const nesteSteg = finnNesteStegForPleiepenger(sykdomsstegStatus);
     return nesteSteg === tilsynOgPleieSteg || nesteSteg === toOmsorgspersonerSteg;
 };

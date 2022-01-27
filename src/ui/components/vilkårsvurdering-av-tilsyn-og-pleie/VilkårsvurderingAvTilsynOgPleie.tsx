@@ -7,7 +7,7 @@ import Step, { StepId, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../..
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import { finnNesteSteg } from '../../../util/statusUtils';
+import { finnNesteStegForPleiepenger } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
@@ -121,7 +121,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
                     return;
                 }
 
-                const nesteSteg = finnNesteSteg(status);
+                const nesteSteg = finnNesteStegForPleiepenger(status);
                 if (nesteSteg === tilsynOgPleieSteg || nesteSteg === null) {
                     oppdaterVurderingsoversikt();
                 } else {
