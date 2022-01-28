@@ -46,7 +46,7 @@ const DokumentoversiktMessages = ({
                 <>
                     <Box marginBottom={Margin.large}>
                         <Alertstripe type="advarsel">
-                            {erFagytelsetypeLivetsSluttfase
+                            {!erFagytelsetypeLivetsSluttfase
                                 ? <span>Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler.</span>
                                 : <span>Dokumentasjon signert av lege eller helseinstitusjon mangler.</span>
                             }
