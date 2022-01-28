@@ -7,7 +7,11 @@ import Dokumentoversikt from '../../../types/Dokumentoversikt';
 import { DokumentoversiktResponse } from '../../../types/DokumentoversiktResponse';
 import { StepId } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
-import { nesteStegErVurdering } from '../../../util/statusUtils';
+import {
+    finnNesteStegForLivetsSluttfase,
+    finnNesteStegForPleiepenger, nesteStegErLivetssluttfase,
+    nesteStegErVurdering, nesteStegErVurderingForPleiepenger,
+} from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
 import DokumentasjonFooter from '../dokumentasjon-footer/DokumentasjonFooter';
@@ -51,6 +55,8 @@ const StruktureringAvDokumentasjon = ({
         dokumentoversiktFeilet,
         visRedigeringAvDokument,
     } = state;
+
+    const nesteStegErVurderingFn = (nesteSteg: SykdomsstegStatusResponse) => erFagytelsetypeLivetsSluttfase ? nesteStegErLivetssluttfase(nesteSteg) : nesteStegErVurderingForPleiepenger(nesteSteg);
 
     const getDokumentoversikt = () =>
         get<DokumentoversiktResponse>(endpoints.dokumentoversikt, httpErrorHandler, {
@@ -119,7 +125,7 @@ const StruktureringAvDokumentasjon = ({
             <DokumentoversiktMessages
                 dokumentoversikt={dokumentoversikt}
                 harRegistrertDiagnosekode={erFagytelsetypeLivetsSluttfase || !sykdomsstegStatus.manglerDiagnosekode}
-                kanNavigereVidere={nesteStegErVurdering(sykdomsstegStatus)}
+                kanNavigereVidere={nesteStegErVurderingFn(sykdomsstegStatus)}
                 navigerTilNesteSteg={navigerTilNesteSteg}
             />
             {dokumentoversikt?.harDokumenter() === true && (

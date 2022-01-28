@@ -59,7 +59,12 @@ export const finnNesteStegForLivetsSluttfase = (
     return null;
 };
 
-export const nesteStegErVurdering = (sykdomsstegStatus: StatusResponse): boolean => {
+export const nesteStegErVurderingForPleiepenger = (sykdomsstegStatus: StatusResponse): boolean => {
     const nesteSteg = finnNesteStegForPleiepenger(sykdomsstegStatus);
     return nesteSteg === tilsynOgPleieSteg || nesteSteg === toOmsorgspersonerSteg;
+};
+
+export const nesteStegErLivetssluttfase= (sykdomsstegStatus: StatusResponse): boolean => {
+    const nesteSteg = finnNesteStegForLivetsSluttfase(sykdomsstegStatus);
+    return nesteSteg === livetsSluttfaseSteg;
 };
