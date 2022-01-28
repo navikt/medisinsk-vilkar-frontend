@@ -9,14 +9,16 @@ import {
     FieldName as TOFieldName,
     VurderingAvToOmsorgspersonerFormState,
 } from '../vurdering-av-to-omsorgspersoner-form/VurderingAvToOmsorgspersonerForm';
+import {
+    FieldName as LivetsSluttfaseFieldName,
+    VurderingAvLivetsSluttfaseFormState,
+} from '../vurdering-av-livets-sluttfase-form/VurderingAvLivetsSluttfaseForm';
 
 function buildInitialFormStateForEdit(
     { tekst, resultat, perioder, dokumenter }: Vurderingsversjon,
     vurderingstype: Vurderingstype
-): VurderingAvTilsynsbehovFormState | VurderingAvToOmsorgspersonerFormState {
+): VurderingAvTilsynsbehovFormState | VurderingAvToOmsorgspersonerFormState | VurderingAvLivetsSluttfaseFormState{
     const dokumenterFraVurdering = dokumenter.filter((dokument) => dokument.benyttet).map((dokument) => dokument.id);
-
-    // TODO: denne må ta med LIVETS_SLUTTFASE også
 
     if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
         return {
@@ -32,6 +34,14 @@ function buildInitialFormStateForEdit(
             [TOFieldName.HAR_BEHOV_FOR_TO_OMSORGSPERSONER]: resultat === Vurderingsresultat.OPPFYLT,
             [TOFieldName.PERIODER]: perioder,
             [TOFieldName.DOKUMENTER]: dokumenterFraVurdering,
+        };
+    }
+    if (vurderingstype === Vurderingstype.LIVETS_SLUTTFASE) {
+        return {
+            [LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE]: tekst,
+            [LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE]: resultat === Vurderingsresultat.OPPFYLT,
+            [LivetsSluttfaseFieldName.DOKUMENTER]: dokumenterFraVurdering,
+            [LivetsSluttfaseFieldName.PERIODER]: perioder,
         };
     }
     return undefined;
