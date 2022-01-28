@@ -135,7 +135,6 @@ const VurderingsdetaljvisningForNyVurdering = ({
                             onSubmit={onSubmit}
                             onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
                             isSubmitting={isSubmitting}
-                            perioder={defaultPerioder()}
                         />
                     );
                 }
