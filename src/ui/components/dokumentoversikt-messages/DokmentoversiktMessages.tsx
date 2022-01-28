@@ -19,7 +19,7 @@ const DokumentoversiktMessages = ({
     kanNavigereVidere,
     navigerTilNesteSteg,
 }: DokumentoversiktMessagesProps): JSX.Element => {
-    const { onFinished, readOnly } = React.useContext(ContainerContext);
+    const { onFinished, readOnly, erFagytelsetypeLivetsSluttfase } = React.useContext(ContainerContext);
     if (!dokumentoversikt) {
         return null;
     }
@@ -46,8 +46,11 @@ const DokumentoversiktMessages = ({
                 <>
                     <Box marginBottom={Margin.large}>
                         <Alertstripe type="advarsel">
-                            Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler. Sett saken på vent
-                            mens du innhenter mer dokumentasjon.
+                            {!erFagytelsetypeLivetsSluttfase
+                                ? <span>Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler.</span>
+                                : <span>Dokumentasjon signert av lege eller helseinstitusjon mangler.</span>
+                            }
+                            Sett saken på vent mens du innhenter mer dokumentasjon.
                         </Alertstripe>
                     </Box>
                     <Box marginBottom={Margin.large}>
@@ -57,7 +60,7 @@ const DokumentoversiktMessages = ({
                     </Box>
                 </>
             )}
-            {visHåndterNyeDokumenterMelding && (
+            {visHåndterNyeDokumenterMelding && !erFagytelsetypeLivetsSluttfase && (
                 <>
                     <Box marginBottom={Margin.large}>
                         <Alertstripe type="advarsel">
