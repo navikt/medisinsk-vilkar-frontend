@@ -3,7 +3,7 @@ import { Period } from '@navikt/k9-period-utils';
 import { NavigationWithDetailView, PageContainer, Box, Margin } from '@navikt/k9-react-components';
 import React, { useMemo } from 'react';
 import axios from 'axios';
-import Step, { livetsSluttfaseSteg, StepId, toOmsorgspersonerSteg } from '../../../types/Step';
+import Step, { livetsSluttfaseSteg, StepId } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
@@ -114,24 +114,14 @@ const VilkårsvurderingAvLivetsSluttfase = ({
 
     const onVurderingLagret = () => {
         dispatch({ type: ActionType.PENDING });
-        hentSykdomsstegStatus()
-            .then((status) => {
-                if (status.kanLøseAksjonspunkt) {
-                    navigerTilNesteSteg(toOmsorgspersonerSteg, true);
-                    return;
-                }
-
-                const nesteSteg = finnNesteStegForLivetsSluttfase(status);
-                if (nesteSteg === livetsSluttfaseSteg || nesteSteg === null) {
-                    oppdaterVurderingsoversikt();
-                }
-                // else {
-                // const ikkeMarkerSteg =
-                //     nesteSteg === toOmsorgspersonerSteg && !status.manglerVurderingAvToOmsorgspersoner;
-                // navigerTilNesteSteg(nesteSteg, ikkeMarkerSteg);
-                // }
-            })
-            .catch(handleError);
+        hentSykdomsstegStatus().then((status) => {
+            const nesteSteg = finnNesteStegForLivetsSluttfase(status);
+            if (nesteSteg === livetsSluttfaseSteg || nesteSteg === null) {
+                oppdaterVurderingsoversikt();
+            } else if (nesteSteg !== null) {
+                navigerTilNesteSteg(nesteSteg);
+            }
+        });
     };
 
     const setMargin = () => {
