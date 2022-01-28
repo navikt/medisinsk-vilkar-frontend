@@ -1,5 +1,5 @@
 import StatusResponse from '../types/SykdomsstegStatusResponse';
-import { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../types/Step';
+import { dokumentSteg, livetsSluttfaseSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../types/Step';
 import SykdomsstegStatusSluttfaseResponse from '../types/SykdomsstegStatusSluttfaseResponse';
 
 type Steg = typeof dokumentSteg | typeof tilsynOgPleieSteg | typeof toOmsorgspersonerSteg;
@@ -43,6 +43,7 @@ export const finnNesteStegForLivetsSluttfase = (
         manglerVurderingAvToOmsorgspersoner,
         manglerGodkjentLegeerklæring,
         nyttDokumentHarIkkekontrollertEksisterendeVurderinger,
+        manglerVurderingAvILivetsSluttfase
     }: SykdomsstegStatusSluttfaseResponse,
     isOnMount?: boolean
 ): Steg => {
@@ -50,8 +51,8 @@ export const finnNesteStegForLivetsSluttfase = (
         return dokumentSteg;
     }
 
-    if (manglerVurderingAvKontinuerligTilsynOgPleie || nyttDokumentHarIkkekontrollertEksisterendeVurderinger) {
-        return tilsynOgPleieSteg;
+    if (manglerVurderingAvILivetsSluttfase || nyttDokumentHarIkkekontrollertEksisterendeVurderinger) {
+        return livetsSluttfaseSteg;
     }
 
     if (manglerVurderingAvToOmsorgspersoner) {
@@ -59,7 +60,7 @@ export const finnNesteStegForLivetsSluttfase = (
     }
 
     if (kanLøseAksjonspunkt && !isOnMount) {
-        return tilsynOgPleieSteg;
+        return livetsSluttfaseSteg;
     }
 
     return null;

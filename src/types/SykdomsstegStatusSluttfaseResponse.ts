@@ -6,6 +6,7 @@ interface SykdomsstegStatusSluttfaseResponse {
     manglerVurderingAvKontinuerligTilsynOgPleie: boolean;
     manglerVurderingAvToOmsorgspersoner: boolean;
     nyttDokumentHarIkkekontrollertEksisterendeVurderinger: boolean;
+    manglerVurderingAvILivetsSluttfase: boolean;
 }
 
 export default SykdomsstegStatusSluttfaseResponse;
