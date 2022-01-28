@@ -61,7 +61,6 @@ interface VurderingAvLivetsSluttfaseFormProps {
     dokumenter: Dokument[];
     onAvbryt: () => void;
     isSubmitting: boolean;
-    perioder: Period[]
 }
 
 const VurderingAvLivetsSluttfaseForm = ({
@@ -72,7 +71,6 @@ const VurderingAvLivetsSluttfaseForm = ({
     dokumenter,
     onAvbryt,
     isSubmitting,
-    perioder
 }: VurderingAvLivetsSluttfaseFormProps): JSX.Element => {
     const { readOnly } = React.useContext(ContainerContext);
     const formMethods = useForm({
@@ -149,7 +147,7 @@ const VurderingAvLivetsSluttfaseForm = ({
 
     // TODO - Finne ut om det blir riktigt att köra perioder her
     return (
-        <DetailViewVurdering title="Vurdering av livets sluttfase" perioder={perioder}>
+        <DetailViewVurdering title="Vurdering av livets sluttfase" perioder={defaultValues.perioder}>
             <div id="modal" />
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <FormProvider {...formMethods}>

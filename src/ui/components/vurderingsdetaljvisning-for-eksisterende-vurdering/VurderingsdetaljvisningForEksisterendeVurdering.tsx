@@ -16,6 +16,9 @@ import VurderingAvToOmsorgspersonerForm from '../vurdering-av-to-omsorgspersoner
 import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
 import VurderingsoppsummeringForInnleggelsesperiode from '../vurderingsoppsummering-for-innleggelsesperiode/VurderingsoppsummeringForInnleggelsesperiode';
 import InnleggelsesperiodeVurdering from '../../../types/InnleggelsesperiodeVurdering';
+import VurderingAvLivetsSluttfaseForm from '../vurdering-av-livets-sluttfase-form/VurderingAvLivetsSluttfaseForm';
+import VurderingsoppsummeringForSluttfase
+    from '../vurderingsoppsummering-for-livets-sluttfase/VurderingsoppsummeringForSluttfase';
 
 interface VurderingsdetaljvisningForEksisterendeProps {
     vurderingsoversikt: Vurderingsoversikt;
@@ -33,6 +36,9 @@ const getFormComponent = (vurderingstype: Vurderingstype) => {
     if (vurderingstype === Vurderingstype.TO_OMSORGSPERSONER) {
         return VurderingAvToOmsorgspersonerForm;
     }
+    if (vurderingstype === Vurderingstype.LIVETS_SLUTTFASE) {
+        return VurderingAvLivetsSluttfaseForm;
+    }
     return null;
 };
 
@@ -42,6 +48,9 @@ const getSummaryComponent = (vurderingstype: Vurderingstype) => {
     }
     if (vurderingstype === Vurderingstype.TO_OMSORGSPERSONER) {
         return VurderingsoppsummeringForToOmsorgspersoner;
+    }
+    if (vurderingstype === Vurderingstype.LIVETS_SLUTTFASE) {
+        return VurderingsoppsummeringForSluttfase;
     }
     return null;
 };
