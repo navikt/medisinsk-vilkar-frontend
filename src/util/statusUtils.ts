@@ -34,6 +34,7 @@ export const finnNesteStegForPleiepenger = (
     return null;
 };
 
+
 export const finnNesteStegForLivetsSluttfase = (
     {
         kanLøseAksjonspunkt,
