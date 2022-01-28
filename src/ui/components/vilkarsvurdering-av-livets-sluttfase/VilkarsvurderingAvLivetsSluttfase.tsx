@@ -122,8 +122,7 @@ const VilkårsvurderingAvLivetsSluttfase = ({
             } else if (nesteSteg !== null) {
                 navigerTilNesteSteg(nesteSteg);
             }
-            .catch(handleError);
-        });
+        }).catch(handleError);
     };
 
     const setMargin = () => {
