@@ -7,11 +7,7 @@ import Dokumentoversikt from '../../../types/Dokumentoversikt';
 import { DokumentoversiktResponse } from '../../../types/DokumentoversiktResponse';
 import { StepId } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
-import {
-    finnNesteStegForLivetsSluttfase,
-    finnNesteStegForPleiepenger, nesteStegErLivetssluttfase,
-    nesteStegErVurdering, nesteStegErVurderingForPleiepenger,
-} from '../../../util/statusUtils';
+import { nesteStegErLivetssluttfase, nesteStegErVurderingForPleiepenger } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
 import DokumentasjonFooter from '../dokumentasjon-footer/DokumentasjonFooter';
