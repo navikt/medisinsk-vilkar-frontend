@@ -32,7 +32,7 @@ jobs:
           wait-on: "http://localhost:8081"
           wait-on-timeout: 60
           headless: true
-      - name: Upload screenshots if Cypress tests failed
+      - name: Laster opp screenshots dersom Cypress-testene feiler
         uses: actions/upload-artifact@v1
         if: failure()
         with:
