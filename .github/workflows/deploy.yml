@@ -39,6 +39,13 @@ jobs:
           start: npm run start:e2e
           wait-on: "http://localhost:8081"
           wait-on-timeout: 60
+          headless: true
+      - name: Upload screenshots if Cypress tests failed
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
       - name: Kjøre bygg
         run: npm run build
       - name: Sette versjon
