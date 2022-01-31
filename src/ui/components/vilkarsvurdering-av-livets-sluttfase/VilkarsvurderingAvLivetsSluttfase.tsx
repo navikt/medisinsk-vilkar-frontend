@@ -117,9 +117,9 @@ const VilkårsvurderingAvLivetsSluttfase = ({
         dispatch({ type: ActionType.PENDING });
         hentSykdomsstegStatus().then((status) => {
             const nesteSteg = finnNesteStegForLivetsSluttfase(status);
-            if (nesteSteg === livetsSluttfaseSteg || nesteSteg === null) {
+            if (nesteSteg === null) {
                 oppdaterVurderingsoversikt();
-            } else if (nesteSteg !== null) {
+            } else {
                 navigerTilNesteSteg(nesteSteg);
             }
         }).catch(handleError);
