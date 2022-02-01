@@ -179,7 +179,7 @@ const MedisinskVilkår = (): JSX.Element => {
 
     return (
         <PageContainer isLoading={isLoading} hasError={hasError}>
-            {!erFagytelsetypeLivetsSluttfase && <Infostripe
+            <Infostripe
                 element={erFagytelsetypeLivetsSluttfase
                     ?
                     <span>Sykdomsvurderingen gjelder pleietrengende og er felles for alle parter.</span>
@@ -193,7 +193,7 @@ const MedisinskVilkår = (): JSX.Element => {
                     </>
                 }
                 iconRenderer={() => <ChildIcon />}
-            />}
+            />
 
             <div className={styles.medisinskVilkår}>
                 <h1 style={{ fontSize: 22 }}>Sykdom</h1>

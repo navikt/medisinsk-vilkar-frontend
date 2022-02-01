@@ -3,7 +3,7 @@ import { Period } from '@navikt/k9-period-utils';
 import { NavigationWithDetailView, PageContainer, Box, Margin } from '@navikt/k9-react-components';
 import React, { useMemo } from 'react';
 import axios from 'axios';
-import Step, { livetsSluttfaseSteg, StepId } from '../../../types/Step';
+import Step, { dokumentSteg, StepId } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
@@ -117,9 +117,9 @@ const VilkårsvurderingAvLivetsSluttfase = ({
         dispatch({ type: ActionType.PENDING });
         hentSykdomsstegStatus().then((status) => {
             const nesteSteg = finnNesteStegForLivetsSluttfase(status);
-            if (nesteSteg === livetsSluttfaseSteg || nesteSteg === null) {
+            if (nesteSteg === null || nesteSteg === dokumentSteg) {
                 oppdaterVurderingsoversikt();
-            } else if (nesteSteg !== null) {
+            } else {
                 navigerTilNesteSteg(nesteSteg);
             }
         }).catch(handleError);
