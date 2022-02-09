@@ -196,7 +196,7 @@ const MedisinskVilkår = (): JSX.Element => {
             />
 
             <div className={styles.medisinskVilkår}>
-                <h1 style={{ fontSize: 22 }}>Sykdom</h1>
+                <h1 style={{ fontSize: 22 }}>{erFagytelsetypeLivetsSluttfase ? "Livets sluttfase" : "Sykdom"}</h1>
                 <WriteAccessBoundContent
                     contentRenderer={() => (
                         <Box marginBottom={Margin.medium}>
