@@ -177,6 +177,9 @@ const MedisinskVilkår = (): JSX.Element => {
         ? [dokumentSteg, livetsSluttfaseSteg]
         : [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
+    // eslint-disable-next-line
+    console.log('HEI', kanLøseAksjonspunkt, visFortsettknapp, markedStep, activeStep, !!harDataSomIkkeHarBlittTattMedIBehandling);
+
     return (
         <PageContainer isLoading={isLoading} hasError={hasError}>
             <Infostripe
