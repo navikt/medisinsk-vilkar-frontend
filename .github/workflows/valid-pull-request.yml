@@ -25,6 +25,8 @@ jobs:
         run: npm run lint
       - name: Kjøre enhetstester
         run: npm test
+      - name: Kjøre visuelle regresjonstester
+        run: npm test-visual
       - name: Kjør E2E-tester
         uses: cypress-io/github-action@v2
         with:
