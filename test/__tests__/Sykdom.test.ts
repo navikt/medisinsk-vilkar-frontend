@@ -1,8 +1,8 @@
 it('no Sykdom visual regression', async () => {
     const response = await page.goto('http://localhost:8081/');
     await page.setViewport({
-        width: 1920,
-        height: 1080,
+        width: 1440,
+        height: 900,
     });
     expect(response.status()).toBe(200);
     /** ************************************* */
