@@ -36,7 +36,6 @@ describe('Sykdom', () => {
     });
     it('skal kunne håndtere to omsorgspersoner', () => {
         cy.get('[type="checkbox"]').first().check({ force: true });
-        cy.get('[name="vurderingAvToOmsorgspersoner"]').should('exist');
         cy.get('[name="vurderingAvToOmsorgspersoner"]').type('test');
         cy.get('input[id="harBehovForToOmsorgspersonerYES"]').check({ force: true });
         cy.contains('Bekreft').should('exist').click();
