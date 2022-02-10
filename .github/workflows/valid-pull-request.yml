@@ -26,7 +26,7 @@ jobs:
       - name: Kjøre enhetstester
         run: npm test
       - name: Kjøre visuelle regresjonstester
-        run: npm test-visual
+        run: npm run test-visual
       - name: Kjør E2E-tester
         uses: cypress-io/github-action@v2
         with:
