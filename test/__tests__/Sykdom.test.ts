@@ -1,4 +1,8 @@
+import puppeteer from 'puppeteer';
+
 it('no Sykdom visual regression', async () => {
+    const browser = await puppeteer.launch({ headless: true, args: ['--font-render-hinting=none'] });
+    const page = await browser.newPage();
     const response = await page.goto('http://localhost:8081/');
     await page.setViewport({
         width: 1440,
@@ -35,4 +39,5 @@ it('no Sykdom visual regression', async () => {
     await expect(page).toMatch('Vurdering av to omsorgspersoner');
     const tomOmsorgspersonerFørInput = await page.screenshot({ fullPage: true });
     expect(tomOmsorgspersonerFørInput).toMatchImageSnapshot();
+    await browser.close();
 });
