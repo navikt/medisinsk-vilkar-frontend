@@ -46,7 +46,7 @@ it('ingen visuelle regresjoner tilsyn og pleie', async () => {
         const tilsynOgPleieModal = await page.screenshot({ fullPage: true });
         expect(tilsynOgPleieModal).toMatchImageSnapshot();
         await expect(page).toClick('button[data-testid="modal-confirm-button"]');
-        await expect(page).toMatch('Alle perioder');
+        await expect(page).toMatch('Alle perioder', { timeout: 5_000 });
         const tilsynOgPleieEtterInput = await page.screenshot({ fullPage: true });
         expect(tilsynOgPleieEtterInput).toMatchImageSnapshot();
         await expect(page).toClick('button', { text: 'Eventuelle endringer er registrert' });
