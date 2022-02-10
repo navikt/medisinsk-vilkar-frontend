@@ -2,8 +2,9 @@
     "name": "medisinsk-vilkar-frontend",
     "version": "1.0.5",
     "scripts": {
-        "test": "jest",
+        "test": "cross-env DEBUG=test JEST_PUPPETEER_CONFIG=./jest-puppeteer.config.js jest --runInBand --detectOpenHandles --config=./jest.config.js ",
         "test-watch": "jest --watch",
+        "test-update-snapshots": "cross-env DEBUG=test JEST_PUPPETEER_CONFIG=./jest-puppeteer.config.js jest --runInBand --detectOpenHandles --config=./jest.config.js -u",
         "start": "node ./server.js",
         "build": "cross-env NODE_ENV=production webpack --config webpack/webpack-config.production.js",
         "dev": "node webpack/webpack-config.development.js",
@@ -12,9 +13,7 @@
         "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
         "cypress:headless": "cypress run",
         "test:e2e": "start-server-and-test api-mock 8082 dev http://localhost:8081 cypress:headless",
-        "start:e2e": "nodemon mock/api-mock.ts & node webpack/webpack-config.development.js",
-        "test-visual": "cross-env DEBUG=test JEST_PUPPETEER_CONFIG=./test/jest-puppeteer.config.js jest --runInBand --detectOpenHandles --config=./test/jest.config.js",
-        "test-visual:update": "cross-env DEBUG=test JEST_PUPPETEER_CONFIG=./test/jest-puppeteer.config.js jest --runInBand --detectOpenHandles --config=./test/jest.config.js -u"
+        "start:e2e": "nodemon mock/api-mock.ts & node webpack/webpack-config.development.js"
     },
     "pre-commit": [
         "lint",
