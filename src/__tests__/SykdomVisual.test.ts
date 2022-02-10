@@ -1,17 +1,21 @@
 import puppeteer from 'puppeteer';
 
 let browser;
+let page;
 
-it('ingen visuelle regresjoner', async () => {
+beforeAll(async () => {
+    browser = await puppeteer.launch({ headless: true, args: ['--font-render-hinting=none'] });
+    page = await browser.newPage();
+    const response = await page.goto('http://localhost:8081/');
+    await page.setViewport({
+        width: 1440,
+        height: 900,
+    });
+    expect(response.status()).toBe(200);
+});
+
+it('ingen visuelle regresjoner dokumentasjon', async () => {
     try {
-        browser = await puppeteer.launch({ headless: true, args: ['--font-render-hinting=none'] });
-        const page = await browser.newPage();
-        await page.setViewport({
-            width: 1440,
-            height: 900,
-        });
-        const response = await page.goto('http://localhost:8081/');
-        expect(response.status()).toBe(200);
         await page.waitForSelector('#medisinskVilkår', { timeout: 5_000 });
         await expect(page).toMatch('Dokumenter til behandling');
         const dokumentasjonFørInput = await page.screenshot({ fullPage: true });
@@ -23,7 +27,16 @@ it('ingen visuelle regresjoner', async () => {
         const dokumentasjonEtterInput = await page.screenshot({ fullPage: true });
         expect(dokumentasjonEtterInput).toMatchImageSnapshot();
         await expect(page).toClick('button', { text: 'Fortsett' });
+    } catch (e) {
+        console.log(e);
+        await browser.close();
+    }
+});
+
+it('ingen visuelle regresjoner tilsyn og pleie', async () => {
+    try {
         await expect(page).toMatch('Vurdering av tilsyn og pleie');
+        await expect(page).toMatch('Bekreft');
         const tilsynOgPleieFørInput = await page.screenshot({ fullPage: true });
         expect(tilsynOgPleieFørInput).toMatchImageSnapshot();
         await expect(page).toClick('input[type="checkbox"]');
@@ -37,7 +50,16 @@ it('ingen visuelle regresjoner', async () => {
         const tilsynOgPleieEtterInput = await page.screenshot({ fullPage: true });
         expect(tilsynOgPleieEtterInput).toMatchImageSnapshot();
         await expect(page).toClick('button', { text: 'Eventuelle endringer er registrert' });
+    } catch (e) {
+        console.log(e);
+        await browser.close();
+    }
+});
+
+it('ingen visuelle regresjoner i to omsorgspersoner', async () => {
+    try {
         await expect(page).toMatch('Vurdering av to omsorgspersoner');
+        await expect(page).toMatch('Bekreft');
         const tomOmsorgspersonerFørInput = await page.screenshot({ fullPage: true });
         expect(tomOmsorgspersonerFørInput).toMatchImageSnapshot();
     } catch (e) {
