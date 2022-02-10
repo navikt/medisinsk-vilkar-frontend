@@ -7,11 +7,14 @@ beforeAll(async () => {
     browser = await puppeteer.launch({ headless: true, args: ['--font-render-hinting=none'] });
     page = await browser.newPage();
     const response = await page.goto('http://localhost:8081/');
+    expect(response.status()).toBe(200);
+});
+
+beforeEach(async () => {
     await page.setViewport({
         width: 1440,
         height: 900,
     });
-    expect(response.status()).toBe(200);
 });
 
 it('ingen visuelle regresjoner dokumentasjon', async () => {
