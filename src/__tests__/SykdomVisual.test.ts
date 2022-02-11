@@ -17,7 +17,7 @@ beforeAll(async () => {
 it('ingen visuelle regresjoner dokumentasjon', async () => {
     try {
         await page.waitForSelector('#medisinskVilkår', { timeout: 5_000 });
-        await expect(page).toMatch('Dokumenter til behandling');
+        await expect(page).toMatch('Dokumenter til behandling', { timeout: 5_000 });
         const dokumentasjonFørInput = await page.screenshot({ fullPage: true });
         expect(dokumentasjonFørInput).toMatchImageSnapshot();
         await expect(page).toClick('label', { text: 'Ja, legeerklæring fra sykehus/spesialisthelsetjenesten' });
@@ -35,8 +35,8 @@ it('ingen visuelle regresjoner dokumentasjon', async () => {
 
 it('ingen visuelle regresjoner tilsyn og pleie', async () => {
     try {
-        await expect(page).toMatch('Vurdering av tilsyn og pleie');
-        await expect(page).toMatch('Bekreft');
+        await expect(page).toMatch('Vurdering av tilsyn og pleie', { timeout: 5_000 });
+        await expect(page).toMatch('Bekreft', { timeout: 5_000 });
         const tilsynOgPleieFørInput = await page.screenshot({ fullPage: true });
         expect(tilsynOgPleieFørInput).toMatchImageSnapshot();
         await expect(page).toClick('input[type="checkbox"]');
@@ -58,8 +58,8 @@ it('ingen visuelle regresjoner tilsyn og pleie', async () => {
 
 it('ingen visuelle regresjoner i to omsorgspersoner', async () => {
     try {
-        await expect(page).toMatch('Vurdering av to omsorgspersoner');
-        await expect(page).toMatch('Bekreft');
+        await expect(page).toMatch('Vurdering av to omsorgspersoner', { timeout: 5_000 });
+        await expect(page).toMatch('Bekreft', { timeout: 5_000 });
         const tomOmsorgspersonerFørInput = await page.screenshot({ fullPage: true });
         expect(tomOmsorgspersonerFørInput).toMatchImageSnapshot();
     } catch (e) {
