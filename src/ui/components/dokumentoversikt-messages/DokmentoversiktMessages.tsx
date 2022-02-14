@@ -75,7 +75,7 @@ const DokumentoversiktMessages = ({
             )}
             {kanNavigereVidere && !readOnly && (
                 <Box marginBottom={Margin.large}>
-                    <Alertstripe type={erFagytelsetypeLivetsSluttfase ? 'suksess' : 'info'}>
+                    <Alertstripe data-testid="dokumentasjon-ferdig" type={erFagytelsetypeLivetsSluttfase ? 'suksess' : 'info'}>
                         Dokumentasjon av sykdom er ferdig vurdert og du kan gå videre i vurderingen.
                         <Knapp
                             type="hoved"
