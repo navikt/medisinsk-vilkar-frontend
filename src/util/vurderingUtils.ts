@@ -92,7 +92,7 @@ export const lagSplittetSluttfaseVurdering = (
 
     return [
         /**
-         * Første episode, fom første mulige dato, frem til dagen før "splittdatoen"
+         * Første periode, fom første mulige dato, frem til dagen før "splittdatoen"
          */
         {
             resultat: Vurderingsresultat.IKKE_OPPFYLT,
