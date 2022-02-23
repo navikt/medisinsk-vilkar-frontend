@@ -19,6 +19,7 @@ import VurderingAvLivetsSluttfaseForm, {
 } from '../vurdering-av-livets-sluttfase-form/VurderingAvLivetsSluttfaseForm';
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
 import VurderingContext from '../../context/VurderingContext';
+import { finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
 
 interface VurderingsdetaljvisningForNyVurderingProps {
     vurderingsoversikt: Vurderingsoversikt;
@@ -52,6 +53,7 @@ function makeDefaultValues(
         return {
             [LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE]: '',
             [LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE]: undefined,
+            [LivetsSluttfaseFieldName.SPLITT_PERIODE_DATO]: finnMaksavgrensningerForPerioder(perioder).fom,
             [LivetsSluttfaseFieldName.DOKUMENTER]: [],
             [LivetsSluttfaseFieldName.PERIODER]: perioder,
         };
@@ -123,9 +125,10 @@ const VurderingsdetaljvisningForNyVurdering = ({
                     );
                 }
                 if (Vurderingstype.LIVETS_SLUTTFASE === vurderingstype) {
+                    const perioder = defaultPerioder();
                     return (
                         <VurderingAvLivetsSluttfaseForm
-                            defaultValues={makeDefaultValues(vurderingstype, defaultPerioder())}
+                            defaultValues={makeDefaultValues(vurderingstype, perioder)}
                             // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
                             // resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
                             // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
@@ -135,6 +138,7 @@ const VurderingsdetaljvisningForNyVurdering = ({
                             onSubmit={onSubmit}
                             onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
                             isSubmitting={isSubmitting}
+                            sluttfasePeriode={finnMaksavgrensningerForPerioder(perioder)}
                         />
                     );
                 }

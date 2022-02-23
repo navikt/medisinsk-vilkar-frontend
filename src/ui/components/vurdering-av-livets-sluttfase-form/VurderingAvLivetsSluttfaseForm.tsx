@@ -1,8 +1,11 @@
+import dayjs from 'dayjs';
+
 import {
     CheckboxGroup,
+    Datepicker,
+    RadioGroupPanel,
     // PeriodpickerList, // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
-    TextArea,
-    YesOrNoQuestion
+    TextArea
 } from '@navikt/k9-form-utils';
 import { Period } from '@navikt/k9-period-utils';
 import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/k9-react-components';
@@ -21,7 +24,7 @@ import { Vurderingsversjon } from '../../../types/Vurdering';
 //     finnMaksavgrensningerForPerioder,
 //     slåSammenSammenhengendePerioder,
 // } from '../../../util/periodUtils';
-import { lagSluttfaseVurdering } from '../../../util/vurderingUtils';
+import { lagSluttfaseVurdering, lagSplittetSluttfaseVurdering } from '../../../util/vurderingUtils';
 import ContainerContext from '../../context/ContainerContext';
 import {
     // fomDatoErFørTomDato, // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
@@ -38,17 +41,22 @@ import VurderingDokumentfilter from '../vurdering-dokumentfilter/VurderingDokume
 import vurderingDokumentfilterOptions from '../vurdering-dokumentfilter/vurderingDokumentfilterOptions';
 import StjerneIkon from './StjerneIkon';
 import styles from './VurderingAvLivetsSluttfaseForm.less';
+import Vurderingsresultat from '../../../types/Vurderingsresultat';
 
 export enum FieldName {
     VURDERING_AV_LIVETS_SLUTTFASE = 'vurderingAvLivetsSluttfase',
     ER_I_LIVETS_SLUTTFASE = 'erILivetsSluttfase',
+    SPLITT_PERIODE_DATO = "splittPeriodeDato",
+    SPLITT_PERIODE_VURDERING = "splittPeriodeVurdering",
     DOKUMENTER = 'dokumenter',
     PERIODER = 'perioder',
 }
 
 export interface VurderingAvLivetsSluttfaseFormState {
     [FieldName.VURDERING_AV_LIVETS_SLUTTFASE]?: string;
-    [FieldName.ER_I_LIVETS_SLUTTFASE]?: boolean;
+    [FieldName.ER_I_LIVETS_SLUTTFASE]?: Vurderingsresultat;
+    [FieldName.SPLITT_PERIODE_DATO]?: string;
+    [FieldName.SPLITT_PERIODE_VURDERING]?: string;
     [FieldName.DOKUMENTER]: string[];
     [FieldName.PERIODER]?: Period[];
 }
@@ -61,6 +69,7 @@ interface VurderingAvLivetsSluttfaseFormProps {
     dokumenter: Dokument[];
     onAvbryt: () => void;
     isSubmitting: boolean;
+    sluttfasePeriode?: { fom: string; tom: string };
 }
 
 const VurderingAvLivetsSluttfaseForm = ({
@@ -71,6 +80,7 @@ const VurderingAvLivetsSluttfaseForm = ({
     dokumenter,
     onAvbryt,
     isSubmitting,
+    sluttfasePeriode,
 }: VurderingAvLivetsSluttfaseFormProps): JSX.Element => {
     const { readOnly } = React.useContext(ContainerContext);
     const formMethods = useForm({
@@ -80,6 +90,7 @@ const VurderingAvLivetsSluttfaseForm = ({
     });
     const [visAlleDokumenter, setVisAlleDokumenter] = useState(false);
     const [dokumentFilter, setDokumentFilter] = useState([]);
+    const [visSplittetPeriode, setVisSplittetPeriode] = useState<boolean>(false);
 
     const updateDokumentFilter = (valgtFilter) => {
         if (dokumentFilter.includes(valgtFilter)) {
@@ -140,9 +151,15 @@ const VurderingAvLivetsSluttfaseForm = ({
 
     // }, [resterendeVurderingsperioder]);
 
-    const lagNyTilsynsvurdering = (formState: VurderingAvLivetsSluttfaseFormState) => {
-        // Legg til default perioder, fra backend, da samme periode må sendes inn for å godkjenne vurderingen
-        onSubmit(lagSluttfaseVurdering({ ...formState, perioder: defaultValues.perioder }, dokumenter));
+    const lagNySluttfaseVurdering = (formState: VurderingAvLivetsSluttfaseFormState) => {
+        const vurderinger = [];
+        if (formState[FieldName.ER_I_LIVETS_SLUTTFASE] === Vurderingsresultat.DELVIS_OPPFYLT) {
+            vurderinger.push(...lagSplittetSluttfaseVurdering({ ...formState, perioder: defaultValues.perioder }, dokumenter));
+        } else {
+            vurderinger.push(lagSluttfaseVurdering({ ...formState, perioder: defaultValues.perioder }, dokumenter));
+        }
+
+        vurderinger.map(vurdering => onSubmit(vurdering));
     };
 
     // TODO - Finne ut om det blir riktigt att köra perioder her
@@ -153,7 +170,7 @@ const VurderingAvLivetsSluttfaseForm = ({
             <FormProvider {...formMethods}>
                 <Form
                     buttonLabel="Bekreft"
-                    onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}
+                    onSubmit={formMethods.handleSubmit(lagNySluttfaseVurdering)}
                     onAvbryt={onAvbryt}
                     submitButtonDisabled={isSubmitting}
                     cancelButtonDisabled={isSubmitting}
@@ -280,13 +297,83 @@ const VurderingAvLivetsSluttfaseForm = ({
                         />
                     </Box>
                     <Box marginTop={Margin.xLarge}>
-                        <YesOrNoQuestion
-                            question="Er pleietrengende i livets sluttfase?"
+                        <RadioGroupPanel
+                            question="Hva er vurderingen av livets sluttfase?"
                             name={FieldName.ER_I_LIVETS_SLUTTFASE}
+                            radios={[
+                                { value: Vurderingsresultat.OPPFYLT, label: 'Ja' },
+                                { value: Vurderingsresultat.IKKE_OPPFYLT, label: 'Nei' },
+                                { value: Vurderingsresultat.DELVIS_OPPFYLT, label: 'Delvis' },
+                            ]}
                             validators={{ required }}
                             disabled={readOnly}
+                            onChange={(value) => setVisSplittetPeriode(value === Vurderingsresultat.DELVIS_OPPFYLT)}
                         />
                     </Box>
+
+                    {visSplittetPeriode && (
+                        /**
+                         * Dato for endret startdato på livets sluttfase skal bare vises om man velger
+                         * delvis i vurderingen over. 
+                         */
+                        <>
+
+                            <Box marginTop={Margin.xLarge}>
+                                <TextArea
+                                    id="splitt-periode-begrunnelsesfelt"
+                                    disabled={readOnly}
+                                    textareaClass={styles.begrunnelsesfelt}
+                                    name={FieldName.SPLITT_PERIODE_VURDERING}
+                                    label={
+                                        <>
+                                            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                                            <b>
+                                                Legg inn tekst rundt paragrafen som ommfatter livets sluttfase, og oppdater
+                                                lenkene nedenfor til riktig referanse i folketrygdeloven
+                                            </b>
+                                            <p className={styles.begrunnelsesfelt__labeltekst}>
+                                                Du skal ta utgangspunkt i{' '}
+                                                <Lenke href="https://lovdata.no/nav/folketrygdloven/kap9" target="_blank">
+                                                    lovteksten
+                                                </Lenke>{' '}
+                                                og{' '}
+                                                <Lenke
+                                                    href="https://lovdata.no/nav/rundskriv/r09-00#ref/lov/1997-02-28-19/%C2%A79-10"
+                                                    target="_blank"
+                                                >
+                                                    rundskrivet
+                                                </Lenke>{' '}
+                                                når du skriver vurderingen.
+                                            </p>
+
+                                            <p className={styles.begrunnelsesfelt__labeltekst}>Vurderingen skal beskrive:</p>
+                                            <ul className={styles.begrunnelsesfelt__liste}>
+                                                <li>Om det er årsakssammenheng mellom sykdom og pleiebehov</li>
+                                                <li>Om behovet er kontinuerlig og ikke situasjonsbestemt</li>
+                                            </ul>
+                                        </>
+                                    }
+                                    validators={{ required }}
+                                />
+                            </Box>
+
+                            <Box marginTop={Margin.xLarge}>
+                                <Datepicker
+                                    inputId="splitt-periode-dato"
+                                    name={FieldName.SPLITT_PERIODE_DATO}
+                                    disabled={readOnly}
+                                    label="Startdato for livets sluttfase"
+                                    defaultValue={sluttfasePeriode.fom}
+                                    validators={{ required }}
+                                    limitations={{
+                                        minDate: dayjs(sluttfasePeriode.fom).toISOString(),
+                                        maxDate: dayjs(sluttfasePeriode.tom).toISOString()
+                                    }}
+                                />
+                            </Box>
+                        </>
+                    )}
+
                     {/*
                     Tror vi kan fjerne denne, når vi kun har "uendelig" periode.
                     Lar stå inntill videre, så ser vi etter vurdering rundt hva
