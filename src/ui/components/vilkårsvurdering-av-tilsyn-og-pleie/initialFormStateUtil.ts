@@ -17,7 +17,7 @@ import {
 function buildInitialFormStateForEdit(
     { tekst, resultat, perioder, dokumenter }: Vurderingsversjon,
     vurderingstype: Vurderingstype
-): VurderingAvTilsynsbehovFormState | VurderingAvToOmsorgspersonerFormState | VurderingAvLivetsSluttfaseFormState{
+): VurderingAvTilsynsbehovFormState | VurderingAvToOmsorgspersonerFormState | VurderingAvLivetsSluttfaseFormState {
     const dokumenterFraVurdering = dokumenter.filter((dokument) => dokument.benyttet).map((dokument) => dokument.id);
 
     if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
@@ -39,7 +39,7 @@ function buildInitialFormStateForEdit(
     if (vurderingstype === Vurderingstype.LIVETS_SLUTTFASE) {
         return {
             [LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE]: tekst,
-            [LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE]: resultat === Vurderingsresultat.OPPFYLT,
+            [LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE]: Vurderingsresultat.OPPFYLT,
             [LivetsSluttfaseFieldName.DOKUMENTER]: dokumenterFraVurdering,
             [LivetsSluttfaseFieldName.PERIODER]: perioder,
         };
