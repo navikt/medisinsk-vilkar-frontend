@@ -14,7 +14,7 @@ beforeAll(async () => {
     expect(response.status()).toBe(200);
 });
 
-it('ingen visuelle regresjoner dokumentasjon', async () => {
+it.skip('ingen visuelle regresjoner dokumentasjon', async () => {
     try {
         await page.waitForSelector('#medisinskVilkår', { timeout: 5_000 });
         await expect(page).toMatch('Dokumenter til behandling', { timeout: 5_000 });
@@ -33,7 +33,7 @@ it('ingen visuelle regresjoner dokumentasjon', async () => {
     }
 });
 
-it('ingen visuelle regresjoner tilsyn og pleie', async () => {
+it.skip('ingen visuelle regresjoner tilsyn og pleie', async () => {
     try {
         await expect(page).toMatch('Vurdering av tilsyn og pleie', { timeout: 5_000 });
         await expect(page).toMatch('Bekreft', { timeout: 5_000 });
@@ -56,7 +56,7 @@ it('ingen visuelle regresjoner tilsyn og pleie', async () => {
     }
 });
 
-it('ingen visuelle regresjoner i to omsorgspersoner', async () => {
+it.skip('ingen visuelle regresjoner i to omsorgspersoner', async () => {
     try {
         await expect(page).toMatch('Vurdering av to omsorgspersoner', { timeout: 5_000 });
         await expect(page).toMatch('Bekreft', { timeout: 5_000 });
