@@ -9,11 +9,13 @@
         "build": "cross-env NODE_ENV=production webpack --config webpack/webpack-config.production.js",
         "dev": "node webpack/webpack-config.development.js",
         "api-mock": "nodemon mock/api-mock.ts",
+        "api-mock-ls": "nodemon mock/api-mock-livets-sluttfase.ts",
         "majorVersion": "node ./majorVersion.js",
         "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
         "cypress:headless": "cypress run",
         "test:e2e": "start-server-and-test api-mock 8082 dev http://localhost:8081 cypress:headless",
-        "start:e2e": "nodemon mock/api-mock.ts & node webpack/webpack-config.development.js"
+        "start:e2e": "nodemon mock/api-mock.ts & node webpack/webpack-config.development.js",
+        "start-ls:e2e": "nodemon mock/api-mock-livets-sluttfase.ts & node webpack/webpack-config.development.js"
     },
     "pre-commit": [
         "lint",
