@@ -64,18 +64,14 @@ const MedisinskVilkår = (): JSX.Element => {
 
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
-    const hentDiagnosekoder = () => {
-        if (!erFagytelsetypeLivetsSluttfase) {
-            return get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler).then(
-                (response: DiagnosekodeResponse) => response
-            );
-        }
-        return undefined;
-    }
+    const hentDiagnosekoder = () => get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler).then(
+        (response: DiagnosekodeResponse) => response,
+    );
 
     const { isLoading: diagnosekoderLoading, data: diagnosekoderData } = useQuery(
         'diagnosekodeResponse',
-        hentDiagnosekoder
+        hentDiagnosekoder,
+        { enabled: !erFagytelsetypeLivetsSluttfase }
     );
 
     const diagnosekoder = (endpoints.diagnosekoder) ? diagnosekoderData?.diagnosekoder : [];

@@ -23,5 +23,26 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
       - name: Kjøre linter
         run: npm run lint
+      - name: Kjøre enhetstester
+        run: npm test
+      - name: Laster opp screenshots dersom de visuelle regresjonstestene feiler
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: visual-regression-screenshots
+          path: src/__tests__/__image_snapshots__/__diff_output__/
+      - name: Kjør E2E-tester
+        uses: cypress-io/github-action@v2
+        with:
+          start: npm run start:e2e
+          wait-on: "http://localhost:8081"
+          wait-on-timeout: 60
+          headless: true
+      - name: Laster opp screenshots dersom Cypress-testene feiler
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
       - name: Kjøre bygg
         run: npm run build
