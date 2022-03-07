@@ -19,6 +19,8 @@ app.use((req, res, next) => {
 });
 
 const port = 8080;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 app.listen(port, (error) => {
     if (error) {
         console.error(error);
