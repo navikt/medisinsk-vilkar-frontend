@@ -28,6 +28,7 @@ const ConfirmationModal = ({
                 type="hoved"
                 htmlType="button"
                 mini
+                data-testid="modal-confirm-button"
             >
                 Bekreft
             </Knapp>
