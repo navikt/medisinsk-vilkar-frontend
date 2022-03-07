@@ -141,10 +141,7 @@ const VurderingAvTilsynsbehovForm = ({
         onSubmit(lagTilsynsbehovVurdering(formState, dokumenter));
     };
 
-    const sammenhengendeSøknadsperioder = React.useMemo(
-        () => slåSammenSammenhengendePerioder(perioderSomKanVurderes),
-        [perioderSomKanVurderes]
-    );
+    const sammenhengendeSøknadsperioder = slåSammenSammenhengendePerioder(perioderSomKanVurderes);
 
     return (
         <DetailViewVurdering title="Vurdering av tilsyn og pleie" perioder={defaultValues[FieldName.PERIODER]}>
