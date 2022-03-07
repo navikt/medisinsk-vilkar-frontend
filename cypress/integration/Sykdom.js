@@ -3,7 +3,7 @@ describe('Sykdom', () => {
         cy.visit('/');
     });
     it('skal kunne håndtere dokumentasjon av sykdom', () => {
-        cy.contains('Ja, legeerklæring fra sykehus/spesialisthelsetjenesten').should('exist').click();
+        cy.contains('Ja, legeerklæring fra sykehus/spesialisthelsetjenestenn').should('exist').click();
         cy.findByLabelText(/Hvilken dato er dokumentet datert?/).type('101021');
         cy.contains('Bekreft').should('exist').click();
         cy.contains('Fortsett').should('exist').click();
