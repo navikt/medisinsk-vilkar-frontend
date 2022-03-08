@@ -4,13 +4,10 @@ import {
     CheckboxGroup,
     Datepicker,
     RadioGroupPanel,
-    // PeriodpickerList, // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
     TextArea
 } from '@navikt/k9-form-utils';
 import { Period } from '@navikt/k9-period-utils';
 import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/k9-react-components';
-// TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
-// import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Ikon from 'nav-frontend-ikoner-assets';
 import Lenke from 'nav-frontend-lenker';
 import { Element } from 'nav-frontend-typografi';
@@ -18,23 +15,9 @@ import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-// TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
-// import {
-//     finnHullIPerioder,
-//     finnMaksavgrensningerForPerioder,
-//     slåSammenSammenhengendePerioder,
-// } from '../../../util/periodUtils';
 import { lagSluttfaseVurdering, lagSplittetSluttfaseVurdering } from '../../../util/vurderingUtils';
 import ContainerContext from '../../context/ContainerContext';
-import {
-    // fomDatoErFørTomDato, // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
-    harBruktDokumentasjon,
-    required
-} from '../../form/validators';
-// TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
-// import AddButton from '../add-button/AddButton';
-// TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
-// import DeleteButton from '../delete-button/DeleteButton';
+import { harBruktDokumentasjon, required } from '../../form/validators';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
 import VurderingDokumentfilter from '../vurdering-dokumentfilter/VurderingDokumentfilter';
@@ -64,8 +47,6 @@ export interface VurderingAvLivetsSluttfaseFormState {
 interface VurderingAvLivetsSluttfaseFormProps {
     defaultValues: VurderingAvLivetsSluttfaseFormState;
     onSubmit: (nyVurdering: Partial<Vurderingsversjon>) => void;
-    // resterendeVurderingsperioder?: Period[]; // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
-    // perioderSomKanVurderes?: Period[]; // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
     dokumenter: Dokument[];
     onAvbryt: () => void;
     isSubmitting: boolean;
@@ -75,8 +56,6 @@ interface VurderingAvLivetsSluttfaseFormProps {
 const VurderingAvLivetsSluttfaseForm = ({
     defaultValues,
     onSubmit,
-    // resterendeVurderingsperioder, // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
-    // perioderSomKanVurderes, // TODO: Tror denne blir overflødig om vi lander på å ikke ha perioder
     dokumenter,
     onAvbryt,
     isSubmitting,
@@ -135,22 +114,6 @@ const VurderingAvLivetsSluttfaseForm = ({
         return true;
     };
 
-    // const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
-    //     const dagerSomSkalVurderes = (resterendeVurderings
-    // || []).flatMap((p) => p.asListOfDays());
-    //     // TODO FINNE UT AV NY LOGIKK HER?
-    //     const dagerSomBlirVurdert = ([])
-    //         .map((period) => {
-    //             if ((period as AnyType).period) {
-    //                 return (period as AnyType).period;
-    //             }
-    //             return period;
-    //         })
-    //         .flatMap((p) => p.asListOfDays());
-    //     return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
-
-    // }, [resterendeVurderingsperioder]);
-
     const lagNySluttfaseVurdering = (formState: VurderingAvLivetsSluttfaseFormState) => {
         const vurderinger = [];
         if (formState[FieldName.ER_I_LIVETS_SLUTTFASE] === Vurderingsresultat.DELVIS_OPPFYLT) {
@@ -162,7 +125,6 @@ const VurderingAvLivetsSluttfaseForm = ({
         vurderinger.map(vurdering => onSubmit(vurdering));
     };
 
-    // TODO - Finne ut om det blir riktigt att köra perioder her
     return (
         <DetailViewVurdering title="Vurdering av livets sluttfase" perioder={defaultValues.perioder}>
             <div id="modal" />
@@ -373,19 +335,6 @@ const VurderingAvLivetsSluttfaseForm = ({
                             </Box>
                         </>
                     )}
-
-                    {/*
-                    Tror vi kan fjerne denne, når vi kun har "uendelig" periode.
-                    Lar stå inntill videre, så ser vi etter vurdering rundt hva
-                    vi skal gjøre med periodene
-                    {!harVurdertAlleDagerSomSkalVurderes && (
-                        <Box marginTop={Margin.xLarge}>
-                            <AlertStripeInfo>
-                                Du har ikke vurdert alle periodene som må vurderes. Resterende perioder vurderer du
-                                etter at du har lagret denne.
-                            </AlertStripeInfo>
-                        </Box>
-                    )} */}
                 </Form>
             </FormProvider>
         </DetailViewVurdering>
