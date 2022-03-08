@@ -59,27 +59,34 @@ export const slåSammenSammenhengendePerioder = (periods: Period[]): Period[] =>
         }
     };
 
-    let skipNextPeriod = false;
+    const periodsToSkip = [];
 
-    sortedPeriods.forEach((period, index, array) => {
-        if (!skipNextPeriod) {
-            const nextPeriod = array[index + 1];
-            if (nextPeriod) {
-                const hasOverlapWithNextPeriod = nextPeriod.includesDate(period.tom);
-                const periodsAreEdgeToEdge = checkIfPeriodsAreEdgeToEdge(period, nextPeriod);
-
-                if (hasOverlapWithNextPeriod || periodsAreEdgeToEdge) {
-                    const combinedPeriod = combinePeriods(period, nextPeriod);
-                    combinedPeriods.push(combinedPeriod);
-                    skipNextPeriod = true;
+    const maybeCombinePeriods = (period, nextPeriod, index, array, previouslySkippedCounter = 0) => {
+        if (nextPeriod) {
+            const hasOverlapWithNextPeriod = nextPeriod.includesDate(period.tom);
+            const periodsAreEdgeToEdge = checkIfPeriodsAreEdgeToEdge(period, nextPeriod);
+            if (hasOverlapWithNextPeriod || periodsAreEdgeToEdge) {
+                const combinedPeriod = combinePeriods(period, nextPeriod);
+                periodsToSkip.push(nextPeriod);
+                const periodsToSkipCounter = previouslySkippedCounter + 1;
+                const next = array[index + periodsToSkipCounter];
+                if (next) {
+                    maybeCombinePeriods(combinedPeriod, next, index, array, periodsToSkipCounter);
                 } else {
-                    addToListIfNotAdded(period);
+                    combinedPeriods.push(combinedPeriod);
                 }
             } else {
                 addToListIfNotAdded(period);
             }
         } else {
-            skipNextPeriod = false;
+            addToListIfNotAdded(period);
+        }
+    };
+
+    sortedPeriods.forEach((period, index, array) => {
+        const nextPeriod = array[index + 1];
+        if (!periodsToSkip.includes(nextPeriod)) {
+            maybeCombinePeriods(period, nextPeriod, index, array);
         }
     });
     return combinedPeriods;
