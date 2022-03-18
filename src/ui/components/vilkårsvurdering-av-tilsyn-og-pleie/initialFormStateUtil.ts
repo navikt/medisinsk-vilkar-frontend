@@ -39,7 +39,7 @@ function buildInitialFormStateForEdit(
     if (vurderingstype === Vurderingstype.LIVETS_SLUTTFASE) {
         return {
             [LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE]: tekst,
-            [LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE]: Vurderingsresultat.OPPFYLT,
+            [LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE]: resultat,
             [LivetsSluttfaseFieldName.DOKUMENTER]: dokumenterFraVurdering,
             [LivetsSluttfaseFieldName.PERIODER]: perioder,
         };

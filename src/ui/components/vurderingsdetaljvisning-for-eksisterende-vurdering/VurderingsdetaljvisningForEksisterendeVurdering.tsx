@@ -19,6 +19,7 @@ import InnleggelsesperiodeVurdering from '../../../types/InnleggelsesperiodeVurd
 import VurderingAvLivetsSluttfaseForm from '../vurdering-av-livets-sluttfase-form/VurderingAvLivetsSluttfaseForm';
 import VurderingsoppsummeringForSluttfase
     from '../vurderingsoppsummering-for-livets-sluttfase/VurderingsoppsummeringForSluttfase';
+import { finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
 
 interface VurderingsdetaljvisningForEksisterendeProps {
     vurderingsoversikt: Vurderingsoversikt;
@@ -94,17 +95,31 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                         <EndreVurderingController
                             endreVurderingLink={endreLink}
                             dataTilVurderingUrl={endpoints.dataTilVurdering}
-                            formRenderer={(dokumenter, onSubmit, isSubmitting) => (
-                                <FormComponent
-                                    defaultValues={buildInitialFormStateForEdit(vurderingsversjon, vurderingstype)}
-                                    resterendeVurderingsperioder={vurderingsoversikt.resterendeVurderingsperioder}
-                                    perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
-                                    dokumenter={dokumenter}
-                                    onSubmit={onSubmit}
-                                    onAvbryt={onAvbrytClick}
-                                    isSubmitting={isSubmitting}
-                                />
-                            )}
+                            formRenderer={(dokumenter, onSubmit, isSubmitting) => {
+                                if (Vurderingstype.LIVETS_SLUTTFASE === vurderingstype) {
+                                    return (
+                                        <VurderingAvLivetsSluttfaseForm
+                                            defaultValues={buildInitialFormStateForEdit(vurderingsversjon, vurderingstype)}
+                                            dokumenter={dokumenter}
+                                            onSubmit={onSubmit}
+                                            onAvbryt={onAvbrytClick}
+                                            isSubmitting={isSubmitting}
+                                            sluttfasePeriode={finnMaksavgrensningerForPerioder(vurderingsversjon.perioder)}
+                                        />
+                                    );
+                                }
+                                return (
+                                    <FormComponent
+                                        defaultValues={buildInitialFormStateForEdit(vurderingsversjon, vurderingstype)}
+                                        resterendeVurderingsperioder={vurderingsoversikt.resterendeVurderingsperioder}
+                                        perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
+                                        dokumenter={dokumenter}
+                                        onSubmit={onSubmit}
+                                        onAvbryt={onAvbrytClick}
+                                        isSubmitting={isSubmitting}
+                                    />
+                                )
+                            }}
                             vurderingsid={vurderingselement.id}
                             vurderingsversjonId={vurderingsversjon.versjon}
                             onVurderingLagret={onVurderingLagret}
