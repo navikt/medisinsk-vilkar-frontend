@@ -46,7 +46,7 @@ const tilsynsbehovVurderingsoversiktMock = {
     søknadsperioderTilBehandling: [],
     links: mockedVurderingsoversiktLinks,
     pleietrengendesFødselsdato: '2004-02-28',
-    harPerioderDerPleietrengendeErOver18år: true,
+    harPerioderDerPleietrengendeErOver18år: true
 };
 
 export default tilsynsbehovVurderingsoversiktMock;

@@ -7,7 +7,7 @@ import Dokumentoversikt from '../../../types/Dokumentoversikt';
 import { DokumentoversiktResponse } from '../../../types/DokumentoversiktResponse';
 import { StepId } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
-import { nesteStegErVurdering } from '../../../util/statusUtils';
+import { nesteStegErLivetssluttfase, nesteStegErVurderingForPleiepenger } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
 import DokumentasjonFooter from '../dokumentasjon-footer/DokumentasjonFooter';
@@ -31,7 +31,7 @@ const StruktureringAvDokumentasjon = ({
     hentSykdomsstegStatus,
     sykdomsstegStatus,
 }: StruktureringAvDokumentasjonProps): JSX.Element => {
-    const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler, erFagytelsetypeLivetsSluttfase } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(dokumentReducer, {
@@ -51,6 +51,8 @@ const StruktureringAvDokumentasjon = ({
         dokumentoversiktFeilet,
         visRedigeringAvDokument,
     } = state;
+
+    const nesteStegErVurderingFn = (nesteSteg: SykdomsstegStatusResponse) => erFagytelsetypeLivetsSluttfase ? nesteStegErLivetssluttfase(nesteSteg) : nesteStegErVurderingForPleiepenger(nesteSteg);
 
     const getDokumentoversikt = () =>
         get<DokumentoversiktResponse>(endpoints.dokumentoversikt, httpErrorHandler, {
@@ -118,8 +120,8 @@ const StruktureringAvDokumentasjon = ({
         <PageContainer isLoading={isLoading} hasError={dokumentoversiktFeilet} key={StepId.Dokument} preventUnmount>
             <DokumentoversiktMessages
                 dokumentoversikt={dokumentoversikt}
-                harRegistrertDiagnosekode={!sykdomsstegStatus.manglerDiagnosekode}
-                kanNavigereVidere={nesteStegErVurdering(sykdomsstegStatus)}
+                harRegistrertDiagnosekode={erFagytelsetypeLivetsSluttfase || !sykdomsstegStatus.manglerDiagnosekode}
+                kanNavigereVidere={nesteStegErVurderingFn(sykdomsstegStatus)}
                 navigerTilNesteSteg={navigerTilNesteSteg}
             />
             {dokumentoversikt?.harDokumenter() === true && (
@@ -157,7 +159,7 @@ const StruktureringAvDokumentasjon = ({
                         )}
                     />
 
-                    <Box marginTop={Margin.xxLarge}>
+                    {!erFagytelsetypeLivetsSluttfase && <Box marginTop={Margin.xxLarge}>
                         <DokumentasjonFooter
                             firstSectionRenderer={() => (
                                 <Innleggelsesperiodeoversikt onInnleggelsesperioderUpdated={sjekkStatus} />
@@ -168,6 +170,7 @@ const StruktureringAvDokumentasjon = ({
                             )}
                         />
                     </Box>
+                    }
                 </div>
             )}
         </PageContainer>

@@ -26,12 +26,14 @@
                         diagnosekodeSearch: 'http://localhost:8082/mock/diagnosekode-search',
                         status: 'http://localhost:8082/mock/status',
                         nyeDokumenter: 'http://localhost:8082/mock/nye-dokumenter',
+                        vurderingsoversiktLivetsSluttfase: 'http://localhost:8082/mock/livets-sluttfase/vurderingsoversikt'
                     },
                     behandlingUuid: '123',
                     readOnly: false,
                     onFinished: () => console.log('Aksjonspunkt løst'),
                     visFortsettknapp: true,
-                    saksbehandlere: {}
+                    saksbehandlere: {},
+                    erFagytelsetypeLivetsSluttfase: false
                 });
             });
         </script>

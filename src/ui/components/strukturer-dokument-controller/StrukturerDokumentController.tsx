@@ -8,6 +8,7 @@ import Link from '../../../types/Link';
 import scrollUp from '../../../util/viewUtils';
 import ContainerContext from '../../context/ContainerContext';
 import StrukturerDokumentForm from '../strukturer-dokument-form/StrukturerDokumentForm';
+import StrukturerDokumentSluttfaseForm from '../strukturer-dokument-sluttfase-form/StrukturerDokumentSluttfaseForm';
 
 interface StrukturerDokumentControllerProps {
     strukturerDokumentLink: Link;
@@ -24,7 +25,7 @@ const StrukturerDokumentController = ({
     editMode,
     strukturerteDokumenter,
 }: StrukturerDokumentControllerProps): JSX.Element => {
-    const { httpErrorHandler } = React.useContext(ContainerContext);
+    const { httpErrorHandler, erFagytelsetypeLivetsSluttfase } = React.useContext(ContainerContext);
     const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
     const [submitDocumentError, setSubmitDocumentError] = React.useState(null);
@@ -33,7 +34,7 @@ const StrukturerDokumentController = ({
         () => () => {
             httpCanceler.cancel();
         },
-        []
+        [],
     );
 
     const strukturerDokument = (strukturertDokument: Dokument) => {
@@ -82,13 +83,22 @@ const StrukturerDokumentController = ({
                     <AlertStripeFeil>{getErrorMessage()}</AlertStripeFeil>
                 </Box>
             )}
-            <StrukturerDokumentForm
+            {!erFagytelsetypeLivetsSluttfase && <StrukturerDokumentForm
                 dokument={dokument}
                 onSubmit={strukturerDokument}
                 editMode={editMode}
                 isSubmitting={isSubmitting}
                 strukturerteDokumenter={strukturerteDokumenter}
             />
+            }
+            {erFagytelsetypeLivetsSluttfase && <StrukturerDokumentSluttfaseForm
+                dokument={dokument}
+                onSubmit={strukturerDokument}
+                editMode={editMode}
+                isSubmitting={isSubmitting}
+                strukturerteDokumenter={strukturerteDokumenter}
+            />}
+
             {hasError && (
                 <Box marginTop={Margin.medium}>
                     <AlertStripeFeil>{getErrorMessage()}</AlertStripeFeil>

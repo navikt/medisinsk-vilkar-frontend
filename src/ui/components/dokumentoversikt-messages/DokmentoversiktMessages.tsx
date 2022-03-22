@@ -19,7 +19,7 @@ const DokumentoversiktMessages = ({
     kanNavigereVidere,
     navigerTilNesteSteg,
 }: DokumentoversiktMessagesProps): JSX.Element => {
-    const { onFinished, readOnly } = React.useContext(ContainerContext);
+    const { onFinished, readOnly, erFagytelsetypeLivetsSluttfase } = React.useContext(ContainerContext);
     if (!dokumentoversikt) {
         return null;
     }
@@ -46,8 +46,11 @@ const DokumentoversiktMessages = ({
                 <>
                     <Box marginBottom={Margin.large}>
                         <Alertstripe type="advarsel">
-                            Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler. Sett saken på vent
-                            mens du innhenter mer dokumentasjon.
+                            {!erFagytelsetypeLivetsSluttfase
+                                ? <span>Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler.</span>
+                                : <span>Dokumentasjon signert av lege eller helseinstitusjon mangler.</span>
+                            }
+                            Sett saken på vent mens du innhenter mer dokumentasjon.
                         </Alertstripe>
                     </Box>
                     <Box marginBottom={Margin.large}>
@@ -57,7 +60,7 @@ const DokumentoversiktMessages = ({
                     </Box>
                 </>
             )}
-            {visHåndterNyeDokumenterMelding && (
+            {visHåndterNyeDokumenterMelding && !erFagytelsetypeLivetsSluttfase && (
                 <>
                     <Box marginBottom={Margin.large}>
                         <Alertstripe type="advarsel">
@@ -72,7 +75,7 @@ const DokumentoversiktMessages = ({
             )}
             {kanNavigereVidere && !readOnly && (
                 <Box marginBottom={Margin.large}>
-                    <Alertstripe type="info" data-testid="dokumentasjon-ferdig">
+                    <Alertstripe data-testid="dokumentasjon-ferdig" type={erFagytelsetypeLivetsSluttfase ? 'suksess' : 'info'}>
                         Dokumentasjon av sykdom er ferdig vurdert og du kan gå videre i vurderingen.
                         <Knapp
                             type="hoved"

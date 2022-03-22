@@ -8,24 +8,23 @@ import { useQuery } from 'react-query';
 import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
 import Dokument from '../../../types/Dokument';
 import { NyeDokumenterResponse } from '../../../types/NyeDokumenterResponse';
-import Step, { dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
+import Step, { dokumentSteg, livetsSluttfaseSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingstype from '../../../types/Vurderingstype';
-import { finnNesteSteg } from '../../../util/statusUtils';
+import { finnNesteStegForPleiepenger, finnNesteStegForLivetsSluttfase } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import VurderingContext from '../../context/VurderingContext';
 import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
 import NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController from '../nye-dokumenter-som-kan-påvirke-eksisterende-vurderinger/NyeDokumenterSomKanPåvirkeEksisterendeVurderingerController';
 import StruktureringAvDokumentasjon from '../strukturering-av-dokumentasjon/StruktureringAvDokumentasjon';
 import UteståendeEndringerMelding from '../utestående-endringer-melding/UteståendeEndringerMelding';
+import VilkarsvurderingAvLivetsSluttfase from '../vilkarsvurdering-av-livets-sluttfase/VilkarsvurderingAvLivetsSluttfase';
 import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-pleie/VilkårsvurderingAvTilsynOgPleie';
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import ActionType from './actionTypes';
 import styles from './medisinskVilkår.less';
 import medisinskVilkårReducer from './reducer';
-
-const steps: Step[] = [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
 interface TabItemProps {
     label: string;
@@ -59,20 +58,23 @@ const MedisinskVilkår = (): JSX.Element => {
     });
 
     const { isLoading, hasError, activeStep, markedStep, sykdomsstegStatus, nyeDokumenterSomIkkeErVurdert } = state;
-    const { endpoints, httpErrorHandler, visFortsettknapp } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler, visFortsettknapp, erFagytelsetypeLivetsSluttfase } = React.useContext(ContainerContext);
+
+    const finnNesteStegFn = (nesteSteg: SykdomsstegStatusResponse, isOnMount?: boolean) => erFagytelsetypeLivetsSluttfase ? finnNesteStegForLivetsSluttfase(nesteSteg, isOnMount) : finnNesteStegForPleiepenger(nesteSteg, isOnMount);
 
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
-    const hentDiagnosekoder = () =>
-        get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler).then(
-            (response: DiagnosekodeResponse) => response
-        );
+    const hentDiagnosekoder = () => get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler).then(
+        (response: DiagnosekodeResponse) => response,
+    );
 
     const { isLoading: diagnosekoderLoading, data: diagnosekoderData } = useQuery(
         'diagnosekodeResponse',
-        hentDiagnosekoder
+        hentDiagnosekoder,
+        { enabled: !erFagytelsetypeLivetsSluttfase }
     );
-    const { diagnosekoder } = diagnosekoderData;
+
+    const diagnosekoder = (endpoints.diagnosekoder) ? diagnosekoderData?.diagnosekoder : [];
     const diagnosekoderTekst = diagnosekoder?.length > 0 ? `${diagnosekoder?.join(', ')}` : 'Kode mangler';
 
     const hentSykdomsstegStatus = async () => {
@@ -80,7 +82,7 @@ const MedisinskVilkår = (): JSX.Element => {
             const status = await get<SykdomsstegStatusResponse>(endpoints.status, httpErrorHandler, {
                 cancelToken: httpCanceler.token,
             });
-            const nesteSteg = finnNesteSteg(status);
+            const nesteSteg = finnNesteStegFn(status);
             dispatch({
                 type: ActionType.UPDATE_STATUS,
                 sykdomsstegStatus: status,
@@ -113,7 +115,7 @@ const MedisinskVilkår = (): JSX.Element => {
         hentSykdomsstegStatus()
             .then(hentNyeDokumenterSomIkkeErVurdertHvisNødvendig)
             .then(([sykdomsstegStatusResponse, nyeDokumenterSomIkkeErVurdertResponse]) => {
-                const step = finnNesteSteg(sykdomsstegStatusResponse, true);
+                const step = finnNesteStegFn(sykdomsstegStatusResponse, true);
                 if (step !== null) {
                     dispatch({
                         type: ActionType.MARK_AND_ACTIVATE_STEP,
@@ -134,7 +136,7 @@ const MedisinskVilkår = (): JSX.Element => {
     }, []);
 
     const navigerTilNesteSteg = () => {
-        const nesteSteg = finnNesteSteg(sykdomsstegStatus);
+        const nesteSteg = finnNesteStegFn(sykdomsstegStatus);
         dispatch({ type: ActionType.NAVIGATE_TO_STEP, step: nesteSteg });
     };
 
@@ -167,10 +169,17 @@ const MedisinskVilkår = (): JSX.Element => {
     const harDataSomIkkeHarBlittTattMedIBehandling = sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling;
     const manglerVurderingAvNyeDokumenter = sykdomsstegStatus?.nyttDokumentHarIkkekontrollertEksisterendeVurderinger;
 
+    const steps: Step[] = (erFagytelsetypeLivetsSluttfase)
+        ? [dokumentSteg, livetsSluttfaseSteg]
+        : [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
+
     return (
         <PageContainer isLoading={isLoading} hasError={hasError}>
             <Infostripe
-                element={
+                element={erFagytelsetypeLivetsSluttfase
+                    ?
+                    <span>Sykdomsvurderingen gjelder pleietrengende og er felles for alle parter.</span>
+                    :
                     <>
                         <span>Sykdomsvurderingen gjelder barnet og er felles for alle parter.</span>
                         <span className={styles.infostripe__diagnosekode__tittel}>Diagnose:</span>
@@ -181,8 +190,9 @@ const MedisinskVilkår = (): JSX.Element => {
                 }
                 iconRenderer={() => <ChildIcon />}
             />
+
             <div className={styles.medisinskVilkår}>
-                <h1 style={{ fontSize: 22 }}>Sykdom</h1>
+                <h1 style={{ fontSize: 22 }}>{erFagytelsetypeLivetsSluttfase ? "Livets sluttfase" : "Sykdom"}</h1>
                 <WriteAccessBoundContent
                     contentRenderer={() => (
                         <Box marginBottom={Margin.medium}>
@@ -222,7 +232,8 @@ const MedisinskVilkår = (): JSX.Element => {
                             <TabItem label={step.title} showWarningIcon={step === markedStep && !kanLøseAksjonspunkt} />
                         ),
                         aktiv: step === activeStep,
-                    }))}
+                    })
+                    )}
                     onChange={(event, clickedIndex) => {
                         dispatch({ type: ActionType.ACTIVATE_STEP, step: steps[clickedIndex] });
                     }}
@@ -251,6 +262,15 @@ const MedisinskVilkår = (): JSX.Element => {
                                 value={{ vurderingstype: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE }}
                             >
                                 <VilkårsvurderingAvTilsynOgPleie
+                                    navigerTilNesteSteg={navigerTilSteg}
+                                    hentSykdomsstegStatus={hentSykdomsstegStatus}
+                                    sykdomsstegStatus={sykdomsstegStatus}
+                                />
+                            </VurderingContext.Provider>
+                        )}
+                        {activeStep === livetsSluttfaseSteg && (
+                            <VurderingContext.Provider value={{ vurderingstype: Vurderingstype.LIVETS_SLUTTFASE }}>
+                                <VilkarsvurderingAvLivetsSluttfase
                                     navigerTilNesteSteg={navigerTilSteg}
                                     hentSykdomsstegStatus={hentSykdomsstegStatus}
                                     sykdomsstegStatus={sykdomsstegStatus}

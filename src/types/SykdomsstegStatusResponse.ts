@@ -2,11 +2,12 @@ interface SykdomsstegStatusResponse {
     kanLøseAksjonspunkt: boolean;
     harDataSomIkkeHarBlittTattMedIBehandling: boolean;
     harUklassifiserteDokumenter: boolean;
-    manglerDiagnosekode: boolean;
+    manglerDiagnosekode?: boolean;
     manglerGodkjentLegeerklæring: boolean;
-    manglerVurderingAvKontinuerligTilsynOgPleie: boolean;
-    manglerVurderingAvToOmsorgspersoner: boolean;
+    manglerVurderingAvKontinuerligTilsynOgPleie?: boolean;
+    manglerVurderingAvToOmsorgspersoner?: boolean;
     nyttDokumentHarIkkekontrollertEksisterendeVurderinger: boolean;
+    manglerVurderingAvILivetsSluttfase?: true;
 }
 
 export default SykdomsstegStatusResponse;

@@ -3,29 +3,30 @@ import { Period } from '@navikt/k9-period-utils';
 import { NavigationWithDetailView, PageContainer, Box, Margin } from '@navikt/k9-react-components';
 import React, { useMemo } from 'react';
 import axios from 'axios';
-import Step, { StepId, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
+import Step, { livetsSluttfaseSteg, StepId } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import { finnNesteStegForPleiepenger } from '../../../util/statusUtils';
+import { finnNesteStegForLivetsSluttfase } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
-import VurderingsoversiktMessages from '../vurderingsoversikt-messages/VurderingsoversiktMessages';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 import Vurderingsdetaljer from '../vurderingsdetaljer/Vurderingsdetaljer';
+import VurderingsoversiktSluttfaseMessages
+    from '../vurderingsoversikt-sluttfase-messages/VurderingsoversiktSluttfaseMessages';
 
-interface VilkårsvurderingAvTilsynOgPleieProps {
+interface VilkårsvurderingAvLivetsSluttfaseProps {
     navigerTilNesteSteg: (steg: Step, ikkeMarkerSteg?: boolean) => void;
     hentSykdomsstegStatus: () => Promise<SykdomsstegStatusResponse>;
     sykdomsstegStatus: SykdomsstegStatusResponse;
 }
 
-const VilkårsvurderingAvTilsynOgPleie = ({
+const VilkårsvurderingAvLivetsSluttfase = ({
     navigerTilNesteSteg,
     hentSykdomsstegStatus,
     sykdomsstegStatus,
-}: VilkårsvurderingAvTilsynOgPleieProps): JSX.Element => {
+}: VilkårsvurderingAvLivetsSluttfaseProps): JSX.Element => {
     const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
@@ -51,7 +52,7 @@ const VilkårsvurderingAvTilsynOgPleie = ({
     const harGyldigSignatur = !manglerGodkjentLegeerklæring;
 
     const getVurderingsoversikt = () =>
-        get<Vurderingsoversikt>(endpoints.vurderingsoversiktKontinuerligTilsynOgPleie, httpErrorHandler, {
+        get<Vurderingsoversikt>(endpoints.vurderingsoversiktLivetsSluttfase, httpErrorHandler, {
             cancelToken: httpCanceler.token,
         });
 
@@ -114,23 +115,14 @@ const VilkårsvurderingAvTilsynOgPleie = ({
 
     const onVurderingLagret = () => {
         dispatch({ type: ActionType.PENDING });
-        hentSykdomsstegStatus()
-            .then((status) => {
-                if (status.kanLøseAksjonspunkt) {
-                    navigerTilNesteSteg(toOmsorgspersonerSteg, true);
-                    return;
-                }
-
-                const nesteSteg = finnNesteStegForPleiepenger(status);
-                if (nesteSteg === tilsynOgPleieSteg || nesteSteg === null) {
-                    oppdaterVurderingsoversikt();
-                } else {
-                    const ikkeMarkerSteg =
-                        nesteSteg === toOmsorgspersonerSteg && !status.manglerVurderingAvToOmsorgspersoner;
-                    navigerTilNesteSteg(nesteSteg, ikkeMarkerSteg);
-                }
-            })
-            .catch(handleError);
+        hentSykdomsstegStatus().then((status) => {
+            const nesteSteg = finnNesteStegForLivetsSluttfase(status);
+            if (nesteSteg === livetsSluttfaseSteg || nesteSteg === null) {
+                oppdaterVurderingsoversikt();
+            } else if (nesteSteg !== null) {
+                navigerTilNesteSteg(nesteSteg);
+            }
+        }).catch(handleError);
     };
 
     const setMargin = () => {
@@ -146,8 +138,8 @@ const VilkårsvurderingAvTilsynOgPleie = ({
     const skalViseNyVurderingForm = visVurderingDetails && !valgtVurderingselement;
 
     return (
-        <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet} key={StepId.TilsynOgPleie}>
-            <VurderingsoversiktMessages vurderingsoversikt={vurderingsoversikt} harGyldigSignatur={harGyldigSignatur} />
+        <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet} key={StepId.LivetsSluttfase}>
+            <VurderingsoversiktSluttfaseMessages vurderingsoversikt={vurderingsoversikt} harGyldigSignatur={harGyldigSignatur} />
             {vurderingsoversikt?.harPerioderÅVise() && (
                 <Box marginTop={setMargin()}>
                     <NavigationWithDetailView
@@ -180,4 +172,4 @@ const VilkårsvurderingAvTilsynOgPleie = ({
     );
 };
 
-export default VilkårsvurderingAvTilsynOgPleie;
+export default VilkårsvurderingAvLivetsSluttfase;

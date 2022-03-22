@@ -17,9 +17,7 @@ import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
 import DuplikatRadiobuttons from '../duplikat-radiobuttons/DuplikatRadiobuttons';
 import StrukturerDokumentFormProps from '../../../types/StrukturerDokumentFormProps';
 
-export const ikkeDuplikatValue = 'ikkeDuplikat';
-
-const StrukturerDokumentForm = ({
+const StrukturerDokumentSluttfaseForm = ({
     dokument,
     onSubmit,
     editMode,
@@ -63,15 +61,11 @@ const StrukturerDokumentForm = ({
                             question="Inneholder dokumentet medisinske opplysninger?"
                             radios={[
                                 {
-                                    label: 'Ja, legeerklæring fra sykehus/spesialisthelsetjenesten',
+                                    label: 'Ja, legeerklæring fra lege eller helseinstitusjon',
                                     value: Dokumenttype.LEGEERKLÆRING,
                                 },
                                 {
-                                    label: 'Ja, andre medisinske opplysninger (f.eks. legeerklæring fra fastlege, uttalelse fra psykolog)',
-                                    value: Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER,
-                                },
-                                {
-                                    label: 'Dokumentet inneholder ikke medisinske opplysninger',
+                                    label: 'Nei, dokumentet inneholder ikke medisinske opplysninger',
                                     value: Dokumenttype.MANGLER_MEDISINSKE_OPPLYSNINGER,
                                 },
                             ]}
@@ -96,4 +90,4 @@ const StrukturerDokumentForm = ({
     );
 };
 
-export default StrukturerDokumentForm;
+export default StrukturerDokumentSluttfaseForm;

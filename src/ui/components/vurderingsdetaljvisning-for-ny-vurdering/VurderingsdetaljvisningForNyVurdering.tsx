@@ -13,8 +13,13 @@ import VurderingAvToOmsorgspersonerForm, {
     FieldName as TOFieldName,
     VurderingAvToOmsorgspersonerFormState,
 } from '../vurdering-av-to-omsorgspersoner-form/VurderingAvToOmsorgspersonerForm';
+import VurderingAvLivetsSluttfaseForm, {
+    FieldName as LivetsSluttfaseFieldName,
+    VurderingAvLivetsSluttfaseFormState,
+} from '../vurdering-av-livets-sluttfase-form/VurderingAvLivetsSluttfaseForm';
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
 import VurderingContext from '../../context/VurderingContext';
+import { finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
 
 interface VurderingsdetaljvisningForNyVurderingProps {
     vurderingsoversikt: Vurderingsoversikt;
@@ -26,7 +31,7 @@ interface VurderingsdetaljvisningForNyVurderingProps {
 function makeDefaultValues(
     vurderingstype: Vurderingstype,
     perioder: Period[]
-): VurderingAvToOmsorgspersonerFormState | VurderingAvTilsynsbehovFormState {
+): VurderingAvToOmsorgspersonerFormState | VurderingAvTilsynsbehovFormState | VurderingAvLivetsSluttfaseFormState {
     if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
         return {
             [KTPFieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
@@ -43,6 +48,17 @@ function makeDefaultValues(
             [TOFieldName.DOKUMENTER]: [],
         };
     }
+
+    if (vurderingstype === Vurderingstype.LIVETS_SLUTTFASE) {
+        return {
+            [LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE]: '',
+            [LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE]: undefined,
+            [LivetsSluttfaseFieldName.SPLITT_PERIODE_DATO]: finnMaksavgrensningerForPerioder(perioder).fom,
+            [LivetsSluttfaseFieldName.DOKUMENTER]: [],
+            [LivetsSluttfaseFieldName.PERIODER]: perioder,
+        };
+    }
+
     return null;
 }
 
@@ -58,6 +74,7 @@ const VurderingsdetaljvisningForNyVurdering = ({
     const resterendeVurderingsperioderDefaultValue = vurderingsoversikt.resterendeVurderingsperioder;
 
     const defaultPerioder = () => {
+
         if (resterendeVurderingsperioderDefaultValue?.length > 0) {
             return resterendeVurderingsperioderDefaultValue;
         }
@@ -67,6 +84,7 @@ const VurderingsdetaljvisningForNyVurdering = ({
         if (skalViseValgfriePerioder) {
             return vurderingsoversikt.resterendeValgfrieVurderingsperioder || [new Period('', '')];
         }
+
 
         return [new Period('', '')];
     };
@@ -103,6 +121,19 @@ const VurderingsdetaljvisningForNyVurdering = ({
                             onSubmit={onSubmit}
                             onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
                             isSubmitting={isSubmitting}
+                        />
+                    );
+                }
+                if (Vurderingstype.LIVETS_SLUTTFASE === vurderingstype) {
+                    const perioder = defaultPerioder();
+                    return (
+                        <VurderingAvLivetsSluttfaseForm
+                            defaultValues={makeDefaultValues(vurderingstype, perioder)}
+                            dokumenter={dokumenter}
+                            onSubmit={onSubmit}
+                            onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
+                            isSubmitting={isSubmitting}
+                            sluttfasePeriode={finnMaksavgrensningerForPerioder(perioder)}
                         />
                     );
                 }
