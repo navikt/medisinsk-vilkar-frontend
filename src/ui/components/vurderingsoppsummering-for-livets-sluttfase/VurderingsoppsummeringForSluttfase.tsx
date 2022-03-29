@@ -10,26 +10,27 @@ import ContainerContext from '../../context/ContainerContext';
 interface VurderingsoppsummeringForSluttfaseProps {
     vurdering: Vurdering;
     redigerVurdering: () => void;
+    erInnleggelsesperiode: boolean;
 }
 
 const VurderingsoppsummeringForSluttfase = ({
     vurdering,
     redigerVurdering,
+    erInnleggelsesperiode,
 }: VurderingsoppsummeringForSluttfaseProps): JSX.Element => {
     const gjeldendeVurdering = vurdering.versjoner[0];
     const { dokumenter, perioder, tekst, resultat } = gjeldendeVurdering;
     const brukerId = gjeldendeVurdering.endretAv;
     const { saksbehandlere } = React.useContext(ContainerContext);
 
-    const erInnleggelse = vurdering.erInnleggelsesperiode;
     return (
         <DetailViewVurdering
             title="Vurdering av livets sluttfase"
             perioder={perioder}
-            redigerVurdering={!erInnleggelse ? redigerVurdering : null}
+            redigerVurdering={!erInnleggelsesperiode ? redigerVurdering : null}
         >
             <Box marginTop={Margin.large}>
-                {erInnleggelse && <DekketAvInnleggelsesperiodeMelding />}
+                {erInnleggelsesperiode && <DekketAvInnleggelsesperiodeMelding />}
                 <Box marginTop={Margin.medium}>
                     <LabelledContent
                         label="Hvilke dokumenter er brukt i vurderingen om livets sluttfase?"
