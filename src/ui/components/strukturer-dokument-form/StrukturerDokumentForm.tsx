@@ -4,7 +4,7 @@ import { Box, DetailView, Form, Margin } from '@navikt/k9-react-components';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import LinkRel from '../../../constants/LinkRel';
-import { Dokument, Dokumenttype } from '../../../types/Dokument';
+import { Dokumenttype } from '../../../types/Dokument';
 import {
     StrukturerDokumentFormFieldName as FieldName,
     StrukturerDokumentFormState,
@@ -15,14 +15,7 @@ import ContainerContext from '../../context/ContainerContext';
 import { dateIsNotInTheFuture, required } from '../../form/validators';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
 import DuplikatRadiobuttons from '../duplikat-radiobuttons/DuplikatRadiobuttons';
-
-interface StrukturerDokumentFormProps {
-    dokument: Dokument;
-    onSubmit: (nyttDokument: Dokument) => void;
-    editMode?: boolean;
-    isSubmitting: boolean;
-    strukturerteDokumenter: Dokument[];
-}
+import StrukturerDokumentFormProps from '../../../types/StrukturerDokumentFormProps';
 
 export const ikkeDuplikatValue = 'ikkeDuplikat';
 
