@@ -15,8 +15,8 @@ const DiagnosekodeSelektor = ({
     name,
     label,
 }: DiagnosekodeSelektorProps): JSX.Element => {
-    const { control, errors } = useFormContext();
-
+    const { control, formState } = useFormContext();
+    const { errors } = formState;
     return (
         <Controller
             control={control}
@@ -27,15 +27,18 @@ const DiagnosekodeSelektor = ({
                     ...validators,
                 },
             }}
-            render={({ onChange }) => (
-                <PureDiagnosekodeSelector
-                    label={label}
-                    initialDiagnosekodeValue={initialDiagnosekodeValue}
-                    name={name}
-                    onChange={onChange}
-                    errorMessage={errors[name]?.message}
-                />
-            )}
+            render={({ field }) => {
+                const { onChange } = field;
+                return (
+                    <PureDiagnosekodeSelector
+                        label={label}
+                        initialDiagnosekodeValue={initialDiagnosekodeValue}
+                        name={name}
+                        onChange={onChange}
+                        errorMessage={errors[name]?.message}
+                    />
+                );
+            }}
         />
     );
 };
