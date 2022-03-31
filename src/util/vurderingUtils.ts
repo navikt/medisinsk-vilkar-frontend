@@ -110,7 +110,7 @@ export const lagSplittetSluttfaseVurdering = (
          */
         {
             resultat: Vurderingsresultat.OPPFYLT,
-            tekst: formState[LivetsSluttfaseFieldName.SPLITT_PERIODE_VURDERING],
+            tekst: formState[LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE],
             perioder: [
                 new Period(
                     formState[LivetsSluttfaseFieldName.SPLITT_PERIODE_DATO],

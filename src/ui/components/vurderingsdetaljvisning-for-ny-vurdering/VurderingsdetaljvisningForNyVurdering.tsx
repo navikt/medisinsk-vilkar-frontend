@@ -134,6 +134,7 @@ const VurderingsdetaljvisningForNyVurdering = ({
                             onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
                             isSubmitting={isSubmitting}
                             sluttfasePeriode={finnMaksavgrensningerForPerioder(perioder)}
+                            erNyVurdering
                         />
                     );
                 }

@@ -27,7 +27,7 @@ const VilkårsvurderingAvLivetsSluttfase = ({
     hentSykdomsstegStatus,
     sykdomsstegStatus,
 }: VilkårsvurderingAvLivetsSluttfaseProps): JSX.Element => {
-    const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler, erBehandlingenForstegangsvurdering } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
@@ -133,7 +133,10 @@ const VilkårsvurderingAvLivetsSluttfase = ({
     };
 
     const skalViseOpprettVurderingKnapp =
-        !vurderingsoversikt?.harPerioderSomSkalVurderes() && !skalViseRadForNyVurdering && harGyldigSignatur;
+        !vurderingsoversikt?.harPerioderSomSkalVurderes()
+            && !skalViseRadForNyVurdering
+            && harGyldigSignatur
+            && (erBehandlingenForstegangsvurdering !== undefined) ? !erBehandlingenForstegangsvurdering : true;
 
     const skalViseNyVurderingForm = visVurderingDetails && !valgtVurderingselement;
 

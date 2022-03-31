@@ -30,7 +30,6 @@ export enum FieldName {
     VURDERING_AV_LIVETS_SLUTTFASE = 'vurderingAvLivetsSluttfase',
     ER_I_LIVETS_SLUTTFASE = 'erILivetsSluttfase',
     SPLITT_PERIODE_DATO = "splittPeriodeDato",
-    SPLITT_PERIODE_VURDERING = "splittPeriodeVurdering",
     DOKUMENTER = 'dokumenter',
     PERIODER = 'perioder',
 }
@@ -39,7 +38,6 @@ export interface VurderingAvLivetsSluttfaseFormState {
     [FieldName.VURDERING_AV_LIVETS_SLUTTFASE]?: string;
     [FieldName.ER_I_LIVETS_SLUTTFASE]?: Vurderingsresultat;
     [FieldName.SPLITT_PERIODE_DATO]?: string;
-    [FieldName.SPLITT_PERIODE_VURDERING]?: string;
     [FieldName.DOKUMENTER]: string[];
     [FieldName.PERIODER]?: Period[];
 }
@@ -51,6 +49,7 @@ interface VurderingAvLivetsSluttfaseFormProps {
     onAvbryt: () => void;
     isSubmitting: boolean;
     sluttfasePeriode?: { fom: string; tom: string };
+    erNyVurdering?: boolean;
 }
 
 const VurderingAvLivetsSluttfaseForm = ({
@@ -60,6 +59,7 @@ const VurderingAvLivetsSluttfaseForm = ({
     onAvbryt,
     isSubmitting,
     sluttfasePeriode,
+    erNyVurdering = false,
 }: VurderingAvLivetsSluttfaseFormProps): JSX.Element => {
     const { readOnly } = React.useContext(ContainerContext);
     const formMethods = useForm({
@@ -122,7 +122,8 @@ const VurderingAvLivetsSluttfaseForm = ({
             vurderinger.push(lagSluttfaseVurdering({ ...formState, perioder: defaultValues.perioder }, dokumenter));
         }
 
-        vurderinger.map(vurdering => onSubmit(vurdering));
+        if (erNyVurdering) vurderinger.map(vurdering => onSubmit(vurdering));
+        else onSubmit(vurderinger.pop());
     };
 
     return (
@@ -279,46 +280,6 @@ const VurderingAvLivetsSluttfaseForm = ({
                          * delvis i vurderingen over. 
                          */
                         <>
-
-                            <Box marginTop={Margin.xLarge}>
-                                <TextArea
-                                    id="splitt-periode-begrunnelsesfelt"
-                                    disabled={readOnly}
-                                    textareaClass={styles.begrunnelsesfelt}
-                                    name={FieldName.SPLITT_PERIODE_VURDERING}
-                                    label={
-                                        <>
-                                            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                                            <b>
-                                                Legg inn tekst rundt paragrafen som ommfatter livets sluttfase, og oppdater
-                                                lenkene nedenfor til riktig referanse i folketrygdeloven
-                                            </b>
-                                            <p className={styles.begrunnelsesfelt__labeltekst}>
-                                                Du skal ta utgangspunkt i{' '}
-                                                <Lenke href="https://lovdata.no/nav/folketrygdloven/kap9" target="_blank">
-                                                    lovteksten
-                                                </Lenke>{' '}
-                                                og{' '}
-                                                <Lenke
-                                                    href="https://lovdata.no/nav/rundskriv/r09-00#ref/lov/1997-02-28-19/%C2%A79-10"
-                                                    target="_blank"
-                                                >
-                                                    rundskrivet
-                                                </Lenke>{' '}
-                                                når du skriver vurderingen.
-                                            </p>
-
-                                            <p className={styles.begrunnelsesfelt__labeltekst}>Vurderingen skal beskrive:</p>
-                                            <ul className={styles.begrunnelsesfelt__liste}>
-                                                <li>Om det er årsakssammenheng mellom sykdom og pleiebehov</li>
-                                                <li>Om behovet er kontinuerlig og ikke situasjonsbestemt</li>
-                                            </ul>
-                                        </>
-                                    }
-                                    validators={{ required }}
-                                />
-                            </Box>
-
                             <Box marginTop={Margin.xLarge}>
                                 <Datepicker
                                     inputId="splitt-periode-dato"

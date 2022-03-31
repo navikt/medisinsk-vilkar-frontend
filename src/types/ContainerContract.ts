@@ -25,6 +25,7 @@ interface ContainerContract {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     saksbehandlere: any;
     erFagytelsetypeLivetsSluttfase: boolean;
+    erBehandlingenForstegangsvurdering: boolean;
 }
 
 export default ContainerContract;
