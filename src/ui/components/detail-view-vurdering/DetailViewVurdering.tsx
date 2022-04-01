@@ -6,6 +6,7 @@ import styles from './detailViewVurdering.less';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import ContainerContext from '../../context/ContainerContext';
 import BehandlingType from '../../../constants/BehandlingType';
+import FagsakYtelseType from '../../../constants/FagsakYtelseType';
 
 interface DetailViewVurderingProps extends DetailViewProps {
     perioder: Period[];
@@ -14,10 +15,13 @@ interface DetailViewVurderingProps extends DetailViewProps {
 
 const DetailViewVurdering = (props: DetailViewVurderingProps): JSX.Element => {
     const { children, perioder, redigerVurdering, title } = props;
-    const { behandlingType } = React.useContext(ContainerContext);
+    const { fagsakYtelseType, behandlingType } = React.useContext(ContainerContext);
     const harPerioder = perioder.length > 0 && perioder[0].isValid();
 
-    const skalViseRedigerVurderingKnapp = behandlingType !== BehandlingType.REVURDERING;
+    const skalViseRedigerVurderingKnapp =
+        fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE
+            ? behandlingType !== BehandlingType.REVURDERING
+            : true;
 
     return (
         <DetailView

@@ -17,6 +17,7 @@ import Vurderingsdetaljer from '../vurderingsdetaljer/Vurderingsdetaljer';
 import VurderingsoversiktSluttfaseMessages
     from '../vurderingsoversikt-sluttfase-messages/VurderingsoversiktSluttfaseMessages';
 import BehandlingType from '../../../constants/BehandlingType';
+import FagsakYtelseType from '../../../constants/FagsakYtelseType';
 
 interface VilkårsvurderingAvLivetsSluttfaseProps {
     navigerTilNesteSteg: (steg: Step, ikkeMarkerSteg?: boolean) => void;
@@ -29,7 +30,7 @@ const VilkårsvurderingAvLivetsSluttfase = ({
     hentSykdomsstegStatus,
     sykdomsstegStatus,
 }: VilkårsvurderingAvLivetsSluttfaseProps): JSX.Element => {
-    const { endpoints, httpErrorHandler, behandlingType } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler, fagsakYtelseType, behandlingType } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
@@ -138,7 +139,9 @@ const VilkårsvurderingAvLivetsSluttfase = ({
         !vurderingsoversikt?.harPerioderSomSkalVurderes()
             && !skalViseRadForNyVurdering
             && harGyldigSignatur
-            && (behandlingType) ? behandlingType !== BehandlingType.FORSTEGANGSSOKNAD : true;
+            && fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE
+            ? behandlingType !== BehandlingType.FORSTEGANGSSOKNAD
+            : true;
 
     const skalViseNyVurderingForm = visVurderingDetails && !valgtVurderingselement;
 
