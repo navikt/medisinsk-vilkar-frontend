@@ -289,8 +289,8 @@ const VurderingAvLivetsSluttfaseForm = ({
                                     defaultValue={sluttfasePeriode.fom}
                                     validators={{ required }}
                                     limitations={{
-                                        minDate: dayjs(sluttfasePeriode.fom).toISOString(),
-                                        maxDate: dayjs(sluttfasePeriode.tom).toISOString()
+                                        minDate: dayjs(sluttfasePeriode.fom).utc(true).toISOString(),
+                                        maxDate: dayjs(sluttfasePeriode.tom).utc(true).toISOString()
                                     }}
                                 />
                             </Box>
