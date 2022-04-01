@@ -123,7 +123,7 @@ const VurderingAvTilsynsbehovForm = ({
                 }
                 return period;
             })
-            .flatMap((p) => p.asListOfDays());
+            .flatMap((p) => new Period(p.fom, p.tom).asListOfDays());
         return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
     }, [resterendeVurderingsperioder, perioderSomBlirVurdert]);
 
