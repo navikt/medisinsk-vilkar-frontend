@@ -3,7 +3,7 @@ import { Element } from 'nav-frontend-typografi';
 import Chevron from 'nav-frontend-chevron';
 import { Checkbox } from 'nav-frontend-skjema';
 import classNames from 'classnames';
-import { FilterFilled } from '@navikt/ds-icons';
+import FilterFilled from '@navikt/ds-icons/cjs/FilterFilled';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { Dokumenttype, dokumentLabel } from '../../../types/Dokument';
 import styles from './dokumentfilter.less';

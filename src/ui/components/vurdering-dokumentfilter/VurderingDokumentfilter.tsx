@@ -1,4 +1,4 @@
-import { FilterFilled } from '@navikt/ds-icons';
+import FilterFilled from '@navikt/ds-icons/cjs/FilterFilled';
 import classNames from 'classnames';
 import Chevron from 'nav-frontend-chevron';
 import { Checkbox } from 'nav-frontend-skjema';
