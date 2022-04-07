@@ -53,16 +53,18 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             httpErrorHandler
         );
 
-    const lagreDiagnosekode = (nyDiagnosekode: Diagnosekode) =>
-        post(
+    const lagreDiagnosekode = (nyDiagnosekode: Diagnosekode) => {
+        const nyeDiagnosekoder = [...diagnosekoder, nyDiagnosekode.kode];
+        return post(
             endreDiagnosekoderLink.href,
             {
                 behandlingUuid,
                 versjon,
-                diagnosekoder: [...diagnosekoder, nyDiagnosekode.kode],
+                diagnosekoder: [...new Set(nyeDiagnosekoder)],
             },
             httpErrorHandler
         );
+    };
 
     const slettDiagnosekodeMutation = useMutation((diagnosekode: Diagnosekode) => slettDiagnosekode(diagnosekode), {
         onSuccess: () => {
