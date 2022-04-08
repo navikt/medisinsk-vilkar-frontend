@@ -30,7 +30,8 @@ interface VurderingsdetaljvisningForNyVurderingProps {
 
 function makeDefaultValues(
     vurderingstype: Vurderingstype,
-    perioder: Period[]
+    perioder: Period[],
+    vurderingsoversikt?: Vurderingsoversikt,
 ): VurderingAvToOmsorgspersonerFormState | VurderingAvTilsynsbehovFormState | VurderingAvLivetsSluttfaseFormState {
     if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
         return {
@@ -55,7 +56,7 @@ function makeDefaultValues(
             [LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE]: undefined,
             [LivetsSluttfaseFieldName.SPLITT_PERIODE_DATO]: finnMaksavgrensningerForPerioder(perioder).fom,
             [LivetsSluttfaseFieldName.DOKUMENTER]: [],
-            [LivetsSluttfaseFieldName.PERIODER]: perioder,
+            [LivetsSluttfaseFieldName.PERIODER]: vurderingsoversikt.vurderingselementer.map(element => element.periode), //perioder,
         };
     }
 
@@ -74,6 +75,8 @@ const VurderingsdetaljvisningForNyVurdering = ({
     const resterendeVurderingsperioderDefaultValue = vurderingsoversikt.resterendeVurderingsperioder;
 
     const defaultPerioder = () => {
+
+        console.log("vurderingsoversikt", vurderingsoversikt);
 
         if (resterendeVurderingsperioderDefaultValue?.length > 0) {
             return resterendeVurderingsperioderDefaultValue;
@@ -128,13 +131,14 @@ const VurderingsdetaljvisningForNyVurdering = ({
                     const perioder = defaultPerioder();
                     return (
                         <VurderingAvLivetsSluttfaseForm
-                            defaultValues={makeDefaultValues(vurderingstype, perioder)}
+                            defaultValues={makeDefaultValues(vurderingstype, perioder, vurderingsoversikt)}
                             dokumenter={dokumenter}
                             onSubmit={onSubmit}
                             onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
                             isSubmitting={isSubmitting}
                             sluttfasePeriode={finnMaksavgrensningerForPerioder(perioder)}
                             erNyVurdering
+                            vurderingselementer={vurderingsoversikt.vurderingselementer}
                         />
                     );
                 }

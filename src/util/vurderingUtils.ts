@@ -18,6 +18,8 @@ import Dokument from '../types/Dokument';
 import { Vurderingsversjon } from '../types/Vurdering';
 import { finnBenyttedeDokumenter } from './dokumentUtils';
 import { finnMaksavgrensningerForPerioder } from './periodUtils';
+import Vurderingselement from '../types/Vurderingselement';
+import isBetween from 'dayjs/plugin/isBetween';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyType = any;
@@ -121,3 +123,123 @@ export const lagSplittetSluttfaseVurdering = (
         }
     ];
 }
+
+export const lagNySluttfaseRevurdering = (
+    formState: VurderingAvLivetsSluttfaseFormState,
+    alleDokumenter: Dokument[]
+): Partial<Vurderingsversjon>[] => {
+    const dokumenter = finnBenyttedeDokumenter(formState[LivetsSluttfaseFieldName.DOKUMENTER], alleDokumenter);
+
+
+
+    // return [];
+    return [
+        // {
+        //     "resultat": Vurderingsresultat.IKKE_OPPFYLT,
+        //     "tekst": "asdf",
+        //     "perioder": [
+        //         new Period("2022-02-08", "2022-02-10")
+        //     ],
+        //     dokumenter
+        // },
+        // {
+        //     "resultat": Vurderingsresultat.IKKE_OPPFYLT,
+        //     "tekst": "asdf",
+        //     "perioder": [
+        //         new Period("2022-02-15", "2022-02-20")
+        //     ],
+        //     dokumenter
+        // },
+        {
+            "resultat": Vurderingsresultat.IKKE_OPPFYLT,
+            "tekst": "asdf",
+            "perioder": [
+                new Period("2022-02-10", "2022-02-17")
+            ],
+            dokumenter
+        },
+        // {
+        //     "resultat": Vurderingsresultat.IKKE_OPPFYLT,
+        //     "tekst": "asdf",
+        //     "perioder": [
+        //         new Period("2020-01-01", "2022-02-07")
+        //     ],
+        //     dokumenter
+        // },
+        // {
+        //     "resultat": Vurderingsresultat.IKKE_OPPFYLT,
+        //     "tekst": "asdf",
+        //     "perioder": [
+        //         new Period("2022-02-08", "2022-11-02")
+        //     ],
+        //     dokumenter
+        // },
+        // {
+        //     "resultat": Vurderingsresultat.OPPFYLT,
+        //     "tekst": "asdf",
+        //     "perioder": [
+        //         new Period("2022-02-12", "2022-02-22")
+        //     ],
+        //     dokumenter
+        // },
+        // {
+        //     "resultat": Vurderingsresultat.OPPFYLT,
+        //     "tekst": "asdf",
+        //     "perioder": [
+        //         new Period("2022-02-23", "2099-12-31")
+        //     ],
+        //     dokumenter
+        // }
+    ];
+};
+
+// export const lagNySluttfaseRevurdering = (
+//     formState: VurderingAvLivetsSluttfaseFormState,
+//     alleDokumenter: Dokument[],
+//     vurderingselementer: Vurderingselement[]
+// ): Partial<Vurderingsversjon>[] => {
+//     dayjs.extend(isBetween)
+//     console.log("vi skal lage ny sluttfasevurdering");
+//     console.log("formstate", formState);
+//     // console.log("alldokumenter", alleDokumenter);
+//     // console.log("vurderingselementer", vurderingselementer);
+
+//     const splittDato = dayjs(formState[LivetsSluttfaseFieldName.SPLITT_PERIODE_DATO]);
+//     const dokumenter = finnBenyttedeDokumenter(formState[LivetsSluttfaseFieldName.DOKUMENTER], alleDokumenter);
+
+//     vurderingselementer.forEach((vurderingselement) => {
+//         console.log(" ", "=========================");
+//         let resultat = Vurderingsresultat.IKKE_OPPFYLT;
+//         const fomDato = dayjs(vurderingselement.periode.fom);
+//         const tomDato = dayjs(vurderingselement.periode.tom);
+//         console.log("splittdato", formState[LivetsSluttfaseFieldName.SPLITT_PERIODE_DATO]);
+//         console.log("fomDato", vurderingselement.periode.fom);
+//         console.log("tomDato", vurderingselement.periode.tom);
+
+//         if (splittDato.isBefore(fomDato, 'day')) {
+//             console.log("splittDato er før fomDato");
+//             resultat = Vurderingsresultat.OPPFYLT;
+//         } else if (splittDato.isSame(fomDato, 'day')) {
+//             console.log("splittDato er lik fomDato");
+//             resultat = Vurderingsresultat.OPPFYLT;
+//         } else if (splittDato.isAfter(tomDato, 'day')) {
+//             console.log("splittDato er etter tomDato");
+//             resultat = Vurderingsresultat.IKKE_OPPFYLT;
+//         } else if (splittDato.isBetween(fomDato, tomDato, 'day', '()')) {
+//             console.log("splittDato er mellom fomDato og tomDato");
+//             resultat = Vurderingsresultat.DELVIS_OPPFYLT;
+//         }
+
+//         if (splittDato.isBetween(fomDato, tomDato, 'day', '[]')) {
+//             console.log("splittDato er mellom fomDato og tomDato");
+//         } else {
+//             console.log("denne perioden er utenom splittdatoen");
+//         }
+
+
+//         // console.log("vurderingselement", vurderingselement);
+//     });
+
+//     return [];
+// };
+

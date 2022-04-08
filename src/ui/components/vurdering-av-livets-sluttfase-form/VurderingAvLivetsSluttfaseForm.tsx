@@ -15,7 +15,7 @@ import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-import { lagSluttfaseVurdering, lagSplittetSluttfaseVurdering } from '../../../util/vurderingUtils';
+import { lagNySluttfaseRevurdering, lagSluttfaseVurdering, lagSplittetSluttfaseVurdering } from '../../../util/vurderingUtils';
 import ContainerContext from '../../context/ContainerContext';
 import { harBruktDokumentasjon, required } from '../../form/validators';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
@@ -25,6 +25,7 @@ import vurderingDokumentfilterOptions from '../vurdering-dokumentfilter/vurderin
 import StjerneIkon from './StjerneIkon';
 import styles from './VurderingAvLivetsSluttfaseForm.less';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
+import Vurderingselement from '../../../types/Vurderingselement';
 
 export enum FieldName {
     VURDERING_AV_LIVETS_SLUTTFASE = 'vurderingAvLivetsSluttfase',
@@ -50,6 +51,7 @@ interface VurderingAvLivetsSluttfaseFormProps {
     isSubmitting: boolean;
     sluttfasePeriode?: { fom: string; tom: string };
     erNyVurdering?: boolean;
+    vurderingselementer?: Vurderingselement[];
 }
 
 const VurderingAvLivetsSluttfaseForm = ({
@@ -60,7 +62,9 @@ const VurderingAvLivetsSluttfaseForm = ({
     isSubmitting,
     sluttfasePeriode,
     erNyVurdering = false,
+    vurderingselementer = [],
 }: VurderingAvLivetsSluttfaseFormProps): JSX.Element => {
+    console.log("dette er en ny vurdering", erNyVurdering);
     const { readOnly } = React.useContext(ContainerContext);
     const formMethods = useForm({
         defaultValues,
@@ -116,14 +120,22 @@ const VurderingAvLivetsSluttfaseForm = ({
 
     const lagNySluttfaseVurdering = (formState: VurderingAvLivetsSluttfaseFormState) => {
         const vurderinger = [];
-        if (formState[FieldName.ER_I_LIVETS_SLUTTFASE] === Vurderingsresultat.DELVIS_OPPFYLT) {
-            vurderinger.push(...lagSplittetSluttfaseVurdering({ ...formState, perioder: defaultValues.perioder }, dokumenter));
+        if (erNyVurdering) {
+            // console.log("ny vurdering", ...lagSplittetSluttfaseVurdering({ ...formState, perioder: defaultValues.perioder }, dokumenter));
+            // console.log(...lagNySluttfaseRevurdering({ ...formState, perioder: defaultValues.perioder }, dokumenter));
+            // vurderinger.push(...lagNySluttfaseRevurdering({ ...formState, perioder: defaultValues.perioder }, dokumenter));
+            lagNySluttfaseRevurdering({ ...formState, perioder: defaultValues.perioder }, dokumenter, vurderingselementer);
         } else {
-            vurderinger.push(lagSluttfaseVurdering({ ...formState, perioder: defaultValues.perioder }, dokumenter));
-        }
+            if (formState[FieldName.ER_I_LIVETS_SLUTTFASE] === Vurderingsresultat.DELVIS_OPPFYLT) {
+                vurderinger.push(...lagSplittetSluttfaseVurdering({ ...formState, perioder: defaultValues.perioder }, dokumenter));
+            } else {
+                vurderinger.push(lagSluttfaseVurdering({ ...formState, perioder: defaultValues.perioder }, dokumenter));
+            }
 
-        if (erNyVurdering) vurderinger.map(vurdering => onSubmit(vurdering));
-        else onSubmit(vurderinger.pop());
+        }
+        // if (erNyVurdering) 
+        vurderinger.map(vurdering => onSubmit(vurdering));
+        // else onSubmit(vurderinger.pop());
     };
 
     return (
@@ -221,60 +233,119 @@ const VurderingAvLivetsSluttfaseForm = ({
                             )}
                         </Box>
                     )}
-                    <Box marginTop={Margin.xLarge}>
-                        <TextArea
-                            id="begrunnelsesfelt"
-                            disabled={readOnly}
-                            textareaClass={styles.begrunnelsesfelt}
-                            name={FieldName.VURDERING_AV_LIVETS_SLUTTFASE}
-                            label={
-                                <>
-                                    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                                    <b>
-                                        Legg inn tekst rundt paragrafen som ommfatter livets sluttfase, og oppdater
-                                        lenkene nedenfor til riktig referanse i folketrygdeloven
-                                    </b>
-                                    <p className={styles.begrunnelsesfelt__labeltekst}>
-                                        Du skal ta utgangspunkt i{' '}
-                                        <Lenke href="https://lovdata.no/nav/folketrygdloven/kap9" target="_blank">
-                                            lovteksten
-                                        </Lenke>{' '}
-                                        og{' '}
-                                        <Lenke
-                                            href="https://lovdata.no/nav/rundskriv/r09-00#ref/lov/1997-02-28-19/%C2%A79-10"
-                                            target="_blank"
-                                        >
-                                            rundskrivet
-                                        </Lenke>{' '}
-                                        når du skriver vurderingen.
-                                    </p>
+                    {erNyVurdering && (
+                        <>
+                            <Box marginTop={Margin.xLarge}>
+                                <TextArea
+                                    id="begrunnelsesfelt"
+                                    disabled={readOnly}
+                                    textareaClass={styles.begrunnelsesfelt}
+                                    name={FieldName.VURDERING_AV_LIVETS_SLUTTFASE}
+                                    label={
+                                        <>
+                                            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                                            <b>
+                                                Legg inn tekst rundt paragrafen som ommfatter livets sluttfase, og oppdater
+                                                lenkene nedenfor til riktig referanse i folketrygdeloven
+                                            </b>
+                                            <p className={styles.begrunnelsesfelt__labeltekst}>
+                                                Du skal ta utgangspunkt i{' '}
+                                                <Lenke href="https://lovdata.no/nav/folketrygdloven/kap9" target="_blank">
+                                                    lovteksten
+                                                </Lenke>{' '}
+                                                og{' '}
+                                                <Lenke
+                                                    href="https://lovdata.no/nav/rundskriv/r09-00#ref/lov/1997-02-28-19/%C2%A79-10"
+                                                    target="_blank"
+                                                >
+                                                    rundskrivet
+                                                </Lenke>{' '}
+                                                når du skriver vurderingen.
+                                            </p>
 
-                                    <p className={styles.begrunnelsesfelt__labeltekst}>Vurderingen skal beskrive:</p>
-                                    <ul className={styles.begrunnelsesfelt__liste}>
-                                        <li>Om det er årsakssammenheng mellom sykdom og pleiebehov</li>
-                                        <li>Om behovet er kontinuerlig og ikke situasjonsbestemt</li>
-                                    </ul>
-                                </>
-                            }
-                            validators={{ required }}
-                        />
-                    </Box>
-                    <Box marginTop={Margin.xLarge}>
-                        <RadioGroupPanel
-                            question="Hva er vurderingen av livets sluttfase?"
-                            name={FieldName.ER_I_LIVETS_SLUTTFASE}
-                            radios={[
-                                { value: Vurderingsresultat.OPPFYLT, label: 'Ja' },
-                                { value: Vurderingsresultat.IKKE_OPPFYLT, label: 'Nei' },
-                                { value: Vurderingsresultat.DELVIS_OPPFYLT, label: 'Delvis' },
-                            ]}
-                            validators={{ required }}
-                            disabled={readOnly}
-                            onChange={(value) => setVisSplittetPeriode(value === Vurderingsresultat.DELVIS_OPPFYLT)}
-                        />
-                    </Box>
+                                            <p className={styles.begrunnelsesfelt__labeltekst}>Vurderingen skal beskrive:</p>
+                                            <ul className={styles.begrunnelsesfelt__liste}>
+                                                <li>Om det er årsakssammenheng mellom sykdom og pleiebehov</li>
+                                                <li>Om behovet er kontinuerlig og ikke situasjonsbestemt</li>
+                                            </ul>
+                                        </>
+                                    }
+                                    validators={{ required }}
+                                />
+                            </Box>
+                            <Box marginTop={Margin.xLarge}>
+                                <Datepicker
+                                    inputId="splitt-periode-dato"
+                                    name={FieldName.SPLITT_PERIODE_DATO}
+                                    disabled={readOnly}
+                                    label="Startdato for livets sluttfase"
+                                    defaultValue={sluttfasePeriode.fom}
+                                    validators={{ required }}
+                                    limitations={{
+                                        minDate: (sluttfasePeriode.fom) ? dayjs(sluttfasePeriode.fom).utc(true).toISOString() : undefined,
+                                        maxDate: (sluttfasePeriode.tom) ? dayjs(sluttfasePeriode.tom).utc(true).toISOString() : undefined,
+                                    }}
+                                />
+                            </Box>
+                        </>
+                    )}
+                    {!erNyVurdering && (
+                        <>
+                            <Box marginTop={Margin.xLarge}>
+                                <TextArea
+                                    id="begrunnelsesfelt"
+                                    disabled={readOnly}
+                                    textareaClass={styles.begrunnelsesfelt}
+                                    name={FieldName.VURDERING_AV_LIVETS_SLUTTFASE}
+                                    label={
+                                        <>
+                                            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                                            <b>
+                                                Legg inn tekst rundt paragrafen som ommfatter livets sluttfase, og oppdater
+                                                lenkene nedenfor til riktig referanse i folketrygdeloven
+                                            </b>
+                                            <p className={styles.begrunnelsesfelt__labeltekst}>
+                                                Du skal ta utgangspunkt i{' '}
+                                                <Lenke href="https://lovdata.no/nav/folketrygdloven/kap9" target="_blank">
+                                                    lovteksten
+                                                </Lenke>{' '}
+                                                og{' '}
+                                                <Lenke
+                                                    href="https://lovdata.no/nav/rundskriv/r09-00#ref/lov/1997-02-28-19/%C2%A79-10"
+                                                    target="_blank"
+                                                >
+                                                    rundskrivet
+                                                </Lenke>{' '}
+                                                når du skriver vurderingen.
+                                            </p>
 
-                    {visSplittetPeriode && (
+                                            <p className={styles.begrunnelsesfelt__labeltekst}>Vurderingen skal beskrive:</p>
+                                            <ul className={styles.begrunnelsesfelt__liste}>
+                                                <li>Om det er årsakssammenheng mellom sykdom og pleiebehov</li>
+                                                <li>Om behovet er kontinuerlig og ikke situasjonsbestemt</li>
+                                            </ul>
+                                        </>
+                                    }
+                                    validators={{ required }}
+                                />
+                            </Box>
+                            <Box marginTop={Margin.xLarge}>
+                                <RadioGroupPanel
+                                    question="Hva er vurderingen av livets sluttfase?"
+                                    name={FieldName.ER_I_LIVETS_SLUTTFASE}
+                                    radios={[
+                                        { value: Vurderingsresultat.OPPFYLT, label: 'Ja' },
+                                        { value: Vurderingsresultat.IKKE_OPPFYLT, label: 'Nei' },
+                                        { value: Vurderingsresultat.DELVIS_OPPFYLT, label: 'Delvis' },
+                                    ]}
+                                    validators={{ required }}
+                                    disabled={readOnly}
+                                    onChange={(value) => setVisSplittetPeriode(value === Vurderingsresultat.DELVIS_OPPFYLT)}
+                                />
+                            </Box>
+                        </>
+                    )}
+                    {visSplittetPeriode && !erNyVurdering && (
                         /**
                          * Dato for endret startdato på livets sluttfase skal bare vises om man velger
                          * delvis i vurderingen over. 

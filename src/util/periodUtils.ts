@@ -114,7 +114,7 @@ export const finnHullIPerioder = (periode: Period[]): Period[] => {
 
 export const finnMaksavgrensningerForPerioder = (perioder: Period[]): Period => {
     let maksimalSøknadsperiode: Period = null;
-
+    console.log("her er perioder", perioder);
     perioder.forEach((periode) => {
         let nyFom;
         let nyTom;
@@ -137,6 +137,8 @@ export const finnMaksavgrensningerForPerioder = (perioder: Period[]): Period => 
             }
         }
     });
+
+    console.log("maksimal periode", maksimalSøknadsperiode);
 
     return maksimalSøknadsperiode;
 };
