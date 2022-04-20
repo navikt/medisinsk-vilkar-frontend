@@ -135,13 +135,18 @@ const VilkårsvurderingAvLivetsSluttfase = ({
         return null;
     };
 
-    const skalViseOpprettVurderingKnapp =
-        !vurderingsoversikt?.harPerioderSomSkalVurderes()
+    const skalViseOpprettVurderingKnapp = () => {
+
+        if (fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE && BehandlingType.FORSTEGANGSSOKNAD === behandlingType)
+            return false;
+
+        return !vurderingsoversikt?.harPerioderSomSkalVurderes()
             && !skalViseRadForNyVurdering
             && harGyldigSignatur
             && fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE
             ? behandlingType !== BehandlingType.FORSTEGANGSSOKNAD
             : true;
+    }
 
     const skalViseNyVurderingForm = visVurderingDetails && !valgtVurderingselement;
 
@@ -159,7 +164,7 @@ const VilkårsvurderingAvLivetsSluttfase = ({
                                 onNyVurderingClick={visNyVurderingForm}
                                 visRadForNyVurdering={skalViseRadForNyVurdering}
                                 visParterLabel
-                                visOpprettVurderingKnapp={skalViseOpprettVurderingKnapp}
+                                visOpprettVurderingKnapp={skalViseOpprettVurderingKnapp()}
                             />
                         )}
                         showDetailSection={visVurderingDetails}

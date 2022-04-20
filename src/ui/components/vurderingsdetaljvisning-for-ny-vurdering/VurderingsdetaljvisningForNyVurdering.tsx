@@ -56,7 +56,7 @@ function makeDefaultValues(
             [LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE]: undefined,
             [LivetsSluttfaseFieldName.SPLITT_PERIODE_DATO]: finnMaksavgrensningerForPerioder(perioder).fom,
             [LivetsSluttfaseFieldName.DOKUMENTER]: [],
-            [LivetsSluttfaseFieldName.PERIODER]: vurderingsoversikt.vurderingselementer.map(element => element.periode), //perioder,
+            [LivetsSluttfaseFieldName.PERIODER]: perioder,
         };
     }
 
@@ -76,8 +76,6 @@ const VurderingsdetaljvisningForNyVurdering = ({
 
     const defaultPerioder = () => {
 
-        console.log("vurderingsoversikt", vurderingsoversikt);
-
         if (resterendeVurderingsperioderDefaultValue?.length > 0) {
             return resterendeVurderingsperioderDefaultValue;
         }
@@ -87,7 +85,6 @@ const VurderingsdetaljvisningForNyVurdering = ({
         if (skalViseValgfriePerioder) {
             return vurderingsoversikt.resterendeValgfrieVurderingsperioder || [new Period('', '')];
         }
-
 
         return [new Period('', '')];
     };
@@ -131,14 +128,13 @@ const VurderingsdetaljvisningForNyVurdering = ({
                     const perioder = defaultPerioder();
                     return (
                         <VurderingAvLivetsSluttfaseForm
-                            defaultValues={makeDefaultValues(vurderingstype, perioder, vurderingsoversikt)}
+                            defaultValues={makeDefaultValues(vurderingstype, defaultPerioder(), vurderingsoversikt)}
+                            resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                            perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
                             dokumenter={dokumenter}
                             onSubmit={onSubmit}
                             onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
                             isSubmitting={isSubmitting}
-                            sluttfasePeriode={finnMaksavgrensningerForPerioder(perioder)}
-                            erNyVurdering
-                            vurderingselementer={vurderingsoversikt.vurderingselementer}
                         />
                     );
                 }

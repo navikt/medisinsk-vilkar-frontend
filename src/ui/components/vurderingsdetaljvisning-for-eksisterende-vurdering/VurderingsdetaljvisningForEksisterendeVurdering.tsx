@@ -104,8 +104,8 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                                             onSubmit={onSubmit}
                                             onAvbryt={onAvbrytClick}
                                             isSubmitting={isSubmitting}
-                                            sluttfasePeriode={finnMaksavgrensningerForPerioder(vurderingsversjon.perioder)}
-                                            erNyVurdering
+                                            resterendeVurderingsperioder={vurderingsoversikt.resterendeVurderingsperioder}
+                                            perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
                                         />
                                     );
                                 }
