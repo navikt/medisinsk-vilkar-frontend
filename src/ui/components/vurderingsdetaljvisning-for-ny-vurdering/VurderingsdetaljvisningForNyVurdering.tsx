@@ -31,7 +31,6 @@ interface VurderingsdetaljvisningForNyVurderingProps {
 function makeDefaultValues(
     vurderingstype: Vurderingstype,
     perioder: Period[],
-    vurderingsoversikt?: Vurderingsoversikt,
 ): VurderingAvToOmsorgspersonerFormState | VurderingAvTilsynsbehovFormState | VurderingAvLivetsSluttfaseFormState {
     if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
         return {
@@ -125,10 +124,9 @@ const VurderingsdetaljvisningForNyVurdering = ({
                     );
                 }
                 if (Vurderingstype.LIVETS_SLUTTFASE === vurderingstype) {
-                    const perioder = defaultPerioder();
                     return (
                         <VurderingAvLivetsSluttfaseForm
-                            defaultValues={makeDefaultValues(vurderingstype, defaultPerioder(), vurderingsoversikt)}
+                            defaultValues={makeDefaultValues(vurderingstype, defaultPerioder())}
                             resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
                             perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
                             dokumenter={dokumenter}

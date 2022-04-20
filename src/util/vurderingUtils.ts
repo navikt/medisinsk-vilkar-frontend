@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-
 import { Period } from '@navikt/k9-period-utils';
 import {
     FieldName as TilsynFieldName,
@@ -17,9 +15,6 @@ import Vurderingsresultat from '../types/Vurderingsresultat';
 import Dokument from '../types/Dokument';
 import { Vurderingsversjon } from '../types/Vurdering';
 import { finnBenyttedeDokumenter } from './dokumentUtils';
-import { finnMaksavgrensningerForPerioder } from './periodUtils';
-import Vurderingselement from '../types/Vurderingselement';
-import isBetween from 'dayjs/plugin/isBetween';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyType = any;

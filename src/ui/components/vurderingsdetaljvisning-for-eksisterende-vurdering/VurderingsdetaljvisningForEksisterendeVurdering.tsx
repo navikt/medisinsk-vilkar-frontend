@@ -19,7 +19,6 @@ import InnleggelsesperiodeVurdering from '../../../types/InnleggelsesperiodeVurd
 import VurderingAvLivetsSluttfaseForm from '../vurdering-av-livets-sluttfase-form/VurderingAvLivetsSluttfaseForm';
 import VurderingsoppsummeringForSluttfase
     from '../vurderingsoppsummering-for-livets-sluttfase/VurderingsoppsummeringForSluttfase';
-import { finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
 
 interface VurderingsdetaljvisningForEksisterendeProps {
     vurderingsoversikt: Vurderingsoversikt;

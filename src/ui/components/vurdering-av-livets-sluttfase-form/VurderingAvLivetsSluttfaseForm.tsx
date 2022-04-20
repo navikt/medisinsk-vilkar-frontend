@@ -24,7 +24,6 @@ import vurderingDokumentfilterOptions from '../vurdering-dokumentfilter/vurderin
 import StjerneIkon from './StjerneIkon';
 import styles from './VurderingAvLivetsSluttfaseForm.less';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
-import Vurderingselement from '../../../types/Vurderingselement';
 import DeleteButton from '../delete-button/DeleteButton';
 import AddButton from '../add-button/AddButton';
 import { finnHullIPerioder, finnMaksavgrensningerForPerioder, slåSammenSammenhengendePerioder } from '../../../util/periodUtils';
