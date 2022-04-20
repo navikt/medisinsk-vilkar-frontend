@@ -31,8 +31,8 @@ const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick }: Diagnosekode
                     e.stopPropagation();
                     setIsSubmitting(true);
                     onSaveClick(selectedDiagnosekode).then(
-                        () => setIsSubmitting(false),
-                        () => setIsSubmitting(false)
+                        () => setTimeout(() => setIsSubmitting(false), 2500),
+                        () => setTimeout(() => setIsSubmitting(false), 2500)
                     );
                 }}
             >

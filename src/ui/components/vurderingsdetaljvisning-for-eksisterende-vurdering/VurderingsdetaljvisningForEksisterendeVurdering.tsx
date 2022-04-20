@@ -17,8 +17,7 @@ import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummerin
 import VurderingsoppsummeringForInnleggelsesperiode from '../vurderingsoppsummering-for-innleggelsesperiode/VurderingsoppsummeringForInnleggelsesperiode';
 import InnleggelsesperiodeVurdering from '../../../types/InnleggelsesperiodeVurdering';
 import VurderingAvLivetsSluttfaseForm from '../vurdering-av-livets-sluttfase-form/VurderingAvLivetsSluttfaseForm';
-import VurderingsoppsummeringForSluttfase
-    from '../vurderingsoppsummering-for-livets-sluttfase/VurderingsoppsummeringForSluttfase';
+import VurderingsoppsummeringForSluttfase from '../vurderingsoppsummering-for-livets-sluttfase/VurderingsoppsummeringForSluttfase';
 import { finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
 
 interface VurderingsdetaljvisningForEksisterendeProps {
@@ -99,12 +98,17 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                                 if (Vurderingstype.LIVETS_SLUTTFASE === vurderingstype) {
                                     return (
                                         <VurderingAvLivetsSluttfaseForm
-                                            defaultValues={buildInitialFormStateForEdit(vurderingsversjon, vurderingstype)}
+                                            defaultValues={buildInitialFormStateForEdit(
+                                                vurderingsversjon,
+                                                vurderingstype
+                                            )}
                                             dokumenter={dokumenter}
                                             onSubmit={onSubmit}
                                             onAvbryt={onAvbrytClick}
                                             isSubmitting={isSubmitting}
-                                            sluttfasePeriode={finnMaksavgrensningerForPerioder(vurderingsversjon.perioder)}
+                                            sluttfasePeriode={finnMaksavgrensningerForPerioder(
+                                                vurderingsversjon.perioder
+                                            )}
                                         />
                                     );
                                 }
@@ -118,7 +122,7 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                                         onAvbryt={onAvbrytClick}
                                         isSubmitting={isSubmitting}
                                     />
-                                )
+                                );
                             }}
                             vurderingsid={vurderingselement.id}
                             vurderingsversjonId={vurderingsversjon.versjon}
@@ -128,7 +132,13 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                 }
 
                 const SummaryComponent = getSummaryComponent(vurderingstype);
-                return <SummaryComponent vurdering={vurdering} redigerVurdering={onEditClick} />;
+                return (
+                    <SummaryComponent
+                        vurdering={vurdering}
+                        redigerVurdering={onEditClick}
+                        erInnleggelsesperiode={vurderingselement.erInnleggelsesperiode}
+                    />
+                );
             }}
         />
     );
