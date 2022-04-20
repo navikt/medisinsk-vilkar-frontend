@@ -10,15 +10,16 @@ import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 interface VurderingsoppsummeringForToOmsorgspersonerProps {
     vurdering: Vurdering;
     redigerVurdering: () => void;
+    erInnleggelsesperiode: boolean;
 }
 
 const VurderingsoppsummeringForToOmsorgspersoner = ({
     vurdering,
     redigerVurdering,
+    erInnleggelsesperiode,
 }: VurderingsoppsummeringForToOmsorgspersonerProps): JSX.Element => {
     const gjeldendeVurdering = vurdering.versjoner[0];
     const { resultat, tekst, dokumenter, perioder } = gjeldendeVurdering;
-    const erInnleggelse = vurdering.erInnleggelsesperiode;
     const brukerId = gjeldendeVurdering.endretAv;
     const { saksbehandlere } = React.useContext(ContainerContext);
 
@@ -26,10 +27,10 @@ const VurderingsoppsummeringForToOmsorgspersoner = ({
         <DetailViewVurdering
             title="Vurdering av to omsorgspersoner"
             perioder={perioder}
-            redigerVurdering={!erInnleggelse ? redigerVurdering : null}
+            redigerVurdering={!erInnleggelsesperiode ? redigerVurdering : null}
         >
             <Box marginTop={Margin.large}>
-                {erInnleggelse && <DekketAvInnleggelsesperiodeMelding />}
+                {erInnleggelsesperiode && <DekketAvInnleggelsesperiodeMelding />}
                 <Box marginTop={Margin.medium}>
                     <LabelledContent
                         label="Hvilke dokumenter er brukt i vurderingen av behov for to omsorgspersoner samtidig?"

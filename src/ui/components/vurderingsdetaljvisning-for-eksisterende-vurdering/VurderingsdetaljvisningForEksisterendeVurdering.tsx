@@ -98,7 +98,10 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                                 if (Vurderingstype.LIVETS_SLUTTFASE === vurderingstype) {
                                     return (
                                         <VurderingAvLivetsSluttfaseForm
-                                            defaultValues={buildInitialFormStateForEdit(vurderingsversjon, vurderingstype)}
+                                            defaultValues={buildInitialFormStateForEdit(
+                                                vurderingsversjon,
+                                                vurderingstype
+                                            )}
                                             dokumenter={dokumenter}
                                             onSubmit={onSubmit}
                                             onAvbryt={onAvbrytClick}
@@ -118,7 +121,7 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                                         onAvbryt={onAvbrytClick}
                                         isSubmitting={isSubmitting}
                                     />
-                                )
+                                );
                             }}
                             vurderingsid={vurderingselement.id}
                             vurderingsversjonId={vurderingsversjon.versjon}
@@ -128,7 +131,13 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                 }
 
                 const SummaryComponent = getSummaryComponent(vurderingstype);
-                return <SummaryComponent vurdering={vurdering} redigerVurdering={onEditClick} />;
+                return (
+                    <SummaryComponent
+                        vurdering={vurdering}
+                        redigerVurdering={onEditClick}
+                        erInnleggelsesperiode={vurderingselement.erInnleggelsesperiode}
+                    />
+                );
             }}
         />
     );
