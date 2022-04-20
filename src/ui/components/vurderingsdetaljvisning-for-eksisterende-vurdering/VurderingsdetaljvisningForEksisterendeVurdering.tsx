@@ -17,8 +17,8 @@ import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummerin
 import VurderingsoppsummeringForInnleggelsesperiode from '../vurderingsoppsummering-for-innleggelsesperiode/VurderingsoppsummeringForInnleggelsesperiode';
 import InnleggelsesperiodeVurdering from '../../../types/InnleggelsesperiodeVurdering';
 import VurderingAvLivetsSluttfaseForm from '../vurdering-av-livets-sluttfase-form/VurderingAvLivetsSluttfaseForm';
-import VurderingsoppsummeringForSluttfase from '../vurderingsoppsummering-for-livets-sluttfase/VurderingsoppsummeringForSluttfase';
-import { finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
+import VurderingsoppsummeringForSluttfase
+    from '../vurderingsoppsummering-for-livets-sluttfase/VurderingsoppsummeringForSluttfase';
 
 interface VurderingsdetaljvisningForEksisterendeProps {
     vurderingsoversikt: Vurderingsoversikt;
@@ -106,9 +106,8 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                                             onSubmit={onSubmit}
                                             onAvbryt={onAvbrytClick}
                                             isSubmitting={isSubmitting}
-                                            sluttfasePeriode={finnMaksavgrensningerForPerioder(
-                                                vurderingsversjon.perioder
-                                            )}
+                                            resterendeVurderingsperioder={vurderingsoversikt.resterendeVurderingsperioder}
+                                            perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
                                         />
                                     );
                                 }

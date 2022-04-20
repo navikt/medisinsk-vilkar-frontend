@@ -1,3 +1,5 @@
+import BehandlingType from '../constants/BehandlingType';
+import FagsakYtelseType from '../constants/FagsakYtelseType';
 import { HttpErrorHandler } from './HttpErrorHandler';
 
 interface ContainerContract {
@@ -24,7 +26,8 @@ interface ContainerContract {
     visFortsettknapp: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     saksbehandlere: any;
-    erFagytelsetypeLivetsSluttfase: boolean;
+    fagsakYtelseType: FagsakYtelseType | undefined;
+    behandlingType: BehandlingType | undefined;
 }
 
 export default ContainerContract;
