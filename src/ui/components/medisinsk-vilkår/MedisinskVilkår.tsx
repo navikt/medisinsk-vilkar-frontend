@@ -61,8 +61,10 @@ const MedisinskVilkår = (): JSX.Element => {
     const { isLoading, hasError, activeStep, markedStep, sykdomsstegStatus, nyeDokumenterSomIkkeErVurdert } = state;
     const { endpoints, httpErrorHandler, visFortsettknapp, fagsakYtelseType } = React.useContext(ContainerContext);
 
+    const erPleiepengerSluttfaseFagsak = fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE;
+
     const finnNesteStegFn = (nesteSteg: SykdomsstegStatusResponse, isOnMount?: boolean) =>
-        fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE
+        erPleiepengerSluttfaseFagsak
             ? finnNesteStegForLivetsSluttfase(nesteSteg, isOnMount)
             : finnNesteStegForPleiepenger(nesteSteg, isOnMount);
 
@@ -173,14 +175,14 @@ const MedisinskVilkår = (): JSX.Element => {
     const harDataSomIkkeHarBlittTattMedIBehandling = sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling;
     const manglerVurderingAvNyeDokumenter = sykdomsstegStatus?.nyttDokumentHarIkkekontrollertEksisterendeVurderinger;
 
-    const steps: Step[] = (fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE)
+    const steps: Step[] = (erPleiepengerSluttfaseFagsak)
         ? [dokumentSteg, livetsSluttfaseSteg]
         : [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
     return (
         <PageContainer isLoading={isLoading} hasError={hasError}>
             <Infostripe
-                element={fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE
+                element={erPleiepengerSluttfaseFagsak
                     ?
                     <span>Sykdomsvurderingen gjelder pleietrengende og er felles for alle parter.</span>
                     :
@@ -196,7 +198,7 @@ const MedisinskVilkår = (): JSX.Element => {
             />
 
             <div className={styles.medisinskVilkår}>
-                <h1 style={{ fontSize: 22 }}>{fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE ? "Livets sluttfase" : "Sykdom"}</h1>
+                <h1 style={{ fontSize: 22 }}>{erPleiepengerSluttfaseFagsak ? "Livets sluttfase" : "Sykdom"}</h1>
                 <WriteAccessBoundContent
                     contentRenderer={() => (
                         <Box marginBottom={Margin.medium}>

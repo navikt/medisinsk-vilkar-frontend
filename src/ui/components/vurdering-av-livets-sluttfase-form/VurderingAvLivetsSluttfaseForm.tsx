@@ -10,7 +10,7 @@ import Ikon from 'nav-frontend-ikoner-assets';
 import Lenke from 'nav-frontend-lenker';
 import { Element } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Dokument from '../../../types/Dokument';
 import { Vurderingsversjon } from '../../../types/Vurdering';
@@ -98,7 +98,8 @@ const VurderingAvLivetsSluttfaseForm = ({
         }
     };
 
-    const perioderSomBlirVurdert = formMethods.watch(FieldName.PERIODER);
+    const perioderSomBlirVurdert: any[] = useWatch({ control: formMethods.control, name: FieldName.PERIODER });
+
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
         const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap((p) => p.asListOfDays());
         const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])

@@ -53,8 +53,10 @@ const StruktureringAvDokumentasjon = ({
         visRedigeringAvDokument,
     } = state;
 
+    const erPleiepengerSluttfaseFagsak = fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE;
+
     const nesteStegErVurderingFn = (nesteSteg: SykdomsstegStatusResponse) =>
-        fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE
+        erPleiepengerSluttfaseFagsak
             ? nesteStegErLivetssluttfase(nesteSteg)
             : nesteStegErVurderingForPleiepenger(nesteSteg);
 
@@ -124,7 +126,7 @@ const StruktureringAvDokumentasjon = ({
         <PageContainer isLoading={isLoading} hasError={dokumentoversiktFeilet} key={StepId.Dokument} preventUnmount>
             <DokumentoversiktMessages
                 dokumentoversikt={dokumentoversikt}
-                harRegistrertDiagnosekode={fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE || !sykdomsstegStatus.manglerDiagnosekode}
+                harRegistrertDiagnosekode={erPleiepengerSluttfaseFagsak || !sykdomsstegStatus.manglerDiagnosekode}
                 kanNavigereVidere={nesteStegErVurderingFn(sykdomsstegStatus)}
                 navigerTilNesteSteg={navigerTilNesteSteg}
             />
@@ -163,7 +165,7 @@ const StruktureringAvDokumentasjon = ({
                         )}
                     />
 
-                    {fagsakYtelseType !== FagsakYtelseType.PLEIEPENGER_SLUTTFASE && <Box marginTop={Margin.xxLarge}>
+                    {!erPleiepengerSluttfaseFagsak && <Box marginTop={Margin.xxLarge}>
                         <DokumentasjonFooter
                             firstSectionRenderer={() => (
                                 <Innleggelsesperiodeoversikt onInnleggelsesperioderUpdated={sjekkStatus} />
