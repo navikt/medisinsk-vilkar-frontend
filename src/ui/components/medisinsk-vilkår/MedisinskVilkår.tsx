@@ -77,7 +77,7 @@ const MedisinskVilkår = (): JSX.Element => {
     const { isLoading: diagnosekoderLoading, data: diagnosekoderData } = useQuery(
         'diagnosekodeResponse',
         hentDiagnosekoder,
-        { enabled: fagsakYtelseType !== FagsakYtelseType.PLEIEPENGER_SLUTTFASE }
+        { enabled: !erPleiepengerSluttfaseFagsak }
     );
 
     const diagnosekoder = (endpoints.diagnosekoder) ? diagnosekoderData?.diagnosekoder : [];

@@ -26,8 +26,8 @@ interface ContainerContract {
     visFortsettknapp: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     saksbehandlere: any;
-    fagsakYtelseType?: FagsakYtelseType | undefined;
-    behandlingType?: BehandlingType | undefined;
+    fagsakYtelseType?: FagsakYtelseType;
+    behandlingType?: BehandlingType;
 }
 
 export default ContainerContract;
