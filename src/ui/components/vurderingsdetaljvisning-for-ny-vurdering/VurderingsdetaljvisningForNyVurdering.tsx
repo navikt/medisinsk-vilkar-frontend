@@ -30,7 +30,7 @@ interface VurderingsdetaljvisningForNyVurderingProps {
 
 function makeDefaultValues(
     vurderingstype: Vurderingstype,
-    perioder: Period[]
+    perioder: Period[],
 ): VurderingAvToOmsorgspersonerFormState | VurderingAvTilsynsbehovFormState | VurderingAvLivetsSluttfaseFormState {
     if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
         return {
@@ -85,7 +85,6 @@ const VurderingsdetaljvisningForNyVurdering = ({
             return vurderingsoversikt.resterendeValgfrieVurderingsperioder || [new Period('', '')];
         }
 
-
         return [new Period('', '')];
     };
 
@@ -125,15 +124,15 @@ const VurderingsdetaljvisningForNyVurdering = ({
                     );
                 }
                 if (Vurderingstype.LIVETS_SLUTTFASE === vurderingstype) {
-                    const perioder = defaultPerioder();
                     return (
                         <VurderingAvLivetsSluttfaseForm
-                            defaultValues={makeDefaultValues(vurderingstype, perioder)}
+                            defaultValues={makeDefaultValues(vurderingstype, defaultPerioder())}
+                            resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                            perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
                             dokumenter={dokumenter}
                             onSubmit={onSubmit}
                             onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
                             isSubmitting={isSubmitting}
-                            sluttfasePeriode={finnMaksavgrensningerForPerioder(perioder)}
                         />
                     );
                 }

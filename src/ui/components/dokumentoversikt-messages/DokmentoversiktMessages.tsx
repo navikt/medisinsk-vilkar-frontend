@@ -2,6 +2,7 @@ import { Box, Margin } from '@navikt/k9-react-components';
 import Alertstripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import React from 'react';
+import FagsakYtelseType from '../../../constants/FagsakYtelseType';
 import Dokumentoversikt from '../../../types/Dokumentoversikt';
 import ContainerContext from '../../context/ContainerContext';
 import FristForDokumentasjonUtløptPanel from '../frist-for-dokumentasjon-utløpt-panel/FristForDokumentasjonUtløptPanel';
@@ -19,7 +20,7 @@ const DokumentoversiktMessages = ({
     kanNavigereVidere,
     navigerTilNesteSteg,
 }: DokumentoversiktMessagesProps): JSX.Element => {
-    const { onFinished, readOnly, erFagytelsetypeLivetsSluttfase } = React.useContext(ContainerContext);
+    const { onFinished, readOnly, fagsakYtelseType } = React.useContext(ContainerContext);
     if (!dokumentoversikt) {
         return null;
     }
@@ -46,9 +47,9 @@ const DokumentoversiktMessages = ({
                 <>
                     <Box marginBottom={Margin.large}>
                         <Alertstripe type="advarsel">
-                            {!erFagytelsetypeLivetsSluttfase
-                                ? <span>Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler.</span>
-                                : <span>Dokumentasjon signert av lege eller helseinstitusjon mangler.</span>
+                            {fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE
+                                ? <span>Dokumentasjon signert av lege eller helseinstitusjon mangler.</span>
+                                : <span>Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler.</span>
                             }
                             Sett saken på vent mens du innhenter mer dokumentasjon.
                         </Alertstripe>
@@ -60,7 +61,7 @@ const DokumentoversiktMessages = ({
                     </Box>
                 </>
             )}
-            {visHåndterNyeDokumenterMelding && !erFagytelsetypeLivetsSluttfase && (
+            {visHåndterNyeDokumenterMelding && fagsakYtelseType !== FagsakYtelseType.PLEIEPENGER_SLUTTFASE && (
                 <>
                     <Box marginBottom={Margin.large}>
                         <Alertstripe type="advarsel">
@@ -75,7 +76,9 @@ const DokumentoversiktMessages = ({
             )}
             {kanNavigereVidere && !readOnly && (
                 <Box marginBottom={Margin.large}>
-                    <Alertstripe data-testid="dokumentasjon-ferdig" type={erFagytelsetypeLivetsSluttfase ? 'suksess' : 'info'}>
+                    <Alertstripe
+                        data-testid="dokumentasjon-ferdig"
+                        type={fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE ? 'suksess' : 'info'}>
                         Dokumentasjon av sykdom er ferdig vurdert og du kan gå videre i vurderingen.
                         <Knapp
                             type="hoved"

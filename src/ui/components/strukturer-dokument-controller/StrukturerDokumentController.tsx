@@ -3,6 +3,7 @@ import { Box, Margin } from '@navikt/k9-react-components';
 import axios from 'axios';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import React, { useMemo } from 'react';
+import FagsakYtelseType from '../../../constants/FagsakYtelseType';
 import Dokument from '../../../types/Dokument';
 import Link from '../../../types/Link';
 import scrollUp from '../../../util/viewUtils';
@@ -25,7 +26,7 @@ const StrukturerDokumentController = ({
     editMode,
     strukturerteDokumenter,
 }: StrukturerDokumentControllerProps): JSX.Element => {
-    const { httpErrorHandler, erFagytelsetypeLivetsSluttfase } = React.useContext(ContainerContext);
+    const { httpErrorHandler, fagsakYtelseType } = React.useContext(ContainerContext);
     const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
     const [submitDocumentError, setSubmitDocumentError] = React.useState(null);
@@ -83,7 +84,7 @@ const StrukturerDokumentController = ({
                     <AlertStripeFeil>{getErrorMessage()}</AlertStripeFeil>
                 </Box>
             )}
-            {!erFagytelsetypeLivetsSluttfase && <StrukturerDokumentForm
+            {fagsakYtelseType !== FagsakYtelseType.PLEIEPENGER_SLUTTFASE && <StrukturerDokumentForm
                 dokument={dokument}
                 onSubmit={strukturerDokument}
                 editMode={editMode}
@@ -91,7 +92,7 @@ const StrukturerDokumentController = ({
                 strukturerteDokumenter={strukturerteDokumenter}
             />
             }
-            {erFagytelsetypeLivetsSluttfase && <StrukturerDokumentSluttfaseForm
+            {fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE && <StrukturerDokumentSluttfaseForm
                 dokument={dokument}
                 onSubmit={strukturerDokument}
                 editMode={editMode}

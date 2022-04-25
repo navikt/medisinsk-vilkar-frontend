@@ -13,8 +13,11 @@ import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 import Vurderingsdetaljer from '../vurderingsdetaljer/Vurderingsdetaljer';
+
 import VurderingsoversiktSluttfaseMessages
     from '../vurderingsoversikt-sluttfase-messages/VurderingsoversiktSluttfaseMessages';
+import BehandlingType from '../../../constants/BehandlingType';
+import FagsakYtelseType from '../../../constants/FagsakYtelseType';
 
 interface VilkårsvurderingAvLivetsSluttfaseProps {
     navigerTilNesteSteg: (steg: Step, ikkeMarkerSteg?: boolean) => void;
@@ -27,7 +30,7 @@ const VilkårsvurderingAvLivetsSluttfase = ({
     hentSykdomsstegStatus,
     sykdomsstegStatus,
 }: VilkårsvurderingAvLivetsSluttfaseProps): JSX.Element => {
-    const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler, fagsakYtelseType, behandlingType } = React.useContext(ContainerContext);
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
     const [state, dispatch] = React.useReducer(vilkårsvurderingReducer, {
@@ -132,8 +135,18 @@ const VilkårsvurderingAvLivetsSluttfase = ({
         return null;
     };
 
-    const skalViseOpprettVurderingKnapp =
-        !vurderingsoversikt?.harPerioderSomSkalVurderes() && !skalViseRadForNyVurdering && harGyldigSignatur;
+    const skalViseOpprettVurderingKnapp = () => {
+
+        if (fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE && BehandlingType.FORSTEGANGSSOKNAD === behandlingType)
+            return false;
+
+        return !vurderingsoversikt?.harPerioderSomSkalVurderes()
+            && !skalViseRadForNyVurdering
+            && harGyldigSignatur
+            && fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE
+            ? behandlingType !== BehandlingType.FORSTEGANGSSOKNAD
+            : true;
+    }
 
     const skalViseNyVurderingForm = visVurderingDetails && !valgtVurderingselement;
 
@@ -151,7 +164,7 @@ const VilkårsvurderingAvLivetsSluttfase = ({
                                 onNyVurderingClick={visNyVurderingForm}
                                 visRadForNyVurdering={skalViseRadForNyVurdering}
                                 visParterLabel
-                                visOpprettVurderingKnapp={skalViseOpprettVurderingKnapp}
+                                visOpprettVurderingKnapp={skalViseOpprettVurderingKnapp()}
                             />
                         )}
                         showDetailSection={visVurderingDetails}

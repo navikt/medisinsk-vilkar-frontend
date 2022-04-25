@@ -113,7 +113,7 @@ const VurderingAvTilsynsbehovForm = ({
         return true;
     };
 
-    const perioderSomBlirVurdert = useWatch({ control: formMethods.control, name: FieldName.PERIODER });
+    const perioderSomBlirVurdert: Period[] = useWatch({ control: formMethods.control, name: FieldName.PERIODER });
     const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
         const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap((p) => p.asListOfDays());
         const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])

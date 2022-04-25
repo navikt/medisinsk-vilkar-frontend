@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import { TabsPure } from 'nav-frontend-tabs';
 import React, { useMemo } from 'react';
 import { useQuery } from 'react-query';
+import FagsakYtelseType from '../../../constants/FagsakYtelseType';
 import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
 import Dokument from '../../../types/Dokument';
 import { NyeDokumenterResponse } from '../../../types/NyeDokumenterResponse';
@@ -58,9 +59,14 @@ const MedisinskVilkår = (): JSX.Element => {
     });
 
     const { isLoading, hasError, activeStep, markedStep, sykdomsstegStatus, nyeDokumenterSomIkkeErVurdert } = state;
-    const { endpoints, httpErrorHandler, visFortsettknapp, erFagytelsetypeLivetsSluttfase } = React.useContext(ContainerContext);
+    const { endpoints, httpErrorHandler, visFortsettknapp, fagsakYtelseType } = React.useContext(ContainerContext);
 
-    const finnNesteStegFn = (nesteSteg: SykdomsstegStatusResponse, isOnMount?: boolean) => erFagytelsetypeLivetsSluttfase ? finnNesteStegForLivetsSluttfase(nesteSteg, isOnMount) : finnNesteStegForPleiepenger(nesteSteg, isOnMount);
+    const erPleiepengerSluttfaseFagsak = fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE;
+
+    const finnNesteStegFn = (nesteSteg: SykdomsstegStatusResponse, isOnMount?: boolean) =>
+        erPleiepengerSluttfaseFagsak
+            ? finnNesteStegForLivetsSluttfase(nesteSteg, isOnMount)
+            : finnNesteStegForPleiepenger(nesteSteg, isOnMount);
 
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
@@ -71,7 +77,7 @@ const MedisinskVilkår = (): JSX.Element => {
     const { isLoading: diagnosekoderLoading, data: diagnosekoderData } = useQuery(
         'diagnosekodeResponse',
         hentDiagnosekoder,
-        { enabled: !erFagytelsetypeLivetsSluttfase }
+        { enabled: fagsakYtelseType !== FagsakYtelseType.PLEIEPENGER_SLUTTFASE }
     );
 
     const diagnosekoder = (endpoints.diagnosekoder) ? diagnosekoderData?.diagnosekoder : [];
@@ -169,14 +175,14 @@ const MedisinskVilkår = (): JSX.Element => {
     const harDataSomIkkeHarBlittTattMedIBehandling = sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling;
     const manglerVurderingAvNyeDokumenter = sykdomsstegStatus?.nyttDokumentHarIkkekontrollertEksisterendeVurderinger;
 
-    const steps: Step[] = (erFagytelsetypeLivetsSluttfase)
+    const steps: Step[] = (erPleiepengerSluttfaseFagsak)
         ? [dokumentSteg, livetsSluttfaseSteg]
         : [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
     return (
         <PageContainer isLoading={isLoading} hasError={hasError}>
             <Infostripe
-                element={erFagytelsetypeLivetsSluttfase
+                element={erPleiepengerSluttfaseFagsak
                     ?
                     <span>Sykdomsvurderingen gjelder pleietrengende og er felles for alle parter.</span>
                     :
@@ -192,7 +198,7 @@ const MedisinskVilkår = (): JSX.Element => {
             />
 
             <div className={styles.medisinskVilkår}>
-                <h1 style={{ fontSize: 22 }}>{erFagytelsetypeLivetsSluttfase ? "Livets sluttfase" : "Sykdom"}</h1>
+                <h1 style={{ fontSize: 22 }}>{erPleiepengerSluttfaseFagsak ? "Livets sluttfase" : "Sykdom"}</h1>
                 <WriteAccessBoundContent
                     contentRenderer={() => (
                         <Box marginBottom={Margin.medium}>

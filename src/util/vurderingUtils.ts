@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-
 import { Period } from '@navikt/k9-period-utils';
 import {
     FieldName as TilsynFieldName,
@@ -17,7 +15,6 @@ import Vurderingsresultat from '../types/Vurderingsresultat';
 import Dokument from '../types/Dokument';
 import { Vurderingsversjon } from '../types/Vurdering';
 import { finnBenyttedeDokumenter } from './dokumentUtils';
-import { finnMaksavgrensningerForPerioder } from './periodUtils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyType = any;
@@ -67,57 +64,17 @@ export const lagSluttfaseVurdering = (
     formState: VurderingAvLivetsSluttfaseFormState,
     alleDokumenter: Dokument[]
 ): Partial<Vurderingsversjon> => {
-    const resultat = Vurderingsresultat[formState[LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE]];
-    const begrunnelse = formState[LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE];
-
-    // Vurdering av livets sluttfase skal sende inn samme periode som ble hentet fra backend
+    const resultat = formState[LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE];
+    const tekst = formState[LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE];
+    const dokumenter = finnBenyttedeDokumenter(formState[LivetsSluttfaseFieldName.DOKUMENTER], alleDokumenter);
     const perioder = formState[LivetsSluttfaseFieldName.PERIODER].map(
-        (periodeWrapper) => new Period(periodeWrapper.fom, periodeWrapper.tom)
+        (periodeWrapper) => new Period((periodeWrapper as AnyType).period.fom, (periodeWrapper as AnyType).period.tom)
     );
 
     return {
         resultat,
-        tekst: begrunnelse,
+        tekst,
         perioder,
-        dokumenter: finnBenyttedeDokumenter(formState[LivetsSluttfaseFieldName.DOKUMENTER], alleDokumenter),
-    };
+        dokumenter,
+    }
 };
-
-export const lagSplittetSluttfaseVurdering = (
-    formState: VurderingAvLivetsSluttfaseFormState,
-    alleDokumenter: Dokument[]
-): Partial<Vurderingsversjon>[] => {
-    const maksavgrensning = finnMaksavgrensningerForPerioder(formState[LivetsSluttfaseFieldName.PERIODER]);
-    const dokumenter = finnBenyttedeDokumenter(formState[LivetsSluttfaseFieldName.DOKUMENTER], alleDokumenter);
-
-    return [
-        /**
-         * Første periode, fom første mulige dato, frem til dagen før "splittdatoen"
-         */
-        {
-            resultat: Vurderingsresultat.IKKE_OPPFYLT,
-            tekst: formState[LivetsSluttfaseFieldName.VURDERING_AV_LIVETS_SLUTTFASE],
-            perioder: [
-                new Period(
-                    maksavgrensning.fom,
-                    dayjs(formState[LivetsSluttfaseFieldName.SPLITT_PERIODE_DATO]).subtract(1, 'day').format('YYYY-MM-DD')
-                ),
-            ],
-            dokumenter,
-        },
-        /**
-         * Andre periode fom splittdatoen og tom siste dag i søknadsperioden
-         */
-        {
-            resultat: Vurderingsresultat.OPPFYLT,
-            tekst: formState[LivetsSluttfaseFieldName.SPLITT_PERIODE_VURDERING],
-            perioder: [
-                new Period(
-                    formState[LivetsSluttfaseFieldName.SPLITT_PERIODE_DATO],
-                    maksavgrensning.tom
-                ),
-            ],
-            dokumenter,
-        }
-    ];
-}
