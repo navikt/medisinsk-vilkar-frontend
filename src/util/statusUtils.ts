@@ -1,5 +1,5 @@
 import StatusResponse from '../types/SykdomsstegStatusResponse';
-import { dokumentSteg, livetsSluttfaseSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../types/Step';
+import { dokumentSteg, livetsSluttfaseSteg, sluttfaseDokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../types/Step';
 
 type Steg = typeof dokumentSteg | typeof tilsynOgPleieSteg | typeof toOmsorgspersonerSteg;
 
@@ -46,7 +46,7 @@ export const finnNesteStegForLivetsSluttfase = (
     isOnMount?: boolean
 ): Steg => {
     if (harUklassifiserteDokumenter || manglerGodkjentLegeerklæring) {
-        return dokumentSteg;
+        return sluttfaseDokumentSteg;
     }
 
     if (manglerVurderingAvILivetsSluttfase || nyttDokumentHarIkkekontrollertEksisterendeVurderinger) {
@@ -65,7 +65,7 @@ export const nesteStegErVurderingForPleiepenger = (sykdomsstegStatus: StatusResp
     return nesteSteg === tilsynOgPleieSteg || nesteSteg === toOmsorgspersonerSteg;
 };
 
-export const nesteStegErLivetssluttfase= (sykdomsstegStatus: StatusResponse): boolean => {
+export const nesteStegErLivetssluttfase = (sykdomsstegStatus: StatusResponse): boolean => {
     const nesteSteg = finnNesteStegForLivetsSluttfase(sykdomsstegStatus);
     return nesteSteg === livetsSluttfaseSteg;
 };

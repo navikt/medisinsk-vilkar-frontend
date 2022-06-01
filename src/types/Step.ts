@@ -15,6 +15,11 @@ export const dokumentSteg: Step = {
     title: 'Dokumentasjon av sykdom',
 };
 
+export const sluttfaseDokumentSteg: Step = {
+    id: StepId.Dokument,
+    title: 'Dokumentasjon av livets sluttfase',
+};
+
 export const tilsynOgPleieSteg: Step = {
     id: StepId.TilsynOgPleie,
     title: 'Tilsyn og pleie',
