@@ -11,8 +11,6 @@ const AksjonspunktFerdigStripe = (): JSX.Element => {
     const { fagsakYtelseType } = React.useContext(ContainerContext);
     const erPleiepengerSluttfaseFagsak = fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE;
 
-    // const infoTekstType = `${(fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE) ? 'Vilkåret' : 'Sykdom'}`;
-
     return (
         <Box marginBottom={Margin.medium}>
             <AlertStripe type="info">
