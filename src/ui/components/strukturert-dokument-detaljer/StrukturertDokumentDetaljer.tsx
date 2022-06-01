@@ -24,7 +24,7 @@ interface StrukturertDokumentDetaljerProps {
 const renderDokumenttypeContent = (dokumenttype: Dokumenttype, erPleiepengerSluttfaseFagsak = false) => {
     if (dokumenttype === Dokumenttype.LEGEERKLÆRING) {
         return erPleiepengerSluttfaseFagsak
-            ? <span>ja, dokumentet inneholder medinske opplysninger</span>
+            ? <span>Ja, dokumentet inneholder medinske opplysninger</span>
             : <span>Ja, legeerklæring fra sykehus/spesialisthelsetjenesten</span>;
     }
     if (dokumenttype === Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER) {
