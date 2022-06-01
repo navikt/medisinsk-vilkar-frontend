@@ -3,10 +3,12 @@ import { Box, DetailView, LabelledContent, LinkButton, Margin } from '@navikt/k9
 import Alertstripe from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
 import React from 'react';
+import FagsakYtelseType from '../../../constants/FagsakYtelseType';
 import LinkRel from '../../../constants/LinkRel';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import { renderDokumenttypeText } from '../../../util/dokumentUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
+import ContainerContext from '../../context/ContainerContext';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
 import Duplikatliste from '../duplikatliste/Duplikatliste';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
@@ -19,9 +21,11 @@ interface StrukturertDokumentDetaljerProps {
     onRemoveDuplikat: () => void;
 }
 
-const renderDokumenttypeContent = (dokumenttype: Dokumenttype) => {
+const renderDokumenttypeContent = (dokumenttype: Dokumenttype, erPleiepengerSluttfaseFagsak = false) => {
     if (dokumenttype === Dokumenttype.LEGEERKLÆRING) {
-        return <span>Ja, legeerklæring fra sykehus/spesialisthelsetjenesten</span>;
+        return erPleiepengerSluttfaseFagsak
+            ? <span>ja, dokumentet inneholder medinske opplysninger</span>
+            : <span>Ja, legeerklæring fra sykehus/spesialisthelsetjenesten</span>;
     }
     if (dokumenttype === Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER) {
         return (
@@ -40,6 +44,7 @@ const StrukturertDokumentDetaljer = ({
     strukturerteDokumenter,
     onRemoveDuplikat,
 }: StrukturertDokumentDetaljerProps): JSX.Element => {
+    const { fagsakYtelseType } = React.useContext(ContainerContext);
     const { type, datert, links, duplikater, duplikatAvId } = dokument;
     const harDuplikater = duplikater?.length > 0;
     const dokumentinnholdLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, links);
@@ -88,7 +93,7 @@ const StrukturertDokumentDetaljer = ({
             <Box marginTop={Margin.xLarge}>
                 <LabelledContent
                     label="Inneholder dokumentet medisinske opplysninger?"
-                    content={renderDokumenttypeContent(type)}
+                    content={renderDokumenttypeContent(type, fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE)}
                 />
             </Box>
             <Box marginTop={Margin.xLarge}>

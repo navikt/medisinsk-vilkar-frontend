@@ -1,3 +1,4 @@
+import { ErrorFilled } from '@navikt/ds-icons';
 import { Box, Margin } from '@navikt/k9-react-components';
 import Alertstripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
@@ -34,6 +35,8 @@ const DokumentoversiktMessages = ({
         dokumentoversikt.harDokumenter() &&
         !visFristForDokumentasjonUtløptMelding;
 
+    const erPleiepengerSluttfaseFagsak = fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE;
+
     return (
         <>
             {harRegistrertDiagnosekode === false && (
@@ -47,7 +50,7 @@ const DokumentoversiktMessages = ({
                 <>
                     <Box marginBottom={Margin.large}>
                         <Alertstripe type="advarsel">
-                            {fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE
+                            {erPleiepengerSluttfaseFagsak
                                 ? <span>Dokumentasjon signert av lege eller helseinstitusjon mangler.</span>
                                 : <span>Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler.</span>
                             }
@@ -78,8 +81,11 @@ const DokumentoversiktMessages = ({
                 <Box marginBottom={Margin.large}>
                     <Alertstripe
                         data-testid="dokumentasjon-ferdig"
-                        type={fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE ? 'suksess' : 'info'}>
-                        Dokumentasjon av sykdom er ferdig vurdert og du kan gå videre i vurderingen.
+                        type={erPleiepengerSluttfaseFagsak ? 'suksess' : 'info'}>
+                        {erPleiepengerSluttfaseFagsak
+                            ? <>Dokumentasjon av livets sluttfase er ferdig vurdert og du kan gå videre i vurderingen.</>
+                            : <>Dokumentasjon av sykdom er ferdig vurdert og du kan gå videre i vurderingen.</>
+                        }
                         <Knapp
                             type="hoved"
                             htmlType="button"
