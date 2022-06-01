@@ -212,7 +212,6 @@ const MedisinskVilkår = (): JSX.Element => {
                     otherRequirementsAreMet={
                         (
                             !erPleiepengerSluttfaseFagsak && (
-
                                 nyeDokumenterSomIkkeErVurdert &&
                                 manglerVurderingAvNyeDokumenter &&
                                 markedStep !== dokumentSteg &&
