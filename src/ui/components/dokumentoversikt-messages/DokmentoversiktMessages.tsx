@@ -1,4 +1,3 @@
-import { ErrorFilled } from '@navikt/ds-icons';
 import { Box, Margin } from '@navikt/k9-react-components';
 import Alertstripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
