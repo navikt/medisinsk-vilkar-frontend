@@ -61,7 +61,7 @@ const StrukturerDokumentSluttfaseForm = ({
                             question="Inneholder dokumentet medisinske opplysninger?"
                             radios={[
                                 {
-                                    label: 'Ja, legeerklæring fra lege eller helseinstitusjon',
+                                    label: 'Ja, dokumentet inneholder medinske opplysninger',
                                     value: Dokumenttype.LEGEERKLÆRING,
                                 },
                                 {

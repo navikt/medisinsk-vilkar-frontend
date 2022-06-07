@@ -9,7 +9,7 @@ import FagsakYtelseType from '../../../constants/FagsakYtelseType';
 import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
 import Dokument from '../../../types/Dokument';
 import { NyeDokumenterResponse } from '../../../types/NyeDokumenterResponse';
-import Step, { dokumentSteg, livetsSluttfaseSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
+import Step, { dokumentSteg, livetsSluttfaseSteg, sluttfaseDokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingstype from '../../../types/Vurderingstype';
 import { finnNesteStegForPleiepenger, finnNesteStegForLivetsSluttfase } from '../../../util/statusUtils';
@@ -131,6 +131,7 @@ const MedisinskVilkår = (): JSX.Element => {
                 } else {
                     dispatch({
                         type: ActionType.ACTIVATE_DEFAULT_STEP,
+                        step: erPleiepengerSluttfaseFagsak ? sluttfaseDokumentSteg : dokumentSteg,
                         nyeDokumenterSomIkkeErVurdert: nyeDokumenterSomIkkeErVurdertResponse,
                     });
                 }
@@ -176,7 +177,7 @@ const MedisinskVilkår = (): JSX.Element => {
     const manglerVurderingAvNyeDokumenter = sykdomsstegStatus?.nyttDokumentHarIkkekontrollertEksisterendeVurderinger;
 
     const steps: Step[] = (erPleiepengerSluttfaseFagsak)
-        ? [dokumentSteg, livetsSluttfaseSteg]
+        ? [sluttfaseDokumentSteg, livetsSluttfaseSteg]
         : [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
     return (
@@ -184,7 +185,7 @@ const MedisinskVilkår = (): JSX.Element => {
             <Infostripe
                 element={erPleiepengerSluttfaseFagsak
                     ?
-                    <span>Sykdomsvurderingen gjelder pleietrengende og er felles for alle parter.</span>
+                    <span>Vurderingen gjelder pleietrengende og er felles for alle parter.</span>
                     :
                     <>
                         <span>Sykdomsvurderingen gjelder barnet og er felles for alle parter.</span>
@@ -209,20 +210,42 @@ const MedisinskVilkår = (): JSX.Element => {
                         </Box>
                     )}
                     otherRequirementsAreMet={
-                        nyeDokumenterSomIkkeErVurdert &&
-                        manglerVurderingAvNyeDokumenter &&
-                        markedStep !== dokumentSteg &&
-                        activeStep !== dokumentSteg
+                        (
+                            !erPleiepengerSluttfaseFagsak && (
+                                nyeDokumenterSomIkkeErVurdert &&
+                                manglerVurderingAvNyeDokumenter &&
+                                markedStep !== dokumentSteg &&
+                                activeStep !== dokumentSteg
+                            )
+                        ) || (
+                            erPleiepengerSluttfaseFagsak && (
+                                nyeDokumenterSomIkkeErVurdert &&
+                                manglerVurderingAvNyeDokumenter &&
+                                markedStep !== sluttfaseDokumentSteg &&
+                                activeStep !== sluttfaseDokumentSteg
+                            )
+                        )
                     }
                 />
 
                 <WriteAccessBoundContent
                     contentRenderer={() => <AksjonspunktFerdigStripe />}
                     otherRequirementsAreMet={
-                        kanLøseAksjonspunkt &&
-                        visFortsettknapp === true &&
-                        markedStep !== dokumentSteg &&
-                        activeStep !== dokumentSteg
+                        (
+                            !erPleiepengerSluttfaseFagsak && (
+                                kanLøseAksjonspunkt &&
+                                visFortsettknapp === true &&
+                                markedStep !== dokumentSteg &&
+                                activeStep !== dokumentSteg
+                            )
+                        ) || (
+                            erPleiepengerSluttfaseFagsak && (
+                                kanLøseAksjonspunkt &&
+                                visFortsettknapp === true &&
+                                markedStep !== sluttfaseDokumentSteg &&
+                                activeStep !== sluttfaseDokumentSteg
+                            )
+                        )
                     }
                 />
                 <WriteAccessBoundContent
@@ -246,7 +269,7 @@ const MedisinskVilkår = (): JSX.Element => {
                 />
                 <div style={{ marginTop: '1rem', maxWidth: '1204px' }}>
                     <div className={styles.medisinskVilkår__vilkårContentContainer}>
-                        {activeStep === dokumentSteg && (
+                        {(activeStep === dokumentSteg || activeStep === sluttfaseDokumentSteg) && (
                             <StruktureringAvDokumentasjon
                                 navigerTilNesteSteg={navigerTilNesteSteg}
                                 hentSykdomsstegStatus={() =>

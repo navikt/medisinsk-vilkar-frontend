@@ -253,8 +253,8 @@ const VurderingAvLivetsSluttfaseForm = ({
                                 <>
                                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                                     <b>
-                                        Legg inn tekst rundt paragrafen som ommfatter livets sluttfase, og oppdater
-                                        lenkene nedenfor til riktig referanse i folketrygdeloven
+                                        Gjør en vurdering av om den pleietrengende er i livets sluttfase i perioden det
+                                        søkes for, jamfør folketrygdens § 9.13
                                     </b>
                                     <p className={styles.begrunnelsesfelt__labeltekst}>
                                         Du skal ta utgangspunkt i{' '}
@@ -263,19 +263,14 @@ const VurderingAvLivetsSluttfaseForm = ({
                                         </Lenke>{' '}
                                         og{' '}
                                         <Lenke
-                                            href="https://lovdata.no/nav/rundskriv/r09-00#ref/lov/1997-02-28-19/%C2%A79-10"
+                                            href="https://lovdata.no/nav/rundskriv/r09-00#ref/lov/1997-02-28-19/%C2%A79-13"
                                             target="_blank"
                                         >
                                             rundskrivet
                                         </Lenke>{' '}
                                         når du skriver vurderingen.
                                     </p>
-
-                                    <p className={styles.begrunnelsesfelt__labeltekst}>Vurderingen skal beskrive:</p>
-                                    <ul className={styles.begrunnelsesfelt__liste}>
-                                        <li>Om det er årsakssammenheng mellom sykdom og pleiebehov</li>
-                                        <li>Om behovet er kontinuerlig og ikke situasjonsbestemt</li>
-                                    </ul>
+                                    <br />
                                 </>
                             }
                             validators={{ required }}
@@ -283,7 +278,7 @@ const VurderingAvLivetsSluttfaseForm = ({
                     </Box>
                     <Box marginTop={Margin.xLarge}>
                         <RadioGroupPanel
-                            question="Hva er vurderingen av livets sluttfase?"
+                            question="Er den pleietrengende i livets sluttfase?"
                             name={FieldName.ER_I_LIVETS_SLUTTFASE}
                             radios={[
                                 { value: Vurderingsresultat.OPPFYLT, label: 'Ja' },
