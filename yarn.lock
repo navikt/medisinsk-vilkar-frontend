@@ -1076,6 +1076,26 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@floating-ui/core@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-0.6.2.tgz#f2813f0e5f3d5ed7af5029e1a082203dadf02b7d"
+  integrity sha512-jktYRmZwmau63adUG3GKOAVCofBXkk55S/zQ94XOorAHhwqFIOFAy1rSp2N0Wp6/tGbe9V3u/ExlGZypyY17rg==
+
+"@floating-ui/dom@^0.4.0":
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-0.4.5.tgz#2e88d16646119cc67d44683f75ee99840475bbfa"
+  integrity sha512-b+prvQgJt8pieaKYMSJBXHxX/DYwdLsAWxKYqnO5dO2V4oo/TYBZJAUQCVNjTWWsrs6o4VDrNcP9+E70HAhJdw==
+  dependencies:
+    "@floating-ui/core" "^0.6.2"
+
+"@floating-ui/react-dom@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@floating-ui/react-dom/-/react-dom-0.6.0.tgz#e58abf75bec1eac01f0adfff1454106bf9d3dd50"
+  integrity sha512-/dF+jpAUtoonjs2lO0F+miqEQlzA9XJGOxWBiJsq/COhK2kz7XzryyJdxfaNEH+RN63vRs9osDolOJXlst50hg==
+  dependencies:
+    "@floating-ui/dom" "^0.4.0"
+    use-isomorphic-layout-effect "^1.1.1"
+
 "@hapi/hoek@^9.0.0":
   version "9.2.1"
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.2.1.tgz#9551142a1980503752536b5050fd99f4a7f13b17"
@@ -1404,33 +1424,35 @@
     outvariant "^1.2.0"
     strict-event-emitter "^0.2.0"
 
-"@navikt/ds-css@^0.15.4":
-  version "0.15.12"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/0.15.12/269db11ba6789049b61d70a1a2f330a5acd362d2d40d8372f52aff50f4ba26b1#dae50463663c72e40dd84a5d24dc6c71dfecabe2"
-  integrity sha512-WbYAWsy/rFhCzp+zbZwy1+JqxxgKPx7mEqdI/qtr6dbYoDtHwF0eDBFYOHxUuihgGd5Dm+gANhnY5PdIMpymHw==
+"@navikt/ds-css@^0.18.7":
+  version "0.18.10"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/0.18.10/db7f3693e99c30f20854da3e00d239fca2c3c0ee1cb6ab30b007d0c95057c9d0#2f81e6e6e8ab3ea12de066fc8a1effc346e4aa9f"
+  integrity sha512-1MHKjKA/rntNDUuZHJ6lj1mNob/3/rNWcFuR3eTUIi4ca4E/cGpkrvD8AXEzbKDx/QrZSGgpi88JO/WtTymPHw==
 
-"@navikt/ds-icons@^0.5.2", "@navikt/ds-icons@^0.5.5":
+"@navikt/ds-icons@^0.5.2":
   version "0.5.10"
   resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/0.5.10/94c8c95f7c0ae8e26ff335737df0075fb388b7775a6634c4355d9b34372dd257#000a37bde2ec612354766d6d06b603c90292ec52"
   integrity sha512-ThVHgyy7wwqI/Je3Qg1wNW5gcwH+DwW+CLWb/IFB0zNQcDp/GI1nXw3hA/IFAhzxJPRhqqtfEldFJ5UkaxzZYw==
   dependencies:
     uuid "^8.3.2"
 
-"@navikt/ds-icons@^0.8.4":
-  version "0.8.6"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/0.8.6/51a9a30e74f2f2cd3849d52132b58d01880840ad8503b41329626bd1f0a604db#d5237b20a086c83291d5fcb02d6d5206c93bde45"
-  integrity sha512-3s3fLI2Pg3xRdeiZdIePZoOoEIK/UuMzafZQHrSg57VhupPlZmf1jLYbR+i0bXmkeRuq7kT3hKdoakRMzDEYLw==
+"@navikt/ds-icons@^0.8.17":
+  version "0.8.17"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/0.8.17/359dd97bac9bd3c41fcb5fd2d3bb3f853e356894eef75ee09c7369225802eea4#ddf124687e158a988d6be70f653ae3239aba90ad"
+  integrity sha512-CR1h9t0MZprEvTqlrlLd3cHhoYmriFWkETikPprUNl3AMJMSCDovVYzXtOgIyVeFbtwTPzGtShw5mgxlVWAEDg==
   dependencies:
     uuid "^8.3.2"
 
-"@navikt/ds-react@^0.16.8":
-  version "0.16.20"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/0.16.20/53c10c1866731d1d21ff71e9395972af30f7fdbeee9b144e9501dd2f1ce66d79#2d7f9d04e10ba28b4e8a762540b62bce588973a9"
-  integrity sha512-FU3O+xYIID2r8+jFfTxCcVrAOXzsVHb9vHQJSF/gg4wNObRocJncNjgWp0b87QElvhVllFlOmUZj/S3nIDb/+A==
+"@navikt/ds-react@^0.19.8":
+  version "0.19.10"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/0.19.10/465a4bb73c8973042ec84261da4117c9a60f088d5f7506ec1e643ed8a23b29c4#89ecee0c67ad3a5a63308455f0d92b15710a7cb2"
+  integrity sha512-zKzz5c7BapLc+QFSv/dNxBgpUahbwNswjr59PJILFWSbx1ES+d49vCCGxeM1/uwx0xnC3yv4gN58FdjE6lWUZA==
   dependencies:
+    "@floating-ui/react-dom" "0.6.0"
     "@material-ui/core" "^4.12.3"
-    "@navikt/ds-icons" "^0.8.4"
+    "@navikt/ds-icons" "^0.8.17"
     "@popperjs/core" "^2.10.1"
+    "@radix-ui/react-tabs" "0.1.5"
     "@radix-ui/react-toggle-group" "0.1.5"
     classnames "^2.2.6"
     react-collapse "^5.1.0"
@@ -1444,7 +1466,7 @@
   resolved "https://npm.pkg.github.com/download/@navikt/fnrvalidator/1.1.4/57aacaca4b4d6c045625ec4e86cc6029f566f6388de258d45f93ef027f888219#b2ce64cb24b3726f715eee110f9f3fde37b907f7"
   integrity sha512-EZBwlNhp886E57GuknLB6G9Bnv4nl+e5K12B/2BeLpWZENxCmcQ+5oFvIThvEsU+LVOdfJxxGOxSvrwe5ZB3pQ==
 
-"@navikt/k9-array-utils@^0.0.1":
+"@navikt/k9-array-utils@0.0.1", "@navikt/k9-array-utils@^0.0.1":
   version "0.0.1"
   resolved "https://npm.pkg.github.com/download/@navikt/k9-array-utils/0.0.1/98bc78a50527f6c229ca570b290fa3f05392dcaed647dabda3954f75fef2805e#5f1fd9b78afcc5fe1d73b67d93fc1d5c4377d9d1"
   integrity sha512-43FAkBgT/LB4MgU5s18pe+4svmxXojKu5ypyNdxIPSCY+4y80ZZ58/yZTgmQw3XZxLACHMePRdP6PRkTrk9j2g==
@@ -1454,57 +1476,44 @@
   resolved "https://npm.pkg.github.com/download/@navikt/k9-bem-utils/1.0.1/1c8b370a7f8e822ffffeff6fa566af9a025692ae3fd258c7a4e4c0d67cd52ea1#451f330cbf3636c6406468c157468ea07dfb3b10"
   integrity sha512-DRV0rm6NDyAIosWGeMk0RlfUciUNIdD4AxpnGYOpqJCTIoCJHxLtzwRa1Zv15LEX5BHDWbiDYF5ZxDFhfE4yBg==
 
-"@navikt/k9-date-utils@^0.0.5":
-  version "0.0.5"
-  resolved "https://npm.pkg.github.com/download/@navikt/k9-date-utils/0.0.5/62215107bf7c1a3b45d5d5a569773bcf94696b98620199aaeb79d11601c047cf#38418e62899fe77647cc4a3ac60ada6ddf0ce3b1"
-  integrity sha512-JkJGDvvIiYnPb5hejxoOOd14xY9NqXP6kuGodQ7zRxo7qmUBHXX8cmZgNIP0uMofMSnN1LIobCI4lmChbKpPnw==
-
-"@navikt/k9-date-utils@^0.0.6":
-  version "0.0.6"
-  resolved "https://npm.pkg.github.com/download/@navikt/k9-date-utils/0.0.6/73b5b9ef333f21f0cbdfec2e20d70b7b8f7cb1bf04b6ddc46188418cedc31f1d#af9bc93a6ff9cf212f7ebdc6c4fc0b6d6c7e14d3"
-  integrity sha512-Z2sz3wcYyFQm3oCo7aoWhS+fQd69vWzWqPumvkR3FJmmmRxnKnIos2mpeCN5WA1fJgRv1YihYQNSlWbplZ/UxQ==
-
-"@navikt/k9-form-utils@^1.0.3":
-  version "1.0.3"
-  resolved "https://npm.pkg.github.com/download/@navikt/k9-form-utils/1.0.3/64108dac738b9ec88e8a12f993dd0575679e45c923d0b4b372e843ff64315a23#1d1e7a3d5b9c4188c76ffe12df67ba33c887223f"
-  integrity sha512-ZlJwgsdEjHncYi8WNs4aFl0i+xAxQnqmTSPBzxerq3Qp8NJixoxg+3JjoBs+jRdxs9E1aDA79Hujb+t5AnD0OQ==
-  dependencies:
-    "@navikt/k9-bem-utils" "^1.0.1"
-    "@navikt/k9-period-utils" "^0.0.9"
-    "@navikt/k9-react-components" "^0.1.16"
-
-"@navikt/k9-http-utils@^0.0.2":
-  version "0.0.2"
-  resolved "https://npm.pkg.github.com/download/@navikt/k9-http-utils/0.0.2/a61b3a4a049975e3eb9bfdae9bfa42ae18864b882435c3aa36e7aa4bdef4e97e#e55cf8049f74db2c8bab39b19dfd564e8c690762"
-  integrity sha512-H+mw6ED6HUZmTgVlWU4vJmbk71Gh4Kd9QKwveNpjjnKCvCRD5fcEaE98AKDWf8iZU6vSFVN0gtrgQFDOTSa1aA==
-
-"@navikt/k9-period-utils@^0.0.8":
+"@navikt/k9-date-utils@0.0.8", "@navikt/k9-date-utils@^0.0.8":
   version "0.0.8"
-  resolved "https://npm.pkg.github.com/download/@navikt/k9-period-utils/0.0.8/c07eb6e3a075b5231d5b1fd31be5ab30a39ae597036aabaad4ae787ead613784#60afc63f2f24498c10a6fabac8d7cb2875d3ce57"
-  integrity sha512-ZmUbuaDwiwO9oBnu01jKkZzq/ABgT7538pXEb1fSmCIrdBF1Xd/iXOKtFlbejj/wa6IR8PKtIR2sgt3rqYDr4g==
-  dependencies:
-    "@navikt/k9-array-utils" "^0.0.1"
-    "@navikt/k9-date-utils" "^0.0.5"
+  resolved "https://npm.pkg.github.com/download/@navikt/k9-date-utils/0.0.8/853f1aecd15b45b4982708babfac49868671f2797814e0d2d80d4fe0efa50871#06cfdda433652b39c1c4f2457463fc91dabd0d58"
+  integrity sha512-k6kJtGyReu3ZAUwi5/8eNQyQHQgPyHYO1fuOuvsrcXv4KoU33d2tO/+QHvMyVW3qKyTJGURKT1tN8mqpAAajsQ==
 
-"@navikt/k9-period-utils@^0.0.9":
-  version "0.0.9"
-  resolved "https://npm.pkg.github.com/download/@navikt/k9-period-utils/0.0.9/2ea3871d6717a79e328067e6795882a027116f3c7f33c2791705ea273141fdf7#12f36361860dcc0b100d6c0aa873b26f596859a6"
-  integrity sha512-/SWmrGXv5fUwzbP0+jUokDn/SDKsFXiD0V/RsODjLHMbiUZM3c27kaVtrBaiYwKSnGMGmaIP6ITzh9cG8rXqEw==
+"@navikt/k9-form-utils@1.0.6":
+  version "1.0.6"
+  resolved "https://npm.pkg.github.com/download/@navikt/k9-form-utils/1.0.6/63587a8d1661e1db6cf0c5f231442d88885bf848c4f03ddc36af30f80e01a63e#873a216e6edcb62a5fe4e5c89970258f07a71ae9"
+  integrity sha512-rWkAsTTfcAy26Qc84B3zx3WNVqwZZKbtczihtz0XXCp7Wv2iDFa0omXlynMni/9gCp/7u4JbwkOx5H0I1WdT9A==
   dependencies:
-    "@navikt/k9-array-utils" "^0.0.1"
-    "@navikt/k9-date-utils" "^0.0.6"
-
-"@navikt/k9-react-components@^0.1.16", "@navikt/k9-react-components@^0.1.9":
-  version "0.1.19"
-  resolved "https://npm.pkg.github.com/download/@navikt/k9-react-components/0.1.19/5673c863e473394dbe64fd3b9d7ad3944098478bdb3989f6aed7f294e87c4cd0#75986a7608d03bedb12a59ca125e7c7ad3362bd9"
-  integrity sha512-vUbqwDzPmPxRL73UIXQKCSCnCWQCFKtCgFDPG3YUhCUq+3Hn155oC8fkKBLw/37wElcTmqxmbN0+ItzT+A1P7A==
-  dependencies:
-    "@navikt/ds-css" "^0.15.4"
-    "@navikt/ds-icons" "^0.5.5"
-    "@navikt/ds-react" "^0.16.8"
     "@navikt/k9-bem-utils" "^1.0.1"
-    "@navikt/k9-date-utils" "^0.0.6"
-    "@navikt/k9-period-utils" "^0.0.8"
+    "@navikt/k9-period-utils" "^0.0.11"
+    "@navikt/k9-react-components" "^0.2.1"
+
+"@navikt/k9-http-utils@0.0.3":
+  version "0.0.3"
+  resolved "https://npm.pkg.github.com/download/@navikt/k9-http-utils/0.0.3/1bdf62703379080d1c5a65400183fb1b2fe7ffdbf6ddf928db37a85c33f6f35b#133dec9df786c1f1aa27da7a0598bd4ba77823fa"
+  integrity sha512-GPLcn/64+HfLQd/1/JQ0WV9iicDdApiAtb0bU67y9FowKRlKIUKitaulSFCYFKjD1dUP3oArxHKd1qmZrBBqnQ==
+
+"@navikt/k9-period-utils@0.0.11", "@navikt/k9-period-utils@^0.0.11":
+  version "0.0.11"
+  resolved "https://npm.pkg.github.com/download/@navikt/k9-period-utils/0.0.11/87e82ad6ac4cb0ed970b8985678695eaf029e0d7274b1735984f4fb9f6cee35f#90faf1570b80935de3dfc7f3cf1ddec07316a983"
+  integrity sha512-kwt+6617GfJkjlZPT/qMTXXWa/bb31+A/3uhToLNHmkBpQdpBZqXsy0/+u22c3gTyS5895O+VM4r3w6g2oumag==
+  dependencies:
+    "@navikt/k9-array-utils" "^0.0.1"
+    "@navikt/k9-date-utils" "^0.0.8"
+
+"@navikt/k9-react-components@0.2.1", "@navikt/k9-react-components@^0.2.1":
+  version "0.2.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/k9-react-components/0.2.1/3f5e966c53a61be17c89f0da1bac42320b429d32a10c265ed0e7d50dfbf7f08e#cd6b5f49ec90531ad2bad7d85f81e319c1ab2547"
+  integrity sha512-KhfuObZ76IB3KL5l69rgUGQ9R8CnosziUtIeJxCLa1a/A2Orf7vrOX2tTGql49Q8MyqrMLxuftoNBbr6d5xvCw==
+  dependencies:
+    "@navikt/ds-css" "^0.18.7"
+    "@navikt/ds-icons" "^0.8.17"
+    "@navikt/ds-react" "^0.19.8"
+    "@navikt/k9-bem-utils" "^1.0.1"
+    "@navikt/k9-date-utils" "^0.0.8"
+    "@navikt/k9-period-utils" "^0.0.11"
 
 "@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3":
   version "2.1.8-no-fsevents.3"
@@ -1627,6 +1636,19 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-compose-refs" "0.1.0"
+
+"@radix-ui/react-tabs@0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-tabs/-/react-tabs-0.1.5.tgz#ddcf860cc32e186d76477ae767dbb216d1944252"
+  integrity sha512-ieVQS1TFr0dX1XA8B+CsSFKOE7kcgEaNWWEfItxj9D1GZjn1o3WqPkW+FhQWDAWZLSKCH2PezYF3MNyO41lgJg==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "0.1.0"
+    "@radix-ui/react-context" "0.1.1"
+    "@radix-ui/react-id" "0.1.5"
+    "@radix-ui/react-primitive" "0.1.4"
+    "@radix-ui/react-roving-focus" "0.1.5"
+    "@radix-ui/react-use-controllable-state" "0.1.0"
 
 "@radix-ui/react-toggle-group@0.1.5":
   version "0.1.5"
@@ -10086,6 +10108,11 @@ url@^0.11.0:
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
+
+use-isomorphic-layout-effect@^1.1.1:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/use-isomorphic-layout-effect/-/use-isomorphic-layout-effect-1.1.2.tgz#497cefb13d863d687b08477d9e5a164ad8c1a6fb"
+  integrity sha512-49L8yCO3iGT/ZF9QttjwLF/ZD9Iwto5LnH5LmEdk/6cFmXddqi2ulF0edxTwjj+7mqvpVVGQWvbXZdn32wRSHA==
 
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
