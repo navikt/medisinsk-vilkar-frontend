@@ -4,6 +4,8 @@ module.exports = {
     moduleNameMapper: {
         '\\.(css|jpg|png|svg|less)$': '<rootDir>/styleMock.js',
         'nav-(.*)-style': '<rootDir>/styleMock.js',
+        // Force module uuid to resolve with the CJS entry point, because Jest does not support package.json.exports. See https://github.com/uuidjs/uuid/issues/451
+        uuid: require.resolve('uuid'),
     },
     transform: {
         '^.+\\.(ts|js)x?$': 'ts-jest',

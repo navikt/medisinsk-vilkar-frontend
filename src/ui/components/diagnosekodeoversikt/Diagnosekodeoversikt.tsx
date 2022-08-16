@@ -42,7 +42,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
         }
     };
 
-    const slettDiagnosekode = (diagnosekode: Diagnosekode) =>
+    const slettDiagnosekode = (diagnosekode: string) =>
         post(
             endreDiagnosekoderLink.href,
             {
@@ -66,7 +66,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
         );
     };
 
-    const slettDiagnosekodeMutation = useMutation((diagnosekode: Diagnosekode) => slettDiagnosekode(diagnosekode), {
+    const slettDiagnosekodeMutation = useMutation((diagnosekode: string) => slettDiagnosekode(diagnosekode), {
         onSuccess: () => {
             refetch().finally(() => {
                 onDiagnosekoderUpdated();
