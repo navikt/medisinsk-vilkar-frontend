@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Dokumentnavigasjon from './Dokumentnavigasjon';
 import mockedDokumentoversikt from '../../../../mock/mocked-data/mockedDokumentoversikt';
@@ -52,7 +52,7 @@ describe('Dokumentnavigasjon', () => {
         expect(screen.queryByText(/ikke med. oppl./i)).toBeNull();
     });
 
-    test('documents are filtered correctly', () => {
+    test('documents are filtered correctly', async () => {
         render(
             <Dokumentnavigasjon
                 tittel="Something"
@@ -65,16 +65,16 @@ describe('Dokumentnavigasjon', () => {
         );
         expect(screen.getByText(/ikke klassifisert/i)).toBeInTheDocument();
 
-        userEvent.click(screen.getAllByText(/type/i)[0]);
+        userEvent.click(screen.getByRole('button', { name: 'Type' }));
 
-        const ikkeKlassifisertCheckbox = screen.getByLabelText(/ikke klassifisert/i);
+        const ikkeKlassifisertCheckbox = await screen.findByLabelText(/ikke klassifisert/i);
         userEvent.click(ikkeKlassifisertCheckbox);
         userEvent.click(screen.getAllByText(/type/i)[1]);
 
-        expect(screen.queryByText(/ikke klassifisert/i)).toBeFalsy();
+        await waitFor(() => expect(screen.queryByText(/ikke klassifisert/i)).not.toBeInTheDocument());
     });
 
-    test('dropdown filter opens and closes correctly when filter functionality is activated', () => {
+    test('dropdown filter opens and closes correctly when filter functionality is activated', async () => {
         render(
             <Dokumentnavigasjon
                 tittel="something"
@@ -85,13 +85,11 @@ describe('Dokumentnavigasjon', () => {
                 onDokumentValgt={() => null}
             />
         );
-
-        userEvent.click(screen.getAllByText(/type/i)[0]);
-        let ikkeKlassifisertCheckbox = screen.queryByLabelText(/ikke klassifisert/i);
+        userEvent.click(screen.getByRole('button', { name: 'Type' }));
+        const ikkeKlassifisertCheckbox = await screen.findByLabelText(/ikke klassifisert/i);
         expect(ikkeKlassifisertCheckbox).toBeTruthy();
 
         userEvent.click(document.body);
-        ikkeKlassifisertCheckbox = screen.queryByLabelText(/ikke klassifisert/i);
-        expect(ikkeKlassifisertCheckbox).toBeFalsy();
+        await waitFor(() => expect(screen.queryByLabelText(/ikke klassifisert/i)).not.toBeInTheDocument());
     });
 });

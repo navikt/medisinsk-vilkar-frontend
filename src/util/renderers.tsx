@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import MainComponent from '../ui/MainComponent';
 import ContainerContract from '../types/ContainerContract';
 
@@ -13,7 +13,9 @@ function prepare() {
 
 const renderAppInSuccessfulState = (appId: string, data: ContainerContract): Promise<void> =>
     prepare().then(() => {
-        render(<MainComponent containerData={data} />, document.getElementById(appId));
+        const container = document.getElementById(appId);
+        const root = createRoot(container);
+        root.render(<MainComponent containerData={data} />);
     });
 
 export default {

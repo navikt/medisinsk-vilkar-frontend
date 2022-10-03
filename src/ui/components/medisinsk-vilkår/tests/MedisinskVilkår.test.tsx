@@ -99,9 +99,9 @@ describe('MedisinskVilkår', () => {
             visFortsettknapp: true,
         });
         expect(getByText('Venter...')).toBeInTheDocument();
+        expect(queryByText(/Sykdom er ferdig vurdert og du kan gå videre i behandlingen/i)).toBeNull();
+        expect(queryByText(/OBS! Det er gjort endringer i sykdomssteget/i)).toBeNull();
         await waitFor(async () => {
-            expect(queryByText(/Sykdom er ferdig vurdert og du kan gå videre i behandlingen/i)).toBeNull();
-            expect(queryByText(/OBS! Det er gjort endringer i sykdomssteget/i)).toBeNull();
             userEvent.click(getAllByText(/Tilsyn og pleie/i)[0]);
             expect(getByText(/Sykdom er ferdig vurdert og du kan gå videre i behandlingen/i)).toBeInTheDocument();
             userEvent.click(getAllByText(/To omsorgspersoner/i)[0]);
@@ -145,9 +145,11 @@ describe('MedisinskVilkår', () => {
         expect(getByText('Venter...')).toBeInTheDocument();
         await waitFor(async () => {
             userEvent.click(getAllByText(/Tilsyn og pleie/i)[0]);
-            expect(onFinishedSpy).not.toHaveBeenCalled();
+        });
+        expect(onFinishedSpy).toHaveBeenCalledTimes(0);
+        await waitFor(async () => {
             userEvent.click(getAllByText(/Fortsett/i)[0]);
-            expect(onFinishedSpy).toHaveBeenCalled();
+            expect(onFinishedSpy).toHaveBeenCalledTimes(1);
         });
     });
 
