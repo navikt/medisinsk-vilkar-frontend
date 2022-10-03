@@ -1,6 +1,6 @@
 import { get } from '@navikt/k9-http-utils';
 import { Period } from '@navikt/k9-period-utils';
-import { NavigationWithDetailView, PageContainer, Box, Margin } from '@navikt/k9-react-components';
+import { NavigationWithDetailView, PageContainer, Box, Margin } from '@navikt/ft-plattform-komponenter';
 import React, { useMemo } from 'react';
 import axios from 'axios';
 import Step, { StepId, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';

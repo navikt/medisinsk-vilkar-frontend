@@ -1,5 +1,5 @@
 import { get } from '@navikt/k9-http-utils';
-import { PageError, Box, Margin, LinkButton, TitleWithUnderline } from '@navikt/k9-react-components';
+import { PageError, Box, Margin, LinkButton, TitleWithUnderline } from '@navikt/ft-plattform-komponenter';
 import { Period } from '@navikt/k9-period-utils';
 import Modal from 'nav-frontend-modal';
 import Spinner from 'nav-frontend-spinner';
@@ -14,7 +14,7 @@ import { InnleggelsesperiodeResponse } from '../../../types/InnleggelsesperiodeR
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
 import { postInnleggelsesperioder, postInnleggelsesperioderDryRun } from '../../../api/api';
-import styles from './innleggelsesperiodeoversikt.less';
+import styles from './innleggelsesperiodeoversikt.css';
 
 export enum FieldName {
     INNLEGGELSESPERIODER = 'innleggelsesperioder',

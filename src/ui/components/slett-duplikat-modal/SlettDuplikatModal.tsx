@@ -1,5 +1,5 @@
 import { post } from '@navikt/k9-http-utils';
-import { Box, Margin, PageError } from '@navikt/k9-react-components';
+import { Box, Margin, PageError } from '@navikt/ft-plattform-komponenter';
 import axios from 'axios';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import Modal from 'nav-frontend-modal';
@@ -11,7 +11,7 @@ import { findLinkByRel } from '../../../util/linkUtils';
 import scrollUp from '../../../util/viewUtils';
 import ContainerContext from '../../context/ContainerContext';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
-import styles from './slettDuplikatModal.less';
+import styles from './slettDuplikatModal.css';
 
 interface SlettDuplikatModalProps {
     handleCloseModal: () => void;

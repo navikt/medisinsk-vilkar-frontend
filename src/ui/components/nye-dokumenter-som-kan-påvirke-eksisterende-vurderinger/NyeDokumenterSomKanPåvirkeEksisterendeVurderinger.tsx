@@ -1,12 +1,12 @@
 import React from 'react';
-import { Box, DocumentIcon, Margin } from '@navikt/k9-react-components';
+import { Box, DocumentIcon, Margin } from '@navikt/ft-plattform-komponenter';
 import { prettifyDateString } from '@navikt/k9-date-utils';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import { Element } from 'nav-frontend-typografi';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import { findLinkByRel } from '../../../util/linkUtils';
 import LinkRel from '../../../constants/LinkRel';
-import styles from './nyeDokumenterSomKanPåvirkeEksisterendeVurderinger.less';
+import styles from './nyeDokumenterSomKanPåvirkeEksisterendeVurderinger.css';
 
 interface NyeDokumenterListeProps {
     dokumenter: Dokument[];

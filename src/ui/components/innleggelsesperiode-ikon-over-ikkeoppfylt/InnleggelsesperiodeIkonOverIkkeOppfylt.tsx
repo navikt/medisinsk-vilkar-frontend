@@ -1,4 +1,4 @@
-import { IndicatorWithOverlay, InstitutionIcon, RedCrossIconFilled } from '@navikt/k9-react-components';
+import { IndicatorWithOverlay, InstitutionIcon, RedCrossIconFilled } from '@navikt/ft-plattform-komponenter';
 import React from 'react';
 
 const InnleggelsesperiodeIkonOverIkkeOppfylt = (): JSX.Element => (

@@ -1,6 +1,6 @@
-import { ContentWithTooltip } from '@navikt/k9-react-components';
+import { ContentWithTooltip } from '@navikt/ft-plattform-komponenter';
 import * as React from 'react';
-import styles from './nyLabel.less';
+import styles from './nyLabel.css';
 
 const NyLabel = (): JSX.Element => (
     <div className={styles.nyLabel__container}>

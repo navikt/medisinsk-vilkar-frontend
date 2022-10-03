@@ -1,6 +1,6 @@
 import { get } from '@navikt/k9-http-utils';
 import { Period } from '@navikt/k9-period-utils';
-import { NavigationWithDetailView, PageContainer, Box, Margin } from '@navikt/k9-react-components';
+import { NavigationWithDetailView, PageContainer, Box, Margin } from '@navikt/ft-plattform-komponenter';
 import React, { useMemo } from 'react';
 import axios from 'axios';
 import Step, { livetsSluttfaseSteg, StepId } from '../../../types/Step';
@@ -14,8 +14,7 @@ import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 import Vurderingsdetaljer from '../vurderingsdetaljer/Vurderingsdetaljer';
 
-import VurderingsoversiktSluttfaseMessages
-    from '../vurderingsoversikt-sluttfase-messages/VurderingsoversiktSluttfaseMessages';
+import VurderingsoversiktSluttfaseMessages from '../vurderingsoversikt-sluttfase-messages/VurderingsoversiktSluttfaseMessages';
 import BehandlingType from '../../../constants/BehandlingType';
 import FagsakYtelseType from '../../../constants/FagsakYtelseType';
 
@@ -118,14 +117,16 @@ const VilkårsvurderingAvLivetsSluttfase = ({
 
     const onVurderingLagret = () => {
         dispatch({ type: ActionType.PENDING });
-        hentSykdomsstegStatus().then((status) => {
-            const nesteSteg = finnNesteStegForLivetsSluttfase(status);
-            if (nesteSteg === livetsSluttfaseSteg || nesteSteg === null) {
-                oppdaterVurderingsoversikt();
-            } else if (nesteSteg !== null) {
-                navigerTilNesteSteg(nesteSteg);
-            }
-        }).catch(handleError);
+        hentSykdomsstegStatus()
+            .then((status) => {
+                const nesteSteg = finnNesteStegForLivetsSluttfase(status);
+                if (nesteSteg === livetsSluttfaseSteg || nesteSteg === null) {
+                    oppdaterVurderingsoversikt();
+                } else if (nesteSteg !== null) {
+                    navigerTilNesteSteg(nesteSteg);
+                }
+            })
+            .catch(handleError);
     };
 
     const setMargin = () => {
@@ -136,23 +137,28 @@ const VilkårsvurderingAvLivetsSluttfase = ({
     };
 
     const skalViseOpprettVurderingKnapp = () => {
-
-        if (fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE && BehandlingType.FORSTEGANGSSOKNAD === behandlingType)
+        if (
+            fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE &&
+            BehandlingType.FORSTEGANGSSOKNAD === behandlingType
+        )
             return false;
 
-        return !vurderingsoversikt?.harPerioderSomSkalVurderes()
-            && !skalViseRadForNyVurdering
-            && harGyldigSignatur
-            && fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE
+        return !vurderingsoversikt?.harPerioderSomSkalVurderes() &&
+            !skalViseRadForNyVurdering &&
+            harGyldigSignatur &&
+            fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE
             ? behandlingType !== BehandlingType.FORSTEGANGSSOKNAD
             : true;
-    }
+    };
 
     const skalViseNyVurderingForm = visVurderingDetails && !valgtVurderingselement;
 
     return (
         <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet} key={StepId.LivetsSluttfase}>
-            <VurderingsoversiktSluttfaseMessages vurderingsoversikt={vurderingsoversikt} harGyldigSignatur={harGyldigSignatur} />
+            <VurderingsoversiktSluttfaseMessages
+                vurderingsoversikt={vurderingsoversikt}
+                harGyldigSignatur={harGyldigSignatur}
+            />
             {vurderingsoversikt?.harPerioderÅVise() && (
                 <Box marginTop={setMargin()}>
                     <NavigationWithDetailView

@@ -1,8 +1,8 @@
-import { DetailView, DetailViewProps, LinkButton } from '@navikt/k9-react-components';
+import { DetailView, DetailViewProps, LinkButton } from '@navikt/ft-plattform-komponenter';
 import React from 'react';
 import { Period } from '@navikt/k9-period-utils';
 import PeriodList from '../period-list/PeriodList';
-import styles from './detailViewVurdering.less';
+import styles from './detailViewVurdering.css';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import ContainerContext from '../../context/ContainerContext';
 import BehandlingType from '../../../constants/BehandlingType';
@@ -33,7 +33,10 @@ const DetailViewVurdering = (props: DetailViewVurderingProps): JSX.Element => {
                         contentRenderer={() => (
                             <>
                                 {skalViseRedigerVurderingKnapp && (
-                                    <LinkButton className={styles.detailViewVurdering__endreLink} onClick={redigerVurdering}>
+                                    <LinkButton
+                                        className={styles.detailViewVurdering__endreLink}
+                                        onClick={redigerVurdering}
+                                    >
                                         Rediger vurdering
                                     </LinkButton>
                                 )}
@@ -46,7 +49,7 @@ const DetailViewVurdering = (props: DetailViewVurderingProps): JSX.Element => {
             {harPerioder && <PeriodList periods={perioder} className={styles.detailViewVurdering__periodList} />}
             <hr className={styles.detailViewVurdering__hr} />
             {children}
-        </DetailView >
+        </DetailView>
     );
 };
 

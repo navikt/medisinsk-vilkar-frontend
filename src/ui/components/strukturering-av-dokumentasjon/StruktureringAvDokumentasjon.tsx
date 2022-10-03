@@ -1,5 +1,5 @@
 import { get } from '@navikt/k9-http-utils';
-import { Box, Margin, NavigationWithDetailView, PageContainer } from '@navikt/k9-react-components';
+import { Box, Margin, NavigationWithDetailView, PageContainer } from '@navikt/ft-plattform-komponenter';
 import axios from 'axios';
 import React, { useMemo } from 'react';
 import FagsakYtelseType from '../../../constants/FagsakYtelseType';
@@ -19,7 +19,7 @@ import Innleggelsesperiodeoversikt from '../innleggelsesperiodeoversikt/Innlegge
 import SignertSeksjon from '../signert-seksjon/SignertSeksjon';
 import ActionType from './actionTypes';
 import dokumentReducer from './reducer';
-import styles from './struktureringAvDokumentasjon.less';
+import styles from './struktureringAvDokumentasjon.css';
 
 interface StruktureringAvDokumentasjonProps {
     navigerTilNesteSteg: () => void;
@@ -165,18 +165,21 @@ const StruktureringAvDokumentasjon = ({
                         )}
                     />
 
-                    {!erPleiepengerSluttfaseFagsak && <Box marginTop={Margin.xxLarge}>
-                        <DokumentasjonFooter
-                            firstSectionRenderer={() => (
-                                <Innleggelsesperiodeoversikt onInnleggelsesperioderUpdated={sjekkStatus} />
-                            )}
-                            secondSectionRenderer={() => <Diagnosekodeoversikt onDiagnosekoderUpdated={sjekkStatus} />}
-                            thirdSectionRenderer={() => (
-                                <SignertSeksjon harGyldigSignatur={dokumentoversikt.harGyldigSignatur()} />
-                            )}
-                        />
-                    </Box>
-                    }
+                    {!erPleiepengerSluttfaseFagsak && (
+                        <Box marginTop={Margin.xxLarge}>
+                            <DokumentasjonFooter
+                                firstSectionRenderer={() => (
+                                    <Innleggelsesperiodeoversikt onInnleggelsesperioderUpdated={sjekkStatus} />
+                                )}
+                                secondSectionRenderer={() => (
+                                    <Diagnosekodeoversikt onDiagnosekoderUpdated={sjekkStatus} />
+                                )}
+                                thirdSectionRenderer={() => (
+                                    <SignertSeksjon harGyldigSignatur={dokumentoversikt.harGyldigSignatur()} />
+                                )}
+                            />
+                        </Box>
+                    )}
                 </div>
             )}
         </PageContainer>

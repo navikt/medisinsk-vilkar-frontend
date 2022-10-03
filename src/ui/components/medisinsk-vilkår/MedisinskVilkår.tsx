@@ -1,5 +1,5 @@
 import { get } from '@navikt/k9-http-utils';
-import { Box, ChildIcon, Infostripe, Margin, PageContainer, WarningIcon } from '@navikt/k9-react-components';
+import { Box, ChildIcon, Infostripe, Margin, PageContainer, WarningIcon } from '@navikt/ft-plattform-komponenter';
 import axios from 'axios';
 import classnames from 'classnames';
 import { TabsPure } from 'nav-frontend-tabs';
@@ -9,7 +9,13 @@ import FagsakYtelseType from '../../../constants/FagsakYtelseType';
 import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
 import Dokument from '../../../types/Dokument';
 import { NyeDokumenterResponse } from '../../../types/NyeDokumenterResponse';
-import Step, { dokumentSteg, livetsSluttfaseSteg, sluttfaseDokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg } from '../../../types/Step';
+import Step, {
+    dokumentSteg,
+    livetsSluttfaseSteg,
+    sluttfaseDokumentSteg,
+    tilsynOgPleieSteg,
+    toOmsorgspersonerSteg,
+} from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingstype from '../../../types/Vurderingstype';
 import { finnNesteStegForPleiepenger, finnNesteStegForLivetsSluttfase } from '../../../util/statusUtils';
@@ -24,7 +30,7 @@ import VilkårsvurderingAvTilsynOgPleie from '../vilkårsvurdering-av-tilsyn-og-
 import VilkårsvurderingAvToOmsorgspersoner from '../vilkårsvurdering-av-to-omsorgspersoner/VilkårsvurderingAvToOmsorgspersoner';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import ActionType from './actionTypes';
-import styles from './medisinskVilkår.less';
+import styles from './medisinskVilkår.css';
 import medisinskVilkårReducer from './reducer';
 
 interface TabItemProps {
@@ -70,9 +76,10 @@ const MedisinskVilkår = (): JSX.Element => {
 
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
-    const hentDiagnosekoder = () => get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler).then(
-        (response: DiagnosekodeResponse) => response,
-    );
+    const hentDiagnosekoder = () =>
+        get<DiagnosekodeResponse>(endpoints.diagnosekoder, httpErrorHandler).then(
+            (response: DiagnosekodeResponse) => response
+        );
 
     const { isLoading: diagnosekoderLoading, data: diagnosekoderData } = useQuery(
         'diagnosekodeResponse',
@@ -80,7 +87,7 @@ const MedisinskVilkår = (): JSX.Element => {
         { enabled: !erPleiepengerSluttfaseFagsak }
     );
 
-    const diagnosekoder = (endpoints.diagnosekoder) ? diagnosekoderData?.diagnosekoder : [];
+    const diagnosekoder = endpoints.diagnosekoder ? diagnosekoderData?.diagnosekoder : [];
     const diagnosekoderTekst = diagnosekoder?.length > 0 ? `${diagnosekoder?.join(', ')}` : 'Kode mangler';
 
     const hentSykdomsstegStatus = async () => {
@@ -176,30 +183,31 @@ const MedisinskVilkår = (): JSX.Element => {
     const harDataSomIkkeHarBlittTattMedIBehandling = sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling;
     const manglerVurderingAvNyeDokumenter = sykdomsstegStatus?.nyttDokumentHarIkkekontrollertEksisterendeVurderinger;
 
-    const steps: Step[] = (erPleiepengerSluttfaseFagsak)
+    const steps: Step[] = erPleiepengerSluttfaseFagsak
         ? [sluttfaseDokumentSteg, livetsSluttfaseSteg]
         : [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
 
     return (
         <PageContainer isLoading={isLoading} hasError={hasError}>
             <Infostripe
-                element={erPleiepengerSluttfaseFagsak
-                    ?
-                    <span>Vurderingen gjelder pleietrengende og er felles for alle parter.</span>
-                    :
-                    <>
-                        <span>Sykdomsvurderingen gjelder barnet og er felles for alle parter.</span>
-                        <span className={styles.infostripe__diagnosekode__tittel}>Diagnose:</span>
-                        <span className={styles.infostripe__diagnosekode}>
-                            {(diagnosekoderLoading && ' ') || diagnosekoderTekst}
-                        </span>
-                    </>
+                element={
+                    erPleiepengerSluttfaseFagsak ? (
+                        <span>Vurderingen gjelder pleietrengende og er felles for alle parter.</span>
+                    ) : (
+                        <>
+                            <span>Sykdomsvurderingen gjelder barnet og er felles for alle parter.</span>
+                            <span className={styles.infostripe__diagnosekode__tittel}>Diagnose:</span>
+                            <span className={styles.infostripe__diagnosekode}>
+                                {(diagnosekoderLoading && ' ') || diagnosekoderTekst}
+                            </span>
+                        </>
+                    )
                 }
                 iconRenderer={() => <ChildIcon />}
             />
 
             <div className={styles.medisinskVilkår}>
-                <h1 style={{ fontSize: 22 }}>{erPleiepengerSluttfaseFagsak ? "Livets sluttfase" : "Sykdom"}</h1>
+                <h1 style={{ fontSize: 22 }}>{erPleiepengerSluttfaseFagsak ? 'Livets sluttfase' : 'Sykdom'}</h1>
                 <WriteAccessBoundContent
                     contentRenderer={() => (
                         <Box marginBottom={Margin.medium}>
@@ -210,42 +218,32 @@ const MedisinskVilkår = (): JSX.Element => {
                         </Box>
                     )}
                     otherRequirementsAreMet={
-                        (
-                            !erPleiepengerSluttfaseFagsak && (
-                                nyeDokumenterSomIkkeErVurdert &&
-                                manglerVurderingAvNyeDokumenter &&
-                                markedStep !== dokumentSteg &&
-                                activeStep !== dokumentSteg
-                            )
-                        ) || (
-                            erPleiepengerSluttfaseFagsak && (
-                                nyeDokumenterSomIkkeErVurdert &&
-                                manglerVurderingAvNyeDokumenter &&
-                                markedStep !== sluttfaseDokumentSteg &&
-                                activeStep !== sluttfaseDokumentSteg
-                            )
-                        )
+                        (!erPleiepengerSluttfaseFagsak &&
+                            nyeDokumenterSomIkkeErVurdert &&
+                            manglerVurderingAvNyeDokumenter &&
+                            markedStep !== dokumentSteg &&
+                            activeStep !== dokumentSteg) ||
+                        (erPleiepengerSluttfaseFagsak &&
+                            nyeDokumenterSomIkkeErVurdert &&
+                            manglerVurderingAvNyeDokumenter &&
+                            markedStep !== sluttfaseDokumentSteg &&
+                            activeStep !== sluttfaseDokumentSteg)
                     }
                 />
 
                 <WriteAccessBoundContent
                     contentRenderer={() => <AksjonspunktFerdigStripe />}
                     otherRequirementsAreMet={
-                        (
-                            !erPleiepengerSluttfaseFagsak && (
-                                kanLøseAksjonspunkt &&
-                                visFortsettknapp === true &&
-                                markedStep !== dokumentSteg &&
-                                activeStep !== dokumentSteg
-                            )
-                        ) || (
-                            erPleiepengerSluttfaseFagsak && (
-                                kanLøseAksjonspunkt &&
-                                visFortsettknapp === true &&
-                                markedStep !== sluttfaseDokumentSteg &&
-                                activeStep !== sluttfaseDokumentSteg
-                            )
-                        )
+                        (!erPleiepengerSluttfaseFagsak &&
+                            kanLøseAksjonspunkt &&
+                            visFortsettknapp === true &&
+                            markedStep !== dokumentSteg &&
+                            activeStep !== dokumentSteg) ||
+                        (erPleiepengerSluttfaseFagsak &&
+                            kanLøseAksjonspunkt &&
+                            visFortsettknapp === true &&
+                            markedStep !== sluttfaseDokumentSteg &&
+                            activeStep !== sluttfaseDokumentSteg)
                     }
                 />
                 <WriteAccessBoundContent
@@ -261,8 +259,7 @@ const MedisinskVilkår = (): JSX.Element => {
                             <TabItem label={step.title} showWarningIcon={step === markedStep && !kanLøseAksjonspunkt} />
                         ),
                         aktiv: step === activeStep,
-                    })
-                    )}
+                    }))}
                     onChange={(event, clickedIndex) => {
                         dispatch({ type: ActionType.ACTIVATE_STEP, step: steps[clickedIndex] });
                     }}

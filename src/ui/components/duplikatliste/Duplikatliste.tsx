@@ -1,5 +1,5 @@
 import { prettifyDateString } from '@navikt/k9-date-utils';
-import { BucketIcon } from '@navikt/k9-react-components';
+import { BucketIcon } from '@navikt/ft-plattform-komponenter';
 import Lenke from 'nav-frontend-lenker';
 import React, { useState } from 'react';
 import LinkRel from '../../../constants/LinkRel';
@@ -8,7 +8,7 @@ import { renderDokumenttypeText } from '../../../util/dokumentUtils';
 import { findLinkByRel } from '../../../util/linkUtils';
 import SlettDuplikatModal from '../slett-duplikat-modal/SlettDuplikatModal';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
-import styles from './duplikatliste.less';
+import styles from './duplikatliste.css';
 
 interface DuplikatlisteProps {
     dokumenter: Dokument[];

@@ -1,6 +1,6 @@
 import React from 'react';
 import Lenke from 'nav-frontend-lenker';
-import styles from './diagnosekodeliste.less';
+import styles from './diagnosekodeliste.css';
 import Diagnosekode from '../../../types/Diagnosekode';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 

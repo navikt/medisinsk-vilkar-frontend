@@ -1,8 +1,8 @@
-import { Box, Margin } from '@navikt/k9-react-components';
+import { Box, Margin } from '@navikt/ft-plattform-komponenter';
 import React from 'react';
 import Modal from 'nav-frontend-modal';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import styles from '../diagnosekodeoversikt/diagnosekodeoversikt.less';
+import styles from '../diagnosekodeoversikt/diagnosekodeoversikt.css';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
 import DiagnosekodeSelector from '../../form/pure/PureDiagnosekodeSelector';
 import Diagnosekode from '../../../types/Diagnosekode';

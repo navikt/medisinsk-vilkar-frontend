@@ -1,6 +1,6 @@
 import { prettifyDateString } from '@navikt/k9-date-utils';
 import { RadioGroupPanel } from '@navikt/k9-form-utils';
-import { Box, Margin } from '@navikt/k9-react-components';
+import { Box, Margin } from '@navikt/ft-plattform-komponenter';
 import Lenke from 'nav-frontend-lenker';
 import * as React from 'react';
 import { useFormContext } from 'react-hook-form';

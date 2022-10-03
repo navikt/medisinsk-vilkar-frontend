@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flatknapp, Knapp } from 'nav-frontend-knapper';
 import Modal from 'nav-frontend-modal';
-import styles from './confirmationModal.less';
+import styles from './confirmationModal.css';
 
 interface ConfirmationModalProps {
     children: React.ReactNode;

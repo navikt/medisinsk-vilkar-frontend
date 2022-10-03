@@ -4,7 +4,7 @@ import {
     EditedBySaksbehandlerIcon,
     InfoIcon,
     WarningIcon,
-} from '@navikt/k9-react-components';
+} from '@navikt/ft-plattform-komponenter';
 import { Period, sortPeriodsByFomDate } from '@navikt/k9-period-utils';
 import React, { useEffect } from 'react';
 import { EtikettInfo } from 'nav-frontend-etiketter';
@@ -16,7 +16,7 @@ import AddButton from '../add-button/AddButton';
 import VurderingsperiodeElement from '../vurderingsperiode/VurderingsperiodeElement';
 import Vurderingsperioder from '../vurderingsperioder/Vurderingsperioder';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
-import styles from './vurderingsnavigasjon.less';
+import styles from './vurderingsnavigasjon.css';
 
 interface VurderingsnavigasjonProps {
     vurderingselementer: Vurderingselement[];

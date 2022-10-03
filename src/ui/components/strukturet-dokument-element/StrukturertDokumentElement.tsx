@@ -5,10 +5,10 @@ import {
     GreenCheckIconFilled,
     OnePersonIconGray,
     OnePersonOutlineGray,
-} from '@navikt/k9-react-components';
+} from '@navikt/ft-plattform-komponenter';
 import React from 'react';
 import Dokument, { dokumentLabel } from '../../../types/Dokument';
-import styles from './strukturertDokumentElement.less';
+import styles from './strukturertDokumentElement.css';
 
 interface StrukturertDokumentElementProps {
     dokument: Dokument;

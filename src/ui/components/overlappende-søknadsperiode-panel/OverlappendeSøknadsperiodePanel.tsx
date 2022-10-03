@@ -1,5 +1,5 @@
 import React from 'react';
-import { InfoPanel } from '@navikt/k9-react-components';
+import { InfoPanel } from '@navikt/ft-plattform-komponenter';
 import { Period, prettifyPeriodList } from '@navikt/k9-period-utils';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { Knapp } from 'nav-frontend-knapper';

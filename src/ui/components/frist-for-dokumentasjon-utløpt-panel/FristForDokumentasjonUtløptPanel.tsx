@@ -1,9 +1,9 @@
-import { Box, Margin, InfoPanel } from '@navikt/k9-react-components';
+import { Box, Margin, InfoPanel } from '@navikt/ft-plattform-komponenter';
 import React from 'react';
 import { Normaltekst } from 'nav-frontend-typografi';
 import { Checkbox } from 'nav-frontend-skjema';
 import { Hovedknapp } from 'nav-frontend-knapper';
-import styles from './fristForDokumentasjonUtløptPanel.less';
+import styles from './fristForDokumentasjonUtløptPanel.css';
 
 interface FristForDokumentasjonUtløptPanelProps {
     onProceedClick: () => void;

@@ -1,5 +1,5 @@
 import { prettifyDateString } from '@navikt/k9-date-utils';
-import { Box, DetailView, LabelledContent, LinkButton, Margin } from '@navikt/k9-react-components';
+import { Box, DetailView, LabelledContent, LinkButton, Margin } from '@navikt/ft-plattform-komponenter';
 import Alertstripe from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
 import React from 'react';
@@ -12,7 +12,7 @@ import ContainerContext from '../../context/ContainerContext';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
 import Duplikatliste from '../duplikatliste/Duplikatliste';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
-import styles from './strukturertDokumentDetaljer.less';
+import styles from './strukturertDokumentDetaljer.css';
 
 interface StrukturertDokumentDetaljerProps {
     dokument: Dokument;
@@ -23,9 +23,11 @@ interface StrukturertDokumentDetaljerProps {
 
 const renderDokumenttypeContent = (dokumenttype: Dokumenttype, erPleiepengerSluttfaseFagsak = false) => {
     if (dokumenttype === Dokumenttype.LEGEERKLÆRING) {
-        return erPleiepengerSluttfaseFagsak
-            ? <span>Ja, dokumentet inneholder medinske opplysninger</span>
-            : <span>Ja, legeerklæring fra sykehus/spesialisthelsetjenesten</span>;
+        return erPleiepengerSluttfaseFagsak ? (
+            <span>Ja, dokumentet inneholder medinske opplysninger</span>
+        ) : (
+            <span>Ja, legeerklæring fra sykehus/spesialisthelsetjenesten</span>
+        );
     }
     if (dokumenttype === Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER) {
         return (
@@ -93,7 +95,10 @@ const StrukturertDokumentDetaljer = ({
             <Box marginTop={Margin.xLarge}>
                 <LabelledContent
                     label="Inneholder dokumentet medisinske opplysninger?"
-                    content={renderDokumenttypeContent(type, fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE)}
+                    content={renderDokumenttypeContent(
+                        type,
+                        fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE
+                    )}
                 />
             </Box>
             <Box marginTop={Margin.xLarge}>

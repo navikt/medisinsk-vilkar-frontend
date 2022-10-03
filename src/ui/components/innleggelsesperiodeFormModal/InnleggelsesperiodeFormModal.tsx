@@ -1,5 +1,5 @@
 import { Period } from '@navikt/k9-period-utils';
-import { Box, Form, Margin } from '@navikt/k9-react-components';
+import { Box, Form, Margin } from '@navikt/ft-plattform-komponenter';
 import { PeriodpickerList } from '@navikt/k9-form-utils';
 import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
@@ -12,7 +12,7 @@ import AddButton from '../add-button/AddButton';
 import DeleteButton from '../delete-button/DeleteButton';
 import { FieldName } from '../innleggelsesperiodeoversikt/Innleggelsesperiodeoversikt';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
-import styles from './innleggelsesperiodeFormModal.less';
+import styles from './innleggelsesperiodeFormModal.css';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyType = any;

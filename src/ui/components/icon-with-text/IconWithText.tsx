@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './iconWithText.less';
+import styles from './iconWithText.css';
 
 interface IconWithTextProps {
     iconRenderer: () => React.ReactNode;

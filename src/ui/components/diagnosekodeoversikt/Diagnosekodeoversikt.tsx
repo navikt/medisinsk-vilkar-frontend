@@ -1,5 +1,5 @@
 import { get, post } from '@navikt/k9-http-utils';
-import { Box, Margin, TitleWithUnderline, WarningIcon } from '@navikt/k9-react-components';
+import { Box, Margin, TitleWithUnderline, WarningIcon } from '@navikt/ft-plattform-komponenter';
 import Modal from 'nav-frontend-modal';
 import Spinner from 'nav-frontend-spinner';
 import React from 'react';
