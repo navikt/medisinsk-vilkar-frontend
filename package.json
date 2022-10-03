@@ -14,7 +14,7 @@
         "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
         "cypress:headless": "cypress run",
         "test:e2e": "start-server-and-test api-mock 8082 dev http://localhost:8081 cypress:headless",
-        "start:e2e": "nodemon mock/api-mock.ts & nodemon webpack/webpack-config.development.js",
+        "start:e2e": "nodemon mock/api-mock.ts & node webpack/webpack-config.development.js",
         "start-ls:e2e": "nodemon mock/api-mock-livets-sluttfase.ts & node webpack/webpack-config.development.js"
     },
     "pre-commit": [
