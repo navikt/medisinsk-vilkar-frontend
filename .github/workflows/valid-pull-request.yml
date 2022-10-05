@@ -17,14 +17,17 @@ jobs:
                   node-version: 16.x
                   registry-url: https://npm.pkg.github.com/
                   scope: '@navikt'
+                  cache: 'yarn'
             - name: Installere dependencies
               run: yarn
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - name: Kjøre linter
-              run: npm run lint
+              run: yarn lint
+            - name: Valider typescript
+              run: yarn ts-check
             - name: Kjøre enhetstester
-              run: npm test
+              run: yarn test
             - name: Laster opp screenshots dersom de visuelle regresjonstestene feiler
               uses: actions/upload-artifact@v2
               if: failure()
@@ -36,7 +39,7 @@ jobs:
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
               with:
-                  start: npm run start:e2e
+                  start: yarn start:e2e
                   wait-on: 'http://localhost:8081'
                   wait-on-timeout: 60
                   headless: true
