@@ -1,4 +1,4 @@
-import { Box, Margin } from '@navikt/k9-react-components';
+import { Box, Margin } from '@navikt/ft-plattform-komponenter';
 import { getHumanReadablePeriodString } from '@navikt/k9-period-utils';
 import Alertstripe from 'nav-frontend-alertstriper';
 import React from 'react';
@@ -19,8 +19,8 @@ const VurderingsoversiktSluttfaseMessages = ({
         return (
             <Box marginBottom={Margin.large}>
                 <ManglerGyldigSignaturMelding>
-                    Du kan ikke vurdere behov for om pleietrengende er i livets sluttfase
-                    før søker har sendt inn legeerklæring fra lege eller helseinstitusjon.
+                    Du kan ikke vurdere behov for om pleietrengende er i livets sluttfase før søker har sendt inn
+                    legeerklæring fra lege eller helseinstitusjon.
                 </ManglerGyldigSignaturMelding>
             </Box>
         );
@@ -35,12 +35,13 @@ const VurderingsoversiktSluttfaseMessages = ({
     }
 
     if (vurderingsoversikt.harPerioderSomSkalVurderes() === true) {
-
         return (
             <>
                 <Box marginBottom={Margin.large}>
                     <Alertstripe type="advarsel">
-                        {`Vurder om pleietrengende er i livets sluttfase i søknadsperioden ${getHumanReadablePeriodString(vurderingsoversikt.resterendeVurderingsperioder)}.`}
+                        {`Vurder om pleietrengende er i livets sluttfase i søknadsperioden ${getHumanReadablePeriodString(
+                            vurderingsoversikt.resterendeVurderingsperioder
+                        )}.`}
                     </Alertstripe>
                 </Box>
             </>

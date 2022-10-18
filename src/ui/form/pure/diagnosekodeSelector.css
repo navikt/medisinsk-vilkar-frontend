@@ -1,0 +1,24 @@
+.diagnosekodeContainer {
+  width: 100%;
+}
+.diagnosekodeContainer input {
+  min-width: 500px;
+  width: 40%;
+}
+.diagnosekodeContainer__hideLabel {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+.diagnosekodeContainer__autocompleteContainer {
+  display: flex;
+  align-items: center;
+}
+.diagnosekodeContainer__spinnerContainer {
+  margin-left: 1rem;
+  width: 2rem;
+}

@@ -1,4 +1,4 @@
-import { Box, Margin } from '@navikt/k9-react-components';
+import { Box, Margin } from '@navikt/ft-plattform-komponenter';
 import React from 'react';
 import Modal from 'nav-frontend-modal';
 import Alertstripe from 'nav-frontend-alertstriper';

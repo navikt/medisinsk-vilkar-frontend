@@ -1,6 +1,6 @@
 import React from 'react';
 import Alertstripe from 'nav-frontend-alertstriper';
-import { Box, Margin } from '@navikt/k9-react-components';
+import { Box, Margin } from '@navikt/ft-plattform-komponenter';
 import InnleggelsesperiodeVurdering from '../../../types/InnleggelsesperiodeVurdering';
 import Vurderingstype from '../../../types/Vurderingstype';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';

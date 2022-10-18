@@ -1,4 +1,4 @@
-import { Box, Margin } from '@navikt/k9-react-components';
+import { Box, Margin } from '@navikt/ft-plattform-komponenter';
 import Alertstripe from 'nav-frontend-alertstriper';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import { Normaltekst } from 'nav-frontend-typografi';

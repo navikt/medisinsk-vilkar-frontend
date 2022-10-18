@@ -6,14 +6,14 @@ import {
     RedCrossIconFilled,
     TwoPersonsWithOneHighlightedIconGray,
     InstitutionIcon,
-} from '@navikt/k9-react-components';
+} from '@navikt/ft-plattform-komponenter';
 import React from 'react';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import ManuellVurdering from '../../../types/ManuellVurdering';
 import InnleggelsesperiodeIkonOverOppfylt from '../innleggelsesperiode-ikon-over-oppfylt/InnleggelsesperiodeIkonOverOppfylt';
 import InnleggelsesperiodeIkonOverIkkeOppfylt from '../innleggelsesperiode-ikon-over-ikkeoppfylt/InnleggelsesperiodeIkonOverIkkeOppfylt';
 import Vurderingselement from '../../../types/Vurderingselement';
-import styles from './vurderingsperiodeElement.less';
+import styles from './vurderingsperiodeElement.css';
 
 interface VurderingsperiodeElementProps {
     vurderingselement: Vurderingselement;

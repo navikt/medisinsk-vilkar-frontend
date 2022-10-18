@@ -1,5 +1,7 @@
 import React from 'react';
 import { QueryClientProvider } from 'react-query';
+import '@navikt/ft-plattform-komponenter/dist/style.css';
+import '@navikt/ds-css';
 import ContainerContext from './context/ContainerContext';
 import queryClient from './context/queryClient';
 import ContainerContract from '../types/ContainerContract';
@@ -8,7 +10,6 @@ import MedisinskVilkår from './components/medisinsk-vilkår/MedisinskVilkår';
 interface MainComponentProps {
     containerData: ContainerContract;
 }
-
 
 const MainComponent = ({ containerData }: MainComponentProps): JSX.Element => (
     <div id="medisinskVilkår">

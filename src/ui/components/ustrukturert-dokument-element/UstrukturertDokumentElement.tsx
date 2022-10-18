@@ -1,8 +1,13 @@
 import { prettifyDateString } from '@navikt/k9-date-utils';
-import { ContentWithTooltip, OnePersonIconGray, OnePersonOutlineGray, WarningIcon } from '@navikt/k9-react-components';
+import {
+    ContentWithTooltip,
+    OnePersonIconGray,
+    OnePersonOutlineGray,
+    WarningIcon,
+} from '@navikt/ft-plattform-komponenter';
 import React from 'react';
 import { Dokument, dokumentLabel } from '../../../types/Dokument';
-import styles from './ustrukturertDokumentElement.less';
+import styles from './ustrukturertDokumentElement.css';
 
 interface UstrukturertDokumentElementProps {
     dokument: Dokument;

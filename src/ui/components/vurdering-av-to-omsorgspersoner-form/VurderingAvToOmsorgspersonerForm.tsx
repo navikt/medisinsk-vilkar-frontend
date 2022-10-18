@@ -1,5 +1,5 @@
 import { Period } from '@navikt/k9-period-utils';
-import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/k9-react-components';
+import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/ft-plattform-komponenter';
 import { CheckboxGroup, PeriodpickerList, TextArea, YesOrNoQuestion } from '@navikt/k9-form-utils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Lenke from 'nav-frontend-lenker';
@@ -19,7 +19,7 @@ import DeleteButton from '../delete-button/DeleteButton';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
 import ContainerContext from '../../context/ContainerContext';
-import styles from './vurderingAvToOmsorgspersonerForm.less';
+import styles from './vurderingAvToOmsorgspersonerForm.css';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyType = any;
@@ -74,7 +74,7 @@ const VurderingAvToOmsorgspersonerForm = ({
                 }
                 return period;
             })
-            .flatMap((p) => p.asListOfDays());
+            .flatMap((p) => new Period(p.fom, p.tom).asListOfDays());
         return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
     }, [resterendeVurderingsperioder, perioderSomBlirVurdert]);
 

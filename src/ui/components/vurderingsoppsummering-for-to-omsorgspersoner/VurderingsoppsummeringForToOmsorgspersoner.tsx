@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Margin, BasicList, LabelledContent, AssessedBy } from '@navikt/k9-react-components';
+import { Box, Margin, BasicList, LabelledContent, AssessedBy } from '@navikt/ft-plattform-komponenter';
 import ContainerContext from '../../context/ContainerContext';
 import Vurdering from '../../../types/Vurdering';
 import DokumentLink from '../dokument-link/DokumentLink';

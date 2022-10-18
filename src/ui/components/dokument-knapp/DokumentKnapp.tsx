@@ -1,17 +1,17 @@
-import Lenke from 'nav-frontend-lenker';
+import { Link } from '@navikt/ds-react';
 import * as React from 'react';
-import { DocumentIcon } from '@navikt/k9-react-components';
-import styles from './dokumentKnapp.less';
+import { DocumentIcon } from '@navikt/ft-plattform-komponenter';
+import styles from './dokumentKnapp.css';
 
 interface DokumentKnappProps {
     href: string;
 }
 
 const DokumentKnapp = ({ href }: DokumentKnappProps): JSX.Element => (
-    <Lenke href={href} target="_blank" className={styles.dokumentKnapp}>
+    <Link href={href} target="_blank" className={styles.dokumentKnapp}>
         <DocumentIcon />
         Åpne dokument
-    </Lenke>
+    </Link>
 );
 
 export default DokumentKnapp;

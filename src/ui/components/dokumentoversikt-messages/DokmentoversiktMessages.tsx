@@ -1,4 +1,4 @@
-import { Box, Margin } from '@navikt/k9-react-components';
+import { Box, Margin } from '@navikt/ft-plattform-komponenter';
 import Alertstripe from 'nav-frontend-alertstriper';
 import { Knapp } from 'nav-frontend-knapper';
 import React from 'react';
@@ -49,10 +49,11 @@ const DokumentoversiktMessages = ({
                 <>
                     <Box marginBottom={Margin.large}>
                         <Alertstripe type="advarsel">
-                            {erPleiepengerSluttfaseFagsak
-                                ? <span>Dokumentasjon signert av lege eller helseinstitusjon mangler.</span>
-                                : <span>Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler.</span>
-                            }
+                            {erPleiepengerSluttfaseFagsak ? (
+                                <span>Dokumentasjon signert av lege eller helseinstitusjon mangler.</span>
+                            ) : (
+                                <span>Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler.</span>
+                            )}
                             Sett saken på vent mens du innhenter mer dokumentasjon.
                         </Alertstripe>
                     </Box>
@@ -80,11 +81,13 @@ const DokumentoversiktMessages = ({
                 <Box marginBottom={Margin.large}>
                     <Alertstripe
                         data-testid="dokumentasjon-ferdig"
-                        type={erPleiepengerSluttfaseFagsak ? 'suksess' : 'info'}>
-                        {erPleiepengerSluttfaseFagsak
-                            ? <>Dokumentasjon av livets sluttfase er ferdig vurdert og du kan gå videre i vurderingen.</>
-                            : <>Dokumentasjon av sykdom er ferdig vurdert og du kan gå videre i vurderingen.</>
-                        }
+                        type={erPleiepengerSluttfaseFagsak ? 'suksess' : 'info'}
+                    >
+                        {erPleiepengerSluttfaseFagsak ? (
+                            <>Dokumentasjon av livets sluttfase er ferdig vurdert og du kan gå videre i vurderingen.</>
+                        ) : (
+                            <>Dokumentasjon av sykdom er ferdig vurdert og du kan gå videre i vurderingen.</>
+                        )}
                         <Knapp
                             type="hoved"
                             htmlType="button"

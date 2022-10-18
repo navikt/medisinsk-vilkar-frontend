@@ -9,7 +9,7 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 
 const webpackConfig = merge(commonWebpackConfig, {
     mode: 'development',
-    devtool: 'inline-source-map',
+    devtool: 'eval-cheap-module-source-map',
     plugins: [
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, '../index.html'),

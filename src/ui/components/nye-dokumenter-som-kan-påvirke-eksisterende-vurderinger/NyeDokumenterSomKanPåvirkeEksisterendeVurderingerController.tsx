@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import axios from 'axios';
-import { Box, Margin, PageContainer } from '@navikt/k9-react-components';
+import { Box, Margin, PageContainer } from '@navikt/ft-plattform-komponenter';
 import { post } from '@navikt/k9-http-utils';
 import Dokument from '../../../types/Dokument';
 import ContainerContext from '../../context/ContainerContext';

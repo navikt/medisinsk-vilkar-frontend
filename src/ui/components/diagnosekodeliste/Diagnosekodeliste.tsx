@@ -1,12 +1,11 @@
-import React from 'react';
 import Lenke from 'nav-frontend-lenker';
-import styles from './diagnosekodeliste.less';
-import Diagnosekode from '../../../types/Diagnosekode';
+import React from 'react';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
+import styles from './diagnosekodeliste.css';
 
 interface DiagnosekodelisteProps {
-    diagnosekoder: Diagnosekode[];
-    onDeleteClick: (diagnosekode: Diagnosekode) => void;
+    diagnosekoder: string[];
+    onDeleteClick: (diagnosekode: string) => void;
 }
 
 const Diagnosekodeliste = ({ diagnosekoder, onDeleteClick }: DiagnosekodelisteProps): JSX.Element => (

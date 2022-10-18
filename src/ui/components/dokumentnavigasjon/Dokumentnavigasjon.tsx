@@ -1,4 +1,4 @@
-import { InteractiveList } from '@navikt/k9-react-components';
+import { InteractiveList } from '@navikt/ft-plattform-komponenter';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
@@ -6,7 +6,7 @@ import { Dokument, Dokumenttype } from '../../../types/Dokument';
 import Dokumentfilter from '../dokumentfilter/Dokumentfilter';
 import StrukturertDokumentElement from '../strukturet-dokument-element/StrukturertDokumentElement';
 import UstrukturertDokumentElement from '../ustrukturert-dokument-element/UstrukturertDokumentElement';
-import styles from './dokumentnavigasjon.less';
+import styles from './dokumentnavigasjon.css';
 
 interface DokumentnavigasjonProps {
     tittel: string;

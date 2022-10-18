@@ -1,0 +1,30 @@
+.dokumentnavigasjon {
+  min-width: 28.5rem;
+  /* important pga https://github.com/webpack-contrib/mini-css-extract-plugin/issues/188 */
+}
+.dokumentnavigasjon :global .ekspanderbartPanel__innhold {
+  padding: 0.5rem 0 0 0;
+}
+.dokumentnavigasjon__heading {
+  padding: 1.25rem 0.9375rem 0;
+}
+.dokumentnavigasjon__container {
+  flex-grow: 1;
+}
+.dokumentnavigasjon__columnHeadings {
+  position: relative;
+  display: flex;
+  margin-bottom: 0.75rem;
+}
+.dokumentnavigasjon__columnHeading--first {
+  margin-left: 0.875rem !important;
+}
+.dokumentnavigasjon__columnHeading--second {
+  margin-left: 1.375rem;
+}
+.dokumentnavigasjon__columnHeading--third {
+  margin-left: 7rem !important;
+}
+.dokumentnavigasjon__columnHeading--fourth {
+  margin-left: 3.125rem !important;
+}

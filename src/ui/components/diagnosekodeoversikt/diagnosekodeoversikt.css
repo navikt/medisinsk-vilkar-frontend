@@ -1,0 +1,12 @@
+.diagnosekodeoversikt__modal {
+  overflow: visible;
+  color: #262626;
+}
+
+.diagnosekodeoversikt__modal form{
+  margin: 0;
+}
+
+.diagnosekodeoversikt__modal :global .autocomplete ul {
+  position: absolute;
+}

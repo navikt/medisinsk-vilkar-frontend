@@ -1,11 +1,6 @@
-import {
-    CheckboxGroup,
-    PeriodpickerList,
-    RadioGroupPanel,
-    TextArea
-} from '@navikt/k9-form-utils';
+import { CheckboxGroup, PeriodpickerList, RadioGroupPanel, TextArea } from '@navikt/k9-form-utils';
 import { Period } from '@navikt/k9-period-utils';
-import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/k9-react-components';
+import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/ft-plattform-komponenter';
 import Ikon from 'nav-frontend-ikoner-assets';
 import Lenke from 'nav-frontend-lenker';
 import { Element } from 'nav-frontend-typografi';
@@ -22,11 +17,15 @@ import DokumentLink from '../dokument-link/DokumentLink';
 import VurderingDokumentfilter from '../vurdering-dokumentfilter/VurderingDokumentfilter';
 import vurderingDokumentfilterOptions from '../vurdering-dokumentfilter/vurderingDokumentfilterOptions';
 import StjerneIkon from './StjerneIkon';
-import styles from './VurderingAvLivetsSluttfaseForm.less';
+import styles from './VurderingAvLivetsSluttfaseForm.css';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import DeleteButton from '../delete-button/DeleteButton';
 import AddButton from '../add-button/AddButton';
-import { finnHullIPerioder, finnMaksavgrensningerForPerioder, slåSammenSammenhengendePerioder } from '../../../util/periodUtils';
+import {
+    finnHullIPerioder,
+    finnMaksavgrensningerForPerioder,
+    slåSammenSammenhengendePerioder,
+} from '../../../util/periodUtils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyType = any;
@@ -34,7 +33,7 @@ type AnyType = any;
 export enum FieldName {
     VURDERING_AV_LIVETS_SLUTTFASE = 'vurderingAvLivetsSluttfase',
     ER_I_LIVETS_SLUTTFASE = 'erILivetsSluttfase',
-    SPLITT_PERIODE_DATO = "splittPeriodeDato",
+    SPLITT_PERIODE_DATO = 'splittPeriodeDato',
     DOKUMENTER = 'dokumenter',
     PERIODER = 'perioder',
 }
@@ -109,7 +108,7 @@ const VurderingAvLivetsSluttfaseForm = ({
                 }
                 return period;
             })
-            .flatMap((p) => p.asListOfDays());
+            .flatMap((p) => new Period(p.fom, p.tom).asListOfDays());
         return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
     }, [resterendeVurderingsperioder, perioderSomBlirVurdert]);
 

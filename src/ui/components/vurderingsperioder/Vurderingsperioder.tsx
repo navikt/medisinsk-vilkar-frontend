@@ -1,7 +1,7 @@
-import { ContentWithTooltip, OnePersonIconGray } from '@navikt/k9-react-components';
+import { ContentWithTooltip, OnePersonIconGray } from '@navikt/ft-plattform-komponenter';
 import { Period } from '@navikt/k9-period-utils';
 import React from 'react';
-import styles from './vurderingsperioder.less';
+import styles from './vurderingsperioder.css';
 
 interface VurderingsperioderProps {
     perioder: Period[];

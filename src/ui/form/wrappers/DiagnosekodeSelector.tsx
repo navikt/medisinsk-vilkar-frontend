@@ -35,7 +35,7 @@ const DiagnosekodeSelektor = ({
                         initialDiagnosekodeValue={initialDiagnosekodeValue}
                         name={name}
                         onChange={onChange}
-                        errorMessage={errors[name]?.message}
+                        errorMessage={errors[name]?.message as string}
                     />
                 );
             }}

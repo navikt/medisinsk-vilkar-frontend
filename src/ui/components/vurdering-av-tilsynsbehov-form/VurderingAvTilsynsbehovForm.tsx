@@ -1,6 +1,6 @@
 import { CheckboxGroup, PeriodpickerList, TextArea, YesOrNoQuestion } from '@navikt/k9-form-utils';
 import { Period } from '@navikt/k9-period-utils';
-import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/k9-react-components';
+import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/ft-plattform-komponenter';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Ikon from 'nav-frontend-ikoner-assets';
 import Lenke from 'nav-frontend-lenker';
@@ -24,7 +24,7 @@ import DokumentLink from '../dokument-link/DokumentLink';
 import VurderingDokumentfilter from '../vurdering-dokumentfilter/VurderingDokumentfilter';
 import vurderingDokumentfilterOptions from '../vurdering-dokumentfilter/vurderingDokumentfilterOptions';
 import StjerneIkon from './StjerneIkon';
-import styles from './vurderingAvTilsynsbehovForm.less';
+import styles from './vurderingAvTilsynsbehovForm.css';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyType = any;
@@ -123,7 +123,7 @@ const VurderingAvTilsynsbehovForm = ({
                 }
                 return period;
             })
-            .flatMap((p) => p.asListOfDays());
+            .flatMap((p) => new Period(p.fom, p.tom).asListOfDays());
         return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
     }, [resterendeVurderingsperioder, perioderSomBlirVurdert]);
 

@@ -1,5 +1,5 @@
 import { post } from '@navikt/k9-http-utils';
-import { Box, Margin } from '@navikt/k9-react-components';
+import { Box, Margin } from '@navikt/ft-plattform-komponenter';
 import axios from 'axios';
 import { AlertStripeFeil } from 'nav-frontend-alertstriper';
 import React, { useMemo } from 'react';
@@ -35,7 +35,7 @@ const StrukturerDokumentController = ({
         () => () => {
             httpCanceler.cancel();
         },
-        [],
+        []
     );
 
     const strukturerDokument = (strukturertDokument: Dokument) => {
@@ -84,21 +84,24 @@ const StrukturerDokumentController = ({
                     <AlertStripeFeil>{getErrorMessage()}</AlertStripeFeil>
                 </Box>
             )}
-            {fagsakYtelseType !== FagsakYtelseType.PLEIEPENGER_SLUTTFASE && <StrukturerDokumentForm
-                dokument={dokument}
-                onSubmit={strukturerDokument}
-                editMode={editMode}
-                isSubmitting={isSubmitting}
-                strukturerteDokumenter={strukturerteDokumenter}
-            />
-            }
-            {fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE && <StrukturerDokumentSluttfaseForm
-                dokument={dokument}
-                onSubmit={strukturerDokument}
-                editMode={editMode}
-                isSubmitting={isSubmitting}
-                strukturerteDokumenter={strukturerteDokumenter}
-            />}
+            {fagsakYtelseType !== FagsakYtelseType.PLEIEPENGER_SLUTTFASE && (
+                <StrukturerDokumentForm
+                    dokument={dokument}
+                    onSubmit={strukturerDokument}
+                    editMode={editMode}
+                    isSubmitting={isSubmitting}
+                    strukturerteDokumenter={strukturerteDokumenter}
+                />
+            )}
+            {fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE && (
+                <StrukturerDokumentSluttfaseForm
+                    dokument={dokument}
+                    onSubmit={strukturerDokument}
+                    editMode={editMode}
+                    isSubmitting={isSubmitting}
+                    strukturerteDokumenter={strukturerteDokumenter}
+                />
+            )}
 
             {hasError && (
                 <Box marginTop={Margin.medium}>

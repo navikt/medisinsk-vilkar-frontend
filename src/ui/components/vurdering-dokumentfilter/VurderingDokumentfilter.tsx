@@ -5,7 +5,7 @@ import { Checkbox } from 'nav-frontend-skjema';
 import { Element } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
-import styles from './vurderingDokumentfilter.less';
+import styles from './vurderingDokumentfilter.css';
 import vurderingDokumentfilterOptions from './vurderingDokumentfilterOptions';
 
 interface ChevronWithTextProps {

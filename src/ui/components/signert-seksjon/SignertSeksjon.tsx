@@ -1,4 +1,4 @@
-import { Box, Margin, TitleWithUnderline, GreenCheckIcon, WarningIcon } from '@navikt/k9-react-components';
+import { Box, Margin, TitleWithUnderline, GreenCheckIcon, WarningIcon } from '@navikt/ft-plattform-komponenter';
 import React from 'react';
 import IconWithText from '../icon-with-text/IconWithText';
 

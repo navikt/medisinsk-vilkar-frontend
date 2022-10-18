@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { FilterFilled } from '@navikt/ds-icons';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { Dokumenttype, dokumentLabel } from '../../../types/Dokument';
-import styles from './dokumentfilter.less';
+import styles from './dokumentfilter.css';
 
 interface ChevronWithTextProps {
     chevronDirection: 'opp' | 'ned';

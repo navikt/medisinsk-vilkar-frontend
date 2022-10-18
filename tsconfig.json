@@ -10,5 +10,5 @@
         "esModuleInterop": true,
         "allowJs": true
     },
-    "exclude": ["node_modules", "build", "**/*.test.ts", "**/*.test.tsx", "dist"]
+    "exclude": ["node_modules", "build", "**/*.test.ts", "**/*.spec.ts", "**/*.test.tsx", "dist", "./cypress.config.ts"]
 }
