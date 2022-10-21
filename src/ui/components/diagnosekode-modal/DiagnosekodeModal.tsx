@@ -1,11 +1,10 @@
 import { Box, Margin } from '@navikt/ft-plattform-komponenter';
-import React from 'react';
-import Modal from 'nav-frontend-modal';
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
+import Modal from 'nav-frontend-modal';
+import React from 'react';
+import DiagnosekodeSelector from '../../form/pure/PureDiagnosekodeSelector';
 import styles from '../diagnosekodeoversikt/diagnosekodeoversikt.css';
 import ModalFormWrapper from '../modal-form-wrapper/ModalFormWrapper';
-import DiagnosekodeSelector from '../../form/pure/PureDiagnosekodeSelector';
-import Diagnosekode from '../../../types/Diagnosekode';
 
 interface DiagnosekodeModalProps {
     isOpen: boolean;
