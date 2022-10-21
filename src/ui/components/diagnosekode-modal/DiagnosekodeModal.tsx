@@ -51,7 +51,12 @@ const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick }: Diagnosekode
                     </Box>
                     <Box marginTop={Margin.xLarge}>
                         <div style={{ display: 'flex' }}>
-                            <Hovedknapp mini disabled={isSubmitting} spinner={isSubmitting}>
+                            <Hovedknapp
+                                mini
+                                disabled={isSubmitting}
+                                spinner={isSubmitting}
+                                id="bekreftDiagnosekodeKnapp"
+                            >
                                 Bekreft
                             </Hovedknapp>
                             <Knapp
