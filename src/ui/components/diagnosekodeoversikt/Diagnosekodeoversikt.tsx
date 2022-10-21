@@ -53,18 +53,16 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             httpErrorHandler
         );
 
-    const lagreDiagnosekode = (nyDiagnosekode: Diagnosekode) => {
-        const nyeDiagnosekoder = [...diagnosekoder, nyDiagnosekode.kode];
-        return post(
+    const lagreDiagnosekode = (nyeDiagnosekoder: string[]) =>
+        post(
             endreDiagnosekoderLink.href,
             {
                 behandlingUuid,
                 versjon,
-                diagnosekoder: [...new Set(nyeDiagnosekoder)],
+                diagnosekoder: [...new Set([...diagnosekoder, ...nyeDiagnosekoder])],
             },
             httpErrorHandler
         );
-    };
 
     const slettDiagnosekodeMutation = useMutation((diagnosekode: string) => slettDiagnosekode(diagnosekode), {
         onSuccess: () => {
@@ -74,7 +72,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             });
         },
     });
-    const lagreDiagnosekodeMutation = useMutation((diagnosekode: Diagnosekode) => lagreDiagnosekode(diagnosekode), {
+    const lagreDiagnosekodeMutation = useMutation((nyeDiagnosekoder: string[]) => lagreDiagnosekode(nyeDiagnosekoder), {
         onSuccess: () => {
             refetch().finally(() => {
                 onDiagnosekoderUpdated();

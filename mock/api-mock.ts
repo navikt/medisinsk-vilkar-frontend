@@ -177,7 +177,7 @@ app.use('/mock/data-til-vurdering', (req, res) => {
     res.send(mockedDokumentliste);
 });
 
-app.use('/mock/diagnosekode-search', (req, res) => {
+app.use('/k9/diagnosekoder', (req, res) => {
     res.send(mockedDiagnosekodeSearchResponse);
 });
 
