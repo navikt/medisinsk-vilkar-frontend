@@ -86,6 +86,7 @@ const StrukturerDokumentController = ({
             )}
             {fagsakYtelseType !== FagsakYtelseType.PLEIEPENGER_SLUTTFASE && (
                 <StrukturerDokumentForm
+                    key={dokument.id}
                     dokument={dokument}
                     onSubmit={strukturerDokument}
                     editMode={editMode}
@@ -95,6 +96,7 @@ const StrukturerDokumentController = ({
             )}
             {fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE && (
                 <StrukturerDokumentSluttfaseForm
+                    key={dokument.id}
                     dokument={dokument}
                     onSubmit={strukturerDokument}
                     editMode={editMode}

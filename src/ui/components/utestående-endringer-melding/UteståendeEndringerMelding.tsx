@@ -24,7 +24,7 @@ const UteståendeEndringerMelding = (): JSX.Element => {
                         spinner={isSubmitting}
                         onClick={() => {
                             setIsSubmitting(true);
-                            setTimeout(() => setIsSubmitting(false), 1500);
+                            setTimeout(() => setIsSubmitting(false), 10 * 1000);
                             onFinished();
                         }}
                     >

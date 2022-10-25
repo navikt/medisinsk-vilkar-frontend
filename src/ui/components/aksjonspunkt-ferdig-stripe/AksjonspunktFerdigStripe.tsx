@@ -24,7 +24,7 @@ const AksjonspunktFerdigStripe = (): JSX.Element => {
                     spinner={isSubmitting}
                     onClick={() => {
                         setIsSubmitting(true);
-                        setTimeout(() => setIsSubmitting(false), 5 * 1000);
+                        setTimeout(() => setIsSubmitting(false), 10 * 1000);
                         onFinished();
                     }}
                     mini
