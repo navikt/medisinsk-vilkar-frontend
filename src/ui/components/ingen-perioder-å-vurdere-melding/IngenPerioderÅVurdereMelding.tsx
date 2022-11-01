@@ -1,6 +1,10 @@
 import React from 'react';
-import Alertstripe from 'nav-frontend-alertstriper';
+import { Alert } from '@navikt/ds-react';
 
-const IngenPerioderÅVurdereMelding = (): JSX.Element => <Alertstripe type="info">Ingen perioder å vurdere</Alertstripe>;
+const IngenPerioderÅVurdereMelding = (): JSX.Element => (
+    <Alert size="small" variant="info">
+        Ingen perioder å vurdere
+    </Alert>
+);
 
 export default IngenPerioderÅVurdereMelding;

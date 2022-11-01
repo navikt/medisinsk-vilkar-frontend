@@ -1,7 +1,7 @@
 import { post } from '@navikt/k9-http-utils';
 import { Box, Margin } from '@navikt/ft-plattform-komponenter';
 import axios from 'axios';
-import { AlertStripeFeil } from 'nav-frontend-alertstriper';
+import { Alert } from '@navikt/ds-react';
 import React, { useMemo } from 'react';
 import FagsakYtelseType from '../../../constants/FagsakYtelseType';
 import Dokument from '../../../types/Dokument';
@@ -81,7 +81,9 @@ const StrukturerDokumentController = ({
         <>
             {hasError && (
                 <Box marginBottom={Margin.medium}>
-                    <AlertStripeFeil>{getErrorMessage()}</AlertStripeFeil>
+                    <Alert size="small" variant="error">
+                        {getErrorMessage()}
+                    </Alert>
                 </Box>
             )}
             {fagsakYtelseType !== FagsakYtelseType.PLEIEPENGER_SLUTTFASE && (
@@ -107,7 +109,9 @@ const StrukturerDokumentController = ({
 
             {hasError && (
                 <Box marginTop={Margin.medium}>
-                    <AlertStripeFeil>{getErrorMessage()}</AlertStripeFeil>
+                    <Alert size="small" variant="error">
+                        {getErrorMessage()}
+                    </Alert>
                 </Box>
             )}
         </>

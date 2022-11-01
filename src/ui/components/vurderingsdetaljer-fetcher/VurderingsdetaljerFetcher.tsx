@@ -1,8 +1,8 @@
-import { get } from '@navikt/k9-http-utils';
+import { Loader } from '@navikt/ds-react';
 import { PageError } from '@navikt/ft-plattform-komponenter';
-import React, { useMemo } from 'react';
+import { get } from '@navikt/k9-http-utils';
 import axios from 'axios';
-import Spinner from 'nav-frontend-spinner';
+import React, { useMemo } from 'react';
 import Vurdering from '../../../types/Vurdering';
 import ContainerContext from '../../context/ContainerContext';
 
@@ -50,7 +50,7 @@ const VurderingsdetaljerFetcher = ({ url, contentRenderer }: VurderingsdetaljerF
     }, [url]);
 
     if (isLoading) {
-        return <Spinner />;
+        return <Loader size="large" />;
     }
     if (hentVurderingHarFeilet) {
         return <PageError message="Noe gikk galt, vennligst prøv igjen senere" />;

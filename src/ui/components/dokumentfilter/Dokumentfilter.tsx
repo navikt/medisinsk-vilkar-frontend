@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import { Element } from 'nav-frontend-typografi';
-import Chevron from 'nav-frontend-chevron';
-import { Checkbox } from 'nav-frontend-skjema';
+import { Collapse, Expand, FilterFilled } from '@navikt/ds-icons';
+import { Checkbox, Label } from '@navikt/ds-react';
 import classNames from 'classnames';
-import { FilterFilled } from '@navikt/ds-icons';
+import React, { useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
-import { Dokumenttype, dokumentLabel } from '../../../types/Dokument';
+import { dokumentLabel, Dokumenttype } from '../../../types/Dokument';
 import styles from './dokumentfilter.css';
 
 interface ChevronWithTextProps {
@@ -23,8 +21,10 @@ interface DokumentfilterProps {
 function ChevronWithText({ chevronDirection, onClick, text }: ChevronWithTextProps): JSX.Element {
     return (
         <button type="button" className={styles.chevronDropdown__toggleButton} onClick={onClick}>
-            <Element className={styles.chevronDropdown__toggleButton__text}>{text}</Element>
-            <Chevron type={chevronDirection} />
+            <Label size="small" className={styles.chevronDropdown__toggleButton__text}>
+                {text}
+            </Label>
+            {chevronDirection === 'ned' ? <Expand /> : <Collapse />}
         </button>
     );
 }
@@ -59,10 +59,11 @@ function Dokumentfilter({
                                 {dokumenttypeListe.map((type) => (
                                     <Checkbox
                                         key={type}
-                                        label={dokumentLabel[type]}
                                         checked={filters.includes(type)}
                                         onChange={() => filtrerDokumenttype(type)}
-                                    />
+                                    >
+                                        {dokumentLabel[type]}
+                                    </Checkbox>
                                 ))}
                             </div>
                         </span>

@@ -1,8 +1,6 @@
-import { Box, Margin, InfoPanel } from '@navikt/ft-plattform-komponenter';
+import { BodyShort, Button, Checkbox } from '@navikt/ds-react';
+import { Box, InfoPanel, Margin } from '@navikt/ft-plattform-komponenter';
 import React from 'react';
-import { Normaltekst } from 'nav-frontend-typografi';
-import { Checkbox } from 'nav-frontend-skjema';
-import { Hovedknapp } from 'nav-frontend-knapper';
 import styles from './fristForDokumentasjonUtløptPanel.css';
 
 interface FristForDokumentasjonUtløptPanelProps {
@@ -13,27 +11,28 @@ const FristForDokumentasjonUtløptPanel = ({ onProceedClick }: FristForDokumenta
     const [fristenErUtløpt, setFristenErUtløpt] = React.useState(false);
     return (
         <InfoPanel type="warning">
-            <Normaltekst>
+            <BodyShort size="small">
                 Dersom du ikke får dokumentasjon innen fristen, kan du avslå vilkåret og gå videre til vedtaksbrev.
-            </Normaltekst>
+            </BodyShort>
             <div className={styles.fristForDokumentasjonUtløptPanel__formContainer}>
                 <Box marginTop={Margin.small}>
                     <Checkbox
-                        label="Legeerklæring fra sykehus/spesialisthelsetjenesten etter §9-16 første ledd er ikke mottatt innen fristen"
                         name="fristenErUtløpt"
                         checked={fristenErUtløpt === true}
                         onChange={() => setFristenErUtløpt(!fristenErUtløpt)}
-                    />
+                    >
+                        Legeerklæring fra sykehus/spesialisthelsetjenesten etter §9-16 første ledd er ikke mottatt innen
+                        fristen
+                    </Checkbox>
                 </Box>
                 {fristenErUtløpt === true && (
-                    <Hovedknapp
-                        htmlType="button"
+                    <Button
                         onClick={onProceedClick}
-                        mini
+                        size="small"
                         className={styles.fristForDokumentasjonUtløptPanel__formContainer__gåVidereKnapp}
                     >
                         Gå videre
-                    </Hovedknapp>
+                    </Button>
                 )}
             </div>
         </InfoPanel>

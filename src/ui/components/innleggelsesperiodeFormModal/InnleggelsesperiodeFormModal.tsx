@@ -1,10 +1,7 @@
-import { Period } from '@navikt/k9-period-utils';
+import { Alert, Button, Label, Modal } from '@navikt/ds-react';
 import { Box, Form, Margin } from '@navikt/ft-plattform-komponenter';
 import { PeriodpickerList } from '@navikt/k9-form-utils';
-import { AlertStripeAdvarsel } from 'nav-frontend-alertstriper';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import Modal from 'nav-frontend-modal';
-import { Element } from 'nav-frontend-typografi';
+import { Period } from '@navikt/k9-period-utils';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { InnleggelsesperiodeDryRunResponse } from '../../../api/api';
@@ -60,131 +57,130 @@ const InnleggelsesperiodeFormModal = ({
     };
 
     return (
-        <Modal
-            isOpen
-            closeButton
-            onRequestClose={handleCloseModal}
-            contentLabel="Legg til innleggelsesperiode"
-            className={styles.innleggelsesperiodeFormModal}
-        >
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <FormProvider {...formMethods}>
-                <Form onSubmit={formMethods.handleSubmit(handleSubmit)} shouldShowSubmitButton={false}>
-                    <ModalFormWrapper title="Innleggelsesperioder">
-                        <Box marginTop={Margin.large}>
-                            <PeriodpickerList
-                                name="innleggelsesperioder"
-                                legend="Innleggelsesperioder"
-                                fromDatepickerProps={{
-                                    ariaLabel: 'Fra',
-                                    calendarSettings: { position: 'fullscreen' },
-                                }}
-                                toDatepickerProps={{
-                                    ariaLabel: 'Til',
-                                    calendarSettings: { position: 'fullscreen' },
-                                }}
-                                afterOnChange={() => {
-                                    const initialiserteInnleggelsesperioder = getValues().innleggelsesperioder.map(
-                                        ({ period }: AnyType) => new Period(period.fom, period.tom)
-                                    );
-                                    const erAllePerioderGyldige = initialiserteInnleggelsesperioder.every((periode) =>
-                                        periode.isValid()
-                                    );
-                                    if (erAllePerioderGyldige) {
-                                        endringerPåvirkerAndreBehandlinger(initialiserteInnleggelsesperioder).then(
-                                            ({ førerTilRevurdering }) => setShowWarningMessage(førerTilRevurdering)
+        <Modal open closeButton onClose={handleCloseModal} className={styles.innleggelsesperiodeFormModal}>
+            <Modal.Content>
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                <FormProvider {...formMethods}>
+                    <Form onSubmit={formMethods.handleSubmit(handleSubmit)} shouldShowSubmitButton={false}>
+                        <ModalFormWrapper title="Innleggelsesperioder">
+                            <Box marginTop={Margin.large}>
+                                <PeriodpickerList
+                                    name="innleggelsesperioder"
+                                    legend="Innleggelsesperioder"
+                                    fromDatepickerProps={{
+                                        ariaLabel: 'Fra',
+                                        calendarSettings: { position: 'fullscreen' },
+                                    }}
+                                    toDatepickerProps={{
+                                        ariaLabel: 'Til',
+                                        calendarSettings: { position: 'fullscreen' },
+                                    }}
+                                    afterOnChange={() => {
+                                        const initialiserteInnleggelsesperioder = getValues().innleggelsesperioder.map(
+                                            ({ period }: AnyType) => new Period(period.fom, period.tom)
                                         );
-                                    }
-                                }}
-                                defaultValues={defaultValues[FieldName.INNLEGGELSESPERIODER] || []}
-                                validators={{
-                                    overlaps: (periodValue: Period) => {
-                                        const innleggelsesperioderFormValue = getValues()
-                                            .innleggelsesperioder.filter(
-                                                (periodWrapper: AnyType) => periodWrapper.period !== periodValue
-                                            )
-                                            .map(({ period }: AnyType) => new Period(period.fom, period.tom));
-                                        const { fom, tom } = periodValue;
-                                        const period = new Period(fom, tom);
-                                        if (period.overlapsWithSomePeriodInList(innleggelsesperioderFormValue)) {
-                                            return 'Innleggelsesperiodene kan ikke overlappe';
+                                        const erAllePerioderGyldige = initialiserteInnleggelsesperioder.every(
+                                            (periode) => periode.isValid()
+                                        );
+                                        if (erAllePerioderGyldige) {
+                                            endringerPåvirkerAndreBehandlinger(initialiserteInnleggelsesperioder).then(
+                                                ({ førerTilRevurdering }) => setShowWarningMessage(førerTilRevurdering)
+                                            );
                                         }
-                                        return null;
-                                    },
-                                    hasEmptyPeriodInputs: (periodValue: Period) => {
-                                        const { fom, tom } = periodValue;
-                                        if (!fom) {
-                                            return 'Fra-dato er påkrevd';
-                                        }
-                                        if (!tom) {
-                                            return 'Til-dato er påkrevd';
-                                        }
-                                        return null;
-                                    },
-                                    fomIsBeforeOrSameAsTom: (periodValue: Period) => {
-                                        const { fom, tom } = periodValue;
-                                        const period = new Period(fom, tom);
+                                    }}
+                                    defaultValues={defaultValues[FieldName.INNLEGGELSESPERIODER] || []}
+                                    validators={{
+                                        overlaps: (periodValue: Period) => {
+                                            const innleggelsesperioderFormValue = getValues()
+                                                .innleggelsesperioder.filter(
+                                                    (periodWrapper: AnyType) => periodWrapper.period !== periodValue
+                                                )
+                                                .map(({ period }: AnyType) => new Period(period.fom, period.tom));
+                                            const { fom, tom } = periodValue;
+                                            const period = new Period(fom, tom);
+                                            if (period.overlapsWithSomePeriodInList(innleggelsesperioderFormValue)) {
+                                                return 'Innleggelsesperiodene kan ikke overlappe';
+                                            }
+                                            return null;
+                                        },
+                                        hasEmptyPeriodInputs: (periodValue: Period) => {
+                                            const { fom, tom } = periodValue;
+                                            if (!fom) {
+                                                return 'Fra-dato er påkrevd';
+                                            }
+                                            if (!tom) {
+                                                return 'Til-dato er påkrevd';
+                                            }
+                                            return null;
+                                        },
+                                        fomIsBeforeOrSameAsTom: (periodValue: Period) => {
+                                            const { fom, tom } = periodValue;
+                                            const period = new Period(fom, tom);
 
-                                        if (period.fomIsBeforeOrSameAsTom() === false) {
-                                            return 'Fra-dato må være tidligere eller samme som til-dato';
-                                        }
-                                        return null;
-                                    },
-                                }}
-                                renderBeforeFieldArray={(fieldArrayMethods) => (
-                                    <>
-                                        <Box marginTop={Margin.large} marginBottom={Margin.medium}>
-                                            <AddButton
-                                                label="Legg til innleggelsesperiode"
-                                                onClick={() => fieldArrayMethods.append({ fom: '', tom: '' })}
-                                                id="leggTilInnleggelsesperiodeKnapp"
-                                            />
-                                        </Box>
-                                        <Box marginTop={Margin.medium}>
-                                            <div className={styles.innleggelsesperiodeFormModal__pickerLabels}>
-                                                <Element
-                                                    className={styles.innleggelsesperiodeFormModal__firstLabel}
-                                                    aria-hidden
-                                                >
-                                                    Fra
-                                                </Element>
-                                                <Element aria-hidden>Til</Element>
-                                            </div>
-                                        </Box>
-                                    </>
+                                            if (period.fomIsBeforeOrSameAsTom() === false) {
+                                                return 'Fra-dato må være tidligere eller samme som til-dato';
+                                            }
+                                            return null;
+                                        },
+                                    }}
+                                    renderBeforeFieldArray={(fieldArrayMethods) => (
+                                        <>
+                                            <Box marginTop={Margin.large} marginBottom={Margin.medium}>
+                                                <AddButton
+                                                    label="Legg til innleggelsesperiode"
+                                                    onClick={() => fieldArrayMethods.append({ fom: '', tom: '' })}
+                                                    id="leggTilInnleggelsesperiodeKnapp"
+                                                />
+                                            </Box>
+                                            <Box marginTop={Margin.medium}>
+                                                <div className={styles.innleggelsesperiodeFormModal__pickerLabels}>
+                                                    <Label
+                                                        size="small"
+                                                        className={styles.innleggelsesperiodeFormModal__firstLabel}
+                                                        aria-hidden
+                                                    >
+                                                        Fra
+                                                    </Label>
+                                                    <Label size="small" aria-hidden>
+                                                        Til
+                                                    </Label>
+                                                </div>
+                                            </Box>
+                                        </>
+                                    )}
+                                    renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => (
+                                        <DeleteButton onClick={() => fieldArrayMethods.remove(index)} />
+                                    )}
+                                />
+                                {showWarningMessage && (
+                                    <Box marginTop={Margin.large}>
+                                        <Alert size="small" variant="warning">
+                                            Endringene du har gjort på innleggelsesperiodene vil føre til en ny
+                                            revurdering av en annen behandling. Påvirker alle søkere.
+                                        </Alert>
+                                    </Box>
                                 )}
-                                renderContentAfterElement={(index, numberOfItems, fieldArrayMethods) => (
-                                    <DeleteButton onClick={() => fieldArrayMethods.remove(index)} />
-                                )}
-                            />
-                            {showWarningMessage && (
-                                <Box marginTop={Margin.large}>
-                                    <AlertStripeAdvarsel>
-                                        Endringene du har gjort på innleggelsesperiodene vil føre til en ny revurdering
-                                        av en annen behandling. Påvirker alle søkere.
-                                    </AlertStripeAdvarsel>
-                                </Box>
-                            )}
-                        </Box>
-                        <Box marginTop={Margin.xLarge}>
-                            <div style={{ display: 'flex' }}>
-                                <Hovedknapp spinner={isLoading} disabled={isLoading} autoDisableVedSpinner mini>
-                                    Bekreft
-                                </Hovedknapp>
-                                <Knapp
-                                    mini
-                                    style={{ marginLeft: '1rem' }}
-                                    htmlType="button"
-                                    onClick={handleCloseModal}
-                                    disabled={isLoading}
-                                >
-                                    Avbryt
-                                </Knapp>
-                            </div>
-                        </Box>
-                    </ModalFormWrapper>
-                </Form>
-            </FormProvider>
+                            </Box>
+                            <Box marginTop={Margin.xLarge}>
+                                <div style={{ display: 'flex' }}>
+                                    <Button loading={isLoading} disabled={isLoading} size="small">
+                                        Bekreft
+                                    </Button>
+                                    <Button
+                                        size="small"
+                                        style={{ marginLeft: '1rem' }}
+                                        variant="secondary"
+                                        onClick={handleCloseModal}
+                                        disabled={isLoading}
+                                    >
+                                        Avbryt
+                                    </Button>
+                                </div>
+                            </Box>
+                        </ModalFormWrapper>
+                    </Form>
+                </FormProvider>
+            </Modal.Content>
         </Modal>
     );
 };

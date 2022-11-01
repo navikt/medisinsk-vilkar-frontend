@@ -1,8 +1,7 @@
-import { Period } from '@navikt/k9-period-utils';
+import { Alert, Link } from '@navikt/ds-react';
 import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/ft-plattform-komponenter';
 import { CheckboxGroup, PeriodpickerList, TextArea, YesOrNoQuestion } from '@navikt/k9-form-utils';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import Lenke from 'nav-frontend-lenker';
+import { Period } from '@navikt/k9-period-utils';
 import React from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
@@ -13,12 +12,12 @@ import {
     slåSammenSammenhengendePerioder,
 } from '../../../util/periodUtils';
 import { lagToOmsorgspersonerVurdering } from '../../../util/vurderingUtils';
+import ContainerContext from '../../context/ContainerContext';
 import { fomDatoErFørTomDato, harBruktDokumentasjon, required } from '../../form/validators';
 import AddButton from '../add-button/AddButton';
 import DeleteButton from '../delete-button/DeleteButton';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
-import ContainerContext from '../../context/ContainerContext';
 import styles from './vurderingAvToOmsorgspersonerForm.css';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -153,16 +152,16 @@ const VurderingAvToOmsorgspersonerForm = ({
                                     </b>
                                     <p className={styles.begrunnelsesfelt__labeltekst}>
                                         Du skal ta utgangspunkt i{' '}
-                                        <Lenke href="https://lovdata.no/nav/folketrygdloven/kap9" target="_blank">
+                                        <Link href="https://lovdata.no/nav/folketrygdloven/kap9" target="_blank">
                                             lovteksten
-                                        </Lenke>{' '}
+                                        </Link>{' '}
                                         og{' '}
-                                        <Lenke
+                                        <Link
                                             href="https://lovdata.no/nav/rundskriv/r09-00#ref/lov/1997-02-28-19/%C2%A79-10"
                                             target="_blank"
                                         >
                                             rundskrivet
-                                        </Lenke>{' '}
+                                        </Link>{' '}
                                         når du skriver vurderingen.
                                     </p>
                                     <p className={styles.begrunnelsesfelt__labeltekst}>Vurderingen skal beskrive:</p>
@@ -250,10 +249,10 @@ const VurderingAvToOmsorgspersonerForm = ({
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (
                         <Box marginTop={Margin.xLarge}>
-                            <AlertStripeInfo>
+                            <Alert size="small" variant="info">
                                 Du har ikke vurdert alle periodene som må vurderes. Resterende perioder vurderer du
                                 etter at du har lagret denne.
-                            </AlertStripeInfo>
+                            </Alert>
                         </Box>
                     )}
                 </Form>

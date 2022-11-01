@@ -1,9 +1,7 @@
-import { post } from '@navikt/k9-http-utils';
+import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import { Box, Margin, PageError } from '@navikt/ft-plattform-komponenter';
+import { post } from '@navikt/k9-http-utils';
 import axios from 'axios';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
-import Modal from 'nav-frontend-modal';
-import { Normaltekst } from 'nav-frontend-typografi';
 import React, { useMemo, useState } from 'react';
 import LinkRel from '../../../constants/LinkRel';
 import Dokument from '../../../types/Dokument';
@@ -57,36 +55,37 @@ const SlettDuplikatModal = ({ handleCloseModal, selectedDocument, onRemove }: Sl
         );
     };
     return (
-        <Modal isOpen closeButton onRequestClose={handleCloseModal} contentLabel="Fjern som duplikat">
-            <ModalFormWrapper title="Fjern som duplikat">
-                <Normaltekst>
-                    Når du fjerner et dokument som duplikat vil det bli lagt som et eget dokument i listen.
-                </Normaltekst>
-                {removeDuplikatFeilet && (
-                    <Box marginTop={Margin.medium}>
-                        <PageError message="Noe gikk galt, vennligst prøv igjen senere" />
-                    </Box>
-                )}
-                <div className={styles.buttonContainer}>
-                    <Hovedknapp
-                        id="submitButton"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            removeDuplikatreferanse();
-                        }}
-                        spinner={isSubmitting}
-                        disabled={isSubmitting}
-                        autoDisableVedSpinner
-                    >
-                        Fjern som duplikat
-                    </Hovedknapp>
-                    <div className={styles.cancelButton}>
-                        <Knapp htmlType="button" onClick={handleCloseModal}>
-                            Avbryt
-                        </Knapp>
+        <Modal open closeButton onClose={handleCloseModal}>
+            <Modal.Content>
+                <ModalFormWrapper title="Fjern som duplikat">
+                    <BodyShort size="small">
+                        Når du fjerner et dokument som duplikat vil det bli lagt som et eget dokument i listen.
+                    </BodyShort>
+                    {removeDuplikatFeilet && (
+                        <Box marginTop={Margin.medium}>
+                            <PageError message="Noe gikk galt, vennligst prøv igjen senere" />
+                        </Box>
+                    )}
+                    <div className={styles.buttonContainer}>
+                        <Button
+                            id="submitButton"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                removeDuplikatreferanse();
+                            }}
+                            loading={isSubmitting}
+                            disabled={isSubmitting}
+                        >
+                            Fjern som duplikat
+                        </Button>
+                        <div className={styles.cancelButton}>
+                            <Button variant="secondary" onClick={handleCloseModal}>
+                                Avbryt
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            </ModalFormWrapper>
+                </ModalFormWrapper>
+            </Modal.Content>
         </Modal>
     );
 };

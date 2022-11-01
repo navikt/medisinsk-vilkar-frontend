@@ -1,6 +1,5 @@
 import { Box, Margin } from '@navikt/ft-plattform-komponenter';
-import Alertstripe from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
+import { Alert, Button } from '@navikt/ds-react';
 import React from 'react';
 import FagsakYtelseType from '../../../constants/FagsakYtelseType';
 import Dokumentoversikt from '../../../types/Dokumentoversikt';
@@ -40,22 +39,22 @@ const DokumentoversiktMessages = ({
         <>
             {harRegistrertDiagnosekode === false && (
                 <Box marginBottom={Margin.large}>
-                    <Alertstripe type="advarsel">
+                    <Alert size="small" variant="warning">
                         Diagnosekode mangler. Du må legge til en diagnosekode for å vurdere tilsyn og pleie.
-                    </Alertstripe>
+                    </Alert>
                 </Box>
             )}
             {visFristForDokumentasjonUtløptMelding && !readOnly && (
                 <>
                     <Box marginBottom={Margin.large}>
-                        <Alertstripe type="advarsel">
+                        <Alert size="small" variant="warning">
                             {erPleiepengerSluttfaseFagsak ? (
                                 <span>Dokumentasjon signert av lege eller helseinstitusjon mangler.</span>
                             ) : (
                                 <span>Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler.</span>
                             )}
                             Sett saken på vent mens du innhenter mer dokumentasjon.
-                        </Alertstripe>
+                        </Alert>
                     </Box>
                     <Box marginBottom={Margin.large}>
                         <FristForDokumentasjonUtløptPanel
@@ -67,38 +66,44 @@ const DokumentoversiktMessages = ({
             {visHåndterNyeDokumenterMelding && fagsakYtelseType !== FagsakYtelseType.PLEIEPENGER_SLUTTFASE && (
                 <>
                     <Box marginBottom={Margin.large}>
-                        <Alertstripe type="advarsel">
+                        <Alert size="small" variant="warning">
                             Dokumentasjon signert av sykehuslege/spesialisthelsetjenesten mangler. Håndter eventuelle
                             nye dokumenter, eller sett saken på vent mens du innhenter mer dokumentasjon.
-                        </Alertstripe>
+                        </Alert>
                     </Box>
                 </>
             )}
             {dokumentoversikt.harDokumenter() === false && (
-                <Alertstripe type="info">Ingen dokumenter å vise</Alertstripe>
+                <Alert size="small" variant="info">
+                    Ingen dokumenter å vise
+                </Alert>
             )}
             {kanNavigereVidere && !readOnly && (
                 <Box marginBottom={Margin.large}>
-                    <Alertstripe
+                    <Alert
+                        size="small"
                         data-testid="dokumentasjon-ferdig"
-                        type={erPleiepengerSluttfaseFagsak ? 'suksess' : 'info'}
+                        variant={erPleiepengerSluttfaseFagsak ? 'success' : 'info'}
                     >
-                        {erPleiepengerSluttfaseFagsak ? (
-                            <>Dokumentasjon av livets sluttfase er ferdig vurdert og du kan gå videre i vurderingen.</>
-                        ) : (
-                            <>Dokumentasjon av sykdom er ferdig vurdert og du kan gå videre i vurderingen.</>
-                        )}
-                        <Knapp
-                            type="hoved"
-                            htmlType="button"
-                            style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
-                            onClick={navigerTilNesteSteg}
-                            mini
-                            id="gåVidereFraDokumentasjonKnapp"
-                        >
-                            Fortsett
-                        </Knapp>
-                    </Alertstripe>
+                        <div style={{ display: 'flex' }}>
+                            {erPleiepengerSluttfaseFagsak ? (
+                                <>
+                                    Dokumentasjon av livets sluttfase er ferdig vurdert og du kan gå videre i
+                                    vurderingen.
+                                </>
+                            ) : (
+                                <>Dokumentasjon av sykdom er ferdig vurdert og du kan gå videre i vurderingen.</>
+                            )}
+                            <Button
+                                style={{ marginLeft: '2rem' }}
+                                onClick={navigerTilNesteSteg}
+                                size="small"
+                                id="gåVidereFraDokumentasjonKnapp"
+                            >
+                                Fortsett
+                            </Button>
+                        </div>
+                    </Alert>
                 </Box>
             )}
         </>

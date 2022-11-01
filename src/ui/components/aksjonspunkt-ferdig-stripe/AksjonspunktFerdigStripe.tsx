@@ -1,6 +1,5 @@
 import { Box, Margin } from '@navikt/ft-plattform-komponenter';
-import AlertStripe from 'nav-frontend-alertstriper';
-import { Knapp } from 'nav-frontend-knapper';
+import { Alert, Button } from '@navikt/ds-react';
 import * as React from 'react';
 import FagsakYtelseType from '../../../constants/FagsakYtelseType';
 import ContainerContext from '../../context/ContainerContext';
@@ -13,25 +12,23 @@ const AksjonspunktFerdigStripe = (): JSX.Element => {
 
     return (
         <Box marginBottom={Margin.medium}>
-            <AlertStripe type="info">
+            <Alert size="small" variant="info">
                 {erPleiepengerSluttfaseFagsak && <>Vilkåret er ferdig vurdert og du kan gå videre i behandlingen.</>}
                 {!erPleiepengerSluttfaseFagsak && <>Sykdom er ferdig vurdert og du kan gå videre i behandlingen.</>}
-                <Knapp
-                    type="hoved"
-                    htmlType="button"
-                    style={{ marginLeft: '2rem', marginBottom: '-0.25rem' }}
+                <Button
+                    style={{ marginLeft: '2rem' }}
                     disabled={isSubmitting}
-                    spinner={isSubmitting}
+                    loading={isSubmitting}
                     onClick={() => {
                         setIsSubmitting(true);
                         setTimeout(() => setIsSubmitting(false), 10 * 1000);
                         onFinished();
                     }}
-                    mini
+                    size="small"
                 >
                     Fortsett
-                </Knapp>
-            </AlertStripe>
+                </Button>
+            </Alert>
         </Box>
     );
 };

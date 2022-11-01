@@ -1,7 +1,6 @@
-import { prettifyDateString } from '@navikt/k9-date-utils';
+import { Alert, Link } from '@navikt/ds-react';
 import { Box, DetailView, LabelledContent, LinkButton, Margin } from '@navikt/ft-plattform-komponenter';
-import Alertstripe from 'nav-frontend-alertstriper';
-import Lenke from 'nav-frontend-lenker';
+import { prettifyDateString } from '@navikt/k9-date-utils';
 import React from 'react';
 import FagsakYtelseType from '../../../constants/FagsakYtelseType';
 import LinkRel from '../../../constants/LinkRel';
@@ -60,9 +59,9 @@ const StrukturertDokumentDetaljer = ({
         const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, originaltDokument.links);
 
         return (
-            <Lenke href={dokumentLink.href} target="_blank">
+            <Link href={dokumentLink.href} target="_blank">
                 {`${renderDokumenttypeText(originaltDokument.type)} - ${prettifyDateString(originaltDokument.datert)}`}
-            </Lenke>
+            </Link>
         );
     };
 
@@ -81,12 +80,16 @@ const StrukturertDokumentDetaljer = ({
         >
             {harDuplikater && (
                 <Box marginTop={Margin.large}>
-                    <Alertstripe type="info">Det finnes ett eller flere duplikater av dette dokumentet.</Alertstripe>
+                    <Alert size="small" variant="info">
+                        Det finnes ett eller flere duplikater av dette dokumentet.
+                    </Alert>
                 </Box>
             )}
             {duplikatAvId && (
                 <Box marginTop={Margin.large}>
-                    <Alertstripe type="info">Dokumentet er et duplikat.</Alertstripe>
+                    <Alert size="small" variant="info">
+                        Dokumentet er et duplikat.
+                    </Alert>
                 </Box>
             )}
             <Box marginTop={Margin.xLarge}>

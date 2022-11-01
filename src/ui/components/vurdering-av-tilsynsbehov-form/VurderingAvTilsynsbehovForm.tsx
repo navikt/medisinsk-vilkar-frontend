@@ -1,10 +1,8 @@
+import { Close } from '@navikt/ds-icons';
+import { Alert, Label, Link } from '@navikt/ds-react';
+import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/ft-plattform-komponenter';
 import { CheckboxGroup, PeriodpickerList, TextArea, YesOrNoQuestion } from '@navikt/k9-form-utils';
 import { Period } from '@navikt/k9-period-utils';
-import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/ft-plattform-komponenter';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
-import Ikon from 'nav-frontend-ikoner-assets';
-import Lenke from 'nav-frontend-lenker';
-import { Element } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import Dokument from '../../../types/Dokument';
@@ -158,9 +156,9 @@ const VurderingAvTilsynsbehovForm = ({
                 >
                     {dokumenter?.length > 0 && (
                         <Box marginTop={Margin.large}>
-                            <Element aria-hidden="true">
+                            <Label size="small" aria-hidden="true">
                                 Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?
-                            </Element>
+                            </Label>
                             <div className={styles.filterContainer}>
                                 <VurderingDokumentfilter
                                     text="Filter"
@@ -181,7 +179,7 @@ const VurderingAvTilsynsbehovForm = ({
                                                 type="button"
                                             >
                                                 {label}
-                                                <Ikon kind="x" />
+                                                <Close />
                                             </button>
                                         );
                                     })}
@@ -253,16 +251,16 @@ const VurderingAvTilsynsbehovForm = ({
                                     </b>
                                     <p className={styles.begrunnelsesfelt__labeltekst}>
                                         Du skal ta utgangspunkt i{' '}
-                                        <Lenke href="https://lovdata.no/nav/folketrygdloven/kap9" target="_blank">
+                                        <Link href="https://lovdata.no/nav/folketrygdloven/kap9" target="_blank">
                                             lovteksten
-                                        </Lenke>{' '}
+                                        </Link>{' '}
                                         og{' '}
-                                        <Lenke
+                                        <Link
                                             href="https://lovdata.no/nav/rundskriv/r09-00#ref/lov/1997-02-28-19/%C2%A79-10"
                                             target="_blank"
                                         >
                                             rundskrivet
-                                        </Lenke>{' '}
+                                        </Link>{' '}
                                         når du skriver vurderingen.
                                     </p>
 
@@ -347,10 +345,10 @@ const VurderingAvTilsynsbehovForm = ({
                     </Box>
                     {!harVurdertAlleDagerSomSkalVurderes && (
                         <Box marginTop={Margin.xLarge}>
-                            <AlertStripeInfo>
+                            <Alert size="small" variant="info">
                                 Du har ikke vurdert alle periodene som må vurderes. Resterende perioder vurderer du
                                 etter at du har lagret denne.
-                            </AlertStripeInfo>
+                            </Alert>
                         </Box>
                     )}
                 </Form>

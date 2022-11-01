@@ -1,13 +1,10 @@
+import { Alert, BodyShort, Heading, Modal } from '@navikt/ds-react';
 import { Box, Margin } from '@navikt/ft-plattform-komponenter';
-import React from 'react';
-import Modal from 'nav-frontend-modal';
-import Alertstripe from 'nav-frontend-alertstriper';
-import { Normaltekst, Systemtittel } from 'nav-frontend-typografi';
+import React, { useEffect } from 'react';
 import { PeriodeMedEndring } from '../../../types/PeriodeMedEndring';
 import ConfirmationModal from '../confirmation-modal/ConfirmationModal';
 
 interface OverlappendePeriodeModalProps {
-    appElementId: string;
     perioderMedEndring: PeriodeMedEndring[];
     onConfirm: () => void;
     onCancel: () => void;
@@ -17,31 +14,32 @@ interface OverlappendePeriodeModalProps {
 
 const renderInfoMsg = ({ periode }: PeriodeMedEndring) => (
     <Box key={periode.fom} marginBottom={Margin.medium}>
-        <Alertstripe type="info">
+        <Alert size="small" variant="info">
             {`${periode.prettifyPeriod()} overlapper med en tidligere vurdert periode lagt til i denne behandlingen. Den nye
         vurderingen vil erstatte den gamle.`}
-        </Alertstripe>
+        </Alert>
     </Box>
 );
 
 const renderWarningMsg = ({ periode }: PeriodeMedEndring) => (
     <Box key={periode.fom} marginBottom={Margin.medium}>
-        <Alertstripe type="advarsel">
+        <Alert size="small" variant="warning">
             {`${periode.prettifyPeriod()} overlapper med en tidligere vurdert periode. Dersom ny vurdering medfører endring i
         resultat vil det bli sendt melding om nytt vedtak til bruker. Dette vil også gjelde eventuelle andre parter.`}
-        </Alertstripe>
+        </Alert>
     </Box>
 );
 
 const OverlappendePeriodeModal = ({
-    appElementId,
     perioderMedEndring,
     onConfirm,
     onCancel,
     isOpen,
     isSubmitting,
 }: OverlappendePeriodeModalProps): JSX.Element => {
-    Modal.setAppElement(`#${appElementId}`);
+    useEffect(() => {
+        Modal.setAppElement(document.body);
+    }, []);
 
     const overlappendePerioderISammeBehandling =
         perioderMedEndring.filter(({ endrerVurderingSammeBehandling }) => endrerVurderingSammeBehandling === true) ||
@@ -53,18 +51,20 @@ const OverlappendePeriodeModal = ({
 
     return (
         <ConfirmationModal onConfirm={onConfirm} onCancel={onCancel} isOpen={isOpen} isSubmitting={isSubmitting}>
-            <Systemtittel>Overlappende periode</Systemtittel>
+            <Heading level="1" size="medium">
+                Overlappende periode
+            </Heading>
             <Box marginTop={Margin.large}>
                 {overlappendePerioderISammeBehandling.map(renderInfoMsg)}
                 {overlappendePerioderIAndreBehandlinger.map(renderWarningMsg)}
                 <Box marginTop={Margin.large}>
-                    <Normaltekst>
+                    <BodyShort size="small">
                         {`Er du sikker på at du vil erstatte ${
                             harFlerePerioderMedOverlapp
                                 ? 'de tidligere vurderte periodene'
                                 : 'den tidligere vurderte perioden'
                         }?`}
-                    </Normaltekst>
+                    </BodyShort>
                 </Box>
             </Box>
         </ConfirmationModal>

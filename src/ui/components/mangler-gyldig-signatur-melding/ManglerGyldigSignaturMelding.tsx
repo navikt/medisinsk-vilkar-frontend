@@ -1,12 +1,14 @@
 import React from 'react';
-import Alertstripe from 'nav-frontend-alertstriper';
+import { Alert } from '@navikt/ds-react';
 
 interface ManglerGyldigSignaturMeldingProps {
     children: React.ReactNode;
 }
 
 const ManglerGyldigSignaturMelding = ({ children }: ManglerGyldigSignaturMeldingProps): JSX.Element => (
-    <Alertstripe type="info">{children}</Alertstripe>
+    <Alert size="small" variant="info">
+        {children}
+    </Alert>
 );
 
 export default ManglerGyldigSignaturMelding;

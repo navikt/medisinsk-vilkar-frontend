@@ -1,8 +1,6 @@
-import { FilterFilled } from '@navikt/ds-icons';
+import { Collapse, Expand, FilterFilled } from '@navikt/ds-icons';
+import { Checkbox, Label } from '@navikt/ds-react';
 import classNames from 'classnames';
-import Chevron from 'nav-frontend-chevron';
-import { Checkbox } from 'nav-frontend-skjema';
-import { Element } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 import styles from './vurderingDokumentfilter.css';
@@ -22,8 +20,10 @@ interface VurderingDokumentfilterProps {
 function ChevronWithText({ chevronDirection, onClick, text }: ChevronWithTextProps): JSX.Element {
     return (
         <button type="button" className={styles.chevronDropdown__toggleButton} onClick={onClick}>
-            <Element className={styles.chevronDropdown__toggleButton__text}>{text}</Element>
-            <Chevron type={chevronDirection} />
+            <Label size="small" className={styles.chevronDropdown__toggleButton__text}>
+                {text}
+            </Label>
+            {chevronDirection === 'ned' ? <Expand /> : <Collapse />}
         </button>
     );
 }
@@ -53,10 +53,11 @@ function VurderingDokumentfilter({ text, filters, onFilterChange }: VurderingDok
                                 {filterListe.map(({ label, attributtNavn }) => (
                                     <Checkbox
                                         key={attributtNavn}
-                                        label={label}
                                         checked={filters.includes(attributtNavn)}
                                         onChange={() => onFilterChange(attributtNavn)}
-                                    />
+                                    >
+                                        {label}
+                                    </Checkbox>
                                 ))}
                             </div>
                         </span>

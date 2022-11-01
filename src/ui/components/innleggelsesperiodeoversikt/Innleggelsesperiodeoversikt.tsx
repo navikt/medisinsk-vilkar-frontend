@@ -1,19 +1,18 @@
+import { Loader, Modal } from '@navikt/ds-react';
+import { Box, LinkButton, Margin, PageError, TitleWithUnderline } from '@navikt/ft-plattform-komponenter';
 import { get } from '@navikt/k9-http-utils';
-import { PageError, Box, Margin, LinkButton, TitleWithUnderline } from '@navikt/ft-plattform-komponenter';
 import { Period } from '@navikt/k9-period-utils';
-import Modal from 'nav-frontend-modal';
-import Spinner from 'nav-frontend-spinner';
 import axios from 'axios';
 import React, { useEffect, useMemo } from 'react';
-import ContainerContext from '../../context/ContainerContext';
-import AddButton from '../add-button/AddButton';
-import Innleggelsesperiodeliste from '../innleggelsesperiodeliste/Innleggelsesperiodeliste';
-import InnleggelsesperiodeFormModal from '../innleggelsesperiodeFormModal/InnleggelsesperiodeFormModal';
-import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
+import { postInnleggelsesperioder, postInnleggelsesperioderDryRun } from '../../../api/api';
+import LinkRel from '../../../constants/LinkRel';
 import { InnleggelsesperiodeResponse } from '../../../types/InnleggelsesperiodeResponse';
 import { findLinkByRel } from '../../../util/linkUtils';
-import LinkRel from '../../../constants/LinkRel';
-import { postInnleggelsesperioder, postInnleggelsesperioderDryRun } from '../../../api/api';
+import ContainerContext from '../../context/ContainerContext';
+import AddButton from '../add-button/AddButton';
+import InnleggelsesperiodeFormModal from '../innleggelsesperiodeFormModal/InnleggelsesperiodeFormModal';
+import Innleggelsesperiodeliste from '../innleggelsesperiodeliste/Innleggelsesperiodeliste';
+import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import styles from './innleggelsesperiodeoversikt.css';
 
 export enum FieldName {
@@ -24,10 +23,12 @@ interface InnleggelsesperiodeoversiktProps {
     onInnleggelsesperioderUpdated: () => void;
 }
 
-Modal.setAppElement('#app');
 const Innleggelsesperiodeoversikt = ({
     onInnleggelsesperioderUpdated,
 }: InnleggelsesperiodeoversiktProps): JSX.Element => {
+    useEffect(() => {
+        Modal.setAppElement(document.body);
+    }, []);
     const { endpoints, httpErrorHandler } = React.useContext(ContainerContext);
 
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
@@ -145,7 +146,7 @@ const Innleggelsesperiodeoversikt = ({
                 Innleggelsesperioder
             </TitleWithUnderline>
             {isLoading ? (
-                <Spinner />
+                <Loader size="large" />
             ) : (
                 <>
                     <Box marginTop={Margin.large}>

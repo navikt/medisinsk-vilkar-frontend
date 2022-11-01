@@ -1,6 +1,5 @@
+import { Label, Loader } from '@navikt/ds-react';
 import { Autocomplete, FieldError } from '@navikt/ft-plattform-komponenter';
-import { Label } from 'nav-frontend-skjema';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import * as React from 'react';
 import Diagnosekode from '../../../types/Diagnosekode';
 import styles from './diagnosekodeSelector.css';
@@ -62,7 +61,9 @@ const PureDiagnosekodeSelector = ({
     return (
         <div className={styles.diagnosekodeContainer}>
             <div className={hideLabel ? styles.diagnosekodeContainer__hideLabel : ''}>
-                <Label htmlFor={name}>{label}</Label>
+                <Label as="label" htmlFor={name}>
+                    {label}
+                </Label>
             </div>
             <div className={styles.diagnosekodeContainer__autocompleteContainer}>
                 <Autocomplete
@@ -80,7 +81,7 @@ const PureDiagnosekodeSelector = ({
                 />
                 {showSpinner && (
                     <div className={styles.diagnosekodeContainer__spinnerContainer}>
-                        {isLoading && <NavFrontendSpinner />}
+                        {isLoading && <Loader size="large" />}
                     </div>
                 )}
             </div>

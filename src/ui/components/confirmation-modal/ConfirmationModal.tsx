@@ -1,6 +1,5 @@
 import React from 'react';
-import { Flatknapp, Knapp } from 'nav-frontend-knapper';
-import Modal from 'nav-frontend-modal';
+import { Button, Modal } from '@navikt/ds-react';
 import styles from './confirmationModal.css';
 
 interface ConfirmationModalProps {
@@ -18,30 +17,30 @@ const ConfirmationModal = ({
     isOpen,
     isSubmitting,
 }: ConfirmationModalProps): JSX.Element => (
-    <Modal isOpen={isOpen} onRequestClose={onCancel} contentLabel="" className={styles.confirmationModal}>
-        {children}
-        <div className={styles.confirmationModal__buttonSection}>
-            <Knapp
-                onClick={onConfirm}
-                spinner={isSubmitting}
-                disabled={isSubmitting}
-                type="hoved"
-                htmlType="button"
-                mini
-                data-testid="modal-confirm-button"
-            >
-                Bekreft
-            </Knapp>
-            <Flatknapp
-                onClick={onCancel}
-                htmlType="button"
-                mini
-                style={{ marginLeft: '0.5rem' }}
-                disabled={isSubmitting}
-            >
-                Avbryt
-            </Flatknapp>
-        </div>
+    <Modal open={isOpen} onClose={onCancel} className={styles.confirmationModal}>
+        <Modal.Content>
+            {children}
+            <div className={styles.confirmationModal__buttonSection}>
+                <Button
+                    onClick={onConfirm}
+                    loading={isSubmitting}
+                    disabled={isSubmitting}
+                    size="small"
+                    data-testid="modal-confirm-button"
+                >
+                    Bekreft
+                </Button>
+                <Button
+                    onClick={onCancel}
+                    size="small"
+                    style={{ marginLeft: '0.5rem' }}
+                    disabled={isSubmitting}
+                    variant="tertiary"
+                >
+                    Avbryt
+                </Button>
+            </div>
+        </Modal.Content>
     </Modal>
 );
 

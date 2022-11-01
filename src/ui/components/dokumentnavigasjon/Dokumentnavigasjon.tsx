@@ -1,6 +1,6 @@
+import { BodyShort, Label } from '@navikt/ds-react';
 import { InteractiveList } from '@navikt/ft-plattform-komponenter';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { Element, Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
 import { Dokument, Dokumenttype } from '../../../types/Dokument';
 import Dokumentfilter from '../dokumentfilter/Dokumentfilter';
@@ -55,9 +55,13 @@ const Dokumentnavigasjon = ({
             <EkspanderbartpanelBase tittel={tittel} apen={listExpanded} onClick={() => setListExpanded(!listExpanded)}>
                 <div className={styles.dokumentnavigasjon__container}>
                     <div className={styles.dokumentnavigasjon__columnHeadings}>
-                        <Element className={styles['dokumentnavigasjon__columnHeading--first']}>Status</Element>
+                        <Label size="small" className={styles['dokumentnavigasjon__columnHeading--first']}>
+                            Status
+                        </Label>
                         {!displayFilterOption && (
-                            <Element className={styles['dokumentnavigasjon__columnHeading--second']}>Type</Element>
+                            <Label size="small" className={styles['dokumentnavigasjon__columnHeading--second']}>
+                                Type
+                            </Label>
                         )}
                         {displayFilterOption && (
                             <Dokumentfilter
@@ -67,12 +71,16 @@ const Dokumentnavigasjon = ({
                                 onFilterChange={updateDokumenttypeFilter}
                             />
                         )}
-                        <Element className={styles['dokumentnavigasjon__columnHeading--third']}>Datert</Element>
-                        <Element className={styles['dokumentnavigasjon__columnHeading--fourth']}>Part</Element>
+                        <Label size="small" className={styles['dokumentnavigasjon__columnHeading--third']}>
+                            Datert
+                        </Label>
+                        <Label size="small" className={styles['dokumentnavigasjon__columnHeading--fourth']}>
+                            Part
+                        </Label>
                     </div>
                     {dokumentElementer.length === 0 && (
                         <div style={{ padding: '0.5rem 1rem 1rem 1rem' }}>
-                            <Normaltekst>Ingen dokumenter å vise</Normaltekst>
+                            <BodyShort size="small">Ingen dokumenter å vise</BodyShort>
                         </div>
                     )}
                     <InteractiveList

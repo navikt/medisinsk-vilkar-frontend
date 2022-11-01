@@ -1,6 +1,6 @@
 import { prettifyDateString } from '@navikt/k9-date-utils';
 import { BucketIcon } from '@navikt/ft-plattform-komponenter';
-import Lenke from 'nav-frontend-lenker';
+import { Link } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import LinkRel from '../../../constants/LinkRel';
 import Dokument from '../../../types/Dokument';
@@ -26,13 +26,13 @@ const Duplikatliste = ({ dokumenter, onRemoveDuplikat }: DuplikatlisteProps): JS
                     const dokumentLink = findLinkByRel(LinkRel.DOKUMENT_INNHOLD, dokument.links);
                     return (
                         <li key={dokument.id} className={styles.dokumentliste__element}>
-                            <Lenke
+                            <Link
                                 href={dokumentLink.href}
                                 className={styles.dokumentliste__beskrivelse}
                                 target="_blank"
                             >
                                 {`${renderDokumenttypeText(dokument.type)} - ${prettifyDateString(dokument.datert)}`}
-                            </Lenke>
+                            </Link>
                             <WriteAccessBoundContent
                                 contentRenderer={() => (
                                     <button

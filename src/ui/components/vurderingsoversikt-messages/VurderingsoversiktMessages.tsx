@@ -1,6 +1,6 @@
 import { Box, Margin } from '@navikt/ft-plattform-komponenter';
 import { getHumanReadablePeriodString } from '@navikt/k9-period-utils';
-import Alertstripe from 'nav-frontend-alertstriper';
+import { Alert } from '@navikt/ds-react';
 import React from 'react';
 import { addYearsToDate } from '@navikt/k9-date-utils';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
@@ -50,18 +50,18 @@ const VurderingsoversiktMessages = ({
         return (
             <>
                 <Box marginBottom={Margin.large}>
-                    <Alertstripe type="advarsel">
+                    <Alert size="small" variant="warning">
                         {`Vurder behov for ${vurderingsnavn} for ${getHumanReadablePeriodString(
                             vurderingsoversikt.resterendeVurderingsperioder
                         )}.`}
-                    </Alertstripe>
+                    </Alert>
                 </Box>
                 {vurderingsoversikt.harPerioderDerPleietrengendeErOver18år && (
                     <Box marginBottom={Margin.large}>
-                        <Alertstripe type="advarsel">
+                        <Alert size="small" variant="warning">
                             Barnet er 18 år {barnetsAttenårsdag}. Du må gjøre en egen vurdering etter § 9-10, tredje
                             ledd fra datoen barnet fyller 18 år.
-                        </Alertstripe>
+                        </Alert>
                     </Box>
                 )}
             </>

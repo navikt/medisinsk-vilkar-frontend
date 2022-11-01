@@ -1,14 +1,13 @@
+import { Heading, Label, Tag } from '@navikt/ds-react';
 import {
     ContentWithTooltip,
-    InteractiveList,
     EditedBySaksbehandlerIcon,
     InfoIcon,
+    InteractiveList,
     WarningIcon,
 } from '@navikt/ft-plattform-komponenter';
 import { Period, sortPeriodsByFomDate } from '@navikt/k9-period-utils';
 import React, { useEffect } from 'react';
-import { EtikettInfo } from 'nav-frontend-etiketter';
-import { Element, Undertittel } from 'nav-frontend-typografi';
 import ManuellVurdering from '../../../types/ManuellVurdering';
 import Vurderingselement from '../../../types/Vurderingselement';
 import usePrevious from '../../../util/hooks';
@@ -74,7 +73,11 @@ const Vurderingsnavigasjon = ({
                             </ContentWithTooltip>
                         )}
 
-                        {visOverlappetikett && <EtikettInfo mini>Overlapp</EtikettInfo>}
+                        {visOverlappetikett && (
+                            <Tag variant="info" size="small">
+                                Overlapp
+                            </Tag>
+                        )}
                     </div>
                 )}
             />
@@ -109,13 +112,19 @@ const Vurderingsnavigasjon = ({
     }
 
     if (visRadForNyVurdering) {
-        allElements.unshift(<EtikettInfo mini>Ny vurdering</EtikettInfo>);
+        allElements.unshift(
+            <Tag variant="info" size="small">
+                Ny vurdering
+            </Tag>
+        );
     }
 
     return (
         <div className={styles.vurderingsnavigasjon}>
             <div className={styles.vurderingsnavigasjon__headingContainer}>
-                <Undertittel className={styles.vurderingsnavigasjon__heading}>Alle perioder</Undertittel>
+                <Heading size="small" level="2" className={styles.vurderingsnavigasjon__heading}>
+                    Alle perioder
+                </Heading>
                 {visOpprettVurderingKnapp && (
                     <WriteAccessBoundContent
                         contentRenderer={() => (
@@ -138,14 +147,16 @@ const Vurderingsnavigasjon = ({
             {allElements.length > 0 && (
                 <div className={styles.vurderingsvelgerContainer}>
                     <div className={styles.vurderingsvelgerContainer__columnHeadings}>
-                        <Element className={styles['vurderingsvelgerContainer__columnHeading--first']}>Status</Element>
-                        <Element className={styles['vurderingsvelgerContainer__columnHeading--second']}>
+                        <Label size="small" className={styles['vurderingsvelgerContainer__columnHeading--first']}>
+                            Status
+                        </Label>
+                        <Label size="small" className={styles['vurderingsvelgerContainer__columnHeading--second']}>
                             Periode
-                        </Element>
+                        </Label>
                         {visParterLabel && (
-                            <Element className={styles['vurderingsvelgerContainer__columnHeading--third']}>
+                            <Label size="small" className={styles['vurderingsvelgerContainer__columnHeading--third']}>
                                 Part
-                            </Element>
+                            </Label>
                         )}
                     </div>
                     <InteractiveList

@@ -1,4 +1,3 @@
-import Lenke from 'nav-frontend-lenker';
 import React from 'react';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 import styles from './diagnosekodeliste.css';
@@ -16,9 +15,9 @@ const Diagnosekodeliste = ({ diagnosekoder, onDeleteClick }: DiagnosekodelistePr
                 <WriteAccessBoundContent
                     contentRenderer={() => (
                         <div className={styles.lenkeContainer}>
-                            <Lenke
-                                className={styles.lenkeContainer__slettLenke}
-                                href="#"
+                            <button
+                                type="button"
+                                className={`${styles.lenkeContainer__slettLenke} navds-link`}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -26,7 +25,7 @@ const Diagnosekodeliste = ({ diagnosekoder, onDeleteClick }: DiagnosekodelistePr
                                 }}
                             >
                                 Slett
-                            </Lenke>
+                            </button>
                         </div>
                     )}
                 />

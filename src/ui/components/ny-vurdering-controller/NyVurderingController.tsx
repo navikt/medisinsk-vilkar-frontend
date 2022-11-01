@@ -166,7 +166,6 @@ const NyVurderingController = ({
             )}
             {formRenderer(dokumenter, beOmBekreftelseFørLagringHvisNødvendig, isSubmitting)}
             <OverlappendePeriodeModal
-                appElementId="app"
                 perioderMedEndring={perioderMedEndring || []}
                 onCancel={() => dispatch({ type: ActionType.LAGRING_AV_VURDERING_AVBRUTT })}
                 onConfirm={() => {

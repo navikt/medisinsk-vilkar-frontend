@@ -1,7 +1,5 @@
+import { Alert, BodyShort, Button } from '@navikt/ds-react';
 import { Box, Margin } from '@navikt/ft-plattform-komponenter';
-import Alertstripe from 'nav-frontend-alertstriper';
-import { Hovedknapp } from 'nav-frontend-knapper';
-import { Normaltekst } from 'nav-frontend-typografi';
 import React from 'react';
 import ContainerContext from '../../context/ContainerContext';
 
@@ -11,17 +9,16 @@ const UteståendeEndringerMelding = (): JSX.Element => {
 
     return (
         <Box marginBottom={Margin.medium}>
-            <Alertstripe type="advarsel">
-                <Normaltekst>
+            <Alert size="small" variant="warning">
+                <BodyShort size="small">
                     OBS! Det er gjort endringer i sykdomssteget. For at endringene som er gjort skal bli tatt med i
                     behandlingen, trykk på Fortsett.
-                </Normaltekst>
+                </BodyShort>
                 <Box marginTop={Margin.small}>
-                    <Hovedknapp
-                        mini
-                        htmlType="button"
+                    <Button
+                        size="small"
                         disabled={isSubmitting}
-                        spinner={isSubmitting}
+                        loading={isSubmitting}
                         onClick={() => {
                             setIsSubmitting(true);
                             setTimeout(() => setIsSubmitting(false), 10 * 1000);
@@ -29,9 +26,9 @@ const UteståendeEndringerMelding = (): JSX.Element => {
                         }}
                     >
                         Fortsett
-                    </Hovedknapp>
+                    </Button>
                 </Box>
-            </Alertstripe>
+            </Alert>
         </Box>
     );
 };

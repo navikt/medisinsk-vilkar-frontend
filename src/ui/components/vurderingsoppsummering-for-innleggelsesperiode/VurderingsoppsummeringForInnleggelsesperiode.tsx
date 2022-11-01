@@ -1,5 +1,5 @@
 import React from 'react';
-import Alertstripe from 'nav-frontend-alertstriper';
+import { Alert } from '@navikt/ds-react';
 import { Box, Margin } from '@navikt/ft-plattform-komponenter';
 import InnleggelsesperiodeVurdering from '../../../types/InnleggelsesperiodeVurdering';
 import Vurderingstype from '../../../types/Vurderingstype';
@@ -19,7 +19,9 @@ const VurderingsoppsummeringForInnleggelsesperiode = ({
     return (
         <DetailViewVurdering title={`Vurdering av ${vurderingstekst}`} perioder={[vurdering.periode]}>
             <Box marginTop={Margin.large}>
-                <Alertstripe type="info">Innvilget som følge av innleggelse</Alertstripe>
+                <Alert size="small" variant="info">
+                    Innvilget som følge av innleggelse
+                </Alert>
             </Box>
         </DetailViewVurdering>
     );

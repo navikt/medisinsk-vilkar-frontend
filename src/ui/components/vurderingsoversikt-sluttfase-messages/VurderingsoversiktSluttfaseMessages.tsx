@@ -1,6 +1,6 @@
 import { Box, Margin } from '@navikt/ft-plattform-komponenter';
 import { getHumanReadablePeriodString } from '@navikt/k9-period-utils';
-import Alertstripe from 'nav-frontend-alertstriper';
+import { Alert } from '@navikt/ds-react';
 import React from 'react';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
 import IngenPerioderÅVurdereMelding from '../ingen-perioder-å-vurdere-melding/IngenPerioderÅVurdereMelding';
@@ -38,11 +38,11 @@ const VurderingsoversiktSluttfaseMessages = ({
         return (
             <>
                 <Box marginBottom={Margin.large}>
-                    <Alertstripe type="advarsel">
+                    <Alert size="small" variant="warning">
                         {`Vurder om pleietrengende er i livets sluttfase i søknadsperioden ${getHumanReadablePeriodString(
                             vurderingsoversikt.resterendeVurderingsperioder
                         )}.`}
-                    </Alertstripe>
+                    </Alert>
                 </Box>
             </>
         );

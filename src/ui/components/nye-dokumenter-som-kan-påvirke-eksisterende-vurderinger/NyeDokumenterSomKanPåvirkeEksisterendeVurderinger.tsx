@@ -1,11 +1,10 @@
-import React from 'react';
+import { Button, Label } from '@navikt/ds-react';
 import { Box, DocumentIcon, Margin } from '@navikt/ft-plattform-komponenter';
 import { prettifyDateString } from '@navikt/k9-date-utils';
-import { Hovedknapp } from 'nav-frontend-knapper';
-import { Element } from 'nav-frontend-typografi';
+import React from 'react';
+import LinkRel from '../../../constants/LinkRel';
 import Dokument, { Dokumenttype } from '../../../types/Dokument';
 import { findLinkByRel } from '../../../util/linkUtils';
-import LinkRel from '../../../constants/LinkRel';
 import styles from './nyeDokumenterSomKanPåvirkeEksisterendeVurderinger.css';
 
 interface NyeDokumenterListeProps {
@@ -58,18 +57,18 @@ const NyeDokumenterSomKanPåvirkeEksisterendeVurderinger = ({
     <div className={styles.nyeDokumenterSomKanPåvirkeEksisterendeVurderinger}>
         <Box marginTop={Margin.large}>
             <div className={styles.nyeDokumenterSomKanPåvirkeEksisterendeVurderinger__content}>
-                <Element>Vurder om nytt dokument fører til endringer i eksisterende vurderinger.</Element>
+                <Label size="small">Vurder om nytt dokument fører til endringer i eksisterende vurderinger.</Label>
                 <NyeDokumenterListe dokumenter={dokumenter} />
                 <Box marginTop={Margin.large}>
-                    <Hovedknapp
-                        mini
+                    <Button
+                        size="small"
                         onClick={() => onEndringerRegistrertClick()}
                         disabled={isSubmitting}
-                        spinner={isSubmitting}
+                        loading={isSubmitting}
                         id="bekreftNyeDokumenterVurdertKnapp"
                     >
                         Eventuelle endringer er registrert
-                    </Hovedknapp>
+                    </Button>
                 </Box>
             </div>
         </Box>
