@@ -14,8 +14,6 @@ const vurderingsopprettelseEndpoint = 'vurderingsopprettelse-mock';
 const httpErrorHandlerMock = () => null;
 const cancelTokenMock = { cancelToken: 'foo' };
 
-jest.mock('nav-frontend-modal');
-
 const vurderingsoversiktMock = {
     perioderSomKanVurderes: [],
     resterendeVurderingsperioder: [],

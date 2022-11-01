@@ -1,6 +1,5 @@
-import { Modal } from '@navikt/ds-react';
+import { Button, Modal } from '@navikt/ds-react';
 import { Box, Margin } from '@navikt/ft-plattform-komponenter';
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper';
 import React from 'react';
 import Diagnosekode from '../../../types/Diagnosekode';
 import DiagnosekodeSelector from '../../form/pure/PureDiagnosekodeSelector';
@@ -46,23 +45,23 @@ const DiagnosekodeModal = ({ isOpen, onRequestClose, onSaveClick }: Diagnosekode
                         </Box>
                         <Box marginTop={Margin.xLarge}>
                             <div style={{ display: 'flex' }}>
-                                <Hovedknapp
-                                    mini
+                                <Button
+                                    size="small"
                                     disabled={isSubmitting}
-                                    spinner={isSubmitting}
+                                    loading={isSubmitting}
                                     id="bekreftDiagnosekodeKnapp"
                                 >
                                     Bekreft
-                                </Hovedknapp>
-                                <Knapp
-                                    mini
+                                </Button>
+                                <Button
+                                    variant="secondary"
+                                    size="small"
                                     style={{ marginLeft: '1rem' }}
-                                    htmlType="button"
                                     onClick={onRequestClose}
                                     disabled={isSubmitting}
                                 >
                                     Avbryt
-                                </Knapp>
+                                </Button>
                             </div>
                         </Box>
                     </ModalFormWrapper>

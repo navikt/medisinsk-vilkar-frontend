@@ -8,8 +8,6 @@ import ContainerContext from '../../../context/ContainerContext';
 import queryClient from '../../../context/queryClient';
 import MedisinskVilkår from '../MedisinskVilkår';
 
-jest.mock('nav-frontend-modal');
-
 const statusEndpointMock = 'statusEndpointMock';
 
 const vurderingsoversiktMock = {
