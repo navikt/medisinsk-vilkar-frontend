@@ -1,24 +1,24 @@
+import { addYearsToDate } from '@navikt/k9-date-utils';
 import React from 'react';
-import Vurderingselement from '../../../types/Vurderingselement';
-import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
-import VurderingsdetaljerFetcher from '../vurderingsdetaljer-fetcher/VurderingsdetaljerFetcher';
 import LinkRel from '../../../constants/LinkRel';
-import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
+import InnleggelsesperiodeVurdering from '../../../types/InnleggelsesperiodeVurdering';
 import ManuellVurdering from '../../../types/ManuellVurdering';
-import buildInitialFormStateForEdit from '../vilkårsvurdering-av-tilsyn-og-pleie/initialFormStateUtil';
-import VurderingAvTilsynsbehovForm from '../vurdering-av-tilsynsbehov-form/VurderingAvTilsynsbehovForm';
+import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import EndreVurderingController from '../endre-vurdering-controller/EndreVurderingController';
+import Vurderingstype from '../../../types/Vurderingstype';
+import { findHrefByRel, findLinkByRel } from '../../../util/linkUtils';
 import ContainerContext from '../../context/ContainerContext';
 import VurderingContext from '../../context/VurderingContext';
-import Vurderingstype from '../../../types/Vurderingstype';
-import VurderingAvToOmsorgspersonerForm from '../vurdering-av-to-omsorgspersoner-form/VurderingAvToOmsorgspersonerForm';
-import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
-import VurderingsoppsummeringForInnleggelsesperiode from '../vurderingsoppsummering-for-innleggelsesperiode/VurderingsoppsummeringForInnleggelsesperiode';
-import InnleggelsesperiodeVurdering from '../../../types/InnleggelsesperiodeVurdering';
+import EndreVurderingController from '../endre-vurdering-controller/EndreVurderingController';
+import buildInitialFormStateForEdit from '../vilkårsvurdering-av-tilsyn-og-pleie/initialFormStateUtil';
 import VurderingAvLivetsSluttfaseForm from '../vurdering-av-livets-sluttfase-form/VurderingAvLivetsSluttfaseForm';
-import VurderingsoppsummeringForSluttfase
-    from '../vurderingsoppsummering-for-livets-sluttfase/VurderingsoppsummeringForSluttfase';
+import VurderingAvTilsynsbehovForm from '../vurdering-av-tilsynsbehov-form/VurderingAvTilsynsbehovForm';
+import VurderingAvToOmsorgspersonerForm from '../vurdering-av-to-omsorgspersoner-form/VurderingAvToOmsorgspersonerForm';
+import VurderingsdetaljerFetcher from '../vurderingsdetaljer-fetcher/VurderingsdetaljerFetcher';
+import VurderingsoppsummeringForInnleggelsesperiode from '../vurderingsoppsummering-for-innleggelsesperiode/VurderingsoppsummeringForInnleggelsesperiode';
+import VurderingsoppsummeringForKontinuerligTilsynOgPleie from '../vurderingsoppsummering-for-kontinuerlig-tilsyn-og-pleie/VurderingsoppsummeringForKontinuerligTilsynOgPleie';
+import VurderingsoppsummeringForSluttfase from '../vurderingsoppsummering-for-livets-sluttfase/VurderingsoppsummeringForSluttfase';
+import VurderingsoppsummeringForToOmsorgspersoner from '../vurderingsoppsummering-for-to-omsorgspersoner/VurderingsoppsummeringForToOmsorgspersoner';
 
 interface VurderingsdetaljvisningForEksisterendeProps {
     vurderingsoversikt: Vurderingsoversikt;
@@ -106,7 +106,9 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                                             onSubmit={onSubmit}
                                             onAvbryt={onAvbrytClick}
                                             isSubmitting={isSubmitting}
-                                            resterendeVurderingsperioder={vurderingsoversikt.resterendeVurderingsperioder}
+                                            resterendeVurderingsperioder={
+                                                vurderingsoversikt.resterendeVurderingsperioder
+                                            }
                                             perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
                                         />
                                     );
@@ -120,6 +122,14 @@ const VurderingsdetaljvisningForEksisterendeVurdering = ({
                                         onSubmit={onSubmit}
                                         onAvbryt={onAvbrytClick}
                                         isSubmitting={isSubmitting}
+                                        harPerioderDerPleietrengendeErOver18år={
+                                            vurderingsoversikt.harPerioderDerPleietrengendeErOver18år
+                                        }
+                                        barnetsAttenårsdag={
+                                            vurderingsoversikt.harPerioderDerPleietrengendeErOver18år
+                                                ? addYearsToDate(vurderingsoversikt.pleietrengendesFødselsdato, 18)
+                                                : undefined
+                                        }
                                     />
                                 );
                             }}
