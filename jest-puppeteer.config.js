@@ -6,7 +6,7 @@ module.exports = {
         // if default or tcp, the test starts right await whereas the dev server is not available on http
         protocol: 'http',
         // in ms
-        launchTimeout: 30000,
+        launchTimeout: 50000,
         debug: true,
     },
     launch: {

@@ -1,11 +1,10 @@
-import { get, post } from '@navikt/k9-http-utils';
 import { Box, Margin, TitleWithUnderline, WarningIcon } from '@navikt/ft-plattform-komponenter';
+import { get, post } from '@navikt/k9-http-utils';
 import Modal from 'nav-frontend-modal';
 import Spinner from 'nav-frontend-spinner';
 import React from 'react';
-import { useQuery, useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import LinkRel from '../../../constants/LinkRel';
-import Diagnosekode from '../../../types/Diagnosekode';
 import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
 import { findLinkByRel } from '../../../util/linkUtils';
 import ContainerContext from '../../context/ContainerContext';
@@ -53,18 +52,16 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             httpErrorHandler
         );
 
-    const lagreDiagnosekode = (nyDiagnosekode: Diagnosekode) => {
-        const nyeDiagnosekoder = [...diagnosekoder, nyDiagnosekode.kode];
-        return post(
+    const lagreDiagnosekode = (nyeDiagnosekoder: string[]) =>
+        post(
             endreDiagnosekoderLink.href,
             {
                 behandlingUuid,
                 versjon,
-                diagnosekoder: [...new Set(nyeDiagnosekoder)],
+                diagnosekoder: [...new Set([...diagnosekoder, ...nyeDiagnosekoder])],
             },
             httpErrorHandler
         );
-    };
 
     const slettDiagnosekodeMutation = useMutation((diagnosekode: string) => slettDiagnosekode(diagnosekode), {
         onSuccess: () => {
@@ -74,7 +71,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
             });
         },
     });
-    const lagreDiagnosekodeMutation = useMutation((diagnosekode: Diagnosekode) => lagreDiagnosekode(diagnosekode), {
+    const lagreDiagnosekodeMutation = useMutation((nyeDiagnosekoder: string[]) => lagreDiagnosekode(nyeDiagnosekoder), {
         onSuccess: () => {
             refetch().finally(() => {
                 onDiagnosekoderUpdated();
