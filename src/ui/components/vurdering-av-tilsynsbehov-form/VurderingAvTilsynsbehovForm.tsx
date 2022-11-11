@@ -1,5 +1,5 @@
 import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/ft-plattform-komponenter';
-import { initializeDate } from '@navikt/k9-date-utils';
+import { isSameOrBefore } from '@navikt/k9-date-utils';
 import { CheckboxGroup, PeriodpickerList, TextArea, YesOrNoQuestion } from '@navikt/k9-form-utils';
 import { Period } from '@navikt/k9-period-utils';
 import { AlertStripeInfo } from 'nav-frontend-alertstriper';
@@ -132,11 +132,17 @@ const VurderingAvTilsynsbehovForm = ({
         return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
     }, [resterendeVurderingsperioder, perioderSomBlirVurdert]);
 
-    const visLovparagrafForPleietrengendeOver18år =
-        harPerioderDerPleietrengendeErOver18år &&
-        perioderSomBlirVurdert.some((periode) =>
-            initializeDate(periode.tom).isAfter(initializeDate(barnetsAttenårsdag))
-        );
+    const visLovparagrafForPleietrengendeOver18år = React.useMemo(
+        () =>
+            harPerioderDerPleietrengendeErOver18år &&
+            perioderSomBlirVurdert.some((periode) => {
+                if ((periode as AnyType).period) {
+                    return isSameOrBefore(barnetsAttenårsdag, (periode as AnyType).period.fom);
+                }
+                return isSameOrBefore(barnetsAttenårsdag, periode.fom);
+            }),
+        [perioderSomBlirVurdert]
+    );
 
     const hullISøknadsperiodene = React.useMemo(
         () => finnHullIPerioder(perioderSomKanVurderes).map((period) => period.asInternationalPeriod()),
