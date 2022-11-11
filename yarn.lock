@@ -1495,6 +1495,11 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
+"@hookform/error-message@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@hookform/error-message/-/error-message-2.0.1.tgz#6a37419106e13664ad6a29c9dae699ae6cd276b8"
+  integrity sha512-U410sAr92xgxT1idlu9WWOVjndxLdgPUHEB8Schr27C9eh7/xUnITWpCMF93s+lGiG++D4JnbSnrb5A21AdSNg==
+
 "@humanwhocodes/config-array@^0.10.5":
   version "0.10.7"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.10.7.tgz#6d53769fd0c222767e6452e8ebda825c22e9f0dc"
@@ -1877,33 +1882,23 @@
     strict-event-emitter "^0.2.4"
     web-encoding "^1.1.5"
 
-"@navikt/ds-css@^1.3.28":
-  version "1.3.29"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/1.3.29/e0c5d0082cc66f09f56164b64a05c64b140430d9#e0c5d0082cc66f09f56164b64a05c64b140430d9"
-  integrity sha512-aJbK3F3z6y+zFt+hC59aBYkL+3hwZj77Pa1miMW9qjVUHWXl2hzhPvnuTGqCYeI2d4+DWpP03R7Z9nv2JB8Cdg==
+"@navikt/ds-css@^1.5.6":
+  version "1.5.6"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/1.5.6/a4c7dcc0e8dab6ab00f620f2dcb07243580d014d#a4c7dcc0e8dab6ab00f620f2dcb07243580d014d"
+  integrity sha512-+4MN62Doi9j82gqpbA5lS+JPbFOPo3rSTaBINtRgNRZ/svA4IVDsl/ayH3qfKKjl7DMqNZe8HUeEmQrYHCXSqQ==
 
-"@navikt/ds-css@^1.3.5":
-  version "1.3.5"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-css/1.3.5/9a7f048400bc7e3dafd41170af8ed8600fd836cf#9a7f048400bc7e3dafd41170af8ed8600fd836cf"
-  integrity sha512-J0p5B33KA+Vf9B4RI61TQpwPdE2efpiENbi+UMiwoo17siMMC/htLN1gbLOp/wXEDwUHzhGG5zEk9uJkXsoqVg==
+"@navikt/ds-icons@^1.5.6":
+  version "1.5.6"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/1.5.6/5a02a5501bb30bd8798c060c4d6d67c7697e76cf#5a02a5501bb30bd8798c060c4d6d67c7697e76cf"
+  integrity sha512-Kp5gzstB0J99J+cDKFgRQlgR31egle5SrL9uA+otgqKoVCroV8QM0q9wFOjFaxOv8GMHKylI6VRFFwONXiDhlQ==
 
-"@navikt/ds-icons@^1.3.28", "@navikt/ds-icons@^1.3.29":
-  version "1.3.29"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/1.3.29/fcfce2b373f30242b5d4b67908153b98dc9c8b95#fcfce2b373f30242b5d4b67908153b98dc9c8b95"
-  integrity sha512-I4BRBQg2R/ViWgqWVsT56YoO9Xmu5rnff7aXCuMR6AZwm7UnWvkMZ9WspPqzM7VU6rLUbUmXlco4KA63oc880g==
-
-"@navikt/ds-icons@^1.3.5":
-  version "1.3.5"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/1.3.5/8750ba442903aca9bc95d4557e64328c4b872c26#8750ba442903aca9bc95d4557e64328c4b872c26"
-  integrity sha512-/SBwomWktNqAdJRdo0JmI6TLiGSbQtn3qmTsxVfgcWrOEPvU3Z/LADCYuN03+ZmZTRROrmH/EXuKVVkxuu+UKw==
-
-"@navikt/ds-react@^1.3.28":
-  version "1.3.29"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/1.3.29/4ff05fd870508e680c9fe0772135053b7fcedff8#4ff05fd870508e680c9fe0772135053b7fcedff8"
-  integrity sha512-LA2Eh1DiGilQ935quJJ5jDrYsRF/kWhumvcjkwwL2UQI4rwSNS+lRpSKdawcjW1813I2h5jwl0Vx5+/nRDfmwg==
+"@navikt/ds-react@^1.5.6":
+  version "1.5.6"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/1.5.6/32ec3f7eb7cc7b409980fcf0b86c939a35b7ded5#32ec3f7eb7cc7b409980fcf0b86c939a35b7ded5"
+  integrity sha512-Mt5ZaxYJegHz+9BJTOYKlXo7k0cSV96qDZgEl1txidETnloIWd69wAJpFFBm5eWT7BZRQgde2BLMdCUOZWsmRQ==
   dependencies:
     "@floating-ui/react-dom-interactions" "0.9.2"
-    "@navikt/ds-icons" "^1.3.29"
+    "@navikt/ds-icons" "^1.5.6"
     "@radix-ui/react-tabs" "1.0.0"
     "@radix-ui/react-toggle-group" "1.0.0"
     clsx "^1.2.1"
@@ -1911,52 +1906,40 @@
     react-day-picker "8.3.4"
     react-modal "3.15.1"
 
-"@navikt/ds-react@^1.3.5":
-  version "1.3.5"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/1.3.5/7c5a31a9af6494ab5fa1426ef173421f4851af44#7c5a31a9af6494ab5fa1426ef173421f4851af44"
-  integrity sha512-X2OSdxt3xiTXrDdTZgDVTyOg3Qz6f1/em3Wv6LjA4fR9wJ7qJQxrzTbJchRxbOkxyPQhJ2nGxQB8sErVsPeBSA==
-  dependencies:
-    "@floating-ui/react-dom-interactions" "0.9.2"
-    "@navikt/ds-icons" "^1.3.5"
-    "@radix-ui/react-tabs" "1.0.0"
-    "@radix-ui/react-toggle-group" "1.0.0"
-    clsx "^1.1.1"
-    react-modal "3.15.1"
-
 "@navikt/fnrvalidator@^1.1.4":
   version "1.1.4"
   resolved "https://npm.pkg.github.com/download/@navikt/fnrvalidator/1.1.4/57aacaca4b4d6c045625ec4e86cc6029f566f6388de258d45f93ef027f888219#b2ce64cb24b3726f715eee110f9f3fde37b907f7"
   integrity sha512-EZBwlNhp886E57GuknLB6G9Bnv4nl+e5K12B/2BeLpWZENxCmcQ+5oFvIThvEsU+LVOdfJxxGOxSvrwe5ZB3pQ==
 
-"@navikt/ft-kodeverk@^1.0.20":
-  version "1.0.20"
-  resolved "https://npm.pkg.github.com/download/@navikt/ft-kodeverk/1.0.20/c17c8061afbd9b7dc5ba30c92272656c3afd21ca#c17c8061afbd9b7dc5ba30c92272656c3afd21ca"
-  integrity sha512-CYza4/FpjAJYSNBufALxsF8B9UMdUjA5s9d2msHmUAJmhogs3HZjtnCy8nsmX9hoft5muF5Zjmmh7mMy3tKPjQ==
+"@navikt/ft-kodeverk@^1.0.21":
+  version "1.0.21"
+  resolved "https://npm.pkg.github.com/download/@navikt/ft-kodeverk/1.0.21/c7ac62f24bc8bbb40208557ceead6efd0edb3d73#c7ac62f24bc8bbb40208557ceead6efd0edb3d73"
+  integrity sha512-Y6yWNaKNhM0G6GHvT3P86lVePKW/k/IsK3mIC8IFGscU8qg9VmVOOxNDf/cLMSZxdm+lyUk+h6pusZ5LU7Vh2Q==
 
-"@navikt/ft-plattform-komponenter@1.2.7":
-  version "1.2.7"
-  resolved "https://npm.pkg.github.com/download/@navikt/ft-plattform-komponenter/1.2.7/f1b021847d272575d92acb59afffeb9037bf3bdf#f1b021847d272575d92acb59afffeb9037bf3bdf"
-  integrity sha512-DYoKAWYc5G1AeR8kshHEiY7aT9HOj6nvJj/2xHzm8ffNeDw02eW3eH0j19WnDYR7HUQ+sC3avvZXmitKDkwhPQ==
+"@navikt/ft-plattform-komponenter@1.3.4":
+  version "1.3.4"
+  resolved "https://npm.pkg.github.com/download/@navikt/ft-plattform-komponenter/1.3.4/6b7259ce97d07dd723877677a9bd207d68395581#6b7259ce97d07dd723877677a9bd207d68395581"
+  integrity sha512-3Vi+Ry6T+YtUIkcoR2vf3PCFGqjKpZuIE3+CXcq1kN/Exc2Y6qKJ4sWumVeXfPWiTb9bxwWCzyF060XvvpQFAA==
   dependencies:
-    "@navikt/ds-css" "^1.3.28"
-    "@navikt/ds-icons" "^1.3.28"
-    "@navikt/ds-react" "^1.3.28"
-    "@navikt/ft-utils" "^1.1.6"
+    "@navikt/ds-css" "^1.5.6"
+    "@navikt/ds-icons" "^1.5.6"
+    "@navikt/ds-react" "^1.5.6"
+    "@navikt/ft-utils" "^1.1.7"
 
-"@navikt/ft-types@^1.0.31":
-  version "1.0.31"
-  resolved "https://npm.pkg.github.com/download/@navikt/ft-types/1.0.31/bcd56a7d42df2d043267ec89223ec329aacd161f#bcd56a7d42df2d043267ec89223ec329aacd161f"
-  integrity sha512-q0Rlq45wklpjBZIy1DmYdys7hgto1LDNfLlhRSFiFJ5xLH84Sc6BVCoxxEzgXOXiAg6bfm5A/AOqwaZaXdzrMw==
+"@navikt/ft-types@^1.0.32":
+  version "1.0.32"
+  resolved "https://npm.pkg.github.com/download/@navikt/ft-types/1.0.32/f466e2c13038d947830281e301b5ee7c2c9f414c#f466e2c13038d947830281e301b5ee7c2c9f414c"
+  integrity sha512-pwSCaC5NfeI4UJ0vz2kDdozH8L/Oq3qH4PIlQKPo7maYs/dYEbRuhQBq14dtl3uCZGqMlkLLRZjNHW7eVErKbA==
   dependencies:
-    "@navikt/ft-kodeverk" "^1.0.20"
+    "@navikt/ft-kodeverk" "^1.0.21"
 
-"@navikt/ft-utils@^1.1.6":
-  version "1.1.6"
-  resolved "https://npm.pkg.github.com/download/@navikt/ft-utils/1.1.6/9fb1a7a9827f76df7edcb32bb9cfb19d46b88ea0#9fb1a7a9827f76df7edcb32bb9cfb19d46b88ea0"
-  integrity sha512-uhB8HcTkCTNHK0NZ8gSkXwFlhJ/vsHd1IJiq2mdWX7loLa7U1oYOT6o/pyRdZmf+T+um7p8FNnPR69IaZvwR/g==
+"@navikt/ft-utils@^1.1.7":
+  version "1.1.7"
+  resolved "https://npm.pkg.github.com/download/@navikt/ft-utils/1.1.7/77cf5e15faba03b206ae485363f3227ab3241173#77cf5e15faba03b206ae485363f3227ab3241173"
+  integrity sha512-m3sPQe4B+ScxuLTaiUtcWrY/4+fMF+owirKcav+INzz68ZrVrBHhOehM48W9CkErnashyF6ySxmgMvpaGviUug==
   dependencies:
-    "@navikt/ft-kodeverk" "^1.0.20"
-    "@navikt/ft-types" "^1.0.31"
+    "@navikt/ft-kodeverk" "^1.0.21"
+    "@navikt/ft-types" "^1.0.32"
     dayjs "1.11.6"
     react-intl "6.2.1"
 
@@ -1975,12 +1958,11 @@
   resolved "https://npm.pkg.github.com/download/@navikt/k9-date-utils/0.0.8/853f1aecd15b45b4982708babfac49868671f2797814e0d2d80d4fe0efa50871#06cfdda433652b39c1c4f2457463fc91dabd0d58"
   integrity sha512-k6kJtGyReu3ZAUwi5/8eNQyQHQgPyHYO1fuOuvsrcXv4KoU33d2tO/+QHvMyVW3qKyTJGURKT1tN8mqpAAajsQ==
 
-"@navikt/k9-form-utils@1.2.0":
-  version "1.2.0"
-  resolved "https://npm.pkg.github.com/download/@navikt/k9-form-utils/1.2.0/5598e6e4bb847cb02574258769228620ddc7210b#5598e6e4bb847cb02574258769228620ddc7210b"
-  integrity sha512-xy+EnRWvK+tK5WE+Kn5Zkr1YHwRHmxSd90Rk01e0RxPPOen+QvIFA/v2CTyB3G1CIBQtkpfXdRbOG35xCpz+iQ==
+"@navikt/k9-form-utils@1.3.1":
+  version "1.3.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/k9-form-utils/1.3.1/dc782b72cb461c1c0e6f0ba9b980e38d2c892a01#dc782b72cb461c1c0e6f0ba9b980e38d2c892a01"
+  integrity sha512-3sgRxhZ1JRdSKBaBx/s92v/btFID2Lpxko4qsJzyQk0+0udQCdMtaMOI3HRhoMWX+oJl09pIzBfJaN2eJ8dHuw==
   dependencies:
-    "@navikt/ft-plattform-komponenter" "1.2.7"
     "@navikt/k9-bem-utils" "1.0.1"
     "@navikt/k9-period-utils" "0.0.12"
 
@@ -3981,7 +3963,7 @@ clone@^1.0.2:
   resolved "https://registry.yarnpkg.com/clone/-/clone-1.0.4.tgz#da309cc263df15994c688ca902179ca3c7cd7c7e"
   integrity sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==
 
-clsx@^1.1.1, clsx@^1.2.1:
+clsx@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.2.1.tgz#0ddc4a20a549b59c93a4116bb26f5294ca17dc12"
   integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
