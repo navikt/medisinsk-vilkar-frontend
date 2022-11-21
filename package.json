@@ -107,7 +107,7 @@
         "dayjs": "^1.11.5",
         "express": "^4.18.1",
         "lodash.throttle": "^4.1.1",
-        "msw": "0.47.4",
+        "msw": "0.49.0",
         "nav-datovelger": "^12.6.0",
         "nav-frontend-alertstriper": "^4.0.2",
         "nav-frontend-alertstriper-style": "^3.0.2",
