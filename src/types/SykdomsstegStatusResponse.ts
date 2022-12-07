@@ -8,6 +8,7 @@ interface SykdomsstegStatusResponse {
     manglerVurderingAvToOmsorgspersoner?: boolean;
     nyttDokumentHarIkkekontrollertEksisterendeVurderinger: boolean;
     manglerVurderingAvILivetsSluttfase?: true;
+    manglerVurderingAvLangvarigSykdom?: boolean;
 }
 
 export default SykdomsstegStatusResponse;

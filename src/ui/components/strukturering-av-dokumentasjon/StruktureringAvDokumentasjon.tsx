@@ -8,7 +8,11 @@ import Dokumentoversikt from '../../../types/Dokumentoversikt';
 import { DokumentoversiktResponse } from '../../../types/DokumentoversiktResponse';
 import { StepId } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
-import { nesteStegErLivetssluttfase, nesteStegErVurderingForPleiepenger } from '../../../util/statusUtils';
+import {
+    nesteStegErLivetssluttfase,
+    nesteStegErOpplæringspenger,
+    nesteStegErVurderingForPleiepenger,
+} from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Diagnosekodeoversikt from '../diagnosekodeoversikt/Diagnosekodeoversikt';
 import DokumentasjonFooter from '../dokumentasjon-footer/DokumentasjonFooter';
@@ -53,12 +57,22 @@ const StruktureringAvDokumentasjon = ({
         visRedigeringAvDokument,
     } = state;
 
-    const erPleiepengerSluttfaseFagsak = fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE;
+    const skalViseInnleggelsesperioderOgDiagnosekoder = ![
+        FagsakYtelseType.PLEIEPENGER_SLUTTFASE,
+        FagsakYtelseType.OPPLÆRINGSPENGER,
+    ].includes(fagsakYtelseType);
 
-    const nesteStegErVurderingFn = (nesteSteg: SykdomsstegStatusResponse) =>
-        erPleiepengerSluttfaseFagsak
-            ? nesteStegErLivetssluttfase(nesteSteg)
-            : nesteStegErVurderingForPleiepenger(nesteSteg);
+    const nesteStegErVurderingFn = (nesteSteg: SykdomsstegStatusResponse) => {
+        if (fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE) {
+            return nesteStegErLivetssluttfase(nesteSteg);
+        }
+
+        if (fagsakYtelseType === FagsakYtelseType.OPPLÆRINGSPENGER) {
+            return nesteStegErOpplæringspenger(nesteSteg);
+        }
+
+        return nesteStegErVurderingForPleiepenger(nesteSteg);
+    };
 
     const getDokumentoversikt = () =>
         get<DokumentoversiktResponse>(endpoints.dokumentoversikt, httpErrorHandler, {
@@ -126,7 +140,9 @@ const StruktureringAvDokumentasjon = ({
         <PageContainer isLoading={isLoading} hasError={dokumentoversiktFeilet} key={StepId.Dokument} preventUnmount>
             <DokumentoversiktMessages
                 dokumentoversikt={dokumentoversikt}
-                harRegistrertDiagnosekode={erPleiepengerSluttfaseFagsak || !sykdomsstegStatus.manglerDiagnosekode}
+                harRegistrertDiagnosekode={
+                    !skalViseInnleggelsesperioderOgDiagnosekoder || !sykdomsstegStatus.manglerDiagnosekode
+                }
                 kanNavigereVidere={nesteStegErVurderingFn(sykdomsstegStatus)}
                 navigerTilNesteSteg={navigerTilNesteSteg}
             />
@@ -165,7 +181,7 @@ const StruktureringAvDokumentasjon = ({
                         )}
                     />
 
-                    {!erPleiepengerSluttfaseFagsak && (
+                    {skalViseInnleggelsesperioderOgDiagnosekoder && (
                         <Box marginTop={Margin.xxLarge}>
                             <DokumentasjonFooter
                                 firstSectionRenderer={() => (

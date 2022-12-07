@@ -7,6 +7,7 @@ interface ContainerContract {
         vurderingsoversiktKontinuerligTilsynOgPleie: string;
         vurderingsoversiktBehovForToOmsorgspersoner: string;
         vurderingsoversiktLivetsSluttfase: string;
+        vurderingsoversiktLangvarigSykdom: string;
         dokumentoversikt: string;
         innleggelsesperioder: string;
         lagreInnleggelsesperioder: string;
