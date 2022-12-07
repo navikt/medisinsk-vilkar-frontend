@@ -3,7 +3,6 @@ import { Box, Margin, BasicList, LabelledContent, AssessedBy } from '@navikt/ft-
 import Vurdering from '../../../types/Vurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
-import DekketAvInnleggelsesperiodeMelding from '../dekket-av-innleggelsesperiode-melding/DekketAvInnleggelsesperiodeMelding';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 import ContainerContext from '../../context/ContainerContext';
 

@@ -196,11 +196,14 @@ const MedisinskVilkår = (): JSX.Element => {
                 kanLøseAksjonspunkt,
                 manglerVurderingAvKontinuerligTilsynOgPleie,
                 manglerVurderingAvToOmsorgspersoner,
+                manglerVurderingAvLangvarigSykdom,
             }) => {
                 if (kanLøseAksjonspunkt) {
                     navigerTilSteg(toOmsorgspersonerSteg, true);
                 } else if (!manglerVurderingAvKontinuerligTilsynOgPleie && manglerVurderingAvToOmsorgspersoner) {
                     navigerTilSteg(toOmsorgspersonerSteg);
+                } else if (manglerVurderingAvLangvarigSykdom) {
+                    navigerTilSteg(langvarigSykdomSteg);
                 }
             }
         );

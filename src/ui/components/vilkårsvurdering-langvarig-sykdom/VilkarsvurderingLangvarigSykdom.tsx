@@ -3,20 +3,20 @@ import { Period } from '@navikt/k9-period-utils';
 import { NavigationWithDetailView, PageContainer, Box, Margin } from '@navikt/ft-plattform-komponenter';
 import React, { useMemo } from 'react';
 import axios from 'axios';
-import Step, { livetsSluttfaseSteg, StepId } from '../../../types/Step';
+import Step, { langvarigSykdomSteg, StepId } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingselement from '../../../types/Vurderingselement';
 import Vurderingsoversikt from '../../../types/Vurderingsoversikt';
-import { finnNesteStegForLivetsSluttfase } from '../../../util/statusUtils';
+import { finnNesteStegForOpplæringspenger } from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import Vurderingsnavigasjon from '../vurderingsnavigasjon/Vurderingsnavigasjon';
 import ActionType from './actionTypes';
 import vilkårsvurderingReducer from './reducer';
 import Vurderingsdetaljer from '../vurderingsdetaljer/Vurderingsdetaljer';
 
-import VurderingsoversiktSluttfaseMessages from '../vurderingsoversikt-sluttfase-messages/VurderingsoversiktSluttfaseMessages';
 import BehandlingType from '../../../constants/BehandlingType';
 import FagsakYtelseType from '../../../constants/FagsakYtelseType';
+import VurderingsoversiktLangvarigSykdomMessages from '../vurderingsoversikt-langvarig-sykdom-messages/VurderingsoversiktLangvarigSykdomMessages';
 
 interface VilkårsvurderingLangvarigSykdomProps {
     navigerTilNesteSteg: (steg: Step, ikkeMarkerSteg?: boolean) => void;
@@ -119,8 +119,8 @@ const VilkårsvurderingLangvarigSykdom = ({
         dispatch({ type: ActionType.PENDING });
         hentSykdomsstegStatus()
             .then((status) => {
-                const nesteSteg = finnNesteStegForLivetsSluttfase(status);
-                if (nesteSteg === livetsSluttfaseSteg || nesteSteg === null) {
+                const nesteSteg = finnNesteStegForOpplæringspenger(status);
+                if (nesteSteg === langvarigSykdomSteg || nesteSteg === null) {
                     oppdaterVurderingsoversikt();
                 } else if (nesteSteg !== null) {
                     navigerTilNesteSteg(nesteSteg);
@@ -155,10 +155,7 @@ const VilkårsvurderingLangvarigSykdom = ({
 
     return (
         <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet} key={StepId.LangvarigSykdom}>
-            <VurderingsoversiktSluttfaseMessages
-                vurderingsoversikt={vurderingsoversikt}
-                harGyldigSignatur={harGyldigSignatur}
-            />
+            <VurderingsoversiktLangvarigSykdomMessages vurderingsoversikt={vurderingsoversikt} />
             {vurderingsoversikt?.harPerioderÅVise() && (
                 <Box marginTop={setMargin()}>
                     <NavigationWithDetailView

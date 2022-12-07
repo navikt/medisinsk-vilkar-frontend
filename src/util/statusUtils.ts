@@ -114,5 +114,5 @@ export const nesteStegErLivetssluttfase = (sykdomsstegStatus: StatusResponse): b
 
 export const nesteStegErOpplæringspenger = (sykdomsstegStatus: StatusResponse): boolean => {
     const nesteSteg = finnNesteStegForOpplæringspenger(sykdomsstegStatus);
-    return nesteSteg === livetsSluttfaseSteg;
+    return nesteSteg === langvarigSykdomSteg;
 };
