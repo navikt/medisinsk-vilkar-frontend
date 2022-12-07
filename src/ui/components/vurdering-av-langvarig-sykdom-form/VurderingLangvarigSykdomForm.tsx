@@ -56,7 +56,7 @@ interface VurderingLangvarigSykdomFormProps {
     isSubmitting: boolean;
 }
 
-const VurderingAvLivetslangvarigSykdomForm = ({
+const VurderingLangvarigSykdomForm = ({
     defaultValues,
     resterendeVurderingsperioder,
     perioderSomKanVurderes,
@@ -361,4 +361,4 @@ const VurderingAvLivetslangvarigSykdomForm = ({
     );
 };
 
-export default VurderingAvLivetslangvarigSykdomForm;
+export default VurderingLangvarigSykdomForm;

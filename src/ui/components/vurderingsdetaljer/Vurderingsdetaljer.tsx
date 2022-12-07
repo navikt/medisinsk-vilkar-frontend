@@ -22,7 +22,6 @@ const Vurderingsdetaljer = ({
     nyVurderingFormVises,
 }: VurderingsdetaljerProps): JSX.Element => {
     const [editMode, setEditMode] = React.useState(false);
-    console.log(valgtVurderingselement);
 
     React.useEffect(() => {
         setEditMode(false);

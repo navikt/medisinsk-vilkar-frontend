@@ -20,6 +20,7 @@ import VurderingAvLivetsSluttfaseForm, {
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
 import VurderingContext from '../../context/VurderingContext';
 import { finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
+import VurderingLangvarigSykdomForm from '../vurdering-av-langvarig-sykdom-form/VurderingLangvarigSykdomForm';
 
 interface VurderingsdetaljvisningForNyVurderingProps {
     vurderingsoversikt: Vurderingsoversikt;
@@ -30,7 +31,7 @@ interface VurderingsdetaljvisningForNyVurderingProps {
 
 function makeDefaultValues(
     vurderingstype: Vurderingstype,
-    perioder: Period[],
+    perioder: Period[]
 ): VurderingAvToOmsorgspersonerFormState | VurderingAvTilsynsbehovFormState | VurderingAvLivetsSluttfaseFormState {
     if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
         return {
@@ -74,7 +75,6 @@ const VurderingsdetaljvisningForNyVurdering = ({
     const resterendeVurderingsperioderDefaultValue = vurderingsoversikt.resterendeVurderingsperioder;
 
     const defaultPerioder = () => {
-
         if (resterendeVurderingsperioderDefaultValue?.length > 0) {
             return resterendeVurderingsperioderDefaultValue;
         }
@@ -126,6 +126,19 @@ const VurderingsdetaljvisningForNyVurdering = ({
                 if (Vurderingstype.LIVETS_SLUTTFASE === vurderingstype) {
                     return (
                         <VurderingAvLivetsSluttfaseForm
+                            defaultValues={makeDefaultValues(vurderingstype, defaultPerioder())}
+                            resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                            perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
+                            dokumenter={dokumenter}
+                            onSubmit={onSubmit}
+                            onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
+                            isSubmitting={isSubmitting}
+                        />
+                    );
+                }
+                if (Vurderingstype.LANGVARIG_SYKDOM === vurderingstype) {
+                    return (
+                        <VurderingLangvarigSykdomForm
                             defaultValues={makeDefaultValues(vurderingstype, defaultPerioder())}
                             resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
                             perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
