@@ -154,7 +154,7 @@ const VilkårsvurderingLangvarigSykdom = ({
     const skalViseNyVurderingForm = visVurderingDetails && !valgtVurderingselement;
 
     return (
-        <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet} key={StepId.LivetsSluttfase}>
+        <PageContainer isLoading={isLoading} hasError={vurderingsoversiktFeilet} key={StepId.LangvarigSykdom}>
             <VurderingsoversiktSluttfaseMessages
                 vurderingsoversikt={vurderingsoversikt}
                 harGyldigSignatur={harGyldigSignatur}

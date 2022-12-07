@@ -27,10 +27,9 @@ const VurderingsoppsummeringLangvarigSykdom = ({
         <DetailViewVurdering
             title="Vurdering av langvarig sykdom"
             perioder={perioder}
-            redigerVurdering={!erInnleggelsesperiode ? redigerVurdering : null}
+            redigerVurdering={redigerVurdering}
         >
             <Box marginTop={Margin.large}>
-                {erInnleggelsesperiode && <DekketAvInnleggelsesperiodeMelding />}
                 <Box marginTop={Margin.medium}>
                     <LabelledContent
                         label="Hvilke dokumenter er brukt i vurderingen om sykdom?"

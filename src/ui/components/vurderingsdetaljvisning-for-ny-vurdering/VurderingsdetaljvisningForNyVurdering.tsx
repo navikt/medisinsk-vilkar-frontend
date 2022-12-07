@@ -107,7 +107,6 @@ const VurderingsdetaljvisningForNyVurdering = ({
 
     const { endpoints } = React.useContext(ContainerContext);
     const { vurderingstype } = React.useContext(VurderingContext);
-
     return (
         <NyVurderingController
             opprettVurderingLink={opprettLink}

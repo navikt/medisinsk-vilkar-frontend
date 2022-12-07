@@ -211,7 +211,6 @@ const MedisinskVilkår = (): JSX.Element => {
     const manglerVurderingAvNyeDokumenter = sykdomsstegStatus?.nyttDokumentHarIkkekontrollertEksisterendeVurderinger;
 
     const steps: Step[] = stegForSakstype(fagsakYtelseType);
-
     return (
         <PageContainer isLoading={isLoading} hasError={hasError}>
             <Infostripe
