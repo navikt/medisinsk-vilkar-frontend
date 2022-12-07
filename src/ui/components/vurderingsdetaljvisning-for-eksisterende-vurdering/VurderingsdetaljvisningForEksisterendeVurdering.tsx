@@ -19,6 +19,7 @@ import InnleggelsesperiodeVurdering from '../../../types/InnleggelsesperiodeVurd
 import VurderingAvLivetsSluttfaseForm from '../vurdering-av-livets-sluttfase-form/VurderingAvLivetsSluttfaseForm';
 import VurderingsoppsummeringForSluttfase from '../vurderingsoppsummering-for-livets-sluttfase/VurderingsoppsummeringForSluttfase';
 import VurderingsoppsummeringLangvarigSykdom from '../vurderingsoppsummering-for-langvarig-sykdom/VurderingsoppsummeringLangvarigSykdom';
+import VurderingLangvarigSykdomForm from '../vurdering-av-langvarig-sykdom-form/VurderingLangvarigSykdomForm';
 
 interface VurderingsdetaljvisningForEksisterendeProps {
     vurderingsoversikt: Vurderingsoversikt;
@@ -38,6 +39,9 @@ const getFormComponent = (vurderingstype: Vurderingstype) => {
     }
     if (vurderingstype === Vurderingstype.LIVETS_SLUTTFASE) {
         return VurderingAvLivetsSluttfaseForm;
+    }
+    if (vurderingstype === Vurderingstype.LANGVARIG_SYKDOM) {
+        return VurderingLangvarigSykdomForm;
     }
     return null;
 };

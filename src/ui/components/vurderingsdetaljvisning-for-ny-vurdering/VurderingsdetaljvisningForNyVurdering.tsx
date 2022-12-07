@@ -20,7 +20,10 @@ import VurderingAvLivetsSluttfaseForm, {
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
 import VurderingContext from '../../context/VurderingContext';
 import { finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
-import VurderingLangvarigSykdomForm from '../vurdering-av-langvarig-sykdom-form/VurderingLangvarigSykdomForm';
+import VurderingLangvarigSykdomForm, {
+    FieldName as LangvarigSykdomFieldName,
+    VurderingLangvarigSykdomFormState,
+} from '../vurdering-av-langvarig-sykdom-form/VurderingLangvarigSykdomForm';
 
 interface VurderingsdetaljvisningForNyVurderingProps {
     vurderingsoversikt: Vurderingsoversikt;
@@ -32,7 +35,11 @@ interface VurderingsdetaljvisningForNyVurderingProps {
 function makeDefaultValues(
     vurderingstype: Vurderingstype,
     perioder: Period[]
-): VurderingAvToOmsorgspersonerFormState | VurderingAvTilsynsbehovFormState | VurderingAvLivetsSluttfaseFormState {
+):
+    | VurderingAvToOmsorgspersonerFormState
+    | VurderingAvTilsynsbehovFormState
+    | VurderingAvLivetsSluttfaseFormState
+    | VurderingLangvarigSykdomFormState {
     if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
         return {
             [KTPFieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
@@ -57,6 +64,16 @@ function makeDefaultValues(
             [LivetsSluttfaseFieldName.SPLITT_PERIODE_DATO]: finnMaksavgrensningerForPerioder(perioder).fom,
             [LivetsSluttfaseFieldName.DOKUMENTER]: [],
             [LivetsSluttfaseFieldName.PERIODER]: perioder,
+        };
+    }
+
+    if (vurderingstype === Vurderingstype.LANGVARIG_SYKDOM) {
+        return {
+            [LangvarigSykdomFieldName.VURDERING_LANGVARIG_SYKDOM]: '',
+            [LangvarigSykdomFieldName.HAR_LANGVARIG_SYKDOM]: undefined,
+            [LangvarigSykdomFieldName.SPLITT_PERIODE_DATO]: finnMaksavgrensningerForPerioder(perioder).fom,
+            [LangvarigSykdomFieldName.DOKUMENTER]: [],
+            [LangvarigSykdomFieldName.PERIODER]: perioder,
         };
     }
 
