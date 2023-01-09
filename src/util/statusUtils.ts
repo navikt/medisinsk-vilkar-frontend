@@ -99,7 +99,7 @@ export const finnNesteStegForOpplæringspenger = (
         return langvarigSykdomSteg;
     }
 
-    return null;
+    return opplæringspengerDokumentSteg;
 };
 
 export const nesteStegErVurderingForPleiepenger = (sykdomsstegStatus: StatusResponse): boolean => {
