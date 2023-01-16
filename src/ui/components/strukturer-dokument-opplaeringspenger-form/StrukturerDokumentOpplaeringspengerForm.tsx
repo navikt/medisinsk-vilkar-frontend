@@ -17,7 +17,7 @@ import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
 import DuplikatRadiobuttons from '../duplikat-radiobuttons/DuplikatRadiobuttons';
 import StrukturerDokumentFormProps from '../../../types/StrukturerDokumentFormProps';
 
-const StrukturerDokumentSluttfaseForm = ({
+const StrukturerDokumentOpplaeringspengerForm = ({
     dokument,
     onSubmit,
     editMode,
@@ -58,14 +58,22 @@ const StrukturerDokumentSluttfaseForm = ({
                         <RadioGroupPanel
                             name={FieldName.INNEHOLDER_MEDISINSKE_OPPLYSNINGER}
                             disabled={readOnly}
-                            question="Inneholder dokumentet medisinske opplysninger?"
+                            question="Inneholder dokumentet medisinske opplysninger eller dokumentasjon av opplæring?"
                             radios={[
                                 {
-                                    label: 'Ja, dokumentet inneholder medisinske opplysninger',
-                                    value: Dokumenttype.LEGEERKLÆRING,
+                                    label: 'Ja, legeerklæring fra lege eller helseinstitusjon',
+                                    value: Dokumenttype.LEGEERKLÆRING_ANNEN,
                                 },
                                 {
-                                    label: 'Nei, dokumentet inneholder ikke medisinske opplysninger',
+                                    label: 'Ja, dokumentasjon av opplæring',
+                                    value: Dokumenttype.DOKUMENTASJON_AV_OPPLÆRING,
+                                },
+                                {
+                                    label: 'Ja, både legeerklæring og dokumentasjon av opplæring',
+                                    value: Dokumenttype.LEGEERKLÆRING_MED_DOKUMENTASJON_AV_OPPLÆRING,
+                                },
+                                {
+                                    label: 'Nei, dokumentet inneholder ikke medisinske opplysninger eller dokumentasjon av opplæring',
                                     value: Dokumenttype.MANGLER_MEDISINSKE_OPPLYSNINGER,
                                 },
                             ]}
@@ -90,4 +98,4 @@ const StrukturerDokumentSluttfaseForm = ({
     );
 };
 
-export default StrukturerDokumentSluttfaseForm;
+export default StrukturerDokumentOpplaeringspengerForm;

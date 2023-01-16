@@ -9,7 +9,7 @@ import ContainerContext from '../../context/ContainerContext';
 interface VurderingsoppsummeringLangvarigSykdom {
     vurdering: Vurdering;
     redigerVurdering: () => void;
-    erInnleggelsesperiode: boolean;
+    erInnleggelsesperiode?: boolean;
 }
 
 const VurderingsoppsummeringLangvarigSykdom = ({
