@@ -72,7 +72,7 @@
         "mini-css-extract-plugin": "^2.6.1",
         "nodemon": "^2.0.20",
         "pre-commit": "^1.2.2",
-        "prettier": "^2.7.1",
+        "prettier": "^2.8.3",
         "puppeteer": "^18.0.5",
         "react-refresh": "^0.14.0",
         "start-server-and-test": "^1.14.0",
