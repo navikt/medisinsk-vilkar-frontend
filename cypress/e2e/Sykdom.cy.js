@@ -6,7 +6,15 @@ describe('Sykdom', () => {
         cy.contains('Ja, legeerklæring fra sykehus/spesialisthelsetjenesten').should('exist').click();
         cy.findByLabelText(/Hvilken dato er dokumentet datert?/).type('101021');
         cy.contains('Bekreft').should('exist').click();
-        cy.contains('Fortsett').should('exist').click();
+    });
+    it('skal kunne legge inn innleggelsesperioder', () => {
+        cy.visit('/');
+        cy.contains('Dokumentasjon av sykdom').should('exist').click();
+        cy.contains('Rediger liste').should('exist').click();
+        cy.contains('Legg til innleggelsesperiode').should('exist').click();
+        cy.get('input[id="innleggelsesperioder[3].fom"]').type('010123');
+        cy.get('input[id="innleggelsesperioder[3].tom"]').type('300123');
+        cy.contains('Bekreft').should('exist').click();
     });
     it('skal kunne håndtere tilsyn og pleie', () => {
         cy.visit('/');
