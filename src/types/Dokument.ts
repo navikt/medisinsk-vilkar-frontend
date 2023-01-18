@@ -16,8 +16,8 @@ export const dokumentLabel = {
     ANNET: 'Ikke med. oppl.',
     UKLASSIFISERT: 'Ikke klassifisert',
     LEGEERKLÆRING_ANNEN: 'Legeerklæring',
-    LEGEERKLÆRING_MED_DOKUMENTASJON_AV_OPPLÆRING: 'Legeerklæring /m dok. opplæring',
-    DOKUMENTASJON_AV_OPPLÆRING: 'Dokumentasjon av opplæring',
+    LEGEERKLÆRING_MED_DOKUMENTASJON_AV_OPPLÆRING: 'Legeerklæring/kursdok.',
+    DOKUMENTASJON_AV_OPPLÆRING: 'Kursdok.',
 };
 
 export interface Dokument {
