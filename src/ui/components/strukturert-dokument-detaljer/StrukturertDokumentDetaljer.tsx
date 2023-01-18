@@ -52,7 +52,9 @@ const renderDokumenttypeContent = (dokumenttype: Dokumenttype, fagsakYtelseType:
     }
     if (dokumenttype === Dokumenttype.MANGLER_MEDISINSKE_OPPLYSNINGER) {
         if (fagsakYtelseType === FagsakYtelseType.OPPLÆRINGSPENGER) {
-            return <span>Nei, dokumentet inneholder ikke medinske opplysninger eller dokumentasjon av opplæring</span>;
+            return (
+                <span>Nei, dokumentet inneholder ikke medisinske opplysninger eller dokumentasjon av opplæring</span>
+            );
         }
         return <span>Dokumentet inneholder ikke medisinske opplysninger</span>;
     }

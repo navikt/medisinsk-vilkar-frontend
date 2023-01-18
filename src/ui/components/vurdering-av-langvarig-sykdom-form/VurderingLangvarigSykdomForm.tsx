@@ -16,8 +16,8 @@ import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
 import VurderingDokumentfilter from '../vurdering-dokumentfilter/VurderingDokumentfilter';
 import vurderingDokumentfilterOptions from '../vurdering-dokumentfilter/vurderingDokumentfilterOptions';
-import StjerneIkon from './StjerneIkon';
-import styles from './VurderingLangvarigSykdomForm.css';
+import StjerneIkon from '../vurdering-av-form/StjerneIkon';
+import styles from '../vurdering-av-form/vurderingForm.css';
 import Vurderingsresultat from '../../../types/Vurderingsresultat';
 import DeleteButton from '../delete-button/DeleteButton';
 import AddButton from '../add-button/AddButton';
@@ -178,6 +178,7 @@ const VurderingLangvarigSykdomForm = ({
                                         );
                                         return (
                                             <button
+                                                key={label}
                                                 onClick={() => updateDokumentFilter(filter)}
                                                 className={styles.fjernFilterKnapp}
                                                 type="button"

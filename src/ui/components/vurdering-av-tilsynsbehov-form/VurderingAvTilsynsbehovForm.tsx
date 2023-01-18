@@ -23,8 +23,8 @@ import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
 import VurderingDokumentfilter from '../vurdering-dokumentfilter/VurderingDokumentfilter';
 import vurderingDokumentfilterOptions from '../vurdering-dokumentfilter/vurderingDokumentfilterOptions';
-import StjerneIkon from './StjerneIkon';
-import styles from './vurderingAvTilsynsbehovForm.css';
+import StjerneIkon from '../vurdering-av-form/StjerneIkon';
+import styles from '../vurdering-av-form/vurderingForm.css';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyType = any;
