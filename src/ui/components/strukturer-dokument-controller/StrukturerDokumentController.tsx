@@ -86,7 +86,7 @@ const StrukturerDokumentController = ({
                     <AlertStripeFeil>{getErrorMessage()}</AlertStripeFeil>
                 </Box>
             )}
-            {erFagsakOLPEllerPLS(fagsakYtelseType) && (
+            {!erFagsakOLPEllerPLS(fagsakYtelseType) && (
                 <StrukturerDokumentForm
                     key={dokument.id}
                     dokument={dokument}

@@ -86,9 +86,6 @@ const MedisinskVilkår = (): JSX.Element => {
     const { isLoading, hasError, activeStep, markedStep, sykdomsstegStatus, nyeDokumenterSomIkkeErVurdert } = state;
     const { endpoints, httpErrorHandler, visFortsettknapp, fagsakYtelseType } = React.useContext(ContainerContext);
 
-    const skalOppgiDiagnosekoder = (ytelsestype: FagsakYtelseType) =>
-        ![FagsakYtelseType.PLEIEPENGER_SLUTTFASE, FagsakYtelseType.OPPLÆRINGSPENGER].includes(ytelsestype);
-
     const dokumentStegForSakstype = stegForSakstype(fagsakYtelseType).find((stepObj) => stepObj.id === StepId.Dokument);
 
     const finnNesteStegFn = (nesteSteg: SykdomsstegStatusResponse, isOnMount?: boolean) => {
@@ -112,7 +109,7 @@ const MedisinskVilkår = (): JSX.Element => {
     const { isLoading: diagnosekoderLoading, data: diagnosekoderData } = useQuery(
         'diagnosekodeResponse',
         hentDiagnosekoder,
-        { enabled: skalOppgiDiagnosekoder(fagsakYtelseType) }
+        { enabled: !erFagsakOLPEllerPLS(fagsakYtelseType) }
     );
 
     const diagnosekoder = endpoints.diagnosekoder ? diagnosekoderData?.diagnosekoder : [];
@@ -219,7 +216,7 @@ const MedisinskVilkår = (): JSX.Element => {
         <PageContainer isLoading={isLoading} hasError={hasError}>
             <Infostripe
                 element={
-                    erFagsakOLPEllerPLS(fagsakYtelseType) ? (
+                    !erFagsakOLPEllerPLS(fagsakYtelseType) ? (
                         <>
                             <span>Sykdomsvurderingen gjelder barnet og er felles for alle parter.</span>
                             <span className={styles.infostripe__diagnosekode__tittel}>Diagnose:</span>
