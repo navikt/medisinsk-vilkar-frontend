@@ -11,7 +11,7 @@ import ContainerContext from '../../context/ContainerContext';
 import StrukturerDokumentForm from '../strukturer-dokument-form/StrukturerDokumentForm';
 import StrukturerDokumentSluttfaseForm from '../strukturer-dokument-sluttfase-form/StrukturerDokumentSluttfaseForm';
 import StrukturerDokumentOpplaeringspengerForm from '../strukturer-dokument-opplaeringspenger-form/StrukturerDokumentOpplaeringspengerForm';
-import { skalOppgiDiagnosekode } from '../../../util/utils';
+import { erFagsakOLPEllerPLS } from '../../../util/utils';
 
 interface StrukturerDokumentControllerProps {
     strukturerDokumentLink: Link;
@@ -86,7 +86,7 @@ const StrukturerDokumentController = ({
                     <AlertStripeFeil>{getErrorMessage()}</AlertStripeFeil>
                 </Box>
             )}
-            {skalOppgiDiagnosekode(fagsakYtelseType) && (
+            {erFagsakOLPEllerPLS(fagsakYtelseType) && (
                 <StrukturerDokumentForm
                     key={dokument.id}
                     dokument={dokument}

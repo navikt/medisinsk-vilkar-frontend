@@ -38,7 +38,7 @@ import ActionType from './actionTypes';
 import styles from './medisinskVilkår.css';
 import medisinskVilkårReducer from './reducer';
 import VilkårsvurderingLangvarigSykdom from '../vilkårsvurdering-langvarig-sykdom/VilkarsvurderingLangvarigSykdom';
-import { skalOppgiDiagnosekode } from '../../../util/utils';
+import { erFagsakOLPEllerPLS } from '../../../util/utils';
 
 interface TabItemProps {
     label: string;
@@ -219,7 +219,7 @@ const MedisinskVilkår = (): JSX.Element => {
         <PageContainer isLoading={isLoading} hasError={hasError}>
             <Infostripe
                 element={
-                    skalOppgiDiagnosekode(fagsakYtelseType) ? (
+                    erFagsakOLPEllerPLS(fagsakYtelseType) ? (
                         <>
                             <span>Sykdomsvurderingen gjelder barnet og er felles for alle parter.</span>
                             <span className={styles.infostripe__diagnosekode__tittel}>Diagnose:</span>
