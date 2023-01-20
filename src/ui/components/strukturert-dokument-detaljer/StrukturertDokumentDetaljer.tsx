@@ -5,8 +5,7 @@ import Lenke from 'nav-frontend-lenker';
 import React from 'react';
 import FagsakYtelseType from '../../../constants/FagsakYtelseType';
 import LinkRel from '../../../constants/LinkRel';
-import Dokument, { Dokumenttype } from '../../../types/Dokument';
-import { renderDokumenttypeText } from '../../../util/dokumentUtils';
+import Dokument, { dokumentLabel, Dokumenttype } from '../../../types/Dokument';
 import { findLinkByRel } from '../../../util/linkUtils';
 import ContainerContext from '../../context/ContainerContext';
 import DokumentKnapp from '../dokument-knapp/DokumentKnapp';
@@ -21,13 +20,30 @@ interface StrukturertDokumentDetaljerProps {
     onRemoveDuplikat: () => void;
 }
 
-const renderDokumenttypeContent = (dokumenttype: Dokumenttype, erPleiepengerSluttfaseFagsak = false) => {
+const renderDokumenttypeLabel = (fagsakYtelseType: FagsakYtelseType) => {
+    if (fagsakYtelseType === FagsakYtelseType.OPPLÆRINGSPENGER) {
+        return 'Inneholder dokumentet medisinske opplysninger eller dokumentasjon av opplæring?';
+    }
+
+    return 'Inneholder dokumentet medisinske opplysninger?';
+};
+
+const renderDokumenttypeContent = (dokumenttype: Dokumenttype, fagsakYtelseType: FagsakYtelseType) => {
     if (dokumenttype === Dokumenttype.LEGEERKLÆRING) {
-        return erPleiepengerSluttfaseFagsak ? (
-            <span>Ja, dokumentet inneholder medinske opplysninger</span>
+        return fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE ? (
+            <span>Ja, dokumentet inneholder medisinske opplysninger</span>
         ) : (
             <span>Ja, legeerklæring fra sykehus/spesialisthelsetjenesten</span>
         );
+    }
+    if (dokumenttype === Dokumenttype.LEGEERKLÆRING_MED_DOKUMENTASJON_AV_OPPLÆRING) {
+        return <span>Ja, både legeerklæring og dokumentasjon av opplæring</span>;
+    }
+    if (dokumenttype === Dokumenttype.LEGEERKLÆRING_ANNEN) {
+        return <span>Ja, legeerklæring fra lege eller helseinstitusjon</span>;
+    }
+    if (dokumenttype === Dokumenttype.DOKUMENTASJON_AV_OPPLÆRING) {
+        return <span>Ja, dokumentasjon av opplæring</span>;
     }
     if (dokumenttype === Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER) {
         return (
@@ -35,6 +51,11 @@ const renderDokumenttypeContent = (dokumenttype: Dokumenttype, erPleiepengerSlut
         );
     }
     if (dokumenttype === Dokumenttype.MANGLER_MEDISINSKE_OPPLYSNINGER) {
+        if (fagsakYtelseType === FagsakYtelseType.OPPLÆRINGSPENGER) {
+            return (
+                <span>Nei, dokumentet inneholder ikke medisinske opplysninger eller dokumentasjon av opplæring</span>
+            );
+        }
         return <span>Dokumentet inneholder ikke medisinske opplysninger</span>;
     }
     return null;
@@ -61,7 +82,7 @@ const StrukturertDokumentDetaljer = ({
 
         return (
             <Lenke href={dokumentLink.href} target="_blank">
-                {`${renderDokumenttypeText(originaltDokument.type)} - ${prettifyDateString(originaltDokument.datert)}`}
+                {`${dokumentLabel[originaltDokument.type]} - ${prettifyDateString(originaltDokument.datert)}`}
             </Lenke>
         );
     };
@@ -94,11 +115,8 @@ const StrukturertDokumentDetaljer = ({
             </Box>
             <Box marginTop={Margin.xLarge}>
                 <LabelledContent
-                    label="Inneholder dokumentet medisinske opplysninger?"
-                    content={renderDokumenttypeContent(
-                        type,
-                        fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE
-                    )}
+                    label={renderDokumenttypeLabel(fagsakYtelseType)}
+                    content={renderDokumenttypeContent(type, fagsakYtelseType)}
                 />
             </Box>
             <Box marginTop={Margin.xLarge}>

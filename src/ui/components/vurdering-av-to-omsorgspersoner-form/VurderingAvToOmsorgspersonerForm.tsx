@@ -19,7 +19,7 @@ import DeleteButton from '../delete-button/DeleteButton';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
 import ContainerContext from '../../context/ContainerContext';
-import styles from './vurderingAvToOmsorgspersonerForm.css';
+import styles from '../vurdering-av-form/vurderingForm.css';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyType = any;

@@ -1,67 +1,70 @@
-import { CheckboxGroup, PeriodpickerList, TextArea, YesOrNoQuestion } from '@navikt/k9-form-utils';
+import { CheckboxGroup, PeriodpickerList, RadioGroupPanel, TextArea } from '@navikt/k9-form-utils';
 import { Period } from '@navikt/k9-period-utils';
 import { Box, ContentWithTooltip, Form, Margin, OnePersonOutlineGray } from '@navikt/ft-plattform-komponenter';
-import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Ikon from 'nav-frontend-ikoner-assets';
 import Lenke from 'nav-frontend-lenker';
 import { Element } from 'nav-frontend-typografi';
 import React, { useState } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { AlertStripeInfo } from 'nav-frontend-alertstriper';
 import Dokument from '../../../types/Dokument';
 import { Vurderingsversjon } from '../../../types/Vurdering';
-import {
-    finnHullIPerioder,
-    finnMaksavgrensningerForPerioder,
-    slåSammenSammenhengendePerioder,
-} from '../../../util/periodUtils';
-import { lagTilsynsbehovVurdering } from '../../../util/vurderingUtils';
+import { lagLangvarigSykdomVurdering } from '../../../util/vurderingUtils';
 import ContainerContext from '../../context/ContainerContext';
 import { fomDatoErFørTomDato, harBruktDokumentasjon, required } from '../../form/validators';
-import AddButton from '../add-button/AddButton';
-import DeleteButton from '../delete-button/DeleteButton';
 import DetailViewVurdering from '../detail-view-vurdering/DetailViewVurdering';
 import DokumentLink from '../dokument-link/DokumentLink';
 import VurderingDokumentfilter from '../vurdering-dokumentfilter/VurderingDokumentfilter';
 import vurderingDokumentfilterOptions from '../vurdering-dokumentfilter/vurderingDokumentfilterOptions';
 import StjerneIkon from '../vurdering-av-form/StjerneIkon';
 import styles from '../vurdering-av-form/vurderingForm.css';
+import Vurderingsresultat from '../../../types/Vurderingsresultat';
+import DeleteButton from '../delete-button/DeleteButton';
+import AddButton from '../add-button/AddButton';
+import {
+    finnHullIPerioder,
+    finnMaksavgrensningerForPerioder,
+    slåSammenSammenhengendePerioder,
+} from '../../../util/periodUtils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyType = any;
 
 export enum FieldName {
-    VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE = 'vurderingAvKontinuerligTilsynOgPleie',
-    HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE = 'harBehovForKontinuerligTilsynOgPleie',
-    PERIODER = 'perioder',
+    VURDERING_LANGVARIG_SYKDOM = 'vurderingLangvarigSykdom',
+    HAR_LANGVARIG_SYKDOM = 'harLangvarigSykdom',
+    SPLITT_PERIODE_DATO = 'splittPeriodeDato',
     DOKUMENTER = 'dokumenter',
+    PERIODER = 'perioder',
 }
 
-export interface VurderingAvTilsynsbehovFormState {
-    [FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]?: string;
-    [FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE]?: boolean;
-    [FieldName.PERIODER]?: Period[];
+export interface VurderingLangvarigSykdomFormState {
+    [FieldName.VURDERING_LANGVARIG_SYKDOM]?: string;
+    [FieldName.HAR_LANGVARIG_SYKDOM]?: Vurderingsresultat;
+    [FieldName.SPLITT_PERIODE_DATO]?: string;
     [FieldName.DOKUMENTER]: string[];
+    [FieldName.PERIODER]?: Period[];
 }
 
-interface VurderingAvTilsynsbehovFormProps {
-    defaultValues: VurderingAvTilsynsbehovFormState;
-    onSubmit: (nyVurdering: Partial<Vurderingsversjon>) => void;
+interface VurderingLangvarigSykdomFormProps {
+    defaultValues: VurderingLangvarigSykdomFormState;
     resterendeVurderingsperioder?: Period[];
     perioderSomKanVurderes?: Period[];
+    onSubmit: (nyVurdering: Partial<Vurderingsversjon>) => void;
     dokumenter: Dokument[];
     onAvbryt: () => void;
     isSubmitting: boolean;
 }
 
-const VurderingAvTilsynsbehovForm = ({
+const VurderingLangvarigSykdomForm = ({
     defaultValues,
-    onSubmit,
     resterendeVurderingsperioder,
     perioderSomKanVurderes,
+    onSubmit,
     dokumenter,
     onAvbryt,
     isSubmitting,
-}: VurderingAvTilsynsbehovFormProps): JSX.Element => {
+}: VurderingLangvarigSykdomFormProps): JSX.Element => {
     const { readOnly } = React.useContext(ContainerContext);
     const formMethods = useForm({
         defaultValues,
@@ -69,6 +72,18 @@ const VurderingAvTilsynsbehovForm = ({
     });
     const [visAlleDokumenter, setVisAlleDokumenter] = useState(false);
     const [dokumentFilter, setDokumentFilter] = useState([]);
+
+    const sammenhengendeSøknadsperioder = slåSammenSammenhengendePerioder(perioderSomKanVurderes);
+
+    const avgrensningerForSøknadsperiode = React.useMemo(
+        () => finnMaksavgrensningerForPerioder(perioderSomKanVurderes),
+        [perioderSomKanVurderes]
+    );
+
+    const hullISøknadsperiodene = React.useMemo(
+        () => finnHullIPerioder(perioderSomKanVurderes).map((period) => period.asInternationalPeriod()),
+        [perioderSomKanVurderes]
+    );
 
     const updateDokumentFilter = (valgtFilter) => {
         if (dokumentFilter.includes(valgtFilter)) {
@@ -81,6 +96,21 @@ const VurderingAvTilsynsbehovForm = ({
             setVisAlleDokumenter(true);
         }
     };
+
+    const perioderSomBlirVurdert: any[] = useWatch({ control: formMethods.control, name: FieldName.PERIODER });
+
+    const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
+        const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap((p) => p.asListOfDays());
+        const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])
+            .map((period) => {
+                if ((period as AnyType).period) {
+                    return (period as AnyType).period;
+                }
+                return period;
+            })
+            .flatMap((p) => new Period(p.fom, p.tom).asListOfDays());
+        return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
+    }, [resterendeVurderingsperioder, perioderSomBlirVurdert]);
 
     const getDokumenterSomSkalVises = () => {
         const filtrerteDokumenter = dokumenter.filter((dokument) => {
@@ -113,44 +143,18 @@ const VurderingAvTilsynsbehovForm = ({
         return true;
     };
 
-    const perioderSomBlirVurdert: Period[] = useWatch({ control: formMethods.control, name: FieldName.PERIODER });
-    const harVurdertAlleDagerSomSkalVurderes = React.useMemo(() => {
-        const dagerSomSkalVurderes = (resterendeVurderingsperioder || []).flatMap((p) => p.asListOfDays());
-        const dagerSomBlirVurdert = (perioderSomBlirVurdert || [])
-            .map((period) => {
-                if ((period as AnyType).period) {
-                    return (period as AnyType).period;
-                }
-                return period;
-            })
-            .flatMap((p) => new Period(p.fom, p.tom).asListOfDays());
-        return dagerSomSkalVurderes.every((dagSomSkalVurderes) => dagerSomBlirVurdert.indexOf(dagSomSkalVurderes) > -1);
-    }, [resterendeVurderingsperioder, perioderSomBlirVurdert]);
-
-    const hullISøknadsperiodene = React.useMemo(
-        () => finnHullIPerioder(perioderSomKanVurderes).map((period) => period.asInternationalPeriod()),
-        [perioderSomKanVurderes]
-    );
-
-    const avgrensningerForSøknadsperiode = React.useMemo(
-        () => finnMaksavgrensningerForPerioder(perioderSomKanVurderes),
-        [perioderSomKanVurderes]
-    );
-
-    const lagNyTilsynsvurdering = (formState: VurderingAvTilsynsbehovFormState) => {
-        onSubmit(lagTilsynsbehovVurdering(formState, dokumenter));
+    const lagNyLangvarigSykdomVurdering = (formState: VurderingLangvarigSykdomFormState) => {
+        onSubmit(lagLangvarigSykdomVurdering(formState, dokumenter));
     };
 
-    const sammenhengendeSøknadsperioder = slåSammenSammenhengendePerioder(perioderSomKanVurderes);
-
     return (
-        <DetailViewVurdering title="Vurdering av tilsyn og pleie" perioder={defaultValues[FieldName.PERIODER]}>
+        <DetailViewVurdering title="Vurdering av langvarig sykdom" perioder={defaultValues.perioder}>
             <div id="modal" />
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <FormProvider {...formMethods}>
                 <Form
                     buttonLabel="Bekreft"
-                    onSubmit={formMethods.handleSubmit(lagNyTilsynsvurdering)}
+                    onSubmit={formMethods.handleSubmit(lagNyLangvarigSykdomVurdering)}
                     onAvbryt={onAvbryt}
                     submitButtonDisabled={isSubmitting}
                     cancelButtonDisabled={isSubmitting}
@@ -158,9 +162,7 @@ const VurderingAvTilsynsbehovForm = ({
                 >
                     {dokumenter?.length > 0 && (
                         <Box marginTop={Margin.large}>
-                            <Element aria-hidden="true">
-                                Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?
-                            </Element>
+                            <Element aria-hidden="true">Hvilke dokumenter er brukt i vurderingen av sykdom?</Element>
                             <div className={styles.filterContainer}>
                                 <VurderingDokumentfilter
                                     text="Filter"
@@ -176,6 +178,7 @@ const VurderingAvTilsynsbehovForm = ({
                                         );
                                         return (
                                             <button
+                                                key={label}
                                                 onClick={() => updateDokumentFilter(filter)}
                                                 className={styles.fjernFilterKnapp}
                                                 type="button"
@@ -189,7 +192,7 @@ const VurderingAvTilsynsbehovForm = ({
                             )}
                             <div className={styles.checkboxGroupWrapper}>
                                 <CheckboxGroup
-                                    question="Hvilke dokumenter er brukt i vurderingen av tilsyn og pleie?"
+                                    question="Hvilke dokumenter er brukt i vurderingen av langvarig sykdom?"
                                     name={FieldName.DOKUMENTER}
                                     checkboxes={getDokumenterSomSkalVises().map((dokument) => ({
                                         value: dokument.id,
@@ -243,13 +246,13 @@ const VurderingAvTilsynsbehovForm = ({
                             id="begrunnelsesfelt"
                             disabled={readOnly}
                             textareaClass={styles.begrunnelsesfelt}
-                            name={FieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE}
+                            name={FieldName.VURDERING_LANGVARIG_SYKDOM}
                             label={
                                 <>
                                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                                     <b>
-                                        Gjør en vurdering av om det er behov for kontinuerlig tilsyn og pleie som følge
-                                        av sykdommen etter § 9-10, første ledd.
+                                        Gjør en vurdering av om den pleietrengende er i langvarig sykdom i perioden det
+                                        søkes for, jamfør folketrygdens § 9.13
                                     </b>
                                     <p className={styles.begrunnelsesfelt__labeltekst}>
                                         Du skal ta utgangspunkt i{' '}
@@ -258,32 +261,32 @@ const VurderingAvTilsynsbehovForm = ({
                                         </Lenke>{' '}
                                         og{' '}
                                         <Lenke
-                                            href="https://lovdata.no/nav/rundskriv/r09-00#ref/lov/1997-02-28-19/%C2%A79-10"
+                                            href="https://lovdata.no/nav/rundskriv/r09-00#ref/lov/1997-02-28-19/%C2%A79-13"
                                             target="_blank"
                                         >
                                             rundskrivet
                                         </Lenke>{' '}
                                         når du skriver vurderingen.
                                     </p>
-
-                                    <p className={styles.begrunnelsesfelt__labeltekst}>Vurderingen skal beskrive:</p>
-                                    <ul className={styles.begrunnelsesfelt__liste}>
-                                        <li>Om det er årsakssammenheng mellom sykdom og pleiebehov</li>
-                                        <li>Om behovet er kontinuerlig og ikke situasjonsbestemt</li>
-                                    </ul>
+                                    <br />
                                 </>
                             }
                             validators={{ required }}
                         />
                     </Box>
                     <Box marginTop={Margin.xLarge}>
-                        <YesOrNoQuestion
-                            question="Er det behov for tilsyn og pleie?"
-                            name={FieldName.HAR_BEHOV_FOR_KONTINUERLIG_TILSYN_OG_PLEIE}
+                        <RadioGroupPanel
+                            question="Har den pleietrengende en langvarig sykdom?"
+                            name={FieldName.HAR_LANGVARIG_SYKDOM}
+                            radios={[
+                                { value: Vurderingsresultat.OPPFYLT, label: 'Ja' },
+                                { value: Vurderingsresultat.IKKE_OPPFYLT, label: 'Nei' },
+                            ]}
                             validators={{ required }}
                             disabled={readOnly}
                         />
                     </Box>
+
                     <Box marginTop={Margin.xLarge}>
                         <PeriodpickerList
                             legend="Oppgi perioder"
@@ -359,4 +362,4 @@ const VurderingAvTilsynsbehovForm = ({
     );
 };
 
-export default VurderingAvTilsynsbehovForm;
+export default VurderingLangvarigSykdomForm;

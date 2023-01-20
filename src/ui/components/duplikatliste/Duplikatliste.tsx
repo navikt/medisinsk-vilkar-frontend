@@ -3,8 +3,7 @@ import { BucketIcon } from '@navikt/ft-plattform-komponenter';
 import Lenke from 'nav-frontend-lenker';
 import React, { useState } from 'react';
 import LinkRel from '../../../constants/LinkRel';
-import Dokument from '../../../types/Dokument';
-import { renderDokumenttypeText } from '../../../util/dokumentUtils';
+import Dokument, { dokumentLabel } from '../../../types/Dokument';
 import { findLinkByRel } from '../../../util/linkUtils';
 import SlettDuplikatModal from '../slett-duplikat-modal/SlettDuplikatModal';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
@@ -31,7 +30,7 @@ const Duplikatliste = ({ dokumenter, onRemoveDuplikat }: DuplikatlisteProps): JS
                                 className={styles.dokumentliste__beskrivelse}
                                 target="_blank"
                             >
-                                {`${renderDokumenttypeText(dokument.type)} - ${prettifyDateString(dokument.datert)}`}
+                                {`${dokumentLabel[dokument.type]} - ${prettifyDateString(dokument.datert)}`}
                             </Lenke>
                             <WriteAccessBoundContent
                                 contentRenderer={() => (

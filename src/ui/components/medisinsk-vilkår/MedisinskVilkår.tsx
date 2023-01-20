@@ -10,15 +10,20 @@ import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
 import Dokument from '../../../types/Dokument';
 import { NyeDokumenterResponse } from '../../../types/NyeDokumenterResponse';
 import Step, {
-    dokumentSteg,
+    langvarigSykdomSteg,
     livetsSluttfaseSteg,
-    sluttfaseDokumentSteg,
+    StepId,
     tilsynOgPleieSteg,
     toOmsorgspersonerSteg,
 } from '../../../types/Step';
 import SykdomsstegStatusResponse from '../../../types/SykdomsstegStatusResponse';
 import Vurderingstype from '../../../types/Vurderingstype';
-import { finnNesteStegForPleiepenger, finnNesteStegForLivetsSluttfase } from '../../../util/statusUtils';
+import {
+    finnNesteStegForPleiepenger,
+    finnNesteStegForLivetsSluttfase,
+    stegForSakstype,
+    finnNesteStegForOpplæringspenger,
+} from '../../../util/statusUtils';
 import ContainerContext from '../../context/ContainerContext';
 import VurderingContext from '../../context/VurderingContext';
 import AksjonspunktFerdigStripe from '../aksjonspunkt-ferdig-stripe/AksjonspunktFerdigStripe';
@@ -32,6 +37,8 @@ import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBo
 import ActionType from './actionTypes';
 import styles from './medisinskVilkår.css';
 import medisinskVilkårReducer from './reducer';
+import VilkårsvurderingLangvarigSykdom from '../vilkårsvurdering-langvarig-sykdom/VilkarsvurderingLangvarigSykdom';
+import { erFagsakOLPEllerPLS } from '../../../util/utils';
 
 interface TabItemProps {
     label: string;
@@ -54,6 +61,18 @@ const TabItem = ({ label, showWarningIcon }: TabItemProps) => {
     );
 };
 
+const sykdomTittel = (fagsakYtelseType: FagsakYtelseType) => {
+    if (fagsakYtelseType === FagsakYtelseType.OPPLÆRINGSPENGER) {
+        return 'Sykdom og opplæring';
+    }
+
+    if (fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE) {
+        return 'Livets sluttfase';
+    }
+
+    return 'Sykdom';
+};
+
 const MedisinskVilkår = (): JSX.Element => {
     const [state, dispatch] = React.useReducer(medisinskVilkårReducer, {
         isLoading: true,
@@ -67,12 +86,18 @@ const MedisinskVilkår = (): JSX.Element => {
     const { isLoading, hasError, activeStep, markedStep, sykdomsstegStatus, nyeDokumenterSomIkkeErVurdert } = state;
     const { endpoints, httpErrorHandler, visFortsettknapp, fagsakYtelseType } = React.useContext(ContainerContext);
 
-    const erPleiepengerSluttfaseFagsak = fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE;
+    const dokumentStegForSakstype = stegForSakstype(fagsakYtelseType).find((stepObj) => stepObj.id === StepId.Dokument);
 
-    const finnNesteStegFn = (nesteSteg: SykdomsstegStatusResponse, isOnMount?: boolean) =>
-        erPleiepengerSluttfaseFagsak
-            ? finnNesteStegForLivetsSluttfase(nesteSteg, isOnMount)
-            : finnNesteStegForPleiepenger(nesteSteg, isOnMount);
+    const finnNesteStegFn = (nesteSteg: SykdomsstegStatusResponse, isOnMount?: boolean) => {
+        switch (fagsakYtelseType) {
+            case FagsakYtelseType.OPPLÆRINGSPENGER:
+                return finnNesteStegForOpplæringspenger(nesteSteg, isOnMount);
+            case FagsakYtelseType.PLEIEPENGER_SLUTTFASE:
+                return finnNesteStegForLivetsSluttfase(nesteSteg, isOnMount);
+            default:
+                return finnNesteStegForPleiepenger(nesteSteg, isOnMount);
+        }
+    };
 
     const httpCanceler = useMemo(() => axios.CancelToken.source(), []);
 
@@ -84,7 +109,7 @@ const MedisinskVilkår = (): JSX.Element => {
     const { isLoading: diagnosekoderLoading, data: diagnosekoderData } = useQuery(
         'diagnosekodeResponse',
         hentDiagnosekoder,
-        { enabled: !erPleiepengerSluttfaseFagsak }
+        { enabled: !erFagsakOLPEllerPLS(fagsakYtelseType) }
     );
 
     const diagnosekoder = endpoints.diagnosekoder ? diagnosekoderData?.diagnosekoder : [];
@@ -138,7 +163,7 @@ const MedisinskVilkår = (): JSX.Element => {
                 } else {
                     dispatch({
                         type: ActionType.ACTIVATE_DEFAULT_STEP,
-                        step: erPleiepengerSluttfaseFagsak ? sluttfaseDokumentSteg : dokumentSteg,
+                        step: dokumentStegForSakstype,
                         nyeDokumenterSomIkkeErVurdert: nyeDokumenterSomIkkeErVurdertResponse,
                     });
                 }
@@ -169,11 +194,14 @@ const MedisinskVilkår = (): JSX.Element => {
                 kanLøseAksjonspunkt,
                 manglerVurderingAvKontinuerligTilsynOgPleie,
                 manglerVurderingAvToOmsorgspersoner,
+                manglerVurderingAvLangvarigSykdom,
             }) => {
                 if (kanLøseAksjonspunkt) {
                     navigerTilSteg(toOmsorgspersonerSteg, true);
                 } else if (!manglerVurderingAvKontinuerligTilsynOgPleie && manglerVurderingAvToOmsorgspersoner) {
                     navigerTilSteg(toOmsorgspersonerSteg);
+                } else if (manglerVurderingAvLangvarigSykdom) {
+                    navigerTilSteg(langvarigSykdomSteg);
                 }
             }
         );
@@ -183,17 +211,12 @@ const MedisinskVilkår = (): JSX.Element => {
     const harDataSomIkkeHarBlittTattMedIBehandling = sykdomsstegStatus?.harDataSomIkkeHarBlittTattMedIBehandling;
     const manglerVurderingAvNyeDokumenter = sykdomsstegStatus?.nyttDokumentHarIkkekontrollertEksisterendeVurderinger;
 
-    const steps: Step[] = erPleiepengerSluttfaseFagsak
-        ? [sluttfaseDokumentSteg, livetsSluttfaseSteg]
-        : [dokumentSteg, tilsynOgPleieSteg, toOmsorgspersonerSteg];
-
+    const steps: Step[] = stegForSakstype(fagsakYtelseType);
     return (
         <PageContainer isLoading={isLoading} hasError={hasError}>
             <Infostripe
                 element={
-                    erPleiepengerSluttfaseFagsak ? (
-                        <span>Vurderingen gjelder pleietrengende og er felles for alle parter.</span>
-                    ) : (
+                    !erFagsakOLPEllerPLS(fagsakYtelseType) ? (
                         <>
                             <span>Sykdomsvurderingen gjelder barnet og er felles for alle parter.</span>
                             <span className={styles.infostripe__diagnosekode__tittel}>Diagnose:</span>
@@ -201,13 +224,15 @@ const MedisinskVilkår = (): JSX.Element => {
                                 {(diagnosekoderLoading && ' ') || diagnosekoderTekst}
                             </span>
                         </>
+                    ) : (
+                        <span>Vurderingen gjelder pleietrengende og er felles for alle parter.</span>
                     )
                 }
                 iconRenderer={() => <ChildIcon />}
             />
 
             <div className={styles.medisinskVilkår}>
-                <h1 style={{ fontSize: 22 }}>{erPleiepengerSluttfaseFagsak ? 'Livets sluttfase' : 'Sykdom'}</h1>
+                <h1 style={{ fontSize: 22 }}>{sykdomTittel(fagsakYtelseType)}</h1>
                 <WriteAccessBoundContent
                     contentRenderer={() => (
                         <Box marginBottom={Margin.medium}>
@@ -218,32 +243,24 @@ const MedisinskVilkår = (): JSX.Element => {
                         </Box>
                     )}
                     otherRequirementsAreMet={
-                        (!erPleiepengerSluttfaseFagsak &&
+                        !!(
                             nyeDokumenterSomIkkeErVurdert &&
                             manglerVurderingAvNyeDokumenter &&
-                            markedStep !== dokumentSteg &&
-                            activeStep !== dokumentSteg) ||
-                        (erPleiepengerSluttfaseFagsak &&
-                            nyeDokumenterSomIkkeErVurdert &&
-                            manglerVurderingAvNyeDokumenter &&
-                            markedStep !== sluttfaseDokumentSteg &&
-                            activeStep !== sluttfaseDokumentSteg)
+                            markedStep !== dokumentStegForSakstype &&
+                            activeStep !== dokumentStegForSakstype
+                        )
                     }
                 />
 
                 <WriteAccessBoundContent
                     contentRenderer={() => <AksjonspunktFerdigStripe />}
                     otherRequirementsAreMet={
-                        (!erPleiepengerSluttfaseFagsak &&
+                        !!(
                             kanLøseAksjonspunkt &&
                             visFortsettknapp === true &&
-                            markedStep !== dokumentSteg &&
-                            activeStep !== dokumentSteg) ||
-                        (erPleiepengerSluttfaseFagsak &&
-                            kanLøseAksjonspunkt &&
-                            visFortsettknapp === true &&
-                            markedStep !== sluttfaseDokumentSteg &&
-                            activeStep !== sluttfaseDokumentSteg)
+                            markedStep !== dokumentStegForSakstype &&
+                            activeStep !== dokumentStegForSakstype
+                        )
                     }
                 />
                 <WriteAccessBoundContent
@@ -266,7 +283,7 @@ const MedisinskVilkår = (): JSX.Element => {
                 />
                 <div style={{ marginTop: '1rem', maxWidth: '1204px' }}>
                     <div className={styles.medisinskVilkår__vilkårContentContainer}>
-                        {(activeStep === dokumentSteg || activeStep === sluttfaseDokumentSteg) && (
+                        {activeStep === dokumentStegForSakstype && (
                             <StruktureringAvDokumentasjon
                                 navigerTilNesteSteg={navigerTilNesteSteg}
                                 hentSykdomsstegStatus={() =>
@@ -288,6 +305,15 @@ const MedisinskVilkår = (): JSX.Element => {
                                 value={{ vurderingstype: Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE }}
                             >
                                 <VilkårsvurderingAvTilsynOgPleie
+                                    navigerTilNesteSteg={navigerTilSteg}
+                                    hentSykdomsstegStatus={hentSykdomsstegStatus}
+                                    sykdomsstegStatus={sykdomsstegStatus}
+                                />
+                            </VurderingContext.Provider>
+                        )}
+                        {activeStep === langvarigSykdomSteg && (
+                            <VurderingContext.Provider value={{ vurderingstype: Vurderingstype.LANGVARIG_SYKDOM }}>
+                                <VilkårsvurderingLangvarigSykdom
                                     navigerTilNesteSteg={navigerTilSteg}
                                     hentSykdomsstegStatus={hentSykdomsstegStatus}
                                     sykdomsstegStatus={sykdomsstegStatus}

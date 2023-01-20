@@ -13,11 +13,19 @@ import {
     FieldName as LivetsSluttfaseFieldName,
     VurderingAvLivetsSluttfaseFormState,
 } from '../vurdering-av-livets-sluttfase-form/VurderingAvLivetsSluttfaseForm';
+import {
+    FieldName as LangvarigSykdomFieldName,
+    VurderingLangvarigSykdomFormState,
+} from '../vurdering-av-langvarig-sykdom-form/VurderingLangvarigSykdomForm';
 
 function buildInitialFormStateForEdit(
     { tekst, resultat, perioder, dokumenter }: Vurderingsversjon,
     vurderingstype: Vurderingstype
-): VurderingAvTilsynsbehovFormState | VurderingAvToOmsorgspersonerFormState | VurderingAvLivetsSluttfaseFormState {
+):
+    | VurderingAvTilsynsbehovFormState
+    | VurderingAvToOmsorgspersonerFormState
+    | VurderingAvLivetsSluttfaseFormState
+    | VurderingLangvarigSykdomFormState {
     const dokumenterFraVurdering = dokumenter.filter((dokument) => dokument.benyttet).map((dokument) => dokument.id);
 
     if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
@@ -42,6 +50,14 @@ function buildInitialFormStateForEdit(
             [LivetsSluttfaseFieldName.ER_I_LIVETS_SLUTTFASE]: resultat,
             [LivetsSluttfaseFieldName.DOKUMENTER]: dokumenterFraVurdering,
             [LivetsSluttfaseFieldName.PERIODER]: perioder,
+        };
+    }
+    if (vurderingstype === Vurderingstype.LANGVARIG_SYKDOM) {
+        return {
+            [LangvarigSykdomFieldName.VURDERING_LANGVARIG_SYKDOM]: tekst,
+            [LangvarigSykdomFieldName.HAR_LANGVARIG_SYKDOM]: resultat,
+            [LangvarigSykdomFieldName.DOKUMENTER]: dokumenterFraVurdering,
+            [LangvarigSykdomFieldName.PERIODER]: perioder,
         };
     }
     return undefined;
