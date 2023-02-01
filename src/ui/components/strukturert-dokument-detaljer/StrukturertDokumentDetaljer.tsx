@@ -42,9 +42,6 @@ const renderDokumenttypeContent = (dokumenttype: Dokumenttype, fagsakYtelseType:
     if (dokumenttype === Dokumenttype.LEGEERKLÆRING_ANNEN) {
         return <span>Ja, legeerklæring fra lege eller helseinstitusjon</span>;
     }
-    if (dokumenttype === Dokumenttype.DOKUMENTASJON_AV_OPPLÆRING) {
-        return <span>Ja, dokumentasjon av opplæring</span>;
-    }
     if (dokumenttype === Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER) {
         return (
             <span>Ja, andre medisinske opplysninger (f.eks. legeerklæring fra fastlege, uttalelse fra psykolog)</span>
