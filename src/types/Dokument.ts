@@ -5,6 +5,8 @@ export enum Dokumenttype {
     ANDRE_MEDISINSKE_OPPLYSNINGER = 'MEDISINSKE_OPPLYSNINGER',
     MANGLER_MEDISINSKE_OPPLYSNINGER = 'ANNET',
     UKLASSIFISERT = 'UKLASSIFISERT',
+    LEGEERKLÆRING_ANNEN = 'LEGEERKLÆRING_ANNEN',
+    LEGEERKLÆRING_MED_DOKUMENTASJON_AV_OPPLÆRING = 'LEGEERKLÆRING_MED_DOKUMENTASJON_AV_OPPLÆRING',
 }
 
 export const dokumentLabel = {
@@ -12,6 +14,9 @@ export const dokumentLabel = {
     MEDISINSKE_OPPLYSNINGER: 'Andre med. oppl.',
     ANNET: 'Ikke med. oppl.',
     UKLASSIFISERT: 'Ikke klassifisert',
+    LEGEERKLÆRING_ANNEN: 'Legeerklæring',
+    LEGEERKLÆRING_MED_DOKUMENTASJON_AV_OPPLÆRING: 'Legeerklæring/kursdok.',
+    DOKUMENTASJON_AV_OPPLÆRING: 'Kursdok.',
 };
 
 export interface Dokument {

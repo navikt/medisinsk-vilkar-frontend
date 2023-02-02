@@ -13,7 +13,7 @@ import {
     finnMaksavgrensningerForPerioder,
     slåSammenSammenhengendePerioder,
 } from '../../../util/periodUtils';
-import { lagSluttfaseVurdering } from '../../../util/vurderingUtils';
+import { lagLangvarigSykdomVurdering } from '../../../util/vurderingUtils';
 import ContainerContext from '../../context/ContainerContext';
 import { fomDatoErFørTomDato, harBruktDokumentasjon, required } from '../../form/validators';
 import AddButton from '../add-button/AddButton';
@@ -29,23 +29,23 @@ import vurderingDokumentfilterOptions from '../vurdering-dokumentfilter/vurderin
 type AnyType = any;
 
 export enum FieldName {
-    VURDERING_AV_LIVETS_SLUTTFASE = 'vurderingAvLivetsSluttfase',
-    ER_I_LIVETS_SLUTTFASE = 'erILivetsSluttfase',
+    VURDERING_LANGVARIG_SYKDOM = 'vurderingLangvarigSykdom',
+    HAR_LANGVARIG_SYKDOM = 'harLangvarigSykdom',
     SPLITT_PERIODE_DATO = 'splittPeriodeDato',
     DOKUMENTER = 'dokumenter',
     PERIODER = 'perioder',
 }
 
-export interface VurderingAvLivetsSluttfaseFormState {
-    [FieldName.VURDERING_AV_LIVETS_SLUTTFASE]?: string;
-    [FieldName.ER_I_LIVETS_SLUTTFASE]?: Vurderingsresultat;
+export interface VurderingLangvarigSykdomFormState {
+    [FieldName.VURDERING_LANGVARIG_SYKDOM]?: string;
+    [FieldName.HAR_LANGVARIG_SYKDOM]?: Vurderingsresultat;
     [FieldName.SPLITT_PERIODE_DATO]?: string;
     [FieldName.DOKUMENTER]: string[];
     [FieldName.PERIODER]?: Period[];
 }
 
-interface VurderingAvLivetsSluttfaseFormProps {
-    defaultValues: VurderingAvLivetsSluttfaseFormState;
+interface VurderingLangvarigSykdomFormProps {
+    defaultValues: VurderingLangvarigSykdomFormState;
     resterendeVurderingsperioder?: Period[];
     perioderSomKanVurderes?: Period[];
     onSubmit: (nyVurdering: Partial<Vurderingsversjon>) => void;
@@ -54,7 +54,7 @@ interface VurderingAvLivetsSluttfaseFormProps {
     isSubmitting: boolean;
 }
 
-const VurderingAvLivetsSluttfaseForm = ({
+const VurderingLangvarigSykdomForm = ({
     defaultValues,
     resterendeVurderingsperioder,
     perioderSomKanVurderes,
@@ -62,7 +62,7 @@ const VurderingAvLivetsSluttfaseForm = ({
     dokumenter,
     onAvbryt,
     isSubmitting,
-}: VurderingAvLivetsSluttfaseFormProps): JSX.Element => {
+}: VurderingLangvarigSykdomFormProps): JSX.Element => {
     const { readOnly } = React.useContext(ContainerContext);
     const formMethods = useForm({
         defaultValues,
@@ -141,18 +141,18 @@ const VurderingAvLivetsSluttfaseForm = ({
         return true;
     };
 
-    const lagNySluttfaseVurdering = (formState: VurderingAvLivetsSluttfaseFormState) => {
-        onSubmit(lagSluttfaseVurdering(formState, dokumenter));
+    const lagNyLangvarigSykdomVurdering = (formState: VurderingLangvarigSykdomFormState) => {
+        onSubmit(lagLangvarigSykdomVurdering(formState, dokumenter));
     };
 
     return (
-        <DetailViewVurdering title="Vurdering av livets sluttfase" perioder={defaultValues.perioder}>
+        <DetailViewVurdering title="Vurdering av langvarig sykdom" perioder={defaultValues.perioder}>
             <div id="modal" />
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <FormProvider {...formMethods}>
                 <Form
                     buttonLabel="Bekreft"
-                    onSubmit={formMethods.handleSubmit(lagNySluttfaseVurdering)}
+                    onSubmit={formMethods.handleSubmit(lagNyLangvarigSykdomVurdering)}
                     onAvbryt={onAvbryt}
                     submitButtonDisabled={isSubmitting}
                     cancelButtonDisabled={isSubmitting}
@@ -161,7 +161,7 @@ const VurderingAvLivetsSluttfaseForm = ({
                     {dokumenter?.length > 0 && (
                         <Box marginTop={Margin.large}>
                             <Label size="small" aria-hidden="true">
-                                Hvilke dokumenter er brukt i vurderingen av livets sluttfase?
+                                Hvilke dokumenter er brukt i vurderingen av sykdom?
                             </Label>
                             <div className={styles.filterContainer}>
                                 <VurderingDokumentfilter
@@ -178,6 +178,7 @@ const VurderingAvLivetsSluttfaseForm = ({
                                         );
                                         return (
                                             <button
+                                                key={label}
                                                 onClick={() => updateDokumentFilter(filter)}
                                                 className={styles.fjernFilterKnapp}
                                                 type="button"
@@ -191,7 +192,7 @@ const VurderingAvLivetsSluttfaseForm = ({
                             )}
                             <div className={styles.checkboxGroupWrapper}>
                                 <CheckboxGroup
-                                    question="Hvilke dokumenter er brukt i vurderingen av livets sluttfase?"
+                                    question="Hvilke dokumenter er brukt i vurderingen av langvarig sykdom?"
                                     name={FieldName.DOKUMENTER}
                                     checkboxes={getDokumenterSomSkalVises().map((dokument) => ({
                                         value: dokument.id,
@@ -245,12 +246,12 @@ const VurderingAvLivetsSluttfaseForm = ({
                             id="begrunnelsesfelt"
                             disabled={readOnly}
                             textareaClass={styles.begrunnelsesfelt}
-                            name={FieldName.VURDERING_AV_LIVETS_SLUTTFASE}
+                            name={FieldName.VURDERING_LANGVARIG_SYKDOM}
                             label={
                                 <>
                                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                                     <b>
-                                        Gjør en vurdering av om den pleietrengende er i livets sluttfase i perioden det
+                                        Gjør en vurdering av om den pleietrengende er i langvarig sykdom i perioden det
                                         søkes for, jamfør folketrygdens § 9.13
                                     </b>
                                     <p className={styles.begrunnelsesfelt__labeltekst}>
@@ -275,8 +276,8 @@ const VurderingAvLivetsSluttfaseForm = ({
                     </Box>
                     <Box marginTop={Margin.xLarge}>
                         <RadioGroupPanel
-                            question="Er den pleietrengende i livets sluttfase?"
-                            name={FieldName.ER_I_LIVETS_SLUTTFASE}
+                            question="Har den pleietrengende en langvarig sykdom?"
+                            name={FieldName.HAR_LANGVARIG_SYKDOM}
                             radios={[
                                 { value: Vurderingsresultat.OPPFYLT, label: 'Ja' },
                                 { value: Vurderingsresultat.IKKE_OPPFYLT, label: 'Nei' },
@@ -361,4 +362,4 @@ const VurderingAvLivetsSluttfaseForm = ({
     );
 };
 
-export default VurderingAvLivetsSluttfaseForm;
+export default VurderingLangvarigSykdomForm;

@@ -1,7 +1,8 @@
-import { Label, Loader } from '@navikt/ds-react';
+import { BodyShort, Label } from '@navikt/ds-react';
 import { Autocomplete, FieldError } from '@navikt/ft-plattform-komponenter';
 import * as React from 'react';
 import Diagnosekode from '../../../types/Diagnosekode';
+import DeleteButton from '../../components/delete-button/DeleteButton';
 import styles from './diagnosekodeSelector.css';
 
 interface DiagnosekodeSelectorProps {
@@ -11,7 +12,7 @@ interface DiagnosekodeSelectorProps {
     errorMessage?: string;
     initialDiagnosekodeValue: string;
     hideLabel?: boolean;
-    showSpinner?: boolean;
+    selectedDiagnosekoder: string[];
 }
 
 const fetchDiagnosekoderByQuery = (queryString: string) =>
@@ -24,7 +25,7 @@ const PureDiagnosekodeSelector = ({
     errorMessage,
     initialDiagnosekodeValue,
     hideLabel,
-    showSpinner,
+    selectedDiagnosekoder,
 }: DiagnosekodeSelectorProps): JSX.Element => {
     const [suggestions, setSuggestions] = React.useState([]);
     const [inputValue, setInputValue] = React.useState('');
@@ -54,10 +55,13 @@ const PureDiagnosekodeSelector = ({
     }, [initialDiagnosekodeValue]);
 
     const onInputValueChange = async (v) => {
-        setInputValue(v);
         const newSuggestionList = await getUpdatedSuggestions(v);
         setSuggestions(newSuggestionList);
     };
+
+    const removeDiagnosekode = (diagnosekodeToRemove: string) =>
+        onChange(selectedDiagnosekoder.filter((selectedDiagnosekode) => selectedDiagnosekode !== diagnosekodeToRemove));
+
     return (
         <div className={styles.diagnosekodeContainer}>
             <div className={hideLabel ? styles.diagnosekodeContainer__hideLabel : ''}>
@@ -70,22 +74,33 @@ const PureDiagnosekodeSelector = ({
                     id={name}
                     suggestions={suggestions}
                     value={inputValue}
-                    onChange={onInputValueChange}
+                    onChange={(e) => {
+                        onInputValueChange(e);
+                        setInputValue(e);
+                    }}
                     onSelect={(e) => {
-                        onInputValueChange(e.value);
-                        onChange(e);
+                        setInputValue('');
+                        if (!selectedDiagnosekoder.includes(e.key)) {
+                            onChange([...selectedDiagnosekoder, e.key]);
+                        }
                     }}
                     ariaLabel="Søk etter diagnose"
                     placeholder="Søk etter diagnose"
                     shouldFocusOnMount
+                    isLoading={isLoading}
                 />
-                {showSpinner && (
-                    <div className={styles.diagnosekodeContainer__spinnerContainer}>
-                        {isLoading && <Loader size="large" />}
-                    </div>
-                )}
             </div>
             {errorMessage && <FieldError message={errorMessage} />}
+            {selectedDiagnosekoder.length > 0 && (
+                <ul className={styles.diagnosekodeContainer__diagnosekodeList}>
+                    {selectedDiagnosekoder.map((selectedDiagnosekode) => (
+                        <li key={selectedDiagnosekode}>
+                            <BodyShort size="small">{selectedDiagnosekode}</BodyShort>
+                            <DeleteButton onClick={() => removeDiagnosekode(selectedDiagnosekode)} />
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 };

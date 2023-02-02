@@ -32,7 +32,13 @@ const InnleggelsesperiodeFormModal = ({
     endringerPåvirkerAndreBehandlinger,
 }: InnleggelsesperiodeFormModal): JSX.Element => {
     const formMethods = useForm({
-        defaultValues,
+        defaultValues: {
+            [FieldName.INNLEGGELSESPERIODER]: defaultValues[FieldName.INNLEGGELSESPERIODER].map(
+                (innleggelsesPeriode) => ({
+                    period: innleggelsesPeriode,
+                })
+            ),
+        },
     });
 
     const {

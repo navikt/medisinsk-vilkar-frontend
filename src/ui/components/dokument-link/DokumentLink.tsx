@@ -3,8 +3,7 @@ import { DocumentIcon } from '@navikt/ft-plattform-komponenter';
 import { Link } from '@navikt/ds-react';
 import React from 'react';
 import LinkRel from '../../../constants/LinkRel';
-import Dokument from '../../../types/Dokument';
-import { renderDokumenttypeText } from '../../../util/dokumentUtils';
+import Dokument, { dokumentLabel } from '../../../types/Dokument';
 import { findLinkByRel } from '../../../util/linkUtils';
 import styles from './dokumentLink.css';
 
@@ -20,7 +19,7 @@ const DokumentLink = ({ dokument, etikett, visDokumentIkon }: DokumentLinkProps)
     return (
         <Link className={styles.dokumentLink} href={dokumentLink.href} target="_blank">
             {visDokumentIkon && <DocumentIcon className={styles.dokumentLink__dokumentikon} />}
-            {renderDokumenttypeText(type)} {prettifyDateString(datert)}
+            {dokumentLabel[type]} {prettifyDateString(datert)}
             {etikett && <div className={styles.dokumentLink__etikett}>{etikett}</div>}
         </Link>
     );

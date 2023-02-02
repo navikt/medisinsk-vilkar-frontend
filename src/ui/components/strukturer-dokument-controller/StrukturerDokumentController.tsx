@@ -10,6 +10,8 @@ import scrollUp from '../../../util/viewUtils';
 import ContainerContext from '../../context/ContainerContext';
 import StrukturerDokumentForm from '../strukturer-dokument-form/StrukturerDokumentForm';
 import StrukturerDokumentSluttfaseForm from '../strukturer-dokument-sluttfase-form/StrukturerDokumentSluttfaseForm';
+import StrukturerDokumentOpplaeringspengerForm from '../strukturer-dokument-opplaeringspenger-form/StrukturerDokumentOpplaeringspengerForm';
+import { erFagsakOLPEllerPLS } from '../../../util/utils';
 
 interface StrukturerDokumentControllerProps {
     strukturerDokumentLink: Link;
@@ -86,7 +88,7 @@ const StrukturerDokumentController = ({
                     </Alert>
                 </Box>
             )}
-            {fagsakYtelseType !== FagsakYtelseType.PLEIEPENGER_SLUTTFASE && (
+            {!erFagsakOLPEllerPLS(fagsakYtelseType) && (
                 <StrukturerDokumentForm
                     key={dokument.id}
                     dokument={dokument}
@@ -98,6 +100,16 @@ const StrukturerDokumentController = ({
             )}
             {fagsakYtelseType === FagsakYtelseType.PLEIEPENGER_SLUTTFASE && (
                 <StrukturerDokumentSluttfaseForm
+                    key={dokument.id}
+                    dokument={dokument}
+                    onSubmit={strukturerDokument}
+                    editMode={editMode}
+                    isSubmitting={isSubmitting}
+                    strukturerteDokumenter={strukturerteDokumenter}
+                />
+            )}
+            {fagsakYtelseType === FagsakYtelseType.OPPLÆRINGSPENGER && (
+                <StrukturerDokumentOpplaeringspengerForm
                     key={dokument.id}
                     dokument={dokument}
                     onSubmit={strukturerDokument}

@@ -20,6 +20,10 @@ import VurderingAvLivetsSluttfaseForm, {
 import NyVurderingController from '../ny-vurdering-controller/NyVurderingController';
 import VurderingContext from '../../context/VurderingContext';
 import { finnMaksavgrensningerForPerioder } from '../../../util/periodUtils';
+import VurderingLangvarigSykdomForm, {
+    FieldName as LangvarigSykdomFieldName,
+    VurderingLangvarigSykdomFormState,
+} from '../vurdering-av-langvarig-sykdom-form/VurderingLangvarigSykdomForm';
 
 interface VurderingsdetaljvisningForNyVurderingProps {
     vurderingsoversikt: Vurderingsoversikt;
@@ -30,8 +34,12 @@ interface VurderingsdetaljvisningForNyVurderingProps {
 
 function makeDefaultValues(
     vurderingstype: Vurderingstype,
-    perioder: Period[],
-): VurderingAvToOmsorgspersonerFormState | VurderingAvTilsynsbehovFormState | VurderingAvLivetsSluttfaseFormState {
+    perioder: Period[]
+):
+    | VurderingAvToOmsorgspersonerFormState
+    | VurderingAvTilsynsbehovFormState
+    | VurderingAvLivetsSluttfaseFormState
+    | VurderingLangvarigSykdomFormState {
     if (vurderingstype === Vurderingstype.KONTINUERLIG_TILSYN_OG_PLEIE) {
         return {
             [KTPFieldName.VURDERING_AV_KONTINUERLIG_TILSYN_OG_PLEIE]: '',
@@ -59,6 +67,16 @@ function makeDefaultValues(
         };
     }
 
+    if (vurderingstype === Vurderingstype.LANGVARIG_SYKDOM) {
+        return {
+            [LangvarigSykdomFieldName.VURDERING_LANGVARIG_SYKDOM]: '',
+            [LangvarigSykdomFieldName.HAR_LANGVARIG_SYKDOM]: undefined,
+            [LangvarigSykdomFieldName.SPLITT_PERIODE_DATO]: finnMaksavgrensningerForPerioder(perioder).fom,
+            [LangvarigSykdomFieldName.DOKUMENTER]: [],
+            [LangvarigSykdomFieldName.PERIODER]: perioder,
+        };
+    }
+
     return null;
 }
 
@@ -74,7 +92,6 @@ const VurderingsdetaljvisningForNyVurdering = ({
     const resterendeVurderingsperioderDefaultValue = vurderingsoversikt.resterendeVurderingsperioder;
 
     const defaultPerioder = () => {
-
         if (resterendeVurderingsperioderDefaultValue?.length > 0) {
             return resterendeVurderingsperioderDefaultValue;
         }
@@ -90,7 +107,6 @@ const VurderingsdetaljvisningForNyVurdering = ({
 
     const { endpoints } = React.useContext(ContainerContext);
     const { vurderingstype } = React.useContext(VurderingContext);
-
     return (
         <NyVurderingController
             opprettVurderingLink={opprettLink}
@@ -126,6 +142,19 @@ const VurderingsdetaljvisningForNyVurdering = ({
                 if (Vurderingstype.LIVETS_SLUTTFASE === vurderingstype) {
                     return (
                         <VurderingAvLivetsSluttfaseForm
+                            defaultValues={makeDefaultValues(vurderingstype, defaultPerioder())}
+                            resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
+                            perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}
+                            dokumenter={dokumenter}
+                            onSubmit={onSubmit}
+                            onAvbryt={radForNyVurderingVises ? () => onAvbryt() : undefined}
+                            isSubmitting={isSubmitting}
+                        />
+                    );
+                }
+                if (Vurderingstype.LANGVARIG_SYKDOM === vurderingstype) {
+                    return (
+                        <VurderingLangvarigSykdomForm
                             defaultValues={makeDefaultValues(vurderingstype, defaultPerioder())}
                             resterendeVurderingsperioder={resterendeVurderingsperioderDefaultValue}
                             perioderSomKanVurderes={vurderingsoversikt.perioderSomKanVurderes}

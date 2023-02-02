@@ -19,7 +19,13 @@ class Dokumentoversikt {
     }
 
     harGyldigSignatur(): boolean {
-        return this.strukturerteDokumenter.some(({ type }) => type === Dokumenttype.LEGEERKLÆRING);
+        return this.strukturerteDokumenter.some(({ type }) =>
+            [
+                Dokumenttype.LEGEERKLÆRING,
+                Dokumenttype.LEGEERKLÆRING_ANNEN,
+                Dokumenttype.LEGEERKLÆRING_MED_DOKUMENTASJON_AV_OPPLÆRING,
+            ].includes(type)
+        );
     }
 
     harDokumenter(): boolean {

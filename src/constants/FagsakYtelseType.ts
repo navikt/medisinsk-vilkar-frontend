@@ -9,6 +9,7 @@ enum FagsakYtelseType {
     OMSORGSPENGER_ALENE_OM_OMSORGEN = 'OMP_AO',
     FRISINN = 'FRISINN',
     PLEIEPENGER_SLUTTFASE = 'PPN',
-};
+    OPPLÆRINGSPENGER = 'OLP',
+}
 
 export default FagsakYtelseType;

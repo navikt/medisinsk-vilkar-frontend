@@ -6,9 +6,18 @@ describe('Sykdom', () => {
         cy.contains('Ja, legeerklæring fra sykehus/spesialisthelsetjenesten').should('exist').click();
         cy.findByLabelText(/Hvilken dato er dokumentet datert?/).type('101021');
         cy.contains('Bekreft').should('exist').click();
-        cy.contains('Fortsett').should('exist').click();
+    });
+    it('skal kunne legge inn innleggelsesperioder', () => {
+        cy.visit('/');
+        cy.contains('Dokumentasjon av sykdom').should('exist').click();
+        cy.contains('Rediger liste').should('exist').click();
+        cy.contains('Legg til innleggelsesperiode').should('exist').click();
+        cy.get('input[id="innleggelsesperioder[3].fom"]').type('010123');
+        cy.get('input[id="innleggelsesperioder[3].tom"]').type('300123');
+        cy.contains('Bekreft').should('exist').click();
     });
     it('skal kunne håndtere tilsyn og pleie', () => {
+        cy.visit('/');
         cy.get('[type="checkbox"]').first().check({ force: true });
         cy.get('[name="vurderingAvKontinuerligTilsynOgPleie"]').type('test');
         cy.get('input[id="harBehovForKontinuerligTilsynOgPleieYES"]').check({ force: true });
@@ -35,6 +44,7 @@ describe('Sykdom', () => {
         cy.contains('Eventuelle endringer er registrert').should('exist').click();
     });
     it('skal kunne håndtere to omsorgspersoner', () => {
+        cy.visit('/');
         cy.get('[type="checkbox"]').first().check({ force: true });
         cy.get('[name="vurderingAvToOmsorgspersoner"]').type('test');
         cy.get('input[id="harBehovForToOmsorgspersonerYES"]').check({ force: true });

@@ -1,5 +1,5 @@
 import { initializeDate } from '@navikt/k9-date-utils';
-import { Dokument, Dokumenttype } from '../types/Dokument';
+import { Dokument } from '../types/Dokument';
 import {
     StrukturerDokumentFormFieldName as FieldName,
     StrukturerDokumentFormState,
@@ -16,19 +16,6 @@ export const lagStrukturertDokument = (formState: StrukturerDokumentFormState, d
     duplikatAvId:
         formState[FieldName.DUPLIKAT_AV_ID] === ikkeDuplikatValue ? null : formState[FieldName.DUPLIKAT_AV_ID],
 });
-
-export const renderDokumenttypeText = (dokumenttype: Dokumenttype): string => {
-    if (dokumenttype === Dokumenttype.LEGEERKLÆRING) {
-        return 'Sykehus/spesialist.';
-    }
-    if (dokumenttype === Dokumenttype.ANDRE_MEDISINSKE_OPPLYSNINGER) {
-        return 'Andre med. oppl.';
-    }
-    if (dokumenttype === Dokumenttype.MANGLER_MEDISINSKE_OPPLYSNINGER) {
-        return 'Mangler med. oppl.';
-    }
-    return null;
-};
 
 export const dokumentSorter = (dok1: Dokument, dok2: Dokument): number => {
     const dok1Date = initializeDate(dok1.datert || dok1.mottattTidspunkt);
