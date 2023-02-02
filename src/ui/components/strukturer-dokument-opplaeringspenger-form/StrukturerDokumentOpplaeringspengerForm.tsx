@@ -65,10 +65,6 @@ const StrukturerDokumentOpplaeringspengerForm = ({
                                     value: Dokumenttype.LEGEERKLÆRING_ANNEN,
                                 },
                                 {
-                                    label: 'Ja, dokumentasjon av opplæring',
-                                    value: Dokumenttype.DOKUMENTASJON_AV_OPPLÆRING,
-                                },
-                                {
                                     label: 'Ja, både legeerklæring og dokumentasjon av opplæring',
                                     value: Dokumenttype.LEGEERKLÆRING_MED_DOKUMENTASJON_AV_OPPLÆRING,
                                 },
