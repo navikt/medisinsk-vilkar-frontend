@@ -20,7 +20,7 @@ Modal.setAppElement('#app');
 
 const fetchDiagnosekoderByQuery = (queryString: string): Promise<Diagnosekode> =>
     axios
-        .get(`/k9/diagnosekoder?query=${queryString}&max=8`)
+        .get(`/k9/diagnosekoder/?query=${queryString}&max=8`)
         .then((response) => (response.data && response.data.length === 1 ? response.data[0] : { kode: queryString }));
 
 interface DiagnosekodeoversiktProps {

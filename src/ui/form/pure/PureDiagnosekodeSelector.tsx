@@ -22,7 +22,7 @@ interface DiagnosekodeSelectorProps {
 }
 
 const fetchDiagnosekoderByQuery = (queryString: string) =>
-    fetch(`/k9/diagnosekoder?query=${queryString}&max=8`).then((response) => response.json());
+    fetch(`/k9/diagnosekoder/?query=${queryString}&max=8`).then((response) => response.json());
 
 const PureDiagnosekodeSelector = ({
     label,
