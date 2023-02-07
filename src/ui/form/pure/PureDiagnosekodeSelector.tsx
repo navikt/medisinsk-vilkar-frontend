@@ -6,6 +6,11 @@ import Diagnosekode from '../../../types/Diagnosekode';
 import DeleteButton from '../../components/delete-button/DeleteButton';
 import styles from './diagnosekodeSelector.css';
 
+interface Suggestion {
+    key: string;
+    value: string;
+}
+
 interface DiagnosekodeSelectorProps {
     label: string;
     onChange: (value) => void;
@@ -17,7 +22,7 @@ interface DiagnosekodeSelectorProps {
 }
 
 const fetchDiagnosekoderByQuery = (queryString: string) =>
-    fetch(`/k9/diagnosekoder/?query=${queryString}&max=8`).then((response) => response.json());
+    fetch(`/k9/diagnosekoder?query=${queryString}&max=8`).then((response) => response.json());
 
 const PureDiagnosekodeSelector = ({
     label,
@@ -31,6 +36,7 @@ const PureDiagnosekodeSelector = ({
     const [suggestions, setSuggestions] = React.useState([]);
     const [inputValue, setInputValue] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
+    const [selectedDiagnosekoderFullName, setSelectedDiagnosekoderFullName] = React.useState<Suggestion[]>([]);
 
     const getUpdatedSuggestions = async (queryString: string) => {
         if (queryString.length >= 3) {
@@ -60,9 +66,9 @@ const PureDiagnosekodeSelector = ({
         setSuggestions(newSuggestionList);
     };
 
-    const removeDiagnosekode = (diagnosekodeToRemove: string) =>
+    const removeDiagnosekode = (diagnosekodeToRemove: string) => {
         onChange(selectedDiagnosekoder.filter((selectedDiagnosekode) => selectedDiagnosekode !== diagnosekodeToRemove));
-
+    };
     return (
         <div className={styles.diagnosekodeContainer}>
             <div className={hideLabel ? styles.diagnosekodeContainer__hideLabel : ''}>
@@ -81,6 +87,7 @@ const PureDiagnosekodeSelector = ({
                         setInputValue('');
                         if (!selectedDiagnosekoder.includes(e.key)) {
                             onChange([...selectedDiagnosekoder, e.key]);
+                            setSelectedDiagnosekoderFullName([...selectedDiagnosekoderFullName, e]);
                         }
                     }}
                     ariaLabel="Søk etter diagnose"
@@ -92,12 +99,18 @@ const PureDiagnosekodeSelector = ({
             {errorMessage && <FieldError message={errorMessage} />}
             {selectedDiagnosekoder.length > 0 && (
                 <ul className={styles.diagnosekodeContainer__diagnosekodeList}>
-                    {selectedDiagnosekoder.map((selectedDiagnosekode) => (
-                        <li key={selectedDiagnosekode}>
-                            <BodyShort size="small">{selectedDiagnosekode}</BodyShort>
-                            <DeleteButton onClick={() => removeDiagnosekode(selectedDiagnosekode)} />
-                        </li>
-                    ))}
+                    {selectedDiagnosekoder.map((selectedDiagnosekode) => {
+                        const fullName = selectedDiagnosekoderFullName.find(
+                            (selectedDiagnosekodeFullName) => selectedDiagnosekodeFullName.key === selectedDiagnosekode
+                        );
+                        const diagnosekodeLabel = fullName ? fullName.value : selectedDiagnosekode;
+                        return (
+                            <li key={selectedDiagnosekode}>
+                                <BodyShort size="small">{diagnosekodeLabel}</BodyShort>
+                                <DeleteButton onClick={() => removeDiagnosekode(selectedDiagnosekode)} />
+                            </li>
+                        );
+                    })}
                 </ul>
             )}
         </div>
