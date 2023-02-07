@@ -1,10 +1,12 @@
 import { Box, Margin, TitleWithUnderline, WarningIcon } from '@navikt/ft-plattform-komponenter';
 import { get, post } from '@navikt/k9-http-utils';
+import axios from 'axios';
 import Modal from 'nav-frontend-modal';
 import Spinner from 'nav-frontend-spinner';
-import React from 'react';
-import { useMutation, useQuery } from 'react-query';
+import React, { useMemo } from 'react';
+import { useMutation, useQueries, useQuery } from 'react-query';
 import LinkRel from '../../../constants/LinkRel';
+import Diagnosekode from '../../../types/Diagnosekode';
 import { DiagnosekodeResponse } from '../../../types/DiagnosekodeResponse';
 import { findLinkByRel } from '../../../util/linkUtils';
 import ContainerContext from '../../context/ContainerContext';
@@ -15,6 +17,11 @@ import IconWithText from '../icon-with-text/IconWithText';
 import WriteAccessBoundContent from '../write-access-bound-content/WriteAccessBoundContent';
 
 Modal.setAppElement('#app');
+
+const fetchDiagnosekoderByQuery = (queryString: string): Promise<Diagnosekode> =>
+    axios
+        .get(`/k9/diagnosekoder/?query=${queryString}&max=8`)
+        .then((response) => (response.data && response.data.length === 1 ? response.data[0] : { kode: queryString }));
 
 interface DiagnosekodeoversiktProps {
     onDiagnosekoderUpdated: () => void;
@@ -34,6 +41,19 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
 
     const { diagnosekoder, links, behandlingUuid, versjon } = data;
     const endreDiagnosekoderLink = findLinkByRel(LinkRel.ENDRE_DIAGNOSEKODER, links);
+
+    const diagnosekoderMedNavnResponses = useQueries(
+        diagnosekoder.map((diagnosekode) => ({
+            queryKey: ['diagnosekode', diagnosekode],
+            queryFn: () => fetchDiagnosekoderByQuery(diagnosekode),
+            refetchOnWindowFocus: false,
+        }))
+    );
+
+    const diagnosekoderMedNavn = useMemo(
+        () => diagnosekoderMedNavnResponses.filter((response) => !!response.data).map((response) => response.data),
+        [diagnosekoderMedNavnResponses]
+    );
 
     const focusAddButton = () => {
         if (addButtonRef.current) {
@@ -109,7 +129,7 @@ const Diagnosekodeoversikt = ({ onDiagnosekoderUpdated }: DiagnosekodeoversiktPr
                     )}
                     {diagnosekoder.length >= 1 && (
                         <Diagnosekodeliste
-                            diagnosekoder={diagnosekoder}
+                            diagnosekoder={diagnosekoderMedNavn}
                             onDeleteClick={slettDiagnosekodeMutation.mutate}
                         />
                     )}
