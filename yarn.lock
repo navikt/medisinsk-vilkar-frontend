@@ -1589,10 +1589,10 @@
   resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/2.0.12/5a501c8994d587dfee3a6cddb6387ee1f05652f5#5a501c8994d587dfee3a6cddb6387ee1f05652f5"
   integrity sha512-56ywftdtL5B4oZUb0ouO9rdN6X/refmDKJ+jtHt5jtnpjE+STpmCWmDCxacRSLb34YHmGJCl3zoyhPdelCZe9w==
 
-"@navikt/ds-icons@^2.0.12", "@navikt/ds-icons@^2.1.3":
-  version "2.1.3"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/2.1.3/8af2ea2d8805094349ae9b8467edbd017f31854f#8af2ea2d8805094349ae9b8467edbd017f31854f"
-  integrity sha512-G8qDbFMy4aa06Yg1mruvFXupSf0SIIRR8JEKXQaMVfuSLzBXlXSyWQcVSIAjXau/GlSfgR5HHICK+cKpGRA6wQ==
+"@navikt/ds-icons@^2.0.12", "@navikt/ds-icons@^2.3.1":
+  version "2.3.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-icons/2.3.1/3c9095bde3655ebede707db11cd42986b798a951#3c9095bde3655ebede707db11cd42986b798a951"
+  integrity sha512-Dd/pLaIai/1xUUisiIkQmA4vl4nqxv1QrFj2xbjhA0J0SJjHkqShsTzqKdttEHgiBLaUz3z8LJWMIUweMfBryA==
 
 "@navikt/ds-react@2.0.12":
   version "2.0.12"
@@ -1608,13 +1608,13 @@
     react-day-picker "8.3.4"
     react-modal "3.15.1"
 
-"@navikt/ds-react@^2.0.12":
-  version "2.1.3"
-  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/2.1.3/301b4f43a516d18890dbfe1c377968b46d5a5d02#301b4f43a516d18890dbfe1c377968b46d5a5d02"
-  integrity sha512-DKaR9so5+qzdecViOyn2AsFfxtLLzmYJJkzX4mBZINJhK6jmjATzI+jIKn5RY9NCM3pAvshDJrrHt6IYe39MEg==
+"@navikt/ds-react@^2.3.1":
+  version "2.3.1"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-react/2.3.1/ab5b38385b0b225940efce89f0d2bb9107ea617c#ab5b38385b0b225940efce89f0d2bb9107ea617c"
+  integrity sha512-gslV96WLw49EV48layWj079ZhcAODjBSZPpwSR5us1oG5icXeZjaodEHd6nCo6JVepaLel2/hRmi7vYRb60Glg==
   dependencies:
     "@floating-ui/react" "0.17.0"
-    "@navikt/ds-icons" "^2.1.3"
+    "@navikt/ds-icons" "^2.3.1"
     "@radix-ui/react-tabs" "1.0.0"
     "@radix-ui/react-toggle-group" "1.0.0"
     clsx "^1.2.1"
