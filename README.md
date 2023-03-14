@@ -1,4 +1,8 @@
-# Frontend for medisinsk vilkårsvurdering
+# Flyttet til https://github.com/navikt/k9-saksbehandling-frontend
+
+
+
+## Frontend for medisinsk vilkårsvurdering
 
 Dette er en frontend for medisinsk vilkårsvurdering i saksbehandlingen av pleiepenger ved sykt barn.
 
